@@ -1,0 +1,102 @@
+/**
+ * @version		$Id: files.css 221 2011-06-11 17:30:33Z happy_noodle_boy $
+ * @package		JCE
+ * @copyright	Copyright © 2009 - 2011 Ryan Demmer. All rights reserved.
+ * @license		GNU/GPL 2
+ * This version may have been modified pursuant
+ * to the GNU General Public License, and as distributed it includes or
+ * is derivative of works licensed under the GNU General Public License or
+ * other free or open source software licenses.
+ */
+li.file, li.file.default {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 0;
+}
+li.file.txt {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -20px;
+}
+li.file.zip, li.file.tar, li.file.gz, li.file.rar {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -40px;
+}
+li.file.html, li.file.htm {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -60px;
+}
+li.file.mp3, li.file.wav, li.file.aiff {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -80px;
+}
+li.file.php {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -100px;
+}
+li.file.sql {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -120px;
+}
+li.file.gif {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -140px;
+}
+li.file.jpg, li.file.jpeg {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -160px;
+}
+li.file.png {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -180px;
+}
+li.file.webm, li.file.ogg, li.file.mp4, li.file.mpeg, li.file.mpg {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
+}
+li.file.js, li.file.xml, li.file.xaml {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -220px;
+}
+li.file.css {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -420px;
+}
+li.file.rtf {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -300px;
+}
+li.file.notwritable, dd.file.notwritable, li.file.duplicate {
+    background: #FFFFFF url(../img/icons.png) no-repeat 0 -620px;
+}
+li.file.notsafe, dd.file.notsafe {
+    background: #FFFFFF url(../img/icons.png) no-repeat 0 -640px;
+}
+
+/* Adobe Flash Player® */
+li.file.swf, li.file.as, li.file.fla {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -340px;
+}
+/* Adobe Flash Video® */
+li.file.flv, li.file.f4v, li.file.f4p, li.file.f4a, li.file.f4b {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -340px;
+}
+/* Microsoft Word® */
+li.file.doc, li.file.docx {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -400px;
+}
+/* Microsoft Excel® */
+li.file.xls, li.file.xlsx {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -320px;
+}
+/* Microsoft Powerpoint® */
+li.file.ppt, li.file.pptx {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -380px;
+}
+/* Adobe® Acrobat® */
+li.file.pdf {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -360px;
+}
+
+/** Application specific file types. These currently use a generic set of icons but can be edited to use custom / specific icons where the user has licence from the trademark holders to use such icons **/
+
+/* Apple Quicktime® */
+li.file.mov, li.file.qt {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
+}
+/* RealPlayer® */
+li.file.ra, li.file.rm, li.file.ram {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
+}
+/* Adobe® Shockwave® */
+li.file.dcr {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
+}
+/* Windows Media Player® */
+li.file.wmv, li.file.wma, li.file.wm, li.file.wmx, li.file.wvx, li.file.asf, li.file.asx, li.file.avi {
+    background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
+}

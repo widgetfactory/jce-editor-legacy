@@ -1,0 +1,56 @@
+/**
+ * @version		$Id: editor.css 221 2011-06-11 17:30:33Z happy_noodle_boy $
+ * @package		JCE
+ * @copyright	Copyright (C) 2009 Ryan Demmer. All rights reserved.
+ * @license		GNU/GPL
+ * This version may have been modified pursuant
+ * to the GNU General Public License, and as distributed it includes or
+ * is derivative of works licensed under the GNU General Public License or
+ * other free or open source software licenses.
+ */
+div.mceEditor {
+	position: relative;
+}
+div.mceEditor.fullscreen {
+	position: fixed;
+	z-index: 10000;
+	top:0;
+	left:0;
+}
+
+div.mceEditor table.mceLayout td {
+	padding: 0;
+	margin: 0;
+	text-align: left;
+}
+
+textarea.wfEditor, textarea.wfNoEditor {
+    background: #FFFFFF none;
+    font-family: monospace;
+    font-size: 1.1em;
+    color: #333;
+    line-height: 16px;
+	position: relative;
+	border: 1px solid #CCCCCC;
+}
+textarea.wfEditor:focus, textarea.wfNoEditor:focus {
+	background: #FFFFFF none;
+    color: #333;
+}
+
+span.wf_editor_toggle {
+	cursor: pointer;
+	display: block;
+	padding: 5px;
+	line-height: 20px;
+}
+div.mceEditor table.mceLayout td.mceIframeContainer iframe.hidden {
+	visibility: hidden;
+	z-index: 0;
+}
+div.mceEditor table.mceLayout td.mceIframeContainer iframe.offleft {
+	position: absolute;
+	position: absolute;
+    top: -10000px;
+    left: -10000px;
+}

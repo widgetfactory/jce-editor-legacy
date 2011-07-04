@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<params group="setup">
+	<!-- Cosmetic parameters -->
+		<param name="width" type="text" size="5" default="" pattern="[0-9%]+" label="WF_PARAM_EDITOR_WIDTH" description="WF_PARAM_EDITOR_WIDTH_DESC" />
+		<param name="height" type="text" size="5" default="" pattern="[0-9%]+" label="WF_PARAM_EDITOR_HEIGHT" description="WF_PARAM_EDITOR_HEIGHT_DESC" />
+		<!--param name="theme_advanced_toolbar_location" type="list" default="top" label="WF_PARAM_TOOLBAR_LOCATION" description="WF_PARAM_TOOLBAR_LOCATION_DESC">
+			<option value="top">JWF_OPTION_TOP</option>
+			<option value="bottom">WF_OPTION_BOTTOM</option>
+			<option value="external">WF_OPTION_EXTERNAL</option>
+		</param>
+		<param name="theme_advanced_toolbar_align" type="list" default="left" label="WF_PARAM_TOOLBAR_ALIGN" description="WF_PARAM_TOOLBAR_ALIGN_DESC">
+			<option value="left">WF_OPTION_LEFT</option>
+			<option value="center">WF_OPTION_CENTER</option>
+			<option value="right">WF_OPTION_RIGHT</option>
+		</param-->
+		<param name="toolbar_theme" type="list" default="default" label="WF_PARAM_EDITOR_TOOLBAR_THEME" description="WF_PARAM_EDITOR_TOOLBAR_THEME_DESC">
+			<option value="default">WF_LABEL_DEFAULT</option>
+			<option value="classic">WF_PARAM_EDITOR_SKIN_CLASSIC</option>
+			<option value="o2k7">WF_PARAM_EDITOR_SKIN_OFFICE_BLUE</option>
+			<option value="o2k7.silver">WF_PARAM_EDITOR_SKIN_OFFICE_SILVER</option>
+			<option value="o2k7.black">WF_PARAM_EDITOR_SKIN_OFFICE_BLACK</option>
+		</param>
+		<param name="toolbar_align" type="list" default="left" label="WF_PARAM_EDITOR_TOOLBAR_ALIGN" description="WF_PARAM_EDITOR_TOOLBAR_ALIGN_DESC">
+			<option value="left">WF_OPTION_LEFT</option>
+			<option value="center">WF_OPTION_CENTER</option>
+		</param>
+		<param name="toolbar_location" type="list" default="top" label="WF_PARAM_EDITOR_TOOLBAR_LOCATION" description="WF_PARAM_EDITOR_TOOLBAR_LOCATION_DESC">
+			<option value="top">WF_OPTION_TOP</option>
+			<option value="bottom">WF_OPTION_BOTTOM</option>
+		</param>
+		<param name="statusbar_location" type="list" default="bottom" label="WF_PARAM_EDITOR_STATUSBAR_LOCATION" description="WF_PARAM_EDITOR_STATUSBAR_LOCATION_DESC">
+			<option value="top">WF_OPTION_TOP</option>
+			<option value="bottom">WF_OPTION_BOTTOM</option>
+			<option value="none">WF_OPTION_NONE</option>
+		</param>
+		<param name="path" type="list" default="1" label="WF_PARAM_EDITOR_PATH" description="WF_PARAM_EDITOR_PATH_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<param name="resizing" type="list" default="1" label="WF_PARAM_EDITOR_RESIZING" description="WF_PARAM_EDITOR_RESIZING_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<param name="resize_horizontal" type="list" default="1" label="WF_PARAM_EDITOR_RESIZE_HORIZONTAL" description="WF_PARAM_EDITOR_RESIZE_HORIZONTAL_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<param name="resizing_use_cookie" type="list" default="1" label="WF_PARAM_EDITOR_RESIZE_COOKIE" description="WF_PARAM_EDITOR_RESIZE_COOKIE_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<param name="dialog_theme" type="folderlist" directory="administrator/components/com_jce/media/css/jquery" hide_none="true" hide_default="true" default="smoothness" label="WF_PARAM_EDITOR_DIALOG_THEME" description="WF_PARAM_EDITOR_DIALOG_THEME_DESC" />
+		<param name="profile_content_css" type="list" default="2" label="WF_PARAM_EDITOR_PROFILE_CSS" description="WF_PARAM_EDITOR_PROFILE_CSS_DESC">
+			<option value="0">WF_PARAM_CSS_ADD</option>
+			<option value="1">WF_PARAM_CSS_OVERWRITE</option>
+			<option value="2">WF_PARAM_CSS_INHERIT</option>
+		</param>
+		<param name="profile_content_css_custom" placeholder="eg: templates/$template/css/content.css" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_CSS_CUSTOM" description="WF_PARAM_CSS_CUSTOM_DESC" />		
+	</params>
+	<params group="options">
+		<!-- URLS -->
+		<param name="relative_urls" type="list" default="1" label="WF_PARAM_RELATIVE" description="WF_PARAM_RELATIVE_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<!-- Elements -->
+		<param name="invalid_elements" type="text" size="50" default="" label="WF_PARAM_NO_ELEMENTS" description="WF_PARAM_NO_ELEMENTS_DESC" />
+		<param name="extended_elements" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_ELEMENTS" description="WF_PARAM_ELEMENTS_DESC" />
+		<!-- Script parameters -->
+		<!-- Formatting parameters -->
+		<param name="theme_advanced_blockformats" class="checklist sortable" type="list" multiple="multiple" default="p,div,h1,h2,h3,h4,h5,h6,address,code,pre,samp" label="WF_PARAM_BLOCK_FORMAT" description="WF_PARAM_BLOCK_FORMAT_DESC">
+			<option value="p">Paragraph</option>
+			<option value="div">Div</option>
+			<option value="h1">Heading1</option>
+			<option value="h2">Heading2</option>
+			<option value="h3">Heading3</option>
+			<option value="h4">Heading4</option>
+			<option value="h5">Heading5</option>
+			<option value="h6">Heading6</option>
+			<option value="address">Address</option>
+			<option value="code">Code</option>
+			<option value="pre">Preformatted</option>
+			<option value="samp">Sample</option>
+		</param>
+		<param name="theme_advanced_fonts_add" type="text" size="50" default="" label="WF_PARAM_FONT_ADD" description="WF_PARAM_FONT_ADD_DESC" />
+		<param name="theme_advanced_fonts_remove" type="text" size="50" default="" label="WF_PARAM_FONT_REMOVE" description="WF_PARAM_FONT_REMOVE_DESC" />
+		<param name="theme_advanced_font_sizes" type="text" size="50" default="8pt,10pt,12pt,14pt,18pt,24pt,36pt" label="WF_PARAM_FONT_STYLES" description="WF_PARAM_FONT_STYLES_DESC" />
+		<param name="inline_styles" type="list" default="1" label="WF_PARAM_INLINE_STYLES" description="WF_PARAM_INLINE_STYLES_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<param name="cdata" type="list" default="1" label="WF_PARAM_CDATA" description="WF_PARAM_CDATA_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<param name="allow_javascript" type="list" default="0" label="WF_PARAM_JAVASCRIPT" description="WF_PARAM_JAVASCRIPT_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<param name="allow_css" type="list" default="0" label="WF_PARAM_CSS" description="WF_PARAM_CSS_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<param name="allow_php" type="list" default="0" label="WF_PARAM_PHP" description="WF_PARAM_PHP_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<!--param name="allow_iframes" type="list" default="0" label="WF_PARAM_IFRAMES" description="WF_PARAM_IFRAMES_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param-->
+		<param name="allow_applet" type="list" default="0" label="WF_PARAM_APPLET" description="WF_PARAM_APPLET_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<param name="visualchars" type="list" default="0" label="WF_PARAM_VISUALCHARS" description="WF_PARAM_VISUALCHARS_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<param name="toggle" type="list" default="1" label="WF_PARAM_EDITOR_TOGGLE" description="WF_PARAM_EDITOR_TOGGLE_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<param name="toggle_label" type="text" default="[show/hide]" label="WF_PARAM_EDITOR_TOGGLE_LABEL" description="WF_PARAM_EDITOR_TOGGLE_LABEL_DESC" />
+		<param name="custom_colors" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_CUSTOM_COLORS" description="WF_PARAM_CUSTOM_COLORS_DESC" />
+	</params>
+	<params group="filesystem">
+		<!-- Plugin parameters -->
+		<param name="dir" type="text" default="" pattern="[a-zA-Z0-9_\-\.\/\$]*" size="50" placeholder="images" label="WF_PARAM_DIRECTORY" description="WF_PARAM_DIRECTORY_DESC"/>
+		<param name="name" type="filesystem" group="filesystem" exclude_default="true" parameters="components/com_jce/editor/extensions/filesystem" default="joomla" label="WF_PARAM_FILESYSTEM" description="WF_PARAM_FILESYSTEM_DESC" />
+		<param name="max_size" class="upload_size" pattern="[0-9]*" placeholder="1024" max="" type="text" default="" label="WF_PARAM_UPLOAD_SIZE" description="WF_PARAM_UPLOAD_SIZE_DESC" />
+		<param name="upload_conflict" type="list" default="overwrite|unique" multiple="multiple" class="checklist" label="WF_PARAM_UPLOAD_EXISTS" description="WF_PARAM_UPLOAD_EXISTS_DESC">
+			<option value="overwrite">WF_PARAM_UPLOAD_EXISTS_OVERWRITE</option>
+			<option value="unique">WF_PARAM_UPLOAD_EXISTS_UNIQUE</option>
+		</param>
+		<param name="browser_position" type="list" default="bottom" label="WF_PARAM_BROWSER_POSITION" description="WF_PARAM_BROWSER_POSITION_DESC">
+			<option value="top">WF_LABEL_TOP</option>
+			<option value="bottom">WF_LABEL_BOTTOM</option>
+		</param>
+		<param name="folder_tree" type="list" default="bottom" label="WF_PARAM_FOLDER_TREE" description="WF_PARAM_FOLDER_TREE_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<param name="list_limit" type="list" default="all" label="WF_PARAM_LIST_LIMIT" description="WF_PARAM_LIST_LIMIT_DESC">
+			<option value="10">10</option>
+			<option value="25">25</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+			<option value="all">WF_OPTION_ALL</option>
+		</param>
+		<param name="validate_mimetype" type="list" default="0" label="WF_PARAM_VALIDATE_MIMETYPE" description="WF_PARAM_VALIDATE_MIMETYPE_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param> 
+	</params>
+</config>

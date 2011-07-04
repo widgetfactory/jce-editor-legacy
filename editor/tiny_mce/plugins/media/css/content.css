@@ -1,0 +1,60 @@
+.mceItemFlash, .mceItemShockWave, .mceItemQuickTime, .mceItemWindowsMedia, .mceItemRealMedia, .mceItemDivX, .mceItemSilverlight, .mceItemGeneric, .mceItemAudio, .mceItemVideo, .mceItemIframe {
+    border:1px dotted #cc0000;
+    background-position:center;
+    background-repeat:no-repeat;
+    background-color:#ffffcc;
+}
+.mceItemShockWave {
+    background-image: url(../img/shockwave.png);
+}
+.mceItemFlash {
+    background-image:url(../img/swf.png);
+}
+.mceItemQuickTime {
+    background-image:url(../img/quicktime.png);
+}
+.mceItemWindowsMedia {
+    background-image:url(../img/windowsmedia.png);
+}
+.mceItemRealMedia {
+    background-image:url(../img/real.png);
+}
+.mceItemDivX {
+    background-image:url(../img/video.png);
+}
+.mceItemGeneric {
+    background-image:url(../img/generic.png);
+}
+.mceItemSilverlight {
+    background-image:url(../img/video.png);
+}
+.mceItemPDF {
+    background-image:url(../img/pdf.png);
+}
+.mceItemIframe {
+    background-image:url(../img/iframe.png);
+}
+
+.mceItemAudio {
+    background-image:url(../img/audio.png);
+}
+.mceItemVideo {
+    background-image:url(../img/video.png);
+}
+.mceItemAudio {
+    width: 200px;
+    height: 25px;
+}
+.mceItemAudio.mceItemAgentGecko {
+    height: 28px;
+}
+.mceItemAudio.mceItemAgentOpera, .mceItemAudio.mceItemAgentChrome, .mceItemAudio.mceItemAgentGecko {
+    width: 300px;
+}
+.mceItemAudio.mceItemAgentChrome {
+    height: 32px;
+}
+.mceItemSelected {
+    border:1px dotted #999999;
+    background-color: #3399ff;
+}

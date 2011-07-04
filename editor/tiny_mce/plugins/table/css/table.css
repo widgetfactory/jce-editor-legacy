@@ -1,0 +1,23 @@
+/* CSS file for table dialog in the table plugin */
+
+.ui-tabs-panel {
+	height: 290px;
+}
+
+.advfield {
+	width: 200px;
+}
+
+#action {
+	margin-bottom: 3px;
+}
+
+#class {
+	width: 150px;
+}
+body.row .ui-tabs-panel, body.cell .ui-tabs-panel {
+	height: 240px;
+}
+#merge_tab.ui-tabs-panel {
+	height: 80px;
+}

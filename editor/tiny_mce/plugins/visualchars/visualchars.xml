@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<install version="2.0" type="plugin" plugin="visualchars" core="1" editable="0">
+	<name>WF_VISUALCHARS_TITLE</name>
+	<version>@@version@@</version>
+	<creationDate>@@date@@</creationDate>
+	<author>Ryan Demmer</author>
+	<authorEmail>@@e-mail@@</authorEmail>
+	<authorUrl>http://www.joomlacontenteditor.net/</authorUrl>
+	<copyright>Ryan Demmer</copyright>
+	<license>@@licence@@</license>
+	<description>WF_VISUALCHARS_DESC</description>
+	<icon>visualchars</icon>
+	<params></params>
+	<help>
+		<topic key="visualchars.about" title="WF_VISUALCHARS_HELP_ABOUT" />
+	</help>
+	<languages></languages>
+</install>

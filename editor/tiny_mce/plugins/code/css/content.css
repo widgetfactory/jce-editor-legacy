@@ -1,0 +1,4 @@
+span.mceItemPhp, span.mcePhp, span.mceItemScript, span.mceItemStyle {display:inline-block;width:20px;height:20px;background-image:url(../../../../libraries/img/ext.png);background-repeat:no-repeat;}
+span.mceItemPhp, span.mcePhp {background-position: 0 -100px;}
+span.mceItemScript {background-position: 0 -220px;}
+span.mceItemStyle {background-position: 0 -420px;}

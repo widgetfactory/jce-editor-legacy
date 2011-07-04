@@ -1,0 +1,63 @@
+/* CSS file for ImageManager plugin */
+.ui-tabs-panel {
+	height: 200px;
+	overflow: auto;
+}
+
+#jce span#upload {
+	background-position: 0 -72px;
+}
+
+div.preview {
+  overflow: hidden;
+  padding: 6px 0;
+  margin: 0;
+  text-align:left;
+  height: 150px;
+  position: relative;
+}
+
+#width, #height {
+	width: 50px;
+	text-align: center;
+}
+
+#constrain {
+	width: auto;
+}
+#id, #dir, #lang, #usemap, #longdesc, #class, #src, #title, #alt, #onmouseout, #onmouseover, #classlist, #style, #classes {
+	width: 350px;
+}
+#margin_top, #margin_right, #margin_bottom, #margin_left, #border_style, #border_width, #border_color, #clear {
+	margin: 0px 5px;
+}
+#border_style, input.editable-input {
+	margin: 0 0 0 5px;
+}
+
+#align {
+	margin-right: 5px;
+}
+#border {
+	margin-left: 0px;
+}
+#border_width {
+	width : 80px;
+}
+label[for="rollover_check"] {
+	min-width: 30px;
+}
+
+#jce table td {
+	padding: 3px 2px;
+}
+
+#jce.ie7 .ui-tabs-panel {
+	height: 210px;
+} 
+/*#jce.ie div.preview {
+	padding: 7px 0 8px 0;
+}*/
+#jce.ie7 div.preview {
+	padding: 8px 0 8px 0;
+}

@@ -1,0 +1,102 @@
+/** Textmate Style Theme **/
+
+/** XML **/
+
+span.xml-tagname {
+	color: #7F0055;
+}
+span.xml-attribute {
+	color: #2A00FF;
+}
+span.xml-punctuation {
+	color: black;
+}
+span.xml-attname {
+	color: #7F0055;
+}
+span.xml-comment {
+	color: #4C886B;
+}
+span.xml-cdata {
+	color: #48A;
+}
+span.xml-processing {
+	color: #999;
+}
+span.xml-entity {
+	color: #A22;
+}
+span.xml-error {
+	color: #F00 !important;
+}
+span.xml-text {
+	color: black;
+}
+/** CSS **/
+span.css-at {
+	color: #000;
+}
+span.css-unit {
+	color: #000;
+}
+span.css-value {
+	color: #000;
+}
+span.css-constant {
+	color: #000;
+}
+span.css-property {
+	color: #000;
+}
+span.css-color {
+	color: #000;
+}
+span.css-identifier {
+	color: #000;
+}
+span.css-selector {
+	color: #7F0055;
+}
+span.css-important {
+	color: #00F;
+}
+span.css-colorcode {
+	color: #000;
+}
+span.css-comment {
+	color: #4C886B;
+}
+span.css-string {
+	color: #2A00FF;
+}
+/** Javascript **/
+span.js-punctuation {
+	color: #000;
+}
+span.js-operator {
+	color: #7F0055;
+}
+span.js-keyword {
+	color: #7F0055;
+}
+span.js-atom {
+	color: #000;
+}
+span.js-variable {
+	color: #000;
+}
+span.js-variabledef {
+	color: #000;
+}
+span.js-localvariable {
+	color: #000;
+}
+span.js-property {
+	color: #000;
+}
+span.js-comment {
+	color: #4C886B;
+}
+span.js-string {
+	color: #2A00FF;
+}	

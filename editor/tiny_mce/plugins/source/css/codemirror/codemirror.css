@@ -1,0 +1,12 @@
+div.CodeMirror-line-numbers {
+	line-height: 16px;
+	font-family: "Menlo","Monaco","Courier New",monospace;
+	color: #888888;
+	margin: 0 5px 0 0;
+	text-align:	right;
+	font-size: 12px;
+	background-color: #E3E3E3;
+	border-right: 1px solid #9F9F9F;
+	min-width: 2em;
+	padding: 7px 6px 0 0;
+}

@@ -1,0 +1,32 @@
+/**
+* @package JCE Media Manager JCE MediaPlayer
+* @copyright Copyright (C) 2005 - 2010 Ryan Demmer. All rights reserved.
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see licence.txt
+* This version may have been modified pursuant
+* to the GNU General Public License, and as distributed it includes or
+* is derivative of works licensed under the GNU General Public License or
+* other free or open source software licenses.
+*/
+#mediaplayer_options input.browser {
+	width: 300px;
+}
+#mediaplayer_controlBarAutoHideTimeout {
+	width: 50px;
+}
+#mediaplayer_audioPan, #mediaplayer_volume  {
+	width: 30px;	
+}
+#mediaplayer_options span.ui-slider {
+	width: 100px;
+}
+label[for="mediaplayer_loop"], label[for="mediaplayer_autoPlay"], label[for="mediaplayer_muted"] {
+	min-width: 80px;
+}
+
+label[for="mediaplayer_playButtonOverlay"], label[for="mediaplayer_bufferingOverlay"] {
+	min-width: 140px;
+}
+
+span.ui-slider-block {
+	display: inline-block;
+}

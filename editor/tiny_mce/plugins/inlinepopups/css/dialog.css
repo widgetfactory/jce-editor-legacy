@@ -1,0 +1,49 @@
+/**
+ * @version		$Id: dialog.css 221 2011-06-11 17:30:33Z happy_noodle_boy $
+ * @package		JCE
+ * @copyright	Copyright (C) 2009 Ryan Demmer. All rights reserved.
+ * @license		GNU/GPL
+ * This version may have been modified pursuant
+ * to the GNU General Public License, and as distributed it includes or
+ * is derivative of works licensed under the GNU General Public License or
+ * other free or open source software licenses.
+ */
+.ui-jce .ui-dialog .ui-dialog-content {
+    padding: 0 !important;
+}
+
+.ui-jce .ui-dialog.loading .ui-dialog-content {
+    background: #FFFFFF url('../../../themes/advanced/skins/default/img/progress.gif') no-repeat center 45%;
+}
+
+.ui-dialog-title {
+    min-height: 16px;
+}
+
+.ui-dialog-confirm .ui-dialog-content, .ui-dialog-alert .ui-dialog-content {
+    font-size: 1em !important;
+    margin: 10px;
+    padding: 10px !important;
+    overflow: auto;
+    white-space: normal;
+    position: relative;
+    background: none !important;
+}
+
+.ui-icon-confirm, .ui-icon-alert {
+    margin: 0 7px 20px 0;
+    float: left;
+}
+
+.ui-icon-confirm {
+    background-position: -16px -144px;
+}
+
+.ui-dialog-blocker {
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: url(../../../themes/advanced/img/spacer.gif) no-repeat 0 -75px;
+    width: 100%;
+    height: 100%
+}

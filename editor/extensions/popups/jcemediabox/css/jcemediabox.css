@@ -1,0 +1,20 @@
+#popup_extension_jcemediabox input[type="text"] {
+	width : 250px;
+}
+#popup_extension_jcemediabox select {
+	width: auto;
+}
+#popup_extension_jcemediabox #jcemediabox_popup_width, #popup_extension_jcemediabox #jcemediabox_popup_height {
+	width : 50px;
+}
+
+#popup_extension_jcemediabox #jcemediabox_popup_icon + label {
+	margin-left: 20px;
+}
+
+#popup_extension_jcemediabox p.required {
+	text-align:center;
+	font-weight: bold;
+	color: red;
+	margin: 5px 0;
+}
