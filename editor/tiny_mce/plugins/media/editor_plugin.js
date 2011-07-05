@@ -39,68 +39,95 @@
 		return s.charAt(0).toUpperCase() + s.substring(1);
 	};
 
+	// Media types supported by this plugin
+	var mediaTypes = {
+		// Type, clsid, mime types, codebase
+		"Flash" : {
+			classid 	: "CLSID:D27CDB6E-AE6D-11CF-96B8-444553540000",
+			type		: "application/x-shockwave-flash",
+			codebase 	: "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,1,53,64"
+		},
+
+		"ShockWave" : {
+			classid 	: "CLSID:166B1BCA-3F9C-11CF-8075-444553540000",
+			type		: "application/x-director",
+			codebase 	: "http://download.macromedia.com/pub/shockwave/cabs/director/sw.cab#version=10,2,0,023"
+		},
+
+		"WindowsMedia" : {
+			classid 	: "CLSID:6BF52A52-394A-11D3-B153-00C04F79FAA6",
+			type		: "application/x-mplayer2",
+			codebase	: "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=10,00,00,3646"
+		},
+
+		"QuickTime" : {
+			classid 	: "CLSID:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B",
+			type		: "video/quicktime",
+			codebase	: "http://www.apple.com/qtactivex/qtplugin.cab#version=7,3,0,0"
+		},
+
+		"DivX"		: {
+			classid 	: "CLSID:67DABFBF-D0AB-41FA-9C46-CC0F21721616",
+			type		: "video/divx",
+			codebase	: "http://go.divx.com/plugin/DivXBrowserPlugin.cab"
+		},
+
+		"RealMedia" : {
+			classid : "CLSID:CFCDAA03-8BE4-11CF-B84B-0020AFBBCCFA",
+			type		: "audio/x-pn-realaudio-plugin"
+		},
+
+		"Java" : {
+			classid 	: "CLSID:8AD9C840-044E-11D1-B3E9-00805F499D93",
+			type		  : "application/x-java-applet",
+			codebase	: "http://java.sun.com/products/plugin/autodl/jinstall-1_5_0-windows-i586.cab#Version=1,5,0,0"
+		},
+
+		"Silverlight" : {
+			classid		: "CLSID:DFEAF541-F3E1-4C24-ACAC-99C30715084A",
+			type		  : "application/x-silverlight-2"
+		},
+
+		"Video" : {
+			type		: 'video/mp4'
+		},
+
+		"Audio" : {
+			type    : 'audio/mp3'
+		}
+	};
+
 	tinymce.create('tinymce.plugins.MediaPlugin', {
 		init : function(ed, url) {
 			var self = this, lookup = {};
 			
-			// Media types supported by this plugin
-			this.mediaTypes = {
+			var cbase = {
 				// Type, clsid, mime types, codebase
 				"Flash" : {
-					classid 	: "CLSID:D27CDB6E-AE6D-11CF-96B8-444553540000",
-					type		: "application/x-shockwave-flash",
 					codebase 	: "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=" + ed.getParam('media_version_flash', '10,1,53,64')
 				},
-		
+
 				"ShockWave" : {
-					classid 	: "CLSID:166B1BCA-3F9C-11CF-8075-444553540000",
-					type		: "application/x-director",
 					codebase 	: "http://download.macromedia.com/pub/shockwave/cabs/director/sw.cab#version=" + ed.getParam('media_version_shockwave', '10,2,0,023')
 				},
-		
+
 				"WindowsMedia" : {
-					classid 	: "CLSID:6BF52A52-394A-11D3-B153-00C04F79FAA6",
-					type		: "application/x-mplayer2",
 					codebase	: "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=" + ed.getParam('media_version_windowsmedia', '10,00,00,3646')
 				},
-		
-				"QuickTime" : {			
-					classid 	: "CLSID:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B",
-					type		: "video/quicktime",
+
+				"QuickTime" : {
 					codebase	: "http://www.apple.com/qtactivex/qtplugin.cab#version=" + ed.getParam('media_version_quicktime', '7,3,0,0')
 				},
-		
-				"DivX"		: {
-					classid 	: "CLSID:67DABFBF-D0AB-41FA-9C46-CC0F21721616",
-					type		: "video/divx",
-					codebase	: "http://go.divx.com/plugin/DivXBrowserPlugin.cab"
-				},
-		
-				"RealMedia" : {
-					classid : "CLSID:CFCDAA03-8BE4-11CF-B84B-0020AFBBCCFA",
-					type		: "audio/x-pn-realaudio-plugin"
-				},
-		
+
 				"Java" : {
-					classid 	: "CLSID:8AD9C840-044E-11D1-B3E9-00805F499D93",
-					type		  : "application/x-java-applet",
 					codebase	: "http://java.sun.com/products/plugin/autodl/jinstall-1_5_0-windows-i586.cab#Version=" + ed.getParam('media_version_java', '1,5,0,0')
-				},
-		
-				"Silverlight" : {
-					classid		: "CLSID:DFEAF541-F3E1-4C24-ACAC-99C30715084A",
-					type		  : "application/x-silverlight-2"
-				},
-		
-				"Video" : {
-					type		: 'video/mp4'
-				},
-		
-				"Audio" : {
-					type    : 'audio/mp3'
 				}
-			};			
+			};
 			
+			each(cbase, function(v, k) {
+				extend(mediaTypes[k], v);
+			});
+
 			this.mimes = {};
 
 			// Parses the default mime types string into a mimes lookup map
@@ -140,7 +167,7 @@
 			// Parse media types into a lookup table
 			scriptRegExp = '';
 
-			each (this.mediaTypes, function(v, k) {
+			each (mediaTypes, function(v, k) {
 				v.name = k;
 
 				if (v.classid) {
@@ -825,7 +852,7 @@
 			var props, type, ext, cl = s.match(/mceItem(Flash|ShockWave|WindowsMedia|QuickTime|RealMedia|DivX|PDF|Silverlight|IFrame)/);
 
 			if (cl) {
-				props = this.mediaTypes[cl[1]];
+				props = mediaTypes[cl[1]];
 
 				if (props) {
 					type = props.type;
@@ -932,13 +959,13 @@
 							type	: root.type || this.getMimeType(n.attr('class')) || this.getMimeType(src)
 						};
 					}
-					
+
 					var lookup = this.lookup[root.type] || this.lookup[name] || this.lookup['flash'];
-					
+
 					if (!root.classid) {
 						root.classid = lookup.classid;
 					}
-					
+
 					if (!root.codebase) {
 						root.codebase = lookup.codebase;
 					}
