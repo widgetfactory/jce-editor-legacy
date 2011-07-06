@@ -284,7 +284,7 @@ class WFFileBrowser extends WFBrowserExtension
 		}		
 
 		// All file types
-		$map[WFText::_('WF_FILEGROUP_ALL') . ' (*.*)'] = '*.*';
+		//$map[WFText::_('WF_FILEGROUP_ALL') . ' (*.*)'] = '*.*';
 		
 		return $map;
 	}
