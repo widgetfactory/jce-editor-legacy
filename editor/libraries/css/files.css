@@ -85,7 +85,7 @@ li.file.pdf {
 /** Application specific file types. These currently use a generic set of icons but can be edited to use custom / specific icons where the user has licence from the trademark holders to use such icons **/
 
 /* Apple Quicktime® */
-li.file.mov, li.file.qt {
+li.file.mov, li.file.qt, li.file.m4a {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
 }
 /* RealPlayer® */
