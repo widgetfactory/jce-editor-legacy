@@ -233,8 +233,8 @@ WFPopups.addPopup('jcemediabox', {
         	$('#jcemediabox_popup_autopopup').val(v);
         }  
 
-        $('#jcemediabox_popup_icon').attr('checked', !icon);
-        $('#jcemediabox_popup_icon_position').attr('disabled', icon);
+        $('#jcemediabox_popup_icon').val(icon ? 0 : 1);
+        $('#jcemediabox_popup_icon_position').prop('disabled', icon);
 
         // Get position
         if (s = /icon-(top-right|top-left|bottom-right|bottom-left|left|right)/.exec(n.className)) {
