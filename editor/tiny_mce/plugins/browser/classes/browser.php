@@ -20,28 +20,27 @@ class WFFileBrowserPlugin extends WFMediaManager
 	/* 
 	* @var string
 	*/
-	var $_extensions = 'xml=xml;html=htm,html;word=doc,docx;powerpoint=ppt;excel=xls;text=txt,rtf;image=gif,jpeg,jpg,png;acrobat=pdf;archive=zip,tar,gz;flash=swf;winrar=rar;quicktime=mov,mp4,qt;windowsmedia=wmv,asx,asf,avi;audio=wav,mp3,aiff;openoffice=odt,odg,odp,ods,odf';	
+	var $_filetypes = 'xml=xml;html=htm,html;word=doc,docx;powerpoint=ppt;excel=xls;text=txt,rtf;image=gif,jpeg,jpg,png;acrobat=pdf;archive=zip,tar,gz;flash=swf;winrar=rar;quicktime=mov,mp4,qt;windowsmedia=wmv,asx,asf,avi;audio=wav,mp3,aiff;openoffice=odt,odg,odp,ods,odf';	
 	
 	/**
 	* @access	protected
 	*/
 	function __construct()
-	{		
-		if (JRequest::getWord('type', 'file') == 'file') {
-			$extensions = 'WF_LABEL_ALL_FILES=*.*;' . $this->getParam('browser.extensions', $this->get('_extensions'));
+	{
+		parent::__construct();	
+					
+		$browser = $this->getBrowser();
+		
+		if (JRequest::getWord('type', 'file') == 'file') {			
+			// Add all files
+			$browser->addFileTypes(array('WF_FILEGROUP_ALL' => '*.*'));
 		} else {
-			$extensions = 'image=jpg,jpeg,png,gif';
+			$browser->setFileTypes();
 		}
 		
 		if (JRequest::getString('filter')) {
-			$extensions = 'files=' . JRequest::getString('filter');
+			$browser->setFileTypes('files=' . JRequest::getString('filter'));	
 		}
-
-		$config = array(
-			'filetypes' => $extensions
-		);
-		
-		parent::__construct($config);
 	}
 	/**
 	 * Returns a reference to a editor object
