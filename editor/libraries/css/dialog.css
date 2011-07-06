@@ -318,7 +318,7 @@ label, input, select {
 	line-height: 16px;
 }
 .disabled {
-	cursor:default !important;
+	cursor:default;
 }
 span[role="button"].disabled {
     opacity:0.3;
