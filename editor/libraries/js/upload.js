@@ -105,7 +105,6 @@
                         extensions : v.replace(/\*\./g, '').replace(/;/, ',')
                     });
                 });
-
             }
 
             // check size for older format and add kb label
@@ -437,7 +436,8 @@
             $(this.element).empty();
 
             $.each(files, function(x, file) {
-                if (/\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)/i.test(file.name)) {
+                // check for extension in file name
+                if (/\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)/i.test($.String.filename(file.name))) {
                     self.uploader.trigger('Error', {
                         code 	: self.FILE_INVALID_ERROR,
                         message : 'File invalid error',
@@ -450,8 +450,6 @@
 
                 // create file list element
                 file.element = doc.createElement('li');
-
-                var f = self._fileinfo(file.name);
 
                 var status 	 	= doc.createElement('span');
                 var size	   	= doc.createElement('span');
@@ -471,12 +469,14 @@
 
                     return self._removeFile(file);
                 });
+                
+                var title = $.String.basename(file.name);
 
                 // text
                 $(name).attr({
-                    'title' : f.base,
+                    'title' : title,
                     'role' : 'presentation'
-                }).addClass('queue-item-name').append('<span class="queue-item-progress" role="presentation"></span><span class="queue-item-name-text">' + f.base + '</span>').appendTo(file.element);
+                }).addClass('queue-item-name').append('<span class="queue-item-progress" role="presentation"></span><span class="queue-item-name-text">' + title + '</span>').appendTo(file.element);
 
                 // size
                 $(size).attr({
@@ -551,14 +551,12 @@
 
                     var txt = this;
 
-                    var data = self._fileinfo($(this).text());
-
                     $(this).hide();
 
                     $(input).val(data.name).show().attr('aria-hidden', false);
 
                     $(input).bind('blur', function() {
-                        var v = $(input).val() + '.' + data.ext;
+                        var v = $(input).val() + '.' + $.string.getExt($(txt).text());
 
                         self._renameFile(file, v);
 
@@ -578,7 +576,7 @@
                     $(input).focus();
                 });
 
-                $(file.element).addClass('queue-item').addClass('file').addClass(f.ext.toLowerCase()).appendTo($(self.element));
+                $(file.element).addClass('queue-item').addClass('file').addClass($.String.getExt(file.name)).appendTo($(self.element));
 
                 self._trigger('fileSelect', null, file);
             });
@@ -589,23 +587,6 @@
             this.uploader.stop();
 
             $(file.element).removeClass('load');
-        },
-
-        _fileinfo: function(s) {
-            // base name
-            s = s.replace(/\\/g, '/');
-            s = s.substring(s.length, s.lastIndexOf('/') + 1);
-            // safe file
-
-            s = s.replace(/(\.){2,}/g, '').replace(/\s/g, '_').replace(/[^a-z0-9\.\_\-]/gi, '');
-
-            var f = {
-                base: s,
-                name: s.replace(/\.[^.]+$/i, ''),
-                ext	: s.substring(s.length, s.lastIndexOf('.') + 1)
-            };
-
-            return f;
         },
 
         destroy: function() {
