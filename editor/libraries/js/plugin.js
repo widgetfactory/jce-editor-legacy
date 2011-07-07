@@ -571,10 +571,8 @@
                     }
                 },
 
-                error: function (e) {
-                    if (typeof e != 'undefined') {
-                        $.Dialog.alert(e);
-                    }
+                error: function (e, txt, status) {
+					$.Dialog.alert(status || ('SERVER ERROR - ' + txt.toUpperCase()));
                 }
 
             });
