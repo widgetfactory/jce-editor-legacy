@@ -19,7 +19,9 @@
 			// Register commands
 			ed.addCommand('mceImageManager', function() {
 				// Internal image object like a flash placeholder
-				if (isMceItem(ed.selection.getNode())){
+				var n = ed.selection.getNode();
+				
+				if (n.nodeName == 'IMG' && isMceItem(n)){
 					return;
 				}
 
