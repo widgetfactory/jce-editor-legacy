@@ -49,6 +49,10 @@
 			<option value="0">WF_OPTION_NO</option>
 			<option value="1">WF_OPTION_YES</option>
 		</param>
+		<param name="compress_gzip" type="list" default="0" label="WF_PARAM_COMPRESS_GZIP" description="WF_PARAM_COMPRESS_GZIP_DESC">
+			<option value="0">WF_OPTION_NO</option>
+			<option value="1">WF_OPTION_YES</option>
+		</param>
 	</params>
 	<params group="advanced">
 		<param name="use_cookies" type="list" default="1" label="WF_PARAM_USE_COOKIES" description="WF_PARAM_USE_COOKIES_DESC">
