@@ -140,6 +140,6 @@ class WFSourcePlugin extends WFEditorPlugin {
 		// set files
 		$packer->setFiles($files);
 		// pack!
-		$packer->pack();
+		$packer->pack(true, $this->getParam('editor.compress_gzip', 0));
 	}
 }

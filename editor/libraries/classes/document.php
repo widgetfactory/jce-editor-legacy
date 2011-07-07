@@ -526,7 +526,7 @@ class WFDocument extends JObject
 	/**
 	 * pack function for plugins
 	 */
-	public function pack()
+	public function pack($minify = true, $gzip = false)
 	{				
 		if (JRequest::getCmd('task') == 'pack') {
 			
@@ -566,7 +566,7 @@ class WFDocument extends JObject
 			}
 
 			$packer->setFiles($files);
-			$packer->pack();
+			$packer->pack($minify, $gzip);
 		}
 	}
 }

@@ -139,7 +139,7 @@ class WFEditorPlugin extends WFEditor
 			}
 			
 			// pack assets if required
-			$document->pack();
+			$document->pack(true, $this->getParam('editor.compress_gzip', 0));
 	
 			// Load Plugin language
 			$this->loadPluginLanguage();
