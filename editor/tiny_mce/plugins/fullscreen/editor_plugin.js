@@ -79,7 +79,7 @@
                 var win = DOM.getViewPort();
 
                 this.width 	= win.w - (container.clientWidth - iframe.clientWidth);
-                this.height = win.h - (th + fh);
+                this.height = win.h - (th + fh + 15);
 
                 DOM.setStyles(iframe, {
                     width	: this.width,
