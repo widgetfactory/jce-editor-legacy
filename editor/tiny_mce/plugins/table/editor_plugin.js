@@ -934,7 +934,7 @@
 						selectedCells = dom.select('td.mceSelected,th.mceSelected');
 						if (selectedCells.length > 0) {
 							rng = dom.createRng();
-							node = selectedCells[0];							
+							node = selectedCells[0];
 							endNode = selectedCells[selectedCells.length - 1];
 							rng.setStartBefore(node);
 							rng.setEndAfter(node);
@@ -964,7 +964,7 @@
 				ed.onKeyUp.add(function(ed, e) {
 					cleanup();
 				});
-				
+
 				ed.onKeyDown.add(function (ed, e) {
 					fixTableCellSelection(ed);
 				});
@@ -1132,23 +1132,21 @@
 					}
 
 					if (!ed.dom.select('td.mceSelected,th.mceSelected').length) {
-                        winMan.open({
-                            url : ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=table&context=merge',
-                            width : 240 + parseInt(ed.getLang('table.merge_cells_delta_width', 0)),
-                            height : 170 + parseInt(ed.getLang('table.merge_cells_delta_height', 0)),
-                            inline : 1,
-                            popup_css : false
-                        }, {
-                            rows : rowSpan,
-                            cols : colSpan,
-                            onaction : function(data) {
-                                grid.merge(cell, data.cols, data.rows);
-                            },
-
-                            plugin_url : url
-                        });
-                    } else
-                        grid.merge();
+						winMan.open({
+							url : ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=table&context=merge',
+							width : 240 + parseInt(ed.getLang('table.merge_cells_delta_width', 0)),
+							height : 170 + parseInt(ed.getLang('table.merge_cells_delta_height', 0)),
+							inline : 1
+						}, {
+							rows : rowSpan,
+							cols : colSpan,
+							onaction : function(data) {
+								grid.merge(cell, data.cols, data.rows);
+							},
+							plugin_url : url
+						});
+					} else
+						grid.merge();
 				},
 
 				mceTableInsertRowBefore : function(grid) {
