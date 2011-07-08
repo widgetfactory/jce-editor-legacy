@@ -112,17 +112,19 @@ class WFFileSystem extends WFExtension
 			if (preg_match('/[\.\$]/', $root{0})) {
 				$root = 'images';
 			}	
-					
-			// Super Administrators not affected
-			/*if ($wf->isSuperAdmin()) {
-				// Get the root folder before dynamic variables for Super Admin
-				$root	= array_shift(explode('/$', $root));
-			} else {*/
-				// Replace any path variables
-				$pattern	= array('/\$id/', '/\$username/', '/\$usertype/', '/\$(group|profile)/', '/\$day/', '/\$month/', '/\$year/');
-				$replace	= array($user->id, strtolower($user->username), strtolower($user->usertype), strtolower($profile->name), date('d'), date('m'), date('Y'));	
-				$root 		= preg_replace($pattern, $replace, $root);
-			//}		
+			
+			// Joomla! 1.6+
+			if (method_exists('JUser', 'getAuthorisedGroups')) {
+				$groups 	= $user->getAuthorisedGroups();
+				$usertype 	= array_shift($groups);
+			} else {
+				$usertype 	= $user->usertype;
+			}
+
+			// Replace any path variables
+			$pattern	= array('/\$id/', '/\$username/', '/\$usertype/', '/\$(group|profile)/', '/\$day/', '/\$month/', '/\$year/');
+			$replace	= array($user->id, strtolower($user->username), strtolower($usertype), strtolower($profile->name), date('d'), date('m'), date('Y'));	
+			$root 		= preg_replace($pattern, $replace, $root);
 				
 			// Clean
 			$root = preg_replace(array('/$\w+\b/', '/(\.) {2,}/', '/[^A-Za-z0-9:\.\_\-\/]/'), '', $root);
