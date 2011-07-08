@@ -448,7 +448,8 @@
 					
 					if (c.error) {
 						ed.setProgressState(0);
-						ed.windowManager.alert('Error response: ' + c.error);
+						var e = c.error;						
+						ed.windowManager.alert(e.errstr || ('Error response: ' + e));
 					} else {
 						cb.call(t, c.result || '');
 					}
