@@ -72,8 +72,13 @@ function IeCursorFix() {
 		init : function(settings) {
 			var self = this;
 
-			var base = this.getBase(settings.compress.javascript) || '';
+			var base = settings.document_base_url;
 			var site = this.getSite(base);
+			
+			// fix https in base url
+			if (/https:\/\//.test(document.location.href)) {
+				base = base.replace(/http:/, 'https:');
+			}
 
 			// set preinit object to prevent tinymce from generating baseURL
 			window.tinyMCEPreInit = {};
