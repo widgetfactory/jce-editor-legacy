@@ -441,9 +441,6 @@
 				each(t.editor.getParam('theme_advanced_blockformats', t.settings.theme_advanced_blockformats, 'hash'), function(v, k) {
 					c.add(t.editor.translate(k != v ? k : fmts[v]), v, {'class' : 'mce_formatPreview mce_' + v});
 				});
-				
-				// add span option
-				c.add(t.editor.translate('advanced.span'), 'span', {'class' : 'mce_formatPreview mce_span'});
 			}
 
 			return c;
