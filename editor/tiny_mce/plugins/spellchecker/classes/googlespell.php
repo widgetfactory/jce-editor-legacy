@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Moxiecode
- * @copyright Copyright © 2004-2007, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright ï¿½ 2004-2007, Moxiecode Systems AB, All rights reserved.
  */
 
 class GoogleSpell extends SpellChecker {
@@ -78,7 +78,14 @@ class GoogleSpell extends SpellChecker {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $header);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-			$xml = curl_exec($ch);
+			$response = curl_exec($ch);
+			
+			if ($response === false) {
+				$this->throwError('Invalid Server Response');
+			} else {
+				$xml = $response;
+			}
+			
 			curl_close($ch);
 		} else {
 			// Use raw sockets
@@ -93,8 +100,10 @@ class GoogleSpell extends SpellChecker {
 					$xml .= fgets($fp, 128);
 
 				fclose($fp);
-			} else
-				echo "Could not open SSL connection to google.";
+			} else {
+				//echo "Could not open SSL connection to google.";
+				$this->throwError('Could not open SSL connection to google.');
+			}
 		}
 
 		// Grab and parse content
