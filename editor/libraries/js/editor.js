@@ -25,32 +25,6 @@ function IeCursorFix() {
 
 		_bookmark : {},
 
-		getBase : function(compress) {
-			// find tinymce
-			var marker = compress ? 'index.php?option=com_jce&view=editor&layout=editor&task=pack' : 'components/com_jce/editor/tiny_mce';
-			// get url from browser
-			var u = document.location.href;
-			// get script
-			var script = tinymce.DOM.select('script[src*="' + marker + '"]')[0];
-
-			if (script) {
-				// get script src
-				var src = script.src;
-
-				if (src) {
-					// extract base url
-					var base = src.substr(0, src.indexOf(marker));
-
-					// remove administrator
-					if (base.indexOf('/administrator/') != -1) {
-						base = base.substr(0, base.indexOf('administrator/'));
-					}
-					// return absolute base
-					return base.indexOf('://') == -1 ? u.substr(0, u.indexOf(base) + base.length) : base;
-				}
-			}
-			return null;
-		},
 		getSite : function(base) {
 			// get url from browser
 			var u 		= document.location.href;
@@ -72,7 +46,7 @@ function IeCursorFix() {
 		init : function(settings) {
 			var self = this;
 
-			var base = settings.document_base_url;
+			var base = settings.base;
 			var site = this.getSite(base);
 			
 			// fix https in base url
