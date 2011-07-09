@@ -80,7 +80,7 @@
 					}
 					
 					if (!ed.getParam('code_style')) {
-						o.content = o.content.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '');
+						o.content = o.content.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, '');
 					}
 
 					// Remove PHP if not enabled
@@ -148,21 +148,6 @@
 						o.content = o.content.replace(/<span([^>]+)class="mcePhp"([^>]+)><!--([\s\S]*?)-->(&nbsp;|\u00a0)<\/span>/g, function(a, b, c, d) {
 							return '<?php' + ed.dom.decode(d) + '?>';
 						});
-
-					}
-					// fix cdata
-					if (/<(script|style)/.test(o.content) && ed.getParam('code_cdata')) {
-						var n = ed.dom.create('div', {}, o.content);
-						
-						tinymce.each(ed.dom.select('script', n), function(s) {
-							s.innerHTML = '\n// <![CDATA[\n' + self._clean(s.innerHTML) + '\n// ]]>\n';
-						});
-						
-						tinymce.each(ed.dom.select('style', n), function(s) {
-							s.innerHTML = '\n<!--\n' + self._clean(s.innerHTML) + '\n-->\n';
-						});
-						
-						o.content = n.innerHTML;						
 					}
 				}
 			});
@@ -188,7 +173,12 @@
 
 			if (v) {
 				text = new Node('#text', 3);
-				text.value = tinymce.trim(v);
+				text.raw = true;
+				// add cdata
+				if (ed.getParam('code_cdata')) {
+					v = '// <![CDATA[\n' + self._clean(tinymce.trim(v)) + '\n// ]]>';
+				}
+				text.value = v;
 				node.append(text);
 			}
 
@@ -220,8 +210,12 @@
 
 			if (v) {
 				text = new Node('#text', 3);
-				text.value = tinymce.trim(v);
-				
+				text.raw = true;
+				// add cdata
+				if (ed.getParam('code_cdata')) {
+					v = '<!--\n' + self._clean(tinymce.trim(v)) + '\n-->';
+				}
+				text.value = v;
 				node.append(text);
 			}
 			
