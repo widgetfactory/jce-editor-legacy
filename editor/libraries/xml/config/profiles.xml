@@ -69,7 +69,7 @@
 		<param name="extended_elements" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_ELEMENTS" description="WF_PARAM_ELEMENTS_DESC" />
 		<!-- Script parameters -->
 		<!-- Formatting parameters -->
-		<param name="theme_advanced_blockformats" class="checklist sortable" type="list" multiple="multiple" default="p,div,h1,h2,h3,h4,h5,h6,address,code,pre,samp" label="WF_PARAM_BLOCK_FORMAT" description="WF_PARAM_BLOCK_FORMAT_DESC">
+		<param name="theme_advanced_blockformats" class="checklist sortable" type="list" multiple="multiple" default="p,div,h1,h2,h3,h4,h5,h6,address,code,pre,samp,span" label="WF_PARAM_BLOCK_FORMAT" description="WF_PARAM_BLOCK_FORMAT_DESC">
 			<option value="p">Paragraph</option>
 			<option value="div">Div</option>
 			<option value="h1">Heading1</option>
@@ -82,6 +82,7 @@
 			<option value="code">Code</option>
 			<option value="pre">Preformatted</option>
 			<option value="samp">Sample</option>
+			<option value="span">Span</option>
 		</param>
 		<param name="theme_advanced_fonts_add" type="text" size="50" default="" label="WF_PARAM_FONT_ADD" description="WF_PARAM_FONT_ADD_DESC" />
 		<param name="theme_advanced_fonts_remove" type="text" size="50" default="" label="WF_PARAM_FONT_REMOVE" description="WF_PARAM_FONT_REMOVE_DESC" />
@@ -119,6 +120,10 @@
 			<option value="0">WF_OPTION_NO</option>
 		</param>
 		<param name="toggle" type="list" default="1" label="WF_PARAM_EDITOR_TOGGLE" description="WF_PARAM_EDITOR_TOGGLE_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
+		<param name="toggle_state" type="list" default="1" label="WF_PARAM_EDITOR_STATE" description="WF_PARAM_EDITOR_STATE_DESC">
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
 		</param>

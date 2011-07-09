@@ -254,7 +254,7 @@ function IeCursorFix() {
 			}
 
 			tinymce.each(DOM.select('.wfEditor'), function(el) {
-				var state 	= getVar(s.editor_state, 1);
+				var state 	= getVar(s.toggle_state, 1);
 				// get cookie
 				var cookie 	= getVar(tinymce.util.Cookie.get('wf_editor_' + el.id + '_state'), 1);
 
