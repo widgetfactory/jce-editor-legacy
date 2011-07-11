@@ -41,10 +41,19 @@ var XHTMLXtrasDialog = {
     },
 
     insert : function() {
-        var ed = tinyMCEPopup.editor, se = ed.selection, n = se.getNode(), el;
+        var ed = tinyMCEPopup.editor, se = ed.selection, n = se.getNode(), elm;
 
         var element = tinyMCEPopup.getWindowArg('element');
-        var elm 	= !element ? n : ed.dom.getParent(n, element);
+        
+        if (element) {
+        	if (n.nodeName.toLowerCase() == element) {
+        		elm = n;
+        	} else {
+        		elm = ed.dom.getParent(n, element);
+        	}
+        } else {
+			elm = n;
+        }
 
         if (elm == null) {
             tag = !element ? 'span' : element;
