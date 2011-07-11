@@ -46,7 +46,7 @@ function IeCursorFix() {
 		init : function(settings) {
 			var self = this;
 
-			var base = settings.base;
+			var base = settings.base_url;
 			var site = this.getSite(base);
 			
 			// fix https in base url
