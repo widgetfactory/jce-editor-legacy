@@ -883,19 +883,19 @@
 					var marker = dom.get('_plain_text_marker'),
 						elm, vp, y, elmHeight;
 
-					sel.select(marker, false);
-					d.execCommand("Delete", false, null);
+					ed.selection.select(marker, false);
+					document.execCommand("Delete", false, null);
 					marker = null;
 
 					// Get element, position and height
-					elm = sel.getStart();
-					vp = dom.getViewPort(w);
+					elm = ed.selection.getStart();
+					vp = dom.getViewPort(window);
 					y = dom.getPos(elm).y;
 					elmHeight = elm.clientHeight;
 
 					// Is element within viewport if not then scroll it into view
 					if ((y < vp.y) || (y + elmHeight > vp.y + vp.h)) {
-						d.body.scrollTop = y < vp.y ? y : y - vp.h + 25;
+						document.body.scrollTop = y < vp.y ? y : y - vp.h + 25;
 					}
 				}, 0);
             }
