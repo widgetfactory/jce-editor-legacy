@@ -80,7 +80,7 @@ class WFMediaManager extends WFEditorPlugin
 	function getConfig()
 	{
 		$filesystem = $this->getParam('filesystem.name', 'joomla');		
-		$filetypes 	= $this->get('filetypes', $this->getParam('extensions', $this->get('_filetypes', 'images=jpg,jpeg,png,gif')));
+		$filetypes 	= $this->getParam('extensions', $this->get('_filetypes', 'images=jpg,jpeg,png,gif'));
 		
 		$config = array(
 			'dir'					=> $this->getParam('dir', 'images'),

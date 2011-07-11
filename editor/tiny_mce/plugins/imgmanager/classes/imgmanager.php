@@ -18,14 +18,14 @@ wfimport('editor.libraries.classes.manager');
  
 class WFImageManagerPlugin extends WFMediaManager
 {
+	var $_filetypes = 'images=jpg,jpeg,png,gif';
+	
 	/**
 	* @access	protected
 	*/
 	function __construct()
 	{			
-		parent::__construct(array(
-			'filetypes' => 'images=jpg,jpeg,png,gif'
-		));
+		parent::__construct();
 	}
 	/**
 	 * Returns a reference to a editor object
