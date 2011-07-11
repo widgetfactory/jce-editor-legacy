@@ -26,7 +26,7 @@
 			ed.onPostProcess.add(function(ed, o) {
 				if (o.set) {
 					// Geshi
-					o.content = o.content.replace(/<pre xml:\s*(.*?)>(.*?)<\/pre>/g, '<pre class="geshi-$1">$2</pre>');				
+					o.content = o.content.replace(/<pre xml:\s*(.*?)>(.*?)<\/pre>/g, '<pre class="geshi-$1">$2</pre>');			
 				}
 				if (o.get) {					
 					// Geshi
@@ -46,9 +46,14 @@
 					if (!ed.getParam('verify_html')) {
 						o.content = o.content.replace(/<p([^>]*)><\/p>/g, '<p$1>&nbsp;</p>');
 					}				
+					
+					// padd empty table cells in Gecko
+					if (tinymce.isGecko) {
+						o.content = o.content.replace(/<td><\/td>/g, '<td>&nbsp;</td>');
+					}
 				}
 			});
-
+			
 			// Save callback
 			ed.onGetContent.add(function(ed, o){
 				if(o.save){
@@ -58,7 +63,11 @@
 						o.content = o.content.replace(/&apos;/gi, "'");
 						o.content = o.content.replace(/&amp;/gi, "&");
 						o.content = o.content.replace(/&quot;/gi, '"');
-					}	
+					}
+				}
+				// padd empty table cells in Gecko
+				if (tinymce.isGecko) {
+					o.content = o.content.replace(/<td><\/td>/g, '<td>&nbsp;</td>');
 				}
 			});
 			
