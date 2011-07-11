@@ -35,7 +35,7 @@ class WFFileBrowserPlugin extends WFMediaManager
 			// Add all files
 			$browser->addFileTypes(array('WF_FILEGROUP_ALL' => '*.*'));
 		} else {
-			$browser->setFileTypes();
+			$browser->setFileTypes('images=jpg,jpeg,png,gif');
 		}
 		
 		if (JRequest::getString('filter')) {
