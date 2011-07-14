@@ -106,9 +106,13 @@ WFMediaPlayer.init({
 		var self = this, s, k, v, data = [];
 		
 		var url = tinyMCEPopup.getParam('document_base_url'); 
+		
+		if (!/http(s)?:\/\//.test(s)) {
+			s = $.String.path(url, s);
+		}
 
 		// add src
-		data.push('src=' + $.String.encodeURI($.String.path(url, s)));
+		data.push('src=' + $.String.encodeURI(s));
 
 		$(':input', '#mediaplayer_options').each( function() {
 			k = $(this).attr('id'), v = $(this).val();
