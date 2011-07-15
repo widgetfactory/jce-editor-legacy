@@ -16,7 +16,7 @@ class WFMimeType
 	 * @var Array Mimetype values by extension
 	 * From mimetype list maintained at http://svn.apache.org/viewvc/httpd/httpd/trunk/docs/conf/mime.types
 	 */
-	private $mimes = array(
+	private static $mimes = array(
 		'application/andrew-inset' => 'ez',
 		'application/applixware' => 'aw',
 		'application/atom+xml' => 'atom',
@@ -651,12 +651,12 @@ class WFMimeType
 	/**
 	 * $mimes getter - see $mimes
 	 */
-	private function getMimes()
+	private static function getMimes()
 	{
-		return self::mimes;
+		return self::$mimes;
 	}	
 	
-	private function getMime($type)
+	private static function getMime($type)
 	{
 		// get mimetype array
 		$mimes = self::getMimes();
@@ -675,7 +675,7 @@ class WFMimeType
 		// check file mime type if possible
 		if (function_exists('mime_content_type')) {			
 			if ($mimetype = @mime_content_type($path)) {
-				if ($mime = mimeType::getMime($mimetype)) {
+				if ($mime = self::getMime($mimetype)) {
 					return in_array($extension, $mime);
 				}
 			}
@@ -684,7 +684,7 @@ class WFMimeType
 			$mimetype 	= finfo_file($finfo, $path);
 			finfo_close($finfo);
 			
-			if ($mime = mimeType::getMime($mimetype)) {
+			if ($mime = self::getMime($mimetype)) {
 				return in_array($extension, $mime);
 			}
 		}
