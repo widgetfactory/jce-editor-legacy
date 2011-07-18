@@ -1277,8 +1277,17 @@ class WFFileBrowser extends WFBrowserExtension
 		if ((int)$size * 1024 > (int)$upload_max) {
 			$size = $upload_max / 1024 . 'kb';
 		}
-
-		$runtimes = explode(',', $upload['runtimes']);
+		
+		$runtimes = array();
+		
+		if (is_string($upload['runtimes'])) {
+			$runtimes = explode(',', $upload['runtimes']);
+		} else {
+			foreach($upload['runtimes'] as $k => $v) {
+				$runtimes[] = $v;
+			}
+		}
+		
 		// add html4
 		$runtimes[] = 'html4';
 
