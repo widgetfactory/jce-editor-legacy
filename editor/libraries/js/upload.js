@@ -29,7 +29,7 @@
             filter			: null,
             swf				: 'uploader.swf',
             xap				: 'uploader.xap',
-            runtimes		: 'html5,flash,html4',
+            runtimes		: 'html5,flash,silverlight,html4',
             chunk_size		: 0,
             urlstream_upload: true,
             insert			: true,
