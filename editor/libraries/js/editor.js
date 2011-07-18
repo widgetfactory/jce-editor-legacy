@@ -17,6 +17,10 @@ function IeCursorFix() {
 	return true;
 }
 
+function jInsertEditorText(text,editor) {
+	WFEditor.insert(editor,text);
+}
+
 /**
  * Widget Factory Editor
  */
@@ -215,11 +219,12 @@ function IeCursorFix() {
 							n._mceOldSubmit = n.submit;
 							n.submit = function() {
 								// Save all instances
-								tinymce.each(tinymce.editors, function(e) {
+								tinymce.each(tinymce.editors, function(e) {									
 									if (e.initialized && !e.isHidden()) {
 										e.save();
 									}
 								});
+								
 								ed.isNotDirty = 1;
 
 								return ed.formElement._mceOldSubmit(ed.formElement);
@@ -280,9 +285,6 @@ function IeCursorFix() {
 
 				DOM.setStyle(div, 'cursor', 'pointer');
 				el.parentNode.insertBefore(div, el);
-				
-				// wrap text
-				self._wrapText(el, true);
 
 				Event.add(div, 'click', function(e) {
 					var ed = tinyMCE.get(el.id);
@@ -296,6 +298,8 @@ function IeCursorFix() {
 
 						tinyMCE.execCommand('mceAddEditor', 0, el.id);
 					} else {
+						self._wrapText(ed.getElement(), true);
+						
 						if (ed.isHidden()) {
 							if (use_cookies) {
 								tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
@@ -352,29 +356,21 @@ function IeCursorFix() {
 				document.getElementById(id).value = html;
 			}
 		},
+
 		/**
 		 * Get the editor content
 		 * @param {String} id The editor id
 		 */
-		getContent: function(id) {
+		getContent: function(id) {			
 			var ed = tinyMCE.get(id);
 
+			// pass content to textarea and return
 			if (ed && !ed.isHidden()) {
-				return ed.getContent();
+				return ed.save();
 			}
 
+			// return textarea content
 			return document.getElementById(id).value;
-		},
-		/**
-		 * Save the editor content
-		 * @param {String} id The editor id
-		 */
-		save: function(id) {
-			var el = document.getElementById(id);
-
-			if (/wfEditor/.test(el.className)) {
-				return tinyMCE.triggerSave();
-			}
 		},
 		/**
 		 * Insert content into the editor. This function is provided for editor-xtd buttons and includes methods for inserting into textareas
