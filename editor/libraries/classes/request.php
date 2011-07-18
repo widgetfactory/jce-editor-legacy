@@ -83,7 +83,7 @@ class WFRequest extends JObject
 
 		// check for null byte
 		foreach ($query as $key => $value) {
-			if (is_array($value)) {
+			if (is_array($value) || is_object($value)) {
 				return self::checkQuery($value);
 			}
 			
