@@ -72,13 +72,6 @@
                 }
             });
 
-            ed.onGetContent.add( function(ed, o) {
-                if (self.getState()) {
-                	self._disable();
-                    o.content = self.getContent();
-                }
-            });
-
             ed.onLoadContent.add( function(ed, o) {
                 if (self.getState()) {
                 	self._disable();
@@ -294,9 +287,7 @@
             var ed = this.editor, DOM = tinymce.DOM, se = this.getEditor();
 
             if (typeof v == 'undefined') {
-                v = ed.getContent({
-                    no_events : true
-                });
+                v = ed.getContent();
             }
 
             if (se) {                
@@ -521,11 +512,7 @@
             tinymce.dom.Event.add(iframe, 'load', function() {
             	var editor = self.getEditor();
             	
-            	var v = ed.getContent({
-                    no_events : true
-                });
-                
-                v = v.replace(/^<br \/>$/, '');
+            	var v = ed.getContent();
 
             	editor.init({
             		'url'		: ed.getParam('site_url'),
