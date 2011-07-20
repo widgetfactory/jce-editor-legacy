@@ -172,14 +172,19 @@
 			node = new Node('script', 1);
 
 			if (v) {
-				text = new Node('#text', 3);
-				text.raw = true;
-				// add cdata
-				if (ed.getParam('code_cdata')) {
-					v = '// <![CDATA[\n' + self._clean(tinymce.trim(v)) + '\n// ]]>';
+				
+				v = tinymce.trim(v);
+				
+				if (v) {
+					text = new Node('#text', 3);
+					text.raw = true;
+					// add cdata
+					if (ed.getParam('code_cdata', true)) {
+						v = '// <![CDATA[\n' + self._clean(tinymce.trim(v)) + '\n// ]]>';
+					}
+					text.value = v;
+					node.append(text);
 				}
-				text.value = v;
-				node.append(text);
 			}
 
 			each(p, function(v, k) {
@@ -209,14 +214,19 @@
 			node = new Node('style', 1);
 
 			if (v) {
-				text = new Node('#text', 3);
-				text.raw = true;
-				// add cdata
-				if (ed.getParam('code_cdata')) {
-					v = '<!--\n' + self._clean(tinymce.trim(v)) + '\n-->';
+				
+				v = tinymce.trim(v);
+				
+				if (v) {
+					text = new Node('#text', 3);
+					text.raw = true;
+					// add cdata
+					if (ed.getParam('code_cdata', true)) {
+						v = '<!--\n' + self._clean(tinymce.trim(v)) + '\n-->';
+					}
+					text.value = v;
+					node.append(text);
 				}
-				text.value = v;
-				node.append(text);
 			}
 			
 			// add scoped attribute
