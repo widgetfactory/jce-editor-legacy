@@ -256,7 +256,7 @@ class JoomlalinksContent extends JObject {
 			$query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title';
 		}
 		
-		if ($wf->getParam('article_alias', 1) == 1) {
+		if ($wf->getParam('joomlalinks.article_alias', 1) == 1) {
 			$query .= ', CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug';
 			$query .= ', CASE WHEN CHAR_LENGTH(b.alias) THEN CONCAT_WS(":", b.id, b.alias) ELSE b.id END as catslug';
 		}
