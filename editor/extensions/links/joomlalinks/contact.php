@@ -121,12 +121,11 @@ class JoomlalinksContact extends JObject
 		$user	= JFactory::getUser();	
 		
 		$where 	= '';
-		
-		// Joomla! 1.5
-		if (isset($user->gid)) {
-			$where  .= ' AND access <= '.(int) $user->get('aid');
+				
+		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
+			$where	.= ' AND access IN ('.implode(',', $user->getAuthorisedViewLevels()).')';
 		} else {
-			$where	.= ' AND access IN ('.implode(',', $user->authorisedLevels()).')';
+			$where  .= ' AND access <= '.(int) $user->get('aid');
 		}
 		
 		$query	= 'SELECT id, name, alias'

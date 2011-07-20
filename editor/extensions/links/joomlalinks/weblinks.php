@@ -125,11 +125,11 @@ class JoomlalinksWeblinks extends JObject
 		
 		$where 	= '';
 		
-		if (isset($user->gid)) {
-			$where .= ' AND published = 1';
-		} else {
+		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
 			$where .= ' AND state = 1';
-			$where .= ' AND access IN ('.implode(',', $user->authorisedLevels()).')';
+			$where .= ' AND access IN ('.implode(',', $user->getAuthorisedViewLevels()).')';
+		} else {
+			$where .= ' AND published = 1';	
 		}
 		
 		$query = 'SELECT title, id, alias'
