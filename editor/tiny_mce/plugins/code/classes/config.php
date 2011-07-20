@@ -26,7 +26,7 @@ class WFCodePluginConfig
 		$settings['code_script'] 	= $wf->getParam('editor.allow_javascript', 0);
 		$settings['code_style'] 	= $wf->getParam('editor.allow_css', 0);
 
-		$settings['code_cdata'] 	= $wf->getParam('editor.cdata', 0);
+		$settings['code_cdata'] 	= $wf->getParam('editor.cdata', 1, 1);
 
 		// Invalid Elements
 		if ($settings['code_script'] == 1) {
