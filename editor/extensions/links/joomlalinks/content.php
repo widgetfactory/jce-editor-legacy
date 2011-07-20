@@ -291,10 +291,10 @@ class JoomlalinksContent extends JObject {
 		
 		$where 	= '';
 		
-		if (isset($user->gid)) {
-			$where  .= ' AND access <= '.(int) $user->get('aid') . ' AND sectionid = 0';
+		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
+			$where	.= ' AND access IN ('.implode(',', $user->getAuthorisedViewLevels()).')';
 		} else {
-			$where	.= ' AND access IN ('.implode(',', $user->authorisedLevels()).')';
+			$where  .= ' AND access <= '.(int) $user->get('aid') . ' AND sectionid = 0';
 		}
 		
 		$query = 'SELECT id, title, alias'

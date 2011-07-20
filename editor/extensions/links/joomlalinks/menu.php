@@ -225,8 +225,8 @@ class JoomlalinksMenu extends JObject
 		}
 		
 		// Joomla! 1.6+
-		if (isset($user->groups)) {
-			$groups	= implode(',', $user->authorisedLevels());
+		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
+			$groups	= implode(',', $user->getAuthorisedViewLevels());
 			$where 	.= ' AND m.access IN ('.$groups.')';
 			
 			if (!$parent) {
