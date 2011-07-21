@@ -18,7 +18,7 @@
 	credits: http://javascript0.org/wiki/Portable_sendAsBinary, 
 	more info: http://code.google.com/p/chromium/issues/detail?id=35705 
 	*/			
-	if (window.Uint8Array && window.ArrayBuffer && !XMLHttpRequest.prototype.sendAsBinary) {
+	/*if (window.Uint8Array && window.ArrayBuffer && !XMLHttpRequest.prototype.sendAsBinary) {
 		XMLHttpRequest.prototype.sendAsBinary = function(datastr) {
 			var ui8a = new Uint8Array(datastr.length);
 			for (var i = 0; i < datastr.length; i++) {
@@ -26,7 +26,7 @@
 			}
 			this.send(ui8a.buffer);
 		};
-	}
+	}*/
 	
 
 	function readFileAsDataURL(file, callback) {
