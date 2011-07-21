@@ -29,21 +29,6 @@
     	return s;
     })();
 
-    function getWindowArgs() {
-        var s = document.location.href, parts, o;
-
-        s = s.replace(/&amp;/g, '&');
-        // get everything after the ?
-        s = s.substr(s.indexOf('?') + 1);
-        // create a JSON string of each key/value pair
-        o = $.map(s.split(/&/), function(n) {
-            return n.replace(/([^=]+)=([\w\W]+)/, '"$1":"$2"');
-        });
-
-        // return object
-        return $.parseJSON('{' + o.join(',') + '}');
-    };
-
     $.Plugin = {
 
         i18n 		: {},
@@ -55,9 +40,6 @@
             root			: '',
             help			: $.noop
         },
-
-        // get window query data
-        data : getWindowArgs(),
 
         getURI : function(absolute) {
             if (!standalone) {
@@ -177,7 +159,7 @@
         },
 
         getName : function() {
-            return this.data.plugin || '';
+            return $('body').data('plugin');    
         },
 
         getPath: function (plugin) {
@@ -670,7 +652,7 @@
             options = $.extend(options, {
                 minWidth	: options.minWidth 	|| options.width 	|| 300,
                 minHeight	: options.minHeight || options.height 	|| 150,
-                modal: true,
+                modal		: (typeof options.modal === 'undefined') ? true : options.modal,
                 open: function () {
                     // adjust modal
                     $(div).dialog('widget').next('div.ui-widget-overlay').css({

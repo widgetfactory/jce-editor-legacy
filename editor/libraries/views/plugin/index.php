@@ -11,6 +11,9 @@
 * other free or open source software licenses.
 */
 defined('WF_EDITOR') or die('ERROR_403');
+
+$wf = WFEditorPlugin::getInstance();
+
 ?> 
 <!DOCTYPE HTML> 
 <html lang="<?php echo $this->language;?>" dir="<?php echo $this->direction;?>">
@@ -19,7 +22,7 @@ defined('WF_EDITOR') or die('ERROR_403');
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<!-- [head] -->
 	</head>
-	<body lang="<?php echo $this->language;?>" id="jce" class="ui-jce">
+	<body lang="<?php echo $this->language;?>" id="jce" class="ui-jce" data-plugin="<?php echo $wf->getName();?>">
 		<!-- [body] -->
 	</body>
 </html>

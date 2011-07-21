@@ -107,8 +107,9 @@ class WFEditorPlugin extends WFEditor
 			$request = WFRequest::getInstance();
 			$request->process();
 		} else {
-			$version 	= $this->getVersion();							
-			$xml 		= JApplicationHelper::parseXMLInstallFile(WF_EDITOR_PLUGINS . DS . $this->get('_name') . DS . $this->get('_name') . '.xml');
+			$version 	= $this->getVersion();	
+			$name		= $this->getName();						
+			$xml 		= JApplicationHelper::parseXMLInstallFile(WF_EDITOR_PLUGINS . DS . $name . DS . $name . '.xml');
 			
 			if (isset($xml['version'])) {
 				$version = $xml['version'];
@@ -118,7 +119,7 @@ class WFEditorPlugin extends WFEditor
 			$document = WFDocument::getInstance(array(
 				'version' 				=> $version,
 				'title'	  				=> WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')),
-				'name' 					=> $this->getName(),
+				'name' 					=> $name,
 				'compress_javscript' 	=> $this->getParam('editor.compress_javscript', 0),
 				'compress_css'			=> $this->getParam('editor.compress_css', 0)
 			));
@@ -146,6 +147,7 @@ class WFEditorPlugin extends WFEditor
 	
 			// get the view
 			$view = $this->getView();
+
 			// set body output
 			$document->setBody($view->loadTemplate());	
 			
