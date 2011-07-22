@@ -57,19 +57,44 @@ class WFEditorTheme extends WFEditor
 		
 		$this->set('dialog', $dialog);
 		$this->set('theme', $theme);
+		
+		$this->execute();
+	}
+	
+	function & getView()
+	{
+		static $view;
+		
+		if (!is_object($view)) {
+			// create plugin view
+			$view = new WFView(array(
+				'base_path'		=> WF_EDITOR_THEMES .DS. $this->get('theme'),
+				'template_path'	=> WF_EDITOR_THEMES .DS. $this->get('theme') .DS. 'tmpl',
+				'name' 			=> $this->get('dialog'),
+				'layout'		=> $this->get('dialog')
+			));
+			
+			$view->assign('theme', $this);
+		}
+		
+		return $view;
+	}
+	
+	function execute()
+	{
+		$document = WFDocument::getInstance(array(
+			'title'		=> WFText::_('WF_'.strtoupper($this->get('dialog')).'_TITLE'),
+      		'version' 	=> $this->getVersion(),
+      		'name'		=> $this->get('dialog')
+		));
 
 		$this->display();
 		
-		$document = WFDocument::getInstance();
-		$document->pack();
-
-		// create plugin view
-		$view = new WFView(array(
-			'base_path'		=> WF_EDITOR_THEMES .DS. $theme,
-			'template_path'	=> WF_EDITOR_THEMES .DS. $theme .DS. 'tmpl',
-			'name' 			=> $this->get('dialog'),
-			'layout'		=> $this->get('dialog')
-		));
+		// pack assets if required
+		$document->pack(true, $this->getParam('editor.compress_gzip', 0));
+		
+		// get view
+		$view = $this->getView();
 		
 		// set body output
 		$document->setBody($view->loadTemplate());			
@@ -80,12 +105,7 @@ class WFEditorTheme extends WFEditor
 	{
 		jimport('joomla.filesystem.folder');
 
-		$theme = JRequest::getWord('theme');
-
-		$document = WFDocument::getInstance(array(
-			'title'		=> WFText::_('WF_'.strtoupper($this->get('dialog')).'_TITLE'),
-      		'version' 	=> $this->getVersion()
-		));
+		$document = WFDocument::getInstance();
 
 		// get UI Theme
 		$uitheme = $this->getParam('editor.dialog_theme', 'jce');

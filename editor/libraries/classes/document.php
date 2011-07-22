@@ -117,6 +117,16 @@ class WFDocument extends JObject
 	{
 		return $this->title;
 	}
+	
+	function setName($name)
+	{
+		$this->name = $name;
+	}
+	
+	function getName()
+	{
+		return $this->name;
+	}
 
 	function getURL($relative = false)
 	{
