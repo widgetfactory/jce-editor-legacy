@@ -952,6 +952,8 @@ class WFFileBrowser extends WFBrowserExtension
 	{
 		// Check for request forgeries
 		WFToken::checkToken() or die();
+		
+		$wf = WFEditor::getInstance();
 
 		jimport('joomla.filesystem.file');
 
@@ -967,10 +969,11 @@ class WFFileBrowser extends WFBrowserExtension
 		$file = JRequest::getVar('file', '', 'files', 'array');
 
 		// get file name
-		$name = JRequest::getVar('name', JFile::stripExt($file['name']));
+		$name 	= JRequest::getVar('name', $file['name']);
+		$ext 	= JFile::getExt($name);
 
 		// check for extension in file name
-		if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)#i', $name)) {
+		if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)#i', basename($name, '.' . $ext))) {
 			JError::raiseError(403, 'RESTRICTED');
 		}
 
@@ -989,7 +992,7 @@ class WFFileBrowser extends WFBrowserExtension
 		if ($contentType && strpos($contentType, "multipart") !== false) {
 			if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name'])) {
 				// validate file before continuing (first chunk only)
-				if ($chunk == 0) {
+				if ($chunk == 0 && $wf->getParam('validate_mimetype', 0) && !preg_match('#(htm|html|txt)#', $ext)) {
 					$this->validateUploadedFile($file);
 				}				
 				
