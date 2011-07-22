@@ -292,7 +292,7 @@
 
             if (se) {                
                 // decode and indent
-                v = this.indent(DOM.decode(v));
+                v = this.indent(v);
                 
                 se.setContent(v);
             }
