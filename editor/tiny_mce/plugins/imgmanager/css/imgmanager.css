@@ -55,9 +55,9 @@ label[for="rollover_check"] {
 #jce.ie7 .ui-tabs-panel {
 	height: 210px;
 } 
-/*#jce.ie div.preview {
+#jce.ie div.preview {
 	padding: 7px 0 8px 0;
-}*/
+}
 #jce.ie7 div.preview {
 	padding: 8px 0 8px 0;
 }
