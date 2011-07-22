@@ -12,8 +12,6 @@
 */
 defined('WF_EDITOR') or die('ERROR_403');
 
-$wf = WFEditorPlugin::getInstance();
-
 ?> 
 <!DOCTYPE HTML> 
 <html lang="<?php echo $this->language;?>" dir="<?php echo $this->direction;?>">
@@ -22,7 +20,7 @@ $wf = WFEditorPlugin::getInstance();
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<!-- [head] -->
 	</head>
-	<body lang="<?php echo $this->language;?>" id="jce" class="ui-jce" data-plugin="<?php echo $wf->getName();?>">
+	<body lang="<?php echo $this->language;?>" id="jce" class="ui-jce" data-plugin="<?php echo $this->getName();?>">
 		<!-- [body] -->
 	</body>
 </html>
