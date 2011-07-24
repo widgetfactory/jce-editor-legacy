@@ -12,13 +12,19 @@ div#upload-body {
 	padding: 4px;
 	z-index: 10;
 	position:static !important;
+	height: 100%;
+}
+div#upload-body div {
+	position: relative;
 }
 div#upload-body div.plupload {
 	z-index: 10000 !important;
+	margin-top: 10px;
 }
 
 div#upload-body button.uploadButton {
-	width: 65px;
+	width: 120px;
+	margin: 10px 0 0;
 	cursor: pointer;
 }
 div#upload-body button.uploadButton span.ui-icon {
@@ -33,7 +39,6 @@ div#upload-body button.uploadButton.addQueue {
 div#upload-body button.uploadButton.removeQueue {
 	float: right;
 }
-
 div#upload-body button.uploadButton.addQueue span.ui-icon-circle-plus {
 	background: url(../img/icons.png) no-repeat 0 -300px;	
 }
@@ -56,21 +61,35 @@ input#upload-name {
 	width: 250px;
 }
 div#upload-queue-block {
-	height: 165px;
-	overflow: auto;
+	
 }
-ul#upload-queue, ul#upload-queue {
+
+ul#upload-queue {
 	list-style: none;
 	white-space: nowrap;
 	margin: 0px;
-	padding: 0px;
 	vertical-align: middle;
+	
+	box-shadow: 0 0 2px #333 inset;
+    -moz-box-shadow: 0 0 2px #333 inset;
+    -webkit-box-shadow: 0 0 1.5px #333 inset;
+    background-color: #eee;
+    padding: 7px 5px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    
+    min-height: 240px;
+    max-height: 300px;
+    overflow: auto;
 }
 ul#upload-queue li {
-	min-height: 20px;
-	margin: 1px 2px;
-	padding: 0px;
-	position: relative;
+    margin: 10px 2px;
+    min-height: 20px;
+    padding: 1px;
+    position: relative;
+    text-shadow: 0 1px 0 #FFFFFF;
+    background-color: transparent;
 }
 
 ul#upload-queue li.load {
@@ -87,10 +106,11 @@ ul#upload-queue li span {
 	display: inline-block;
 }
 ul#upload-queue li input {
-	width: 75%;
+	width: 100%;
 	z-index: 10000;
 	height: 16px;
 	position: absolute;
+	top: -1px;
 }
 ul#upload-queue li span.queue-item-name {
 	float: left;
@@ -161,12 +181,33 @@ ul#upload-queue li span.tooltip {
 	position: absolute;
 }
 ul#upload-queue li#upload-queue-drag {
-	background: url(../img/drag.png) no-repeat 35% center;
-	text-align: center;
-	line-height: 20px;
-	vertical-align: middle;
-	margin-left: -20px;
-    padding-left: 20px;
+	background: url("../img/drag.png") no-repeat 30% center transparent;
+    border: 1px dashed #CCCCCC;
+    display: block;
+    line-height: 230px;
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
+    text-shadow: 0 1px 0 #FFFFFF;
+    font-weight: bold;
+    margin: 5px;
+    font-size: 1.5em;
+    color: #555;
+    box-shadow: none;
+}
+
+ul#upload-queue li#upload-queue-queue {
+	display: block;
+    line-height: 230px;
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
+    text-shadow: 0 1px 0 #FFFFFF;
+    font-weight: bold;
+    margin: 5px;
+    font-size: 1.5em;
+    color: #ccc;
+    box-shadow: none;
 }
 
 div#upload-body #upload-options p {

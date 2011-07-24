@@ -57,37 +57,6 @@
             this.files 		= [];
             this.current	= null;
 
-            $(this.field).css('display', 'none');
-
-            // create target button
-            this.target = document.createElement('button');
-
-            $(this.target).addClass('uploadButton addQueue').attr('id', 'upload-add').button({
-                label : $.Plugin.translate('add', 'Add'),
-                icons : {
-                    primary : 'ui-icon-circle-plus'
-                }
-            }).hide();
-
-            // insert before field
-            $(this.field).before(this.target);
-
-            // create remove button
-            var remove = document.createElement('button');
-
-            $(remove).addClass('uploadButton removeQueue').click( function() {
-                self._removeFiles();
-            }).button({
-                label : $.Plugin.translate('clear', 'Clear'),
-                icons : {
-                    primary : 'ui-icon-circle-minus'
-                }
-            }).hide();
-
-            $(this.field).before(remove);
-
-            $('button.uploadButton').show();
-
             $(this.field).remove();
 
             this._createUploader();
@@ -95,7 +64,6 @@
 
         _createUploader : function() {
             var self 	= this;
-            var target 	= this.target;
             var options = this.options, filters = [];
 
             if ($.isPlainObject(options.filter)) {
@@ -113,14 +81,24 @@
             if (!/kb/.test(size)) {
                 size = parseFloat(size) + 'kb';
             }
+            
+            // add an id to the button parent
+            var container = $('#upload-browse').parent().attr('id');
+
+            if (!container) {
+            	container = 'upload_buttons_container';
+            	$('#upload-browse').parent().attr('id', container);
+            }
 
             try {
 
                 this.uploader = new plupload.Uploader({
-                    container			: 'upload-body',
+                    container			: container,
                     runtimes 			: options.runtimes,
                     unique_names		: false,
-                    browse_button 		: 'upload-add',
+                    browse_button 		: 'upload-browse',
+                    browse_button_hover : 'ui-state-hover',
+                    browse_button_active: 'ui-state-active',
                     drop_element		: 'upload-queue-block',
                     max_file_size 		: size,
                     url 				: options.url,
@@ -133,11 +111,8 @@
                     rename				: true
                 });
 
-                $('#upload-add').addClass('loading');
-
                 // on Uploader init
                 this.uploader.bind('Init', function(up) {
-                    $('#upload-add').removeClass('loading');
                     self._createDragDrop();
 
                     if (up.runtime == 'html4') {
@@ -146,34 +121,17 @@
                 });
 
                 // on Uploader init
-                this.uploader.bind('PostInit', function(up) {
-                    // remove relative position applied by runtime!
-                    $('#upload-body').css('position', '');
-
-                    // set hover / active state classes
-                    if (up.runtime == 'html4') {
-                        up.settings.browse_button_hover 	= 'ui-state-hover';
-                        up.settings.browse_button_active 	= 'ui-state-active';
-                    }
-
-                    // on Uploader refresh
-                    up.bind('Refresh', function() {
-                        $('form, div.plupload', '#upload-body').css($('#upload-add').position());
-                    });
-
-                });
+                this.uploader.bind('PostInit', function(up) {});
 
                 // on Uploader refresh
-                this.uploader.bind('Refresh', function(up) {
-                });
+                this.uploader.bind('Refresh', function(up) {});
 
                 // on add file
                 this.uploader.bind('QueueChanged', function() {
                     var files = self.uploader.files;
 
-                    if ($('#upload-queue-drag')) {
-                        $('#upload-queue-drag').css('display', 'none');
-                    }
+                    $('#upload-queue-drag, #upload-queue-queue').css('display', 'none');
+
                     self._createQueue(files);
                 });
 
@@ -396,7 +354,9 @@
 
         _createDragDrop : function() {
             if (this.uploader.features.dragdrop) {
-                $('<li id="upload-queue-drag">' + $.Plugin.translate('upload_drop', 'Drop files here') + '</li>').appendTo('ul#upload-queue').css('margin-top', 50).show('slow');
+                $('<li id="upload-queue-drag">' + $.Plugin.translate('upload_drop', 'Drop files here') + '</li>').appendTo('ul#upload-queue').show('slow');
+            } else {
+            	$('<li id="upload-queue-queue">' + $.Plugin.translate('upload_queue', 'Upload Queue') + '</li>').appendTo('ul#upload-queue').show('slow');
             }
         },
 
@@ -553,10 +513,10 @@
 
                     $(this).hide();
 
-                    $(input).val(data.name).show().attr('aria-hidden', false);
+                    $(input).val($.String.stripExt(file.name)).show().attr('aria-hidden', false);
 
                     $(input).bind('blur', function() {
-                        var v = $(input).val() + '.' + $.string.getExt($(txt).text());
+                        var v = $(input).val() + '.' + $.String.getExt($(txt).text());
 
                         self._renameFile(file, v);
 
@@ -565,6 +525,8 @@
 
                         // remove input element
                         $(input).hide().attr('aria-hidden', true);
+                        
+                        $(rename).unbind('click.blur');
                     });
 
                     $(rename).bind('click.blur', function() {

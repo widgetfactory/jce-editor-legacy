@@ -1062,7 +1062,7 @@
 							// Set hidden dir value to current dir
 							$('#upload-dir').val(self._dir);
 
-							$('#upload-overwrite').empty().append( function() {
+							/*$('#upload-overwrite').empty().append( function() {
 								return $.map(self.options.upload.conflict, function(v, k) {
 									var o = document.createElement('option');
 
@@ -1071,7 +1071,7 @@
 									return o;
 								});
 
-							});
+							});*/
 
 							/**
 							 * Private internal function
@@ -1176,8 +1176,12 @@
 							return false;
 						},
 
-						close : function() {
+						beforeClose : function() {
 							$('#upload-queue').uploader('close');
+						},
+						
+						resize : function() {
+							$('#upload-queue').uploader('refresh');
 						}
 
 					});

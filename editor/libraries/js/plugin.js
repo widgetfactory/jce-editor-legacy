@@ -660,6 +660,13 @@
                     	height: '100%'
                     });
                     
+                    // fix buttons
+                    $('div.ui-dialog-buttonset button[icons]', $(div).dialog('widget')).each(function() {
+						var icon = $(this).attr('icons');
+						
+						$(this).prepend('<span class="ui-button-icon-primary ui-icon ' + icon + '"/>');
+                    }).addClass('ui-button-text-icon-primary').removeClass('ui-button-text-only');
+                    
                     if ($.isFunction(options.onOpen)) {
                         options.onOpen.call();
                     }
@@ -784,68 +791,42 @@
         upload: function (options) {
             var div = document.createElement('div');
 
-            $(div).attr('id', 'upload-body').append('<fieldset>' +
-            '	<legend>' + $.Plugin.translate('browse', 'Browse') + '</legend>' +
-            '	<input type="hidden" id="upload-dir" name="upload-dir" />' +
-            '	<input type="file" name="file" size="40" style="position:relative;" />' +
-            '</fieldset>' +
-            '<fieldset>' +
-            '	<legend>' + $.Plugin.translate('options', 'Options') + '</legend>' +
-            '	<div id="upload-options">' +
-            '		<p>' +		
-            '			<label>' + $.Plugin.translate('upload_exists', 'If file exists') + '</label>' +
-            '			<select id="upload-overwrite" name="upload-overwrite">' +
-            '				<option value=""></option>' +
-            '			</select>' +
-            '		</p>' +	
-            '	</div>' +
-            '</fieldset>' +
-            '<fieldset>' +
-            '	<legend>' + $.Plugin.translate('queue', 'Queue') + '</legend>' +
-            '	<div id="upload-queue-block">' +
+            $(div).attr('id', 'upload-body').append(
+            '<div id="upload-options"></div>' +
+            '<div id="upload-queue-block">' +
             '		<ul id="upload-queue"><li style="display:none;"></li></ul>' +
-            '	</div>' +
-            '</fieldset>');
+            '	<input type="hidden" id="upload-dir" name="upload-dir" />' +
+            '	<input type="file" name="file" size="40" style="position:relative;" />'+
+            '</div>'
+            );
 
             $(div).find('#upload-options').append(options.elements);
             
-            var qh = 165;
-            
             options = $.extend({
                 width 		: 460,
-                minHeight 	: 390, 
+                minHeight 	: 350, 
+                resizable	: false,
                 buttons: [{
+                    text: $.Plugin.translate('browse', 'Browse'),
+                    id 		: 'upload-browse',
+                    icons	: 'ui-icon-search'
+                },{
                     text: $.Plugin.translate('upload', 'Upload'),
-                    /*icons: {
-                     primary: 'ui-icon-check'
-                     },*/
                     click: function () {
                         if ($.isFunction(options.upload)) {
                             options.upload.call();
                         }
-                    }
+                    },
+                    icons	: 'ui-icon-arrowthick-1-n'
 
                 }, {
                     text: $.Plugin.translate('close', 'Close'),
-                    /*icons: {
-                     primary: 'ui-icon-check'
-                     },*/
                     click: function () {
                         $(this).dialog("close");
-                    }
+                    },
+                    icons	: 'ui-icon-close'
 
-                }],
-                
-                resize : function(event, ui) {
-                	$('#upload-queue-block').height(function(i, h) {
-                		var s = ui.size.height - ui.originalSize.height;
-                		if (s > 0) {
-                			return Math.max(qh, qh + s);
-                		} else {
-                			return Math.max(qh, h + s);
-                		}
-                	});
-                }
+                }]
             }, options);
 
             return $.Dialog.dialog($.Plugin.translate('upload', 'Upload'), div, options);
