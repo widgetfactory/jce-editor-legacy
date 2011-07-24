@@ -89,7 +89,6 @@ class WFMediaManager extends WFEditorPlugin
 			'upload'				=> array(
 				'runtimes'			=> $this->getParam('editor.upload_runtimes', array('html5','flash','silverlight')),
 				'chunk_size' 		=> null,
-				'conflict'			=> $this->getParam('editor.upload_conflict', array('overwrite', 'unique')),
 				'max_size'			=> $this->getParam('max_size', 1024),
 				'validate_mimetype'	=> $this->getParam('validate_mimetype', 0),
 			),

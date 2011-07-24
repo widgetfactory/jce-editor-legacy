@@ -275,8 +275,8 @@
                 $(file.element).addClass(status);
 
                 if (file.status == plupload.DONE) {
-                    if (response.text && file.name != response.text) {
-                        file.name = response.text;
+                    if (response.files && response.files.length) {
+                        file.name = response.files[0];
                     }
 
                     var item = {
