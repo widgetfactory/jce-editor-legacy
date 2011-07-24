@@ -530,13 +530,13 @@ class WFJoomlaFileSystem extends WFFileSystem
 		$result = new WFFileSystemResult();
 		
 		// get overwrite state
-        $overwrite 	= JRequest::getInt('upload-overwrite', 0);
+        $conflict 	= $this->get('upload_conflict', 'overwrite');
         // get suffix
         $suffix		= WFFileBrowser::getFileSuffix();
 		
 		switch($method) {
 			case 'multipart' :
-				if ($overwrite) {
+				if ($conflict == 'unique') {
 				    // get extension
 					$extension 		= JFile::getExt($name);
 					// get name without extension

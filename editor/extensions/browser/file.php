@@ -52,7 +52,6 @@ class WFFileBrowser extends WFBrowserExtension
 			'upload'					=> array(
 				'runtimes'			=> 'html5,flash,silverlight',
 				'chunk_size' 		=> null,
-				'conflict'			=> array('overwrite', 'unique'),
 				'max_size'			=> 1024,
 				'validate_mimetype'	=> 0
 			),
@@ -183,8 +182,11 @@ class WFFileBrowser extends WFBrowserExtension
 		static $filesystem;
 
 		if (!is_object($filesystem)) {
+			$wf = WFEditorPlugin::getInstance();
+			
 			$config = array(
-				'dir' => $this->get('dir')
+				'dir' 				=> $this->get('dir'),
+				'upload_conflict' 	=> $wf->getParam('editor.upload_conflict', 'overwrite')
 			);
 			
 			$filesystem = WFFileSystem::getInstance($this->get('filesystem'), $config);
@@ -1032,19 +1034,15 @@ class WFFileBrowser extends WFBrowserExtension
 		}
 		// upload finished
 		if ($complete) {
-			$output = array(
-            	'error' => array('code' => null, 'message' => '')
-			);
-
+			
 			if (is_a($result, 'WFFileSystemResult')) {
 				if ($result->state === true) {
-					$output = $this->fireEvent('onUpload', array($result->path));
-				} else {
-					$output = array('code' => $result->code, 'message' => $result->message);
+					$this->setResult($this->fireEvent('onUpload', array($result->path)));
+					$this->setResult(basename($result->path), 'files');	
 				}
 			}
 
-			die(json_encode($output));
+			die(json_encode($this->getResult()));
 		}
 	}
 
@@ -1265,14 +1263,6 @@ class WFFileBrowser extends WFBrowserExtension
 		if (!$features['chunking']) {
 			$chunk_size = 0;
 		}
-
-		$conflict = $upload['conflict'];
-
-		if (is_array($conflict)) {
-			if (!$features['unique_filenames']) {
-				unset($conflict[array_search('unique', $conflict)]);
-			}
-		}
 		
 		// get upload size
 		$size = intval(preg_replace('/[^0-9]/', '', $upload['max_size'])) . 'kb';
@@ -1302,7 +1292,6 @@ class WFFileBrowser extends WFBrowserExtension
 
 		$defaults = array(
             'runtimes' 		=> implode(',', $runtimes),
-            'conflict' 		=> $conflict,
             'size' 			=> $size,
             'filter' 		=> $this->mapUploadFileTypes(true),
             'chunk_size' 	=> $chunk_size

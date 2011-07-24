@@ -135,9 +135,9 @@
 		<param name="dir" type="text" default="" pattern="[a-zA-Z0-9_\-\.\/\$]*" size="50" placeholder="images" label="WF_PARAM_DIRECTORY" description="WF_PARAM_DIRECTORY_DESC"/>
 		<param name="name" type="filesystem" group="filesystem" exclude_default="true" parameters="components/com_jce/editor/extensions/filesystem" default="joomla" label="WF_PARAM_FILESYSTEM" description="WF_PARAM_FILESYSTEM_DESC" />
 		<param name="max_size" class="upload_size" pattern="[0-9]*" placeholder="1024" max="" type="text" default="" label="WF_PARAM_UPLOAD_SIZE" description="WF_PARAM_UPLOAD_SIZE_DESC" />
-		<param name="upload_conflict" type="list" default="overwrite|unique" multiple="multiple" class="checklist" label="WF_PARAM_UPLOAD_EXISTS" description="WF_PARAM_UPLOAD_EXISTS_DESC">
-			<option value="overwrite">WF_PARAM_UPLOAD_EXISTS_OVERWRITE</option>
+		<param name="upload_conflict" type="list" default="overwrite" label="WF_PARAM_UPLOAD_EXISTS" description="WF_PARAM_UPLOAD_EXISTS_DESC">
 			<option value="unique">WF_PARAM_UPLOAD_EXISTS_UNIQUE</option>
+			<option value="overwrite">WF_PARAM_UPLOAD_EXISTS_OVERWRITE</option>
 		</param>
 		<param name="upload_runtimes" class="checklist sortable" type="list" multiple="multiple" default="html5,flash,silverlight" label="WF_PARAM_UPLOAD_RUNTIME" description="WF_PARAM_UPLOAD_RUNTIME_DESC">
 			<option value="html5">WF_PARAM_UPLOAD_RUNTIME_HTML5</option>
