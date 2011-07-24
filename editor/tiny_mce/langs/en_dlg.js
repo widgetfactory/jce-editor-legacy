@@ -63,8 +63,8 @@ browse: 'Browse',
 file_extension_error : 'File type not supported',
 file_size_error : 'File size exceeds maximum allowed size',
 file_invalid_error : 'Invalid File type',
-add : 'Add',
-clear : 'Clear',
+add : 'Add Files',
+clear : 'Clear Queue',
 upload_drop : 'Drop files here',
 /**
  * Upload Error Codes
