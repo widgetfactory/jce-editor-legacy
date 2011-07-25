@@ -103,7 +103,7 @@ class WFEditorPlugin extends WFEditor
 	function isRequest()
 	{
 		$format = JRequest::getWord('format');		
-		return (($format == 'json' || $format == 'raw') && JRequest::getVar('json')) || JRequest::getWord('method') == 'form';		
+		return ($format == 'json' || $format == 'raw') && (JRequest::getVar('json') || JRequest::getWord('action'));		
 	}
 
 	function execute()

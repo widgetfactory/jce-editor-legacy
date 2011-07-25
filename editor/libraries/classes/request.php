@@ -106,9 +106,9 @@ class WFRequest extends JObject
 	function process($array = false)
 	{
 		$json   = JRequest::getVar('json', '', 'POST', 'STRING', 2);
-		$method = JRequest::getWord('method', '');
+		$action = JRequest::getWord('action');
 
-		if ($method == 'form' || $json) {
+		if ($action || $json) {
 			// Check for request forgeries
 			WFToken::checkToken() or die('INVALID TOKEN');
 				
@@ -120,13 +120,13 @@ class WFRequest extends JObject
 				
 			JError::setErrorHandling(E_ALL, 'callback', array('WFUtility', 'raiseError'));
 
-			$fn   = JRequest::getWord('action');
-			$args = array();
-
-			if (!$method && $json) {
-				$json 			= json_decode($json);
-				$fn   			= isset($json->fn) ? $json->fn : JError::raiseError(500, 'NO FUNCTION CALL');
-				$args 			= isset($json->args) ? $json->args : array();
+			if ($json) {
+				$json 	= json_decode($json);
+				$fn   	= isset($json->fn) ? $json->fn : JError::raiseError(500, 'NO FUNCTION CALL');
+				$args 	= isset($json->args) ? $json->args : array();
+			} else {
+				$fn 	= $action;
+				$args 	= array();
 			}
 
 			// check query

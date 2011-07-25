@@ -162,8 +162,7 @@ class WFFileBrowser extends WFBrowserExtension
 		$query = '';
 		
 		$args = array(
-			'plugin' => $wf->getName(),
-			'method' => 'form'
+			'plugin' => $wf->getName()
 		);
 		
 		if ($component_id) {
