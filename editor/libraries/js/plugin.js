@@ -498,7 +498,7 @@
             callback = callback || $.noop;
 
             // additional POST data to add (will not be parsed by PHP json parser)
-            var args = {'format' : 'json'};
+            var args = {'format' : 'raw'};
 
             // get form input data (including token)
             var fields = $(':input', 'form').serializeArray();
@@ -803,7 +803,7 @@
             $(div).find('#upload-options').append(options.elements);
             
             options = $.extend({
-                width 		: 460,
+                minWidth 	: 460,
                 minHeight 	: 350, 
                 resizable	: false,
                 buttons: [{

@@ -256,7 +256,7 @@
 		_loadData : function(n) {
 			var t = this, ed = this.editor, s = tinymce.settings, doc = n.contentWindow.document;
 			
-			var query = '', args = {'format' : 'json'};
+			var query = '', args = {'format' : 'raw'};
 			
 			// add token
 			var token = document.getElementById('wf_' + ed.id + '_token');
