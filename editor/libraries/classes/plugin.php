@@ -120,7 +120,7 @@ class WFEditorPlugin extends WFEditor
 				'version' 				=> $version,
 				'title'	  				=> WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')),
 				'name' 					=> $name,
-				'compress_javscript' 	=> $this->getParam('editor.compress_javscript', 0),
+				'compress_javascript' 	=> $this->getParam('editor.compress_javascript', 0),
 				'compress_css'			=> $this->getParam('editor.compress_css', 0)
 			));
 			
