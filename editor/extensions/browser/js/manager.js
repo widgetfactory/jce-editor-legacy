@@ -82,7 +82,8 @@
 				runtimes	: 'html5,flash,html4',
 				chunk_size	: '1mb',
 				insert		: true,
-				dialog 		: null,
+				dialog 		: {},
+				elements	: null,
 				buttons		: {}
 			},
 			folder_new  : {
@@ -943,13 +944,13 @@
 			var options = this.options[dialog];
 			var elements = '';
 
-			if (options && options.dialog) {
+			if (options && options.elements) {
 				if ($.isPlainObject(options.dialog)) {
-					$.each(options.dialog, function(k, v) {
+					$.each(options.options.elements, function(k, v) {
 						if (v.options) {
 							elements += '<p>';
-							elements += '<label for="folder_new_' + k + '">' + (v.label || k) + '</label>';
-							elements += '<select id="folder_new_' + k + '" name="' + k + '">';
+							elements += '<label for="' + k + '">' + (v.label || k) + '</label>';
+							elements += '<select id="' + k + '" name="' + k + '">';
 
 							$.each(v.options, function(value, name) {
 								elements += '<option value="' + value + '">' + name + '</option>';
@@ -958,12 +959,12 @@
 							elements += '</select>';
 							elements += '</p>';
 						} else {
-							elements += '<p><label for="folder_new_' + k + '">' + v.label || k + '</label><input id="folder_new_' + k + '" type="text" name="' + k + '" value="' + v.value || '' + '" /></p>';
+							elements += '<p><label for="' + k + '">' + v.label || k + '</label><input id="' + k + '" type="text" name="' + k + '" value="' + v.value || '' + '" /></p>';
 						}
 					});
 
 				} else {
-					return options.dialog;
+					return options.elements;
 				}
 			}
 
@@ -1056,7 +1057,7 @@
 					}
 					break;
 				case 'upload':
-					this._dialog['upload'] = $.Dialog.upload({
+					this._dialog['upload'] = $.Dialog.upload($.extend({
 						elements 	: this._getDialogOptions('upload'),
 						onOpen 		: function() {
 							// Set hidden dir value to current dir
@@ -1162,7 +1163,7 @@
 
 							var data = {
 								'action' : 'upload',
-								'format' : 'json'
+								'format' : 'raw'
 							}, fields = $.merge($(':input', 'form').serializeArray(), $(':input', '#upload-body').serializeArray());
 
 							$.each(fields, function(i, field) {
@@ -1184,7 +1185,7 @@
 							$('#upload-queue').uploader('refresh');
 						}
 
-					});
+					}, self.options.upload.dialog));
 					break;
 				case 'folder_new':
 					var elements = this._getDialogOptions('folder_new');
