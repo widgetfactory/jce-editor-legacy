@@ -417,7 +417,7 @@
 		_sendRPC : function(m, p, cb) {
 			var t = this, ed = t.editor;
 			
-			var query = '', args = {'format' : 'json'};
+			var query = '', args = {'format' : 'raw'};
 			
 			// add token
 			var token = document.getElementById('wf_' + t.editor.id + '_token');

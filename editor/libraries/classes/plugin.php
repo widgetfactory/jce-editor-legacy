@@ -99,11 +99,17 @@ class WFEditorPlugin extends WFEditor
 		
 		return $view;
 	}
+	
+	function isRequest()
+	{
+		$format = JRequest::getWord('format');		
+		return (($format == 'json' || $format == 'raw') && JRequest::getVar('json')) || JRequest::getWord('method') == 'form';		
+	}
 
 	function execute()
-	{		
+	{				
 		// JSON request or upload action
-		if (JRequest::getWord('format') == 'json') {			
+		if ($this->isRequest()) {			
 			$request = WFRequest::getInstance();
 			$request->process();
 		} else {
