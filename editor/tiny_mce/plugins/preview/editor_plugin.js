@@ -89,6 +89,11 @@
 			this.state = s;
 		},
 		
+		getTop : function() {
+            var ed = this.editor, container = ed.getContentAreaContainer();
+            return container.offsetTop + Math.round((container.offsetHeight - container.clientHeight) / 2);
+        },
+		
 		resize : function(w, h) {
 			var t = this, ed = this.editor, DOM = tinymce.DOM, ifr = DOM.get(ed.id + '_ifr');
 			
@@ -158,6 +163,10 @@
             var editorpath 	= DOM.get(ed.id + '_path_row');
             // Word Count
             var wordcount 	= DOM.get(ed.id + '-word-count');
+            
+            if (tinymce.isIE) {
+            	DOM.setStyle(iframe.parentNode, 'position', 'relative');
+            }
 
 			if (!state) {
 				ed.setProgressState(true);
@@ -168,7 +177,7 @@
 						role : 'application',
 						style : {
 							position : 'absolute',
-							top		 : toolbar.parentNode.clientHeight + 5
+							top		 : tinymce.isIE ? 0 : this.getTop()
 						}
 					});
 					
