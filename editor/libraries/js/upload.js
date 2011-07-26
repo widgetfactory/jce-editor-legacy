@@ -114,10 +114,7 @@
                 // on Uploader init
                 this.uploader.bind('Init', function(up) {
                     self._createDragDrop();
-
-                    if (up.runtime == 'html4') {
-                        up.features.canOpenDialog = false;
-                    }
+                    up.features.canOpenDialog = false;
                 });
 
                 // on Uploader init
