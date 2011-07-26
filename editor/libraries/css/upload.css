@@ -61,7 +61,7 @@ input#upload-name {
 	width: 250px;
 }
 div#upload-queue-block {
-	
+	clear: both;
 }
 
 ul#upload-queue {
