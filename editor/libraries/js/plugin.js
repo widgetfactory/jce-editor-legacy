@@ -807,7 +807,7 @@
                 minHeight 	: 350, 
                 resizable	: false,
                 buttons: [{
-                    text: $.Plugin.translate('browse', 'Browse'),
+                    text	: $.Plugin.translate('browse', 'Browse'),
                     id 		: 'upload-browse',
                     icons	: 'ui-icon-search'
                 },{
