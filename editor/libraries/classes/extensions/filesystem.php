@@ -113,10 +113,11 @@ class WFFileSystem extends WFExtension
 				$root = 'images';
 			}	
 			
+			jimport('joomla.user.helper');
 			// Joomla! 1.6+
-			if (method_exists('JUser', 'getAuthorisedGroups')) {
-				$groups 	= $user->getAuthorisedGroups();
-				$usertype 	= array_shift($groups);
+			if (method_exists('JUserHelper', 'getUserGroups')) {
+				$groups 	= JUserHelper::getUserGroups($user->id);
+				$usertype 	= array_shift(array_keys($groups));												
 			} else {
 				$usertype 	= $user->usertype;
 			}
