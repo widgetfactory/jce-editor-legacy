@@ -429,8 +429,10 @@
                 // hide iframe
                 DOM.setStyle(iframe, 'visiblity', 'hidden');
                 DOM.setAttrib(iframe, 'aria-hidden', true);
-
-                this.setHighlight(this.highlight);
+                
+                window.setTimeout(function() {
+                	self.setHighlight(self.highlight);
+                }, 5);
             } else {
                 if (se) {
                     // pass content
@@ -452,6 +454,10 @@
                 if (wordcount) {
                 	DOM.show(wordcount.parentNode);
                 }
+                
+                cm.setActive('highlight', false);
+            	cm.setActive('numbers', false);
+            	cm.setActive('wrap', false);
 
                 // focus editor
                 ed.focus();
@@ -461,7 +467,7 @@
         },
 
         loadEditor : function() {
-            var self = this, ed = this.editor, url = this.url, DOM = tinymce.DOM, iframe = DOM.get(ed.id + '_ifr');
+            var self = this, ed = this.editor, cm = ed.controlManager, url = this.url, DOM = tinymce.DOM, iframe = DOM.get(ed.id + '_ifr');
 			var w = iframe.clientWidth, h = iframe.clientHeight;
 
             // create the container
@@ -530,6 +536,9 @@
             				ed.show();
             			}
             			
+            			cm.setActive('highlight', self.highlight);
+            			cm.setActive('numbers', self.numbers);
+            			cm.setActive('wrap', self.wrap);          			
             		},
             		change : function() {
             			ed.controlManager.setDisabled('undo', false);
@@ -567,7 +576,7 @@
 
             cm.setActive('highlight', !!s);
 
-            if (se) {
+            if (se) {            	
                 se.setHighlight(s);
 
                 this.setContent();
