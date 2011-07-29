@@ -268,9 +268,9 @@
 
                 t.focus(id);
                 
-                if (DOM.is(n, '.ui-button-cancel, .ui-button-ok')) {
+                if (DOM.is(n, '.ui-button-cancel, .ui-button-cancel span, .ui-button-ok, .ui-button-ok span')) {
                 	f.button_func(DOM.hasClass(n, 'ui-button-ok'));
-                } else if (DOM.is(n, '.ui-dialog-titlebar-close') || DOM.is(n, '.ui-dialog-titlebar-close span')) {
+                } else if (DOM.is(n, '.ui-dialog-titlebar-close, .ui-dialog-titlebar-close span')) {
                 	t.close(null, id);
                 }
 
