@@ -121,7 +121,10 @@ WFMediaPlayer.init({
 			
 			switch(k) {
 				case 'volume':
-					v = v / 100;
+					v = parseInt(v) / 100;
+					break;
+				case 'audioPan':
+					v = parseInt(v);
 					break;
 				case 'poster':
 				case 'endOfVideoOverlay':
