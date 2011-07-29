@@ -265,16 +265,6 @@ function jInsertEditorText(text,editor) {
 
 				var use_cookies = getVar(s.use_cookies, true);
 
-				if (!state) {
-					el.className = 'wfNoEditor';
-				} else {
-					if (parseInt(cookie) == 0) {
-						el.className = 'wfNoEditor';
-					} else {
-						el.className = 'wfEditor';
-					}
-				}
-
 				var label = getVar(s.toggle_label, '[show/hide]');
 
 				var div = DOM.create('span', {
@@ -319,6 +309,18 @@ function jInsertEditorText(text,editor) {
 						}
 					}
 				});
+				
+				if (!state) {
+					el.className = 'wfNoEditor';
+					self._wrapText(el, true);
+				} else {
+					if (parseInt(cookie) == 0) {
+						el.className = 'wfNoEditor';
+						self._wrapText(el, true);
+					} else {
+						el.className = 'wfEditor';
+					}
+				}
 			});
 		},
 		
@@ -331,7 +333,7 @@ function jInsertEditorText(text,editor) {
 				v = el.value;
 				n = el.cloneNode(false);
 				n.setAttribute("wrap", s);
-				el.parentNode.replaceChild(n, el);
+				el.parentNode.replaceChild(n, el);				
 				n.value = v;
 			}
 		},
