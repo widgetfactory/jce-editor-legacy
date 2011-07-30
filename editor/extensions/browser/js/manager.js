@@ -2010,28 +2010,6 @@
 			this._getItemDetails();
 		},
 
-		_sizeToFit : function(img) {
-			var w = img.width, h = img.height;
-
-			if (w > 100) {
-				h = h * (100 / w);
-				w = 100;
-				if (h > 80) {
-					w = w * (80 / h);
-					h = 80;
-				}
-			} else if (h > 80) {
-				w = w * (80 / h);
-				h = 80;
-				if (w > 100) {
-					h = h * (100 / w);
-					w = 100;
-				}
-			}
-
-			img.width = w, img.height = h;
-		},
-
 		/**
 		 * Get a file or folder's properties
 		 */
@@ -2156,7 +2134,10 @@
 
 					} else {
 						// size img
-						self._sizeToFit(img);
+						$.Plugin.sizeToFit(img, {
+							width : 100,
+							height: 80
+						});
 
 						$('dd', '#info-preview').append($(img).attr('alt', self._translate('preview', 'Preview')));
 					}
