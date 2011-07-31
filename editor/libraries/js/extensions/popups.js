@@ -275,9 +275,6 @@ var WFPopups = WFExtensions.add('Popups', {
                 tinymce.each(ed.dom.select('a[href=javascript:mctmp(0);]'), function(link) {
                     self.setAttributes(link, args);
                 });
-
-                // move selection
-                ed.selection.collapse();
             }
         } else {
             // is a popup and option not checked - remove
