@@ -249,7 +249,7 @@ var WFPopups = WFExtensions.add('Popups', {
      * @param {Object} args
      */
     createPopup : function(n, args) {
-        var self = this, ed = tinyMCEPopup.editor, o;
+        var self = this, ed = tinyMCEPopup.editor, o, el;
 
         args = args || {};
 
@@ -274,7 +274,13 @@ var WFPopups = WFExtensions.add('Popups', {
 
                 tinymce.each(ed.dom.select('a[href=javascript:mctmp(0);]'), function(link) {
                     self.setAttributes(link, args);
+                    
+                    el = link;
                 });
+                
+                if (el.parentNode.nodeName != 'BODY') {
+                	ed.selection.collapse();
+                }
             }
         } else {
             // is a popup and option not checked - remove
