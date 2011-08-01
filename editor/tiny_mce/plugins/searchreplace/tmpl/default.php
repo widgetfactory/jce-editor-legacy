@@ -19,7 +19,7 @@ $tabs = WFTabs::getInstance();
 <?php echo $tabs->render(); ?>
 <div class="mceActionPanel">
 	<button type="submit" id="next" name="insert">{#searchreplace_dlg.findnext}</button>
-	<button type="button" class="button" id="replaceBtn" name="replaceBtn" onclick="SearchReplaceDialog.searchNext('current');">{#searchreplace_dlg.replace}</button>
-	<button type="button" class="button" id="replaceAllBtn" name="replaceAllBtn" onclick="SearchReplaceDialog.searchNext('all');">{#searchreplace_dlg.replaceall}</button>
+	<button type="button" class="button" id="replaceBtn" name="replaceBtn">{#searchreplace_dlg.replace}</button>
+	<button type="button" class="button" id="replaceAllBtn" name="replaceAllBtn">{#searchreplace_dlg.replaceall}</button>
 	<button type="button" id="cancel" name="cancel" onclick="tinyMCEPopup.close();">{#cancel}</button>
 </div>
