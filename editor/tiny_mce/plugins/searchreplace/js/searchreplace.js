@@ -26,32 +26,40 @@ var SearchReplaceDialog = {
             icons : {
                 primary : 'ui-icon-arrowthick-1-e'
             }
-        }).click(function() {
+        }).click(function(e) {
         	self.searchNext('none');
+        	e.preventDefault();
         });
 
         $('button#replaceBtn').button({
             icons : {
                 primary : 'ui-icon-transferthick-e-w'
             }
-        }).click(function() {
+        }).click(function(e) {
         	self.searchNext('current');
+        	e.preventDefault();
         });
 
         $('button#replaceAllBtn').button({
             icons : {
                 primary : 'ui-icon-transferthick-e-w'
             }
-        }).click(function() {
+        }).click(function(e) {
         	self.searchNext('all');
+        	e.preventDefault();
         });
+        
+        $('#tabs').tabs('option', 'select', function(e, ui) {
+        	var id = ui.panel.id;
+        	self.switchMode(id.substring(0, id.indexOf('_')));
+        }).tabs('select', '#' + m + '_tab');
 
         this.switchMode(m);
 
         $('#' + m + '_panel_searchstring').val(tinyMCEPopup.getWindowArg("search_string"));
 
         // Focus input field
-        $('#' + '_panel_searchstring').focus();
+        $('#' + m + '_panel_searchstring').focus();
     },
 
     switchMode : function(m) {
@@ -59,17 +67,16 @@ var SearchReplaceDialog = {
 
         if (lm != m) {
             if (lm) {
-                $('#' + '_panel_searchstring').val($('#' + lm + '_panel_searchstring').val());
-                $('#' + '_panel_backwardsu').attr('checked',  $('#' + lm + '_panel_backwardsu').is(':checked'));
+                $('#' + m + '_panel_searchstring').val($('#' + lm + '_panel_searchstring').val());
+                $('#' + m + '_panel_backwardsu').attr('checked',  $('#' + lm + '_panel_backwardsu').is(':checked'));
 
-                $('#' + '_panel_backwardsd').attr('checked',  $('#' + lm + '_panel_backwardsd').is(':checked'));
-                $('#' + '_panel_casesensitivebox').attr('checked',  $('#' + lm + '_panel_casesensitivebox').is(':checked'));
+                $('#' + m + '_panel_backwardsd').attr('checked',  $('#' + lm + '_panel_backwardsd').is(':checked'));
+                $('#' + m + '_panel_casesensitivebox').attr('checked',  $('#' + lm + '_panel_casesensitivebox').is(':checked'));
             }
-
-            $('#tabs').tabs('select', m + '_tab');
 
             $("#replaceBtn").css('display', (m == "replace") ? "inline" : "none");
             $("#replaceAllBtn").css('display', (m == "replace") ? "inline" : "none");
+            
             this.lastMode = m;
         }
     },
@@ -78,11 +85,11 @@ var SearchReplaceDialog = {
         var ed = tinyMCEPopup.editor, se = ed.selection, r = se.getRng(), m = this.lastMode, s, b, fl = 0, w = ed.getWin(), wm = ed.windowManager, fo = 0;
 
         // Get input
-        s   = f$('#' + '_panel_searchstring').val();
-        b   = $('#' + '_panel_backwardsu').is(':checked');
-        ca  = $('#' + '_panel_casesensitivebox').is(':checked');
+        s   = $('#' + m + '_panel_searchstring').val();
+        b   = $('#' + m + '_panel_backwardsu').is(':checked');
+        ca  = $('#' + m + '_panel_casesensitivebox').is(':checked');
         rs  = $('#replace_panel_replacestring').val();
-
+        
         if (s == '')
             return;
 

@@ -22,9 +22,9 @@ defined('WF_EDITOR') or die('RESTRICTED');
 	<tr>
 		<td colspan="2">
 			<label>{#searchreplace_dlg.direction}</label>
-			<input id="search_panel_backwardsu" class="radio" type="radio" />
+			<input id="search_panel_backwardsu" name="search_panel_backwards" class="radio" type="radio" />
 			<label for="search_panel_backwardsu">{#searchreplace_dlg.up}</label>
-			<input id="search_panel_backwardsd" class="radio" type="radio" checked="checked" />
+			<input id="search_panel_backwardsd" name="search_panel_backwards" class="radio" type="radio" checked="checked" />
 			<label for="search_panel_backwardsd">{#searchreplace_dlg.down}</label>
 		</td>
 	</tr>
