@@ -590,7 +590,7 @@ class WFJoomlaFileSystem extends WFFileSystem
 							
 							if ($chunk == $chunks - 1) {
 								if (is_file($dest)) {
-									$result->path  = basename($dest);
+									$result->path  = $dest;
 								}
 							}
 						} else {
@@ -621,7 +621,7 @@ class WFJoomlaFileSystem extends WFFileSystem
 							
 							if (fclose($out) && is_file($dest)) {
 								$result->state = true;
-								$result->path  = basename($dest);
+								$result->path  = $dest;
 							}
 						}
 					}
