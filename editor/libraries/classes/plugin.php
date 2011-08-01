@@ -113,6 +113,9 @@ class WFEditorPlugin extends WFEditor
 			$request = WFRequest::getInstance();
 			$request->process();
 		} else {
+			// Load Plugin language
+			$this->loadPluginLanguage();	
+				
 			$version 	= $this->getVersion();	
 			$name		= $this->getName();						
 			$xml 		= JApplicationHelper::parseXMLInstallFile(WF_EDITOR_PLUGINS . DS . $name . DS . $name . '.xml');
@@ -147,10 +150,7 @@ class WFEditorPlugin extends WFEditor
 			
 			// pack assets if required
 			$document->pack(true, $this->getParam('editor.compress_gzip', 0));
-	
-			// Load Plugin language
-			$this->loadPluginLanguage();
-	
+
 			// get the view
 			$view = $this->getView();
 
