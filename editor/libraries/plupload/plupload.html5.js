@@ -12,22 +12,11 @@
 /*global plupload:false, File:false, window:false, atob:false, FormData:false, FileReader:false, ArrayBuffer:false, Uint8Array:false, BlobBuilder:false, unescape:false */
 
 (function(window, document, plupload, undef) {
-	var fakeSafariDragDrop;
+	var fakeSafariDragDrop;	
 	
-	/* Introduce sendAsBinary for latest WebKits having support for BlobBuilder and typed arrays:
-	credits: http://javascript0.org/wiki/Portable_sendAsBinary, 
-	more info: http://code.google.com/p/chromium/issues/detail?id=35705 
-	*/			
 	if (window.Uint8Array && window.ArrayBuffer && !XMLHttpRequest.prototype.sendAsBinary) {
-		XMLHttpRequest.prototype.sendAsBinary = null;/*function(datastr) {
-			var ui8a = new Uint8Array(datastr.length);
-			for (var i = 0; i < datastr.length; i++) {
-				ui8a[i] = (datastr.charCodeAt(i) & 0xff);
-			}
-			this.send(ui8a.buffer);
-		};*/
+		XMLHttpRequest.prototype.sendAsBinary = null;
 	}
-	
 
 	function readFileAsDataURL(file, callback) {
 		var reader;
@@ -129,8 +118,8 @@
 					data = data.substring(data.indexOf('base64,') + 7);
 					data = atob(data);
 
-					// Restore JPEG headers
-					if (jpegHeaders['headers'] && jpegHeaders['headers'].length) {
+					// Restore JPEG headers if applicable
+					if (jpegHeaders && jpegHeaders['headers'] && jpegHeaders['headers'].length) {
 						data = jpegHeaders.restore(data);
 						jpegHeaders.purge(); // free memory
 					}
@@ -226,7 +215,7 @@
 					// Store away gears blob internally
 					id = plupload.guid();
 					html5files[id] = file;
-					
+
 					// Expose id, name and size
 					files.push(new plupload.File(id, file.fileName, file.fileSize || file.size)); // File.fileSize depricated
 				}
@@ -594,9 +583,9 @@
 						});
 
 						// Build multipart request
-						if (up.settings.multipart && features.multipart) {							
+						if (up.settings.multipart && features.multipart) {
 							// Has FormData support like Chrome 6+, Safari 5+, Firefox 4
-							if (!xhr.sendAsBinary || fakeSafariDragDrop) {
+							if (!xhr.sendAsBinary) {
 								formData = new FormData();
 
 								// Add multipart params
@@ -665,7 +654,6 @@
 								readFileAsBinary(nativeFile, sendBinaryBlob);
 							}
 						});
-						readFileAsBinary(nativeFile, sendBinaryBlob);
 					} else {
 						readFileAsBinary(nativeFile, sendBinaryBlob);
 					}
@@ -870,9 +858,18 @@
 				read.init(data);
 				
 				// Check if data is jpeg
-				if (read.SHORT(0) !== 0xFFD8) {
+				var jpegHeaders = new JPEG_Headers(data);
+				
+				if (!jpegHeaders['headers']) {
 					return false;
 				}	
+				
+				// Delete any existing headers that need to be replaced
+				for (var i = jpegHeaders['headers'].length; i > 0; i--) {
+					var hdr = jpegHeaders['headers'][i - 1];
+					read.SEGMENT(hdr.start, hdr.length, '')
+				}
+				jpegHeaders.purge();
 				
 				idx = read.SHORT(2) == 0xFFE0 ? 4 + read.SHORT(4) : 2;
 								
