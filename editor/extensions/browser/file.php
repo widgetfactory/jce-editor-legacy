@@ -108,8 +108,6 @@ class WFFileBrowser extends WFBrowserExtension
 		
 		$document->addScript(array(
 			'plupload.full',
-			'plupload.html5',
-			'plupload.html4'
 		), 'jce.libraries.plupload');
 		
 		$document->addScript(array(
