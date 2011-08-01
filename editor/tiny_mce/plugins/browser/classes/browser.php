@@ -91,7 +91,7 @@ class WFFileBrowserPlugin extends WFMediaManager
 			);
 			
 			// add element
-			if (JRequest::getWord('element')) {
+			if (JRequest::getCmd('element')) {
 				$options['element'] = JRequest::getWord('element');
 			}
 			
