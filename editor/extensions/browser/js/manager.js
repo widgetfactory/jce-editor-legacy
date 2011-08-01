@@ -2134,12 +2134,12 @@
 
 					} else {
 						// size img
-						$.Plugin.sizeToFit(img, {
+						var dim = $.Plugin.sizeToFit(img, {
 							width : 100,
 							height: 80
 						});
 
-						$('dd', '#info-preview').append($(img).attr('alt', self._translate('preview', 'Preview')));
+						$('dd', '#info-preview').append($(img).attr('alt', self._translate('preview', 'Preview')).css(dim));
 					}
 
 					$('dd', '#info-preview').removeClass('loader');
