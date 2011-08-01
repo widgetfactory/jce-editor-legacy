@@ -1035,8 +1035,8 @@ class WFFileBrowser extends WFBrowserExtension
 		if ($complete) {
 			
 			if (is_a($result, 'WFFileSystemResult')) {
-				if ($result->state === true) {
-					$this->setResult($this->fireEvent('onUpload', array($result->path)));
+				if ($result->state === true) {										
+					$this->setResult($this->fireEvent('onUpload', array($result->path)));					
 					$this->setResult(basename($result->path), 'files');	
 				}
 			}
