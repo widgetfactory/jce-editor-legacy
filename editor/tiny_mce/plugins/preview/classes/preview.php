@@ -65,6 +65,12 @@ class WFPreviewPlugin extends WFEditorPlugin
 		$dispatcher	= JDispatcher::getInstance();
 		$language 	= JFactory::getLanguage();
 		
+		// reset document type
+		$document	= &JFactory::getDocument();
+		$document->setType('html');
+		// required by module loadposition
+		jimport('joomla.application.module.helper');
+		
 		wfimport('admin.helpers.extension');
 
 		// Get variables
