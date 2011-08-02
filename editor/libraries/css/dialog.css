@@ -58,7 +58,6 @@ label {
 }
 label.invalid {
     color:#E00;
-    display:inline;
 }
 input.invalid {
     border:1px solid #E00;
