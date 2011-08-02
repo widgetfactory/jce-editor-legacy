@@ -528,13 +528,11 @@
 			var name 	= $(file).attr('title');
 			var src		= $(file).data('url');
 
-			src	= src.charAt(0) == '/' ? src.substring(1) : src;
-
 			if (!$('#rollover_tab').is('.ui-tabs-hide')) {
 				this._setRollover(src);
 			} else {
 				name = $.String.stripExt(name);
-				name = name.replace(/_/g, ' ');
+				name = name.replace('_', ' ', 'g');
 
 				$('#alt').val(name);
 				$('#onmouseout').val(src);
