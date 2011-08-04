@@ -126,6 +126,9 @@ WFMediaPlayer.init({
 				case 'audioPan':
 					v = parseInt(v);
 					break;
+				case 'backgroundColor':
+					v = v.replace('#', '0x');
+					break;
 				case 'poster':
 				case 'endOfVideoOverlay':
 					if (v) {
@@ -167,6 +170,9 @@ WFMediaPlayer.init({
 					break;
 				case 'volume':
 					data['volume'] = v * 100;
+					break;
+				case 'backgroundColor':
+					data[k] = v.replace('0x', '#');
 					break;
 				case 'poster':
 				case 'endOfVideoOverlay':
