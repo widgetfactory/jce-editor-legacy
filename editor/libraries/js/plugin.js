@@ -142,16 +142,6 @@
             $('.hastip, .tip, .tooltip').tips();
 
             this._formWidgets();
-            
-            this._showAlerts();
-        },
-        
-        _showAlerts : function() {
-        	if (this.options.alerts) {
-        		$.each(this.options.alerts, function(i, s) {
-        			$.Dialog.alert(s.text);
-        		});
-        	}
         },
 
         /**

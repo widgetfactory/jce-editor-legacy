@@ -28,6 +28,9 @@ wfimport('editor.libraries.classes.editor');
 
 class WFEditorPlugin extends WFEditor
 {
+	
+	var $_alerts = array();
+	
 	/**
 	 * Constructor activating the default information of the class
 	 *
@@ -254,11 +257,15 @@ class WFEditorPlugin extends WFEditor
 	 */
 	function addAlert($class = 'info', $title = '', $text = '')
 	{
-		$this->set('_alerts', array_push($this->get('_alerts'), array(
+		$alerts = $this->getAlerts();	
+		
+		$alerts[] = array(
 			'class' => $class,
 			'title'	=> $title,
 			'text'	=> $text
-		)));
+		);
+			
+		$this->set('_alerts', $alerts);
 	}
 	/**
 	 * Get current alerts
