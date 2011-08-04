@@ -61,6 +61,19 @@
 
             this._createUploader();
         },
+        
+        _createSimple : function() {
+        	$.extend(this.options, {
+        		runtimes : 'html4',
+        		required : ['multipart']
+        	});
+        	
+        	if (this.uploader) {
+        		this.uploader.destroy();
+        	}
+
+        	this._createUploader();
+        },
 
         _createUploader : function() {
             var self 	= this;
@@ -155,11 +168,25 @@
                             self.errors++;
                             break;
                     }
+                    // no reponse text perhaps server error
+                    if (o.response === '') {
+                    	if (o.status === 200) {
+                    		o.response = '{"error":false,"files":["' + file.name + '"]}';
+                    	} else {
+                    		o.response = '{"error":true,"text":"UPLOAD ERROR"}';
+                    	}
+                    }
+
                     self._onComplete(file, $.parseJSON(o.response), status);
                 });
 
                 this.uploader.bind('Error', function(up, err) {
                     var file = err.file, message, details;
+                    
+                    // no runtime meets requirements, revert to simple html4
+                    if (err.code === plupload.INIT_ERROR) {
+                    	self._createSimple();
+                    }
 
                     if (file) {
                         // create language key from message
