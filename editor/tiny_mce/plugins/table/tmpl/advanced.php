@@ -96,7 +96,7 @@ $plugin = WFTablesPlugin::getInstance();
 		<table border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td><input id="bordercolor" name="bordercolor" type="text" value=""
-					size="9" class="color" /></td>
+					size="9" class="color" onchange="TableDialog.changedColor();"/></td>
 			</tr>
 		</table>
 		</td>
@@ -108,7 +108,7 @@ $plugin = WFTablesPlugin::getInstance();
 		<table border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td><input id="bgcolor" name="bgcolor" type="text" value="" size="9"
-					class="color" /></td>
+					class="color" onchange="TableDialog.changedColor();" /></td>
 			</tr>
 		</table>
 		</td>
