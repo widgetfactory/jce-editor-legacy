@@ -38,7 +38,8 @@
             selectChange 	: $.noop,
             site 			: '',
             root			: '',
-            help			: $.noop
+            help			: $.noop,
+            alerts			: ''
         },
 
         getURI : function(absolute) {
@@ -141,6 +142,16 @@
             $('.hastip, .tip, .tooltip').tips();
 
             this._formWidgets();
+            
+            this._showAlerts();
+        },
+        
+        _showAlerts : function() {
+        	if (this.options.alerts) {
+        		$.each(this.options.alerts, function(i, s) {
+        			$.Dialog.alert(s.text);
+        		});
+        	}
         },
 
         /**
@@ -251,6 +262,7 @@
 
         createColourPickers: function () {
             var self = this;
+
             $('input.color, input.colour').each( function () {
                 var id = $(this).attr('id');
 

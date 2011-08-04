@@ -37,6 +37,10 @@ defined( '_WF_EXT' ) or die( 'Restricted access' );
 		<td><label for="mediaplayer_endOfVideoOverlay" title="<?php echo WFText::_('WF_MEDIAPLAYER_JCEPLAYER_VIDEOOVERLAY_DESC')?>" class="tooltip"><?php echo WFText::_('WF_MEDIAPLAYER_JCEPLAYER_VIDEOOVERLAY')?></label></td>
 		<td><input type="text" id="mediaplayer_endOfVideoOverlay" value="" class="browser image" /></td>
 	</tr>
+	<tr>	
+		<td><label for="mediaplayer_backgroundColor" title="<?php echo WFText::_('WF_MEDIAPLAYER_JCEPLAYER_BACKGROUNDCOLOR_DESC')?>" class="tooltip"><?php echo WFText::_('WF_MEDIAPLAYER_JCEPLAYER_BACKGROUNDCOLOR')?></label></td>
+		<td><input type="text" id="mediaplayer_backgroundColor" value="" class="color" size="9" /></td>
+	</tr>
 	<tr>
 		<td colspan="2">
 			<input type="checkbox" id="mediaplayer_loop" />
