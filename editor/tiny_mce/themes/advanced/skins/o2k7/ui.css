@@ -58,7 +58,7 @@
 .o2k7Skin table.mceListBoxEnabled:hover .mceText, .o2k7Skin .mceListBoxHover .mceText, .o2k7Skin .mceListBoxSelected .mceText {background:#FFF}
 .o2k7Skin table.mceListBoxEnabled:hover .mceOpen, .o2k7Skin .mceListBoxHover .mceOpen, .o2k7Skin .mceListBoxSelected .mceOpen {background-position:-66px -22px}
 .o2k7Skin .mceListBoxDisabled .mceText {color:gray}
-.o2k7Skin .mceListBoxMenu {overflow:auto; overflow-x:hidden}
+.o2k7Skin .mceListBoxMenu {overflow:auto; overflow-x:hidden; margin-left:3px}
 .o2k7Skin .mceOldBoxModel .mceListBox .mceText {height:22px}
 .o2k7Skin select.mceListBox {font-family:Tahoma,Verdana,Arial,Helvetica; font-size:12px; border:1px solid #b3c7e1; background:#FFF;}
 
