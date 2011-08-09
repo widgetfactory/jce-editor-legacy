@@ -24,7 +24,7 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
                 <tr>
                     <td><label for="classlist" class="hastip" title="<?php echo WFText::_('WF_LABEL_CLASS_LIST_DESC');?>"><?php echo WFText::_('WF_LABEL_CLASS_LIST');?></label></td>
                     <td colspan="3">
-                        <select id="classlist" onchange="AdvLinkDialog.setClasses(this.value);">
+                        <select id="classlist" onchange="LinkDialog.setClasses(this.value);">
                             <option value=""><?php echo WFText::_('WF_OPTION_NOT_SET');?></option>
                         </select>
                    </td>
