@@ -888,7 +888,8 @@
 					elm, vp, y, elmHeight;
 
 					ed.selection.select(marker, false);
-					document.execCommand("Delete", false, null);
+					//document.execCommand("Delete", false, null);
+					dom.remove(marker);
 					marker = null;
 
 					// Get element, position and height
