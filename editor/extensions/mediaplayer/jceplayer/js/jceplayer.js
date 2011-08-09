@@ -145,9 +145,15 @@ WFMediaPlayer.init({
 				v = $(this).is(':checked');
 			}
 
-			if (self.props[k] === v || v == '') {
+			// value is opposite of checked value
+			if (k == 'controlBarAutoHide') {
+				v = !v;
+			}
+
+			if (self.props[k] === v || v === '') {
 				return;
 			}
+			
 			data.push(k + '=' + $.String.encodeURI(v, true));
 		});
 		return {
@@ -162,17 +168,29 @@ WFMediaPlayer.init({
 	},
 	parseValues : function(s) {
 		var ed = tinyMCEPopup.editor, data = {}, o = $.String.query(s);
-
-		$.each(o, function(k, v) {
+		
+		$.each(o, function(k, v) {			
 			switch(k) {
 				case 'src' :
 					data['src'] = ed.convertURL(v);
 					break;
 				case 'volume':
-					data['volume'] = v * 100;
+					data['volume'] = parseInt(v) * 100;
 					break;
 				case 'backgroundColor':
 					data[k] = v.replace('0x', '#');
+					break;
+				case 'loop':
+				case 'autoPlay':
+				case 'muted':
+				case 'playButtonOverlay':
+				case 'bufferingOverlay':
+					v = (v === 'false' || v === '0') ? false : !!v;
+					data[k] = v;
+					break;
+				case 'controlBarAutoHide':
+					v = (v === 'false' || v === '0') ? false : !!v;	
+					data[k] = !v;
 					break;
 				case 'poster':
 				case 'endOfVideoOverlay':
@@ -183,7 +201,7 @@ WFMediaPlayer.init({
 					break;
 			}
 		});
-		
+
 		return data;
 	},
 	/**
