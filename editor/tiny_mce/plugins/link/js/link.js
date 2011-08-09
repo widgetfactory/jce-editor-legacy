@@ -263,6 +263,11 @@ var LinkDialog = {
         	if (n.nodeName == 'IMG' && tinymce.isWebKit) {
             	n.style.cssFloat = flt;
         	}
+        	
+        	// if text selection, update
+        	if (!$('#text').is(':disabled')) {
+        		ed.dom.setHTML(el, $('#text').val());
+        	}
         }
 
         // Create or remove popup
