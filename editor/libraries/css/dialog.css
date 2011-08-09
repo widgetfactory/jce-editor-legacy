@@ -142,6 +142,7 @@ input[type="text"] {
 }
 input[type="checkbox"] {
 	margin: 2px;
+	vertical-align: middle;
 }
 .show {
     display:block;
