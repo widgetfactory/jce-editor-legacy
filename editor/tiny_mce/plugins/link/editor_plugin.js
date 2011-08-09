@@ -45,6 +45,8 @@
                 if (n && n.nodeName != 'A') {
                     n = ed.dom.getParent(n, 'A');
                 }
+                
+                ed.selection.select(n);
 
                 cm.setActive('link', n && n.nodeName == 'A' && !n.name);
             });
