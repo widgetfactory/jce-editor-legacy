@@ -46,11 +46,6 @@
 					if (!ed.getParam('verify_html')) {
 						o.content = o.content.replace(/<p([^>]*)><\/p>/g, '<p$1>&nbsp;</p>');
 					}				
-					
-					// padd empty table cells in Gecko
-					if (tinymce.isGecko) {
-						o.content = o.content.replace(/<td><\/td>/g, '<td>&nbsp;</td>');
-					}
 				}
 			});
 			
@@ -64,10 +59,6 @@
 						o.content = o.content.replace(/&amp;/gi, "&");
 						o.content = o.content.replace(/&quot;/gi, '"');
 					}
-				}
-				// padd empty table cells in Gecko
-				if (tinymce.isGecko) {
-					o.content = o.content.replace(/<td><\/td>/g, '<td>&nbsp;</td>');
 				}
 			});
 			
