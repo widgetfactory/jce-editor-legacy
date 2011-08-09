@@ -242,7 +242,7 @@ function jInsertEditorText(text,editor) {
 				try {
 					// only create toggle for advanced theme
 					if (s.theme == 'advanced' && (typeof s.toggle == 'undefined' ? 1 : s.toggle)) {
-						this.toggle(elements);
+						this._createToggle(elements);
 					}
 
 					tinyMCE.init(s);
@@ -251,21 +251,23 @@ function jInsertEditorText(text,editor) {
 				}
 			}
 		},
-		toggle : function(elements) {
+		
+		_createToggle : function(elements) {
 			var self = this, DOM = tinymce.DOM, Event = tinymce.dom.Event, s = this.settings;
 
 			function getVar(s, dv) {
 				return (typeof s == 'undefined' || s === null) ? dv : s;
 			}
+			
+			var use_cookies = getVar(s.use_cookies, true);
+			
+			elements = elements || DOM.select('.wfEditor');
 
-			tinymce.each(DOM.select('.wfEditor'), function(el) {
+			tinymce.each(elements, function(el) {
 				var state 	= getVar(s.toggle_state, 1);
 				// get cookie
 				var cookie 	= getVar(tinymce.util.Cookie.get('wf_editor_' + el.id + '_state'), 1);
-
-				var use_cookies = getVar(s.use_cookies, true);
-
-				var label = getVar(s.toggle_label, '[show/hide]');
+				var label 	= getVar(s.toggle_label, '[show/hide]');
 
 				var div = DOM.create('span', {
 					'role' 				: 'button',
@@ -277,37 +279,7 @@ function jInsertEditorText(text,editor) {
 				el.parentNode.insertBefore(div, el);
 
 				Event.add(div, 'click', function(e) {
-					var ed = tinyMCE.get(el.id);
-					// turn it on
-					if (!ed) {
-						if (use_cookies) {
-							tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
-						}
-
-						el.className = 'wfEditor';
-
-						tinyMCE.execCommand('mceAddEditor', 0, el.id);
-					} else {
-						self._wrapText(ed.getElement(), true);
-						
-						if (ed.isHidden()) {
-							if (use_cookies) {
-								tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
-							}
-							el.className = 'wfEditor';
-
-							ed.load();
-							ed.show();							
-						} else {
-							if (use_cookies) {
-								tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 0);
-							}
-							el.className = 'wfNoEditor';
-
-							ed.save();
-							ed.hide();
-						}
-					}
+					self.toggle(el);
 				});
 				
 				if (!state) {
@@ -322,6 +294,40 @@ function jInsertEditorText(text,editor) {
 					}
 				}
 			});
+		},
+		
+		toggle : function(el, use_cookies) {
+			var self = this, ed = tinyMCE.get(el.id);
+			// turn it on
+			if (!ed) {
+				if (use_cookies) {
+					tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
+				}
+
+				el.className = 'wfEditor';
+
+				tinyMCE.execCommand('mceAddEditor', 0, el.id);
+			} else {
+				self._wrapText(ed.getElement(), true);
+						
+				if (ed.isHidden()) {
+					if (use_cookies) {
+						tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
+					}
+					el.className = 'wfEditor';
+
+					ed.load();
+					ed.show();							
+				} else {
+					if (use_cookies) {
+						tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 0);
+					}
+					el.className = 'wfNoEditor';
+
+					ed.save();
+					ed.hide();
+				}
+			}
 		},
 		
 		_wrapText : function(el, s) {
@@ -341,9 +347,11 @@ function jInsertEditorText(text,editor) {
 		showLoader : function(el) {
 			tinymce.DOM.addClass('.wfEditor', 'loading');
 		},
+		
 		hideLoader : function(el) {
 			tinymce.DOM.removeClass(el, 'loading');
 		},
+		
 		/**
 		 * Set the editor content
 		 * @param {String} id The editor id
