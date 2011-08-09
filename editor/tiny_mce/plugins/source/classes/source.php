@@ -98,12 +98,6 @@ class WFSourcePlugin extends WFEditorPlugin {
 		switch (JRequest::getWord('type', 'base')) {
 			case 'base':
 				$files = array();
-
-				/*$names = array('util', 'stringstream', 'select', 'undo', 'editor', 'tokenize');
-
-				foreach($names as $name) {
-					$files[] = $base . DS . 'js' . DS . 'codemirror' . DS . $name . '.js';
-				}*/
 				
 				$files[] = $base . DS . 'js' . DS . 'codemirror' . DS . 'base.js';
 				
@@ -113,12 +107,6 @@ class WFSourcePlugin extends WFEditorPlugin {
 			case 'parser' :
 				$files = array();
 
-				/*$names = array('parsetext', 'parsexml', 'parsecss', 'tokenizejavascript', 'parsejavascript', 'parsehtmlmixed');
-
-				foreach($names as $name) {
-					$files[] = $base . DS . 'js' . DS . 'codemirror' . DS . $name . '.js';
-				}*/
-				
 				$files[] = $base . DS . 'js' . DS . 'codemirror' . DS . 'parser.js';
 
 				// javascript
