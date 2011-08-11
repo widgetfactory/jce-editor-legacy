@@ -147,19 +147,23 @@ function jInsertEditorText(text,editor) {
 		setBookmark : function(ed) {
 			var self = this, DOM = tinymce.DOM, Event = tinymce.dom.Event;
 
+			function isHidden(ed) {
+				return ed.isHidden() || DOM.getStyle(ed.id + '_ifr', 'visibility') == 'hidden';
+			}
+			
 			Event.add(document.body, 'mousedown', function(e) {
-				var el = e.target, ta = ed.getElement();
+				var el = e.target;
 
-				if (DOM.getParent(el, ta.id + '_parent')) {
+				if (DOM.getParent(el, 'div#' + ed.id + '_parent')) {
 					return;
 				}
-
-				function isHidden(ed) {
-					return ed.isHidden || DOM.getStyle(ed.id + '_ifr', 'visibility') == 'hidden';
-				}
-
+				
 				if (!isHidden(ed) && ed.selection) {
-					self._bookmark[ed.id] = ed.selection.getBookmark();
+					var n = ed.selection.getNode();
+					
+					if (DOM.getParent(n, 'body#tinymce')) {
+						self._bookmark[ed.id] = ed.selection.getBookmark();
+					}
 				}
 			});
 		},
@@ -234,6 +238,7 @@ function jInsertEditorText(text,editor) {
 						n = null;
 					});
 				});
+				
 				if (elements) {
 					s.mode 		= 'exact';
 					s.elements 	= elements;
