@@ -52,6 +52,8 @@ var PasteDialog = {
 	insert : function() {
 		var h, wc, c = document.getElementById('content');
 		
+		tinyMCEPopup.restoreSelection();
+		
 		if (c.nodeName == 'TEXTAREA') {
 			h = c.value;
 			
