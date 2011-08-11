@@ -818,18 +818,13 @@
 				h = h.replace(/[\x60\x91\x92\u2018\u2019]/g, "'");
 
 				if (ed.getParam("force_p_newlines")) {
-					// create a linebreak marker
-					h = h.replace(/\n\n/g, '__MCE_PARA__');
-					var blocks = '';
-					// convert marker to paragraphs
-					tinymce.each(h.split('__MCE_PARA__'), function(block) {
-						blocks += '<p>' + block + '</p>';
-					});
-
-					h = blocks;
+					// strip whitespace
+					h = h.replace(/^\s+|\s+$/g, '');
+					// replace double linebreaks with paragraphs
+					h = h.replace(/\n\n/g, '</p><p>');
 				}
-
-				h = h.replace(/\n/g, '<br />');
+				// replace single linebreak with br element
+				h = h.replace(/\n+?/g, '<br />');
 
 				// remove empty paragraphs
 				h = h.replace(/<p><\/p>/gi, '');
