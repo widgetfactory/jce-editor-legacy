@@ -1,7 +1,7 @@
 html, body{height:100%;}
 .mceContentBody{height:100%;min-width:90%;padding:5px;}
 body, td, pre {color:#000; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:11px; margin:8px;}
-body {background:#FFF;text-align:left;}
+body {background:#FFF;}
 body.mceContentReset {background: #FFFFFF none !important; color:#000000 !important; text-align:left !important;}
 body.mceContentReset a:link, body.mceContentReset a:visited {color: #000000 !important;}
 h1 {font-size: 2em}
