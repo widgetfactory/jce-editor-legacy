@@ -92,7 +92,7 @@ class WFFileBrowserPlugin extends WFMediaManager
 			
 			// add element
 			if (JRequest::getCmd('element')) {
-				$options['element'] = JRequest::getWord('element');
+				$options['element'] = JRequest::getCmd('element');
 			}
 			
 			$document->addScriptDeclaration('jQuery(document).ready(function($){$.Browser.init('.json_encode($options).');});');
