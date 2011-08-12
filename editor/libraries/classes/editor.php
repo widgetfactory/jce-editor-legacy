@@ -33,12 +33,12 @@ class WFEditor extends JObject
 	/**
 	 * @var varchar
 	 */
-	var $_version = '@@version@@';
+	var $_version 	= '@@version@@';
 
 	/**
 	 *  @var boolean
 	 */
-	var $_debug = false;
+	var $_debug 	= false;
 	/**
 	 * Constructor activating the default information of the class
 	 *
@@ -298,6 +298,27 @@ class WFEditor extends JObject
 
 		return ($param === $default) ? '' : $param;
 	}
+	
+	function checkLanguage($tag)
+	{
+		$file = JPATH_SITE .DS. 'language' .DS. $tag .DS. $tag .'.com_jce.xml';
+		
+		if (file_exists($file)) {
+			wfimport('admin.helpers.xml');
+				
+			$xml = WFXMLHelper::getXML($file);	
+			
+			if ($xml) {
+				$version = WFXMLHelper::getAttribute($xml, 'version');
+				
+				if ($version == '2.0') {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 
 	/**
 	 * Load a language file
@@ -307,17 +328,10 @@ class WFEditor extends JObject
 	 */
 	function loadLanguage($prefix, $path = JPATH_SITE)
 	{
-		$language = JFactory::getLanguage();
-		$language->load($prefix, $path);
-	}
-	
-	/**
-	 * Load the language files for the current plugin
-	 */
-	function loadLanguages()
-	{
-		$this->loadLanguage('com_jce');
-		$this->loadPluginLanguage();
+		$language 	= JFactory::getLanguage();
+		$tag		= $this->getLanguageTag();
+
+		$language->load($prefix, $path, $tag, true);
 	}
 	
 	/**
@@ -328,8 +342,14 @@ class WFEditor extends JObject
 	 */
 	function getLanguageDir()
 	{
-		$language = JFactory::getLanguage();
-		return $language->isRTL() ? 'rtl' : 'ltr';
+		$language 	= JFactory::getLanguage();
+		$tag		= $this->getLanguageTag();
+	
+		if ($language->getTag() == $tag) {
+			return $language->isRTL() ? 'rtl' : 'ltr';
+		}
+		
+		return 'ltr';
 	}
 	
 	/**
@@ -340,11 +360,20 @@ class WFEditor extends JObject
 	 */
 	function getLanguageTag()
 	{
-		$language = JFactory::getLanguage();
-		if ($language->isRTL()) {
-			return 'en-GB';
+		$language 	= JFactory::getLanguage();
+		$tag		= $language->getTag();
+		
+		static $_language;
+		
+		if (!isset($_lanugage)) {
+			if ($this->checkLanguage($tag)) {
+				$_language = $tag;	
+			} else {
+				$_language = 'en-GB';
+			}
 		}
-		return $language->getTag();
+		
+		return $_language;
 	}
 	
 	/**
@@ -355,11 +384,9 @@ class WFEditor extends JObject
 	 */
 	function getLanguage()
 	{
-		$tag = $this->getLanguageTag();
-		if (file_exists(JPATH_SITE .DS. 'language' .DS. $tag .DS. $tag .'.com_jce.xml')) {
-			return substr($tag, 0, strpos($tag, '-'));
-		}
-		return 'en';
+		$tag = $this->getLanguageTag();	
+
+		return substr($tag, 0, strpos($tag, '-'));
 	}
 
 	/**

@@ -1,10 +1,10 @@
 <?php
 /**
- * @version   $Id: document.php 221 2011-06-11 17:30:33Z happy_noodle_boy $
- * @package      JCE
- * @copyright    Copyright (C) 2005 - 2009 Ryan Demmer. All rights reserved.
- * @author    Ryan Demmer
- * @license      GNU/GPL
+ * @package     JCE
+ * @copyright   Copyright (C) 2005 - 2009 Ryan Demmer. All rights reserved.
+ * @copyright	Copyright (C) 2005 - 2011 Open Source Matters. All rights reserved.
+ * @author    	Ryan Demmer
+ * @license     GNU/GPL version 2 or later
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
@@ -70,6 +70,22 @@ class WFDocument extends JObject
 	 * @access  public
 	 */
 	var $version = '000000';
+	
+	/**
+	 * Contains the document language setting
+	 *
+	 * @var	 string
+	 * @access  public
+	 */
+	var $language = 'en-gb';
+
+	/**
+	 * Contains the document direction setting
+	 *
+	 * @var	 string
+	 * @access  public
+	 */
+	var $direction = 'ltr';
 
 	/**
 	 * Constructor activating the default information of the class
@@ -138,43 +154,43 @@ class WFDocument extends JObject
 	}
 	
 	/**
-	 * Return the curernt language code
+	 * Sets the global document language declaration. Default is English (en-gb).
 	 *
 	 * @access public
-	 * @return language code
+	 * @param   string   $lang
 	 */
-	function getLanguageDir()
-	{
-		$language = JFactory::getLanguage();
-		return $language->isRTL() ? 'rtl' : 'ltr';
+	function setLanguage($lang = "en-gb") {
+		$this->language = strtolower($lang);
 	}
+
 	/**
-	 * Return the curernt language code
+	 * Returns the document language.
 	 *
+	 * @return string
 	 * @access public
-	 * @return language code
 	 */
-	function getLanguageTag()
-	{
-		$language = JFactory::getLanguage();
-		if ($language->isRTL()) {
-			return 'en-GB';
-		}
-		return $language->getTag();
+	function getLanguage() {
+		return $this->language;
 	}
+
 	/**
-	 * Return the curernt language code
+	 * Sets the global document direction declaration. Default is left-to-right (ltr).
 	 *
 	 * @access public
-	 * @return language code
+	 * @param   string   $lang
 	 */
-	function getLanguage()
-	{
-		$tag = $this->getLanguageTag();
-		if (file_exists(JPATH_SITE .DS. 'language' .DS. $tag .DS. $tag .'.com_jce.xml')) {
-			return substr($tag, 0, strpos($tag, '-'));
-		}
-		return 'en';
+	function setDirection($dir = "ltr") {
+		$this->direction = strtolower($dir);
+	}
+
+	/**
+	 * Returns the document language.
+	 *
+	 * @return string
+	 * @access public
+	 */
+	function getDirection() {
+		return $this->direction;
 	}
 
 	/**
@@ -516,7 +532,7 @@ class WFDocument extends JObject
 	{		
 		// assign language
 		$this->language 	= $this->getLanguage();
-		$this->direction 	= $this->getLanguageDir();
+		$this->direction 	= $this->getDirection();
 		
 		// load template data
 		$output = $this->loadData();			

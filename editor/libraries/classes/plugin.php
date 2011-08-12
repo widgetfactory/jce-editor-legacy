@@ -116,6 +116,7 @@ class WFEditorPlugin extends WFEditor
 			$request = WFRequest::getInstance();
 			$request->process();
 		} else {
+			$this->loadLanguage('com_jce', JPATH_ADMINISTRATOR);
 			// Load Plugin language
 			$this->loadPluginLanguage();	
 				
@@ -132,6 +133,8 @@ class WFEditorPlugin extends WFEditor
 				'version' 				=> $version,
 				'title'	  				=> WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')),
 				'name' 					=> $name,
+				'language'				=> $this->getLanguageTag(),
+				'direction'				=> $this->getLanguageDir(),
 				'compress_javascript' 	=> $this->getParam('editor.compress_javascript', 0),
 				'compress_css'			=> $this->getParam('editor.compress_css', 0)
 			));

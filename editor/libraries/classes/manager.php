@@ -72,9 +72,6 @@ class WFMediaManager extends WFEditorPlugin
 
 		$browser->set('position', $this->getParam('editor.browser_position', 'bottom'));		
 		$view->assignRef('browser', $browser);
-
-		// Load language files
-		$this->loadLanguages();
 	}
 	
 	function getConfig()
