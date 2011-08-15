@@ -56,7 +56,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 		$document->set('compress_javascript', 1);
 		$document->set('compress_css', 1);
 		
-		$document->addScript('jquery/jquery-' . WF_JQUERY . '.min.js', 'component');
+		$document->addScript('jquery/jquery-' . WF_JQUERY . '.min.js', 'libraries');
 
 		$editor = 'codemirror';
 		
