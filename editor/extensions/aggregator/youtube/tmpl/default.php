@@ -20,8 +20,8 @@ defined( '_WF_EXT' ) or die( 'RESTRICTED' );
 	</tr>
 	<tr>
 		<td style="width:30%;">
-			<input type="checkbox" id="youtube_related" checked="checked" />
-			<label for="youtube_related" title="<?php echo WFText::_('WF_AGGREGATOR_YOUTUBE_RELATED_DESC')?>" class="tooltip"><?php echo WFText::_('WF_AGGREGATOR_YOUTUBE_RELATED')?></label>
+			<input type="checkbox" id="youtube_rel" checked="checked" />
+			<label for="youtube_rel" title="<?php echo WFText::_('WF_AGGREGATOR_YOUTUBE_RELATED_DESC')?>" class="tooltip"><?php echo WFText::_('WF_AGGREGATOR_YOUTUBE_RELATED')?></label>
 		</td>
 
 		<td>

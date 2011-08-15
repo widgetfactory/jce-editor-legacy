@@ -19,14 +19,15 @@ WFAggregator.add('youtube', {
 	},
 
 	props : {
-		related				: 1,
+		rel					: 1,
 		autohide 			: 2,
 		autoplay 			: 0,
 		controls 			: 1,
 		enablejsapi			: 0,
 		loop				: 0,
 		playlist			: '',
-		start				: ''
+		start				: '',
+		privacy				: 0
 	},
 
 	setup 	: function() {
@@ -80,14 +81,19 @@ WFAggregator.add('youtube', {
 
 		$(':input', '#youtube_options').not('#youtube_embed, #youtube_https').each( function() {
 			var k = $(this).attr('id'), v = $(this).val();
+
 			// remove youtube_ prefix
 			k = k.substr(k.indexOf('_') + 1);
 
 			if ($(this).is(':checkbox')) {
 				v = $(this).is(':checked') ? 1 : 0;
 			}
+			
+			if (k == 'autohide') {
+				v = parseInt(v);
+			}
 
-			if (self.props[k] == v || v == '') {
+			if (self.props[k] === v || v === '') {
 				return;
 			}
 
