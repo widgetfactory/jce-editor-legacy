@@ -12,7 +12,7 @@
 
 jimport('joomla.application.component.view');
 
-class JceViewPopup extends JView
+class WFViewPopup extends JView
 {
     function display($tpl = null)
     {
