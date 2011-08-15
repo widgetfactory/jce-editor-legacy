@@ -17,6 +17,36 @@
 			var t = this;
 			this.editor = ed;
 			
+			ed.onPreInit.add( function() {
+
+				// Convert video elements to image placeholder
+				ed.parser.addAttributeFilter('onclick', function(nodes, name) {
+					for (var i = 0, len = nodes.length; i < len; i++) {
+						var node = nodes[i];
+						var oc = node.attr('onclick');
+						
+						if (oc) {
+							node.attr('data-mce-onclick', oc);
+							node.attr('onclick', '');
+						}
+					}
+				});
+
+				// Convert image placeholders to video elements
+				ed.serializer.addAttributeFilter('onclick', function(nodes, name, args) {
+					for (var i = 0, len = nodes.length; i < len; i++) {
+						var node = nodes[i];
+						var oc = node.attr('data-mce-onclick');
+						
+						if (oc) {
+							node.attr('onclick', oc);
+							node.attr('data-mce-onclick', '');
+						}
+					}
+				});
+
+			});
+			
 			// Cleanup callback
 			ed.onBeforeSetContent.add(function(ed, o) {
 				// Geshi
