@@ -10,8 +10,8 @@
 * other free or open source software licenses.
 */
 // JCE Popup Javascript
-var jcePopupWindow = {					
-	init : function(width, height, click){
+var WFWindowPopup = {					
+	init : function(width, height, click) {
 		this.width 	= width;
 		this.height = height;
 		this.resizeToInnerSize();

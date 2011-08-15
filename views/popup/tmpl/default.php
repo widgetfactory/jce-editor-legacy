@@ -16,7 +16,7 @@ JHTML::stylesheet('popup.css', 'components/com_jce/css/');
 ?>
 <script type="text/javascript">
 	window.addEvent('load', function(){
-		jcePopupWindow.init(<?php echo $this->features['width'];?>, <?php echo $this->features['height'];?>, <?php echo $this->features['click'];?>);
+		WFWindowPopup.init(<?php echo $this->features['width'];?>, <?php echo $this->features['height'];?>, <?php echo $this->features['click'];?>);
 	});
 </script>
 <style type="text/css">
