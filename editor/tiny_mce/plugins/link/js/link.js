@@ -55,12 +55,12 @@ var LinkDialog = {
         // if there is a selection
         if (!se.isCollapsed()) {
             n = se.getNode();
-
-            if (n && n.nodeName != 'A') {
-                n = ed.dom.getParent(n, 'A');
+            
+            if (n.nodeName !== 'A') {
+            	n = ed.dom.getParent(n, 'A');
             }
 
-            var state = true, v;
+            var state = false, v;
 
             function setText(state, v) {
                 if (state && v) {
@@ -73,12 +73,23 @@ var LinkDialog = {
                 }
             }
 
-            v = se.getContent({format : 'text'});
-
             if (n) {
-                var children = n.childNodes;
-                state = children.length == 1 && children[0].nodeType == 3;
-            }
+                if (n.nodeName == 'A') {
+                	var c = n.childNodes;
+                	if (c.length == 1 && c[0].nodeType == 3) {
+                		state = true;
+                		v = se.getContent({format: 'text'});
+                	}
+                } else {
+                	if (ed.dom.isBlock(n)) {
+                		state = true;
+                		v = se.getContent({format: 'text'});
+                	}
+                }
+             } else {
+             	state = true;
+             	v = se.getContent({format: 'text'});
+             }
 
             // set text value and state
             setText(state, v);
