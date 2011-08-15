@@ -16,8 +16,13 @@ class WFViewPopup extends JView
 {
     function display($tpl = null)
     {
-        global $mainframe;
+        $app = JFactory::getApplication();
 		
+		JHTML::_('behavior.mootools');
+		
+		$this->document->addScript(JURI::root(true) . '/components/com_jce/media/js/popup.js');
+		$this->document->addStylesheet(JURI::root(true) . '/components/com_jce/media/css/popup.css');
+
 		// Get variables
         $img 	= JRequest::getVar('img');
         $title 	= JRequest::getWord('title');
@@ -46,10 +51,11 @@ class WFViewPopup extends JView
         	);
 
         	$this->assign('features', $features);
-        	parent::display($tpl);	
 		} else {
-			$mainframe->redirect('index.php');
+			$app->redirect('index.php');
 		}
+		
+		parent::display($tpl);	
     }
 }
 ?>
