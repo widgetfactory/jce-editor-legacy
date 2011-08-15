@@ -140,7 +140,7 @@ WFPopups.addPopup('window', {
             };
 
             href 	= 'index.php?option=com_jce&tmpl=component&view=popup';
-            query 	= "this.href+'" + (/\?/.test(query) ? '&' : '?') + decodeURIComponent($.param(params)) + "'";
+            query 	= "this.href+'&" + decodeURIComponent($.param(params)) + "'";
         }
 
         var features = {

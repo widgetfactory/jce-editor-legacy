@@ -10,9 +10,6 @@
  * other free or open source software licenses.
  */
 defined('_JEXEC') or die('Restricted access');
-JHTML::_('behavior.mootools');
-JHTML::script('popup.js', 'components/com_jce/js/');
-JHTML::stylesheet('popup.css', 'components/com_jce/css/');
 ?>
 <script type="text/javascript">
 	window.addEvent('load', function(){
