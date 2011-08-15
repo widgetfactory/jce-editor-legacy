@@ -180,20 +180,20 @@ class WFEditorPlugin extends WFEditor
 		// jquery versions
         $jquery = array('jquery/jquery-' . WF_JQUERY . '.min.js', 'jquery/jquery-ui-' . WF_JQUERYUI . '.custom.min.js');
 
-		$document->addScript($jquery, 'component');
-		
-		$document->addScript(array('html5', 'select', 'tips'), 'component');
+		$document->addScript($jquery, 'libraries');
 
 		$document->addScript(array(
+			'html5', 
+			'select', 
+			'tips',
 			'tiny_mce_utils',
 			'plugin'
 		), 'libraries');
 		
-		$ui = JFolder::files(JPATH_COMPONENT_ADMINISTRATOR.DS.'media'.DS.'css'.DS.'jquery'.DS.$theme, '\.css$');
-
-		$document->addStyleSheet(array('jquery/'.$theme.'/'.basename($ui[0], '.css')), 'component');
+		$ui = JFolder::files(WF_EDITOR_LIBRARIES.DS.'css'.DS.'jquery'.DS.$theme, '\.css$');
 
 		$document->addStyleSheet(array(
+			'jquery/' . $theme . '/' . basename($ui[0], '.css'),
 			'plugin'
 		), 'libraries');
 	}

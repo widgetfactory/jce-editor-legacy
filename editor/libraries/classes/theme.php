@@ -113,30 +113,23 @@ class WFEditorTheme extends WFEditor
 		$document->addScript(array('tiny_mce_popup'), 'tiny_mce');
 
 		// jquery versions
-		$jquery = array();
+        $jquery = array('jquery/jquery-' . WF_JQUERY . '.min.js', 'jquery/jquery-ui-' . WF_JQUERYUI . '.custom.min.js');
 
-		$files = JFolder::files(JPATH_COMPONENT_ADMINISTRATOR.DS.'media'.DS.'js'.DS.'jquery', '\.js$');
+		$document->addScript($jquery, 'libraries');
 
-		foreach ($files as $file) {
-			$jquery[] = 'jquery/' . $file;
-		}
-
-		$document->addScript($jquery, 'component');
-		$ui = JFolder::files(JPATH_COMPONENT_ADMINISTRATOR.DS.'media'.DS.'css'.DS.'jquery'.DS.$uitheme, '\.css$');
-
-		$document->addStyleSheet(array('jquery/'.$uitheme.'/'.basename($ui[0], '.css')), 'component');
+		$ui = JFolder::files(WF_EDITOR_LIBRARIES.DS.'css'.DS.'jquery'.DS.$uitheme, '\.css$');
 
 		$document->addStyleSheet(array(
-      		'plugin',
-      		'theme'
-      	), 'libraries');
+			'jquery/' . $uitheme . '/' . basename($ui[0], '.css'),
+			'plugin'
+		), 'libraries');
 
       	$document->addStyleSheet(array(
       		'themes/'.$this->get('theme').'/css/'.$this->get('dialog')
       	), 'tiny_mce');
 
       	if ($this->get('dialog') == 'colorpicker') {
-      		$document->addScript(array('colorpicker'), 'component');
+      		$document->addScript(array('colorpicker'), 'libraries');
       		
       		require_once(JPATH_COMPONENT_ADMINISTRATOR.DS.'helpers'.DS.'tools.php');
       		

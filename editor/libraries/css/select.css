@@ -1,0 +1,19 @@
+/**
+ * @version		$Id: select.css 203 2011-06-01 19:02:19Z happy_noodle_boy $
+ * @package   	JCE
+ * @copyright 	Copyright © 2009-2011 Ryan Demmer. All rights reserved.
+ * @license   	GNU/GPL 2 or later
+ * This version may have been modified pursuant
+ * to the GNU General Public License, and as distributed it includes or
+ * is derivative of works licensed under the GNU General Public License or
+ * other free or open source software licenses.
+ */
+
+span.editable-edit {
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	cursor:pointer;
+	background: transparent url("../img/icons.png") no-repeat 0 -1080px;
+	vertical-align:middle;
+}

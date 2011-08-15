@@ -10,5 +10,5 @@
  */
 @import url("reset.css");
 @import url("dialog.css");
-@import url(../../../../../administrator/components/com_jce/media/css/tips.css);
-@import url(../../../../../administrator/components/com_jce/media/css/select.css);
+@import url("tips.css");
+@import url("select.css");
