@@ -581,6 +581,8 @@
 
                 this.setContent();
                 
+                se.indent();
+                
                 DOM.show('wf_' + ed.id + '_source_container');
                 DOM.setAttrib('wf_' + ed.id + '_source_container', 'aria-hidden', false);
                 

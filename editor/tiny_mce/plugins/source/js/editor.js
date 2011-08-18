@@ -169,6 +169,10 @@
 		redo : function() {
 			return this.editor.redo();
 		},
+		
+		indent : function() {
+			return this.editor.reindent();
+		},
 
 		getContainer : function() {
 			return this.container || null;
