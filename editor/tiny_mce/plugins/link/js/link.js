@@ -55,10 +55,6 @@ var LinkDialog = {
         // if there is a selection
         if (!se.isCollapsed()) {
             n = se.getNode();
-            
-            if (n.nodeName !== 'A') {
-            	n = ed.dom.getParent(n, 'A');
-            }
 
             var state = false, v;
 
@@ -74,6 +70,8 @@ var LinkDialog = {
             }
 
             if (n) {
+            	n = ed.dom.getParent(n, 'A') || n;
+            	
                 if (n.nodeName == 'A') {
                 	var c = n.childNodes;
                 	if (c.length == 1 && c[0].nodeType == 3) {
