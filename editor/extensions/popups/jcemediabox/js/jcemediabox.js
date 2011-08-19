@@ -225,8 +225,9 @@ WFPopups.addPopup('jcemediabox', {
 
         // No icon
         var icon = /noicon/g.test(n.className);
+        var hide = /noshow/g.test(n.className);
         
-        // Auto popup
+        // Auto popup        
         if (/(autopopup(.?|-single|-multiple))/.test(n.className)) {
         	v = /autopopup-multiple/.test(n.className) ? 'autopopup-multiple' : 'autopopup-single';
         	
@@ -235,6 +236,9 @@ WFPopups.addPopup('jcemediabox', {
 
         $('#jcemediabox_popup_icon').val(icon ? 0 : 1);
         $('#jcemediabox_popup_icon_position').prop('disabled', icon);
+
+		$('#jcemediabox_popup_hide').val(hide ? 1 : 0);
+		
 
         // Get position
         if (s = /icon-(top-right|top-left|bottom-right|bottom-left|left|right)/.exec(n.className)) {
@@ -347,6 +351,10 @@ WFPopups.addPopup('jcemediabox', {
             ed.dom.addClass(n, 'noicon');
         } else {
             ed.dom.addClass(n, $('#jcemediabox_popup_icon_position').val());
+        }
+        
+        if ($('#jcemediabox_popup_hide').val() == 1) {
+        	ed.dom.addClass(n, 'noshow');
         }
 
         // Set target
