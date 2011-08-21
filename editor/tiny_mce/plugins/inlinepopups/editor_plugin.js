@@ -262,14 +262,13 @@
 				}
 			});
 			
-			//clf = Event.add(DOM.select('.ui-dialog-titlebar-close, .ui-button', id), 'click', function(e) {
 			clf = Event.add(id, 'click', function(e) {	
                 var n = e.target;
 
                 t.focus(id);
                 
                 if (DOM.is(n, '.ui-button-cancel, .ui-button-cancel span, .ui-button-ok, .ui-button-ok span')) {
-                	f.button_func(DOM.hasClass(n, 'ui-button-ok'));
+                	f.button_func(DOM.is(n, '.ui-button-ok, .ui-button-ok span'));
                 } else if (DOM.is(n, '.ui-dialog-titlebar-close, .ui-dialog-titlebar-close span')) {
                 	t.close(null, id);
                 }
@@ -620,7 +619,7 @@
 				type : 'alert',
 				button_func : function(s) {
 					if (cb)
-						cb.call(s || t, s);
+						cb.call(t, s);
 
 					t.close(null, w.id);
 				},
@@ -637,9 +636,9 @@
 			w = t.open({
 				title : t,
 				type : 'confirm',
-				button_func : function(s) {
+				button_func : function(s) {					
 					if (cb)
-						cb.call(s || t, s);
+						cb.call(t, s);
 
 					t.close(null, w.id);
 				},
