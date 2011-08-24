@@ -60,7 +60,7 @@ class WFToken
 	public static function checkToken($method = 'POST')
 	{
 		$token = self::getToken();
-		// check POST and GET for token
+		// check POST and GET for token		
 		return JRequest::getVar($token, JRequest::getVar($token, '', 'GET', 'alnum'), 'POST', 'alnum');
 	}
 }
