@@ -19,7 +19,7 @@ var LinkDialog = {
     	tinyMCEPopup.restoreSelection();
     	
     	var self = this, ed = tinyMCEPopup.editor, se = ed.selection, n, el;
-    	
+
     	$('button#insert').click(function(e) {
     		self.insert();
     		e.preventDefault();
@@ -71,7 +71,7 @@ var LinkDialog = {
 
             if (n) {
             	n = ed.dom.getParent(n, 'A') || n;
-            	
+                
                 if (n.nodeName == 'A') {
                 	var c = n.childNodes;
                 	if (c.length == 1 && c[0].nodeType == 3) {
@@ -79,7 +79,7 @@ var LinkDialog = {
                 		v = se.getContent({format: 'text'});
                 	}
                 } else {
-                	if (ed.dom.isBlock(n)) {
+                	if (ed.dom.isBlock(n) || n.nodeName === 'BODY') {
                 		state = true;
                 		v = se.getContent({format: 'text'});
                 	}
