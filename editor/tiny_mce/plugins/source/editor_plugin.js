@@ -83,7 +83,7 @@
             	if (self.getState()) {
                     self.setContent(); 
                     self._disable();                 
-                }
+               }
             });
 
             ed.onSaveContent.add( function(ed, o) {
@@ -485,19 +485,15 @@
             DOM.insertAfter(container, iframe);
 
             var query 	= ed.getParam('site_url') + 'index.php?option=com_jce';
+            
             var args 	= {
                 'view' 		: 'editor',
                 'layout'	: 'plugin',
                 'plugin'	: 'source'
             };
 
-            var token 	= DOM.get('wf_' + ed.id + '_token');
-
-            if (!token) {
-                alert('INVALID TOKEN');
-                return false;
-            }
-            args[token.name] = token.value;
+            // set token
+			args[ed.settings.token] = 1;
 
             // create query
             for (k in args) {
@@ -522,6 +518,7 @@
 
             	editor.init({
             		'url'		: ed.getParam('site_url'),
+            		'token'		: ed.settings.token,
             		'wrap' 		: self.wrap,
             		'numbers'	: self.numbers,
             		'highlight'	: self.highlight,
