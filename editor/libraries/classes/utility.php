@@ -61,6 +61,24 @@ class WFUtility
 		exit(json_encode($output));
 	}
 
+	public function getExtension($path)
+	{
+		$parts = pathinfo($path);
+		
+		return $parts['extension'];
+	}
+	
+	public function stripExtension($path)
+	{
+		$parts = pathinfo($path);
+		
+		if (isset($parts['filename'])) {
+			return $parts['filename'];
+		} else {
+			return basename($path, '.' . $parts['extension']);
+		}
+	}
+
 	/**
 	 * Append a / to the path if required.
 	 * @param string $path the path
@@ -72,6 +90,14 @@ class WFUtility
 		if (!(substr($path, -1) == '/'))
 		$path .= '/';
 		return $path;
+	}
+	
+	public function checkPath($path)
+	{
+		if (strpos($path, '..') !== false) {
+			JError::raiseError(403, 'Use of relative paths not permitted'); // don't translate
+			exit();
+		}
 	}
 
 	/**

@@ -356,6 +356,8 @@ class WFFileBrowser extends WFBrowserExtension
 		
 		// decode path
 		$path = rawurldecode($path);
+
+		WFUtility::checkPath($path);
 		
 		// get source dir from path eg: images/stories/fruit.jpg = images/stories
 		$dir = $filesystem->getSourceDir($path);
@@ -408,9 +410,13 @@ class WFFileBrowser extends WFBrowserExtension
 	 * @param string $dir The relative path of the folder to search
 	 * @return Tree node array
 	 */
-	function getTreeItem($dir)
-	{			
-		$folders = $this->getFolders(rawurldecode($dir));
+	function getTreeItem($path)
+	{
+		$path = rawurldecode($path);	
+			
+		WFUtility::checkPath($path);	
+			
+		$folders = $this->getFolders($path);
 		$array   = array();
 		if (!empty($folders)) {
 			foreach ($folders as $folder) {
@@ -459,6 +465,8 @@ class WFFileBrowser extends WFBrowserExtension
 
 		// decode path
 		$path = rawurldecode($path);
+		
+		WFUtility::checkPath($path);		
 		
 		// get source dir from path eg: images/stories/fruit.jpg = images/stories
 		$dir = $filesystem->getSourceDir($path);	
@@ -514,6 +522,8 @@ class WFFileBrowser extends WFBrowserExtension
 	 */
 	function getFolderDetails($dir)
 	{
+		WFUtility::checkPath($dir);		
+			
 		$filesystem = $this->getFileSystem();
 		// get array with folder date and content count eg: array('date'=>'00-00-000', 'folders'=>1, 'files'=>2);
 		return $filesystem->getFolderDetails($dir);
@@ -526,6 +536,8 @@ class WFFileBrowser extends WFBrowserExtension
 	 */
 	function getFileDetails($file)
 	{
+		WFUtility::checkPath($file);	
+			
 		$filesystem = $this->getFileSystem();
 		// get array with folder date and content count eg: array('date'=>'00-00-000', 'folders'=>1, 'files'=>2);
 		return $filesystem->getFileDetails($file);
@@ -969,7 +981,7 @@ class WFFileBrowser extends WFBrowserExtension
 
 		// get file name
 		$name 	= JRequest::getVar('name', $file['name']);
-		$ext 	= JFile::getExt($name);
+		$ext 	= WFUtility::getExtension($name);
 
 		// check for extension in file name
 		if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)#i', basename($name, '.' . $ext))) {
@@ -1000,6 +1012,9 @@ class WFFileBrowser extends WFBrowserExtension
 
 				// get current dir
 				$dir  = JRequest::getVar('upload-dir', '');
+				
+				// check destination path
+				WFUtility::checkPath($dir);	
 
 				// Normal upload
 				if ($chunks == 1) {
@@ -1054,6 +1069,9 @@ class WFFileBrowser extends WFBrowserExtension
 		$items 		= explode(",", rawurldecode($items));
 
 		foreach ($items as $item) {
+			// check path	
+			WFUtility::checkPath($item);	
+				
 			$result = $filesystem->delete($item);
 
 			if (is_a($result, 'WFFileSystemResult')) {
@@ -1085,9 +1103,17 @@ class WFFileBrowser extends WFBrowserExtension
 		
 		$source 		= array_shift($args);
 		$destination	= array_shift($args);	
-			
-		$filesystem = $this->getFileSystem();
-		$result 	= $filesystem->rename($source, trim($destination), $args);
+		
+		WFUtility::checkPath($source);
+		WFUtility::checkPath($destination);
+		
+		// check for extension in destination name
+		if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b#i', $destination)) {
+			JError::raiseError(403, 'RESTRICTED');
+		}
+	
+		$filesystem 	= $this->getFileSystem();
+		$result 		= $filesystem->rename($source, trim($destination), $args);
 
 		if (is_a($result, 'WFFileSystemResult')) {
 			if (!$result->state) {
@@ -1116,7 +1142,14 @@ class WFFileBrowser extends WFBrowserExtension
 
 		$items = explode(",", rawurldecode($items));
 
+		// check destination path
+		WFUtility::checkPath($destination);
+
 		foreach ($items as $item) {
+			
+			// check source path
+			WFUtility::checkPath($item);	
+				
 			$result = $filesystem->copy($item, $destination);
 
 			if (is_a($result, 'WFFileSystemResult')) {
@@ -1146,8 +1179,14 @@ class WFFileBrowser extends WFBrowserExtension
 		$filesystem = $this->getFileSystem();
 
 		$items = explode(",", rawurldecode($items));
+		
+		// check destination path
+		WFUtility::checkPath($destination);
 
 		foreach ($items as $item) {
+			// check source path
+			WFUtility::checkPath($item);	
+
 			$result = $filesystem->move($item, $destination);
 
 			if (is_a($result, 'WFFileSystemResult')) {
@@ -1173,6 +1212,9 @@ class WFFileBrowser extends WFBrowserExtension
 	 */
 	function folderCreate($folder)
 	{
+		// check folder path
+		WFUtility::checkPath($folder);		
+			
 		$filesystem = $this->getFileSystem();
 		return $filesystem->folderCreate($folder);
 	}
