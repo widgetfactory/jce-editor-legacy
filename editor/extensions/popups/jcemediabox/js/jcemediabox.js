@@ -239,7 +239,6 @@ WFPopups.addPopup('jcemediabox', {
 
 		$('#jcemediabox_popup_hide').val(hide ? 1 : 0);
 		
-
         // Get position
         if (s = /icon-(top-right|top-left|bottom-right|bottom-left|left|right)/.exec(n.className)) {
             $('#jcemediabox_popup_icon_position').val(s[0]);
