@@ -100,6 +100,8 @@ class WFPreviewPlugin extends WFEditorPlugin
 		$limitstart = 0;
 		JPluginHelper::importPlugin('content');
 		
+		require_once(JPATH_SITE .DS. 'components' .DS. 'com_content' .DS. 'helpers' .DS. 'route.php');
+		
 		$dispatcher->trigger('onPrepareContent', array (& $article, & $params, $limitstart));
 		
 		$this->processURLS($article);
