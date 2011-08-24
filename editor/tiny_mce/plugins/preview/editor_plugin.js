@@ -267,15 +267,8 @@
 			
 			var query = '', args = {'format' : 'raw'};
 			
-			// add token
-			var token = document.getElementById('wf_' + ed.id + '_token');
-			
-			if (!token) {
-				alert('INVALID TOKEN');
-				return false;
-			}
-			
-			args[token.name] = token.value;
+			// set token
+			args[ed.settings.token] = 1;
 			
 			tinymce.extend(args, {
 				'data' : ed.getContent()
@@ -305,7 +298,13 @@
 	                }
 				
 					if (o.error) {
-						ed.windowManager.alert(o.text.join(''));
+						var msg = o.error;
+						
+						if (o.text) {
+							msg = o.text.join('');
+						}
+						
+						ed.windowManager.alert(msg);
 						ed.setProgressState(false);
 						return false;
 					}
