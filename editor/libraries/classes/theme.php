@@ -82,6 +82,8 @@ class WFEditorTheme extends WFEditor
 	
 	function execute()
 	{
+		WFToken::checkToken() or die('RESTRICTED ACCESS');	
+			
 		$document = WFDocument::getInstance(array(
 			'title'		=> WFText::_('WF_'.strtoupper($this->get('dialog')).'_TITLE'),
       		'version' 	=> $this->getVersion(),

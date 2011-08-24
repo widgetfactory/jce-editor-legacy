@@ -111,8 +111,10 @@ class WFEditorPlugin extends WFEditor
 
 	function execute()
 	{				
+		WFToken::checkToken() or die('RESTRICTED ACCESS');	
+		
 		// JSON request or upload action
-		if ($this->isRequest()) {			
+		if ($this->isRequest()) {							
 			$request = WFRequest::getInstance();
 			$request->process();
 		} else {
@@ -173,8 +175,6 @@ class WFEditorPlugin extends WFEditor
 		jimport('joomla.filesystem.folder');		
 		$document = WFDocument::getInstance();			
 
-		// get UI Theme
-		$theme = $this->getParam('editor.dialog_theme', 'jce');
 		$document->addScript(array('tiny_mce_popup'), 'tiny_mce');
 
 		// jquery versions
@@ -189,6 +189,9 @@ class WFEditorPlugin extends WFEditor
 			'tiny_mce_utils',
 			'plugin'
 		), 'libraries');
+		
+		// get UI Theme
+		$theme = $this->getParam('editor.dialog_theme', 'jce');
 		
 		$ui = JFolder::files(WF_EDITOR_LIBRARIES.DS.'css'.DS.'jquery'.DS.$theme, '\.css$');
 
