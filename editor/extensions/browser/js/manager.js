@@ -824,7 +824,17 @@
 		_getList : function(src) {
 			// store directory in cookie
 			if (this.options.use_cookies) {
-				$.Cookie.set("wf_" + $.Plugin.getName() + '_dir', this._dir);
+				var v = this._dir;
+				
+				// remove leading slash as this upsets some 'security' extensions
+				if (v.charAt(0) == '/') {
+					v = v.substr(1);
+				}
+
+				// only store if we have a value
+				if (v) {
+					$.Cookie.set("wf_" + $.Plugin.getName() + '_dir', v);
+				}
 			}
 
 			// get path from src or stored directory
