@@ -74,9 +74,9 @@ class WFSourcePlugin extends WFEditorPlugin {
 		$document->addStyleSheet(array('editor'), 'plugins');				
 	}
 	
-	function execute() {
+	function execute() {			
 		$task = JRequest::getWord('task');
-		
+
 		if ($task == 'compile') {
 			return $this->compile();
 		}
@@ -86,9 +86,8 @@ class WFSourcePlugin extends WFEditorPlugin {
 
 	function compile()
 	{
-		// check token
-		WFToken::checkToken('GET') or die('RESTRICTED');
-
+		WFToken::checkToken() or die('RESTRICTED ACCESS');
+			
 		wfimport('admin.classes.packer');
 
 		$base 	= dirname(dirname(__FILE__));		
