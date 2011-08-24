@@ -278,8 +278,23 @@ var WFPopups = WFExtensions.add('Popups', {
                     el = link;
                 });
                 
-                if (el.parentNode.nodeName != 'BODY') {
-                	ed.selection.collapse();
+                var se = ed.selection, marker;
+                
+                if (tinymce.isIE) {
+                	marker = ed.dom.create('span', {'data-mce-type' : 'bookmark'}, '\u00a0');
+	                ed.dom.insertAfter(marker, el);               	
+	                se.select(marker);
+	                se.collapse();
+                } else {
+                	if (el.parentNode.nodeName == 'BODY') {
+	                	marker = ed.dom.create('span', {'data-mce-bogus' : 1}, ' ');
+	                	ed.dom.insertAfter(marker, el);               	
+	                	se.select(marker);
+	                	se.collapse(1);
+	                } else {
+	                	se.select(el);
+	                	se.collapse();
+	                }
                 }
             }
         } else {
