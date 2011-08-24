@@ -57,6 +57,10 @@ function jInsertEditorText(text,editor) {
 			if (/https:\/\//.test(document.location.href)) {
 				base = base.replace(/http:/, 'https:');
 			}
+			
+			// set default values
+			settings.token 			= settings.token || 0;
+			settings.component_id	= settings.component_id || 0;
 
 			// set preinit object to prevent tinymce from generating baseURL
 			window.tinyMCEPreInit = {};
@@ -64,7 +68,7 @@ function jInsertEditorText(text,editor) {
 			tinymce.extend(tinymce, {
 				baseURL : base + 'components/com_jce/editor/tiny_mce',
 				suffix	: '',
-				query	: 'component_id=' + settings.component_id || 0
+				query	: settings.token + '=1&component_id=' + settings.component_id
 			});
 
 			// remove submit triggers
@@ -167,6 +171,7 @@ function jInsertEditorText(text,editor) {
 				}
 			});
 		},
+		
 		/**
 		 * Create Editors on domloaded
 		 */
@@ -182,12 +187,11 @@ function jInsertEditorText(text,editor) {
 				WFEditor.showLoader();
 
 				tinyMCE.onAddEditor.add( function(mgr, ed) {
+	
 					if (s.compress.css) {
-						// get token
-						var token = tinymce.DOM.getAttrib('wf_' + ed.id + '_token', 'name');
 						// load packer css
 						ed.onPreInit.add( function() {
-							ed.dom.loadCSS(s.site_url + 'index.php?option=com_jce&view=editor&layout=editor&task=pack&type=css&context=content&component_id=' + s.component_id + '&' + token + '=1');
+							ed.dom.loadCSS(s.site_url + 'index.php?option=com_jce&view=editor&layout=editor&task=pack&type=css&context=content&component_id=' + s.component_id + '&' + s.token + '=1');
 						});
 					}
 
@@ -205,7 +209,14 @@ function jInsertEditorText(text,editor) {
 								ed.isNotDirty = 1;
 							}
 						});
+						
+						if (!ed.settings.forced_root_block) {
+							ed.selection.normalize = function() {
+								return;
+							};	
+						}
 					});
+					
 					// Form submit patch
 					ed.onBeforeRenderUI.add( function() {
 						var n = ed.getElement().form;
@@ -237,6 +248,15 @@ function jInsertEditorText(text,editor) {
 
 						n = null;
 					});
+					
+					ed.onPostRender.add(function() {
+						var doc 	= ed.getDoc();
+						var base 	= doc.createElement('base');
+						base.setAttribute('href', s.base_url);
+						
+						doc.getElementsByTagName('head')[0].appendChild(base);
+					});
+					
 				});
 				
 				if (elements) {
@@ -271,7 +291,7 @@ function jInsertEditorText(text,editor) {
 			tinymce.each(elements, function(el) {
 				var state 	= getVar(s.toggle_state, 1);
 				// get cookie
-				var cookie 	= getVar(tinymce.util.Cookie.get('wf_editor_' + el.id + '_state'), 1);
+				var cookie 	= getVar(tinymce.util.Cookie.get('wf_editor_' + el.id + '_state'), 1);				
 				var label 	= getVar(s.toggle_label, '[show/hide]');
 
 				var div = DOM.create('span', {
@@ -284,7 +304,7 @@ function jInsertEditorText(text,editor) {
 				el.parentNode.insertBefore(div, el);
 
 				Event.add(div, 'click', function(e) {
-					self.toggle(el);
+					self.toggle(el, use_cookies);
 				});
 				
 				if (!state) {
