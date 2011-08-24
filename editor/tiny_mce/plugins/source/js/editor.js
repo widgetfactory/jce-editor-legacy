@@ -36,13 +36,8 @@
 					'theme' : o.theme || 'textmate'
 				};
 
-				var token = document.getElementById('wf_source_token');
-
-				if(!token) {
-					alert('INVALID TOKEN');
-					return false;
-				}
-				args[token.name] = token.value;
+				// set token
+				args[o.token] = 1;
 
 				// create query
 				for(k in args) {

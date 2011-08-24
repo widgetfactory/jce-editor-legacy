@@ -418,15 +418,9 @@
 			var t = this, ed = t.editor;
 			
 			var query = '', args = {'format' : 'raw'};
-			
-			// add token
-			var token = document.getElementById('wf_' + t.editor.id + '_token');
-			
-			if (!token) {
-				alert('INVALID TOKEN');
-				return false;
-			}
-			args[token.name] = token.value;
+
+			// set token
+			args[ed.settings.token] = 1;
 			
 			// create query
 			for (k in args) {
