@@ -105,13 +105,13 @@ class WFRequest extends JObject
 	 */
 	function process($array = false)
 	{
+		// Check for request forgeries
+		WFToken::checkToken() or die('RESTRICTED ACCESS');	
+			
 		$json   = JRequest::getVar('json', '', 'POST', 'STRING', 2);
 		$action = JRequest::getWord('action');
 
-		if ($action || $json) {
-			// Check for request forgeries
-			WFToken::checkToken() or die('INVALID TOKEN');
-				
+		if ($action || $json) {			
 			$output = array(
                 "result" 	=> null,
 				"text"		=> null,
