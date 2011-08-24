@@ -17,7 +17,7 @@
 
 		init : function() {
 			var ed = tinyMCEPopup.editor, n = ed.selection.getNode(), self = this, br, el;
-
+		
 			// add insert button action
 			$('#insert').click( function(e) {
 				self.insert();
@@ -98,7 +98,7 @@
 				});
 
 				$('#border_style').val(this.getAttrib(n, 'border-style'));
-				$('#border_color').val(this.getAttrib(n, 'border-color'));
+				$('#border_color').val(this.getAttrib(n, 'border-color')).change();
 				$('#align').val(this.getAttrib(n, 'align'));
 
 				// Class
