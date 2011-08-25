@@ -309,6 +309,24 @@ class WFFileBrowser extends WFBrowserExtension
 			$this->_result = $value;
 		}
 	}
+	
+	function checkFeature($action, $type = null)
+	{
+		$features = $this->get('features');		
+			
+		if ($type) {
+			if (isset($features[$type])) {
+				
+				$type = $features[$type];
+				
+				return isset($type[$action]) && (bool)$type[$action];
+			}
+		} else {
+			return isset($features[$action]) && (bool)$features[$action];
+		}	
+
+		return false;
+	}
 
 	function getBaseDir()
 	{
@@ -619,20 +637,18 @@ class WFFileBrowser extends WFBrowserExtension
 	 * Create all standard buttons based on access
 	 */
 	function getStdButtons()
-	{
-		$features = $this->get('features');
-		
-		if ($features['folder']['delete']) {
+	{		
+		if ($this->checkFeature('delete', 'folder')) {
 			$this->addButton('folder', 'delete', array('multiple' => true));
 
 			$this->setRequest(array($this,'deleteItem'));
 		}
-		if ($features['folder']['rename']) {
+		if ($this->checkFeature('rename', 'folder')) {
 			$this->addButton('folder', 'rename');
 
 			$this->setRequest(array($this, 'renameItem'));
 		}
-		if ($features['folder']['move']) {
+		if ($this->checkFeature('move', 'folder')) {
 			$this->addButton('folder', 'copy', array('multiple' => true));
 			$this->addButton('folder', 'cut', array('multiple' => true));
 
@@ -641,17 +657,17 @@ class WFFileBrowser extends WFBrowserExtension
 			$this->setRequest(array($this,'copyItem'));
             $this->setRequest(array($this,'moveItem'));
 		}
-		if ($features['file']['rename']) {
+		if ($this->checkFeature('rename', 'file')) {
 			$this->addButton('file', 'rename');
 
 			$this->setRequest(array($this, 'renameItem'));
 		}
-		if ($features['file']['delete']) {
+		if ($this->checkFeature('delete', 'file')) {
 			$this->addButton('file', 'delete', array('multiple' => true));
 
 			$this->setRequest(array($this, 'deleteItem'));
 		}
-		if ($features['file']['move']) {
+		if ($this->checkFeature('move', 'file')) {
 			$this->addButton('file', 'copy', array('multiple' => true));
 			$this->addButton('file', 'cut', array('multiple' => true));
 
@@ -964,6 +980,11 @@ class WFFileBrowser extends WFBrowserExtension
 		// Check for request forgeries
 		WFToken::checkToken() or die();
 		
+		// check for feature access	
+		if (!$this->checkFeature('upload')) {
+			JError::raiseError(403, 'RESTRICTED');
+		}
+		
 		$wf = WFEditor::getInstance();
 
 		jimport('joomla.filesystem.file');
@@ -1065,6 +1086,11 @@ class WFFileBrowser extends WFBrowserExtension
 	 */
 	function deleteItem($items)
 	{
+		// check for feature access	
+		if (!$this->checkFeature('delete', 'folder') && !$this->checkFeature('delete', 'file')) {
+			JError::raiseError(403, 'RESTRICTED');
+		}	
+			
 		$filesystem = $this->getFileSystem();
 		$items 		= explode(",", rawurldecode($items));
 
@@ -1099,6 +1125,11 @@ class WFFileBrowser extends WFBrowserExtension
 	 */
 	function renameItem()
 	{
+		// check for feature access	
+		if (!$this->checkFeature('rename', 'folder') && !$this->checkFeature('rename', 'file')) {
+			JError::raiseError(403, 'RESTRICTED');
+		}	
+			
 		$args 			= func_get_args();
 		
 		$source 		= array_shift($args);
@@ -1138,6 +1169,11 @@ class WFFileBrowser extends WFBrowserExtension
 	 */
 	function copyItem($items, $destination)
 	{
+		// check for feature access	
+		if (!$this->checkFeature('move', 'folder') && !$this->checkFeature('move', 'file')) {
+			JError::raiseError(403, 'RESTRICTED');
+		}	
+			
 		$filesystem = $this->getFileSystem();
 
 		$items = explode(",", rawurldecode($items));
@@ -1176,6 +1212,11 @@ class WFFileBrowser extends WFBrowserExtension
 	 */
 	function moveItem($items, $destination)
 	{
+		// check for feature access	
+		if (!$this->checkFeature('move', 'folder') && !$this->checkFeature('move', 'file')) {
+			JError::raiseError(403, 'RESTRICTED');
+		}	
+			
 		$filesystem = $this->getFileSystem();
 
 		$items = explode(",", rawurldecode($items));
@@ -1227,6 +1268,10 @@ class WFFileBrowser extends WFBrowserExtension
 	 */
 	function folderNew()
 	{
+		if (!$this->checkFeature('create', 'folder')) {
+			JError::raiseError(403, 'RESTRICTED');
+		}	
+			
 		$args 	= func_get_args();
 		
 		$dir 	= array_shift($args);
