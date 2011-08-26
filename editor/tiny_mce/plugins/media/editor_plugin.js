@@ -455,9 +455,11 @@
 
 				var w = n.attr('width')   || style.width   || '';
 				var h = n.attr('height')  || style.height  || '';
+				
+				var type = n.attr('type');
 
 				// convert from single embed
-				if (name == 'embed' && type == 'application/x-shockwave-flash') {
+				if (name == 'embed' && type == 'application/x-shockwave-flash') {					
 					name = 'object';
 
 					// get and assign flash variables
@@ -466,13 +468,14 @@
 
 						if (v) {
 							if (k == 'flashvars') {
-								v = encodeURIComponent(v);
+								try {
+									v = encodeURIComponent(v);
+								} catch(e) {}
 							}
 
 							data[k] = v;
 						}
 					});
-
 				}
 
 				data = this.createTemplate(n);
@@ -498,7 +501,7 @@
 						}
 					}
 					// get type data
-					var lookup = this.lookup[classid] || this.lookup[n.attr('type')] || this.lookup[name] || this.lookup['flash'];
+					var lookup = this.lookup[classid] || this.lookup[type] || this.lookup[name] || this.lookup['flash'];
 					type = lookup.name || '';
 				} else {
 					if (!data.src) {
@@ -617,7 +620,9 @@
 
 				if (k && v != '') {
 					if (k == 'flashvars') {
-						v = encodeURIComponent(v);
+						try {
+							v = encodeURIComponent(v);
+						} catch(e) {}
 					}
 				}
 				attribs[k] = v;
@@ -661,7 +666,9 @@
 
 						if (k && v != '') {
 							if (k == 'flashvars') {
-								v = encodeURIComponent(v);
+								try {
+									v = encodeURIComponent(v);
+								} catch(e) {}
 							}
 						}
 
@@ -786,7 +793,9 @@
 			if (nn == 'param') {
 				switch (k) {
 					case 'flashvars':
-						v = decodeURIComponent(v);
+						try {
+							v = decodeURIComponent(v);
+						} catch(e) {}
 						break;
 					case 'src' :
 					case 'movie':
@@ -818,7 +827,11 @@
 						n.attr(k, v.replace(/(&(quot|apos);|")/g, "'"));
 						break;
 					case 'flashvars':
-						n.attr(k, decodeURIComponent(v));
+						try {
+							v = decodeURIComponent(v);
+						} catch(e) {}
+						
+						n.attr(k, v);
 						break;
 					case 'src' :
 					case 'data':
