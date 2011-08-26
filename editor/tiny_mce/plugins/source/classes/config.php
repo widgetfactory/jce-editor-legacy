@@ -25,14 +25,16 @@ class WFSourcePluginConfig
 	public function getStyles() {
 		$wf = WFEditor::getInstance();
 		
-		// return file(s) array
-		if ($wf->getParam('editor.compress_css', 0)) {			
-			return array(dirname(dirname(__FILE__)) . DS . 'css' . DS . 'editor.css');
+		if (JRequest::getWord('layout') === 'plugin') {
+			// return file(s) array
+			if ($wf->getParam('editor.compress_css', 0)) {			
+				return array(dirname(dirname(__FILE__)) . DS . 'css' . DS . 'editor.css');
+			}
+			
+			// use document instance	
+			$document = JFactory::getDocument();
+			$document->addStyleSheet(JURI::root(true) . '/components/com_jce/editor/tiny_mce/plugins/source/css/editor.css?version=' . $wf->getVersion());	
 		}
-		
-		// use document instance	
-		$document = JFactory::getDocument();
-		$document->addStyleSheet(JURI::root(true) . '/components/com_jce/editor/tiny_mce/plugins/source/css/editor.css?version=' . $wf->getVersion());
 	}
 }
 ?>
