@@ -257,7 +257,7 @@ class WFFileSystemResult
     /*
      * @var Object type eg: file / folder
      */
-	var $type 		= null;
+	var $type 		= 'files';
     /*
      * @boolean	Result state
      */
