@@ -95,7 +95,7 @@ class WFFileBrowserPlugin extends WFMediaManager
 				$options['element'] = JRequest::getCmd('element');
 			}
 			
-			$document->addScriptDeclaration('jQuery(document).ready(function($){$.Browser.init('.json_encode($options).');});');
+			$document->addScriptDeclaration('jQuery(document).ready(function($){$.WFBrowserWidget.init('.json_encode($options).');});');
 			
 			$document->addStyleSheet(array(
 				'dialog'
