@@ -77,7 +77,7 @@ defined('_JEXEC') or die('ERROR_403');
 	                    		<input type="checkbox" class="checkbox" id="border" onclick="ImageManagerDialog.setBorder();">
 								<label for="border_width" class="hastip" title="<?php echo WFText::_('WF_LABEL_BORDER_WIDTH_DESC');?>"><?php echo WFText::_('WF_LABEL_WIDTH');?></label>
 	                            <select id="border_width" onchange="ImageManagerDialog.updateStyles();" class="mceEditableSelect" data-pattern="[0-9]+">
-		                            <option value=""><?php echo WFText::_('WF_OPTION_NOT_SET');?></option>
+		                            <option value="inherit"><?php echo WFText::_('WF_OPTION_NOT_SET');?></option>
 		                            <option value="0">0</option>
 		                            <option value="1">1</option>
 		                            <option value="2">2</option>
@@ -94,7 +94,7 @@ defined('_JEXEC') or die('ERROR_403');
 	                            </select>
 	                            <label for="border_style" class="hastip" title="<?php echo WFText::_('WF_LABEL_BORDER_STYLE_DESC');?>"><?php echo WFText::_('WF_LABEL_STYLE');?></label>
 	                            <select id="border_style" onchange="ImageManagerDialog.updateStyles();">
-	                            	<option value=""><?php echo WFText::_('WF_OPTION_NOT_SET');?></option>
+	                            	<option value="inherit"><?php echo WFText::_('WF_OPTION_NOT_SET');?></option>
 	                                <option value="none"><?php echo WFText::_('WF_OPTION_BORDER_NONE');?></option>
 	                                <option value="solid"><?php echo WFText::_('WF_OPTION_BORDER_SOLID');?></option>
 	                                <option value="dashed"><?php echo WFText::_('WF_OPTION_BORDER_DASHED');?></option>
