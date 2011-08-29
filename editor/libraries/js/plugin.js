@@ -556,7 +556,7 @@
 
                         r = o.result;
                         
-                        if (r.error) {
+                        if (r.error && r.error.length) {
                         	showError(r.error);
                         }
                     }
