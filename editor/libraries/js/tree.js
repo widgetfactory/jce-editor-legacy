@@ -235,10 +235,8 @@
 						len = self.options.charLength;
 
 						// shorten
-						if (len) {
-							if (name.length > len) {
-								name = name.substring(0, len) + '...';
-							}
+						if (len && name.length > len) {
+							name = name.substring(0, len) + '...';
 						}
 
 						var img = /folder/.test(node['class']) ? 'tree-image' : 'tree-noimage';
