@@ -99,6 +99,14 @@
 
 				$('#border_style').val(this.getAttrib(n, 'border-style'));
 				$('#border_color').val(this.getAttrib(n, 'border-color')).change();
+				
+				// if no border values set, set defaults
+				if (!$('#border').is(':checked')) {
+					$.each(['border_width', 'border_style', 'border_color'], function(i, k) {
+						$('#' + k).val(self.settings.defaults[k]).change();
+					});
+				}
+
 				$('#align').val(this.getAttrib(n, 'align'));
 
 				// Class
@@ -129,8 +137,8 @@
 
 				br = n.nextSibling;
 
-				if (br && br.nodeName == 'BR' && ed.dom.getStyle(br, 'clear')) {
-					$('clear').val(ed.dom.getStyle(br, 'clear'));
+				if (br && br.nodeName == 'BR' && br.style.clear) {
+					$('#clear').val(br.style.clear);
 				}
 			} else {
 				$.Plugin.setDefaults(this.settings.defaults);
@@ -344,12 +352,22 @@
 							v = sv;
 						}
 					});
+					
+					// check if we have a value
+					if (v !== '') {
+						$('#border').prop('checked', true);
+					}
+					
+					// set blank value as inherit
+					if ((at == 'border-width' || at == 'border-style') && v === '') {
+						v = 'inherit';
+					}
 
 					if (at == 'border-color') {
 						v = $.String.toHex(v);
 					}
-					if (at == 'border-width' && v !== '') {
-						$('#border').attr('checked', true);
+					
+					if (at == 'border-width') {
 						if (/[0-9][a-z]/.test(v)) {
 							v = parseFloat(v);
 						}
@@ -479,18 +497,23 @@
 			}
 
 			// Handle border
-			$.each(['width', 'color', 'style'], function() {
+			$.each(['width', 'color', 'style'], function(i, k) {
 				if ($('#border').is(':checked')) {
-					v = $('#border_' + this).val();
+					v = $('#border_' + k).val();
 				} else {
 					v = '';
 				}
+				
+				if (v == 'inherit') {
+					v = '';
+				}
+				
 				// add pixel to width
-				if (this == 'width' && /[^a-z]/i.test(v)) {
+				if(k == 'width' && /[^a-z]/i.test(v)) {
 					v += 'px';
 				}
 
-				$(img).css('border-' + this, v);
+				$(img).css('border-' + k, v);
 			});
 
 			// Margin
