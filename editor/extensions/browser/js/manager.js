@@ -1214,13 +1214,11 @@
 								});
 
 								$.JSON.request('folderNew', args, function(o) {
-									if (!o.error.length) {
+									if (o) {
 										self._trigger('onFolderNew');
-										self.refresh();
 										$(self._dialog['folder_new']).dialog('close');
-									} else {
-										self._raiseError(o.error);
 									}
+									self.refresh();
 								});
 
 							}
@@ -1246,8 +1244,8 @@
 
 					var items = this._pasteitems;
 
-					$.JSON.request(fn, [items, dir], function(o) {
-						if (!o.error.length) {
+					$.JSON.request(fn, [items, dir], function(o) {						
+						if (o) {
 							if (o.folders.length) {
 								// remove from tree
 								if (self._treeLoaded()) {
@@ -1260,11 +1258,9 @@
 								}
 							}
 							self._trigger('onPaste');
-							self._clearPaste();
-							self.refresh();
-						} else {
-							self._raiseError(o.error);
 						}
+						self._clearPaste();
+						self.refresh();
 					});
 
 					break;
@@ -1277,7 +1273,7 @@
 						if (state) {
 							self._setLoader();
 							$.JSON.request('deleteItem', list, function(o) {
-								if (!o.error.length) {
+								if (o) {
 
 									if (o.folders.length) {
 										// remove from tree
@@ -1293,11 +1289,8 @@
 									if (o.files.length) {
 										self._trigger('onFileDelete', null, o.files);
 									}
-
-									self.refresh();
-								} else {
-									self._raiseError(o.error);
 								}
+								self.refresh();
 							});
 
 						}
@@ -1332,7 +1325,7 @@
 									});
 
 									$.JSON.request('renameItem', args, function(o) {
-										if (!o.error.length) {
+										if (o) {
 											self._reset();
 											var item = $.String.path(self._dir, name);
 
@@ -1358,10 +1351,8 @@
 											}
 
 											$(self._dialog['rename']).dialog('close');
-											self._getList();
-										} else {
-											self._raiseError(o.error);
 										}
+										self.refresh();
 									});
 
 								}
