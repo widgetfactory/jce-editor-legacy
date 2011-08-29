@@ -71,7 +71,7 @@ class WFFormatPluginConfig
         $selector 	= explode(',', $selector);
         
 		// set the root block
-        $rootblock 	= ($settings['forced_root_block'] === '') ? 'p' : $settings['forced_root_block'];
+        $rootblock 	= (!$settings['forced_root_block']) ? 'p' : $settings['forced_root_block'];
 
         if ($k = array_search($rootblock, $blocks) !== false) {
         	unset($blocks[$k]);
@@ -87,10 +87,12 @@ class WFFormatPluginConfig
         $settings['formats'] = "{span : {inline : 'span'}}";
 
         // new lines (paragraphs or linebreaks)
-        $newlines = $wf->getParam('editor.newlines', 0);
-        $settings['force_br_newlines'] 	= $newlines == 1 ? 1 : 0;
-        $settings['force_p_newlines'] 	= $newlines == 0 ? 1 : 0;
-        
+		if ($wf->getParam('editor.newlines', 0)) {
+			$settings['force_br_newlines'] 	= 1;
+        	$settings['force_p_newlines'] 	= 0;			
+			$settings['forced_root_block']	= false;
+		}
+
         // Relative urls
         $settings['relative_urls'] = $wf->getParam('editor.relative_urls', 1, 1);
         if ($settings['relative_urls'] == 0) {
