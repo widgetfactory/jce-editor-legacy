@@ -319,10 +319,14 @@ class WFFileBrowser extends WFBrowserExtension
 				
 				$type = $features[$type];
 				
-				return isset($type[$action]) && (bool)$type[$action];
+				if (isset($type[$action])) {
+					return (bool)$type[$action];
+				}
 			}
 		} else {
-			return isset($features[$action]) && (bool)$features[$action];
+			if (isset($features[$action])) {
+				return (bool)$features[$action];
+			}
 		}	
 
 		return false;
@@ -566,15 +570,13 @@ class WFFileBrowser extends WFBrowserExtension
 	function getStdActions()
 	{
 		$this->addAction('help', '', '', WFText::_('WF_BUTTON_HELP'));
-
-		$features = $this->get('features');
 		
-		if ($features['upload']) {
+		if ($this->checkFeature('upload')) {
 			$this->addAction('upload');
 			$this->setRequest(array($this, 'upload'));
 		}
 		
-		if ($features['folder']['create']) {
+		if ($this->checkFeature('create', 'folder')) {
 			$this->addAction('folder_new');
 			$this->setRequest(array($this, 'folderNew'));
 		}
@@ -982,7 +984,7 @@ class WFFileBrowser extends WFBrowserExtension
 		
 		// check for feature access	
 		if (!$this->checkFeature('upload')) {
-			JError::raiseError(403, 'RESTRICTED');
+			JError::raiseError(403, 'RESTRICTED ACCESS');
 		}
 		
 		$wf = WFEditor::getInstance();
@@ -1006,7 +1008,7 @@ class WFFileBrowser extends WFBrowserExtension
 
 		// check for extension in file name
 		if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)#i', basename($name, '.' . $ext))) {
-			JError::raiseError(403, 'RESTRICTED');
+			JError::raiseError(403, 'INVALID FILE NAME');
 		}
 
 		// get chunks
@@ -1088,7 +1090,7 @@ class WFFileBrowser extends WFBrowserExtension
 	{
 		// check for feature access	
 		if (!$this->checkFeature('delete', 'folder') && !$this->checkFeature('delete', 'file')) {
-			JError::raiseError(403, 'RESTRICTED');
+			JError::raiseError(403, 'RESTRICTED ACCESS');
 		}	
 			
 		$filesystem = $this->getFileSystem();
@@ -1127,7 +1129,7 @@ class WFFileBrowser extends WFBrowserExtension
 	{
 		// check for feature access	
 		if (!$this->checkFeature('rename', 'folder') && !$this->checkFeature('rename', 'file')) {
-			JError::raiseError(403, 'RESTRICTED');
+			JError::raiseError(403, 'RESTRICTED ACCESS');
 		}	
 			
 		$args 			= func_get_args();
@@ -1140,7 +1142,7 @@ class WFFileBrowser extends WFBrowserExtension
 		
 		// check for extension in destination name
 		if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b#i', $destination)) {
-			JError::raiseError(403, 'RESTRICTED');
+			JError::raiseError(403, 'INVALID FILE NAME');
 		}
 	
 		$filesystem 	= $this->getFileSystem();
@@ -1171,7 +1173,7 @@ class WFFileBrowser extends WFBrowserExtension
 	{
 		// check for feature access	
 		if (!$this->checkFeature('move', 'folder') && !$this->checkFeature('move', 'file')) {
-			JError::raiseError(403, 'RESTRICTED');
+			JError::raiseError(403, 'RESTRICTED ACCESS');
 		}	
 			
 		$filesystem = $this->getFileSystem();
@@ -1214,7 +1216,7 @@ class WFFileBrowser extends WFBrowserExtension
 	{
 		// check for feature access	
 		if (!$this->checkFeature('move', 'folder') && !$this->checkFeature('move', 'file')) {
-			JError::raiseError(403, 'RESTRICTED');
+			JError::raiseError(403, 'RESTRICTED ACCESS');
 		}	
 			
 		$filesystem = $this->getFileSystem();
@@ -1269,7 +1271,7 @@ class WFFileBrowser extends WFBrowserExtension
 	function folderNew()
 	{
 		if (!$this->checkFeature('create', 'folder')) {
-			JError::raiseError(403, 'RESTRICTED');
+			JError::raiseError(403, 'RESTRICTED ACCESS');
 		}	
 			
 		$args 	= func_get_args();
