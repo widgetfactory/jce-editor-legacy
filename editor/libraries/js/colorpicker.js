@@ -621,7 +621,7 @@
             if (this.options.custom_colors) {
                 var h = '';
 
-                $(parent).append('<p id="colorpicker_custom_label">'+this.options.labels.custom + ':</p><div></div>');
+                $(parent).append('<p id="colorpicker_custom_label">'+this.options.labels.custom + ':</p>');
 
                 var customColors = this.options.custom_colors.split(',');
 
