@@ -62,6 +62,7 @@ div.tree ul li div.tree-row span a {
 	text-decoration: none;
 	line-height: 20px;
 	display: block;
+	white-space: nowrap;
 }
 div.tree ul li div.tree-row span a.nolink {}
 div.tree ul li div.tree-row span a:visited, 
