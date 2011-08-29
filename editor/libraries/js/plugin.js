@@ -529,23 +529,36 @@
 
                 $.extend(args, data);
             }
+            
+            var url = document.location.href;
+            
+            // strip token
+            url = url.replace(/&wf([a-z0-9]+)=1/, '');
+            
+            function showError(e) {                        	
+                var txt = $.type(e) == 'array' ? e.join('\n') : e;     	
+                $.Dialog.alert(txt);
+            }
 
             $.JSON.queue({
                 context: scope || this,
                 dataType: 'json',
                 type: 'POST',
-                url: document.location.href,
+                url: url,
                 data: 'json=' + $.JSON.serialize(json) + '&' + $.param(args),
                 success: function (o) {
                     if (!o) {
                         r = false;
                     } else {
                         if (o.error) {
-                            $.Dialog.alert(o.text || o.error);
-                            return false;
+                        	showError(o.text || o.error || '');
                         }
 
                         r = o.result;
+                        
+                        if (r.error) {
+                        	showError(r.error);
+                        }
                     }
 
                     if ($.isFunction(callback)) {
