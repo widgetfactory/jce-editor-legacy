@@ -62,8 +62,8 @@ var TableDialog = {
 	initTable : function() {
 		var ed = tinyMCEPopup.editor, dom = tinyMCEPopup.dom;
 
-		var cols = 2, rows = 2, border = tinyMCEPopup.getParam('table_default_border', '0'), cellpadding = tinyMCEPopup.getParam('table_default_cellpadding', ''), cellspacing = tinyMCEPopup.getParam('table_default_cellspacing', '');
-		var align = "", width = "", height = "", bordercolor = "", bgcolor = "", className = "";
+		var cols = tinyMCEPopup.getParam('table_default_cols', 2), rows = tinyMCEPopup.getParam('table_default_rows', 2), border = tinyMCEPopup.getParam('table_default_border', '0'), cellpadding = tinyMCEPopup.getParam('table_default_cellpadding', ''), cellspacing = tinyMCEPopup.getParam('table_default_cellspacing', '');
+		var align = "", width = tinyMCEPopup.getParam('table_default_width', '300'), height = tinyMCEPopup.getParam('table_default_height', '300'), bordercolor = "", bgcolor = "", className = "";
 		var id = "", summary = "", style = "", dir = "", lang = "", background = "", bgcolor = "", bordercolor = "", rules = "", frame = "";
 		var elm = dom.getParent(ed.selection.getNode(), "table");
 		action = tinyMCEPopup.getWindowArg('action');
