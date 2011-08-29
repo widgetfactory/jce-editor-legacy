@@ -88,6 +88,12 @@
 .classicSkin .mceColorPreview {margin-left:2px; width:16px; height:4px; overflow:hidden; background:#9a9b9a}
 .classicSkin .mce_forecolor span.mceAction, .classicSkin .mce_backcolor span.mceAction {overflow:hidden; height:15px}
 
+/* Table Grid SplitButton */
+.classicSkin table.mceTableSplitMenu {width : 120px; height: 80px; background:#FFF; border:1px solid #ccc;}
+.classicSkin table.mceTableSplitMenu td {border: 1px solid #ccc;background-color: #FFF;}
+.classicSkin table.mceTableSplitMenu td.selected {background-color: #C2CBE0;}
+.classicSkin table.mceTableSplitMenu tfoot td.mceTableGridCount {background-color: #FFF;text-align: center;font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px;}
+
 /* Menu */
 .classicSkin .mceMenu {position:absolute; left:0; top:0; z-index:1000; border:1px solid #D4D0C8}
 .classicSkin .mceNoIcons span.mceIcon {width:0;}
