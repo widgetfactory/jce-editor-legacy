@@ -17,8 +17,8 @@ function IeCursorFix() {
 	return true;
 }
 
-function jInsertEditorText(text,editor) {
-	WFEditor.insert(editor,text);
+function jInsertEditorText(text, editor) {
+	WFEditor.insert(editor, text);
 }
 
 /**
@@ -31,18 +31,19 @@ function jInsertEditorText(text,editor) {
 
 		getSite : function(base) {
 			// get url from browser
-			var u 		= document.location.href;
+			var u = document.location.href;
 			// get the host part of the url eg: www.mysite.com
-			var host 	= base.substr(base.indexOf('://') + 3);
+			var host = base.substr(base.indexOf('://') + 3);
 			// get the
-			var site 	= host.substr(host.indexOf('/'));
+			var site = host.substr(host.indexOf('/'));
 
-			if (u.indexOf('/administrator/') != -1) {
+			if(u.indexOf('/administrator/') != -1) {
 				site = site + 'administrator/';
 			}
 
 			return site;
 		},
+
 		/**
 		 * Initialise JContentEditor
 		 * @param {Object} settings TinyMCE Settings
@@ -52,52 +53,52 @@ function jInsertEditorText(text,editor) {
 
 			var base = settings.base_url;
 			var site = this.getSite(base);
-			
+
 			// fix https in base url
-			if (/https:\/\//.test(document.location.href)) {
+			if(/https:\/\//.test(document.location.href)) {
 				base = base.replace(/http:/, 'https:');
 			}
-			
+
 			// set default values
-			settings.token 			= settings.token || 0;
-			settings.component_id	= settings.component_id || 0;
+			settings.token = settings.token || 0;
+			settings.component_id = settings.component_id || 0;
 
 			// set preinit object to prevent tinymce from generating baseURL
 			window.tinyMCEPreInit = {};
 			// set baseURL, suffix and query string
 			tinymce.extend(tinymce, {
 				baseURL : base + 'components/com_jce/editor/tiny_mce',
-				suffix	: '',
-				query	: settings.token + '=1&component_id=' + settings.component_id
+				suffix : '',
+				query : settings.token + '=1&component_id=' + settings.component_id
 			});
 
 			// remove submit triggers
 			this.settings = tinymce.extend({
-				document_base_url		: base,
-				site_url				: site,
-				mode 					: 'textareas',
-				editor_selector			: 'wfEditor',
-				editor_deselector		: 'wfNoEditor',
-				urlconverter_callback	: 'WFEditor.convertURL',
-				popup_css				: base + 'components/com_jce/editor/libraries/css/popup.css',
+				document_base_url : base,
+				site_url : site,
+				mode : 'textareas',
+				editor_selector : 'wfEditor',
+				editor_deselector : 'wfNoEditor',
+				urlconverter_callback : 'WFEditor.convertURL',
+				popup_css : base + 'components/com_jce/editor/libraries/css/popup.css',
 				add_form_submit_trigger : false,
-				submit_patch			: false,
-				theme 					: 'none',
-				invalid_elements 		: 'applet,iframe,object,embed,script,style',
-				plugins			 		: ''
+				submit_patch : false,
+				theme : 'none',
+				invalid_elements : 'applet,iframe,object,embed,script,style',
+				plugins : ''
 			}, settings);
 
-			if (this.settings) {
+			if(this.settings) {
 				try {
-					if (this.settings.compress.css) {
+					if(this.settings.compress.css) {
 						tinymce.extend(this.settings, {
 							content_css : false,
-							editor_css	: false
+							editor_css : false
 						});
 					}
 
 					// mark javascript files loaded
-					if (this.settings.compress.javascript) {
+					if(this.settings.compress.javascript) {
 						this._markLoaded();
 					}
 
@@ -108,6 +109,7 @@ function jInsertEditorText(text,editor) {
 				}
 			}
 		},
+
 		_markLoaded : function() {
 			var self = this, s = this.settings, each = tinymce.each, ln = s.language.split(',');
 
@@ -119,154 +121,161 @@ function jInsertEditorText(text,editor) {
 
 			// Add core languages
 			each(ln, function(c) {
-				if (c) {
+				if(c) {
 					load('langs/' + c + '.js');
 				}
 			});
+
 			// Add themes with languages
 			each(s.theme.split(','), function(n) {
-				if (n) {
+				if(n) {
 					load('themes/' + n + '/editor_template' + suffix + '.js');
 
-					each (ln, function(c) {
-						if (c) {
+					each(ln, function(c) {
+						if(c) {
 							load('themes/' + n + '/langs/' + c + '.js');
 						}
 					});
+
 				}
 			});
+
 			// Add plugins with languages
 			each(s.plugins.split(','), function(n) {
-				if (n) {
+				if(n) {
 					load('plugins/' + n + '/editor_plugin' + suffix + '.js');
 
 					each(ln, function(c) {
-						if (c) {
+						if(c) {
 							load('plugins/' + n + '/langs/' + c + '.js');
 						}
 					});
+
 				}
 			});
+
 		},
+
 		setBookmark : function(ed) {
 			var self = this, DOM = tinymce.DOM, Event = tinymce.dom.Event;
 
 			function isHidden(ed) {
 				return ed.isHidden() || DOM.getStyle(ed.id + '_ifr', 'visibility') == 'hidden';
 			}
-			
+
+
 			Event.add(document.body, 'mousedown', function(e) {
 				var el = e.target;
 
-				if (DOM.getParent(el, 'div#' + ed.id + '_parent')) {
+				if(DOM.getParent(el, 'div#' + ed.id + '_parent')) {
 					return;
 				}
-				
-				if (!isHidden(ed) && ed.selection) {
+
+				if(!isHidden(ed) && ed.selection) {
 					var n = ed.selection.getNode();
-					
-					if (DOM.getParent(n, 'body#tinymce')) {
+
+					if(DOM.getParent(n, 'body#tinymce')) {
 						self._bookmark[ed.id] = ed.selection.getBookmark();
 					}
 				}
 			});
+
 		},
-		
+
 		/**
 		 * Create Editors on domloaded
 		 */
 		create : function(elements) {
 			var self = this, Event = tinymce.dom.Event, s = this.settings;
 
-			if (!Event.domLoaded) {
+			if(!Event.domLoaded) {
 				Event.add(document, 'init', function() {
 					self.create();
 				});
+
 				return;
 			} else {
 				WFEditor.showLoader();
 
-				tinyMCE.onAddEditor.add( function(mgr, ed) {
-	
-					if (s.compress.css) {
+				tinyMCE.onAddEditor.add(function(mgr, ed) {
+
+					if(s.compress.css) {
 						// load packer css
-						ed.onPreInit.add( function() {
+						ed.onPreInit.add(function() {
 							ed.dom.loadCSS(s.site_url + 'index.php?option=com_jce&view=editor&layout=editor&task=pack&type=css&context=content&component_id=' + s.component_id + '&' + s.token + '=1');
 						});
+
 					}
 
 					WFEditor.hideLoader(ed.getElement());
 
-					if (tinymce.isIE) {
+					if(tinymce.isIE) {
 						self.setBookmark(ed);
 					}
 
 					// form submit trigger
-					ed.onInit.add( function() {
-						ed.onSubmit.addToTop( function() {
-							if (ed.initialized && !ed.isHidden()) {
+					ed.onInit.add(function() {
+						ed.onSubmit.addToTop(function() {
+							if(ed.initialized && !ed.isHidden()) {
 								ed.save();
 								ed.isNotDirty = 1;
 							}
 						});
-						
-						if (!ed.settings.forced_root_block) {
-							ed.selection.normalize = function() {
-								return;
-							};	
-						}
+
 					});
-					
+
 					// Form submit patch
-					ed.onBeforeRenderUI.add( function() {
+					ed.onBeforeRenderUI.add(function() {
 						var n = ed.getElement().form;
 
-						if (!n)
+						if(!n)
 							return;
 
 						// Already patched
-						if (n._mceOldSubmit)
+						if(n._mceOldSubmit)
 							return;
 
 						// Check page uses id="submit" or name="submit" for it's submit button
-						if (!n.submit.nodeType && !n.submit.length) {
+						if(!n.submit.nodeType && !n.submit.length) {
 							ed.formElement = n;
 							n._mceOldSubmit = n.submit;
 							n.submit = function() {
 								// Save all instances
-								tinymce.each(tinymce.editors, function(e) {									
-									if (e.initialized && !e.isHidden()) {
+								tinymce.each(tinymce.editors, function(e) {
+									if(e.initialized && !e.isHidden()) {
 										e.save();
 									}
 								});
-								
+
+
 								ed.isNotDirty = 1;
 
 								return ed.formElement._mceOldSubmit(ed.formElement);
 							};
-						}
 
+						}
 						n = null;
 					});
-					
+
+
 					ed.onPostRender.add(function() {
-						var doc 	= ed.getDoc();
-						var base 	= doc.createElement('base');
+						var doc = ed.getDoc();
+						var base = doc.createElement('base');
 						base.setAttribute('href', s.base_url);
-						
+
 						doc.getElementsByTagName('head')[0].appendChild(base);
 					});
-					
+
 				});
-				
-				if (elements) {
-					s.mode 		= 'exact';
-					s.elements 	= elements;
+
+				if(elements) {
+					s.mode = 'exact';
+					s.elements = elements;
 				}
 
 				try {
 					// only create toggle for advanced theme
-					if (s.theme == 'advanced' && (typeof s.toggle == 'undefined' ? 1 : s.toggle)) {
+					if(s.theme == 'advanced' && ( typeof s.toggle == 'undefined' ? 1 : s.toggle)) {
 						this._createToggle(elements);
 					}
 
@@ -276,28 +285,27 @@ function jInsertEditorText(text,editor) {
 				}
 			}
 		},
-		
+
 		_createToggle : function(elements) {
 			var self = this, DOM = tinymce.DOM, Event = tinymce.dom.Event, s = this.settings;
 
 			function getVar(s, dv) {
-				return (typeof s == 'undefined' || s === null) ? dv : s;
+				return ( typeof s == 'undefined' || s === null) ? dv : s;
 			}
-			
+
 			var use_cookies = getVar(s.use_cookies, true);
-			
 			elements = elements || DOM.select('.wfEditor');
 
 			tinymce.each(elements, function(el) {
-				var state 	= getVar(s.toggle_state, 1);
+				var state = getVar(s.toggle_state, 1);
 				// get cookie
-				var cookie 	= getVar(tinymce.util.Cookie.get('wf_editor_' + el.id + '_state'), 1);				
-				var label 	= getVar(s.toggle_label, '[show/hide]');
+				var cookie = getVar(tinymce.util.Cookie.get('wf_editor_' + el.id + '_state'), 1);
+				var label = getVar(s.toggle_label, '[show/hide]');
 
 				var div = DOM.create('span', {
-					'role' 				: 'button',
-					'class'				: 'wf_editor_toggle',
-					'aria-labelledby' 	: 'wf_editor_' + el.id + '_toggle'
+					'role' : 'button',
+					'class' : 'wf_editor_toggle',
+					'aria-labelledby' : 'wf_editor_' + el.id + '_toggle'
 				}, '<span id="wf_editor_' + el.id + '_toggle">' + label + '</span>');
 
 				DOM.setStyle(div, 'cursor', 'pointer');
@@ -306,12 +314,12 @@ function jInsertEditorText(text,editor) {
 				Event.add(div, 'click', function(e) {
 					self.toggle(el, use_cookies);
 				});
-				
-				if (!state) {
+
+				if(!state) {
 					el.className = 'wfNoEditor';
 					self._wrapText(el, true);
 				} else {
-					if (parseInt(cookie) == 0) {
+					if(parseInt(cookie) == 0) {
 						el.className = 'wfNoEditor';
 						self._wrapText(el, true);
 					} else {
@@ -319,13 +327,14 @@ function jInsertEditorText(text,editor) {
 					}
 				}
 			});
+
 		},
-		
+
 		toggle : function(el, use_cookies) {
 			var self = this, ed = tinyMCE.get(el.id);
 			// turn it on
-			if (!ed) {
-				if (use_cookies) {
+			if(!ed) {
+				if(use_cookies) {
 					tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
 				}
 
@@ -334,17 +343,17 @@ function jInsertEditorText(text,editor) {
 				tinyMCE.execCommand('mceAddEditor', 0, el.id);
 			} else {
 				self._wrapText(ed.getElement(), true);
-						
-				if (ed.isHidden()) {
-					if (use_cookies) {
+
+				if(ed.isHidden()) {
+					if(use_cookies) {
 						tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
 					}
 					el.className = 'wfEditor';
 
 					ed.load();
-					ed.show();							
+					ed.show();
 				} else {
-					if (use_cookies) {
+					if(use_cookies) {
 						tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 0);
 					}
 					el.className = 'wfNoEditor';
@@ -354,38 +363,38 @@ function jInsertEditorText(text,editor) {
 				}
 			}
 		},
-		
+
 		_wrapText : function(el, s) {
 			var v, n;
-			
+
 			el.setAttribute("wrap", s);
-			
-			if (!tinymce.isIE) {
+
+			if(!tinymce.isIE) {
 				v = el.value;
 				n = el.cloneNode(false);
 				n.setAttribute("wrap", s);
-				el.parentNode.replaceChild(n, el);				
+				el.parentNode.replaceChild(n, el);
 				n.value = v;
 			}
 		},
-		
+
 		showLoader : function(el) {
 			tinymce.DOM.addClass('.wfEditor', 'loading');
 		},
-		
+
 		hideLoader : function(el) {
 			tinymce.DOM.removeClass(el, 'loading');
 		},
-		
+
 		/**
 		 * Set the editor content
 		 * @param {String} id The editor id
 		 * @param {String} html The html content to set
 		 */
-		setContent: function(id, html) {
+		setContent : function(id, html) {
 			var ed = tinyMCE.get(id);
 
-			if (ed) {
+			if(ed) {
 				ed.setContent(html);
 			} else {
 				document.getElementById(id).value = html;
@@ -396,35 +405,36 @@ function jInsertEditorText(text,editor) {
 		 * Get the editor content
 		 * @param {String} id The editor id
 		 */
-		getContent: function(id) {			
+		getContent : function(id) {
 			var ed = tinyMCE.get(id);
 
 			// pass content to textarea and return
-			if (ed && !ed.isHidden()) {
+			if(ed && !ed.isHidden()) {
 				return ed.save();
 			}
 
 			// return textarea content
 			return document.getElementById(id).value;
 		},
+
 		/**
 		 * Insert content into the editor. This function is provided for editor-xtd buttons and includes methods for inserting into textareas
 		 * @param {String} el The editor id
 		 * @param {String} v The text to insert
 		 */
-		insert: function(el, v) {
+		insert : function(el, v) {
 			var bm, ed;
-			if (typeof el == 'string') {
+			if( typeof el == 'string') {
 				el = document.getElementById(el);
 			}
-			if (/wfEditor/.test(el.className)) {
+			if(/wfEditor/.test(el.className)) {
 				ed = tinyMCE.get(el.id);
-				if (tinymce.isIE) {
-					if (window.parent.tinymce) {
+				if(tinymce.isIE) {
+					if(window.parent.tinymce) {
 						var ed = window.parent.tinyMCE.get(el.id);
 
-						if (ed) {
-							if (this._bookmark[ed.id]) {
+						if(ed) {
+							if(this._bookmark[ed.id]) {
 								ed.selection.moveToBookmark(this._bookmark[ed.id]);
 							}
 						}
@@ -435,15 +445,16 @@ function jInsertEditorText(text,editor) {
 				this.insertIntoTextarea(el, v);
 			}
 		},
+
 		insertIntoTextarea : function(el, v) {
 			// IE
-			if (document.selection) {
+			if(document.selection) {
 				el.focus();
 				var s = document.selection.createRange();
 				s.text = v;
 				// Mozilla / Netscape
 			} else {
-				if (el.selectionStart || el.selectionStart == '0') {
+				if(el.selectionStart || el.selectionStart == '0') {
 					var startPos = el.selectionStart;
 					var endPos = el.selectionEnd;
 					el.value = el.value.substring(0, startPos) + v + el.value.substring(endPos, el.value.length);
@@ -453,22 +464,23 @@ function jInsertEditorText(text,editor) {
 				}
 			}
 		},
+
 		convertURL : function(u, e, save) {
 			var ed = tinymce.EditorManager.activeEditor, s = tinymce.settings, base = s.document_base_url;
 
-			if (!u)
+			if(!u)
 				return u;
 
 			// Don't convert link href since thats the CSS files that gets loaded into the editor also skip local file URLs
-			if (!s.convert_urls || (e && e.nodeName == 'LINK') || u.indexOf('file:') === 0)
+			if(!s.convert_urls || (e && e.nodeName == 'LINK') || u.indexOf('file:') === 0)
 				return u;
 
-			if (u == base || u == base.substring(0, base.length - 1) || u.charAt(0) == '/') {
+			if(u == base || u == base.substring(0, base.length - 1) || u.charAt(0) == '/') {
 				return u;
 			}
 
 			// Convert to relative
-			if (s.relative_urls)
+			if(s.relative_urls)
 				return ed.documentBaseURI.toRelative(u);
 
 			// Convert to absolute
@@ -476,6 +488,80 @@ function jInsertEditorText(text,editor) {
 
 			return u;
 		}
+
 	};
 	window.WFEditor = WFEditor;
+
+	// Selection normalize patch
+	tinymce.dom.Selection.prototype.normalize = function() {
+		var self = this, rng, normalized;
+
+		// Normalize only on non IE browsers for now
+		if(tinymce.isIE)
+			return;
+
+		function normalizeEndPoint(start) {
+			var container, offset, walker, dom = self.dom, body = dom.getRoot(), node;
+			container = rng[( start ? 'start' : 'end') + 'Container'];
+			offset = rng[( start ? 'start' : 'end') + 'Offset'];
+
+			// If the container is a document move it to the body element
+			if(container.nodeType === 9) {
+				container = container.body;
+				offset = 0;
+			}
+
+			// If the container is body try move it into the closest text node or position
+			// TODO: Add more logic here to handle element selection cases
+			if(container === body) {
+				// Resolve the index
+				if(container.hasChildNodes()) {
+					container = container.childNodes[Math.min(!start && offset > 0 ? offset - 1 : offset, container.childNodes.length - 1)];
+					offset = 0;
+
+					// Don't walk into elements that doesn't have any child nodes like a IMG
+					if(container.hasChildNodes()) {
+						// Walk the DOM to find a text node to place the caret at or a BR
+						node = container;
+						walker = new tinymce.dom.TreeWalker(container, body);
+						do {
+							// Found a text node use that position
+							if(node.nodeType === 3) {
+								offset = start ? 0 : node.nodeValue.length - 1;
+								container = node;
+								break;
+							}
+
+							// Found a BR element that we can place the caret before
+							if(node.nodeName === 'BR') {
+								offset = dom.nodeIndex(node);
+								container = node.parentNode;
+								break;
+							}
+						} while (node = (start ? walker.next() : walker.prev()));
+						normalized = true;
+					}
+				}
+			}
+
+			// Set endpoint if it was normalized
+			if(normalized)
+				rng['set' + (start ? 'Start' : 'End')](container, offset);
+		};
+
+		rng = self.getRng();
+
+		// Normalize the end points
+		normalizeEndPoint(true);
+
+		if(rng.collapsed)
+			normalizeEndPoint();
+
+		// Set the selection if it was normalized
+		if(normalized) {
+			//console.log(self.dom.dumpRng(rng));
+			self.setRng(rng);
+		}
+	};
+
 }());
