@@ -83,7 +83,7 @@
             	<option value="0">WF_OPTION_NO</option>
 		</param>
 		<param name="border_width" type="list" default="1" pattern="[0-9]+" class="editable" label="WF_PARAM_BORDER_WIDTH" description="WF_PARAM_BORDER_WIDTH_DESC">
-				<option value="">WF_OPTION_NOT_SET</option>
+				<option value="inherit">WF_OPTION_NOT_SET</option>
 				<option value="0">0</option>
 				<option value="1">1</option>
 				<option value="2">2</option>
@@ -99,7 +99,7 @@
 				<option value="thick">WF_OPTION_BORDER_THICK</option>
 		</param>
 		<param name="border_style" type="list" default="solid" label="WF_PARAM_BORDER_STYLE" description="WF_PARAM_BORDER_STYLE_DESC">
-				<option value="">WF_OPTION_NOT_SET</option>
+				<option value="inherit">WF_OPTION_NOT_SET</option>
 				<option value="none">WF_OPTION_NONE</option>
 				<option value="solid">WF_OPTION_BORDER_SOLID</option>
 				<option value="dashed">WF_OPTION_BORDER_DASHED</option>
