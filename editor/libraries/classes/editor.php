@@ -295,8 +295,12 @@ class WFEditor extends JObject
 		if (is_numeric($param)) {
 			$param = intval($param);
 		}
+		
+		if ($param === $default) {
+			return '';
+		}
 
-		return ($param === $default) ? '' : $param;
+		return $param;
 	}
 	
 	function checkLanguage($tag)
