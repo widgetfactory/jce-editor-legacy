@@ -62,8 +62,8 @@ var WFFileBrowser = WFExtensions.add('FileBrowser', {
 		return this._call('error', error);
 	},
 	
-	status : function(message, loading) {
-		return this._call('setStatus', [message, loading]);
+	status : function(message, state) {
+		return this._call('setStatus', {message : message, state : state});
 	},
 	
 	/**

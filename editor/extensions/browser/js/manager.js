@@ -611,7 +611,7 @@
 			var path = src || this._dir;
 
 			/* Initialise tree */
-			this.setStatus(self._translate('message_tree', 'Building tree list...'), true);
+			this.setStatus({message : self._translate('message_tree', 'Building tree list...'), state : 'load'});
 
 			$(dialog.tree).tree({
 				onInit : function(e, callback) {
@@ -696,11 +696,9 @@
 		 * @param {String} message
 		 * @param {String} loading
 		 */
-		setStatus : function(message, loading) {
-			var cls = loading ? 'load' : '';
-			$(this.options.dialog.status).attr('class', cls);
-
-			$(this.options.dialog.status).html('<span>' + message + '</span>');
+		setStatus : function(o) {			
+			$(this.options.dialog.status).attr('class', o.state || '');
+			$(this.options.dialog.status).html('<span>' + o.message || '' + '</span>');
 		},
 
 		/**
@@ -716,7 +714,7 @@
 		 * Sets a loading message
 		 */
 		_setLoader : function() {
-			this.setStatus(this._translate('message_load', 'Loading...'), true);
+			this.setStatus({message : this._translate('message_load', 'Loading...'), state : 'load'});
 		},
 
 		/**
@@ -732,7 +730,7 @@
 		_resetStatus : function() {
 			var dir = decodeURIComponent(this._dir);
 			dir = dir.replace(/\//g, ' &rsaquo; ');
-			this.setStatus(dir + ' ( ' + this._foldercount + ' ' + this._translate('folders', 'folders') + ', ' + this._filecount + ' ' + this._translate('files', 'files') + ' )');
+			this.setStatus({message : dir + ' ( ' + this._foldercount + ' ' + this._translate('folders', 'folders') + ', ' + this._filecount + ' ' + this._translate('files', 'files') + ' )', state : ''});
 		},
 
 		/**
