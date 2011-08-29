@@ -84,15 +84,9 @@ class WFPreviewPlugin extends WFEditorPlugin
 		$component 	= WFExtensionHelper::getComponent($component_id);
 
 		$params  	= new JParameter($component->params);
-		$article 	= new JObject();
-		
+		$article 	= JTable::getInstance('content');
+
 		$article->id			= 0;
-		$article->state			= 1;
-		$article->cat_pub		= null;
-		$article->sec_pub		= null;
-		$article->cat_access	= null;
-		$article->sec_access	= null;
-		$article->author		= null;
 		$article->created_by	= $user->get('id');
 		$article->parameters	= new JParameter('');
 		$article->text			= $data;
@@ -102,8 +96,11 @@ class WFPreviewPlugin extends WFEditorPlugin
 		
 		require_once(JPATH_SITE .DS. 'components' .DS. 'com_content' .DS. 'helpers' .DS. 'route.php');
 		
+		// set error reporting to error only
+		error_reporting(E_ERROR);
+
 		$dispatcher->trigger('onPrepareContent', array (& $article, & $params, $limitstart));
-		
+
 		$this->processURLS($article);
 
 		return $article->text;
