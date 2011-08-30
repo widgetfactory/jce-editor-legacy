@@ -233,18 +233,27 @@ class WFEditor extends JObject
 			// get params data for this profile
 			$profile = $this->getProfile();
 			
-			if (!$component->params) {
-				$component->params = '{}';
+			$profile_params 	= array();
+			$component_params 	= array();
+
+			if (!empty($component->params)) {
+				$component_params = json_decode($component->params, true);
+				// set null as array
+				if (!$component_params) {
+					$component_params = array();
+				}
 			}
-			
-			if (!$profile || !$profile->params) {
-				$profile_params = '{}';
-			} else {
-				$profile_params = $profile->params;
+
+			if ($profile) {
+				$profile_params = json_decode($profile->params, true);
+				// set null as array
+				if (!$profile_params) {
+					$profile_params = array();
+				}
 			}
-			
+
 			// merge data and convert to json string
-			$data = WFParameter::array_to_object(array_merge_recursive(json_decode($component->params, true), json_decode($profile_params, true)));
+			$data = WFParameter::array_to_object(array_merge_recursive($component_params, $profile_params));
 			
 			$params[$signature] = new WFParameter($data, $options['path'], $options['key']);
 		}
