@@ -266,15 +266,19 @@
                 }).insertAfter(this).css('background-color', $(this).val()).toggleClass('disabled', $(this).is(':disabled')).attr('aria-disabled', function() {
                     return $(this).hasClass('disabled');
                 });
+                
+                $(this).bind('pick', function() {
+                	$(this).next('span.pickcolor_icon').css('background-color', $(this).val());
+                });
 
                 // need to use direct call to onchange event for tinyMCEPopup.pickColor callback
                 $(this).get(0).onchange = function() {
-                    $(this).next('span.pickcolor_icon').css('background-color', $(this).val());
+                    $(this).trigger('pick');
+                    
                     if ($.isFunction(ev)) {
                         ev.call(this);
                     }
                 };
-
             });
 
         },
