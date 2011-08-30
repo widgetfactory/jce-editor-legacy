@@ -42,8 +42,8 @@
 			t.settings = s = tinymce.extend({
 				cols 	: 4,
 				rows 	: 4,
-				width 	: '300px',
-				height	: '300px',
+				width 	: '',
+				height	: '',
 				border	: 0 
 			}, t.settings);
 
@@ -1583,8 +1583,8 @@
 							ed.execCommand('mceInsertContent', false, html);
 						},
 						scope	: ed,
-						width 	: ed.getParam('table_default_width', '300px'),
-						height 	: ed.getParam('table_default_height', '300px'),
+						width 	: ed.getParam('table_default_width'),
+						height 	: ed.getParam('table_default_height'),
 						border 	: ed.getParam('table_default_border', 0)
 					}, ed);
 					
