@@ -439,25 +439,45 @@
 		},
 
 		setStyles : function() {
-			var self = this, ed = tinyMCEPopup, img = $('#sample');
+			var self = this, ed = tinyMCEPopup, $img = $('#sample');
 
-			$(img).attr('style', $('#style').val());
+			// apply styles to image
+			$img.attr('style', $('#style').val());
+			// serialize styles
+			var styles = ed.dom.parseStyle($img.attr('style'));
 
 			// Margin
-			tinymce.each(['top', 'right', 'bottom', 'left'], function(o) {
-				$('#margin_' + o).val(self.getAttrib(img, 'margin-' + o));
+			$.each(['top', 'right', 'bottom', 'left'], function(i, k) {
+				var v = styles['margin-' + k] || $img.css('margin-' + k);
+				
+				if (v.indexOf('px') != -1) {
+					v = parseInt(v);
+				}
+				
+				$('#margin_' + k).val(v);
 			});
+			
+			// Handle border
+			$.each(['width', 'color', 'style'], function(i, k) {
+				var v = styles['border-' + k] || '';
 
-			// Border
-			if (this.getAttrib(img, 'border-width') !== '') {
-				dom.check('border', true);
-				this.setBorder();
-				$('#border_width').val(this.getAttrib(img, 'border-width'));
-				$('#border_style').val(this.getAttrib(img, 'border-style'));
-				$('#border_color').val(this.getAttrib(img, 'border-color'));
-			}
+				if (v == '') {
+					return;
+				}
+				
+				$('#border').attr('checked', 'checked');
+				
+				if (k == 'width' && v.indexOf('px') != -1) {
+					v = parseInt(v);
+				}
+
+				$('border_' + k).val(v);
+				
+				self.setBorder();
+			});
+			
 			// Align
-			$('#align', this.getAttrib(img, 'align'));
+			$('#align').val($img.css('float') || $img.css('vertical-align') || '');
 		},
 
 		updateStyles : function() {
