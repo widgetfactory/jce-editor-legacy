@@ -62,14 +62,16 @@ var TableDialog = {
 	initTable : function() {
 		var ed = tinyMCEPopup.editor, dom = tinyMCEPopup.dom;
 
-		var cols = tinyMCEPopup.getParam('table_default_cols', 2), rows = tinyMCEPopup.getParam('table_default_rows', 2), border = tinyMCEPopup.getParam('table_default_border', '0'), cellpadding = tinyMCEPopup.getParam('table_default_cellpadding', ''), cellspacing = tinyMCEPopup.getParam('table_default_cellspacing', '');
-		var align = "", width = tinyMCEPopup.getParam('table_default_width', '300'), height = tinyMCEPopup.getParam('table_default_height', '300'), bordercolor = "", bgcolor = "", className = "";
+		var cols = tinyMCEPopup.getParam('table_default_cols', 2), rows = tinyMCEPopup.getParam('table_default_rows', 2);
+		var border = tinyMCEPopup.getParam('table_default_border', '0'), cellpadding = tinyMCEPopup.getParam('table_default_cellpadding', ''), cellspacing = tinyMCEPopup.getParam('table_default_cellspacing', '');
+		var align = "", width = tinyMCEPopup.getParam('table_default_width'), height = tinyMCEPopup.getParam('table_default_height'), bordercolor = "", bgcolor = "", className = "";
 		var id = "", summary = "", style = "", dir = "", lang = "", background = "", bgcolor = "", bordercolor = "", rules = "", frame = "";
 		var elm = dom.getParent(ed.selection.getNode(), "table");
 		action = tinyMCEPopup.getWindowArg('action');
 
-		if(!action)
+		if(!action) {
 			action = elm ? "update" : "insert";
+		}
 
 		if(elm && action != "insert") {
 			var rowsAr = elm.rows;
@@ -118,7 +120,7 @@ var TableDialog = {
 			if($('option[value="' + className + '"]', this).length == 0) {
 				$(this).append(new Option(className, className));
 			}
-			
+
 			return className;
 		});
 
@@ -186,7 +188,7 @@ var TableDialog = {
 				if($('option[value="' + className + '"]', this).length == 0) {
 					$(this).append(new Option(className, className));
 				}
-				
+
 				return className;
 			});
 
@@ -241,7 +243,7 @@ var TableDialog = {
 				if($('option[value="' + className + '"]', this).length == 0) {
 					$(this).append(new Option(className, className));
 				}
-				
+
 				return className;
 			});
 
@@ -291,25 +293,25 @@ var TableDialog = {
 		elm = dom.getParent(ed.selection.getNode(), 'table');
 
 		// Get form data
-		cols = $('#cols').val()
-		rows = $('#rows').val()
+		cols = $('#cols').val();
+		rows = $('#rows').val();
 		border = $('#border').val() != "" ? $('#border').val() : 0;
 		cellpadding = $('#cellpadding').val() != "" ? $('#cellpadding').val() : "";
 		cellspacing = $('#cellspacing').val() != "" ? $('#cellspacing').val() : "";
 		align = $("#align").val();
 		frame = $("#tframe").val();
 		rules = $("#rules").val();
-		width = $('#width').val()
-		height = $('#height').val()
-		bordercolor = $('#bordercolor').val()
-		bgcolor = $('#bgcolor').val()
+		width = $('#width').val();
+		height = $('#height').val();
+		bordercolor = $('#bordercolor').val();
+		bgcolor = $('#bgcolor').val();
 		className = $("#class").val();
-		id = $('#id').val()
-		summary = $('#summary').val()
-		style = $('#style').val()
-		dir = $('#dir').val()
-		lang = $('#lang').val()
-		background = $('#backgroundimage').val()
+		id = $('#id').val();
+		summary = $('#summary').val();
+		style = $('#style').val();
+		dir = $('#dir').val();
+		lang = $('#lang').val();
+		background = $('#backgroundimage').val();
 		caption = $('#caption').is(':checked');
 		cellLimit = tinyMCEPopup.getParam('table_cell_limit', false);
 		rowLimit = tinyMCEPopup.getParam('table_row_limit', false);
@@ -345,14 +347,16 @@ var TableDialog = {
 			dom.setAttrib(elm, 'lang', lang);
 			capEl = ed.dom.select('caption', elm)[0];
 
-			if(capEl && !caption)
+			if(capEl && !caption) {
 				capEl.parentNode.removeChild(capEl);
+			}
 
 			if(!capEl && caption) {
 				capEl = elm.ownerDocument.createElement('caption');
 
-				if(!tinymce.isIE)
+				if(!tinymce.isIE) {
 					capEl.innerHTML = '<br _mce_bogus="1"/>';
+				}
 
 				elm.insertBefore(capEl, elm.firstChild);
 			}
@@ -378,10 +382,11 @@ var TableDialog = {
 				dom.setStyle(elm, 'height', '');
 			}
 
-			if(background != '')
+			if(background != '') {
 				elm.style.backgroundImage = "url('" + background + "')";
-			else
+			} else {
 				elm.style.backgroundImage = '';
+			}
 
 			/*		if (tinyMCEPopup.getParam("inline_styles")) {
 			 if (width != '')
@@ -392,8 +397,9 @@ var TableDialog = {
 				elm.style.borderColor = bordercolor;
 				elm.style.borderStyle = elm.style.borderStyle == "" ? "solid" : elm.style.borderStyle;
 				elm.style.borderWidth = border == "" ? "1px" : border;
-			} else
+			} else {
 				elm.style.borderColor = '';
+			}
 
 			elm.style.backgroundColor = bgcolor;
 			elm.style.height = getCSSSize(height);
@@ -407,8 +413,9 @@ var TableDialog = {
 			ed.execCommand('mceEndUndoLevel');
 
 			// Repaint if dimensions changed
-			if($('#width').val() != this.orgTableWidth || $('#height').val() != this.orgTableHeight)
+			if($('#width').val() != this.orgTableWidth || $('#height').val() != this.orgTableHeight) {
 				ed.execCommand('mceRepaint');
+			}
 
 			tinyMCEPopup.close();
 			return true;
@@ -423,15 +430,19 @@ var TableDialog = {
 		html += this.makeAttrib('_mce_new', '1');
 
 		if(width && ed.settings.inline_styles) {
-			if(style)
+			if(style) {
 				style += '; ';
+			}
 
 			// Force px
-			if(/^[0-9\.]+$/.test(width))
+			if(/^[0-9\.]+$/.test(width)) {
 				width += 'px';
+			}
+			
 			style += 'width: ' + width;
-		} else
+		} else {
 			html += this.makeAttrib('width', width);
+		}
 
 		/*	if (height) {
 		if (style)
@@ -454,20 +465,22 @@ var TableDialog = {
 		html += '>';
 
 		if(caption) {
-			if(!tinymce.isIE)
+			if(!tinymce.isIE) {
 				html += '<caption><br _mce_bogus="1"/></caption>';
-			else
+			} else {
 				html += '<caption></caption>';
+			}
 		}
 
 		for(var y = 0; y < rows; y++) {
 			html += "<tr>";
 
 			for(var x = 0; x < cols; x++) {
-				if(!tinymce.isIE)
+				if(!tinymce.isIE) {
 					html += '<td><br _mce_bogus="1"/></td>';
-				else
+				} else {
 					html += '<td></td>';
+				}
 			}
 			html += "</tr>";
 		}
@@ -483,8 +496,9 @@ var TableDialog = {
 			ed.selection.setContent('<br class="_mce_marker" />');
 
 			tinymce.each('h1,h2,h3,h4,h5,h6,p'.split(','), function(n) {
-				if(patt)
+				if(patt) {
 					patt += ',';
+				}
 				patt += n + ' ._mce_marker';
 			});
 
@@ -495,8 +509,9 @@ var TableDialog = {
 
 
 			dom.setOuterHTML(dom.select('br._mce_marker')[0], html);
-		} else
+		} else {
 			ed.execCommand('mceInsertContent', false, html);
+		}
 
 		tinymce.each(dom.select('table[_mce_new]'), function(node) {
 			var td = dom.select('td', node);
@@ -557,10 +572,11 @@ var TableDialog = {
 				};
 
 				if(ed.getParam("accessibility_warnings", 1)) {
-					if(celltype == "th" && scope == "")
+					if(celltype == "th" && scope == "") {
 						tinyMCEPopup.confirm(ed.getLang('table_dlg.missing_scope', '', true), doUpdate);
-					else
+					} else {
 						doUpdate(1);
+					}
 
 					return;
 				}
@@ -571,8 +587,9 @@ var TableDialog = {
 			case "row":
 				var cell = trElm.firstChild;
 
-				if(cell.nodeName != "TD" && cell.nodeName != "TH")
+				if(cell.nodeName != "TD" && cell.nodeName != "TH") {
 					cell = this.nextCell(cell);
+				}
 
 				do {
 					cell = this.updateCell(cell, true);
@@ -586,8 +603,9 @@ var TableDialog = {
 				for(var i = 0; i < rows.length; i++) {
 					var cell = rows[i].firstChild;
 
-					if(cell.nodeName != "TD" && cell.nodeName != "TH")
+					if(cell.nodeName != "TD" && cell.nodeName != "TH") {
 						cell = this.nextCell(cell);
+					}
 
 					do {
 						cell = this.updateCell(cell, true);
@@ -608,25 +626,25 @@ var TableDialog = {
 
 		var curRowType = tr_elm.parentNode.nodeName.toLowerCase();
 		var rowtype = $('#rowtype').val();
-			
+
 		$.each(['id', 'align', 'valign', 'lang', 'dir', 'class'], function(i, k) {
 			v = $('#' + k).val();
-			
-			if (k == 'id' && skip_id) {
+
+			if(k == 'id' && skip_id) {
 				return;
 			}
-			
-			if (k == 'style') {
+
+			if(k == 'style') {
 				v = dom.serializeStyle(dom.parseStyle(v));
 			}
-			
-			if (v === '') {
+
+			if(v === '') {
 				tr_elm.removeAttribue(k);
 			} else {
 				dom.setAttrib(tr_elm, k, v);
 			}
-		});	
-		
+		});
+
 		// Clear deprecated attributes
 		$.each(['height', 'bgColor', 'background'], function(i, k) {
 			ed.dom.setAttrib(td, k, null);
@@ -636,10 +654,11 @@ var TableDialog = {
 		tr_elm.style.height = getCSSSize($('#height').val());
 		tr_elm.style.backgroundColor = $('#bgcolor').val();
 
-		if($('#backgroundimage').val() != "")
+		if($('#backgroundimage').val() != "") {
 			tr_elm.style.backgroundImage = "url('" + $('#backgroundimage').val() + "')";
-		else
+		} else {
 			tr_elm.style.backgroundImage = '';
+		}
 
 		// Setup new rowtype
 		if(curRowType != rowtype && !skip_parent) {
@@ -651,20 +670,23 @@ var TableDialog = {
 			var dest = rowtype;
 			var newParent = null;
 			for(var i = 0; i < theTable.childNodes.length; i++) {
-				if(theTable.childNodes[i].nodeName.toLowerCase() == dest)
+				if(theTable.childNodes[i].nodeName.toLowerCase() == dest) {
 					newParent = theTable.childNodes[i];
+				}
 			}
 
 			if(newParent == null) {
 				newParent = doc.createElement(dest);
 
 				if(dest == "thead") {
-					if(theTable.firstChild.nodeName == 'CAPTION')
+					if(theTable.firstChild.nodeName == 'CAPTION') {
 						ed.dom.insertAfter(newParent, theTable.firstChild);
-					else
+					} else {
 						theTable.insertBefore(newParent, theTable.firstChild);
-				} else
+					}
+				} else {
 					theTable.appendChild(newParent);
+				}
 			}
 
 			// append the row to the new parent
@@ -685,8 +707,9 @@ var TableDialog = {
 			value = $('#' + attrib).val();
 		}
 
-		if(value == "")
+		if(value == "") {
 			return "";
+		}
 
 		// XML encode it
 		value = value.replace(/&/g, '&amp;');
@@ -736,8 +759,9 @@ var TableDialog = {
 			case "all":
 				var rows = tableElm.getElementsByTagName("tr");
 
-				for(var i = 0; i < rows.length; i++)
-				this.updateRow(rows[i], true);
+				for(var i = 0; i < rows.length; i++){
+					this.updateRow(rows[i], true);
+				}
 
 				break;
 
@@ -764,25 +788,25 @@ var TableDialog = {
 
 		var curCellType = td.nodeName.toLowerCase();
 		var celltype = $('#celltype').val();
-			
+
 		$.each(['id', 'align', 'valign', 'lang', 'dir', 'class', 'scope'], function(i, k) {
 			v = $('#' + k).val();
-			
-			if (k == 'id' && skip_id) {
+
+			if(k == 'id' && skip_id) {
 				return;
 			}
-			
-			if (k == 'style') {
+
+			if(k == 'style') {
 				v = dom.serializeStyle(dom.parseStyle(v));
 			}
-			
-			if (v === '') {
+
+			if(v === '') {
 				td.removeAttribute(k);
 			} else {
 				dom.setAttrib(td, k, v);
 			}
 		});
-		
+
 		// Clear deprecated attributes
 		$.each(['width', 'height', 'bgColor', 'borderColor', 'background'], function(i, k) {
 			ed.dom.setAttrib(td, k, null);
@@ -791,20 +815,22 @@ var TableDialog = {
 		// Set styles
 		td.style.width = getCSSSize($('#width').val());
 		td.style.height = getCSSSize($('#height').val());
-		
+
 		if($('#bordercolor').val() != "") {
 			td.style.borderColor = $('#bordercolor').val();
 			td.style.borderStyle = td.style.borderStyle == "" ? "solid" : td.style.borderStyle;
 			td.style.borderWidth = td.style.borderWidth == "" ? "1px" : td.style.borderWidth;
-		} else
+		} else {
 			td.style.borderColor = '';
-
+		}
+		
 		td.style.backgroundColor = $('#bgcolor').val();
 
-		if($('#backgroundimage').val() != "")
+		if($('#backgroundimage').val() != "") {
 			td.style.backgroundImage = "url('" + $('#backgroundimage').val() + "')";
-		else
+		} else {
 			td.style.backgroundImage = '';
+		}
 
 		if(curCellType != celltype) {
 			// changing to a different node type
@@ -827,8 +853,9 @@ var TableDialog = {
 
 	nextCell : function(elm) {
 		while(( elm = elm.nextSibling) != null) {
-			if(elm.nodeName == "TD" || elm.nodeName == "TH")
+			if(elm.nodeName == "TD" || elm.nodeName == "TH") {
 				return elm;
+			}
 		}
 
 		return null;
@@ -844,10 +871,11 @@ var TableDialog = {
 		 st['width'] = "";*/
 
 		var height = $('#height').val();
-		if(height != "")
+		if(height != ""){
 			st['height'] = getCSSSize(height);
-		else
+		} else {
 			st['height'] = "";
+		}
 
 		$('#style').val(tinyMCEPopup.dom.serializeStyle(st));
 	},
@@ -864,8 +892,9 @@ var TableDialog = {
 		var st = tinyMCEPopup.dom.parseStyle($('#style').val());
 
 		// Update border width if the element has a color
-		if($('#border').val() != "" && $('#bordercolor').val() != "")
+		if($('#border').val() != "" && $('#bordercolor').val() != "") {
 			st['border-width'] = $('#border').val() + "px";
+		}
 
 		$('#style').val(tinyMCEPopup.dom.serializeStyle(st));
 	},
@@ -881,8 +910,9 @@ var TableDialog = {
 			st['border-color'] = $('#bordercolor').val();
 
 			// Add border-width if it's missing
-			if(!st['border-width'])
+			if(!st['border-width']) {
 				st['border-width'] = $('#border').val() == "" ? "1px" : $('#border').val() + "px";
+			}
 		}
 
 		$('#style').val(dom.serializeStyle(st));
