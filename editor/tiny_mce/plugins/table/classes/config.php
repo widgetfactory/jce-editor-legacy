@@ -15,8 +15,8 @@ class WFTablePluginConfig
 	{
 		$wf = WFEditor::getInstance();
 		
-		$width 	= $wf->getParam('table.width', '300px', '300px');
-		$height = $wf->getParam('table.height', '');
+		$width 	= $wf->getParam('table.width');
+		$height = $wf->getParam('table.height');
 		
 		if ($width && preg_match('#^[0-9\.]$#', $width)) {
 			$width .= 'px';
