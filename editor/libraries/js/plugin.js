@@ -303,7 +303,13 @@
 
         getLanguage : function() {
             if (!this.language) {
-                this.language = $('body').attr('lang') || 'en';
+                var s = $('body').attr('lang') || 'en';
+                
+                if (s.length > 2) {
+                	s = s.substr(0, 2);
+                }
+                
+                this.language = s;
             }
 
             return this.language;
@@ -386,8 +392,8 @@
                 return tinyMCEPopup.getLang('dlg.' + s, ds);
             }
 
-            if (!$.isPlainObject(this.n))
-                this.n = {};
+            if (!$.isPlainObject(this.i18n))
+                this.i18n = {};
 
             return this.i18n[this.getLanguage() + '.dlg.' + s] || ds;
         }
