@@ -1474,18 +1474,23 @@
 		_addButtons : function(buttons) {
 			var self = this;
 
-			$.each(buttons.folder, function(i, button) {
-				if (button) {
-					self._addButton(button, 'folder');
+			if (buttons) {
+				if (buttons.folder) {
+					$.each(buttons.folder, function(i, button) {
+						if (button) {
+							self._addButton(button, 'folder');
+						}
+					});
 				}
-			});
-
-			$.each(buttons.file, function(i, button) {
-				if (button) {
-					self._addButton(button, 'file');
+				
+				if (buttons.file) {
+					$.each(buttons.file, function(i, button) {
+						if (button) {
+							self._addButton(button, 'file');
+						}
+					});
 				}
-			});
-
+			}
 		},
 
 		/**
