@@ -443,12 +443,11 @@
 
 			// apply styles to image
 			$img.attr('style', $('#style').val());
-			// serialize styles
-			var styles = ed.dom.parseStyle($img.attr('style'));
 
 			// Margin
 			$.each(['top', 'right', 'bottom', 'left'], function(i, k) {
-				var v = styles['margin-' + k] || $img.css('margin-' + k);
+				// need to use tinymce DOMUilts for this because jQuery returns 0px for blank values
+				var v = ed.dom.getStyle($img.get(0), 'margin-' + k);
 				
 				if (v.indexOf('px') != -1) {
 					v = parseInt(v);
@@ -457,23 +456,53 @@
 				$('#margin_' + k).val(v);
 			});
 			
+			this.setMargins(true);
+			
+			var border = false;
+			
 			// Handle border
 			$.each(['width', 'color', 'style'], function(i, k) {
-				var v = styles['border-' + k] || '';
+				// need to use tinymce DOMUilts for this because jQuery returns odd results for blank values
+				var v = ed.dom.getStyle($img.get(0), 'border-' + k);
 
 				if (v == '') {
-					return;
-				}
-				
-				$('#border').attr('checked', 'checked');
-				
-				if (k == 'width' && v.indexOf('px') != -1) {
-					v = parseInt(v);
+					$.each(['top', 'right', 'bottom', 'left'], function(i, n) {
+						// need to use tinymce DOMUilts for this because jQuery returns odd results for blank values
+						var sv = ed.dom.getStyle($img.get(0), 'border-' + n + '-' + k);
+	
+						// False or not the same as prev
+						if(sv !== '' || (sv != v && v !== '')) {
+							v = '';
+						}
+						if (sv) {
+							v = sv;
+						}
+					});
 				}
 
-				$('border_' + k).val(v);
+				if (v !== '') {
+					border = true;
+				}
+
+				if (k == 'width') {
+					v = /[0-9][a-z]/.test(v) ? parseInt(v) : v;
+				}
 				
-				self.setBorder();
+				if (k == 'color') {
+					v = $.String.toHex(v);
+				}
+				
+				if (border) {
+					$('#border').attr('checked', 'checked');
+					$('#border_' + k).val(v);
+					
+					$('#border~:input, #border~span, #border~label').attr('disabled', false).toggleClass('disabled', false);
+				
+					// update pick
+					if (k == 'color') {
+						$('#border_' + k).trigger('pick');
+					}
+				}
 			});
 			
 			// Align
