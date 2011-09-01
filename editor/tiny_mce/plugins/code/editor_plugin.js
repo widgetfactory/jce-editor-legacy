@@ -31,9 +31,15 @@
 						self._serializeSpan(nodes[i]);
 					}
 				});
+				
+				ed.parser.addNodeFilter('noscript', function(nodes) {
+					for (var i = 0, len = nodes.length; i < len; i++) {
+						self._serializeNoScript(nodes[i]);
+					}
+				});
 
 				// Convert span placeholders to script elements
-				ed.serializer.addNodeFilter('span,script', function(nodes, name, args) {
+				ed.serializer.addNodeFilter('span,script,div', function(nodes, name, args) {
 					for (var i = 0, len = nodes.length; i < len; i++) {
 						var node = nodes[i];
 
@@ -43,6 +49,10 @@
 
 						if (node.name == 'span' && /mceItemStyle/.test(node.attr('class'))) {
 							self._buildStyle(node);
+						}
+						
+						if (node.name == 'div' && node.attr('data-mce-type') == 'noscript') {
+							self._buildNoScript(node);
 						}
 					}
 				});
@@ -244,6 +254,26 @@
 
 			return true;
 		},
+		
+		_buildNoScript: function(n) {
+			var self = this, ed = this.editor, p, node;
+
+			if (!n.parent)
+				return;
+
+			p = JSON.parse(n.attr('data-mce-json')) || {};
+
+			node = new Node('noscript', 1);
+
+			each(p, function(v, k) {
+				node.attr(k, v);
+			});
+
+			n.wrap(node);
+			n.unwrap();
+			
+			return true;
+		},
 
 		_serializeSpan: function(n) {
 			var self = this, ed = this.editor, dom = ed.dom, v, k, p = {};
@@ -275,6 +305,28 @@
 			span.append(new tinymce.html.Node('#text', 3)).value = '\u00a0';
 
 			n.replace(span);
+		},
+		
+		_serializeNoScript: function(n) {
+			var self = this, ed = this.editor, dom = ed.dom, v, k, p = {};
+
+			if (!n.parent)
+				return;
+
+			each(n.attributes, function(at) {
+				if (at.name == 'type')
+					return;
+
+				p[at.name] = at.value;
+			});
+
+			var div = new Node('div', 1);
+
+			div.attr('data-mce-json', JSON.serialize(p));
+			div.attr('data-mce-type', n.name);
+			
+			n.wrap(div);
+			n.unwrap();
 		},
 
 		_ucfirst : function(s) {
