@@ -1144,7 +1144,7 @@
 
 				n = ed.selection.getStart();
 				p = ed.dom.getParent(n, 'td,th,caption');
-				cm.setActive('table', n.nodeName === 'TABLE' || !!p);
+				cm.setActive('table_insert', n.nodeName === 'TABLE' || !!p);
 
 				// Disable table tools if we are in caption
 				if (p && p.nodeName === 'CAPTION')
