@@ -638,16 +638,12 @@ var TableDialog = {
 				v = dom.serializeStyle(dom.parseStyle(v));
 			}
 
-			if(v === '') {
-				tr_elm.removeAttribue(k);
-			} else {
-				dom.setAttrib(tr_elm, k, v);
-			}
+			dom.setAttrib(tr_elm, k, v);
 		});
 
 		// Clear deprecated attributes
 		$.each(['height', 'bgColor', 'background'], function(i, k) {
-			ed.dom.setAttrib(td, k, null);
+			ed.dom.setAttrib(tr_elm, k, null);
 		});
 
 		// Set styles
