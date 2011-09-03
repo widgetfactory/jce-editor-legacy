@@ -627,6 +627,11 @@
 
 			// Copy paste from Java like Open Office will produce this junk on FF
 			h = h.replace(/Version:[\d.]+\nStartHTML:\d+\nEndHTML:\d+\nStartFragment:\d+\nEndFragment:\d+/gi, '');
+			
+			// convert urls in content
+			if (ed.getParam('paste_convert_urls', true)) {
+				h = this._convertURLs(h);
+			}
 
 			o.content = h;
 		},
@@ -1005,43 +1010,25 @@
 
 		/**
 		 * Convert URL strings to elements
-		 * @param node Node to process
+		 * @param h HTML to process
 		 */
-		_convertURLs : function(node) {
-			var ed = this.editor, dom = ed.dom;
-
+		_convertURLs : function(h) {
 			var ex = '([-!#$%&\'\*\+\\./0-9=?A-Z^_`a-z{|}~]+@[-!#$%&\'\*\+\\/0-9=?A-Z^_`a-z{|}~]+\.[-!#$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+)';
 			var ux = '((news|telnet|nttp|file|http|ftp|https)://[-!#$%&\'\*\+\\/0-9=?A-Z^_`a-z{|}~]+\.[-!#$%&\'\*\+\\./0-9=?A-Z^_`a-z{|}~]+)';
-
-			function processURL(h) {
-				h = h.replace(new RegExp(ex, 'g'), '<a href="mailto:$1">$1</a>');
-				h = h.replace(new RegExp(ux, 'g'), '<a href="$1">$1</a>');
-
-				return h;
-			}
-
-			function _convert(n) {
-				each(n.childNodes, function(el) {
-					if (el && !dom.getParent(el, 'a')) {
-						if (el.nodeType == 3) {
-							var s = el.innerText || el.textContent || el.data || '';
-						
-							if (s && (new RegExp(ex, 'g').test(s) || new RegExp(ux, 'g').test(s))) {								
-								var tmp = dom.create('div', {}, processURL(s));
-								
-								dom.replace(tmp, el);
-								dom.remove(tmp, true);
-							}
-						} else {
-							if (el.nodeName != 'A') {
-								_convert(el);
-							}
-						}
-					}
-				});
-			}
-
-			_convert(node);
+			
+			h = h.replace(new RegExp('(=")?' + ux, 'g'), function(a, b, c) {
+				if (!b) {
+					return '<a href="' + c + '">' + c +'</a>';	
+				}		
+			});
+			
+			h = h.replace(new RegExp('(=")?' + ex, 'g'), function(a, b, c) {
+				if (!b) {
+					return '<a href="mailto:' + c + '">' + c +'</a>';	
+				}		
+			});
+			
+			return h;
 		},
 
 		/**
@@ -1110,11 +1097,6 @@
 					dom.remove(el);
 				}
 			});
-
-			// convert urls in content
-			if (ed.getParam('paste_convert_urls', true)) {
-				this._convertURLs(o.node);
-			}
 
 			if (ed.getParam('paste_remove_empty_paragraphs', true)) {
 				ed.dom.remove(dom.select('p:empty', o.node));
