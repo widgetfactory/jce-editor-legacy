@@ -58,6 +58,7 @@
 		"image/bmp,bmp," +
 		"image/gif,gif," +
 		"image/jpeg,jpeg jpg jpe," +
+		"image/photoshop,psd," +
 		"image/png,png," +
 		"image/svg+xml,svg svgz," +
 		"image/tiff,tiff tif," +
@@ -677,8 +678,7 @@
 					callback(evt);
 				};
 				obj.attachEvent('on' + name, func);
-				
-			}
+			} 
 			
 			// Log event handler to objects internal Plupload registry
 			if (obj[uid] === undef) {
@@ -1678,8 +1678,7 @@
 
 	// Expose plupload namespace
 	window.plupload = plupload;
-})();
-/**
+})();/**
  * plupload.silverlight.js
  *
  * Copyright 2009, Moxiecode Systems AB
@@ -2720,7 +2719,8 @@
 					html5files[id] = file;
 
 					// Expose id, name and size
-					files.push(new plupload.File(id, file.fileName, file.fileSize || file.size)); // File.fileSize depricated
+					//files.push(new plupload.File(id, file.fileName, file.fileSize || file.size)); // File.fileSize depricated
+					files.push(new plupload.File(id, file.fileName || file.name, file.fileSize || file.size));
 				}
 
 				// Trigger FilesAdded event if we added any
@@ -3813,8 +3813,7 @@
 			}
 		};
 	};
-})(window, document, plupload);
-/**
+})(window, document, plupload);/**
  * plupload.html4.js
  *
  * Copyright 2010, Ryan Demmer
