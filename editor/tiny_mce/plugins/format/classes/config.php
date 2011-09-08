@@ -24,7 +24,7 @@ class WFFormatPluginConfig
 
         // Encoding
         $settings['entity_encoding'] 		= $wf->getParam('editor.entity_encoding', 'raw', 'named');
-        $settings['inline_styles'] 			= $wf->getParam('editor.inline_styles', 1, 1);
+        $settings['inline_styles'] 			= $wf->getParam('editor.inline_styles', 1, 1, 'boolean');
         
         // Paragraph handling
         $settings['forced_root_block'] 		= $wf->getParam('editor.forced_root_block', 'p', 'p');
@@ -88,15 +88,15 @@ class WFFormatPluginConfig
 
         // new lines (paragraphs or linebreaks)
 		if ($wf->getParam('editor.newlines', 0)) {
-			$settings['force_br_newlines'] 	= 1;
-        	$settings['force_p_newlines'] 	= 0;			
+			$settings['force_br_newlines'] 	= true;
+        	$settings['force_p_newlines'] 	= false;			
 			$settings['forced_root_block']	= false;
 		}
 
         // Relative urls
-        $settings['relative_urls'] = $wf->getParam('editor.relative_urls', 1, 1);
+        $settings['relative_urls'] = $wf->getParam('editor.relative_urls', 1, 1, 'boolean');
         if ($settings['relative_urls'] == 0) {
-            $settings['remove_script_host'] = 0;
+            $settings['remove_script_host'] = false;
         }
         
         // Fonts
