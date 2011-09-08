@@ -132,41 +132,44 @@ class WFJoomlaFileSystem extends WFFileSystem
 	/**
 	 * Count the number of folders in a given folder
 	 * @return integer Total number of folders
-	 * @param string $path Relative path to folder
+	 * @param string $path Absolute path to folder
 	 */
 	public function countFolders($path)
 	{
 		jimport('joomla.filesystem.folder');
 		$total 	= 0;
-		$path 	= WFUtility::makePath($this->getBaseDir(), $path);
+		
+		if (strpos($this->getBaseDir(), $path) === false) {
+			$path = WFUtility::makePath($this->getBaseDir(), $path);
+		}
 		
 		if (JFolder::exists($path)) {
 			$folders = JFolder::folders($path);
 			$total   = count($folders);
 		}
+		
 		return $total;
 	}
 
 	/**
 	 * Count the number of files in a folder
 	 * @return integer File total
-	 * @param string $path Relative path to folder
+	 * @param string $path Absolute path to folder
 	 */
 	public function countFiles($path)
 	{
 		jimport('joomla.filesystem.file');
 		$total 	= 0;
-		$path 	= WFUtility::makePath($this->getBaseDir(), $path);
+		
+		if (strpos($this->getBaseDir(), $path) === false) {
+			$path = WFUtility::makePath($this->getBaseDir(), $path);
+		}
 		
 		if (JFolder::exists($path)) {
-			$files = JFolder::files($path);
+			$files = JFolder::files($path, '.', false, false, array('index.html', 'thumbs.db'));
 			$total = count($files);
-			foreach ($files as $file) {
-				if (strtolower($file) == 'index.html' || strtolower($file) == 'thumbs.db') {
-					$total = $total - 1;
-				}
-			}
 		}
+		
 		return $total;
 	}
 	
@@ -366,7 +369,7 @@ class WFJoomlaFileSystem extends WFFileSystem
 		} else if (is_dir($path)) {					
 			$result->type = 'folders';
 			
-			if ($this->countFiles($path, '^[(index.html)]') != 0 || $this->countFolders($path) != 0) {
+			if ($this->countFiles($path) > 0 || $this->countFolders($path) > 0) {
 				$result->message = JText::sprintf('WF_MANAGER_FOLDER_NOT_EMPTY', basename($path));
 			} else {
 				$result->state = JFolder::delete($path);	
