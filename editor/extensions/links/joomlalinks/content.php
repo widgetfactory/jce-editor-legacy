@@ -250,13 +250,13 @@ class JoomlalinksContent extends JObject {
 		$user		= JFactory::getUser();
 		$wf 		= WFEditorPlugin::getInstance();
 		
-		if (isset($user->gid)) {
-			$query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title, u.id AS sectionid';
-		} else {
+		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
 			$query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title';
+		} else {
+			$query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title, u.id AS sectionid';	
 		}
 		
-		if ($wf->getParam('joomlalinks.article_alias', 1) == 1) {
+		if ($wf->getParam('links.joomlalinks.article_alias', 1) == 1) {			
 			$query .= ', CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug';
 			$query .= ', CASE WHEN CHAR_LENGTH(b.alias) THEN CONCAT_WS(":", b.id, b.alias) ELSE b.id END as catslug';
 		}
@@ -264,11 +264,11 @@ class JoomlalinksContent extends JObject {
 		$join 	= '';
 		$where 	= '';
 		
-		if (isset($user->gid)) {
+		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
+			$where	.= ' AND a.access IN ('.implode(',', $user->getAuthorisedViewLevels()).')';
+		} else {
 			$join 	.= ' INNER JOIN #__sections AS u ON u.id = a.sectionid';
 			$where  .= ' AND a.access <= '.(int) $user->get('aid');
-		} else {
-			$where	.= ' AND a.access IN ('.implode(',', $user->authorisedLevels()).')';
 		}
 		
 		$query .= ' FROM #__content AS a'
