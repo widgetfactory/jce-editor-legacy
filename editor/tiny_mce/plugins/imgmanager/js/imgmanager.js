@@ -401,15 +401,6 @@
 
 				$elms.each( function() {
 					if (s) {
-						if (v === '') {
-							$('#margin_right, #margin_bottom, #margin_left').each( function() {
-								if (v === '' && $(this).val() !== '') {
-									v = $(this).val();
-								}
-							});
-
-						}
-
 						$(this).val(v);
 					}
 					$(this).prop('disabled', s).prev('label').toggleClass('disabled', s);
