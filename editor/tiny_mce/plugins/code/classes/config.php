@@ -22,17 +22,17 @@ class WFCodePluginConfig
 			$settings['plugins'][] = 'code';
 		}
 
-		$settings['code_php'] 		= $wf->getParam('editor.allow_php', 0, 0);
-		$settings['code_script'] 	= $wf->getParam('editor.allow_javascript', 0, 0);
-		$settings['code_style'] 	= $wf->getParam('editor.allow_css', 0, 0);
+		$settings['code_php'] 		= $wf->getParam('editor.allow_php', 0, 0, 'boolean');
+		$settings['code_script'] 	= $wf->getParam('editor.allow_javascript', 0, 0, 'boolean');
+		$settings['code_style'] 	= $wf->getParam('editor.allow_css', 0, 0, 'boolean');
 
-		$settings['code_cdata'] 	= $wf->getParam('editor.cdata', 1, 1);
+		$settings['code_cdata'] 	= $wf->getParam('editor.cdata', 1, 1, 'boolean');
 
 		// Invalid Elements
-		if ($settings['code_script'] == 1) {
+		if ($settings['code_script']) {
 			$model->removeKeys($settings['invalid_elements'], 'script');
 		}
-		if ($settings['code_style'] == 1) {
+		if ($settings['code_style']) {
 			$model->removeKeys($settings['invalid_elements'], 'style');
 		}
 	}
