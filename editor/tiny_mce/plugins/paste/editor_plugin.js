@@ -833,80 +833,9 @@
 
 				// remove empty paragraphs
 				h = h.replace(/<p><\/p>/gi, '');
-
-				// This next piece of code handles the situation where we're pasting more than one paragraph of plain
-				// text, and we are pasting the content into the middle of a block node in the editor.  The block
-				// node gets split at the selection point into "Para A" and "Para B" (for the purposes of explaining).
-				// The first paragraph of the pasted text is appended to "Para A", and the last paragraph of the
-				// pasted text is prepended to "Para B".  Any other paragraphs of pasted text are placed between
-				// "Para A" and "Para B".  This code solves a host of problems with the original plain text plugin and
-				// now handles styles correctly.  (Pasting plain text into a styled paragraph is supposed to make the
-				// plain text take the same style as the existing paragraph.)
-				if ((pos = h.indexOf("</p><p>")) != -1) {
-					rpos = h.lastIndexOf("</p><p>");
-					node = ed.selection.getNode();
-					breakElms = [];		// Get list of elements to break
-
-					do {
-						if (node.nodeType == 1) {
-							// Don't break tables and break at body
-							if (node.nodeName == "TD" || node.nodeName == "BODY") {
-								break;
-							}
-
-							breakElms[breakElms.length] = node;
-						}
-					} while (node = node.parentNode);
-
-					// Are we in the middle of a block node?
-					if (breakElms.length > 0) {
-						before = h.substring(0, pos);
-						after = "";
-
-						for (i=0, len=breakElms.length; i<len; i++) {
-							before += "</" + breakElms[i].nodeName.toLowerCase() + ">";
-							after += "<" + breakElms[breakElms.length-i-1].nodeName.toLowerCase() + ">";
-						}
-
-						if (pos == rpos) {
-							h = before + after + h.substring(pos+7);
-						} else {
-							h = before + h.substring(pos+4, rpos+4) + after + h.substring(rpos+7);
-						}
-					}
-				}
-
-				// Insert content at the caret, plus add a marker for repositioning the caret
-				ed.execCommand("mceInsertRawHTML", false, h + '<span id="_plain_text_marker">&nbsp;</span>');
-
-				// Reposition the caret to the marker, which was placed immediately after the inserted content.
-				// Needs to be done asynchronously (in window.setTimeout) or else it doesn't work in all browsers.
-				// The second part of the code scrolls the content up if the caret is positioned off-screen.
-				// This is only necessary for WebKit browsers, but it doesn't hurt to use for all.
-				window.setTimeout( function() {
-					var marker = dom.get('_plain_text_marker'),
-					elm, vp, y, elmHeight;
-
-					ed.selection.select(marker, false);
-					//document.execCommand("Delete", false, null);
-					dom.remove(marker);
-					marker = null;
-
-					// Get element, position and height
-					elm = ed.selection.getStart();
-					vp = dom.getViewPort(window);
-					y = dom.getPos(elm).y;
-					elmHeight = elm.clientHeight;
-
-					// Is element within viewport if not then scroll it into view
-					if ((y < vp.y) || (y + elmHeight > vp.y + vp.h)) {
-						document.body.scrollTop = y < vp.y ? y : y - vp.h + 25;
-					}
-				}, 0);
-
 			}
 
-			//t._insert(h);
+			ed.execCommand('mceInsertContent', false, h);
 		},
 
 		/**
