@@ -10,42 +10,152 @@
 * other free or open source software licenses.
 */
 (function() {
-	var each = tinymce.each;
+	var each = tinymce.each, extend = tinymce.extend;
 
 	tinymce.create('tinymce.plugins.CleanupPlugin', {
 		init : function(ed, url) {
-			var t = this;
+			var self = this;
 			this.editor = ed;
+
+			// set validate value to verify_html value
+			if (ed.settings.verify_html === false) {
+				ed.settings.validate = false;
+			}
+			
+			/** TODO - Re-visit in 2.1
+			
+			if (ed.settings.schema == 'html5') {
+				if (ed.settings.invalid_elements) {					
+					ed.settings.invalid_elements += 'acronym,applet,basefont,big,center,dir,font,frame,frameset,noframes,strike,tt,u,xmp';
+				}	
+			} **/
 			
 			ed.onPreInit.add( function() {
+				
+				/** TODO - Re-visit in 2.1
+				if (ed.settings.schema == 'html5') {
+					var schema = ed.schema;
+					
+					// standard events
+					var se = 'onafterprint|onbeforeprint|onbeforeonload|onerror|onhaschange|onmessage|onoffline|ononline|onpagehide|onpageshow|onpopstate|onredo|onresize|onstorage|onundo|onunload'
+					+ 'ondrag|ondragend|ondragenter|ondragleave|ondragover|ondragstart|ondrop|onmousewheel|onscroll'
+					+ 'oncanplay|oncanplaythrough|ondurationchange|onemptied|onended|onerror|onloadeddata|onloadedmetadata|onloadstart|onpause|onplay|onplaying|onprogress|onratechange|onreadystatechange|onseeked|onseeking|onstalled|onsuspend|ontimeupdate|onvolumechange|onwaiting';
+					
+					// form events
+					var fe = 'oncontextmenu|onformchange|onforminput|oninput|oninvalid|onfocus|onblur';
+					
+					// standard attributes
+					var sa = 'contenteditable|contextmenu|draggable|dropzone|hidden|spellcheck';
+					
+					// form attributes
+					var fa = 'autocomplete|autofocus|form|formaction|formenctype|formmethod|formnovalidate|formtarget|height|list|max|min|pattern|placeholder|required|step|width|accesskey|tabindex';
+					
+					// add elements
+					var elms = 'article[*],aside[*],canvas[width|height|*],command[icon|label|radiogroup|type|*],'
+					+ 'details[open|*],figcaption[*],figure[*],footer[*],header[*],hgroup[*],keygen[autofocus=disabled|challenge|form|keytype|name]'
+					+ 'mark[*],meter[form|high|low|max|min|optimum|*],nav[*],output[for|form|name|*],progress[max|value],rp[*],rt[*],ruby[*],section[*],summary[*],time[datetime|pubdate|*],wbr[*]';
 
-				// Convert video elements to image placeholder
-				ed.parser.addAttributeFilter('onclick', function(nodes, name) {
+					schema.addValidElements(elms.replace('*', sa + '|' + se + '|*'));
+					
+					var ielms = 'input[*],select[*],button[*],textarea[*],datalist[*],keygen[*],output[*]';
+					
+					schema.addValidElements(ielms.replace('*', fa + '|' + fe + '|*'));
+					
+					var html5_flow 		= 'article|aside|canvas|details|figure|footer|header|hgroup|menu|nav|section';
+					var html5_phrase 	= 'audio|canvas|math|video|command|datalist|keygen|mark|meter|output|progress|ruby|time|wbr';
+					
+					var flow 			= 'address|blockquote|del|div|dl|fieldset|form|hr|ins|map|noscript|ol|p|pre|table|ul';
+					var phrase 			= 'a|embed|iframe|img|object|a|abbr|b|bdi|bdo|br|button|cite|code|del|dfn|em|i|input|ins|kbd|label|map|noscript|p|s|samp|script|select|small|span|strong|sub|sup|textarea|u|var|#text';
+					
+					// set valid children for flow elements
+					each(html5_flow.split('|'), function(e) {
+						schema.addValidChildren(e + '[' + html5_phrase + '|' + flow + '|' + phrase + ']');
+					});
+					
+					// add valid children for html4 flow / inline elements
+					each(flow.split('|'), function(e) {
+						schema.addValidChildren('+' + e + '[' + html5_phrase + ']');
+					});
+					
+					// add for a element
+					schema.addValidChildren('+a[' + html5_flow + '|' + html5_phrase + '|' + flow + ']');
+					
+					// fix boolean attributes
+					ed.serializer.addAttributeFilter('hidden,formnovalidate,autofocus,required,open,challenge,pubdate', function(nodes, name, args) {
+						for (var i = 0, len = nodes.length; i < len; i++) {
+							nodes[i].attr(name, name);
+						}
+					});
+					
+					// fix shortended elements
+					ed.parser.addNodeFilter('command,keygen,wbr', function(nodes, name, args) {
+						for (var i = 0, len = nodes.length; i < len; i++) {
+							nodes[i].shortEnded = true;
+						}
+					});
+
+					ed.serializer.addNodeFilter('command,keygen,wbr', function(nodes, name, args) {
+						for (var i = 0, len = nodes.length; i < len; i++) {
+							nodes[i].shortEnded = true;
+						}
+					});
+				} **/
+				
+				// disable onclick, ondblclick
+				ed.parser.addAttributeFilter('onclick, ondblclick', function(nodes, name) {
 					for (var i = 0, len = nodes.length; i < len; i++) {
 						var node = nodes[i];
-						var oc = node.attr('onclick');
+						var ev = node.attr(name);
 						
-						if (oc) {
-							node.attr('data-mce-onclick', oc);
-							node.attr('onclick', '');
+						if (ev) {
+							node.attr('data-mce-' + name, ev);
+							node.attr(name, '');
 						}
 					}
 				});
 
-				// Convert image placeholders to video elements
-				ed.serializer.addAttributeFilter('onclick', function(nodes, name, args) {
+				// enable onclick, ondblclick
+				ed.serializer.addAttributeFilter('onclick, ondblclick', function(nodes, name, args) {
 					for (var i = 0, len = nodes.length; i < len; i++) {
 						var node = nodes[i];
-						var oc = node.attr('data-mce-onclick');
+						var ev = node.attr('data-mce-' + name);
 						
-						if (oc) {
-							node.attr('onclick', oc);
-							node.attr('data-mce-onclick', '');
+						if (ev) {
+							node.attr(name, ev);
+							node.attr('data-mce-' + name, '');
 						}
 					}
 				});
 
 			});
+
+			// run cleanup with default settings
+			if (ed.settings.validate === false && ed.settings.verify_html === false) {
+				ed.addCommand('mceCleanup', function() {
+					var s = ed.settings, se = ed.selection, bm;
+					
+					bm = se.getBookmark();
+
+					var content = ed.getContent({cleanup : true});
+					
+					var schema  = new tinymce.html.Schema({
+						validate				: true,
+						verify_html 			: true, 
+						valid_styles			: s.valid_styles, 
+						valid_children			: s.valid_children,
+						custom_elements			: s.custom_elements,
+						extended_valid_elements : s.extended_valid_elements	
+					});	
+					
+					content = new tinymce.html.Serializer({validate : true}, schema).serialize(
+						new tinymce.html.DomParser({validate : true}, schema).parse(content)
+					);
+					
+					ed.setContent(content, {cleanup : true});
+					
+					se.moveToBookmark(bm);	
+				});
+			}
 			
 			// Cleanup callback
 			ed.onBeforeSetContent.add(function(ed, o) {
@@ -73,9 +183,10 @@
 					}	
 					
 					// pad empty paragraphs
-					if (!ed.getParam('verify_html')) {
+					if (ed.getParam('verify_html') === false) {
+						o.content = o.content.replace(/<body>([\s\S]*)<\/body>/, '$1');
 						o.content = o.content.replace(/<p([^>]*)><\/p>/g, '<p$1>&nbsp;</p>');
-					}				
+					}		
 				}
 			});
 			
