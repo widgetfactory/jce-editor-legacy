@@ -10,29 +10,18 @@
 
 (function() {
     var each = tinymce.each;
-
+    
     tinymce.create('tinymce.plugins.Source', {
         init : function(ed, url) {
             var self = this, DOM = tinymce.DOM;
 
             this.editor = ed; 
             this.url = url;
-            this.settings = tinymce.settings;
-
-            this.active = [];
 
             // add command
             ed.addCommand('mceSource', function() {
                 self.toggleSource();
             });
-
-            // set default state
-            this.state = false;
-
-            // set button states
-            this.highlight 	= ed.getParam('source_higlight', 1);
-            this.numbers 	= ed.getParam('source_numbers', 1);
-            this.wrap 		= ed.getParam('source_wrap', 1);
             
             this.invisibles = false;
 
@@ -43,9 +32,29 @@
                         return false;
                     }
                 });
-
             }
-
+            
+            ed.onInit.add(function() {
+            	var s = ed.getParam('source_state', false);
+            		
+            	if (typeof s != 'undefined') {
+            		ed.settings.source_state = !s;
+            		self.toggleSource();
+            	}          		
+            });
+            
+            ed.onFullScreen.add(function(state, settings) {
+            	if (!state) {
+            		ed.settings.source_state = !settings.source_state;
+            		
+            		each(['source_highlight', 'source_numbers', 'source_wrap'], function(s) {
+            			ed.settings[s] = settings[s];
+            		});
+            		
+            		self.toggleSource();
+            	}
+            });
+            
             // Patch in Commands
             ed.onBeforeExecCommand.add( function(ed, cmd, ui, val, o) {
                 var cm = ed.controlManager, se = self.getEditor();
@@ -93,7 +102,6 @@
             });
 
             ed.onExecCommand.add( function(ed, cmd, ui, v, o) {
-
                 switch (cmd) {
                     case 'mceCodeEditor':
                     case 'mceSource' :
@@ -101,13 +109,6 @@
 
                         break;
                     case 'mceFullScreen' :
-                        if (self.getState()) {
-                            self._disable();
-
-                            var fs = ed.plugins.fullscreen;
-                            var w = fs.getWidth(), h = fs.getHeight();
-                            self.resize(w, h);
-                        }
                         break;
                     case 'mceInsertContent' :
                         if (self.getState()) {
@@ -129,7 +130,7 @@
             ed.addButton('wrap', {
                 title : 'source.wrap_desc',
                 onclick : function() {
-                    self.setWrap(!self.wrap);
+                    self.setWrap(!ed.getParam('source_wrap', true));
                     return true;
                 }
 
@@ -138,7 +139,7 @@
             ed.addButton('highlight', {
                 title : 'source.highlight_desc',
                 onclick : function() {
-                    self.setHighlight(!self.highlight);
+                    self.setHighlight(!ed.getParam('source_highlight', true));
                     return true;
                 }
 
@@ -147,7 +148,7 @@
             ed.addButton('numbers', {
                 title : 'source.numbers_desc',
                 onclick : function() {
-                    self.setNumbers(!self.numbers);
+                    self.setNumbers(!ed.getParam('source_numbers', true));
                     return true;
                 }
 
@@ -220,7 +221,7 @@
         },
 
         getState : function() {
-            return this.state;
+            return this.editor.getParam('source_state', false);;
         },
 
         setState : function(s) {
@@ -232,48 +233,7 @@
             return container.offsetTop + Math.round((container.offsetHeight - container.clientHeight) / 2);
         },
 
-        printSource : function() {
-            var self = this, ed = this.editor, DOM = tinymce.DOM, content = '';
-            var iframe = DOM.get(ed.id + '_ifr'), print = DOM.get(ed.id + '_source_print');
-
-            if (se) {
-                if (!print) {
-                    var print = DOM.create('iframe', {
-                        src : 'javascript:""',
-                        id	: ed.id + '_source_print',
-                        style : {
-                            position : 'absolute',
-                            top		 : this.getTop()
-                        }
-                    });
-
-                    print.style.visibility = 'hidden';
-
-                    var parent = iframe.parentNode;
-                    parent.insertBefore(print, iframe);
-                }
-                var doc 	 = print.contentWindow.document;
-                content  	+= ed.settings.doctype + '<html><head xmlns="http://www.w3.org/1999/xhtml">';
-                content 	+= '<meta http-equiv="X-UA-Compatible" content="IE=edge" />';
-                content 	+= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
-
-                var theme 	= this.highlight ? 'textmate' : '';
-
-                each(['editor', theme], function(s) {
-                    if (s) {
-                        content += '<link type="text/css" rel="stylesheet" href="' + self.url + '/css/ace/' + s + '.css" />';
-                    }
-                });
-
-                content += '</head><body><div style="position:relative;"><div class="' + ACE.renderer.getContainerElement().className + '">' + DOM.getOuterHTML(DOM.select('div.ace_layer.ace_text-layer', ACE.renderer.getContainerElement())[0]) + '</div></div></body></html>';
-
-                doc.open();
-                doc.write(content);
-                doc.close();
-            }
-
-            print.contentWindow.print();
-        },
+        printSource : function() {},
         
         reInit : function() {
         	this.toggleDisabled(), se = this.getEditor();
@@ -375,14 +335,10 @@
             });
 
             cm.setActive('source', state);
-            cm.setActive('fullscreen', DOM.hasClass(ed.getContainer(), 'fullscreen'));
+            cm.setActive('fullscreen', (ed.id == 'mce_fullscreen'));
 
             cm.setDisabled('source', false);
             cm.setDisabled('fullscreen', false);
-            //cm.setDisabled('undo', false);
-            //cm.setDisabled('redo', false);
-            
-            //cm.setDisabled('print', false);
 
             each(['wrap', 'highlight', 'numbers'], function(e) {
                 cm.setDisabled(e, !state);
@@ -431,7 +387,7 @@
                 DOM.setAttrib(iframe, 'aria-hidden', true);
                 
                 window.setTimeout(function() {
-                	self.setHighlight(self.highlight);
+                	self.setHighlight(ed.getParam('source_highlight', true));
                 }, 5);
             } else {
                 if (se) {
@@ -464,6 +420,8 @@
 
                 ed.setProgressState(false);
             }
+            // store state
+            ed.settings.source_state = !state;
         },
 
         loadEditor : function() {
@@ -514,14 +472,14 @@
             tinymce.dom.Event.add(iframe, 'load', function() {
             	var editor = self.getEditor();
             	
-            	var v = ed.getContent();
+            	var v = ed.getContent(), highlight = ed.getParam('source_highlight', true), wrap = ed.getParam('source_wrap', true), numbers = ed.getParam('source_numbers', true);
 
             	editor.init({
             		'url'		: ed.getParam('site_url'),
             		'token'		: ed.settings.token,
-            		'wrap' 		: self.wrap,
-            		'numbers'	: self.numbers,
-            		'highlight'	: self.highlight,
+            		'wrap' 		: wrap,
+            		'numbers'	: numbers,
+            		'highlight'	: highlight,
             		'width'		: w,
             		'height'	: h,
             		'theme' 	: ed.getParam('source_theme', 'textmate'),
@@ -533,9 +491,9 @@
             				ed.show();
             			}
             			
-            			cm.setActive('highlight', self.highlight);
-            			cm.setActive('numbers', self.numbers);
-            			cm.setActive('wrap', self.wrap);          			
+            			cm.setActive('highlight', highlight);
+            			cm.setActive('numbers', numbers);
+            			cm.setActive('wrap', wrap);          			
             		},
             		change : function() {
             			ed.controlManager.setDisabled('undo', false);
@@ -585,8 +543,8 @@
                 
                 this.resize();
 
-            	this.setNumbers(this.numbers);
-            	this.setWrap(this.wrap);
+            	this.setNumbers(ed.getParam('source_numbers', true));
+            	this.setWrap(ed.getParam('source_wrap', true));
 
             	ed.focus();
 
@@ -596,7 +554,7 @@
                 this.loadEditor();
             }
 
-            this.highlight = !!s;
+            ed.settings.source_highlight = !!s;
         },
 
         /**
@@ -609,9 +567,9 @@
 
             var cm = ed.controlManager;
 
-            this.wrap = !!s;
+            ed.settings.source_wrap = !!s;
 
-            cm.setActive('wrap', this.wrap);
+            cm.setActive('wrap', !!s);
 
             if (se) {
                 se.setWrap(s);
@@ -620,14 +578,14 @@
         },
 
         setNumbers : function(s) {
-            var cm = this.editor.controlManager, se = this.getEditor();
+            var ed = this.editor, cm = ed.controlManager, se = this.getEditor();
 
-            this.numbers = !!s;
+            ed.settings.source_numbers = !!s;
 
-            cm.setActive('numbers', this.numbers);
+            cm.setActive('numbers', !!s);
 
             if (se) {
-                return se.setNumbers(this.numbers);
+                return se.setNumbers(!!s);
             }
 
         },
