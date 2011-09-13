@@ -103,7 +103,7 @@ WFMediaPlayer.init({
 	 * @param {String} s FLV file path
 	 */
 	getValues: function(s) {
-		var self = this, s, k, v, data = [];
+		var self = this, s, u, k, v, data = [];
 		
 		var url = tinyMCEPopup.getParam('document_base_url'); 
 		
@@ -132,8 +132,8 @@ WFMediaPlayer.init({
 				case 'poster':
 				case 'endOfVideoOverlay':
 					if (v) {
-						url = /http(s)?:\/\/[^\/]+(.*)/.exec(url);
-						s 	= url && url.length > 1 ? url[2] : '';
+						u 	= /http(s)?:\/\/[^\/]+(.*)/.exec(url);
+						s 	= (u && u.length > 1) ? u[2] : '';
 						v 	= $.String.path(s, v);
 					}
 					break;
