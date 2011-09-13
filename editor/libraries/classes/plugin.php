@@ -346,7 +346,7 @@ class WFEditorPlugin extends WFEditor
 	 * @param $fallback Fallback value
 	 * @param $default Default value
 	 */
-	public function getParam($key, $fallback = '', $default = '')
+	public function getParam($key, $fallback = '', $default = '', $type = 'string', $allowempty = true)
 	{
 		// get plugin name
 		$name	= $this->getName();
@@ -355,27 +355,35 @@ class WFEditorPlugin extends WFEditor
 		
 		// root key set
 		if ($keys[0] === 'editor' || $keys[0] === $name) {
-			return parent::getParam($key, $fallback, $default);
+			return parent::getParam($key, $fallback, $default, $type, $allowempty);
 		// no root key set, treat as shared param
 		} else {
 			// get all params
 			$params = parent::getParams();
 			// check plugin param and fallback to editor param
-			$param = $params->get($name . '.' . $key, $params->get('editor.' . $key, $fallback));	
+			$param = $params->get($name . '.' . $key, $params->get('editor.' . $key, $fallback, $allowempty), $allowempty);	
 
-			if (is_string($param)) {
-				$param = parent::cleanParam($param);
+			if (is_string($param) && $type === 'string') {
+				$param = self::cleanParam($param);
 			}
-
+	
 			if (is_numeric($default)) {
 				$default = intval($default);
 			}
-			
+	
 			if (is_numeric($param)) {
 				$param = intval($param);
 			}
+	
+			if ($param === $default) {
+				return '';
+			}
+	
+			if ($type === 'boolean') {
+				$param = (bool)$param;
+			}
 
-			return ($param === $default) ? '' : $param;
+			return $param;
 		}
 	}
 	
