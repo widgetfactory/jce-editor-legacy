@@ -17,9 +17,9 @@
 		<param name="extensions" type="text" default="flv,f4v,mp3,mp4,xml" size="50" label="WF_MEDIAPLAYER_EXTENSIONS" description="WF_MEDIAPLAYER_EXTENSIONS_DESC" />
 		<param name="path" type="text" size="50" default="media/jce/mediaplayer/mediaplayer.swf" label="WF_MEDIAPLAYER_PATH" description="WF_MEDIAPLAYER_PATH_DESC" />
 	</params>
-	<media folder="components/com_jce/libraries/swf" destination="jce/extensions/mediaplayer/jceplayer">
-    <file>mediaplayer.swf</file>
-  </media>
+	<media folder="components/com_jce/editor/libraries" destination="jce">
+    	<folder>mediaplayer</folder>
+  	</media>
 	<plugins></plugins>
 	<languages></languages>
 </install>
