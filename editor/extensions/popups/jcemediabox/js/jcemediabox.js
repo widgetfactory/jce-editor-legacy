@@ -252,18 +252,19 @@ WFPopups.addPopup('jcemediabox', {
         }
 
         if (rel && /\w+\[.*\]/.test(rel)) {
+        	if (rv = new RegExp(relRX, 'g').exec(rel)) {
+        		// set rel value
+        		$('#rel').val(rv[1]);
+        		
+        		rel = rel.replace(new RegExp(relRX, 'g'), '');
+        	}
             // convert to object
-            data = this.convertData(rel);
+            data = this.convertData($.trim(rel));
         } else {
             // remove standard rel values
             group = $.trim(rel.replace(new RegExp(relRX, 'g'), ''));
 
             $('#jcemediabox_popup_group').val(group);
-        }
-
-        if (rv = new RegExp(relRX, 'g').exec(rel)) {
-        	// set rel value
-        	$('#rel').val(rv[1]);
         }
 
         var params = [];
@@ -342,8 +343,12 @@ WFPopups.addPopup('jcemediabox', {
         	});
         }
 
-        // set json data
-        ed.dom.setAttrib(n, 'data-mediabox', data.join(';'));
+        // set json data to rel attribute
+        //ed.dom.setAttrib(n, 'data-mediabox', data.join(';'));
+        ed.dom.setAttrib(n, 'rel', $.trim(ed.dom.getAttrib(n, 'rel', '') + ' ' + data.join(';')));
+        // remove HTML5 data attributes
+        ed.dom.setAttrib(n, 'data-json', '');
+        ed.dom.setAttrib(n, 'data-mediabox', '');
 
         // Add noicon class
         if ($('#jcemediabox_popup_icon').val() == 0) {
