@@ -33,7 +33,7 @@
 			});
 
 			ed.onNodeChange.add(function(ed, cm, n) {
-				cm.setDisabled('styleprops', n.nodeName === 'BODY');
+				cm.setDisabled('style', (n.nodeName === 'BODY' || (n.nodeName === 'BR' && n.getAttribute('data-mce-bogus'))));
 			});
 
 			// Register buttons
