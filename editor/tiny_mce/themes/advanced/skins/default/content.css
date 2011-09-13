@@ -28,6 +28,4 @@ font[face=mceinline] {font-family:inherit !important}
 *[contentEditable]:focus {outline:0}
 
 /** bookmark **/
-span[data-mce-type="bookmark"] {
-	font-size: 0;
-}	
+span[data-mce-type="bookmark"] {font-size: 0;}	
