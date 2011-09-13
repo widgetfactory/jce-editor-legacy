@@ -12,20 +12,19 @@
 	var each = tinymce.each;
 	tinymce.create('tinymce.plugins.Preview', {
 		init : function(ed, url) {
-			var t = this, DOM = tinymce.DOM;
+			var self = this, DOM = tinymce.DOM;
 
-			t.editor = ed, t.url = url;
-			
-			this.state = false;
+			this.editor = ed, this.url = url;
+
 			this.active = [];
 
 			ed.addCommand('mcePreview', function() {
-				t._togglePreview();
+				self._togglePreview();
 			});
 			
 			ed.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
 				if (cmd == 'mcePrint') {
-					if (t.state) {
+					if (self.getState()) {
 						o.terminate = true;
 						var preview = DOM.get(ed.id + '_preview_iframe');
 						
@@ -36,9 +35,25 @@
 				}
 			});
 			
+			ed.onInit.add(function() {
+            	var s = ed.getParam('preview_state', false);
+            		
+            	if (typeof s != 'undefined') {
+            		self.setState(!s);
+            		self._togglePreview();
+            	}          		
+            });
+			
+			ed.onFullScreen.add(function(state, settings) {
+            	if (!state) {
+            		self.setState(!settings.preview_state);
+            		self._togglePreview();
+            	}
+            });
+			
 			ed.onSetContent.add(function(ed, o) {
-            	if (t.getState()) {
-                    t._disable();                 
+            	if (self.getState()) {
+                    self._disable();                 
                 }
             });
 			
@@ -46,28 +61,19 @@
 				switch (cmd) {
 					case 'mcePreview' :
 						window.setTimeout(function() {
-							t._disable();
+							self._disable();
 						}, 0);
 						break;
 					case 'mceFullScreen' :
-						if (t.getState()) {
-							window.setTimeout(function() {
-								t._disable();
-							}, 0);
-
-							var fs = ed.plugins.fullscreen;								
-							var w = fs.getWidth(), h = fs.getHeight();
-							t.resize(w, h);
-						}
 						break;
 				}
 			});
 			
 			ed.onNodeChange.add( function(ed, cm, n) {
-                var s = t.getState();
+                var s = self.getState();
                 
                 if (s) {
-                	t._disable();
+                	self._disable();
                 }
             });
 
@@ -75,18 +81,18 @@
 			
 			// add theme resize
             ed.theme.onResize.add(function() {
-            	if (t.state) {
-            		t.resize();
+            	if (self.getState()) {
+            		self.resize();
             	}
             });
 		},
 		
 		getState : function() {
-			return this.state;
+			return this.editor.getParam('preview_state',false);
 		},
 		
 		setState : function(s) {
-			this.state = s;
+			this.editor.settings.preview_state = s;
 		},
 		
 		getTop : function() {
@@ -95,7 +101,7 @@
         },
 		
 		resize : function(w, h) {
-			var t = this, ed = this.editor, DOM = tinymce.DOM, ifr = DOM.get(ed.id + '_ifr');
+			var self = this, ed = this.editor, DOM = tinymce.DOM, ifr = DOM.get(ed.id + '_ifr');
 			
 			w = parseFloat(w) || parseFloat(DOM.getStyle(ifr, 'width'));
 			h = parseFloat(h) || parseFloat(DOM.getStyle(ifr, 'height'));
@@ -107,48 +113,42 @@
 		},
 		
 		_disable : function() {
-        	var t = this;
+        	var self = this;
         	window.setTimeout( function() {
-				t._toggleDisabled();
+				self._toggleDisabled();
             }, 0);
         },
 		
 		/**
-		 * Disables all buttons except Preview
-		 */
-		_toggleDisabled : function() {
-			var ed = this.editor, DOM = tinymce.DOM, cm = ed.controlManager;
-			
-			var state 	= this.getState();
-			var toolbar = DOM.get(ed.id + '_toolbargroup');
-			
-			// store active buttons
-			this.active = DOM.select('.mceButtonActive', toolbar);
-			
-			each(DOM.select('.mceButton, .mceListBox, .mceSplitButton', toolbar), function(n) {
-				cm.setDisabled(n.id, state);
-				cm.setActive(n.id, false);
-			});
-			
-			if (!state) {
-				each (this.active, function(n) {
-					cm.setActive(n.id, true);
-				});
-			}
-			
-			cm.setActive('preview', state);
-			
-			cm.setActive('fullscreen', DOM.hasClass(ed.getContainer(), 'fullscreen'));
-			
-			cm.setDisabled('preview', false);
-			cm.setDisabled('print', false);
-			cm.setDisabled('fullscreen', false);
-		},
+         * Disables all buttons except Preview
+         */
+        _toggleDisabled : function() {
+            var self = this, ed = this.editor, DOM = tinymce.DOM, cm = ed.controlManager;
+
+            var state 	= this.getState();
+            // store active buttons
+            var active 	= DOM.select('.mceButtonActive', DOM.get(ed.id + '_toolbargroup'));
+
+            each (active, function(n) {
+                cm.setActive(n.id, !state);
+            });
+
+            each(DOM.select('.mceButton, .mceListBox, .mceSplitButton', DOM.get(ed.id + '_toolbargroup')), function(n) {
+                cm.setDisabled(n.id, state);
+            });
+
+            cm.setActive('preview', state);
+            cm.setActive('fullscreen', (ed.id == 'mce_fullscreen'));
+
+            cm.setDisabled('preview', false);
+            cm.setDisabled('print', false);
+            cm.setDisabled('fullscreen', false);
+        },
 		
 		_togglePreview : function(state) {
-			var t = this, ed = this.editor, DOM = tinymce.DOM;
+			var self = this, ed = this.editor, DOM = tinymce.DOM;
 			
-			var state = this.getState();
+			var state 		= this.getState();
 
 			var iframe 		= DOM.get(ed.id + '_ifr');
 			var preview 	= DOM.get(ed.id + '_preview_iframe');
@@ -201,7 +201,7 @@
 		            var css = tinymce.explode(ed.getParam('content_css'));
 					
 					// insert css
-		            html += '<link href="' + t.url + '/css/preview.css" rel="stylesheet" type="text/css" />';
+		            html += '<link href="' + self.url + '/css/preview.css" rel="stylesheet" type="text/css" />';
 		            
 		            tinymce.each(css, function(url) {
 		            	html += '<link href="' + url + '" rel="stylesheet" type="text/css" />';
@@ -231,7 +231,7 @@
                 	DOM.hide(wordcount.parentNode);
                 }
 				
-				t._loadData(preview);
+				self._loadData(preview);
 				
 				DOM.setStyle(iframe, 'hidden');
 				DOM.setAttrib(iframe, 'aria-hidden', true);
@@ -240,30 +240,32 @@
 				container.removeAttribute('aria-hidden');
 				
 			} else {
-				// show Path                
-                if (editorpath) {
-                	DOM.show(editorpath);
-                } 
-                // show word count                
-                if (wordcount) {
-                	DOM.show(wordcount.parentNode);
-                }
-				
-				var doc = preview.contentWindow.document;
-				doc.body.innerHTML = '';
-				
-				DOM.removeClass(iframe, 'hidden');
-            	iframe.removeAttribute('aria-hidden');
-            	
-				DOM.hide(container);
-				DOM.setAttrib(container, 'aria-hidden', true);
+				if (preview) {
+					// show Path                
+	                if (editorpath) {
+	                	DOM.show(editorpath);
+	                } 
+	                // show word count                
+	                if (wordcount) {
+	                	DOM.show(wordcount.parentNode);
+	                }
+					
+					var doc = preview.contentWindow.document;
+					doc.body.innerHTML = '';
+					
+					DOM.removeClass(iframe, 'hidden');
+	            	iframe.removeAttribute('aria-hidden');
+	            	
+					DOM.hide(container);
+					DOM.setAttrib(container, 'aria-hidden', true);	
+				}
 			}
 
 			this.setState(!state);
 		},
 		
 		_loadData : function(n) {
-			var t = this, ed = this.editor, s = tinymce.settings, doc = n.contentWindow.document;
+			var self = this, ed = this.editor, s = tinymce.settings, doc = n.contentWindow.document;
 			
 			var query = '', args = {'format' : 'raw'};
 			
