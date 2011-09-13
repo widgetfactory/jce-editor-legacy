@@ -547,18 +547,25 @@
             
             function showError(e) {                        	
                 var txt = $.type(e) == 'array' ? e.join('\n') : e;     	
+                
+                txt = txt.replace(/^<br \/>/, '');
+                
                 $.Dialog.alert(txt);
             }
 
             $.JSON.queue({
                 context: scope || this,
-                dataType: 'json',
+                //dataType: 'json',
                 type: 'POST',
                 url: url,
                 data: 'json=' + $.JSON.serialize(json) + '&' + $.param(args),
                 success: function (o) {
-                    if (!o) {
-                        r = false;
+                    // no result or not json object
+                    if (!o || !$.isPlainObject(o)) {
+                        if (o) {
+                        	showError(o);
+                        }
+                       	return false;
                     } else {
                         if (o.error) {
                         	showError(o.text || o.error || '');
@@ -691,7 +698,7 @@
 						
 						$(this).prepend('<span class="ui-button-icon-primary ui-icon ' + icon + '"/>');
                     }).addClass('ui-button-text-icon-primary').removeClass('ui-button-text-only');
-                    
+
                     if ($.isFunction(options.onOpen)) {
                         options.onOpen.call();
                     }
@@ -755,7 +762,6 @@
                     click: function () {
                         $(this).dialog("close");
                     }
-
                 }]
             };
 
