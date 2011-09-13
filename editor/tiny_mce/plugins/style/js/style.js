@@ -437,10 +437,13 @@ var StyleDialog = {
 
 		ce.style.width = f.box_width.value + (this.isNum(f.box_width.value) ? f.box_width_measurement.value : "");
 		ce.style.height = f.box_height.value + (this.isNum(f.box_height.value) ? f.box_height_measurement.value : "");
-		ce.style.styleFloat = f.box_float.value;
+		
 
-		if (tinymce.isGecko)
+		if (tinymce.isIE) {
+			ce.style.styleFloat = f.box_float.value;
+		} else {
 			ce.style.cssFloat = f.box_float.value;
+		}
 
 		ce.style.clear = f.box_clear.value;
 
