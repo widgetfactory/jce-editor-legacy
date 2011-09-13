@@ -16,9 +16,9 @@ class WFSourcePluginConfig
 	{
 		$wf = WFEditor::getInstance();
 
-		$settings['source_higlight'] 	= $wf->getParam('source.highlight', 1, 1);
-		$settings['source_numbers'] 	= $wf->getParam('source.numbers', 1, 1);
-		$settings['source_wrap'] 		= $wf->getParam('source.wrap', 1, 1);
+		$settings['source_higlight'] 	= $wf->getParam('source.highlight', 1, 1, 'boolean');
+		$settings['source_numbers'] 	= $wf->getParam('source.numbers', 1, 1, 'boolean');
+		$settings['source_wrap'] 		= $wf->getParam('source.wrap', 1, 1, 'boolean');
 		$settings['source_theme'] 		= $wf->getParam('source.theme', 'textmate', 'textmate');
 	}
 	
