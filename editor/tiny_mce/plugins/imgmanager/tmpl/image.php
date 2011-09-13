@@ -19,7 +19,7 @@ defined('_JEXEC') or die('ERROR_403');
         	<td style="vertical-align:top;width:75%;">
                     <fieldset>
                     <legend><?php echo WFText::_('WF_LABEL_PROPERTIES');?></legend>
-                    <table summary="image">
+                    <table summary="image" width="100%">
                         <tr>
                         	<td><label for="src" class="hastip" title="<?php echo WFText::_('WF_LABEL_URL_DESC');?>"><?php echo WFText::_('WF_LABEL_URL');?></label></td>
                         	<td colspan="3"><input type="text" id="src" value="" class="required" /></td>
@@ -68,7 +68,7 @@ defined('_JEXEC') or die('ERROR_403');
 	                        	<label for="margin_right"><?php echo WFText::_('WF_OPTION_RIGHT');?></label><input type="text" id="margin_right" value="" size="3" maxlength="3" onchange="ImageManagerDialog.setMargins();" />
 	                        	<label for="margin_bottom"><?php echo WFText::_('WF_OPTION_BOTTOM');?></label><input type="text" id="margin_bottom" value="" size="3" maxlength="3" onchange="ImageManagerDialog.setMargins();" />
 	                        	<label for="margin_left"><?php echo WFText::_('WF_OPTION_LEFT');?></label><input type="text" id="margin_left" value="" size="3" maxlength="3" onchange="ImageManagerDialog.setMargins();" />
-	                        	<input type="checkbox" class="checkbox" id="margin_check" onclick="ImageManagerDialog.setMargins();"><label><?php echo WFText::_('WF_LABEL_EQUAL');?></label>
+	                        	<input type="checkbox" class="checkbox" id="margin_check" onclick="ImageManagerDialog.setMargins();"><label for="margin_check"><?php echo WFText::_('WF_LABEL_EQUAL');?></label>
 	                        </td>
                     	</tr>
                     	<tr id="attributes-border">
