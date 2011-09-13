@@ -11,346 +11,344 @@
  */
 
 var WFPopups = WFExtensions.add('Popups', {
-    /**
-     * Array of popup extension objects
-     */
-    popups : {},
+	/**
+	 * Array of popup extension objects
+	 */
+	popups : {},
 
-    /**
-     * Current Popup Extension object
-     */
-    popup : '',
+	/**
+	 * Current Popup Extension object
+	 */
+	popup : '',
 
-    /**
-     * Global Configuration object
-     */
-    config : {},
+	/**
+	 * Global Configuration object
+	 */
+	config : {},
 
-    /**
-     * Add a popup extension
-     * @param {String} n Extension name
-     * @param {Object} o Extension object
-     */
-    addPopup : function(n, o) {
-        this.popups[n] = o;
+	/**
+	 * Add a popup extension
+	 * @param {String} n Extension name
+	 * @param {Object} o Extension object
+	 */
+	addPopup : function(n, o) {
+		this.popups[n] = o;
 
-        WFExtensions.addExtension('popups', n, o);
-    },
+		WFExtensions.addExtension('popups', n, o);
+	},
 
-    /**
-     * Get all popups
-     */
-    getPopups : function() {
-        return this.popups;
-    },
+	/**
+	 * Get all popups
+	 */
+	getPopups : function() {
+		return this.popups;
+	},
 
-    setup : function() {
-        var self = this, ed = tinyMCEPopup.editor, s = ed.selection;
+	setup : function() {
+		var self = this, ed = tinyMCEPopup.editor, s = ed.selection;
 
-        if (!s.isCollapsed()) {
-            n = s.getNode();
+		if(!s.isCollapsed()) {
+			n = s.getNode();
 
-            var state = true, v;
+			var state = true, v;
 
-            function setText(state, v) {
-                if (state && v) {
-                    $('#popup_text').val(v);
-                    $('#popup_text').attr('disabled', false);
-                } else {
-                    $('#popup_text').val(tinyMCEPopup.getLang('dlg.element_selection', 'Element Selection'));
-                    $('#popup_text').attr('disabled', true);
-                    $('#popup_text').addClass('disabled');
-                }
-            }
+			function setText(state, v) {
+				if(state && v) {
+					$('#popup_text').val(v);
+					$('#popup_text').attr('disabled', false);
+				} else {
+					$('#popup_text').val(tinyMCEPopup.getLang('dlg.element_selection', 'Element Selection'));
+					$('#popup_text').attr('disabled', true);
+					$('#popup_text').addClass('disabled');
+				}
+			}
 
-            v = s.getContent({
-                format : 'text'
-            });
+			v = s.getContent({
+				format : 'text'
+			});
 
-            if (n) {
-                var children = tinymce.grep(n.childNodes, function(node) {
-                	return ed.dom.is(node, 'br[data-mce-bogus]') == false;
-                });
-                
-                state = children.length == 1 && children[0].nodeType == 3;
-            }
+			if(n) {
+				var children = tinymce.grep(n.childNodes, function(node) {
+					return ed.dom.is(node, 'br[data-mce-bogus]') == false;
+				});
 
-            // set text value and state
-            setText(state, v);
-        }
+				state = children.length == 1 && children[0].nodeType == 3;
+			}
 
-        $.each(this.popups, function(k, v) {
-            self._call('setup', '', v);
-        });
+			// set text value and state
+			setText(state, v);
+		}
 
-    },
+		$.each(this.popups, function(k, v) {
+			self._call('setup', '', v);
+		});
 
-    /**
-     * Check if selected node is a Popup
-     * @param {Object} n Node
-     * @param {Object} v Popup type
-     */
-    isPopup : function(n, v) {
-        return n && n.nodeName == 'A' && this._call('check', n, v);
-    },
+	},
 
-    /**
-     * Get the assigned popup if any from the selected node
-     * @param {Object} n Anchor Element / Node
-     */
-    getPopup : function(n) {
-        var self = this, ed = tinyMCEPopup.editor, popup, popups = this.getPopups();
-        
-        if (n.nodeName != 'A') {
-            n = ed.dom.getParent(n, 'a');
-        }
-        
-        $.each(this.popups, function(k, v) {
-            if (self.isPopup(n, k)) {
-                self.popup = k;
-            }
-        });
+	/**
+	 * Check if selected node is a Popup
+	 * @param {Object} n Node
+	 * @param {Object} v Popup type
+	 */
+	isPopup : function(n, v) {
+		return n && n.nodeName == 'A' && this._call('check', n, v);
+	},
 
-        if (this.popup) {
-            // Select popup in list
-            this.selectPopup(this.popup);                  
-            // Process attributes
-            return this.getAttributes(n);
-        }
-        
-        return '';
-    },
+	/**
+	 * Get the assigned popup if any from the selected node
+	 * @param {Object} n Anchor Element / Node
+	 */
+	getPopup : function(n) {
+		var self = this, ed = tinyMCEPopup.editor, popup, popups = this.getPopups();
 
-    /**
-     * Set the currently selected popup
-     * @param {String} s popup name eg: jcemediabox
-     */
-    setPopup : function(s) {
-        this.popup = s;
-    },
+		if(n.nodeName != 'A') {
+			n = ed.dom.getParent(n, 'a');
+		}
 
-    /**
-     * Set Global Configuration
-     * @param {Object} config Configuration object
-     */
-    setConfig : function(config) {
-        $.extend(this.config, config);
-    },
+		$.each(this.popups, function(k, v) {
+			if(self.isPopup(n, k)) {
+				self.popup = k;
+			}
+		});
 
-    /**
-     * Set parameters for a popup type
-     * @param {String} n Popup type
-     * @param {Object} p Parameters object
-     */
-    setParams : function(n, p) {
-        var popup = this.popups[n];
+		if(this.popup) {
+			// Select popup in list
+			this.selectPopup(this.popup);
+			// Process attributes
+			return this.getAttributes(n);
+		}
 
-        if (popup) {
-            if (typeof popup.params == 'undefined') {
-                popup.params = {};
-            }
-            $.extend(popup.params, p);
-        }
-    },
+		return '';
+	},
 
-    /**
-     * Get parameters for a popup type
-     * @param {String} n Popup Type
-     */
-    getParams : function(n) {
-        return this.popups[n].params || {};
-    },
+	/**
+	 * Set the currently selected popup
+	 * @param {String} s popup name eg: jcemediabox
+	 */
+	setPopup : function(s) {
+		this.popup = s;
+	},
 
-    /**
-     * Get a specific popup type parameter
-     * @param {String} n Popup type
-     * @param {String} p Paremeter
-     */
-    getParam : function(n, p) {
-        var params = this.getParams(n);
-        return params[p] || null;
-    },
+	/**
+	 * Set Global Configuration
+	 * @param {Object} config Configuration object
+	 */
+	setConfig : function(config) {
+		$.extend(this.config, config);
+	},
 
-    /**
-     * Selects a popup from the popup list
-     * @param {Object} s Select element
-     */
-    selectPopup : function(v) {
-        var self = this;
+	/**
+	 * Set parameters for a popup type
+	 * @param {String} n Popup type
+	 * @param {Object} p Parameters object
+	 */
+	setParams : function(n, p) {
+		var popup = this.popups[n];
 
-        $('option', '#popup_list').each( function() {
-            if (this.value) {
-                // hide all popups
-                $('#popup_extension_' + this.value).hide();
-                if (v == this.value || $(this).is(':selected')) {
-                    this.selected = true;
+		if(popup) {
+			if( typeof popup.params == 'undefined') {
+				popup.params = {};
+			}
+			$.extend(popup.params, p);
+		}
+	},
 
-                    $('#popup_extension_' + this.value).show();
-                    // set as selected popup
-                    self.popup = this.value;
-                    // call onSelect function
-                    self._call('onSelect', [], this.value);
-                }
-            }
-        });
+	/**
+	 * Get parameters for a popup type
+	 * @param {String} n Popup Type
+	 */
+	getParams : function(n) {
+		return this.popups[n].params || {};
+	},
 
-    },
+	/**
+	 * Get a specific popup type parameter
+	 * @param {String} n Popup type
+	 * @param {String} p Paremeter
+	 */
+	getParam : function(n, p) {
+		var params = this.getParams(n);
+		return params[p] || null;
+	},
 
-    /**
-     * Set popup extension parameter values to current node
-     * @param {Object} n Popup / Link node
-     */
-    setAttributes : function(n, args) {
-        var ed = tinyMCEPopup.editor;
-        
-        // map values
-        if (this.config['map']) {
-            $.each(this.config['map'], function (to, from) {
-                var v = args[from] || $('#' + from).val();                
-                ed.dom.setAttrib(n, to, v);
-                
-                // remove initial value
-                delete args[from];
-            });
+	/**
+	 * Selects a popup from the popup list
+	 * @param {Object} s Select element
+	 */
+	selectPopup : function(v) {
+		var self = this;
 
-        }
+		$('option', '#popup_list').each(function() {
+			if(this.value) {
+				// hide all popups
+				$('#popup_extension_' + this.value).hide();
+				if(v == this.value || $(this).is(':selected')) {
+					this.selected = true;
 
-        return this._call('setAttributes', [n, args]);
-    },
+					$('#popup_extension_' + this.value).show();
+					// set as selected popup
+					self.popup = this.value;
+					// call onSelect function
+					self._call('onSelect', [], this.value);
+				}
+			}
+		});
 
-    /**
-     * Apply currently selected popup attributes to link element
-     * @param {Object} n Link element / node
-     */
-    getAttributes : function(n) {
-        var ed = tinyMCEPopup.editor, k, v, at, data;
+	},
 
-        if (n.nodeName != 'A') {
-            n = ed.dom.getParent(n, 'a');
-        }
+	/**
+	 * Set popup extension parameter values to current node
+	 * @param {Object} n Popup / Link node
+	 */
+	setAttributes : function(n, args) {
+		var ed = tinyMCEPopup.editor;
 
-        if (this.isPopup(n)) {
-            data = this._call('getAttributes', n);
-        }
+		// map values
+		if(this.config['map']) {
+			$.each(this.config['map'], function(to, from) {
+				var v = args[from] || $('#' + from).val();
+				ed.dom.setAttrib(n, to, v);
 
-        return data;
-    },
+				// remove initial value
+				delete args[from];
+			});
 
-    /**
-     * Check if popups are enabled (checkbox checked and popup type selected)
-     */
-    isEnabled : function() {
-        return this.popup;
-    },
+		}
 
-    /**
-     * Create a popup on a link element
-     * @param {Object} n
-     * @param {Object} args
-     */
-    createPopup : function(n, args) {
-        var self = this, ed = tinyMCEPopup.editor, o, el;
+		return this._call('setAttributes', [n, args]);
+	},
 
-        args = args || {};
+	/**
+	 * Apply currently selected popup attributes to link element
+	 * @param {Object} n Link element / node
+	 */
+	getAttributes : function(n) {
+		var ed = tinyMCEPopup.editor, k, v, at, data;
 
-        // Popup option is enabled
-        if (this.isEnabled()) {
+		if(n.nodeName != 'A') {
+			n = ed.dom.getParent(n, 'a');
+		}
 
-            if (n && (n.nodeName == 'A' || (n = ed.dom.getParent(n, 'A')))) {
-                // remove all popups
-                this.removePopups(n);
-                // set popup attributes
-                this.setAttributes(n, args);
-            } else {
-                // no selection
-                if (ed.selection.isCollapsed()) {
-                    ed.execCommand('mceInsertContent', false, '<a href="javascript:mctmp(0);">' + $('#popup_text').val() + '</a>', {
-                        skip_undo : 1
-                    });
-                    // create link on selection or update existing link
-                } else {
-                    ed.execCommand('mceInsertLink', false, 'javascript:mctmp(0);');
-                }
+		if(this.isPopup(n)) {
+			data = this._call('getAttributes', n);
+		}
 
-                tinymce.each(ed.dom.select('a[href=javascript:mctmp(0);]'), function(link) {
-                    self.setAttributes(link, args);
-                    
-                    el = link;
-                });
-                
-                var se = ed.selection, marker;
-                
-                if (tinymce.isIE) {
-                	marker = ed.dom.create('span', {'data-mce-type' : 'bookmark'}, '\u00a0');
-	                ed.dom.insertAfter(marker, el);               	
-	                se.select(marker);
-	                se.collapse();
-                } else {
-                	if (el.parentNode.nodeName == 'BODY') {
-	                	marker = ed.dom.create('span', {'data-mce-bogus' : 1}, ' ');
-	                	ed.dom.insertAfter(marker, el);               	
-	                	se.select(marker);
-	                	se.collapse(1);
-	                } else {
-	                	se.select(el);
-	                	se.collapse();
-	                }
-                }
-            }
-        } else {
-            // is a popup and option not checked - remove
-            if (this.isPopup(n)) {
-                ed.dom.remove(n, true);
-            }
-        }
-    },
+		return data;
+	},
 
-    /**
-     * Remove all popups from the current link node
-     */
-    removePopups : function(n) {
-        var self = this;
+	/**
+	 * Check if popups are enabled (checkbox checked and popup type selected)
+	 */
+	isEnabled : function() {
+		return this.popup;
+	},
 
-        $.each(this.popups, function(k, v) {
-            self._call('remove', n, v);
-        });
+	/**
+	 * Create a popup on a link element
+	 * @param {Object} n
+	 * @param {Object} args
+	 */
+	createPopup : function(n, args) {
+		var self = this, ed = tinyMCEPopup.editor, o, el;
+		args = args || {};
 
-    },
+		// Popup option is enabled
+		if(this.isEnabled()) {
 
-    /**
-     * Function called when a file is selected
-     * @param {Object} args Arguments object eg: {src : url, width : 640, height : 480}
-     */
-    onSelectFile : function(args) {
-        this._call('onSelectFile', args);
-    },
-    
-    /**
-     * Call a popup function
-     * @param {String} fn Function to call
-     * @param {Array} args Array of arguments
-     * @param {String} popup popup type to call function on
-     */
-    _call : function(fn, args, popup) {
-        if (!popup) {
-            popup = this.popup;
-        }
-        
-        if (typeof popup == 'string') {
-        	popup = this.popups[popup] || {};
-        }
-        
-        fn = popup[fn];
+			if(n && (n.nodeName == 'A' || ( n = ed.dom.getParent(n, 'A')))) {
+				// remove all popups
+				this.removePopups(n);
+				// set popup attributes
+				this.setAttributes(n, args);
+			} else {				
+				// no selection
+				if(ed.selection.isCollapsed()) {
+					ed.execCommand('mceInsertContent', false, '<a href="javascript:mctmp(0);">' + $('#popup_text').val() + '</a>', {
+						skip_undo : 1
+					});
+					// create link on selection or update existing link
+				} else {
+					ed.execCommand('mceInsertLink', false, 'javascript:mctmp(0);');
+				}
 
-        if (fn) {
-            if (typeof args == 'object' && args instanceof Array) {
-            	return fn.apply(popup, args);
-            } else {
-            	return fn.call(popup, args);
-            }
-        }
+				tinymce.each(ed.dom.select('a[href=javascript:mctmp(0);]'), function(link) {
+					self.setAttributes(link, args);
+					el = link;
+				});
 
-        return false;
-    }
+				var se = ed.selection, marker;
+				
+				se.collapse();
+
+				if(el.parentNode.nodeName == 'BODY') {					
+					// create marker
+					marker = ed.dom.create('span', {
+						'data-mce-type' : 'bookmark'
+					}, ' ');
+					el.parentNode.appendChild(marker);
+					se.select(marker);
+					// move cursor before marker
+					se.collapse();
+					// remove marker
+					ed.dom.remove(marker);					
+				} else {
+					se.select(el);
+					se.collapse();
+				}
+			}
+		} else {
+			// is a popup and option not checked - remove
+			if(this.isPopup(n)) {
+				ed.dom.remove(n, true);
+			}
+		}
+	},
+
+	/**
+	 * Remove all popups from the current link node
+	 */
+	removePopups : function(n) {
+		var self = this;
+
+		$.each(this.popups, function(k, v) {
+			self._call('remove', n, v);
+		});
+
+	},
+
+	/**
+	 * Function called when a file is selected
+	 * @param {Object} args Arguments object eg: {src : url, width : 640, height : 480}
+	 */
+	onSelectFile : function(args) {
+		this._call('onSelectFile', args);
+	},
+
+	/**
+	 * Call a popup function
+	 * @param {String} fn Function to call
+	 * @param {Array} args Array of arguments
+	 * @param {String} popup popup type to call function on
+	 */
+	_call : function(fn, args, popup) {
+		if(!popup) {
+			popup = this.popup;
+		}
+
+		if( typeof popup == 'string') {
+			popup = this.popups[popup] || {};
+		}
+		fn = popup[fn];
+
+		if(fn) {
+			if( typeof args == 'object' && args instanceof Array) {
+				return fn.apply(popup, args);
+			} else {
+				return fn.call(popup, args);
+			}
+		}
+
+		return false;
+	}
 
 });
