@@ -140,7 +140,7 @@
 					target 	: ed.getParam('autolink_target', '') 
 				}
 				
-				tinyMCE.execCommand('createlink',false, args);
+				tinyMCE.execCommand('mceInsertLink',false, args);
 				ed.selection.moveToBookmark(bookmark);
 
 				// TODO: Determine if this is still needed.
