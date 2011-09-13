@@ -523,15 +523,13 @@
 			}
 
 			// Handle clear
-			v = $('#clear').val();
+			v = $('#clear:enabled').val();
 
-			if (v && !$('#clear').is(':disabled')) {
-				br = $('#sample-br');
-
-				if (!$('#sample-br').is('br')) {
-					$(img).append('<br id="sample-br" />');
+			if (v) {
+				if (!$('#sample-br').get(0)) {
+					$(img).after('<br id="sample-br" />');
 				}
-				$(br).css('clear', v);
+				$('#sample-br').css('clear', v);
 			} else {
 				$('#sample-br').remove();
 			}
@@ -562,8 +560,35 @@
 				$(img).css('margin-' + k,  /[^a-z]/i.test(v) ? v + 'px' : v);
 			});
 
+			var styles = ed.dom.parseStyle($(img).attr('style'));
+			
+			function compressBorder(target, a, b, c) {
+				function check(s) {
+					return s in styles && styles[s] !== '';
+				}
+				
+				if (!check(a) || !check(b) || !check(c)) {
+					return;
+				}
+
+				// Compress
+				styles[target] = styles[a] + ' ' + styles[b] + ' ' + styles[c];
+				delete styles[a];
+				delete styles[b];
+				delete styles[c];
+			}
+			// compress border
+			compressBorder('border', 'border-width', 'border-style', 'border-color');
+			
+			// remove -moz and -webkit styles
+			for (k in styles) {
+				if (k.indexOf('-moz-') !== -1 || k.indexOf('-webkit-') !== -1) {
+					delete styles[k];
+				} 
+			}
+
 			// Merge
-			$('#style').val(ed.dom.serializeStyle(ed.dom.parseStyle($(img).attr('style'))));
+			$('#style').val(ed.dom.serializeStyle(styles));
 		},
 
 		_setRollover : function(src) {
