@@ -35,7 +35,7 @@ var StyleDialog = {
 	},
 	
 	init : function() {
-		var ce = document.getElementById('container'), h;
+		var ed = tinyMCEPopup.editor, ce = document.getElementById('container'), h;
 		
 		if (!this.settings.file_browser) {
         	$('input.browser').removeClass('browser');
@@ -43,7 +43,7 @@ var StyleDialog = {
 	
 		ce.style.cssText = tinyMCEPopup.getWindowArg('style_text');
 	
-		this.fillSelect(0, 'text_font', 'style_font', this.defaults.Fonts, ';', true);
+		this.fillSelect(0, 'text_font', 'style_font', ed.getParam('theme_advanced_fonts', this.defaults.Fonts), ';', true);
 		this.fillSelect(0, 'text_size', 'style_font_size', this.defaults.Sizes, ';', true);
 		this.fillSelect(0, 'text_size_measurement', 'style_font_size_measurement', this.defaults.Measurement, ';', true);
 		this.fillSelect(0, 'text_case', 'style_text_case', "capitalize;uppercase;lowercase", ';', true);
