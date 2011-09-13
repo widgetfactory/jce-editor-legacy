@@ -270,16 +270,18 @@ class WFEditor extends JObject {
 	 * @param $fallback Fallback value
 	 * @param $default Default value
 	 */
-	public function getParam($key, $fallback = '', $default = '', $type = 'string') {
+	public function getParam($key, $fallback = '', $default = '', $type = 'string', $allowempty = true) {		
 		// get all keys
 		$keys = explode('.', $key);
 
 		// remove base key eg: 'editor'
 		$base = array_shift($keys);
+		
 		// get params for base key
 		$params = self::getParams(array('key' => $base));
 		// get a parameter
-		$param = $params->get($keys, $fallback);
+		
+		$param = $params->get($keys, $fallback, $allowempty);
 
 		if (is_string($param) && $type === 'string') {
 			$param = self::cleanParam($param);
