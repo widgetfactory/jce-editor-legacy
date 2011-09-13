@@ -948,13 +948,20 @@
 			this._trigger('onListComplete');
 		},
 
+		/**
+		 * Get additional dialog options
+		 * @param {String} Dialog name eg: rename
+		 * @return {String} Dialog options
+		 */
 		_getDialogOptions : function(dialog) {
 			var options = this.options[dialog];
 			var elements = '';
 
-			if (options && options.elements) {
-				if ($.isPlainObject(options.dialog)) {
-					$.each(options.options.elements, function(k, v) {
+			if (options && options.elements) {		
+				// if an object, process key / values		
+				if ($.isPlainObject(options.elements)) {
+					$.each(options.elements, function(k, v) {
+						// select list
 						if (v.options) {
 							elements += '<p>';
 							elements += '<label for="' + k + '">' + (v.label || k) + '</label>';
@@ -966,11 +973,12 @@
 
 							elements += '</select>';
 							elements += '</p>';
+						// input element
 						} else {
 							elements += '<p><label for="' + k + '">' + v.label || k + '</label><input id="' + k + '" type="text" name="' + k + '" value="' + v.value || '' + '" /></p>';
 						}
 					});
-
+				// return string
 				} else {
 					return options.elements;
 				}
