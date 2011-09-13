@@ -126,6 +126,42 @@
 						}
 					}
 				});
+				
+				// add id support for anchors
+				if (!ed.settings.allow_html_in_named_anchor) {
+					ed.parser.addAttributeFilter('id', function(nodes, name) {
+						var i = nodes.length, sibling, prevSibling, parent, node;
+		
+						while (i--) {
+							node = nodes[i];
+							if (node.name === 'a' && !node.attr('href') && node.firstChild) {
+								parent = node.parent;
+		
+								// Move children after current node
+								sibling = node.lastChild;
+								do {
+									prevSibling = sibling.prev;
+									parent.insert(sibling, node);
+									sibling = prevSibling;
+								} while (sibling);
+							}
+						}
+					});
+				}
+				// add anchor class
+				ed.onVisualAid.add(function(ed, n, s) {
+					each(ed.dom.select('a[id]', n), function(e) {
+						if (!e.href) {
+							if (s) {
+								ed.dom.addClass(e, 'mceItemAnchor');
+							} else {
+								ed.dom.removeClass(e, 'mceItemAnchor');
+							}
+						}
+		
+						return;
+					});
+				});
 
 			});
 

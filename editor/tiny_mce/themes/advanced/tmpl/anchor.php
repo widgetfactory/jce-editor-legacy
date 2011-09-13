@@ -17,8 +17,12 @@ defined( '_JEXEC' ) or die('RESTRICTED');
 <form onsubmit="AnchorDialog.update();return false;" action="#">
 	<table border="0" cellpadding="4" cellspacing="0">
 		<tr>
-			<td nowrap="nowrap">{#advanced_dlg.anchor_name}:</td>
-			<td><input name="anchorName" type="text" class="mceFocus" id="anchorName" value="" style="width: 200px" /></td>
+			<td nowrap="nowrap"><?php echo WFText::_('WF_LABEL_NAME');?>:</td>
+			<td><input type="text" class="mceFocus" id="anchorName" value="" style="width: 200px" /></td>
+		</tr>
+		<tr>
+			<td nowrap="nowrap"><?php echo WFText::_('WF_LABEL_ID');?>:</td>
+			<td><input type="text" class="mceFocus" id="anchorID" value="" style="width: 200px" /></td>
 		</tr>
 	</table>
 

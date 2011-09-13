@@ -983,7 +983,7 @@
 			}
 
 			if (c = cm.get('anchor')) {
-				c.setActive(!co && !!p && p.name);
+				c.setActive(!co && !!p && (p.name || (p.id && !p.href)));
 			}
 
 			p = getParent('IMG');

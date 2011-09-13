@@ -2,7 +2,7 @@ tinyMCEPopup.requireLangPack();
 
 var AnchorDialog = {
 	init : function(ed) {
-		var action, elm, f = document.forms[0];
+		var n, name, id;
 		
 		$('button#insert').button({
 			icons : {
@@ -15,40 +15,54 @@ var AnchorDialog = {
 				primary : 'ui-icon-close'
 			}
 		});
+		
+		n = ed.dom.getParent(ed.selection.getNode(), 'A');
+		
+		name 	= ed.dom.getAttrib(n, 'name');
+		id 		= ed.dom.getAttrib(n, 'id');
 
-		this.editor = ed;
-		elm = ed.dom.getParent(ed.selection.getNode(), 'A');
-		v = ed.dom.getAttrib(elm, 'name');
-
-		if (v) {
+		if (name || id) {
 			this.action = 'update';
-			f.anchorName.value = v;
+			
+			$('#insert').button('option', 'label', tinyMCEPopup.getLang('update', 'Update'));
+			$('#anchorName').val(name);
+			$('#anchorID').val(id);
 		}
-		
-		$('#insert').button('option', 'label', ed.getLang(elm ? 'update' : 'insert'));
-		
+
 		$('#jce').css('display', 'block');
 	},
 
 	update : function() {
-		var ed = this.editor, elm, name = document.forms[0].anchorName.value;
+		var ed = tinyMCEPopup.editor, n, name = $('#anchorName').val(), id = $('#anchorID').val();
 		
-		if (!name || !/^[a-z][a-z0-9\-\_:\.]*$/i.test(name)) {
+		function check(s) {
+			return /^[a-z][a-z0-9\-\_:\.]*$/i.test(s);
+		}
+		
+		if (!name && !id) {
+			tinyMCEPopup.alert('advanced_dlg.anchor_invalid');
+			return;
+		}
+		
+		if ((name && !check(name)) || (id && !check(id))) {
 			tinyMCEPopup.alert('advanced_dlg.anchor_invalid');
 			return;
 		}
 
 		tinyMCEPopup.restoreSelection();
 
-		if (this.action != 'update')
+		if (this.action != 'update') {
 			ed.selection.collapse(1);
+		}
 
-		elm = ed.dom.getParent(ed.selection.getNode(), 'A');
-		if (elm)
-			elm.name = name;
-		else
-			ed.execCommand('mceInsertContent', 0, ed.dom.createHTML('a', {name : name, 'class' : 'mceItemAnchor'}, ''));
-
+		n = ed.dom.getParent(ed.selection.getNode(), 'A');
+		
+		if (n) {
+			ed.dom.setAttrib(n, 'name', name);
+			ed.dom.setAttrib(n, 'id', id);
+		} else {
+			ed.execCommand('mceInsertContent', 0, ed.dom.createHTML('a', {name : name, id : id, 'class' : 'mceItemAnchor'}, ''));
+		}
 		tinyMCEPopup.close();
 	}
 };
