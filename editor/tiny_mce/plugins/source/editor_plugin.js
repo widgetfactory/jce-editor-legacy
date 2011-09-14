@@ -40,21 +40,23 @@
             	if (typeof s != 'undefined') {
             		ed.settings.source_state = !s;
             		self.toggleSource();
-            	}          		
+            	}    
+            	
+            	if (ed.plugins.fullscreen) {
+	            	ed.onFullScreen.add(function(state, settings) {
+		            	if (!state) {
+		            		ed.settings.source_state = !settings.source_state;
+		            		
+		            		each(['source_highlight', 'source_numbers', 'source_wrap'], function(s) {
+		            			ed.settings[s] = settings[s];
+		            		});
+		            		
+		            		self.toggleSource();
+		            	}
+		            });
+	            }      		
             });
-            
-            ed.onFullScreen.add(function(state, settings) {
-            	if (!state) {
-            		ed.settings.source_state = !settings.source_state;
-            		
-            		each(['source_highlight', 'source_numbers', 'source_wrap'], function(s) {
-            			ed.settings[s] = settings[s];
-            		});
-            		
-            		self.toggleSource();
-            	}
-            });
-            
+
             // Patch in Commands
             ed.onBeforeExecCommand.add( function(ed, cmd, ui, val, o) {
                 var cm = ed.controlManager, se = self.getEditor();
