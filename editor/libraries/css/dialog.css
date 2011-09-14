@@ -355,7 +355,7 @@ span.ui-slider {
     font-size: 1.1em;
     padding: 0 0 0 32px;
 	margin: 3px 0px;
-	/*height: 24px;*/
+	min-height: 24px;
 	background: url('../img/icons-24.png') no-repeat 0 -48px;
 	width: 240px;
 	word-wrap: break-word;
