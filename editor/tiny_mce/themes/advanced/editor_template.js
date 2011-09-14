@@ -349,7 +349,10 @@
 			});
 
 			if (c) {
-				each(ed.getParam('theme_advanced_fonts', t.settings.theme_advanced_fonts, 'hash'), function(v, k) {
+				each(ed.getParam('theme_advanced_fonts', t.settings.theme_advanced_fonts, 'hash'), function(v, k) {					
+					if (/\d/.test(v)) {
+						v = "'" + v + "'";
+					}
 					c.add(ed.translate(k), v, {style : v.indexOf('dings') == -1 ? 'font-family:' + v : ''});
 				});
 			}
