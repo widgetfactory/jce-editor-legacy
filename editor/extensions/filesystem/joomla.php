@@ -139,16 +139,16 @@ class WFJoomlaFileSystem extends WFFileSystem
 		jimport('joomla.filesystem.folder');
 		$total 	= 0;
 		
-		if (strpos($this->getBaseDir(), $path) === false) {
+		if (strpos($path, $this->getBaseDir()) === false) {
 			$path = WFUtility::makePath($this->getBaseDir(), $path);
 		}
 		
 		if (JFolder::exists($path)) {
 			$folders = JFolder::folders($path);
-			$total   = count($folders);
+			return count($folders);
 		}
 		
-		return $total;
+		return 0;
 	}
 
 	/**
@@ -159,18 +159,17 @@ class WFJoomlaFileSystem extends WFFileSystem
 	public function countFiles($path)
 	{
 		jimport('joomla.filesystem.file');
-		$total 	= 0;
 		
-		if (strpos($this->getBaseDir(), $path) === false) {
+		if (strpos($path, $this->getBaseDir()) === false) {
 			$path = WFUtility::makePath($this->getBaseDir(), $path);
 		}
-		
+
 		if (JFolder::exists($path)) {
 			$files = JFolder::files($path, '.', false, false, array('index.html', 'thumbs.db'));
-			$total = count($files);
+			return count($files);
 		}
 		
-		return $total;
+		return 0;
 	}
 	
 	function getFolders($relative)
