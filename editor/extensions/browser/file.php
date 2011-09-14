@@ -1302,35 +1302,14 @@ class WFFileBrowser extends WFBrowserExtension
 		$upload = trim(ini_get('upload_max_filesize'));
 		$post 	= trim(ini_get('post_max_size'));	
 			
-		$upload = $this->convertSize($upload);
-		$post 	= $this->convertSize($post);
+		$upload = WFUtility::convertSize($upload);
+		$post 	= WFUtility::convertSize($post);
 		
 		if (intval($upload) <= intval($post)) {
 			return $upload;
 		}
 		
 		return $post;
-	}
-	
-	/**
-	 * Convert size value to bytes
-	 */
-	function convertSize($value)
-	{		
-		// Convert to bytes
-		switch(strtolower($value{strlen($value)-1})) {
-			case 'g':
-				$value *= 1073741824;
-				break;
-			case 'm':
-				$value *= 1048576;
-				break;
-			case 'k':
-				$value *= 1024;
-				break;
-		}
-		
-		return $value;
 	}
 
 	function getUploadDefaults()
