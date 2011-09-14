@@ -41,16 +41,18 @@
             	if (typeof s != 'undefined') {
             		self.setState(!s);
             		self._togglePreview();
-            	}          		
+            	}    
+            	
+            	if (ed.plugins.fullscreen) {
+					ed.onFullScreen.add(function(state, settings) {
+		            	if (!state) {
+		            		self.setState(!settings.preview_state);
+		            		self._togglePreview();
+		            	}
+		            });
+				}      		
             });
-			
-			ed.onFullScreen.add(function(state, settings) {
-            	if (!state) {
-            		self.setState(!settings.preview_state);
-            		self._togglePreview();
-            	}
-            });
-			
+
 			ed.onSetContent.add(function(ed, o) {
             	if (self.getState()) {
                     self._disable();                 
