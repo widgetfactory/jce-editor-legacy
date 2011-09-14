@@ -29,7 +29,9 @@
 						if (!v) {
 							ed.undoManager.add();
 							p = ed.dom.getParent(n, blocks);
-							ed.formatter.toggle(p.nodeName.toLowerCase());
+							if (p) {
+								ed.formatter.toggle(p.nodeName.toLowerCase());
+							}
 							o.terminate = true;
 						}
 						break;
@@ -37,7 +39,9 @@
 						if (!v && isBlock(n)) {
 							ed.undoManager.add();
 							p = ed.dom.getParent(n, blocks);
-							ed.formatter.toggle(p.nodeName.toLowerCase());	
+							if (p) {
+								ed.formatter.toggle(p.nodeName.toLowerCase());
+							}	
 							o.terminate = true;
 						}
 						break;
