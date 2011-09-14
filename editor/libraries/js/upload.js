@@ -411,7 +411,12 @@
             this._trigger('fileDelete', null, file);
 
             $(file.element).remove();
+            
             this.uploader.removeFile(file);
+            
+            if (!this.uploader.files.length) {
+            	this._createDragDrop();
+            }
         },
 
         _createQueue: function(files) {
