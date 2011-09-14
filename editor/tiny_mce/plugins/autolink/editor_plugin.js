@@ -138,7 +138,7 @@
 				var args = {
 					href 	: matches[1] + matches[2],
 					target 	: ed.getParam('autolink_target', '') 
-				}
+				};
 				
 				tinyMCE.execCommand('mceInsertLink',false, args);
 				ed.selection.moveToBookmark(bookmark);
