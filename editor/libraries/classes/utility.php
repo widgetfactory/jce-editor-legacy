@@ -191,5 +191,26 @@ class WFUtility
 		
 		return mb_detect_encoding($string, 'UTF-8', true);
 	}
+	
+	/**
+	 * Convert size value to bytes
+	 */
+	function convertSize($value)
+	{		
+		// Convert to bytes
+		switch(strtolower($value{strlen($value)-1})) {
+			case 'g':
+				$value = intval($value) * 1073741824;
+				break;
+			case 'm':
+				$value = intval($value) * 1048576;
+				break;
+			case 'k':
+				$value = intval($value) * 1024;
+				break;
+		}
+		
+		return $value;
+	}
 }
 ?>
