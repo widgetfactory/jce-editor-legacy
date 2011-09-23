@@ -215,7 +215,7 @@
 				ed.serializer.addNodeFilter('img', function(nodes, name, args) {
 					for (var i = 0, len = nodes.length; i < len; i++) {
 						var node = nodes[i];
-						if (/mceItem(Flash|ShockWave|WindowsMedia|QuickTime|RealMedia|DivX|Silverlight|Audio|Video|Generic|Iframe)/.test(node.attr('class') || '')) {
+						if (/mceItem(Flash|ShockWave|WindowsMedia|QuickTime|RealMedia|DivX|Silverlight|Audio|Video|Generic|Embed|Iframe)/.test(node.attr('class') || '')) {
 							self.restoreElement(node, args);
 						}
 					}
