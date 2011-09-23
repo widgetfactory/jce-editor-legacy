@@ -88,8 +88,8 @@ class WFJoomlaFileSystem extends WFFileSystem
 			$wf 	= WFEditorPlugin::getInstance();
 	
 			// Restricted Joomla! folders
-			$restricted = explode(',', $wf->getParam('editor.filesystem.restrict_dir', 'administrator,cache,components,includes,language,libraries,logs,media,modules,plugins,templates,xmlrpc'));
-			$allowroot	= $wf->getParam('editor.filesystem.allow_root', 0);
+			$restricted = explode(',', $wf->getParam('editor.filesystem.joomla.restrict_dir', 'administrator,cache,components,includes,language,libraries,logs,media,modules,plugins,templates,xmlrpc'));
+			$allowroot	= $wf->getParam('editor.filesystem.joomla.allow_root', 0);
 			
 			// Revert to default if empty
 			if (!$root && !$allowroot) {
