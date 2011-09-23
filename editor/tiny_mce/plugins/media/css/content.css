@@ -1,9 +1,14 @@
-.mceItemFlash, .mceItemShockWave, .mceItemQuickTime, .mceItemWindowsMedia, .mceItemRealMedia, .mceItemDivX, .mceItemSilverlight, .mceItemGeneric, .mceItemAudio, .mceItemVideo, .mceItemIframe {
+.mceItemFlash, .mceItemShockWave, .mceItemQuickTime, .mceItemWindowsMedia, .mceItemRealMedia, .mceItemDivX, .mceItemSilverlight, .mceItemGeneric, .mceItemEmbed, .mceItemAudio, .mceItemVideo, .mceItemIframe {
     border:1px dotted #cc0000;
     background-position:center;
     background-repeat:no-repeat;
     background-color:#ffffcc;
 }
+
+.mceItemGeneric, .mceItemEmbed {
+    background-image:url(../img/generic.png);
+}
+
 .mceItemShockWave {
     background-image: url(../img/shockwave.png);
 }
@@ -21,9 +26,6 @@
 }
 .mceItemDivX {
     background-image:url(../img/video.png);
-}
-.mceItemGeneric {
-    background-image:url(../img/generic.png);
 }
 .mceItemSilverlight {
     background-image:url(../img/video.png);
