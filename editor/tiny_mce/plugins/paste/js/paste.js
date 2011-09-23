@@ -26,14 +26,14 @@ var PasteDialog = {
 			css = tinymce.explode(ed.settings.content_css) || [];
 			css.push(ed.baseURI.toAbsolute("themes/" + ed.settings.theme + "/skins/" + ed.settings.skin + "/content.css"));
 			css.push(ed.baseURI.toAbsolute("plugins/paste/css/blank.css"));
-			
+
 			tinymce.each(css, function(u) {
 				cssHTML += '<link href="' + ed.documentBaseURI.toAbsolute('' + u) + '" rel="stylesheet" type="text/css" />';
 			});
 	
 			// Write content into iframe
 			doc.open();
-			doc.write('<html><head>' + cssHTML + '</head><body class="mceContentBody" spellcheck="false"></body></html>');
+			doc.write('<html><head><base href="' + ed.settings.base_url + '" />' + cssHTML + '</head><body class="mceContentBody" spellcheck="false"></body></html>');
 			doc.close();
 	
 			doc.designMode = 'on';
