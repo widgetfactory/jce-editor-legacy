@@ -1249,20 +1249,6 @@ class WFFileBrowser extends WFBrowserExtension
 	}
 
 	/**
-	 * New folder base function. A wrapper for the JFolder::create function
-	 * @param string $folder The folder to create
-	 * @return boolean true on success
-	 */
-	function folderCreate($folder)
-	{
-		// check folder path
-		WFUtility::checkPath($folder);		
-			
-		$filesystem = $this->getFileSystem();
-		return $filesystem->folderCreate($folder);
-	}
-
-	/**
 	 * New folder
 	 * @param string $dir The base dir
 	 * @param string $new_dir The folder to be created
@@ -1281,7 +1267,7 @@ class WFFileBrowser extends WFBrowserExtension
 			
 		$filesystem = $this->getFileSystem();
 
-		$result = $filesystem->createFolder($dir, trim($new), $args);
+		$result = $filesystem->createFolder($dir, trim($new));
 
 		if (is_a($result, 'WFFileSystemResult')) {
 			if (!$result->state) {
