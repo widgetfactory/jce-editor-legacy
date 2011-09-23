@@ -945,16 +945,20 @@
 			var ex = '([-!#$%&\'\*\+\\./0-9=?A-Z^_`a-z{|}~]+@[-!#$%&\'\*\+\\/0-9=?A-Z^_`a-z{|}~]+\.[-!#$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+)';
 			var ux = '((news|telnet|nttp|file|http|ftp|https)://[-!#$%&\'\*\+\\/0-9=?A-Z^_`a-z{|}~]+\.[-!#$%&\'\*\+\\./0-9=?A-Z^_`a-z{|}~]+)';
 			
-			h = h.replace(new RegExp('(=")?' + ux, 'g'), function(a, b, c) {
+			h = h.replace(new RegExp('(=["\'])?' + ux, 'g'), function(a, b, c) {
 				if (!b) {
 					return '<a href="' + c + '">' + c +'</a>';	
-				}		
+				}	
+				
+				return a;	
 			});
 			
-			h = h.replace(new RegExp('(=")?' + ex, 'g'), function(a, b, c) {
+			h = h.replace(new RegExp('(=["\'])?' + ex, 'g'), function(a, b, c) {
 				if (!b) {
 					return '<a href="mailto:' + c + '">' + c +'</a>';	
-				}		
+				}
+				
+				return a;		
 			});
 			
 			return h;
@@ -969,7 +973,6 @@
 			if (ed.settings.paste_enable_default_filters == false) {
 				return;
 			}
-
 			// skip if plain text
 			if (!this.plainText) {
 
@@ -1008,24 +1011,37 @@
 					});
 
 				} // end word content
-			}
-
-			if (!ed.getParam('paste_remove_styles')) {
-				// process style attributes
-				this._processStyles(o.node);
-			}
-
-			// convert lists
-			if (ed.getParam('paste_convert_lists', true)) {
-				this._convertLists(o.node);
-			}
-
-			// Process images - remove local
-			each(dom.select('img', o.node), function(el) {
-				if (/file:\/\//.test(el.src)) {
-					dom.remove(el);
+				
+				if (!ed.getParam('paste_remove_styles')) {
+					// process style attributes
+					this._processStyles(o.node);
 				}
-			});
+	
+				// convert lists
+				if (ed.getParam('paste_convert_lists', true)) {
+					this._convertLists(o.node);
+				}
+	
+				// Process images - remove local
+				each(dom.select('img', o.node), function(el) {					
+					var s = dom.getAttrib(el, 'src');
+					
+					if (!s || /file:\/\//.test(s)) {
+						dom.remove(el);
+					}		
+					
+					dom.getAttrib(el, 'src', ed.convertURL(s));			
+				});
+				
+				// Process links
+				each(dom.select('a', o.node), function(el) {
+					var s = dom.getAttrib(el, 'href');
+					// convert url
+					if (s) {
+						dom.getAttrib(el, 'href', ed.convertURL(s));	
+					}					
+				});
+			}
 
 			if (ed.getParam('paste_remove_empty_paragraphs', true)) {
 				ed.dom.remove(dom.select('p:empty', o.node));
