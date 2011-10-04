@@ -162,12 +162,15 @@ function jInsertEditorText(text, editor) {
 			function isHidden(ed) {
 				return ed.isHidden() || DOM.getStyle(ed.id + '_ifr', 'visibility') == 'hidden';
 			}
-
+			
+			function isEditor(el) {
+				return DOM.getParent(el, 'div.mceEditor, div.mceSplitButtonMenu, div.mceListBoxMenu, div.mceDropDown');
+			}
 
 			Event.add(document.body, 'mousedown', function(e) {
 				var el = e.target;
 
-				if(DOM.getParent(el, 'div#' + ed.id + '_parent')) {
+				if (isEditor(el)) {
 					return;
 				}
 
@@ -255,15 +258,6 @@ function jInsertEditorText(text, editor) {
 
 						}
 						n = null;
-					});
-
-
-					ed.onPostRender.add(function() {
-						var doc = ed.getDoc();
-						var base = doc.createElement('base');
-						base.setAttribute('href', s.base_url);
-
-						doc.getElementsByTagName('head')[0].appendChild(base);
 					});
 
 				});
