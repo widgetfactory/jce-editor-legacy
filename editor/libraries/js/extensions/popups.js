@@ -111,7 +111,7 @@ var WFPopups = WFExtensions.add('Popups', {
 			}
 		});
 
-		if(this.popup) {
+		if(this.popup) {			
 			// Select popup in list
 			this.selectPopup(this.popup);
 			// Process attributes
@@ -178,6 +178,9 @@ var WFPopups = WFExtensions.add('Popups', {
 	selectPopup : function(v) {
 		var self = this;
 
+		// set as selected popup
+		self.popup = v;
+		
 		$('option', '#popup_list').each(function() {
 			if(this.value) {
 				// hide all popups
@@ -186,8 +189,6 @@ var WFPopups = WFExtensions.add('Popups', {
 					this.selected = true;
 
 					$('#popup_extension_' + this.value).show();
-					// set as selected popup
-					self.popup = this.value;
 					// call onSelect function
 					self._call('onSelect', [], this.value);
 				}
@@ -253,8 +254,7 @@ var WFPopups = WFExtensions.add('Popups', {
 		args = args || {};
 
 		// Popup option is enabled
-		if(this.isEnabled()) {
-
+		if(this.isEnabled()) {			
 			if(n && (n.nodeName == 'A' || ( n = ed.dom.getParent(n, 'A')))) {
 				// remove all popups
 				this.removePopups(n);
@@ -297,8 +297,15 @@ var WFPopups = WFExtensions.add('Popups', {
 				}
 			}
 		} else {
+			var s = false;
 			// is a popup and option not checked - remove
-			if(this.isPopup(n)) {
+			$.each(this.popups, function(k, v) {
+				if(self.isPopup(n, v)) {
+					s = true;
+				}
+			});
+			
+			if (s) {
 				ed.dom.remove(n, true);
 			}
 		}
