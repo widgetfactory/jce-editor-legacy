@@ -192,11 +192,11 @@
 				var $item = $('li.selected.active', '#item-list').removeClass('active');
 
 				if ($(this).hasClass('details-nav-left')) {
-					$item.prev('li.selected').addClass('active');
+					$item.prevAll('li.selected:first').addClass('active');
 				}
 
-				if ($(this).hasClass('details-nav-right')) {
-					$item.next('li.selected').addClass('active');
+				if ($(this).hasClass('details-nav-right')) {					
+					$item.nextAll('li.selected:first').addClass('active');
 				}
 
 				self._showItemDetails();
@@ -1984,8 +1984,9 @@
 
 			// show navigation buttons
 			if (n > 1) {
+				
 				// get active item index				
-				var index = $items.index('.active:first');
+				var index = $items.index($items.filter('.active'));
 
 				if (index) {
 					$('span.details-nav-left', $nav).addClass('visible').attr('aria-hidden', false);
