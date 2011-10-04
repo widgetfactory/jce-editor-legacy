@@ -424,13 +424,19 @@ class WFJoomlaFileSystem extends WFFileSystem
 		
 		$src 	= WFUtility::makePath($this->getBaseDir(), $file);
 		$dest 	= WFUtility::makePath($this->getBaseDir(), WFUtility::makePath($destination, basename($file)));
-		
+
 		// src is a file
 		if (is_file($src)) {
 			$result->type 	= 'files';
 			$result->state 	= JFile::copy($src, $dest);
 		} else if (is_dir($src)) {
-			$result->type 	= 'folders';
+			// Folders cannot be copied into themselves as this creates an infinite copy / paste loop	
+			if ($file === $destination) {
+				$result->state = false;
+				$result->message = WFText::_('WF_MANAGER_COPY_INTO_ERROR');
+			}
+
+			$result->type 	= 'folders';				
 			$result->state 	= JFolder::copy($src, $dest);
 			$result->path 	= $dest;
 		}
@@ -456,7 +462,7 @@ class WFJoomlaFileSystem extends WFFileSystem
 				$result->type 	= 'files';
 				$result->state 	= JFile::move($src, $dest);
 			} else if (is_dir($src)) {
-				$result->type 	= 'folders';
+				$result->type 	= 'folders';				
 				$result->state 	= JFolder::move($src, $dest);
 				$result->path 	= $dest;
 			}
