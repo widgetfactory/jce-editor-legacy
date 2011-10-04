@@ -76,14 +76,16 @@ class JoomlalinksContent extends JObject {
 					
 					// Joomla! 1.5	
 					if (method_exists('ContentHelperRoute', 'getSectionRoute')) {
-						$id = ContentHelperRoute::getSectionRoute($section->id);
+						$id 	= ContentHelperRoute::getSectionRoute($section->id);
+						$view 	= 'section';
 					} else {
 						$id = ContentHelperRoute::getCategoryRoute($section->slug);
+						$view 	= 'category';
 					}
 					
 					if (strpos($id, 'index.php?Itemid=') !== false) {
 						$url 	= $id;
-						$id 	= 'index.php?option=com_content&view=category&id=' . $section->id;
+						$id 	= 'index.php?option=com_content&view=' . $view . '&id=' . $section->id;
 					}
 					
 					$items[] = array(
@@ -228,7 +230,9 @@ class JoomlalinksContent extends JObject {
 		$db		= JFactory::getDBO();
 		$user	= JFactory::getUser();
 		
-		if (isset($user->gid)) {
+		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
+			return WFLinkBrowser::getCategory('com_content');
+		} else {
 			$query = 'SELECT id, title, alias'
 			. ' FROM #__sections'
 			. ' WHERE published = 1'
@@ -239,9 +243,7 @@ class JoomlalinksContent extends JObject {
 	
 			$db->setQuery($query);
 			return $db->loadObjectList();	
-		} else {
-			return WFLinkBrowser::getCategory('com_content');
-		}		
+		}	
 	}
 	
 	private function _getArticles($id)
