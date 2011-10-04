@@ -132,11 +132,8 @@ class WFLinkBrowser extends WFBrowserExtension
 		if ($wf->getParam('category_alias', 1) == 1) {
 			$query .= ', CASE WHEN CHAR_LENGTH(alias) THEN CONCAT_WS(":", id, alias) ELSE id END as slug';
 		}
-		// Joomla! 1.5 section / category
-		if (isset($user->gid)) {
-			$where  = ' WHERE section = '.$db->Quote($section);
-			$where .= ' AND access <= '.(int) $user->get('aid');
-		} else {
+		
+		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
 			$where  = ' WHERE parent_id = '.(int) $parent;
 			$where .= ' AND extension = '.$db->Quote($section);
 			$where .= ' AND access IN ('.implode(',', $user->authorisedLevels()).')';
@@ -144,6 +141,9 @@ class WFLinkBrowser extends WFBrowserExtension
 			if (!$wf->checkAccess('static', 1)) {
 				$where .= ' AND path != '.$db->Quote('uncategorised');
 			}
+		} else {
+			$where  = ' WHERE section = '.$db->Quote($section);
+			$where .= ' AND access <= '.(int) $user->get('aid');
 		}
 		
 		$query .= ' FROM #__categories'
