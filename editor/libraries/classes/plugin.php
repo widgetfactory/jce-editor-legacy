@@ -13,9 +13,6 @@
 
 defined( '_JEXEC') or die( 'ERROR_403');
 
-// Needed for cyrillic languages?
-header("Content-type: text/html; charset=utf-8");
-
 wfimport('editor.libraries.classes.editor');
 
 /**
