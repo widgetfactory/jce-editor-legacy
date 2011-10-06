@@ -82,19 +82,17 @@ class WFFileBrowserPlugin extends WFMediaManager
 				$document->addScript(array('langs/en_dlg.js'), 'tiny_mce');
 			}
 			
+			$element = JRequest::getCmd('element', '');
+			
 			$options = array(
 				'plugin' => array(
 					'root' 	=> JURI::root(),
 					'site' 	=> JURI::base(true) . '/'
 				),
-				'manager' 	=> $settings
+				'manager' 	=> $settings,
+				'element'	=> $element
 			);
-			
-			// add element
-			if (JRequest::getCmd('element')) {
-				$options['element'] = JRequest::getCmd('element');
-			}
-			
+
 			$document->addScriptDeclaration('jQuery(document).ready(function($){$.WFBrowserWidget.init('.json_encode($options).');});');
 			
 			$document->addStyleSheet(array(
