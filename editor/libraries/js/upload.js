@@ -127,7 +127,7 @@
                 // on Uploader init
                 this.uploader.bind('Init', function(up) {
                     self._createDragDrop();
-                    up.features.canOpenDialog = false;
+                    up.features.triggerDialog = false;
                 });
 
                 // on Uploader init
