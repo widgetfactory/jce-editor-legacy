@@ -50,7 +50,7 @@ class WFFileBrowser extends WFBrowserExtension
 			'filesystem' 				=> 'joomla',
 			'filetypes'					=> 'images=jpg,jpeg,png,gif',
 			'upload'					=> array(
-				'runtimes'			=> 'html5,flash,silverlight',
+				'runtimes'			=> 'html5,flash',
 				'chunk_size' 		=> null,
 				'max_size'			=> 1024,
 				'validate_mimetype'	=> 0
