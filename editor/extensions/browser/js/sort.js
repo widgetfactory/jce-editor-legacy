@@ -79,7 +79,7 @@
                 return {
                     value 	: v,
                     element : this
-                }
+                };
             }).get();
 
             // sort list

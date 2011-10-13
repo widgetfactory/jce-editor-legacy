@@ -523,16 +523,9 @@
 						classes.push(e.classes);
 					}
 
-					var name = e.name;
-
-					// shorten name
-					if (name.length > 20) {
-						name = name.substr(0, 20) + '...';
-					}
-
 					h += '<li class="folder ' + classes.join(' ') + '" id="' + e.id + '" title="' + e.name + '"' +
 					data.join(' ') +
-					'><span class="checkbox" role="checkbox" aria-checked="false"></span><a href="javascript:;">'+ name +'</a><span class="date" aria-hidden="true">' + $.String.formatDate(e.properties.modified) + '</span></li>';
+					'><span class="checkbox" role="checkbox" aria-checked="false"></span><a href="javascript:;">'+ e.name +'</a><span class="date" aria-hidden="true">' + $.String.formatDate(e.properties.modified) + '</span></li>';
 				});
 
 			}
@@ -564,18 +557,9 @@
 						classes.push(e.classes);
 					}
 
-					var name = $.String.stripExt(e.name);
-
-					// shorten name
-					if (name.length > 20) {
-						name = name.substr(0, 20) + '...' + $.String.getExt(e.name);
-					} else {
-						name = e.name;
-					}
-
 					h += '<li class="file ' + $.String.getExt(e.name) + ' ' + classes.join(' ') + '" id="' + e.id + '" title="' + e.name + '"' +
 					data.join(' ') +
-					'><span class="checkbox" role="checkbox" aria-checked="false"></span><a href="javascript:;">'+ name +'</a><span class="date" aria-hidden="true">' + $.String.formatDate(e.properties.modified) + '</span><span class="size" aria-hidden="true">'+ $.String.formatSize(e.properties.size) +'</span></li>';
+					'><span class="checkbox" role="checkbox" aria-checked="false"></span><a href="javascript:;">'+ e.name +'</a><span class="date" aria-hidden="true">' + $.String.formatDate(e.properties.modified) + '</span><span class="size" aria-hidden="true">'+ $.String.formatSize(e.properties.size) +'</span></li>';
 				});
 
 			} else {
@@ -2033,11 +2017,6 @@
 			if (type == 'file') {
 				name = $.String.stripExt(title);
 				ext  = $.String.getExt(title) + ' ';
-			}
-
-			// shorten name
-			if (name.length > 25) {
-				name = name.substr(0, 25) + '...';
 			}
 
 			// create properties list
