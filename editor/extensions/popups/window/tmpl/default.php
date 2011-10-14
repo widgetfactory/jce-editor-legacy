@@ -66,4 +66,3 @@ defined( '_WF_EXT' ) or die( 'Restricted access' );
     			
    </table>
    </fieldset>
-</table>
