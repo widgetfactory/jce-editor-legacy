@@ -51,8 +51,6 @@
         FILE_INVALID_ERROR : -800,
 
         _init : function() {
-            var self = this;
-
             this.field 		= this.options.field;
             this.files 		= [];
             this.current	= null;
@@ -176,6 +174,8 @@
                     		o.response = '{"error":true,"text":"UPLOAD ERROR"}';
                     	}
                     }
+                    // remove anything outside of {}
+                    o.response = o.response.replace(/^([^\}]*)\{([^\}]+)\}(.*)$/, '{$2}');
 
                     self._onComplete(file, $.parseJSON(o.response), status);
                 });
@@ -218,6 +218,19 @@
                                     });
 
                                     break;
+                                case plupload.IMAGE_MEMORY_ERROR :
+									details = plupload.translate('Runtime ran out of available memory.');
+									break;
+						
+								case plupload.IMAGE_DIMENSIONS_ERROR :
+									details = plupload.translate('Resoultion out of boundaries! <b>%s</b> runtime supports images only up to %wx%hpx.').replace(/%([swh])/g, function($0, $1) {
+										switch ($1) {
+											case 's': return up.runtime;
+											case 'w': return up.features.maxWidth;	
+											case 'h': return up.features.maxHeight;
+										}
+									});
+									break;
                             }
                             message += '<p>' + details + '</p>';
                         }
@@ -292,7 +305,7 @@
                 }
 
                 // show error text
-                $(file.element).addClass('error').after('<li class="queue-item-error"><span>' + response.text + '</span></li>');
+                $(file.element).addClass('error').after('<li class="queue-item-error"><span class="queue-item-error">' + response.text + '</span></li>');
                 // hide progress
                 $('span.queue-item-progress', file.element).hide();
             } else {
@@ -420,7 +433,7 @@
         },
 
         _createQueue: function(files) {
-            var self = this, doc = document, max_file_size = this.uploader.settings.max_file_size, input, info;
+            var self = this, doc = document;
 
             $(this.element).empty();
 
@@ -467,11 +480,17 @@
                     'role' : 'presentation'
                 }).addClass('queue-item-name').append('<span class="queue-item-progress" role="presentation"></span><span class="queue-item-name-text">' + title + '</span>').appendTo(file.element);
 
+                var fs = plupload.formatSize(file.size);
+				// remove N/A label                
+                if (fs == 'N/A') {
+                	fs = '';
+                }
+                
                 // size
                 $(size).attr({
-                    'title' : plupload.formatSize(file.size),
+                    'title' : fs,
                     'role' : 'presentation'
-                }).addClass('queue-item-size').html(plupload.formatSize(file.size));
+                }).addClass('queue-item-size').html(fs);
 
                 // input
                 $(input).attr({
@@ -590,5 +609,4 @@
     $.extend($.ui.uploader, {
         version: "@@version@@"
     });
-
 })(jQuery);
