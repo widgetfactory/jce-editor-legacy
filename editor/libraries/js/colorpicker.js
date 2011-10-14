@@ -836,7 +836,6 @@
          */
         fb.widgetCoords = function(event) {
             var x, y;
-            var el = event.target || event.srcElement;
             var reference = fb.wheel;
 
             // Use absolute coordinates
@@ -981,7 +980,7 @@
         };
 
         fb.HSLToRGB = function(hsl) {
-            var m1, m2, r, g, b;
+            var m1, m2;
             var h = hsl[0], s = hsl[1], l = hsl[2];
             m2 = (l <= 0.5) ? l * (s + 1) : l + s - l * s;
             m1 = l * 2 - m2;

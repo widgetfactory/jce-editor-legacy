@@ -148,8 +148,6 @@
          * HTML5 form widgets
          */
         _formWidgets : function() {
-            var self = this;
-
             $('input[placeholder], textarea[placeholder]').placeholder();
 
 			$(':input[pattern]').pattern();
@@ -367,7 +365,7 @@
          * Modified for JQuery
          */
         addI18n : function(p, o) {
-            var lo, i18n = this.i18n;
+            var i18n = this.i18n;
 
             if (!$.type(p) == 'string') {
                 $.each(p, function(lc, o) {
@@ -502,8 +500,7 @@
          *            Scope to execute callback in
          */
         request: function (func, data, callback, scope) {
-            var self = this,
-            json = {
+            var json = {
                 'fn': func
             };
 
@@ -906,7 +903,6 @@
          * Media Dialog
          */
         media: function (name, url, options) {
-            var self = this;
             options = options || {};
 
             var div = document.createElement('div');
@@ -1047,7 +1043,7 @@
 
                         var ext = $.String.getExt(url);
                         var mt = mimes[ext];
-                        var type, props;
+                        var type = {}, props = {};
 
                         $.each(
                         mediaTypes, function (k, v) {
@@ -1090,7 +1086,7 @@
                                     } else {
                                         $(div).append('<audio autoplay="autoplay" controls="controls" src="' + url + '"></audio>');
                                     }
-                                    var fb, ns = '<p style="margin-left:auto;">' + $.Plugin.translate('media_not_supported', 'Media type not supported by this browser') + '</p>';
+                                    var fb = false, ns = '<p style="margin-left:auto;">' + $.Plugin.translate('media_not_supported', 'Media type not supported by this browser') + '</p>';
 
                                     // add fallback
                                     if ((!$.browser.webkit || /Chrome/.test(navigator.appName)) && /(mp4|mp3|m4v)$/i.test(ext)) {

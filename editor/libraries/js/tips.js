@@ -114,7 +114,6 @@
 		 * @param {Object} el Target Element
 		 */
 		_start: function(e) {
-			var self = this;
 			// Create tooltip if it doesn't exist
 			this._createTips();
 			
