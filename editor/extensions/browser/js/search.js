@@ -26,7 +26,6 @@
 
             var clear 	= this.options.clear;
             var items 	= this.options.items;
-            var list 	= this.options.list;
 
             if (clear) {
                 $(clear).click( function(e) {

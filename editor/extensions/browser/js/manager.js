@@ -442,7 +442,7 @@
 		 * @param {String} src The base url
 		 */
 		_setupDir : function() {
-			var dir = '/', file = '', base = $.String.path(this.options.base, this.options.dir), n = base.length;
+			var dir = '/';
 
 			// get the file src from the widget element
 			var src = $(this.element).val();
@@ -622,8 +622,6 @@
 
 				// When a node is toggled and loaded
 				onNodeLoad : function(e, node) {
-					var self = this;
-
 					$(dialog.tree).tree('toggleLoader', node);
 
 					$.JSON.request('getTreeItem', $(node).attr('id'), function(o) {
@@ -974,7 +972,6 @@
 			var list	= this._serializeSelectedItems();
 
 			var site 	= $.Plugin.getURI(true);
-			var base	= this.options.dir;
 
 			switch(name) {
 				case 'help':
@@ -1072,7 +1069,7 @@
 							 * @param {Object} name File name
 							 */
 							function _checkName(file) {
-								var found, msg = self._translate('file_exists_alert', 'A file with the same name exists in the target folder.');
+								var found = false, msg = self._translate('file_exists_alert', 'A file with the same name exists in the target folder.');
 								var name = $.String.safe(file.name);
 
 								$('li', 'file-list').each( function() {
@@ -1395,7 +1392,7 @@
 		 * @param {Object} options
 		 */
 		_addAction : function(o) {
-			var self = this, name = o.name || '', fn = this._execute, scope = this;
+			var self = this, name = o.name || '', fn = this._execute;
 
 			if (o.action) {
 				fn = o.action;
@@ -1784,7 +1781,7 @@
 				// element is probably parent ul, so get last selected item
 				el = $('li.selected:last', $list).get(0);
 
-				var $list = $(this.options.dialog.list);
+				$list = $(this.options.dialog.list);
 
 				// change target for keydown
 				if (e.which == 38) {
