@@ -11,7 +11,9 @@
 (function() {
 	WFPopups.addPopup('rokbox', {
 
-		setup : function() {			
+		setup : function() {
+			var self = this;
+			
 			$('#rokbox_fullscreen').click(function() {
 				$('#rokbox_width, #rokbox_height').prop('disabled', $(this).is(':checked'));
 			});
@@ -121,7 +123,7 @@
 		 * @param {Object} n Link Element
 		 */
 		setAttributes : function(n, args) {
-			var ed = tinyMCEPopup.editor;
+			var self = this, ed = tinyMCEPopup.editor;
 
 			this.remove(n);
 			
