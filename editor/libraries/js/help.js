@@ -65,7 +65,7 @@
 			},
 			
 			loadItem: function(el) {
-				var s, keys, p, map;
+				var s, n, keys, p, map;
 				$(el).addClass('loading');
 				var id = $(el).attr('id');
 	

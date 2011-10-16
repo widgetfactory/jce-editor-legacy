@@ -49,6 +49,8 @@ function jInsertEditorText(text, editor) {
 		 * @param {Object} settings TinyMCE Settings
 		 */
 		init : function(settings) {
+			var self = this;
+
 			var base = settings.base_url;
 			var site = this.getSite(base);
 
@@ -415,11 +417,12 @@ function jInsertEditorText(text, editor) {
 		 * @param {String} v The text to insert
 		 */
 		insert : function(el, v) {
+			var bm, ed;
 			if( typeof el == 'string') {
 				el = document.getElementById(el);
 			}
 			if(/wfEditor/.test(el.className)) {
-				var ed = tinyMCE.get(el.id);
+				ed = tinyMCE.get(el.id);
 				if(tinymce.isIE) {
 					if(window.parent.tinymce) {
 						var ed = window.parent.tinyMCE.get(el.id);

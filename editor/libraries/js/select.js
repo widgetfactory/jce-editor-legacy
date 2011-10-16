@@ -53,7 +53,7 @@
         },
 
         _onBlurEditableSelectInput : function() {
-            var self = this, found = false, v = $(this.input).val();
+            var self = this, o, found, v = $(this.input).val();
 
             if (v != '') {
             	// select if value exists
