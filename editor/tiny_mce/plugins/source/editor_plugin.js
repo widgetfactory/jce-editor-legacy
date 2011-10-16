@@ -417,9 +417,6 @@
             	cm.setActive('numbers', false);
             	cm.setActive('wrap', false);
 
-                // focus editor
-                ed.focus();
-
                 ed.setProgressState(false);
             }
             // store state
