@@ -145,7 +145,7 @@
 
 						if (v == t.selectedLang)
 							t.selectedItem = mi;
-					})
+					});
 				});
 
 				return c;
