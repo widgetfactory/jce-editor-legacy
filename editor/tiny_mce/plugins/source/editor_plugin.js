@@ -13,7 +13,7 @@
     
     tinymce.create('tinymce.plugins.Source', {
         init : function(ed, url) {
-            var self = this, DOM = tinymce.DOM;
+            var self = this;
 
             this.editor = ed; 
             this.url = url;
@@ -246,7 +246,7 @@
         },
 
         setContent : function(v) {
-            var ed = this.editor, DOM = tinymce.DOM, se = this.getEditor();
+            var ed = this.editor, se = this.getEditor();
 
             if (typeof v == 'undefined') {
                 v = ed.getContent();
@@ -261,7 +261,7 @@
         },
         
         insertContent : function(v) {
-        	var ed = this.editor, DOM = tinymce.DOM, se = this.getEditor();
+        	var DOM = tinymce.DOM, se = this.getEditor();
         	
         	if (se) {                
                 // decode and indent
@@ -272,7 +272,7 @@
         },
 
         getContent : function() {
-            var ed = this.editor, DOM = tinymce.DOM, se = this.getEditor();
+            var se = this.getEditor();
 
             if (se) {
                 return se.getContent();
@@ -283,7 +283,7 @@
             if (!this.state)
                 return;
 
-            var self = this, ed = this.editor, DOM = tinymce.DOM, ifr = DOM.get(ed.id + '_ifr'), se = this.getEditor();
+            var ed = this.editor, DOM = tinymce.DOM, ifr = DOM.get(ed.id + '_ifr'), se = this.getEditor();
 
             w = parseFloat(w) || ifr.clientWidth;
             h = parseFloat(h) || ifr.clientHeight;
@@ -307,7 +307,7 @@
          * Disables all buttons except Source
          */
         toggleDisabled : function() {
-            var self = this, ed = this.editor, DOM = tinymce.DOM, cm = ed.controlManager;
+            var ed = this.editor, DOM = tinymce.DOM, cm = ed.controlManager;
 
             var state 	= this.getState();
             // store active buttons
@@ -349,15 +349,13 @@
         },
 
         toggleSource : function() {
-            var self = this, ed = this.editor, DOM = tinymce.DOM, cm = ed.controlManager, textarea, cMenu;
+            var self = this, ed = this.editor, DOM = tinymce.DOM, cm = ed.controlManager;
             var se = this.getEditor();
 
             var state = this.getState();
 
             // editor iframe
             var iframe 		= DOM.get(ed.id + '_ifr');
-            // main textarea
-            var element		= ed.getElement();
 
             // set the state
             this.setState(!state);
@@ -372,9 +370,6 @@
             var wordcount 	= DOM.get(ed.id + '-word-count');
 
             if (!state) {
-                var w = parseFloat(iframe.clientWidth);
-                var h = parseFloat(iframe.clientHeight);
-
                 // hide Path
                 if (editorpath) {
                 	DOM.hide(editorpath);
@@ -424,7 +419,7 @@
         },
 
         loadEditor : function() {
-            var self = this, ed = this.editor, cm = ed.controlManager, url = this.url, DOM = tinymce.DOM, iframe = DOM.get(ed.id + '_ifr');
+            var self = this, ed = this.editor, cm = ed.controlManager, DOM = tinymce.DOM, iframe = DOM.get(ed.id + '_ifr');
 			var w = iframe.clientWidth, h = iframe.clientHeight;
 
             // create the container
@@ -438,7 +433,6 @@
                 'class' : 'WFSourceEditor'
             });
 
-            var parent = iframe.parentNode;
             DOM.insertAfter(container, iframe);
 
             var query 	= ed.getParam('site_url') + 'index.php?option=com_jce';
@@ -526,7 +520,7 @@
          * Will create / show / hide the textarea source editor or ACE editor
          */
         setHighlight : function(s) {
-            var ed = this.editor, DOM = tinymce.DOM, v, n, cm = ed.controlManager, se = this.getEditor();
+            var ed = this.editor, DOM = tinymce.DOM, cm = ed.controlManager, se = this.getEditor();
 
             cm.setActive('highlight', !!s);
 
@@ -562,7 +556,7 @@
          * @param {Boolean} s State
          */
         setWrap: function(s) {
-            var ed = this.editor, DOM = tinymce.DOM, v, n, se = this.getEditor();
+            var ed = this.editor, se = this.getEditor();
 
             var cm = ed.controlManager;
 
