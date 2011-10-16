@@ -192,6 +192,7 @@
 		 */
 		createNode : function(nodes, parent) {
 			var self = this;
+			var e, p, h, l, np, i;
 
 			// If parent is not an element, find the parent element
 			if (!parent) {
