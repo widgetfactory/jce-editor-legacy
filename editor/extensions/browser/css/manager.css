@@ -608,7 +608,6 @@ div.layout-left-right div.spacer {
 	overflow: hidden;
     text-overflow: ellipsis;
     -o-text-overflow: ellipsis;
-    white-space : nowrap;
 }
 
 #browser-details-text dd,#browser-details-comment li {
@@ -833,7 +832,7 @@ ul.item-list li a {
 	text-overflow: ellipsis;
 	-o-text-overflow: ellipsis;
 	-moz-text-overflow: ellipsis;
-	width: 200px;
+	width: 220px;
 	overflow: hidden;
 	display : inline-block;
 }

@@ -1030,18 +1030,6 @@ class WFFileBrowser extends WFBrowserExtension
 					$this->validateUploadedFile($file);
 				}				
 				
-				// check file size
-				if ($chunk == 0 && $chunks == 1) {
-					@clearstatcache();	
-					$upload 	= $this->get('upload');
-					$max_size 	= intval(preg_replace('/[^0-9]/', '', $upload['max_size'])) * 1024;
-					$file_size 	= @filesize($file['tmp_name']);	
-
-					if ($file_size > $max_size) {
-						JError::raiseError(403, WFText::sprintf('WF_MANAGER_UPLOAD_SIZE_ERROR', $name, $file_size, ($max_size / 1024) . 'KB'));
-					}	
-				}
-				
 				// make file name 'web safe'
 				$name = WFUtility::makeSafe($name);
 

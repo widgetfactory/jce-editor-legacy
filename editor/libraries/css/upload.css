@@ -167,12 +167,6 @@ ul#upload-queue li.error, ul#upload-queue li.queue-item-error {
 }
 ul#upload-queue li.queue-item-error {
 	text-align: center;
-	margin : -10px 2px 10px;
-}
-ul#upload-queue li.queue-item-error span {
-	height : auto;
-	white-space: normal;
-	font-weight : bold;
 }
 div.plupload_flash, div.plupload_silverlight, div.plupload_html5, div.plupload_browserplus, div.plupload_gears {
 	z-index: 9999;
