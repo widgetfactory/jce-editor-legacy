@@ -20,7 +20,7 @@ class WFMediaPlayerExtension extends WFExtension
     /**
      * @access  protected
      */
-    function __construct($config = array())
+    public function __construct($config = array())
     {
         $default = array(
         	'name'		=> '',
@@ -43,7 +43,7 @@ class WFMediaPlayerExtension extends WFExtension
      * @return  MediaManager  The manager object.
      * @since 1.5
      */
-	function &getInstance($name = 'jceplayer')
+	public function &getInstance($name = 'jceplayer')
     {
         static $instance;
         
@@ -71,7 +71,7 @@ class WFMediaPlayerExtension extends WFExtension
         return $instance;
     }
     
-    function display()
+    public function display()
     {
     	parent::display();
     	
@@ -95,27 +95,27 @@ class WFMediaPlayerExtension extends WFExtension
         }
     }
 	
-	function isEnabled()
+	public function isEnabled()
 	{
 		return false;
 	}
     
-    function getName()
+    public function getName()
     {
     	return $this->get('name');
     }
     
-	function getTitle()
+	public function getTitle()
     {
     	return $this->get('title');
     }
     
-    function getParams()
+    public function getParams()
     {
     	return $this->params;
     }
     
-    function getParam($param, $default = '')
+    public function getParam($param, $default = '')
     {
     	$params = $this->getParams();
     	
@@ -127,7 +127,7 @@ class WFMediaPlayerExtension extends WFExtension
      * @param object $player
      * @return 
      */
-    function loadTemplate($tpl = '')
+    public function loadTemplate($tpl = '')
     {
         $output = '';
 		
