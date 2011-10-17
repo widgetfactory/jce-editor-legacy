@@ -195,7 +195,7 @@ class WFUtility
 	/**
 	 * Convert size value to bytes
 	 */
-	function convertSize($value)
+	public function convertSize($value)
 	{		
 		// Convert to bytes
 		switch(strtolower($value{strlen($value)-1})) {

@@ -1,8 +1,7 @@
 <?php
 /**
-* $Id: config.php 221 2011-06-11 17:30:33Z happy_noodle_boy $
-* @package      JCE
-* @copyright    Copyright (C) 2005 - 2009 Ryan Demmer. All rights reserved.
+* @package      JCE Site
+* @copyright    Copyright (C) 2005 - 2011 Ryan Demmer. All rights reserved.
 * @author		Ryan Demmer
 * @license      GNU/GPL
 * JCE is free software. This version may have been modified pursuant

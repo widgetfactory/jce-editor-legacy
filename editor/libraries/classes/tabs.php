@@ -13,18 +13,17 @@
 // no direct access
 defined('_JEXEC') or die('ERROR_403');
 
-class WFTabs extends JObject
+final class WFTabs extends JObject
 {
-	var $_tabs 		= array();
-	var $_panels 	= array();
-	var $_paths		= array();
+	private $_tabs 		= array();
+	private $_panels 	= array();
+	private $_paths		= array();
 
 	/**
 	 * Constructor activating the default information of the class
-	 *
-	 * @access  protected
+	 * @access  public
 	 */
-	function __construct($config = array())
+	public function __construct($config = array())
 	{	
 		if (!array_key_exists('base_path', $config)) {
 			$config['base_path'] = WF_EDITOR_LIBRARIES;
@@ -40,16 +39,15 @@ class WFTabs extends JObject
 	}
 	
 	/**
-	 * Returns a reference to a plugin object
+	 * Returns a reference to a WFTabs object
 	 *
 	 * This method must be invoked as:
-	 *    <pre>  $advlink =AdvLink::getInstance();</pre>
+	 *    <pre>  $tabs = WFTabs::getInstance();</pre>
 	 *
 	 * @access  public
-	 * @return  JCE  The editor object.
-	 * @since 1.5
+	 * @return  object WFTabs
 	 */
-	function &getInstance($config = array())
+	public function &getInstance($config = array())
 	{
 		static $instance;
 
@@ -60,17 +58,23 @@ class WFTabs extends JObject
 		return $instance;
 	}
 	
-	function addTemplatePath($path)
+	/**
+	 * Add a template path
+	 * @access 	public
+	 * @param 	string $path
+	 */
+	public function addTemplatePath($path)
 	{
 		$this->_paths[] = $path;
 	}
 
 	/**
 	 * Load a panel view
+	 * @access  private
 	 * @param object $layout Layout (panel) name
 	 * @return panel JView object
 	 */
-	function loadPanel($panel, $state)
+	private function loadPanel($panel, $state)
 	{		
 		$view = new WFView(array(
             'name' 		=> $panel,
@@ -90,9 +94,10 @@ class WFTabs extends JObject
 
 	/**
 	 * Add a tab to the document. A panel is automatically created and assigned
+	 * @access	public
 	 * @param object $tab Tab name
 	 */
-	function addTab($tab, $state = 1)
+	public function addTab($tab, $state = 1)
 	{
 		if (!array_key_exists($tab, $this->_tabs)) {
 			if ($state) {
@@ -105,9 +110,10 @@ class WFTabs extends JObject
 
 	/**
 	 * Add a panel to the document
-	 * @param object $panel Panel name
+	 * @access	public
+	 * @param 	object $panel Panel name
 	 */
-	function addPanel($panel, $state = 1)
+	public function addPanel($panel, $state = 1)
 	{
 		if (!array_key_exists($panel, $this->_panels)) {
 			$this->_panels[$panel] = $this->loadPanel($panel, $state);
@@ -116,9 +122,10 @@ class WFTabs extends JObject
 
 	/**
 	 * Remove a tab from the document
+	 * @access	public
 	 * @param object $tab Tab name
 	 */
-	function removeTab($tab)
+	public function removeTab($tab)
 	{
 		if (array_key_exists($tab, $this->_tabs)) {
 			unset($this->_tabs[$tab]);
@@ -127,8 +134,9 @@ class WFTabs extends JObject
 	
 	/**
 	 * Render the document tabs and panels
+	 * @access	public
 	 */
-	function render()
+	public function render()
 	{		
 		$output = '';
 		

@@ -13,41 +13,29 @@
 
 defined( '_JEXEC') or die( 'Restricted access');
 
-// Needed for cyrillic languages?
-header("Content-type: text/html; charset=utf-8");
+wfimport('editor.libraries.classes.editor');
+wfimport('editor.libraries.classes.utility');
+wfimport('editor.libraries.classes.document');
+wfimport('editor.libraries.classes.view');
+wfimport('editor.libraries.classes.tabs');
 
-require_once( WF_EDITOR_LIBRARIES .DS. 'classes' .DS. 'editor.php');
-require_once( WF_EDITOR_LIBRARIES .DS. 'classes' .DS. 'utility.php');
-require_once( WF_EDITOR_LIBRARIES .DS. 'classes' .DS. 'document.php');
-require_once( WF_EDITOR_LIBRARIES .DS. 'classes' .DS. 'view.php');
-require_once( WF_EDITOR_LIBRARIES .DS. 'classes' .DS. 'tabs.php');
-
-/**
- * JCE class
- *
- * @static
- * @package		JCE
- * @since	1.5
- */
-
-class WFEditorTheme extends WFEditor
+final class WFEditorTheme extends WFEditor
 {
 	/*
 	 *  @var array
 	 */
-	var $scripts = array();
+	private $scripts = array();
 	/*
 	 *  @var array
 	 */
-	var $styles = array();
+	private $styles = array();
 
 
 	/**
 	 * Constructor activating the default information of the class
-	 *
 	 * @access	protected
 	 */
-	function __construct()
+	public function __construct()
 	{
 		// Call parent
 		parent::__construct();
@@ -61,7 +49,12 @@ class WFEditorTheme extends WFEditor
 		$this->execute();
 	}
 	
-	function & getView()
+	/**
+	 * Get or create the theme view
+	 * @access provate
+	 * @return object WFView
+	 */
+	private function & getView()
 	{
 		static $view;
 		
@@ -80,7 +73,11 @@ class WFEditorTheme extends WFEditor
 		return $view;
 	}
 	
-	function execute()
+	/**
+	* Execute the theme item
+	* @access public
+	*/
+	public function execute()
 	{
 		WFToken::checkToken() or die('RESTRICTED ACCESS');	
 			
@@ -103,7 +100,11 @@ class WFEditorTheme extends WFEditor
 		$document->render();
 	}
 
-	function display()
+	/**
+	 * Show the theme dialog
+	 * @access private
+	 */
+	private function display()
 	{
 		jimport('joomla.filesystem.folder');
 
@@ -154,16 +155,15 @@ class WFEditorTheme extends WFEditor
 	}
 
 	/**
-	 * Returns a reference to a editor object
+	 * Returns a reference to a WFEditorTheme object
 	 *
 	 * This method must be invoked as:
-	 * 		<pre>  $browser =JCE::getInstance();</pre>
+	 * 		<pre>  $theme = WFEditorTheme::getInstance();</pre>
 	 *
 	 * @access	public
-	 * @return	JCE  The editor object.
-	 * @since	1.5
+	 * @return	object WFEditorTheme
 	 */
-	function &getInstance() {
+	public function &getInstance() {
 		static $instance;
 
 		if (!is_object($instance)) {

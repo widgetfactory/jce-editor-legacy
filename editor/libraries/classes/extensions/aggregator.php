@@ -17,13 +17,13 @@ class WFAggregatorExtension extends WFExtension {
 	/*
 	 *  @var varchar
 	 */
-	var $extensions = array();
+	private $extensions = array();
 	/**
 	 * Constructor activating the default information of the class
 	 *
 	 * @access	protected
 	 */
-	function __construct($config = array())
+	public function __construct($config = array())
 	{
 		parent::__construct($config);
 	}
@@ -38,7 +38,7 @@ class WFAggregatorExtension extends WFExtension {
 	 * @return	JCE  The editor object.
 	 * @since	1.5
 	 */
-	function & getInstance($config = array())
+	public function & getInstance($config = array())
 	{
 		static $instance;
 
@@ -49,17 +49,17 @@ class WFAggregatorExtension extends WFExtension {
 		return $instance;
 	}
 
-	function getName()
+	public function getName()
 	{
 		return $this->get('name');
 	}
 
-	function getTitle()
+	public function getTitle()
 	{
 		return $this->get('title');
 	}
 
-	function display()
+	public function display()
 	{
 		parent::display();
 
@@ -81,7 +81,7 @@ class WFAggregatorExtension extends WFExtension {
 		}
 	}
 
-	function & getAggregators()
+	public function & getAggregators()
 	{
 		static $aggregators;
 
@@ -133,7 +133,7 @@ class WFAggregatorExtension extends WFExtension {
 	 * @param object $player
 	 * @return
 	 */
-	function loadTemplate($name, $tpl ='')
+	public function loadTemplate($name, $tpl ='')
 	{
 		$path = WF_EDITOR_EXTENSIONS . DS . 'aggregator' . DS . $name;
 

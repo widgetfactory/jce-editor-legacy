@@ -13,11 +13,11 @@
 // no direct access
 defined('_JEXEC') or die('ERROR_403');
 
-class WFView extends JObject
+final class WFView extends JObject
 {
-	var $path = array();
+	private $path = array();
 	
-	function __construct ($config = array())
+	public function __construct ($config = array())
 	{
 		
 		if (!array_key_exists('base_path', $config)) {
@@ -52,7 +52,7 @@ class WFView extends JObject
 	* @copyright Copyright Copyright (C) 2005 - 2010 Open Source Matters. All rights reserved.
  	* @license GNU/GPL, see LICENSE.php
 	*/
-	function display($tpl = null)
+	public function display($tpl = null)
 	{
 		$result = $this->loadTemplate($tpl);
 		
@@ -189,27 +189,27 @@ class WFView extends JObject
 		return false;
 	}
 	
-	function getName()
+	public function getName()
 	{
 		return $this->get('name');
 	}
 	
-	function setLayout($layout)
+	public function setLayout($layout)
 	{
 		$this->set('layout', $layout);
 	}
 	
-	function getLayout()
+	public function getLayout()
 	{
 		return $this->get('layout');
 	}
 	
-	function addTemplatePath($path)
+	public function addTemplatePath($path)
 	{
 		$this->path[] = $path;
 	}
 	
-	function getTemplatePath()
+	public function getTemplatePath()
 	{
 		return $this->path;
 	}

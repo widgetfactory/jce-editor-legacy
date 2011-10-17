@@ -21,7 +21,7 @@ class WFDocument extends JObject
 	 * @var		array
 	 * @access   private
 	 */	
-	var $_scripts 	= array();
+	private $_scripts 	= array();
 	
 	/**
 	 * Array of scripts placed in the header
@@ -29,7 +29,7 @@ class WFDocument extends JObject
 	 * @var  array
 	 * @access   private
 	 */
-	var $_script 	= array();
+	private $_script 	= array();
 
 	/**
 	 * Array of linked style sheets
@@ -37,7 +37,7 @@ class WFDocument extends JObject
 	 * @var	 array
 	 * @access  private
 	 */
-	var $_styles 	= array();
+	private $_styles 	= array();
 
 	/**
 	 * Array of head items
@@ -45,7 +45,7 @@ class WFDocument extends JObject
 	 * @var	 array
 	 * @access  private
 	 */
-	var $_head 		= array();
+	private $_head 		= array();
 	
 	/**
 	 * Body content
@@ -53,7 +53,7 @@ class WFDocument extends JObject
 	 * @var	 array
 	 * @access  private
 	 */
-	var $_body		= '';
+	private $_body		= '';
 	
 	/**
 	 * Document title
@@ -61,7 +61,7 @@ class WFDocument extends JObject
 	 * @var	 string
 	 * @access  public
 	 */
-	var $title = '';
+	public $title = '';
 	
 	/**
 	 * Document version
@@ -69,7 +69,7 @@ class WFDocument extends JObject
 	 * @var	 string
 	 * @access  public
 	 */
-	var $version = '000000';
+	public $version = '000000';
 	
 	/**
 	 * Contains the document language setting
@@ -77,7 +77,7 @@ class WFDocument extends JObject
 	 * @var	 string
 	 * @access  public
 	 */
-	var $language = 'en-gb';
+	public $language = 'en-gb';
 
 	/**
 	 * Contains the document direction setting
@@ -85,14 +85,14 @@ class WFDocument extends JObject
 	 * @var	 string
 	 * @access  public
 	 */
-	var $direction = 'ltr';
+	public $direction = 'ltr';
 
 	/**
 	 * Constructor activating the default information of the class
 	 *
 	 * @access  protected
 	 */
-	function __construct($config = array())
+	public function __construct($config = array())
 	{
 		parent::__construct();
 		
@@ -103,17 +103,17 @@ class WFDocument extends JObject
 
 		$this->setProperties($config);
 	}
+	
 	/**
-	 * Returns a reference to a plugin object
+	 * Returns a reference to a WFDocument object
 	 *
 	 * This method must be invoked as:
-	 *    <pre>  $advlink =AdvLink::getInstance();</pre>
+	 *    <pre>  $document = WFDocument::getInstance();</pre>
 	 *
 	 * @access  public
-	 * @return  JCE  The editor object.
-	 * @since 1.5
+	 * @return  object WFDocument
 	 */
-	function &getInstance($config = array())
+	public function &getInstance($config = array())
 	{
 		static $instance;
 
@@ -124,27 +124,53 @@ class WFDocument extends JObject
 		return $instance;
 	}
 	
-	function setTitle($title)
+	/**
+	 * Set the document title
+	 * @access 	public
+	 * @param 	string $title
+	 */
+	public function setTitle($title)
 	{
 		$this->title = $title;
 	}
 	
-	function getTitle()
+	/**
+	 * Get the document title
+	 * @access	public
+	 * @return	string
+	 */
+	public function getTitle()
 	{
 		return $this->title;
 	}
 	
-	function setName($name)
+	/**
+	 * Set the document name
+	 * @access	public
+	 * @param 	string $name
+	 */
+	public function setName($name)
 	{
 		$this->name = $name;
 	}
 	
-	function getName()
+	/**
+	* Get the document name
+	* @access	public
+	* @return 	string
+	*/
+	public function getName()
 	{
 		return $this->name;
 	}
 
-	function getURL($relative = false)
+	/**
+	 * Get the editor URL
+	 * @access	private
+	 * @param 	bool $relative
+	 * @return 	string
+	 */
+	private function getURL($relative = false)
 	{
 		if ($relative) {
 			return JURI::root(true) . '/components/com_jce/editor';
@@ -155,11 +181,10 @@ class WFDocument extends JObject
 	
 	/**
 	 * Sets the global document language declaration. Default is English (en-gb).
-	 *
-	 * @access public
+	 * @access 	public
 	 * @param   string   $lang
 	 */
-	function setLanguage($lang = "en-gb") {
+	public function setLanguage($lang = "en-gb") {
 		$this->language = strtolower($lang);
 	}
 
@@ -169,7 +194,7 @@ class WFDocument extends JObject
 	 * @return string
 	 * @access public
 	 */
-	function getLanguage() {
+	public function getLanguage() {
 		return $this->language;
 	}
 
@@ -179,7 +204,7 @@ class WFDocument extends JObject
 	 * @access public
 	 * @param   string   $lang
 	 */
-	function setDirection($dir = "ltr") {
+	public function setDirection($dir = "ltr") {
 		$this->direction = strtolower($dir);
 	}
 
@@ -189,20 +214,19 @@ class WFDocument extends JObject
 	 * @return string
 	 * @access public
 	 */
-	function getDirection() {
+	public function getDirection() {
 		return $this->direction;
 	}
 
 	/**
 	 * Returns a JCE resource url
 	 *
-	 * @access  public
-	 * @param string  The path to resolve eg: libaries
-	 * @param boolean Create a relative url
+	 * @access  private
+	 * @param 	string  The path to resolve eg: libaries
+	 * @param 	boolean Create a relative url
 	 * @return  full url
-	 * @since 1.5
 	 */
-	function getBaseURL($path, $type = '')
+	private function getBaseURL($path, $type = '')
 	{
 		static $url;
 
@@ -272,12 +296,10 @@ class WFDocument extends JObject
 	/**
 	 * Convert a url to path
 	 *
-	 * @access  public
-	 * @param string  The url to convert
-	 * @return  Full path to file
-	 * @since 1.5
+	 * @param 	string $url
+	 * @return  string 
 	 */
-	function urlToPath($url)
+	private function urlToPath($url)
 	{
 		jimport('joomla.filesystem.path');
 		$bool = strpos($url, JURI::root()) === false;
@@ -292,7 +314,7 @@ class WFDocument extends JObject
 	 * @return  Image url
 	 * @since 1.5
 	 */
-	function image($image, $root = 'libraries')
+	public function image($image, $root = 'libraries')
 	{
 		$parts = explode('.', $image);
 		$parts = preg_replace('#[^A-Z0-9-_]#i', '', $parts);
@@ -306,18 +328,19 @@ class WFDocument extends JObject
 		return $this->getBaseURL($root) . implode('/', $parts);
 	}
 
-	function removeScript($file, $root = 'libraries')
+	public function removeScript($file, $root = 'libraries')
 	{
 		$file = $this->buildScriptPath($file, $root);		
 		unset($this->_scripts[$file]);
 	}
-	function removeCss($file, $root = 'libraries')
+	
+	public function removeCss($file, $root = 'libraries')
 	{
 		$file = $this->buildStylePath($file, $root);		
 		unset($this->_styles[$file]);
 	}
 	
-	function buildScriptPath($file, $root)
+	public function buildScriptPath($file, $root)
 	{
 		$file = preg_replace('#[^A-Z0-9-_\/\.]#i', '', $file);
 		// get base dir
@@ -334,7 +357,7 @@ class WFDocument extends JObject
 		return $file;
 	}
 	
-	function buildStylePath($file, $root)
+	public function buildStylePath($file, $root)
 	{
 		$file = preg_replace('#[^A-Z0-9-_\/\.]#i', '', $file);
 		// get base dir
@@ -360,7 +383,7 @@ class WFDocument extends JObject
 	 * @return  echo script html
 	 * @since 1.5
 	 */
-	function addScript($files, $root = 'libraries', $type = 'text/javascript')
+	public function addScript($files, $root = 'libraries', $type = 'text/javascript')
 	{
 		$files = (array) $files;
 
@@ -384,7 +407,7 @@ class WFDocument extends JObject
 	 * @return  echo css html
 	 * @since 1.5
 	 */
-	function addStyleSheet($files, $root = 'libraries', $type = 'text/css')
+	public function addStyleSheet($files, $root = 'libraries', $type = 'text/css')
 	{
 		$files = (array) $files;
 
@@ -408,7 +431,7 @@ class WFDocument extends JObject
 		}
 	}
 
-	function addScriptDeclaration($content, $type = 'text/javascript')
+	public function addScriptDeclaration($content, $type = 'text/javascript')
 	{
 		if (!isset($this->_script[strtolower($type)])) {
 			$this->_script[strtolower($type)] = $content;
@@ -417,23 +440,20 @@ class WFDocument extends JObject
 		}
 	}
 
-	function getScripts()
+	private function getScripts()
 	{
 		return $this->_scripts;
 	}
 
-	function getStyleSheets()
+	private function getStyleSheets()
 	{
 		return $this->_styles;
 	}
 
 	/**
 	 * Setup head data
-	 *
-	 * @access  public
-	 * @since 1.5
 	 */
-	function setHead($data)
+	private function setHead($data)
 	{
 		if (is_array($data)) {
 			$this->_head = array_merge($this->_head, $data);

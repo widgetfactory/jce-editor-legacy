@@ -20,9 +20,9 @@ wfimport('editor.libraries.classes.extensions.browser');
 class WFMediaManager extends WFEditorPlugin 
 {
 	/**
-	 * @access  protected
+	 * @access  public
 	 */
-	function __construct($config = array())
+	public function __construct($config = array())
 	{
 		// Call parent
 		parent::__construct();
@@ -39,7 +39,12 @@ class WFMediaManager extends WFEditorPlugin
 		$browser = $this->getBrowser();	
 	}
 
-	function getBrowser()
+	/**
+	 * Get the File Browser instance
+	 * @access public
+	 * @return object WFBrowserExtension
+	 */
+	public function getBrowser()
 	{
 		static $browser;
 		
@@ -51,10 +56,10 @@ class WFMediaManager extends WFEditorPlugin
 	}
 
 	/**
-	 * Initialize the Manager plugin
-	 * Shortcut to setup Manager elements
+	 * Display the plugin
+	 * @access public
 	 */
-	function display()
+	protected function display()
 	{
 		$view 		= $this->getView();
 		$browser 	= $this->getBrowser();
@@ -74,7 +79,12 @@ class WFMediaManager extends WFEditorPlugin
 		$view->assignRef('browser', $browser);
 	}
 	
-	function getConfig()
+	/**
+	 * Get the configuration
+	 * @access private
+	 * @return array
+	 */
+	private function getConfig()
 	{												
 		$filesystem = $this->getParam('filesystem.name', 'joomla', '', 'string', false);			
 		$filetypes 	= $this->getParam('extensions', $this->get('_filetypes', 'images=jpg,jpeg,png,gif'));
@@ -84,7 +94,7 @@ class WFMediaManager extends WFEditorPlugin
 			'filesystem' 			=> $filesystem,
 			'filetypes'				=> $filetypes,
 			'upload'				=> array(
-				'runtimes'			=> $this->getParam('editor.upload_runtimes', array('html5','flash','silverlight')),
+				'runtimes'			=> $this->getParam('editor.upload_runtimes', array('html5','flash'), '', 'array', true),
 				'chunk_size' 		=> null,
 				'max_size'			=> $this->getParam('max_size', 1024, '', 'string', false),
 				'validate_mimetype'	=> $this->getParam('validate_mimetype', 0),
@@ -111,6 +121,9 @@ class WFMediaManager extends WFEditorPlugin
 		return $config;
 	}
 	
+	/**
+	 * @see WFEditorPlugin::getSettings()
+	 */
 	function getSettings($settings = array())
 	{
 		return parent::getSettings($settings);

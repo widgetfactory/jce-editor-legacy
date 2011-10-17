@@ -13,30 +13,29 @@
 // no direct access
 defined('_JEXEC') or die('ERROR_403');
 
-class WFRequest extends JObject
+final class WFRequest extends JObject
 {
 	var $request = array();
 	
 	/**
 	 * Constructor activating the default information of the class
 	 *
-	 * @access  protected
+	 * @access  public
 	 */
-	function __construct()
+	public function __construct()
 	{
 		parent::__construct();
 	}
 	/**
-	 * Returns a reference to a plugin object
+	 * Returns a reference to a WFRequest object
 	 *
 	 * This method must be invoked as:
-	 *    <pre>  $advlink =AdvLink::getInstance();</pre>
+	 *    <pre>  $request = WFRequest::getInstance();</pre>
 	 *
 	 * @access  public
-	 * @return  JCE  The editor object.
-	 * @since 1.5
+	 * @return  object WFRequest
 	 */
-	function &getInstance()
+	public function &getInstance()
 	{
 		static $instance;
 
@@ -48,12 +47,12 @@ class WFRequest extends JObject
 	}
 
 	/**
-	 * Setup an Request function
+	 * Set Request function
 	 *
-	 * @access public
-	 * @param array   An array containing the function and object
+	 * @access 	public
+	 * @param 	array	$function An array containing the function and object
 	 */
-	function setRequest($function)
+	public function setRequest($function)
 	{
 		$object = new StdClass();
 		
@@ -71,11 +70,21 @@ class WFRequest extends JObject
 		}
 	}
 	
-	function getRequest($function) {
+	/**
+	 * Get a request function
+	 * @access 	public
+	 * @param 	string $function
+	 */
+	public function getRequest($function) {
 		return $this->request[$function];
 	}
 
-	function checkQuery($query)
+	/**
+	 * Check a request query for bad stuff
+	 * @access 	private
+	 * @param 	array $query
+	 */
+	private function checkQuery($query)
 	{
 		if (is_string($query)) {
 			$query = array($query);
@@ -103,7 +112,7 @@ class WFRequest extends JObject
 	 * @access public
 	 * @return string
 	 */
-	function process($array = false)
+	public function process($array = false)
 	{
 		// Check for request forgeries
 		WFToken::checkToken() or die('RESTRICTED ACCESS');	
