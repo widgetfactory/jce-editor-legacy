@@ -18,16 +18,16 @@ class WFPopupsExtension extends WFExtension
     /*
      *  @var varchar
      */
-    var $_popups 	= array();
+    private $_popups 	= array();
     
-    var $_templates = array();
+    private $_templates = array();
     
     /**
      * Constructor activating the default information of the class
      *
      * @access  protected
      */
-    function __construct($config = array())
+    public function __construct($config = array())
     {
         parent::__construct($config);
         
@@ -43,7 +43,7 @@ class WFPopupsExtension extends WFExtension
      * @return  JCE  The editor object.
      * @since 1.5
      */
-    function &getInstance($config = array())
+    public function &getInstance($config = array())
     {
         static $instance;
         
@@ -54,7 +54,7 @@ class WFPopupsExtension extends WFExtension
         return $instance;
     }
     
-    function display()
+    public function display()
     {    	
     	parent::display();
     	
@@ -101,27 +101,27 @@ class WFPopupsExtension extends WFExtension
         }
     }
 
-	function getPopups()
+	private function getPopups()
 	{
 		return $this->_popups;
 	}
 
-	function addPopup($popup)
+	public function addPopup($popup)
 	{
 		$this->_popups[] = $popup;
 	}
 	
-	function getTemplates()
+	private function getTemplates()
 	{
 		return $this->_templates;
 	}
     
-    function addTemplate($template)
+    public function addTemplate($template)
     {
         $this->_templates[] = $template;
     }
     
-    function &getPopupExtension($name)
+    private function &getPopupExtension($name)
     {
         static $popups;
         
@@ -138,7 +138,7 @@ class WFPopupsExtension extends WFExtension
         return $popups[$name];
     }
     
-    function getPopupList()
+    public function getPopupList()
     {
         $options = array();
         
@@ -151,7 +151,7 @@ class WFPopupsExtension extends WFExtension
         return JHTML::_('select.genericlist', $options, 'popup_list', 'class="inputbox levels" size="1" onchange="WFExtensions.Popups.selectPopup(this.value);"', 'value', 'text');
     }
     
-    function getPopupTemplates()
+    public function getPopupTemplates()
     {
         $output = '';
         

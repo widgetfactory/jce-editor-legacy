@@ -10,7 +10,7 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-class WFMimeType 
+abstract class WFMimeType 
 {
 	/*
 	 * @var Array Mimetype values by extension
@@ -650,12 +650,20 @@ class WFMimeType
 	
 	/**
 	 * $mimes getter - see $mimes
+	 * @access	private
 	 */
 	private static function getMimes()
 	{
 		return self::$mimes;
 	}	
 	
+	/**
+	 * 
+	 * Get the mime type from the $mimes array
+	 * @access	private
+	 * @param 	string $type
+	 * @return	string 
+	 */
 	private static function getMime($type)
 	{
 		// get mimetype array
@@ -668,6 +676,14 @@ class WFMimeType
 		return null;
 	}
 	
+	/**
+	 * Check file mime type
+	 * @access	public
+	 * @param 	string $name
+	 * @param 	string $path
+	 * @param 	string $type
+	 * @return 	bool
+	 */
 	public function check($name, $path, $type = null) 
 	{	
 		$extension = strtolower(substr(strrchr($name, "."), 1));

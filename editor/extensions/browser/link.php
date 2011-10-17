@@ -20,13 +20,13 @@ class WFLinkBrowser extends WFBrowserExtension
 	/*
 	*  @var varchar
 	*/
-	var $extensions = array();
+	private $extensions = array();
 	/**
 	* Constructor activating the default information of the class
 	*
 	* @access	protected
 	*/
-	function __construct()
+	public function __construct()
 	{
 		parent::__construct();
 		
@@ -43,7 +43,7 @@ class WFLinkBrowser extends WFBrowserExtension
 		$request->setRequest(array($this, 'getLinks'));
 	}
 	
-	function display()
+	public function display()
 	{		
 		parent::display();
 		
@@ -58,7 +58,7 @@ class WFLinkBrowser extends WFBrowserExtension
 		}
 	}
 
-	function &getLinkExtension($name)
+	private function &getLinkExtension($name)
 	{
 		static $links;
 		
@@ -76,7 +76,7 @@ class WFLinkBrowser extends WFBrowserExtension
 		return $links[$name];
 	}
 	
-    function getLinkBrowser()
+    public function getLinkBrowser()
 	{	
 		$list = array();
 			
@@ -93,7 +93,7 @@ class WFLinkBrowser extends WFBrowserExtension
 		}
 	}
 
-    function getLinks($args)
+    public function getLinks($args)
 	{	    
 	    foreach ($this->extensions as $extension) {
 	        if (in_array($args->option, $extension->getOption())) {
@@ -121,7 +121,7 @@ class WFLinkBrowser extends WFBrowserExtension
 	 * @return	Category list object.
 	 * @since	1.5
 	 */
-	function getCategory($section, $parent = 1)
+	public function getCategory($section, $parent = 1)
 	{
 		$db			= JFactory::getDBO();
 		$user		= JFactory::getUser();
@@ -160,10 +160,11 @@ class WFLinkBrowser extends WFBrowserExtension
 	 * (Attempt to) Get an Itemid
 	 *
 	 * @access	public
+	 * @param	string $component
+	 * @param	array $needles
 	 * @return	Category list object.
-	 * @since	1.5
 	 */
-	function getItemId($component, $needles = array())
+	public function getItemId($component, $needles = array())
 	{		
 		$match = null;
 		

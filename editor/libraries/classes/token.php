@@ -13,7 +13,7 @@
 
 defined('_JEXEC') or die('ERROR_403');
 
-class WFToken
+abstract class WFToken
 {
 	/**
 	 * Create a token-string

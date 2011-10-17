@@ -32,18 +32,18 @@ class WFEditor extends JObject {
 	/**
 	 * @var varchar
 	 */
-	var $_version = '@@version@@';
+	private $_version = '@@version@@';
 
 	/**
 	 *  @var boolean
 	 */
-	var $_debug = false;
+	private $_debug = false;
 	/**
 	 * Constructor activating the default information of the class
 	 *
 	 * @access	protected
 	 */
-	function __construct($config = array()) {
+	public function __construct($config = array()) {
 		$this->setProperties($config);
 	}
 
@@ -55,9 +55,8 @@ class WFEditor extends JObject {
 	 *
 	 * @access	public
 	 * @return	JCE  The editor object.
-	 * @since	1.5
 	 */
-	function & getInstance() {
+	public function & getInstance() {
 		static $instance;
 
 		if (!is_object($instance)) {
@@ -68,9 +67,10 @@ class WFEditor extends JObject {
 
 	/**
 	 * Get the current version
-	 * @return Version
+	 * @access protected
+	 * @return string
 	 */
-	function getVersion() {
+	protected function getVersion() {
 		return $this->get('_version');
 	}
 
@@ -78,10 +78,10 @@ class WFEditor extends JObject {
 	 * Get the Super Administrator status
 	 *
 	 * Determine whether the user is a Super Administrator
-	 *
+	 * @access protected
 	 * @return boolean
 	 */
-	function isSuperAdmin() {
+	protected function isSuperAdmin() {
 		$user = JFactory::getUser();
 
 		if (WF_JOOMLA15) {
@@ -92,6 +92,7 @@ class WFEditor extends JObject {
 
 	/**
 	 * Get an appropriate editor profile
+	 * @access public
 	 * @return $profile Object
 	 */
 	public function getProfile() {
@@ -180,7 +181,12 @@ class WFEditor extends JObject {
 		return $profile;
 	}
 
-	function getComponentOption() {
+	/**
+	 * Get the component option
+	 * @access private
+	 * @return string
+	 */
+	private function getComponentOption() {
 		$option = JRequest::getCmd('option', '');
 
 		switch ($option) {
@@ -198,6 +204,12 @@ class WFEditor extends JObject {
 		return $option;
 	}
 
+	/**
+	 * Get editor parameters
+	 * @access  public
+	 * @param 	array $options
+	 * @return 	object
+	 */
 	public function getParams($options = array()) {
 		static $params;
 
@@ -257,7 +269,7 @@ class WFEditor extends JObject {
 	 * @return The modified value
 	 * @param string	The parameter value
 	 */
-	function cleanParam($param) {
+	protected function cleanParam($param) {
 		if (is_array($param)) {
 			$param = implode('|', $param);
 		}
@@ -306,7 +318,7 @@ class WFEditor extends JObject {
 		return $param;
 	}
 
-	function checkLanguage($tag) {
+	protected function checkLanguage($tag) {
 		$file = JPATH_SITE . DS . 'language' . DS . $tag . DS . $tag . '.com_jce.xml';
 
 		if (file_exists($file)) {
@@ -332,7 +344,7 @@ class WFEditor extends JObject {
 	 * @param string $prefix Language prefix
 	 * @param object $path[optional] Base path
 	 */
-	function loadLanguage($prefix, $path = JPATH_SITE) {
+	protected function loadLanguage($prefix, $path = JPATH_SITE) {
 		$language = JFactory::getLanguage();
 		$tag = $this->getLanguageTag();
 
@@ -345,7 +357,7 @@ class WFEditor extends JObject {
 	 * @access public
 	 * @return language code
 	 */
-	function getLanguageDir() {
+	public function getLanguageDir() {
 		$language = JFactory::getLanguage();
 		$tag = $this->getLanguageTag();
 
@@ -362,7 +374,7 @@ class WFEditor extends JObject {
 	 * @access public
 	 * @return language code
 	 */
-	function getLanguageTag() {
+	protected function getLanguageTag() {
 		$language = JFactory::getLanguage();
 		$tag = $language->getTag();
 
@@ -385,7 +397,7 @@ class WFEditor extends JObject {
 	 * @access public
 	 * @return language code
 	 */
-	function getLanguage() {
+	public function getLanguage() {
 		$tag = $this->getLanguageTag();
 
 		return substr($tag, 0, strpos($tag, '-'));
@@ -395,11 +407,9 @@ class WFEditor extends JObject {
 	 * Named wrapper to check access to a feature
 	 *
 	 * @access 			public
-	 * @param string	The feature to check, eg: upload
-	 * @param string	The defalt value
 	 * @return 			string
 	 */
-	function checkUser() {
+	public function checkUser() {
 		return $this->getProfile();
 	}
 
@@ -410,7 +420,7 @@ class WFEditor extends JObject {
 	 * @param 	string	String to encode
 	 * @return 	string	Encoded string
 	 */
-	function xmlEncode($string) {
+	public function xmlEncode($string) {
 		return preg_replace(array('/&/', '/</', '/>/', '/\'/', '/"/'), array('&amp;', '&lt;', '&gt;', '&apos;', '&quot;'), $string);
 	}
 
@@ -421,11 +431,11 @@ class WFEditor extends JObject {
 	 * @param 	string	String to decode
 	 * @return 	string	Decoded string
 	 */
-	function xmlDecode($string) {
+	public function xmlDecode($string) {
 		return preg_replace(array('&amp;', '&lt;', '&gt;', '&apos;', '&quot;'), array('/&/', '/</', '/>/', '/\'/', '/"/'), $string);
 	}
 
-	function log($file, $msg) {
+	protected function log($file, $msg) {
 		jimport('joomla.error.log');
 		$log = JLog::getInstance($file);
 		$log->addEntry(array('comment' => 'LOG: ' . $msg));

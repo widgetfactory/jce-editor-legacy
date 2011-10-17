@@ -18,9 +18,9 @@ class WFExtension extends JObject
 	/**
 	 * Constructor activating the default information of the class
 	 *
-	 * @access protected
+	 * @access public
 	 */
-	function __construct($config = array())
+	public function __construct($config = array())
 	{
 		parent::__construct();
 		
@@ -29,16 +29,15 @@ class WFExtension extends JObject
 	}
 	 
 	/**
-	 * Returns a reference to a plugin object
+	 * Returns a reference to a WFExtension object
 	 *
 	 * This method must be invoked as:
-	 *    <pre>  $advlink =AdvLink::getInstance();</pre>
+	 *    <pre>  $extension = WFExtension::getInstance();</pre>
 	 *
 	 * @access  public
-	 * @return  JCE  The editor object.
-	 * @since 1.5
+	 * @return  object WFExtension
 	 */
-	function &getInstance()
+	public function &getInstance()
 	{
 		static $instance;
 
@@ -48,7 +47,11 @@ class WFExtension extends JObject
 		return $instance;
 	}
 	
-	function display()
+	/**
+	 * Display the extension
+	 * @access $public
+	 */
+	public function display()
 	{
 		$document = WFDocument::getInstance();
 		// Load Extensions Object
@@ -61,9 +64,9 @@ class WFExtension extends JObject
 	 * Load a plugin extension
 	 *
 	 * @access  public
-	 * @since 1.5
+	 * @return 	array
 	 */
-	function getExtensions($config)
+	public function getExtensions($config)
 	{
 		jimport('joomla.filesystem.folder');
 		jimport('joomla.filesystem.file');
@@ -111,13 +114,15 @@ class WFExtension extends JObject
 		}
 		return $extensions;
 	}
+	
 	/**
 	 * Load & Call an extension
 	 *
 	 * @access  public
-	 * @since 1.5
+	 * @param	array $config
+	 * @return 	mixed
 	 */
-	function loadExtensions($config = array())
+	public function loadExtensions($config = array())
 	{
 		jimport('joomla.filesystem.folder');
 		jimport('joomla.filesystem.file');
@@ -176,11 +181,11 @@ class WFExtension extends JObject
 
 	/**
 	 * Return a parameter for the current plugin / group
-	 * @param object $param Parameter name
-	 * @param object $default Default value
-	 * @return Parameter value
+	 * @param 	object $param Parameter name
+	 * @param 	object $default Default value
+	 * @return 	string Parameter value
 	 */
-	function getParam($param, $default = '')
+	public function getParam($param, $default = '')
 	{
 		$wf = WFEditorPlugin::getInstance();
 

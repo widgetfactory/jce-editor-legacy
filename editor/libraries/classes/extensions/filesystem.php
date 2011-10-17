@@ -252,28 +252,28 @@ class WFFileSystem extends WFExtension
 /**
  * Filesystem Error class
  */
-class WFFileSystemResult
+final class WFFileSystemResult
 {
     /*
      * @var Object type eg: file / folder
      */
-	var $type 		= 'files';
+	public $type 		= 'files';
     /*
      * @boolean	Result state
      */
-    var $state 		= false;
+    public $state 		= false;
     /*
      * @int	Error code
      */
-    var $code 		= null;
+    public $code 		= null;
     /*
      * @var Error message
      */
-    var $message 	= null;
+    public $message 	= null;
     /*
      * @var File / Folder path
      */
-    var $path = null;
+    public $path 		= null;
     
     function __construct(){}
 }

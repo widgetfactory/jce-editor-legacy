@@ -18,20 +18,18 @@ wfimport('editor.libraries.classes.editor');
 /**
  * JCE class
  *
- * @static
- * @package		JCE
- * @since	1.5
+ * @package	JCE Site
  */
 
 class WFEditorPlugin extends WFEditor
 {
 	
-	var $_alerts = array();
+	private $_alerts = array();
 	
 	/**
 	 * Constructor activating the default information of the class
 	 *
-	 * @access	protected
+	 * @access	public
 	 */
 	function __construct()
 	{
@@ -60,6 +58,7 @@ class WFEditorPlugin extends WFEditor
 			die(JError::raiseError(403, WFText::_('ERROR_403')));
 		}
 	}
+	
 	/**
 	 * Returns a reference to a editor object
 	 *
@@ -70,7 +69,7 @@ class WFEditorPlugin extends WFEditor
 	 * @return	JCE  The editor object.
 	 * @since	1.5
 	 */
-	function & getInstance()
+	public function & getInstance()
 	{
 		static $instance;
 
@@ -81,7 +80,12 @@ class WFEditorPlugin extends WFEditor
 		return $instance;
 	}
 	
-	function & getView()
+	/**
+	 * Get plugin View
+	 * @access public
+	 * @return WFView
+	 */
+	public function & getView()
 	{
 		static $view;
 		
@@ -100,13 +104,13 @@ class WFEditorPlugin extends WFEditor
 		return $view;
 	}
 	
-	function isRequest()
+	private function isRequest()
 	{
 		$format = JRequest::getWord('format');		
 		return ($format == 'json' || $format == 'raw') && (JRequest::getVar('json') || JRequest::getWord('action'));		
 	}
 
-	function execute()
+	public function execute()
 	{				
 		WFToken::checkToken() or die('RESTRICTED ACCESS');	
 		
@@ -166,8 +170,12 @@ class WFEditorPlugin extends WFEditor
 			$document->render();
 		}
 	}
-
-	function display()
+	
+	/**
+	 * Display plugin
+	 * @access private
+	 */
+	protected function display()
 	{
 		jimport('joomla.filesystem.folder');		
 		$document = WFDocument::getInstance();			
@@ -200,8 +208,10 @@ class WFEditorPlugin extends WFEditor
 
 	/**
 	 * Return the plugin name
+	 * @access public
+	 * @return string
 	 */
-	function getName()
+	public function getName()
 	{
 		return $this->get('_name');
 	}
@@ -209,8 +219,11 @@ class WFEditorPlugin extends WFEditor
 	/**
 	 * Get default values for a plugin.
 	 * Key / Value pairs will be retrieved from the profile or plugin manifest
+	 * @access 	public
+	 * @param 	array $defaults
+	 * @return 	array
 	 */
-	function getDefaults($defaults = array())
+	public function getDefaults($defaults = array())
 	{
 		$name = $this->getName();
 		
@@ -229,7 +242,7 @@ class WFEditorPlugin extends WFEditor
 	 * @access 			public
 	 * @return 			boolean
 	 */
-	function checkPlugin($plugin = null)
+	public function checkPlugin($plugin = null)
 	{
 		if ($plugin) {	
 			// check existence of plugin directory
@@ -245,20 +258,22 @@ class WFEditorPlugin extends WFEditor
 	
 	/**
 	 * Load current plugin language file
+	 * @access private
 	 */
-	function loadPluginLanguage()
+	private function loadPluginLanguage()
 	{
 		$this->loadLanguage('com_jce_'. trim($this->getName()));
 	}
 
 	/**
 	 * Add an alert array to the stack
-	 *
-	 * @param object $class[optional] Alert classname
-	 * @param object $title[optional] Alert title
-	 * @param object $text[optional]  Alert text
+	 * 
+	 * @access private
+	 * @param object $class Alert classname
+	 * @param object $title Alert title
+	 * @param object $text 	Alert text
 	 */
-	function addAlert($class = 'info', $title = '', $text = '')
+	protected function addAlert($class = 'info', $title = '', $text = '')
 	{
 		$alerts = $this->getAlerts();	
 		
@@ -270,11 +285,13 @@ class WFEditorPlugin extends WFEditor
 			
 		$this->set('_alerts', $alerts);
 	}
+	
 	/**
 	 * Get current alerts
+	 * @access private
 	 * @return array Alerts
 	 */
-	function getAlerts()
+	private function getAlerts()
 	{
 		return $this->get('_alerts');
 	}
@@ -284,10 +301,9 @@ class WFEditorPlugin extends WFEditor
 	 *
 	 * @access	public
 	 * @param	string 	The url to convert
-	 * @return	Full path to file
-	 * @since	1.5
+	 * @return	string 	Full path to file
 	 */
-	function urlToPath($url)
+	public function urlToPath($url)
 	{
 		$document = WFDocument::getInstance();
 		return $document->urlToPath($url);
@@ -298,34 +314,42 @@ class WFEditorPlugin extends WFEditor
 	 *
 	 * @access	public
 	 * @param	string 	The file to load including path and extension eg: libaries.image.gif
-	 * @return	Image url
-	 * @since	1.5
+	 * @return	string 	Image url
 	 */
-	function image($image, $root = 'libraries') {
+	public function image($image, $root = 'libraries') {
 		$document = WFDocument::getInstance();
 
 		return $document->image($image, $root);
 	}
+	
 	/**
 	 * Load a plugin extension
 	 *
-	 * @access	public
-	 * @since	1.5
+	 * @access	protected
 	 */
-	function getExtensions($arguments) {
+	protected function getExtensions($arguments) {
 		return array();
 	}
+	
 	/**
 	 * Load & Call an extension
 	 *
-	 * @access	public
-	 * @since	1.5
+	 * @access	protected
+	 * @param 	array $config
+	 * @return 	array
 	 */
-	function loadExtensions($config=array()) {
+	protected function loadExtensions($config=array()) {
 		return array();
 	}
 
-	function getSettings($settings = array())
+	/**
+	 * Compile plugin settings from defaults and alerts
+	 * 
+	 * @access  public
+	 * @param 	array $settings
+	 * @return 	array
+	 */
+	public function getSettings($settings = array())
 	{
 		$default = array(
 			'alerts' 	=>  $this->getAlerts(),
@@ -339,9 +363,14 @@ class WFEditorPlugin extends WFEditor
 	
 	/**
 	 * Get a parameter by key
-	 * @param $key Parameter key eg: editor.width
-	 * @param $fallback Fallback value
-	 * @param $default Default value
+	 * 
+	 * @access 	public
+	 * @param 	string $key Parameter key eg: editor.width
+	 * @param 	mixed $fallback Fallback value
+	 * @param 	mixed $default Default value
+	 * @param 	string $type Variable type eg: string, boolean, integer, array
+	 * @param 	bool $allowempty
+	 * @return 	mixed
 	 */
 	public function getParam($key, $fallback = '', $default = '', $type = 'string', $allowempty = true)
 	{
@@ -389,10 +418,10 @@ class WFEditorPlugin extends WFEditor
 	 *
 	 * @access 			public
 	 * @param string	The feature to check, eg: upload
-	 * @param string	The defalt value
+	 * @param mixed		The defalt value
 	 * @return 			Boolean
 	 */
-	function checkAccess($option, $default = 0)
+	public function checkAccess($option, $default = 0)
 	{
 		return (bool)self::getParam($option, $default);
 	}

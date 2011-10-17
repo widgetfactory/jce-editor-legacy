@@ -20,13 +20,13 @@ class WFBrowserExtension extends WFExtension
 	/*
 	*  @var varchar
 	*/
-	var $extensions = array();
+	private $extensions = array();
 	/**
 	* Constructor activating the default information of the class
 	*
 	* @access	protected
 	*/
-	function __construct($config = array())
+	public function __construct($config = array())
 	{
 		parent::__construct($config);
 	}
@@ -40,7 +40,7 @@ class WFBrowserExtension extends WFExtension
 	 * @return	JCE  The editor object.
 	 * @since	1.5
 	 */
-	function &getInstance($type, $config = array())
+	public function &getInstance($type, $config = array())
 	{
 		static $instance;
 
@@ -59,12 +59,12 @@ class WFBrowserExtension extends WFExtension
 		return $instance;
 	}
 	
-	function display()
+	public function display()
 	{
 		parent::display();
 	}
 	
-	function getView($layout)
+	protected function getView($layout)
 	{		
 		$view = new WFView(array(
 			'name'		=> 'browser',

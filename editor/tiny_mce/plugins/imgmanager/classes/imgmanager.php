@@ -16,28 +16,27 @@ defined('_JEXEC') or die('ERROR_403');
 // Load class dependencies
 wfimport('editor.libraries.classes.manager');
  
-class WFImageManagerPlugin extends WFMediaManager
+final class WFImageManagerPlugin extends WFMediaManager
 {
 	var $_filetypes = 'images=jpg,jpeg,png,gif';
 	
 	/**
 	* @access	protected
 	*/
-	function __construct()
+	public function __construct()
 	{			
 		parent::__construct();
 	}
 	/**
-	 * Returns a reference to a editor object
+	 * Returns a reference to the Image Manager object
 	 *
 	 * This method must be invoked as:
-	 * 		<pre>  $browser =JCE::getInstance();</pre>
+	 * 		<pre>  $imgmanager = WFImageManagerPlugin::getInstance();</pre>
 	 *
 	 * @access	public
-	 * @return	JCE  The editor object.
-	 * @since	1.5
+	 * @return	object WFImageManagerPlugin
 	 */
-	function &getInstance()
+	public function &getInstance()
 	{
 		static $instance;
 
@@ -49,8 +48,9 @@ class WFImageManagerPlugin extends WFMediaManager
 	
 	/**
 	 * Display the plugin
+	 * @access public
 	 */
-	function display()
+	public function display()
 	{
 		parent::display();
 
