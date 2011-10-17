@@ -255,12 +255,12 @@
 
             $('input.color, input.colour').each( function () {
                 var id = $(this).attr('id');
-
                 var ev = $(this).get(0).onchange;
 
                 $('<span role="button" class="pickcolor_icon" title="' + self.translate('browse') + '" id="' + id + '_pick"></span>').click( function (e) {
-                    if ($(this).hasClass('disabled'))
+                    if ($(this).hasClass('disabled')) {
                         return;
+                    }
 
                     return tinyMCEPopup.pickColor(e, id);
                 }).insertAfter(this).css('background-color', $(this).val()).toggleClass('disabled', $(this).is(':disabled')).attr('aria-disabled', function() {
@@ -272,8 +272,8 @@
                 });
 
                 // need to use direct call to onchange event for tinyMCEPopup.pickColor callback
-                $(this).get(0).onchange = function() {
-                    $(this).trigger('pick');
+                $(this).get(0).onchange = function() {                	                	
+                	$(this).trigger('pick');                   
                     
                     if ($.isFunction(ev)) {
                         ev.call(this);
@@ -367,7 +367,7 @@
          * Modified for JQuery
          */
         addI18n : function(p, o) {
-            var lo, i18n = this.i18n;
+            var i18n = this.i18n;
 
             if (!$.type(p) == 'string') {
                 $.each(p, function(lc, o) {
@@ -502,8 +502,7 @@
          *            Scope to execute callback in
          */
         request: function (func, data, callback, scope) {
-            var self = this,
-            json = {
+            var json = {
                 'fn': func
             };
 
@@ -555,7 +554,6 @@
 
             $.JSON.queue({
                 context: scope || this,
-                //dataType: 'json',
                 type: 'POST',
                 url: url,
                 data: 'json=' + $.JSON.serialize(json) + '&' + $.param(args),
@@ -627,9 +625,10 @@
 
                 v = '{';
 
-                for (i in o)
+                for (i in o) {
                     v += typeof o[i] != 'function' ? (v.length > 1 ? ',"' : '"') + i + '":' + s(o[i]) : '';
-
+                }
+                
                 return v + '}';
             }
 
