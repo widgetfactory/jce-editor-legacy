@@ -124,7 +124,6 @@ var TableDialog = {
 			return className;
 		});
 
-
 		$('#cols').val(cols);
 		$('#rows').val(rows);
 		$('#border').val(border);
@@ -228,8 +227,8 @@ var TableDialog = {
 		var scope = dom.getAttrib(tdElm, 'scope');
 
 		if(!dom.hasClass(tdElm, 'mceSelected')) {
-			$('#bordercolor').val(bordercolor);
-			$('#bgcolor').val(bgcolor);
+			$('#bordercolor').val(bordercolor).change();
+			$('#bgcolor').val(bgcolor).change();
 			$('#backgroundimage').val(backgroundimage);
 			$('#width').val(width);
 			$('#height').val(height);
@@ -627,7 +626,7 @@ var TableDialog = {
 		var curRowType = tr_elm.parentNode.nodeName.toLowerCase();
 		var rowtype = $('#rowtype').val();
 
-		$.each(['id', 'align', 'valign', 'lang', 'dir', 'class'], function(i, k) {
+		$.each(['id', 'align', 'valign', 'lang', 'dir', 'class', 'style'], function(i, k) {
 			v = $('#' + k).val();
 
 			if(k == 'id' && skip_id) {
@@ -785,7 +784,7 @@ var TableDialog = {
 		var curCellType = td.nodeName.toLowerCase();
 		var celltype = $('#celltype').val();
 
-		$.each(['id', 'align', 'valign', 'lang', 'dir', 'class', 'scope'], function(i, k) {
+		$.each(['id', 'align', 'valign', 'lang', 'dir', 'class', 'scope', 'style'], function(i, k) {
 			v = $('#' + k).val();
 
 			if(k == 'id' && skip_id) {
