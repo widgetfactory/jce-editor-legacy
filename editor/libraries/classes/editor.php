@@ -35,10 +35,6 @@ class WFEditor extends JObject {
 	private $_version = '@@version@@';
 
 	/**
-	 *  @var boolean
-	 */
-	private $_debug = false;
-	/**
 	 * Constructor activating the default information of the class
 	 *
 	 * @access	protected
