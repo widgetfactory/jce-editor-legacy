@@ -91,7 +91,10 @@ $this->popup->checkVersion();
                 <option value="video/divx"><?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_DIVX');?></option> 
 				<option value="application/x-director"><?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_DIRECTOR');?></option>
 				<option value="audio/x-pn-realaudio-plugin"><?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_REAL');?></option>
-				<option value="application/x-silverlight-2"><?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_SILVERLIGHT');?></option>         
+				<option value="video/mp4"><?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_VIDEO_MP4');?></option>   
+				<option value="audio/mp3"><?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_AUDIO_MP3');?></option>
+				<option value="video/webm"><?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_VIDEO_WEBM');?></option>
+				<option value="audio/webm"><?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_AUDIO_WEBM');?></option>      
             </select>
         </td>
 	</tr>
