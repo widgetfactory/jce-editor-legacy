@@ -46,9 +46,15 @@ div#help-menu dt {
 	background: url("../img/icons.png") no-repeat 0 -100px;
 	line-height: 20px;
 }
+html[dir="rtl"] div#help-menu dt {
+	background-position: right -100px;
+}
 div#help-menu dt span {
 	margin: 0px 0px 0px 25px;
 	font-weight: bold;
+}
+html[dir="rtl"] div#help-menu dt span {
+	margin: 0px 25px 0px 0;
 }
 div#help-menu dd {
 	margin: 0;
@@ -58,8 +64,15 @@ div#help-menu dd {
 	overflow: hidden;
 	cursor:pointer;
 }
+html[dir="rtl"] div#help-menu dd {
+	padding: 0px 25px 0px 0;
+	background-position: right -400px;
+}
 div#help-menu dd.subtopics {
 	background: url("../img/icons.png") no-repeat 0 -120px;
+}
+html[dir="rtl"] div#help-menu dd.subtopics {
+	background-position: right -120px;
 }
 div#help-menu dl.hidden {
 	display:none;
