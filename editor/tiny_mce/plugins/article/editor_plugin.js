@@ -83,7 +83,12 @@
             ed.onNodeChange.add(function(ed, cm, n) {
 				cm.setActive('readmore', isReadMore(n));
                 cm.setActive('pagebreak', isPageBreak(n));
-            });           
+            });  
+            
+            // replace hr alt attribute with data-mce-alt
+            ed.onBeforeSetContent.add( function(ed, o) {
+            	o.content = o.content.replace(/<hr([^>]+)alt="([^"]+)"([^>]+)>/gi, '<hr$1data-mce-alt="$2"$3>');
+            });
             
             ed.onPostProcess.add(function(ed, o) {   
 				if (o.get) {
@@ -93,8 +98,8 @@
 				}				
             });
             
-            ed.onPreInit.add( function() {
-                // Convert video elements to image placeholder
+            ed.onPreInit.add( function() {            	
+            	// Convert video elements to image placeholder
                 ed.parser.addNodeFilter('hr', function(nodes) {
                     for (var i = 0; i < nodes.length; i++) {
                     	var id = nodes[i].attr('id') || '', cls = nodes[i].attr('class') || '';
@@ -212,7 +217,7 @@
         },
         
         _createImg: function(n) {
-            var ed = this.editor, dom = ed.dom, t = this, args;
+            var ed = this.editor, t = this, args;
             
             args = {
                 src			: t.url + '/img/trans.gif',
@@ -230,7 +235,7 @@
             	tinymce.extend(args, {
                     'class'			: 'mceItemPageBreak',
                     title			: n.attr('title'),
-                    alt				: n.attr('alt'),
+                    'alt'			: n.attr('data-mce-alt'),
 					'data-mce-type'	: 'system-pagebreak'
                 });
             }
