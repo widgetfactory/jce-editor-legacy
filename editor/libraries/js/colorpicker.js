@@ -566,7 +566,7 @@
 
             h += '</div>';
 
-            $(parent).append(h).append('<br style="clear:both;" />').addClass('colorpicker_generated').append('<div id="colorpicker_colorname">' + this.options.labels.name + ': </div>');
+            $(parent).append(h).append('<br style="clear:both;" />').addClass('colorpicker_generated').append('<div id="colorpicker_colorname">' + this.options.labels.name + '</div>');
 
             $('span.colorpicker_namedblock', parent).click( function() {
                 self._insert();
@@ -589,7 +589,7 @@
             }
 
             if (this.options.template_colors) {
-                $(parent).append('<p id="colorpicker_template_label">'+this.options.labels.template + ':</p>');
+                $(parent).append('<p id="colorpicker_template_label">'+this.options.labels.template + '</p>');
 
                 var templateColors = this.options.template_colors;
 
@@ -621,7 +621,7 @@
             if (this.options.custom_colors) {
                 var h = '';
 
-                $(parent).append('<p id="colorpicker_custom_label">'+this.options.labels.custom + ':</p>');
+                $(parent).append('<p id="colorpicker_custom_label">'+this.options.labels.custom + '</p>');
 
                 var customColors = this.options.custom_colors.split(',');
 
