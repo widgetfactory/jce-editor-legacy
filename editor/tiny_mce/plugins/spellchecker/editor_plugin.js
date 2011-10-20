@@ -143,8 +143,9 @@
 						mi = m.add(o);
 						mi.setSelected(v == t.selectedLang);
 
-						if (v == t.selectedLang)
+						if (v == t.selectedLang) {
 							t.selectedItem = mi;
+						}
 					});
 				});
 
