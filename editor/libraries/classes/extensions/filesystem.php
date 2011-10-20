@@ -126,9 +126,9 @@ class WFFileSystem extends WFExtension
 			$pattern	= array('/\$id/', '/\$username/', '/\$usertype/', '/\$(group|profile)/', '/\$day/', '/\$month/', '/\$year/');
 			$replace	= array($user->id, $user->username, $usertype, $profile->name, date('d'), date('m'), date('Y'));	
 			$root 		= preg_replace($pattern, $replace, $root);
-				
-			// Clean
-			$root = preg_replace(array('/$\w+\b/', '/(\.) {2,}/', '/[^A-Za-z0-9:\.\_\-\/]/'), '', $root);
+			
+			// Clean (allow characters A-Za-z0-9:.-_ and space)
+			$root = preg_replace(array('/$\w+\b/', '/(\.) {2,}/', '/[^A-Za-z0-9:\.\_\-\/ ]/'), '', $root);
     	}
     	
     	return $root;
