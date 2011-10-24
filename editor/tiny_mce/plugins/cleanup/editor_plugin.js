@@ -109,20 +109,21 @@
 						
 						if (ev) {
 							node.attr('data-mce-' + name, ev);
-							node.attr(name, '');
+							node.attr(name, null);
 						}
 					}
 				});
 
 				// enable onclick, ondblclick
-				ed.serializer.addAttributeFilter('onclick, ondblclick', function(nodes, name, args) {
+				ed.serializer.addAttributeFilter('data-mce-onclick, data-mce-ondblclick', function(nodes, name, args) {
 					for (var i = 0, len = nodes.length; i < len; i++) {
 						var node = nodes[i];
-						var ev = node.attr('data-mce-' + name);
+						var ev = node.attr(name);
 						
 						if (ev) {
+							name = name.replace('data-mce-', '');
 							node.attr(name, ev);
-							node.attr('data-mce-' + name, '');
+							node.attr('data-mce-' + name, null);
 						}
 					}
 				});
