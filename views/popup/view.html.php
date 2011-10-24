@@ -34,7 +34,7 @@ class WFViewPopup extends JView
         $height = JRequest::getInt('h', JRequest::getInt('height', ''));
 
 		// Cleanup img variable
-		$img 	= preg_replace('/[^a-z\.\/_-]/i', '', $img);
+		$img 	= preg_replace('/[^a-z0-9\.\/_-]/i', '', $img);
 		
 		$title 	= isset($title) ? str_replace('_', ' ', $title) : basename($img);
 		// img src must be passed
