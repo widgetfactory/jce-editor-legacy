@@ -885,10 +885,12 @@ var TableDialog = {
 
 	changedBorder : function() {
 		var st = tinyMCEPopup.dom.parseStyle($('#style').val());
+		
+		var bw = $('#border').val();
 
 		// Update border width if the element has a color
-		if($('#border').val() != "" && $('#bordercolor').val() != "") {
-			st['border-width'] = $('#border').val() + "px";
+		if((bw != '' || bw != 'undefined') && $('#bordercolor').val() != "") {
+			st['border-width'] = bw + "px";
 		}
 
 		$('#style').val(tinyMCEPopup.dom.serializeStyle(st));
@@ -906,7 +908,8 @@ var TableDialog = {
 
 			// Add border-width if it's missing
 			if(!st['border-width']) {
-				st['border-width'] = $('#border').val() == "" ? "1px" : $('#border').val() + "px";
+				var bw = $('#border').val();
+				st['border-width'] = (bw == "" || typeof bw == 'undefined') ? "1px" : bw + "px";
 			}
 		}
 
