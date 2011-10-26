@@ -85,7 +85,8 @@ function jInsertEditorText(text, editor) {
 				submit_patch : false,
 				theme : 'none',
 				invalid_elements : 'applet,iframe,object,embed,script,style',
-				plugins : ''
+				plugins : '',
+				whitespace_elements : 'pre,script,style,textarea,code'
 			}, settings);
 
 			if(this.settings) {
