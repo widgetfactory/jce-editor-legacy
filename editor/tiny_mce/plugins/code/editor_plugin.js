@@ -128,7 +128,10 @@
 					o.content = o.content.replace(/<\?(php)?([\s\S]+?)\?>/gi, '<span class="mcePhp" data-mce-type="php"><!--$2-->\u00a0</span>');
 
 					// padd empty script tags
-					o.content = o.content.replace(/<script([^>]+)><\/script>/g, '<script$1>\u00a0</script>');
+					o.content = o.content.replace(/<script([^>]+)><\/script>/gi, '<script$1>\u00a0</script>');
+					
+					// process type attributes for scripts
+					o.content = o.content.replace(/<script([^>]+)type="([^"]+)"([^>]*)>/gi, '<script$1data-mce-type="$2"$3>');
 				}
 			});
 
@@ -177,7 +180,7 @@
 
 			p = JSON.parse(n.attr('data-mce-json')) || {};
 
-			p.type = 'text/javascript';
+			p.type = n.attr('data-mce-type') || p.type || 'text/javascript';
 
 			node = new Node('script', 1);
 
@@ -280,11 +283,11 @@
 
 			if (!n.parent)
 				return;
-
+			
 			each(n.attributes, function(at) {
-				if (at.name == 'type')
+				if (at.name.indexOf('data-mce-') !== -1 || at.name == 'type')
 					return;
-
+				
 				p[at.name] = at.value;
 			});
 
@@ -292,7 +295,7 @@
 
 			span.attr('class', 'mceItem' + this._ucfirst(n.name));
 			span.attr('data-mce-json', JSON.serialize(p));
-			span.attr('data-mce-type', n.name);
+			span.attr('data-mce-type', n.attr('data-mce-type') || p.type);
 
 			v = n.firstChild ? n.firstChild.value : '';
 
