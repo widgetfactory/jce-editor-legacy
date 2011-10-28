@@ -442,7 +442,7 @@
 		 * @param {String} src The base url
 		 */
 		_setupDir : function() {
-			var dir = '/';
+			var dir = '';
 
 			// get the file src from the widget element
 			var src = $(this.element).val();
@@ -453,7 +453,7 @@
 			}
 
 			// store directory
-			this._dir = $.String.path('/', $.String.encodeURI(dir));
+			this._dir = $.String.encodeURI(dir);
 
 			if (this._treeLoaded()) {
 				// Initialize tree view
@@ -724,7 +724,7 @@
 				return this._dir;
 			}
 			var dirs = this._dir.split('/');
-			var s = '/';
+			var s = '';
 
 			for (var i = 0; i < dirs.length-1; i++) {
 				s = $.String.path(s, dirs[i]);
@@ -790,7 +790,7 @@
 		 * Change Directory
 		 * @param {String} dir
 		 */
-		_changeDir: function(dir) {
+		_changeDir: function(dir) {			
 			this._reset();
 			this._limitcount = 0;
 			this._setDir(dir);
@@ -802,23 +802,16 @@
 		 * @param {String} src optional src url eg: images/stories/fruit.jpg
 		 */
 		_getList : function(src) {
-			// store directory in cookie
-			if (this.options.use_cookies) {
-				var v = this._dir;
-				
-				// remove leading slash as this upsets some 'security' extensions
-				if (v.charAt(0) == '/') {
-					v = v.substr(1);
-				}
-
-				// only store if we have a value
-				if (v) {
-					$.Cookie.set("wf_" + $.Plugin.getName() + '_dir', v);
-				}
-			}
-
 			// get path from src or stored directory
 			var path = src || this._dir;
+			
+			// remove leading slash
+			path = path.replace(/^[\/\\]+/, '');
+			
+			// store directory in cookie
+			if (this.options.use_cookies) {
+				$.Cookie.set("wf_" + $.Plugin.getName() + '_dir', path);
+			}
 
 			// show loading message
 			this._setLoader();
@@ -969,6 +962,9 @@
 		_execute : function(name) {
 			var self 	= this;
 			var dir 	= this._dir;
+			// trim dir - remove leading /
+			dir = dir.replace(/^[\/\\]+/, '');
+			
 			var list	= this._serializeSelectedItems();
 
 			var site 	= $.Plugin.getURI(true);
@@ -1050,7 +1046,7 @@
 						elements 	: this._getDialogOptions('upload'),
 						onOpen 		: function() {
 							// Set hidden dir value to current dir
-							$('#upload-dir').val(self._dir);
+							$('#upload-dir').val(dir);
 
 							/*$('#upload-overwrite').empty().append( function() {
 								return $.map(self.options.upload.conflict, function(v, k) {
