@@ -332,8 +332,17 @@
                 cm.setActive(n.id, !state);
             });
 
-            each(DOM.select('.mceButton, .mceListBox, .mceSplitButton', DOM.get(ed.id + '_toolbargroup')), function(n) {
-                cm.setDisabled(n.id, state);
+            each(DOM.select('.mceButton, .mceListBox, .mceSplitButton', DOM.get(ed.id + '_toolbargroup')), function(n) {            	
+            	var id = n.id;
+            	
+            	// get splitButton id from parent
+            	if (n.className.indexOf('mceSplitButton') !== -1) {
+            		id = n.parentNode.id;
+            	}
+            	
+            	if (id) {
+            		cm.setDisabled(id, state);
+            	}
             });
 
             cm.setActive('source', state);
@@ -345,7 +354,6 @@
             each(['wrap', 'highlight', 'numbers'], function(e) {
                 cm.setDisabled(e, !state);
             });
-
         },
 
         toggleSource : function() {
@@ -385,7 +393,7 @@
                 
                 window.setTimeout(function() {
                 	self.setHighlight(ed.getParam('source_highlight', true));
-                }, 5);
+                }, 10);
             } else {
                 if (se) {
                     // pass content
@@ -483,7 +491,6 @@
             				ed.hide();
             				ed.show();
             			}
-            			
             			cm.setActive('highlight', highlight);
             			cm.setActive('numbers', numbers);
             			cm.setActive('wrap', wrap);          			

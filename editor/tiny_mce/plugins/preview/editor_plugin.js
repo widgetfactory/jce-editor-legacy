@@ -135,8 +135,17 @@
                 cm.setActive(n.id, !state);
             });
 
-            each(DOM.select('.mceButton, .mceListBox, .mceSplitButton', DOM.get(ed.id + '_toolbargroup')), function(n) {
-                cm.setDisabled(n.id, state);
+            each(DOM.select('.mceButton, .mceListBox, .mceSplitButton', DOM.get(ed.id + '_toolbargroup')), function(n) {            	
+            	var id = n.id;
+            	
+            	// get splitButton id from parent
+            	if (n.className.indexOf('mceSplitButton') !== -1) {
+            		id = n.parentNode.id;
+            	}
+            	
+            	if (id) {
+            		cm.setDisabled(id, state);
+            	}
             });
 
             cm.setActive('preview', state);
