@@ -131,7 +131,17 @@
 					o.content = o.content.replace(/<script([^>]+)><\/script>/gi, '<script$1>\u00a0</script>');
 					
 					// process type attributes for scripts
-					o.content = o.content.replace(/<script([^>]+)type="([^"]+)"([^>]*)>/gi, '<script$1data-mce-type="$2"$3>');
+					o.content = o.content.replace(/<script([^>]*)>/gi, function(a, b) {
+						var re = /\stype="([^]+)"/;
+						
+						if (re.test(b)) {
+							b = b.replace(re, ' data-mce-type="$1"');
+						} else {
+							b += ' data-mce-type="text/javascript"';
+						}
+						
+						return '<script' + b + '>';
+					});
 				}
 			});
 
