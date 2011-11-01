@@ -66,6 +66,7 @@
 		</param>
 		<!-- Elements -->
 		<param name="invalid_elements" type="text" size="50" default="" label="WF_PARAM_NO_ELEMENTS" description="WF_PARAM_NO_ELEMENTS_DESC" />
+		<param name="invalid_attributes" type="text" size="50" default="action,codebase,dynsrc,lowsrc" label="WF_PARAM_INVALID_ATTRIBUTES" description="WF_PARAM_INVALID_ATTRIBUTES_DESC" />
 		<param name="extended_elements" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_ELEMENTS" description="WF_PARAM_ELEMENTS_DESC" />
 		<!-- Script parameters -->
 		<!-- Formatting parameters -->
@@ -107,14 +108,18 @@
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
 		</param>
+		<param name="remove_event_attributes" type="list" default="0" label="WF_PARAM_EVENT_ATTRIBUTES" description="WF_PARAM_EVENT_ATTRIBUTES_DESC">
+			<option value="1">WF_OPTION_YES</option>
+			<option value="0">WF_OPTION_NO</option>
+		</param>
 		<!--param name="allow_iframes" type="list" default="0" label="WF_PARAM_IFRAMES" description="WF_PARAM_IFRAMES_DESC">
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
 		</param-->
-		<param name="allow_applet" type="list" default="0" label="WF_PARAM_APPLET" description="WF_PARAM_APPLET_DESC">
+		<!--param name="allow_applet" type="list" default="0" label="WF_PARAM_APPLET" description="WF_PARAM_APPLET_DESC">
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
-		</param>
+		</param-->
 		<param name="visualchars" type="list" default="0" label="WF_PARAM_VISUALCHARS" description="WF_PARAM_VISUALCHARS_DESC">
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>

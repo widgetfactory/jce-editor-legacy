@@ -1,17 +1,15 @@
 <?php
 /**
-* @version		$Id: content.php 221 2011-06-11 17:30:33Z happy_noodle_boy $
-* @package      JCE Advlink
-* @copyright    Copyright (C) 2008 - 2009 Ryan Demmer. All rights reserved.
-* @author		Ryan Demmer
-* @license      GNU/GPL
-* JCE is free software. This version may have been modified pursuant
-* to the GNU General Public License, and as distributed it includes or
-* is derivative of works licensed under the GNU General Public License or
-* other free or open source software licenses.
-*/
-// no direct access
-defined( '_WF_EXT' ) or die( 'Restricted access' );
+ * @package   	JCE
+ * @copyright 	Copyright © 2009-2011 Ryan Demmer. All rights reserved.
+ * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * JCE is free software. This version may have been modified pursuant
+ * to the GNU General Public License, and as distributed it includes or
+ * is derivative of works licensed under the GNU General Public License or
+ * other free or open source software licenses.
+ */
+
+defined( '_WF_EXT' ) or die('RESTRICTED');
 class JoomlalinksContent extends JObject {
 	
 	var $_option = 'com_content';
@@ -72,15 +70,18 @@ class JoomlalinksContent extends JObject {
 				$sections = self::_getSection();
 				
 				foreach ($sections as $section) {
-					$url = '';
+					$url 	= '';
+					$public = false; 
 					
 					// Joomla! 1.5	
 					if (method_exists('ContentHelperRoute', 'getSectionRoute')) {
 						$id 	= ContentHelperRoute::getSectionRoute($section->id);
 						$view 	= 'section';
+						$public = $section->access == 0;
 					} else {
 						$id = ContentHelperRoute::getCategoryRoute($section->slug);
 						$view 	= 'category';
+						$public = $section->access == 1;
 					}
 					
 					if (strpos($id, 'index.php?Itemid=') !== false) {
@@ -92,7 +93,7 @@ class JoomlalinksContent extends JObject {
 						'url'		=>  $url,
 						'id'		=>	$id,
 						'name'		=>	$section->title,
-						'class'		=>	'folder content'
+						'class'		=>	'folder content' . ($public ? ' public' : '')
 					);
 				}
 				// Check Static/Uncategorized permissions
@@ -100,13 +101,15 @@ class JoomlalinksContent extends JObject {
 					$items[] = array(
 						'id'		=>	'option=com_content&amp;view=uncategorized',
 						'name'		=>	WFText::_('WF_LINKS_JOOMLALINKS_UNCATEGORIZED'),
-						'class'		=>	'folder content nolink'
+						'class'		=>	'folder content nolink' . ($public ? ' public' : '')
 					);
 				}
 				break;
 			// get categories in section or sub-categories (Joomla! 1.6+)
 			case 'section':		
 				$articles = array();
+				
+				$public = false;
 				
 				// Joomla! 1.5
 				if (method_exists('ContentHelperRoute', 'getSectionRoute')) {
@@ -127,11 +130,17 @@ class JoomlalinksContent extends JObject {
 						$id 	= 'index.php?option=com_content&view=category&id=' . $category->id;
 					}
 					
+					if (method_exists('ContentHelperRoute', 'getSectionRoute')) {
+						$public = $category->access == 0;
+					} else {
+						$public = $category->access == 1;
+					}
+
 					$items[] = array(
 						'url'		=> $url,
 						'id'		=>	$id,
 						'name'		=>	$category->title . ' / ' . $category->alias,
-						'class'		=>	'folder content'
+						'class'		=>	'folder content' . ($public ? ' public' : '')
 					);
 				}
 				
@@ -141,14 +150,16 @@ class JoomlalinksContent extends JObject {
 						// Joomla! 1.5
 						if (isset($article->sectionid)) {
 							$id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug, $article->sectionid);
+							$public = $article->access == 0;
 						} else {			
 							$id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug);
+							$public = $article->access == 1;
 						}
 						
 						$items[] = array(
 							'id' 	=> $id,
 							'name' 	=> $article->title . ' / ' . $article->alias,
-							'class'	=> 'file'
+							'class'	=> 'file' . ($public ? ' public' : '')
 						);
 					}
 				}
@@ -183,12 +194,14 @@ class JoomlalinksContent extends JObject {
 									$id 	= 'index.php?option=com_content&view=category&id=' . $category->id;
 								}
 							}
+							
+							$public = $category->access == 1;
 
 							$items[] = array(
 								'url'		=> 	$url,
 								'id'		=>	$id,
 								'name'		=>	$category->title . ' / ' . $category->alias,
-								'class'		=>	'folder content'
+								'class'		=>	'folder content' . ($public ? ' public' : '')
 							);
 						}
 					}
@@ -199,14 +212,16 @@ class JoomlalinksContent extends JObject {
 					// Joomla! 1.5
 					if (isset($article->sectionid)) {
 						$id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug, $article->sectionid);
+						$public = $article->access == 0;
 					} else {			
 						$id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug);
+						$public = $article->access == 1;
 					}
 					
 					$items[] = array(
 						'id' 	=> $id,
 						'name' 	=> $article->title . ' / ' . $article->alias,
-						'class'	=> 'file'
+						'class'	=> 'file' . ($public ? ' public' : '')
 					);
 				}
 	
@@ -214,10 +229,17 @@ class JoomlalinksContent extends JObject {
 			case 'uncategorized':			
 				$statics = self::_getUncategorized();
 				foreach ($statics as $static) {
+					
+					if (WF_JOOMLA15) {
+						$public = $static->access == 0;
+					} else {
+						$public = $static->access == 1;
+					}
+					
 					$items[] = array(
 						'id' 	=> ContentHelperRoute::getArticleRoute($static->id), 
 						'name' 	=> 	$static->title . ' / ' . $static->alias,
-						'class'	=>	'file'
+						'class'	=>	'file' . ($public ? ' public' : '')
 					);
 				}
 				break;
@@ -233,7 +255,7 @@ class JoomlalinksContent extends JObject {
 		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
 			return WFLinkBrowser::getCategory('com_content');
 		} else {
-			$query = 'SELECT id, title, alias'
+			$query = 'SELECT id, title, alias, access'
 			. ' FROM #__sections'
 			. ' WHERE published = 1'
 			. ' AND access <= '.(int) $user->get('aid')
@@ -253,9 +275,9 @@ class JoomlalinksContent extends JObject {
 		$wf 		= WFEditorPlugin::getInstance();
 		
 		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
-			$query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title';
+			$query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title, a.access';
 		} else {
-			$query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title, u.id AS sectionid';	
+			$query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title, u.id AS sectionid, a.access';	
 		}
 		
 		if ($wf->getParam('links.joomlalinks.article_alias', 1) == 1) {			
@@ -299,7 +321,7 @@ class JoomlalinksContent extends JObject {
 			$where  .= ' AND access <= '.(int) $user->get('aid') . ' AND sectionid = 0';
 		}
 		
-		$query = 'SELECT id, title, alias'
+		$query = 'SELECT id, title, alias, access'
 		. ' FROM #__content'
 		. ' WHERE state = 1'
 		. $where
@@ -308,6 +330,10 @@ class JoomlalinksContent extends JObject {
 		;
 		$db->setQuery($query, 0);
 		return $db->loadObjectList();
+	}
+	
+	private function getItemId($url)
+	{
 	}
 }
 ?>

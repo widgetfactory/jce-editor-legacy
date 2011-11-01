@@ -5,9 +5,19 @@ var PasteDialog = {
 	settings : {},
 		
 	init : function() {
-		var ed = tinyMCEPopup.editor,  el = document.getElementById('container'), title = document.getElementById('title'), ifr, doc, css, cssHTML = '';
+		var self = this, ed = tinyMCEPopup.editor,  el = document.getElementById('container'), title = document.getElementById('title'), ifr, doc, css, cssHTML = '';
 
 		$.Plugin.init();
+		
+		$('#insert').click(function(e) {
+			self.insert();
+			e.preventDefault;
+		});
+		
+		$('#cancel').click(function(e) {
+			tinyMCEPopup.close();
+			e.preventDefault;
+		});
 		
 		var cmd = tinyMCEPopup.getWindowArg('cmd');
 		

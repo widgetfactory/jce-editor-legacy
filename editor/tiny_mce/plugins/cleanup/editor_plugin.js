@@ -1,9 +1,8 @@
 /**
-* @version		$Id: editor_plugin.js 221 2011-06-11 17:30:33Z happy_noodle_boy $
 * @package      JCE
-* @copyright    Copyright (C) 2005 - 2009 Ryan Demmer. All rights reserved.
+* @copyright    Copyright (C) 2005 - 2011 Ryan Demmer. All rights reserved.
 * @author		Ryan Demmer
-* @license      GNU/GPL
+* @license      GNU/GPL 2 or later
 * JCE is free software. This version may have been modified pursuant
 * to the GNU General Public License, and as distributed it includes or
 * is derivative of works licensed under the GNU General Public License or
@@ -100,34 +99,7 @@
 						}
 					});
 				} **/
-				
-				// disable onclick, ondblclick
-				ed.parser.addAttributeFilter('onclick, ondblclick', function(nodes, name) {
-					for (var i = 0, len = nodes.length; i < len; i++) {
-						var node = nodes[i];
-						var ev = node.attr(name);
-						
-						if (ev) {
-							node.attr('data-mce-' + name, ev);
-							node.attr(name, null);
-						}
-					}
-				});
 
-				// enable onclick, ondblclick
-				ed.serializer.addAttributeFilter('data-mce-onclick, data-mce-ondblclick', function(nodes, name, args) {
-					for (var i = 0, len = nodes.length; i < len; i++) {
-						var node = nodes[i];
-						var ev = node.attr(name);
-						
-						if (ev) {
-							name = name.replace('data-mce-', '');
-							node.attr(name, ev);
-							node.attr('data-mce-' + name, null);
-						}
-					}
-				});
-				
 				// add id support for anchors
 				if (!ed.settings.allow_html_in_named_anchor) {
 					ed.parser.addAttributeFilter('id', function(nodes, name) {
@@ -198,7 +170,28 @@
 			ed.onBeforeSetContent.add(function(ed, o) {
 				// Geshi
 				o.content = o.content.replace(/<pre xml:\s*(.*?)>(.*?)<\/pre>/g, '<pre class="geshi-$1">$2</pre>');
+				
+				// remove event attibutes
+				if (ed.getParam('remove_event_attributes')) {
+					o.content = o.content.replace(/<([^>]+)on([a-z]+)="([^"]+)"([^>]*)>/gi, '<$1$4>');
+				}
+				
+				// remove attributes
+				if (ed.getParam('invalid_attributes')) {
+					var s = ed.getParam('invalid_attributes', '');
+					o.content = o.content.replace(new RegExp('<([^>]+)(' + s.replace(',', '|') + ')="([^"]+)"([^>]*)>', 'gi'), '<$1$4>');
+				}
 			});
+			
+			// disable onclick, ondblclick
+			ed.onSetContent.add(function(ed, o) {
+				each(ed.dom.select('*[onclick], *[ondblclick]'), function(n) {
+					n.onclick = n.ondblclick = function(e) {
+						tinymce.dom.Event.cancel(e);
+					};
+				});
+			});
+			
 			// Cleanup callback
 			ed.onPostProcess.add(function(ed, o) {
 				if (o.set) {

@@ -124,8 +124,8 @@ WFPopups.addPopup('window', {
         var src 		= ed.dom.getAttrib(n, 'href');
         var title 		= $('#window_popup_title').val() || args.title || '';
 
-        var width 		= args.width || $('#window_popup_width').val();
-        var height 		= args.height || $('#window_popup_height').val();
+        var width 		= args.width 	|| $('#window_popup_width').val();
+        var height 		= args.height 	|| $('#window_popup_height').val();
 
         var href 		= src;
         var query 		= 'this.href';
@@ -134,21 +134,20 @@ WFPopups.addPopup('window', {
         if (/\.(jpg|jpeg|png|gif|bmp|tiff)$/i.test(src)) {
             var params 	= {
                 img 	: src,
-                title 	: title.replace(' ', '_', 'gi'),
-                width	: width,
-                height	: height
+                title 	: title.replace(' ', '_', 'gi')
             };
+            
+            if (width) {
+            	params.width = width;
+            }
+            
+            if (height) {
+            	params.height = height;
+            }
 
-            href 	= 'index.php?option=com_jce&tmpl=component&view=popup';
+            href 	= 'index.php?option=com_jce&view=popup&tmpl=component';
             query 	= "this.href+'&" + decodeURIComponent($.param(params)) + "'";
         }
-
-        var features = {
-            'width'		: width,
-            'height' 	: height,
-            'top'		: 0,
-            'left'		: 0
-        };
 
         var top = $('#window_popup_position_top').val();
 
@@ -157,10 +156,10 @@ WFPopups.addPopup('window', {
                 top = 0;
                 break;
             case 'center':
-                top = "'+(screen.availHeight/2-" + (height/2) + ")+'";
+                top = height ? "'+(screen.availHeight/2-" + (height/2) + ")+'" : 0;
                 break;
             case 'bottom':
-                top = "'+(screen.availHeight-" + height + ")+'";
+                top = height ? "'+(screen.availHeight-" + height + ")+'" : 0;
                 break;
         }
 
@@ -171,10 +170,10 @@ WFPopups.addPopup('window', {
                 left = 0;
                 break;
             case 'center':
-                left = "'+(screen.availWidth/2-" + (width/2) + ")+'";
+                left = width ? "'+(screen.availWidth/2-" + (width/2) + ")+'" : 0;
                 break;
             case 'right':
-                left = "'+(screen.availWidth-" + width + ")+'";
+                left = height ? "'+(screen.availWidth-" + width + ")+'" : 0;
                 break;
         }
         
@@ -198,11 +197,17 @@ WFPopups.addPopup('window', {
         });
         
         $.extend(features, {
-        	'width' : width,
-        	'height': height,
         	'left' 	: left,
         	'top'	: top
         });
+        
+        if (width) {
+        	features.width = width;
+        }
+        
+        if (height) {
+        	features.height = height;
+        }
 
         ed.dom.setAttrib(n, 'href', href);
         ed.dom.setAttrib(n, 'onclick', "window.open(" + query + ",'" + encodeURIComponent(title) + "','" + decodeURIComponent($.param(features)).replace(/&/g, ',') + "');return false;");

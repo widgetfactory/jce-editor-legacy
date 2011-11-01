@@ -3,24 +3,23 @@ body{
 	margin:0;
 	padding:0;
 }
-div#jce_popup {
+div#wf_popup_image {
 	margin:0;
 	padding:0;
 	display: block;
 }
-div#jce_popup div {
+div#wf_popup_image div {
 	margin:0;
 	padding:0;
 	float:left;
-	display: block;
 }
-div#jce_popup div.contentheading{
+div#wf_popup_image div.contentheading{
 	width: 95%;
 }
-div#jce_popup div.buttonheading{
+div#wf_popup_image div.buttonheading{
 	float:right;
 }
-div#jce_popup div img {
+div#wf_popup_image div img {
 	margin:0;
 	padding:0;
 	cursor: pointer;
