@@ -66,7 +66,7 @@
 		</param>
 		<!-- Elements -->
 		<param name="invalid_elements" type="text" size="50" default="" label="WF_PARAM_NO_ELEMENTS" description="WF_PARAM_NO_ELEMENTS_DESC" />
-		<param name="invalid_attributes" type="text" size="50" default="action,codebase,dynsrc,lowsrc" label="WF_PARAM_INVALID_ATTRIBUTES" description="WF_PARAM_INVALID_ATTRIBUTES_DESC" />
+		<param name="invalid_attributes" type="text" size="50" default="dynsrc,lowsrc" label="WF_PARAM_INVALID_ATTRIBUTES" description="WF_PARAM_INVALID_ATTRIBUTES_DESC" />
 		<param name="extended_elements" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_ELEMENTS" description="WF_PARAM_ELEMENTS_DESC" />
 		<!-- Script parameters -->
 		<!-- Formatting parameters -->
