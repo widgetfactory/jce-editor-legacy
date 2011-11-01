@@ -29,9 +29,26 @@ class WFViewPopup extends JView
         $mode 	= JRequest::getInt('mode', '0');
         $click 	= JRequest::getInt('click', '0');
         $print 	= JRequest::getInt('print', '0');
+        
+        $dim 	= array('', '');
+        
+        if (strpos('http', $img) === false) {
+        	$path	= JPATH_SITE . DS . trim(str_replace(JURI::root(), '', $img), '/');
+        	if (is_file($path)) {
+        		$dim = @getimagesize($path);
+        	}
+        }
 
         $width 	= JRequest::getInt('w', JRequest::getInt('width', ''));
         $height = JRequest::getInt('h', JRequest::getInt('height', ''));
+        
+        if (!$width) {
+        	$width = $dim[0];
+        }
+        
+        if (!$height) {
+        	$height = $dim[1];
+        }
 
 		// Cleanup img variable
 		$img 	= preg_replace('/[^a-z0-9\.\/_-]/i', '', $img);

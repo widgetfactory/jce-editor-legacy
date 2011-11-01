@@ -240,10 +240,21 @@
 .defaultSkin span.mce_article {background-position:-920px 0;width:40px;}
 .defaultSkin span.mce_textcase {background-position:-40px -40px;}
 
+/** Admin Features Layout Styles **/
+
+#jce span.mceIcon {
+	width : auto;
+	min-width : 20px;
+}
+
+#jce span.mceIcon.mceButton {
+	width : auto;
+	min-width : 20px;
+}
+
 #jce span.mceIcon.mce_fontselect, #jce span.mceIcon.mce_fontsizeselect, #jce span.mceIcon.mce_formatselect, #jce span.mceIcon.mce_styleselect {
   background: url('../../img/layout.png') no-repeat 0 0;
-  width: 78px;
-  border: 1px solid #ccc;
+  width : 78px;
 }
 #jce span.mceIcon.mce_fontselect {
   background-position: 0 0;
@@ -260,8 +271,7 @@
 #jce span.mceIcon.mce_paste, #jce span.mceIcon.mce_numlist, #jce span.mceIcon.mce_bullist, 
 #jce span.mceIcon.mce_forecolor, #jce span.mceIcon.mce_backcolor, #jce span.mceIcon.mce_spellchecker, #jce span.mceIcon.mce_textcase {
   background: url('../../img/layout.png') no-repeat 0 0;
-  width: 30px;
-  border: 1px solid #ccc;
+  width : 30px;
 }
 #jce span.mceIcon.mce_numlist {
   background-position: 0 -100px;

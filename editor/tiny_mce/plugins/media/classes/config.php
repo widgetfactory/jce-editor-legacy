@@ -17,25 +17,34 @@ class WFMediaPluginConfig
 		$wf 	= WFEditor::getInstance();
 		$model 	= JModel::getInstance('editor', 'WFModel');
 		
+		$tags 	= array();
+		
 		if ($wf->getParam('media.iframes', 0)) {
-			$model->removeKeys($settings['invalid_elements'], array('iframe'));
+			$tags[] = 'iframe';
 		}
 		
 		if ($wf->getParam('media.audio', 1)) {
-			$model->removeKeys($settings['invalid_elements'], array('audio', 'source'));
+			$tags[] = 'audio';
 		}
 		
 		if ($wf->getParam('media.video', 1)) {
-			$model->removeKeys($settings['invalid_elements'], array('video', 'source'));
+			$tags[] = 'video';
+		}
+		
+		if (in_array('audio', $tags) || in_array('video', $tags)) {
+			$tags[] = 'source';
 		}
 		
 		if ($wf->getParam('media.embed', 1)) {
-			$model->removeKeys($settings['invalid_elements'], array('embed'));
+			$tags[] = 'embed';
 		}
 		
 		if ($wf->getParam('media.object', 1)) {
-			$model->removeKeys($settings['invalid_elements'], array('object', 'param'));
+			$tags[] = 'object';
+			$tags[] = 'param';
 		}
+		
+		$model->removeKeys($settings['invalid_elements'], $tags);
 
 		$settings['media_strict'] = $wf->getParam('media.strict', 1, 1);
 		
