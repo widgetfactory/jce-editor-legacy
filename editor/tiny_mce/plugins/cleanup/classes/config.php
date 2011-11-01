@@ -67,7 +67,7 @@ class WFCleanupPluginConfig
 			$settings['invalid_elements'] = '';
 		}
 		
-		$settings['invalid_attributes'] 		= $wf->getParam('editor.invalid_attributes', 'action,codebase,dynsrc,lowsrc', 'action,codebase,dynsrc,lowsrc', 'string', true);
+		$settings['invalid_attributes'] 		= $wf->getParam('editor.invalid_attributes', 'dynsrc,lowsrc', 'dynsrc,lowsrc', 'string', true);
 		$settings['remove_event_attributes'] 	= $wf->getParam('editor.remove_event_attributes', 0, 0, 'boolean');
 	}
 }
