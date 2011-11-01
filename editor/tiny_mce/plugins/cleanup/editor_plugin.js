@@ -215,7 +215,7 @@
 					}	
 					
 					// pad empty paragraphs
-					if (ed.getParam('verify_html') === false) {
+					if (!ed.settings.verify_html) {
 						o.content = o.content.replace(/<body([^>]*)>([\s\S]*)<\/body>/, '$2');
 						o.content = o.content.replace(/<p([^>]*)><\/p>/g, '<p$1>&nbsp;</p>');
 					}		
