@@ -173,7 +173,7 @@
 				
 				if (ed.settings.verify_html) {
 					// remove event attibutes
-					if (ed.getParam('remove_event_attributes')) {
+					if (!ed.getParam('event_attributes', true)) {
 						o.content = o.content.replace(/<([^>]+)on([a-z]+)="([^"]+)"([^>]*)>/gi, '<$1$4>');
 					}
 					
