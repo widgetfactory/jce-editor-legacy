@@ -171,16 +171,12 @@
 				// Geshi
 				o.content = o.content.replace(/<pre xml:\s*(.*?)>(.*?)<\/pre>/g, '<pre class="geshi-$1">$2</pre>');
 				
-				if (ed.settings.verify_html) {
-					// remove event attibutes
-					if (!ed.getParam('event_attributes', true)) {
-						o.content = o.content.replace(/<([^>]+)on([a-z]+)="([^"]+)"([^>]*)>/gi, '<$1$4>');
-					}
-					
+				if (ed.getParam('verify_html', true)) {					
 					// remove attributes
 					if (ed.getParam('invalid_attributes')) {
 						var s = ed.getParam('invalid_attributes', '');
-						o.content = o.content.replace(new RegExp('<([^>]+)(' + s.replace(',', '|') + ')="([^"]+)"([^>]*)>', 'gi'), '<$1$4>');
+						
+						o.content = o.content.replace(new RegExp('<([^>]+)(' + s.replace(',', '|', 'g') + ')="([^"]+)"([^>]*)>', 'gi'), '<$1$4>');
 					}
 				}
 			});
@@ -215,7 +211,7 @@
 					}	
 					
 					// pad empty paragraphs
-					if (!ed.settings.verify_html) {
+					if (ed.getParam('verify_html') == false) {
 						o.content = o.content.replace(/<body([^>]*)>([\s\S]*)<\/body>/, '$2');
 						o.content = o.content.replace(/<p([^>]*)><\/p>/g, '<p$1>&nbsp;</p>');
 					}		
