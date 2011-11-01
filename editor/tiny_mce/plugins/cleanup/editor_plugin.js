@@ -171,15 +171,17 @@
 				// Geshi
 				o.content = o.content.replace(/<pre xml:\s*(.*?)>(.*?)<\/pre>/g, '<pre class="geshi-$1">$2</pre>');
 				
-				// remove event attibutes
-				if (ed.getParam('remove_event_attributes')) {
-					o.content = o.content.replace(/<([^>]+)on([a-z]+)="([^"]+)"([^>]*)>/gi, '<$1$4>');
-				}
-				
-				// remove attributes
-				if (ed.getParam('invalid_attributes')) {
-					var s = ed.getParam('invalid_attributes', '');
-					o.content = o.content.replace(new RegExp('<([^>]+)(' + s.replace(',', '|') + ')="([^"]+)"([^>]*)>', 'gi'), '<$1$4>');
+				if (ed.settings.verify_html) {
+					// remove event attibutes
+					if (ed.getParam('remove_event_attributes')) {
+						o.content = o.content.replace(/<([^>]+)on([a-z]+)="([^"]+)"([^>]*)>/gi, '<$1$4>');
+					}
+					
+					// remove attributes
+					if (ed.getParam('invalid_attributes')) {
+						var s = ed.getParam('invalid_attributes', '');
+						o.content = o.content.replace(new RegExp('<([^>]+)(' + s.replace(',', '|') + ')="([^"]+)"([^>]*)>', 'gi'), '<$1$4>');
+					}
 				}
 			});
 			
