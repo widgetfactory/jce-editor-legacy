@@ -18,11 +18,7 @@ class WFCleanupPluginConfig
 		$wf 	= WFEditor::getInstance();
 		$model 	= JModel::getInstance('editor', 'WFModel');
 
-		if(!in_array('cleanup', $settings['plugins'])) {
-			$settings['plugins'][] = 'cleanup';
-		}
-
-		$settings['cleanup_pluginmode'] 	= $wf->getParam('cleanup.pluginmode', 0, 0, 'boolean');
+		$settings['cleanup_pluginmode'] = $wf->getParam('cleanup.pluginmode', 0, 0, 'boolean');
 		
 		/** TODO Re-visit in 2.1
 		
@@ -53,6 +49,7 @@ class WFCleanupPluginConfig
 			
 		// Add elements to invalid list (removed by plugin)
 		$model->addKeys($settings['invalid_elements'], self::$invalid_elements);
+		
 		// remove extended_valid_elements
 		if ($settings['extended_valid_elements']) {
 			preg_match_all('#(\w+)(\[([^\]]+)\])?#', $settings['extended_valid_elements'], $extended);
@@ -63,12 +60,11 @@ class WFCleanupPluginConfig
 		}
 		
 		// remove it if it is the same as the default
-		if ($settings['invalid_elements'] == implode(',', self::$invalid_elements)) {
-			$settings['invalid_elements'] = '';
+		if ($settings['invalid_elements'] === self::$invalid_elements) {
+			$settings['invalid_elements'] = array();
 		}
 		
-		$settings['invalid_attributes'] 		= $wf->getParam('editor.invalid_attributes', 'dynsrc,lowsrc', 'dynsrc,lowsrc', 'string', true);
-		$settings['event_attributes'] 			= $wf->getParam('editor.event_attributes', 1, 1, 'boolean');
+		$settings['invalid_attributes'] = $wf->getParam('editor.invalid_attributes', 'dynsrc,lowsrc', 'dynsrc,lowsrc', 'string', true);
 	}
 }
 ?>
