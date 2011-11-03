@@ -168,12 +168,15 @@
                             self.errors++;
                             break;
                     }
+                    
+                    console.log(o);
+                    
                     // no reponse text perhaps server error
                     if (o.response === '') {
                     	if (o.status === 200) {
                     		o.response = '{"error":false,"files":["' + file.name + '"]}';
                     	} else {
-                    		o.response = '{"error":true,"text":"UPLOAD ERROR"}';
+                    		o.response = '{"error":"UPLOAD ERROR"}';
                     	}
                     }
 
@@ -286,13 +289,18 @@
             if (this._isError(response.error)) {
                 status = 'error';
                 this.errors++;
-
-                if ($.isArray(response.text)) {
-                    response.text = response.text.join(' : ');
+                
+                // pass text to error if available
+                if (response.text) {
+                	response.error = reponse.text;
+                }
+                // join error array
+                if ($.isArray(response.error)) {
+                    response.error = response.error.join(' : ');
                 }
 
                 // show error text
-                $(file.element).addClass('error').after('<li class="queue-item-error"><span>' + response.text + '</span></li>');
+                $(file.element).addClass('error').after('<li class="queue-item-error"><span>' + response.error + '</span></li>');
                 // hide progress
                 $('span.queue-item-progress', file.element).hide();
             } else {
