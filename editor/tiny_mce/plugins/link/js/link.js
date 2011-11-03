@@ -107,7 +107,7 @@ var LinkDialog = {
         if (n && n.nodeName == 'A') {
             $('#insert').button('option', 'label', tinyMCEPopup.getLang('update', 'Update', true));
             
-            var href = ed.convertURL(ed.dom.getAttrib(n, 'href'));
+            var href = decodeURIComponent(ed.convertURL(ed.dom.getAttrib(n, 'href')));
 
             // Setup form data
             $('#href').val(href);
