@@ -221,7 +221,8 @@ var LinkDialog = {
     		var v = $('#' + k).val();
     		
     		if (k == 'href') {
-    			v = $.String.encodeURI(v, true);
+    			// prepare URL
+    			v = $.String.buildURI(v);
     		}
     		
     		if (k == 'class') {
