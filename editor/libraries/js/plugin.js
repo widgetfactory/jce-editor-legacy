@@ -1295,8 +1295,8 @@
         	if (/^\s*www\./.test(s)) {
         		s = 'http://' + s;
         	}
-        	
-        	return  $.String.encodeURI(s, true);
+        	return s.replace(/ /g, '%20');
+        	//return  $.String.encodeURI(s, true);
         },
 
         /**
