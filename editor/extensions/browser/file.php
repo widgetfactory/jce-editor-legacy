@@ -814,17 +814,21 @@ class WFFileBrowser extends WFBrowserExtension
 		return str_replace('WF_MANAGER_FILE_SUFFIX', '_copy', $suffix);
 	}
 
-	private function validateUploadedFile($file)
+	private function validateUploadedFile($file, &$result)
 	{
 		$chunks = JRequest::getInt('chunks', 1);
 		
 		if (!in_array(strtolower(JFile::getExt($file['name'])), $this->getFileTypes('array'))) {
-			JError::raiseError(406, WFText::_('WF_MANAGER_UPLOAD_INVALID_EXT_ERROR'));
+			$result->state = false;
+			$result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_EXT_ERROR');
+			return false;
 		}
 
 		if (preg_match('#\.(jpeg|jpg|jpe|png|gif|wbmp|bmp|tiff|tif)$#i', $file['name'])) {
 			if (@getimagesize($file['tmp_name']) === false) {
-				JError::raiseError(403, WFText::_('WF_MANAGER_UPLOAD_INVALID_IMAGE_ERROR'));
+				$result->state = false;
+				$result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_IMAGE_ERROR');
+				return false;
 			}
 		}
 		$upload = $this->get('upload');
@@ -834,7 +838,9 @@ class WFFileBrowser extends WFBrowserExtension
 			wfimport('editor.libraries.classes.mime');	
 				
 			if (!WFMimeType::check($file['name'], $file['tmp_name'], $file['type'])) {
-				JError::raiseError(403, WFText::_('WF_MANAGER_UPLOAD_INVALID_IMAGE_ERROR'));
+				$result->state = false;
+				$result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_IMAGE_ERROR');
+				return false;
 			}
 		}
 
@@ -847,7 +853,9 @@ class WFFileBrowser extends WFBrowserExtension
 
 		// check for hidden php tags
 		if (stristr($xss_check, '<?php')) {
-			JError::raiseError(403, WFText::_('WF_MANAGER_UPLOAD_RESTRICTED_ERROR'));
+			$result->state = false;
+			$result->message = WFText::_('WF_MANAGER_UPLOAD_RESTRICTED_ERROR');
+			return false;
 		}
 
 		$html_tags = array(
@@ -972,7 +980,9 @@ class WFFileBrowser extends WFBrowserExtension
             foreach ($html_tags as $tag) {
             	// A tag is '<tagname ', so we need to add < and a space or '<tagname>'
             	if (stristr($xss_check, '<' . $tag . ' ') || stristr($xss_check, '<' . $tag . '>')) {
-            		JError::raiseError(403, WFText::_('WF_MANAGER_UPLOAD_RESTRICTED_ERROR'));
+            		$result->state = false;
+					$result->message = WFText::_('WF_MANAGER_UPLOAD_RESTRICTED_ERROR');
+					return false;
             	}
             }
 
@@ -1034,50 +1044,58 @@ class WFFileBrowser extends WFBrowserExtension
 		if ($contentType && strpos($contentType, "multipart") !== false) {
 			if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name'])) {
 				// validate file before continuing (first chunk only)
-				if ($chunk == 0 && $wf->getParam('validate_mimetype', 0) && !preg_match('#(htm|html|txt)#', $ext)) {
-					$this->validateUploadedFile($file);
+				if ($chunk == 0) {
+					if ($wf->getParam('validate_mimetype', 0) && !preg_match('#(htm|html|txt)#', $ext)) {
+						if (!$this->validateUploadedFile($file, $result)) {
+							$complete = true;
+						}
+					}
+					
+					// check file size
+					if (!$complete && $chunks == 1) {
+						@clearstatcache();
+						$upload 	= $this->get('upload');
+						$max_size 	= intval(preg_replace('/[^0-9]/', '', $upload['max_size'])) * 1024;
+						$file_size 	= @filesize($file['tmp_name']);
+					
+						// check size and finish
+						if ($file_size > $max_size) {
+							$result->message = WFText::sprintf('WF_MANAGER_UPLOAD_SIZE_ERROR', $name, $file_size, ($max_size / 1024) . 'KB');
+							$complete = true;
+						}
+					}
 				}	
-
-				// check file size
-				if ($chunk == 0 && $chunks == 1) {
-					@clearstatcache();
-					$upload 	= $this->get('upload');
-					$max_size 	= intval(preg_replace('/[^0-9]/', '', $upload['max_size'])) * 1024;
-					$file_size 	= @filesize($file['tmp_name']);
-				
-					if ($file_size > $max_size) {
-						JError::raiseError(403, WFText::sprintf('WF_MANAGER_UPLOAD_SIZE_ERROR', $name, $file_size, ($max_size / 1024) . 'KB'));
-					}
-				}
-				
-				// make file name 'web safe'
-				$name = WFUtility::makeSafe($name);
-
-				// get current dir
-				$dir  = JRequest::getVar('upload-dir', '');
-				
-				// check destination path
-				WFUtility::checkPath($dir);	
-
-				// Normal upload
-				if ($chunks == 1) {
-					$result = $filesystem->upload('multipart', trim($file['tmp_name']), $dir, $name);
-
-					if (!$result->state) {
-						$result->message = WFText::_('WF_MANAGER_UPLOAD_ERROR');
-						$result->code = 103;
-					}
-
-					$complete = true;
-					// Chunk uploading
-				} else {
-					$result = $filesystem->upload('multipart-chunking', trim($file['tmp_name']), $dir, $name, $chunks, $chunk);
-
-					if (!$result->state) {
-						$result->message = WFText::_('WF_MANAGER_UPLOAD_ERROR');
-						$result->code = 103;
-					}
-					$complete = ($chunk == $chunks - 1);
+				// continue upload
+				if (!$complete) {
+					// make file name 'web safe'
+					$name = WFUtility::makeSafe($name);
+					
+					// get current dir
+					$dir  = JRequest::getVar('upload-dir', '');
+					
+					// check destination path
+					WFUtility::checkPath($dir);
+					
+					// Normal upload
+					if ($chunks == 1) {
+						$result = $filesystem->upload('multipart', trim($file['tmp_name']), $dir, $name);
+					
+						if (!$result->state) {
+							$result->message 	= WFText::_('WF_MANAGER_UPLOAD_ERROR');
+							$result->code 		= 103;
+						}
+					
+						$complete = true;
+						// Chunk uploading
+					} else {
+						$result = $filesystem->upload('multipart-chunking', trim($file['tmp_name']), $dir, $name, $chunks, $chunk);
+					
+						if (!$result->state) {
+							$result->message = WFText::_('WF_MANAGER_UPLOAD_ERROR');
+							$result->code = 103;
+						}
+						$complete = ($chunk == $chunks - 1);
+					}	
 				}
 			}
 		} else {
@@ -1094,6 +1112,8 @@ class WFFileBrowser extends WFBrowserExtension
 				if ($result->state === true) {										
 					$this->setResult($this->fireEvent('onUpload', array($result->path)));					
 					$this->setResult(basename($result->path), 'files');	
+				} else {
+					$this->setResult($result->message, 'error');
 				}
 			}
 
