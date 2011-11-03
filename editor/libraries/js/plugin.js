@@ -1198,7 +1198,8 @@
         },
 
         safe: function (s) {
-            s = s.replace(/(\.){2,}/g, '').replace(/[^a-z0-9\.\_\-\s~]/gi, '').replace(/\s/gi, '_');
+            //s = s.replace(/(\.){2,}/g, '').replace(/[^a-z0-9\.\_\-\s~]/gi, '').replace(/\s/gi, '_');
+        	s = s.replace(/(\.){2,}/, '').replace(/[+\\\/#\?%&<>"\'=]/g, '');//.replace(/\s/gi, '_');
             return this.basename(s);
         },
 

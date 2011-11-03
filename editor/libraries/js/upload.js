@@ -169,8 +169,6 @@
                             break;
                     }
                     
-                    console.log(o);
-                    
                     // no reponse text perhaps server error
                     if (o.response === '') {
                     	if (o.status === 200) {
@@ -312,7 +310,7 @@
                     }
 
                     var item = {
-                        name 	: plupload.cleanName(file.name),
+                        name 	: file.name,//plupload.cleanName(file.name),
                         insert 	: $('span.queue-item-insert', file.element).hasClass('selected')
                     };
 
@@ -554,6 +552,8 @@
 
                     $(input).bind('blur', function() {
                         var v = $(input).val() + '.' + $.String.getExt($(txt).text());
+                        // make web safe
+                        v = $.String.safe(v);
 
                         self._renameFile(file, v);
 
