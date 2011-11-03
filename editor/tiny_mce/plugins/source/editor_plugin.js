@@ -1,11 +1,11 @@
 /**
- * editor_plugin_src.js
- *
- * Copyright 2009, Moxiecode Systems AB
- * Released under LGPL License.
- *
- * License: http://tinymce.moxiecode.com/license
- * Contributing: http://tinymce.moxiecode.com/contributing
+ * @copyright   @@copyright@@
+ * @author		Ryan Demmer
+ * @license     @@licence@@
+ * JCE is free software. This version may have been modified
+ * pursuant to the GNU General Public License, and as distributed it
+ * includes or is derivative of works licensed under the GNU General
+ * Public License or other free or open source software licenses.
  */
 
 (function() {
