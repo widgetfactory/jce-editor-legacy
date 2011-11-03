@@ -334,7 +334,19 @@ var TableDialog = {
 
 			dom.setAttrib(elm, 'cellPadding', cellpadding, true);
 			dom.setAttrib(elm, 'cellSpacing', cellspacing, true);
-			dom.setAttrib(elm, 'border', border);
+			
+			if (!this.isCssSize(border)) {
+				dom.setAttrib(elm, 'border', border);
+			} else {
+				dom.setAttrib(elm, 'border', '');
+			}
+
+			if (border == '') {
+				dom.setStyle(elm, 'border-width', '');
+				dom.setStyle(elm, 'border', '');
+				dom.setAttrib(elm, 'border', '');
+			}
+
 			dom.setAttrib(elm, 'align', align);
 			dom.setAttrib(elm, 'frame', frame);
 			dom.setAttrib(elm, 'rules', rules);
@@ -395,7 +407,7 @@ var TableDialog = {
 			if(bordercolor != "") {
 				elm.style.borderColor = bordercolor;
 				elm.style.borderStyle = elm.style.borderStyle == "" ? "solid" : elm.style.borderStyle;
-				elm.style.borderWidth = border == "" ? "1px" : border;
+				elm.style.borderWidth = this.cssSize(border);
 			} else {
 				elm.style.borderColor = '';
 			}
@@ -423,7 +435,9 @@ var TableDialog = {
 		// Create new table
 		html += '<table';
 		html += this.makeAttrib('id', id);
-		html += this.makeAttrib('border', border);
+		if (!this.isCssSize(border)) {	
+			html += this.makeAttrib('border', border);
+		}
 		html += this.makeAttrib('cellpadding', cellpadding);
 		html += this.makeAttrib('cellspacing', cellspacing);
 		html += this.makeAttrib('_mce_new', '1');
@@ -513,12 +527,16 @@ var TableDialog = {
 		}
 
 		tinymce.each(dom.select('table[_mce_new]'), function(node) {
-			var td = dom.select('td', node);
+			var tdorth = dom.select('td,th', node);
 
-			ed.selection.select(td[0], true);
-			ed.selection.collapse();
+			try {
+				// IE9 might fail to do this selection 
+				inst.selection.setCursorLocation(tdorth[0], 0);
+			} catch (ex) {
+				// Ignore
+			}
 
-			dom.setAttrib(node, '_mce_new', '');
+			dom.setAttrib(node, 'data-mce-new', '');
 		});
 
 
@@ -859,15 +877,10 @@ var TableDialog = {
 	changedSize : function() {
 		var st = tinyMCEPopup.dom.parseStyle($('#style').val());
 
-		/*	var width = $('#width').val();
-		 if (width != "")
-		 st['width'] = tinyMCEPopup.getParam("inline_styles") ? getCSSSize(width) : "";
-		 else
-		 st['width'] = "";*/
-
 		var height = $('#height').val();
+		
 		if(height != ""){
-			st['height'] = getCSSSize(height);
+			st['height'] = this.cssSize(height);
 		} else {
 			st['height'] = "";
 		}
@@ -882,15 +895,33 @@ var TableDialog = {
 
 		$('#style').val(tinyMCEPopup.dom.serializeStyle(st));
 	},
+	
+	isCssSize : function(value) {
+		return /^[0-9.]+(%|in|cm|mm|em|ex|pt|pc|px)$/.test(value);
+	},
+
+	cssSize : function(value, def) {
+		value = tinymce.trim(value || def);
+
+		if (!this.isCssSize(value)) {
+			return parseInt(value, 10) + 'px';
+		}
+
+		return value;
+	},
 
 	changedBorder : function() {
 		var st = tinyMCEPopup.dom.parseStyle($('#style').val());
 		
 		var bw = $('#border').val();
-
-		// Update border width if the element has a color
-		if((bw != '' || bw != 'undefined') && $('#bordercolor').val() != "") {
-			st['border-width'] = bw + "px";
+		
+		if (bw != "" && (this.isCssSize(bw) || $('#bordercolor').val() != ""))
+			st['border-width'] = this.cssSize(bw);
+		else {
+			if (!bw) {
+				st['border'] = '';
+				st['border-width'] = '';
+			}
 		}
 
 		$('#style').val(tinyMCEPopup.dom.serializeStyle(st));
@@ -908,8 +939,7 @@ var TableDialog = {
 
 			// Add border-width if it's missing
 			if(!st['border-width']) {
-				var bw = $('#border').val();
-				st['border-width'] = (bw == "" || typeof bw == 'undefined') ? "1px" : bw + "px";
+				st['border-width'] = this.cssSize($('#border').val(), 1);
 			}
 		}
 
