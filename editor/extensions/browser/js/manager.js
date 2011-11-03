@@ -455,7 +455,8 @@
 		 * Check if a name is websafe
 		 */
 		_isWebSafe : function(name) {
-			return !/[^a-zA-Z0-9:\.\_\-]/.test(name);
+			//return !/[^a-zA-Z0-9:\.\_\-]/.test(name);
+			return /[+\/#\?%&]/.test(name) === false;
 		},
 
 		_isViewable : function(name) {
@@ -686,9 +687,37 @@
 		 * Reset the status display
 		 */
 		_resetStatus : function() {
-			var dir = decodeURIComponent(this._dir);
-			dir = dir.replace(/\//g, ' &rsaquo; ');
-			this.setStatus({message : dir + ' ( ' + this._foldercount + ' ' + this._translate('folders', 'folders') + ', ' + this._filecount + ' ' + this._translate('files', 'files') + ' )', state : ''});
+			var self = this, dir = decodeURIComponent(this._dir);
+
+			var ul = $('<ul/>');
+			
+			$(ul).append('<li>' + self._translate('root', 'Root') + '</li>').click(function() {
+				self._changeDir('/');
+			});
+			
+			dir = $.trim(dir.replace(/^\//, ''));
+			
+			if (dir) {
+				var parts = dir.split('/');
+				
+				$.each(parts, function(i, s) {	
+					var path = s;
+					
+					if (i > 0) {
+						path = parts[i - 1] + '/' + s;
+					}
+
+					$('<li />').click(function(e) {										
+						self._changeDir(path);
+						
+					}).html('&rsaquo; ' + s).appendTo(ul);
+				});
+			}
+
+			$(ul).append('<li>( ' + this._foldercount + ' ' + this._translate('folders', 'folders') + ', ' + this._filecount + ' ' + this._translate('files', 'files') + ')</li>');
+			
+			this.setStatus({message : '', state : ''});			
+			$(this.options.dialog.status).empty().append(ul);
 		},
 
 		/**

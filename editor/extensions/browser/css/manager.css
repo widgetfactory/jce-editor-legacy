@@ -97,8 +97,11 @@ div.layout-top div.layout-header {
 }
 
 div#browser-actions {
-	text-align: right;
-	position: relative;
+	float: left;
+    margin: 0 0 0 -5px;
+    position: relative;
+    text-align: right;
+    width: 30%;
 }
 
 div#browser-actions span {
@@ -325,6 +328,22 @@ div#browser-message {
 
 div#browser-message.load {
 	background: url('../../../libraries/img/load.gif') no-repeat left center;
+}
+
+div#browser-message ul {
+	margin : 0 0 0 30px;
+	padding : 0;
+	list-style : none;
+}
+
+div#browser-message ul li {
+	display : inline-block;
+	margin: 0 0 0 5px;
+	cursor: pointer;
+}
+div#browser-message ul li:last-child {
+	margin: 0 0 0 10px;
+	cursor: default;
 }
 
 div#browser-message span {
@@ -723,13 +742,14 @@ dd#loader {
 }
 
 div#browser-message {
-	line-height: 24px;
 	background: url('../../../libraries/img/icons-24.png') no-repeat 0
 		-120px;
 	display: block;
-	float: left;
-	margin: 3px 0px 3px 5px;
-	height: 24px;
+    float: left;
+    height: 24px;
+    line-height: 24px;
+    margin: 3px 0 3px 5px;
+    width: 70%;
 }
 
 span.message.info {
