@@ -122,7 +122,8 @@ class WFUtility
 	public function makeSafe($file)
 	{
 		jimport('joomla.filesystem.file');
-		return trim(JFile::makeSafe(preg_replace('#\s#', '_', $file)));
+		//return trim(JFile::makeSafe(preg_replace('#\s#', '_', $file)));
+		return trim(preg_replace(array('#(\.){2,}#', '#[+\\\/\?\#%&<>"\'=]#', '#^\.#'), '', $file));
 	}
 
 	/**
