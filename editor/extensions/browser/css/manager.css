@@ -98,7 +98,7 @@ div.layout-top div.layout-header {
 
 div#browser-actions {
 	float: left;
-    margin: 0 0 0 -5px;
+    margin: 0 0 -5px -5px;
     position: relative;
     text-align: right;
     width: 30%;
