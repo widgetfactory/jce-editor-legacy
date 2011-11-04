@@ -103,7 +103,7 @@ class WFEditor extends JObject {
 			$db->setQuery($query);
 			$profiles = $db->loadObjectList();
 
-			if ($option == 'com_jce') {
+			if ($option == 'com_jce') {				
 				$component_id = JRequest::getInt('component_id');
 
 				if ($component_id) {
@@ -115,8 +115,8 @@ class WFEditor extends JObject {
 			$area = $mainframe->isAdmin() ? 2 : 1;
 
 			foreach ($profiles as $item) {
-				// check if option is in list - always true if option is com_jce
-				$isComponent = ($option == 'com_jce') ? true : in_array($option, explode(',', $item->components));
+				// check if option is in list
+				$isComponent = in_array($option, explode(',', $item->components));
 
 				// Set area default as Front-end / Back-end
 				if (!isset($item->area) || $item->area == '') {
