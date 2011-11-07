@@ -217,8 +217,8 @@ class WFFileBrowser extends WFBrowserExtension
 			if (substr(trim($group), 0, 1) === '-') {
 				continue;
 			}
-			
-			$data[] = $group;
+			// remove excluded file types (those that have a - prefix character) from the list
+			$data[] = preg_replace('#(,)?-([\w]+)#', '', $group);
 		}
 		
 		$list = implode(';', $data);
