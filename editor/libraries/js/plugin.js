@@ -558,14 +558,19 @@
                 url: url,
                 data: 'json=' + $.JSON.serialize(json) + '&' + $.param(args),
                 success: function (o) {
-                    // no result or not json object
-                    if (!o || !$.isPlainObject(o)) {
-                        if (o) {
-                        	showError(o);
-                        }
-                       	return false;
-                    } else {
-                        if (o.error) {
+                	// check result - should be object, parse as JSON if string
+                	if ($.type(o) == 'string') {
+                		// parse string as JSON object
+                		var s = $.parseJSON(o);
+                		// pass if successful
+                		if (s) {
+                			o = s;
+                		}
+                	}
+
+                    // process object result
+                    if ($.isPlainObject(o)) {
+                    	if (o.error) {
                         	showError(o.text || o.error || '');
                         }
 
@@ -574,6 +579,12 @@
                         if (r.error && r.error.length) {
                         	showError(r.error);
                         }
+                    // show error
+                    } else {
+                    	if (o) {
+                        	showError(o);
+                        }
+                       	return false;
                     }
 
                     if ($.isFunction(callback)) {
@@ -1197,9 +1208,36 @@
             return s;
         },
 
-        safe: function (s) {
-            //s = s.replace(/(\.){2,}/g, '').replace(/[^a-z0-9\.\_\-\s~]/gi, '').replace(/\s/gi, '_');
-        	s = s.replace(/(\.){2,}/, '').replace(/[+\\\/#\?%&<>"\'=]/g, '');//.replace(/\s/gi, '_');
+        safe: function (s) {     
+        	// remove multiple period characters and some special characters
+        	s = s.replace(/(\.){2,}/g, '').replace(/[+\\\/\?\#%&<>"\'=\[\]\{\},;@^\(\)]/g, '');
+        	var r = '';
+        	// convert character code to unicode eg: \\u001A
+        	function _toUnicode(s) {
+        		var c = s.toString(16).toUpperCase();
+        		
+        		while (c.length < 4) {
+        			c = '0' + c;
+        		}
+        		
+        		return'\\u' + c;
+        	}
+        	
+        	for(var i = 0, ln = s.length; i < ln; i++) {
+        		var char = s[i];
+        		// only process on possible restricted characters or utf-8 letters/numbers
+        		if (/[^\w\.\-\s~ ]/.test(char)) {
+        			// skip any character less than 127, eg: &?@* etc.
+            		if (_toUnicode(char.charCodeAt(0)) < '\\u007F') {
+            			continue;
+            		}
+        		}
+        		
+        		r += char;
+        	}
+        	// remove leading period
+        	s = r.replace(/^\./, '');
+        	
             return this.basename(s);
         },
 
