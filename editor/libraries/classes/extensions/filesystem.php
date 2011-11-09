@@ -126,7 +126,8 @@ class WFFileSystem extends WFExtension
 			$root 		= preg_replace($pattern, $replace, $root);
 			
 			// Clean (allow characters A-Za-z0-9:.-_ and space)
-			$root = preg_replace(array('/$\w+\b/', '/(\.) {2,}/', '/[^A-Za-z0-9:\.\_\-\/ ]/'), '', $root);
+			//$root = preg_replace(array('/$\w+\b/', '/(\.) {2,}/', '/[^A-Za-z0-9:\.\_\-\/ ]/'), '', $root);
+			$root = trim(WFUtility::makeSafe($root));
     	}
     	
     	return $root;

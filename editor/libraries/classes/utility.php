@@ -122,8 +122,14 @@ class WFUtility
 	public function makeSafe($file)
 	{
 		jimport('joomla.filesystem.file');
-		//return trim(JFile::makeSafe(preg_replace('#\s#', '_', $file)));
-		return trim(preg_replace(array('#(\.){2,}#', '#[+\\\/\?\#%&<>"\'=]#', '#^\.#'), '', $file));
+		/*return trim(JFile::makeSafe(preg_replace('#\s#', '_', $file)));
+		return trim(preg_replace(array('#(\.){2,}#', '#[+\\\/\?\#%&<>"\'=\[\]\{\},;@^]#', '#^\.#'), '', $file));
+		
+		$language = JFactory::getLanguage();		
+		// set locale
+		setlocale(LC_COLLATE, $language->getLocale());*/
+		
+		return trim(ltrim(preg_replace(array('#(\.){2,}#', '#[^\w\.\-\s~ \p{L}\p{N}]#u'), '', $file), '.'));
 	}
 
 	/**
@@ -133,12 +139,13 @@ class WFUtility
 	 */
 	public function formatSize($size)
 	{
-		if ($size < 1024)
-		return $size . ' ' . WFText::_('WF_LABEL_BYTES');
-		else if ($size >= 1024 && $size < 1024 * 1024)
-		return sprintf('%01.2f', $size / 1024.0) . ' ' . WFText::_('WF_LABEL_KB');
-		else
-		return sprintf('%01.2f', $size / (1024.0 * 1024)) . ' ' . WFText::_('WF_LABEL_MB');
+		if ($size < 1024) {
+			return $size . ' ' . WFText::_('WF_LABEL_BYTES');
+		} else if ($size >= 1024 && $size < 1024 * 1024) {
+			return sprintf('%01.2f', $size / 1024.0) . ' ' . WFText::_('WF_LABEL_KB');
+		} else {
+			return sprintf('%01.2f', $size / (1024.0 * 1024)) . ' ' . WFText::_('WF_LABEL_MB');
+		}
 	}
 
 	/**
