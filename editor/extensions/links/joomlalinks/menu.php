@@ -76,14 +76,20 @@ class JoomlalinksMenu extends JObject
 				$id 	= $type ? 0 : $args->id;
 				
 				$menus = self::_menu($id, $type);
-				
+
 				foreach ($menus as $menu) {
 					$link = $menu->link;	
+					
+					$class = array();
 						
 					switch ($menu->type) {
 						case 'separator':
-							// No further action needed.
-							continue;
+							if ($link) {
+								$link .= '&Itemid='.$menu->id;
+							} else {
+								$class[] = 'nolink';
+							}
+							break;
 	
 						case 'url':
 							if ((strpos($link, 'index.php?') !== false) && (strpos($link, 'Itemid=') === false)) {
@@ -111,11 +117,17 @@ class JoomlalinksMenu extends JObject
 						$link = $menu->link . '&Itemid=' . $menu->id;
 					}
 					
+					if ($children) {
+						$class = array_merge($class, array('folder', 'menu'));
+					} else {
+						$class[] = 'file';
+					}
+					
 					$items[] = array(
 						'id'		=>	$children ? 'index.php?option=com_menu&view=menu&id=' . $menu->id : $link,
 						'url'		=>	$link,
 						'name'		=>	$title . ' / ' . $menu->alias,
-						'class'		=>	$children ? 'folder menu' : 'file'
+						'class'		=>	implode(' ', $class)
 					);
 				}
 				break;
@@ -186,17 +198,17 @@ class JoomlalinksMenu extends JObject
 		
 		$where  = '';
 		
-		// Joomla! 1.5
-		if (isset($user->gid)) {
-			$where .= ' AND access <= '.(int) $user->get('aid');
-			$where .=  ' AND parent = '.(int) $id;
-		} else {
+		// Joomla! 1.6+
+		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
 			$groups	= implode(',', $user->authorisedLevels());
 			$where .= ' AND menutype != '.$db->Quote('_adminmenu');
 			$where .= ' AND access IN ('.$groups.')';
 			if ($id) {
 				$where .= ' AND parent_id = '.(int) $id;
 			}
+		} else {
+			$where .= ' AND access <= '.(int) $user->get('aid');
+			$where .=  ' AND parent = '.(int) $id;
 		}
 		
 		$query = 'SELECT COUNT(id)'
