@@ -71,17 +71,14 @@ class JoomlalinksContent extends JObject {
 				
 				foreach ($sections as $section) {
 					$url 	= '';
-					$public = false; 
 					
 					// Joomla! 1.5	
 					if (method_exists('ContentHelperRoute', 'getSectionRoute')) {
 						$id 	= ContentHelperRoute::getSectionRoute($section->id);
 						$view 	= 'section';
-						$public = $section->access == 0;
 					} else {
 						$id = ContentHelperRoute::getCategoryRoute($section->slug);
 						$view 	= 'category';
-						$public = $section->access == 1;
 					}
 					
 					if (strpos($id, 'index.php?Itemid=') !== false) {
@@ -93,7 +90,7 @@ class JoomlalinksContent extends JObject {
 						'url'		=>  $url,
 						'id'		=>	$id,
 						'name'		=>	$section->title,
-						'class'		=>	'folder content' . ($public ? ' public' : '')
+						'class'		=>	'folder content'
 					);
 				}
 				// Check Static/Uncategorized permissions
@@ -101,15 +98,13 @@ class JoomlalinksContent extends JObject {
 					$items[] = array(
 						'id'		=>	'option=com_content&amp;view=uncategorized',
 						'name'		=>	WFText::_('WF_LINKS_JOOMLALINKS_UNCATEGORIZED'),
-						'class'		=>	'folder content nolink' . ($public ? ' public' : '')
+						'class'		=>	'folder content nolink'
 					);
 				}
 				break;
 			// get categories in section or sub-categories (Joomla! 1.6+)
 			case 'section':		
 				$articles = array();
-				
-				$public = false;
 				
 				// Joomla! 1.5
 				if (method_exists('ContentHelperRoute', 'getSectionRoute')) {
@@ -129,18 +124,12 @@ class JoomlalinksContent extends JObject {
 						$url 	= $id;
 						$id 	= 'index.php?option=com_content&view=category&id=' . $category->id;
 					}
-					
-					if (method_exists('ContentHelperRoute', 'getSectionRoute')) {
-						$public = $category->access == 0;
-					} else {
-						$public = $category->access == 1;
-					}
 
 					$items[] = array(
 						'url'		=> $url,
 						'id'		=>	$id,
 						'name'		=>	$category->title . ' / ' . $category->alias,
-						'class'		=>	'folder content' . ($public ? ' public' : '')
+						'class'		=>	'folder content'
 					);
 				}
 				
@@ -150,16 +139,14 @@ class JoomlalinksContent extends JObject {
 						// Joomla! 1.5
 						if (isset($article->sectionid)) {
 							$id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug, $article->sectionid);
-							$public = $article->access == 0;
 						} else {			
 							$id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug);
-							$public = $article->access == 1;
 						}
 						
 						$items[] = array(
 							'id' 	=> $id,
 							'name' 	=> $article->title . ' / ' . $article->alias,
-							'class'	=> 'file' . ($public ? ' public' : '')
+							'class'	=> 'file'
 						);
 					}
 				}
@@ -194,14 +181,12 @@ class JoomlalinksContent extends JObject {
 									$id 	= 'index.php?option=com_content&view=category&id=' . $category->id;
 								}
 							}
-							
-							$public = $category->access == 1;
 
 							$items[] = array(
 								'url'		=> 	$url,
 								'id'		=>	$id,
 								'name'		=>	$category->title . ' / ' . $category->alias,
-								'class'		=>	'folder content' . ($public ? ' public' : '')
+								'class'		=>	'folder content'
 							);
 						}
 					}
@@ -212,34 +197,25 @@ class JoomlalinksContent extends JObject {
 					// Joomla! 1.5
 					if (isset($article->sectionid)) {
 						$id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug, $article->sectionid);
-						$public = $article->access == 0;
 					} else {			
 						$id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug);
-						$public = $article->access == 1;
 					}
 					
 					$items[] = array(
 						'id' 	=> $id,
 						'name' 	=> $article->title . ' / ' . $article->alias,
-						'class'	=> 'file' . ($public ? ' public' : '')
+						'class'	=> 'file'
 					);
 				}
 	
 				break;
 			case 'uncategorized':			
 				$statics = self::_getUncategorized();
-				foreach ($statics as $static) {
-					
-					if (WF_JOOMLA15) {
-						$public = $static->access == 0;
-					} else {
-						$public = $static->access == 1;
-					}
-					
+				foreach ($statics as $static) {					
 					$items[] = array(
 						'id' 	=> ContentHelperRoute::getArticleRoute($static->id), 
 						'name' 	=> 	$static->title . ' / ' . $static->alias,
-						'class'	=>	'file' . ($public ? ' public' : '')
+						'class'	=>	'file'
 					);
 				}
 				break;
