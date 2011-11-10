@@ -281,8 +281,8 @@ WFPopups.addPopup('jcemediabox', {
         }
 
         $.each(data, function(k, v) {
-            if ($('#jcemediabox_popup_' + k).get(0)) {
-                $('#jcemediabox_popup_' + k).val(decodeURIComponent(v));
+        	if ($('#jcemediabox_popup_' + k).get(0)) {        		
+                $('#jcemediabox_popup_' + k).val(v);
                 // remove from object
                 delete data[k];
             } else {
