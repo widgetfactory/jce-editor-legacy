@@ -568,13 +568,15 @@
 			// replace double linebreaks with paragraphs
 			if (ed.getParam('force_p_newlines')) {
 				var blocks = '';
+				// only split if a double break exists
+				if (h.indexOf('<br><br>') != -1) {
+					// convert marker to paragraphs
+					tinymce.each(h.split('<br><br>'), function(block) {
+						blocks += '<p>' + block + '</p>';
+					});
 
-				// convert marker to paragraphs
-				tinymce.each(h.split('<br><br>'), function(block) {
-					blocks += '<p>' + block + '</p>';
-				});
-
-				h = blocks;
+					h = blocks;
+				}
 			}
 
 			// replace paragraphs with linebreaks
