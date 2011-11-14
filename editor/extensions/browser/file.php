@@ -63,7 +63,8 @@ class WFFileBrowser extends WFBrowserExtension
 					'delete' => 1,
 					'move' 	 => 1
 				)
-			)
+			),
+			'websafe_mode'	=> 'utf-8'
 		);
 		
 		$config = array_merge($default, $config);		
@@ -113,6 +114,8 @@ class WFFileBrowser extends WFBrowserExtension
 	
 		//$document->addStyleSheet(array('files', 'tree', 'upload'), 'libraries');
 		$document->addStyleSheet(array('manager'), 'extensions.browser.css');
+		// custom stylesheet
+		$document->addStyleSheet(array('custom'), 'libraries.css');
 		
 		// file browser options
 		$document->addScriptDeclaration('WFFileBrowser.settings='.json_encode($this->getSettings()).';');
@@ -1068,7 +1071,7 @@ class WFFileBrowser extends WFBrowserExtension
 				// continue upload
 				if (!$complete) {
 					// make file name 'web safe'
-					$name = WFUtility::makeSafe($name);
+					$name = WFUtility::makeSafe($name, $this->get('websafe_mode', 'utf-8'));
 					
 					// get current dir
 					$dir  = JRequest::getVar('upload-dir', '');
@@ -1189,7 +1192,7 @@ class WFFileBrowser extends WFBrowserExtension
 		}
 	
 		$filesystem 	= $this->getFileSystem();
-		$result 		= $filesystem->rename($source, trim($destination), $args);
+		$result 		= $filesystem->rename($source, WFUtility::makeSafe($destination, $this->get('websafe_mode')), $args);
 
 		if (is_a($result, 'WFFileSystemResult')) {
 			if (!$result->state) {
@@ -1310,7 +1313,7 @@ class WFFileBrowser extends WFBrowserExtension
 			
 		$filesystem = $this->getFileSystem();
 
-		$result = $filesystem->createFolder($dir, trim($new));
+		$result = $filesystem->createFolder($dir, WFUtility::makeSafe($new, $this->get('websafe_mode')));
 
 		if (is_a($result, 'WFFileSystemResult')) {
 			if (!$result->state) {
@@ -1409,12 +1412,13 @@ class WFFileBrowser extends WFBrowserExtension
 		$filesystem = $this->getFileSystem();
 
 		$default = array(
-            'dir'		=> $filesystem->getRootDir(),
-			'actions' 	=> $this->getActions(),
-            'buttons' 	=> $this->getButtons(),
-            'upload' 	=> $this->getUploadDefaults(),
-            'tree' 		=> $this->get('folder_tree'),
-            'listlimit' => $this->get('list_limit')
+            'dir'			=> $filesystem->getRootDir(),
+			'actions' 		=> $this->getActions(),
+            'buttons' 		=> $this->getButtons(),
+            'upload' 		=> $this->getUploadDefaults(),
+            'tree' 			=> $this->get('folder_tree'),
+            'listlimit' 	=> $this->get('list_limit'),
+			'websafe_mode'	=> $this->get('websafe_mode')
 		);
 		
 		$properties = array('base', 'delete', 'rename', 'folder_new', 'copy', 'move');
