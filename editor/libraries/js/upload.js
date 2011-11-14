@@ -34,7 +34,8 @@
             urlstream_upload: true,
             insert			: true,
             buttons			: {},
-            required		: ['multipart']
+            required		: ['multipart'],
+            websafe_mode	: 'utf-8'
         },
 
         /**
@@ -553,7 +554,7 @@
                     $(input).bind('blur', function() {
                         var v = $(input).val() + '.' + $.String.getExt($(txt).text());
                         // make web safe
-                        v = $.String.safe(v);
+                        v = $.String.safe(v, self.options.websafe_mode);
 
                         self._renameFile(file, v);
 
