@@ -57,46 +57,46 @@ li.file.notsafe, dd.file.notsafe {
     background: #FFFFFF url(../img/icons.png) no-repeat 0 -640px;
 }
 
-/* Adobe Flash PlayerÂ® */
+/* Adobe Flash Player¨ */
 li.file.swf, li.file.as, li.file.fla {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -340px;
 }
-/* Adobe Flash VideoÂ® */
+/* Adobe Flash Video¨ */
 li.file.flv, li.file.f4v, li.file.f4p, li.file.f4a, li.file.f4b {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -340px;
 }
-/* Microsoft WordÂ® */
+/* Microsoft Word¨ */
 li.file.doc, li.file.docx {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -400px;
 }
-/* Microsoft ExcelÂ® */
+/* Microsoft Excel¨ */
 li.file.xls, li.file.xlsx {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -320px;
 }
-/* Microsoft PowerpointÂ® */
+/* Microsoft Powerpoint¨ */
 li.file.ppt, li.file.pptx {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -380px;
 }
-/* AdobeÂ® AcrobatÂ® */
+/* AdobeÂ® Acrobat¨ */
 li.file.pdf {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -360px;
 }
 
 /** Application specific file types. These currently use a generic set of icons but can be edited to use custom / specific icons where the user has licence from the trademark holders to use such icons **/
 
-/* Apple QuicktimeÂ® */
+/* Apple Quicktime¨ */
 li.file.mov, li.file.qt, li.file.m4a {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
 }
-/* RealPlayerÂ® */
+/* RealPlayer¨ */
 li.file.ra, li.file.rm, li.file.ram {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
 }
-/* AdobeÂ® ShockwaveÂ® */
+/* Adobe¨Shockwave¨ */
 li.file.dcr {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
 }
-/* Windows Media PlayerÂ® */
+/* Windows Media Player¨ */
 li.file.wmv, li.file.wma, li.file.wm, li.file.wmx, li.file.wvx, li.file.asf, li.file.asx, li.file.avi {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
 }
