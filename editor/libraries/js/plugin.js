@@ -1155,8 +1155,10 @@
      * String functions
      */
     $.String = {
+    	utf8_chars 	: ['À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į', 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō', 'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ', 'ƒ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ǎ', 'ǎ', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ', 'Ǔ', 'ǔ', 'Ǖ', 'ǖ', 'Ǘ', 'ǘ', 'Ǚ', 'ǚ', 'Ǜ', 'ǜ', 'Ǻ', 'ǻ', 'Ǽ', 'ǽ', 'Ǿ', 'ǿ'],	
+    	ascii_chars : ['A', 'A', 'A', 'A', 'A', 'A', 'AE', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'D', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 's', 'a', 'a', 'a', 'a', 'a', 'a', 'ae', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'a', 'A', 'a', 'A', 'a', 'C', 'c', 'C', 'c', 'C', 'c', 'C', 'c', 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'G', 'g', 'G', 'g', 'G', 'g', 'G', 'g', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'IJ', 'ij', 'J', 'j', 'K', 'k', 'L', 'l', 'L', 'l', 'L', 'l', 'L', 'l', 'l', 'l', 'N', 'n', 'N', 'n', 'N', 'n', 'n', 'O', 'o', 'O', 'o', 'O', 'o', 'OE', 'oe', 'R', 'r', 'R', 'r', 'R', 'r', 'S', 's', 'S', 's', 'S', 's', 'S', 's', 'T', 't', 'T', 't', 'T', 't', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'W', 'w', 'Y', 'y', 'Y', 'Z', 'z', 'Z', 'z', 'Z', 'z', 's', 'f', 'O', 'o', 'U', 'u', 'A', 'a', 'I', 'i', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'A', 'a', 'AE', 'ae', 'O', 'o'], 	
 
-        basename: function (s) {
+    	basename: function (s) {
             s = s.replace(/\\/g, '/');
             return s.substring(s.length, s.lastIndexOf('/') + 1);
         },
@@ -1207,36 +1209,60 @@
             }
             return s;
         },
+        
+        utf8_to_ascii : function(s) {
+        	var utf8 	= this.utf8_chars;
+        	var ascii 	= this.ascii_chars;
+        	
+        	for(var i = 0, ln = utf8.length; i < ln; i++) {
+				s = s.replace(utf8[i], ascii[i], 'g');
+			}
+        	
+        	return s;
+        },
 
-        safe: function (s) {     
+        safe: function (s, mode) {     
+        	mode = mode || 'utf-8';
+        	
         	// remove multiple period characters and some special characters
-        	s = s.replace(/(\.){2,}/g, '').replace(/[+\\\/\?\#%&<>"\'=\[\]\{\},;@^\(\)]/g, '');
-        	var r = '';
-        	// convert character code to unicode eg: \\u001A
-        	function _toUnicode(s) {
-        		var c = s.toString(16).toUpperCase();
-        		
-        		while (c.length < 4) {
-        			c = '0' + c;
-        		}
-        		
-        		return'\\u' + c;
+        	s = s.replace(/(\.){2,}/g, '');
+        	
+        	if (mode == 'ascii') {
+        		s = this.utf8_to_ascii(s);
+        		s = s.replace(/[^a-z0-9_\.\-\s~ ]/gi, '');
+        	} else {
+        		s = s.replace(/[+\\\/\?\#%&<>"\'=\[\]\{\},;@^\(\)]/g, '');
+            	var r = '';
+            	// convert character code to unicode eg: \\u001A
+            	function _toUnicode(s) {
+            		var c = s.toString(16).toUpperCase();
+            		
+            		while (c.length < 4) {
+            			c = '0' + c;
+            		}
+            		
+            		return'\\u' + c;
+            	}
+            	
+            	for(var i = 0, ln = s.length; i < ln; i++) {
+            		var char = s[i];
+            		// only process on possible restricted characters or utf-8 letters/numbers
+            		if (/[^\w\.\-\s~ ]/.test(char)) {
+            			// skip any character less than 127, eg: &?@* etc.
+                		if (_toUnicode(char.charCodeAt(0)) < '\\u007F') {
+                			continue;
+                		}
+            		}
+            		
+            		r += char;
+            	}
+            	
+            	s = r;
         	}
         	
-        	for(var i = 0, ln = s.length; i < ln; i++) {
-        		var char = s[i];
-        		// only process on possible restricted characters or utf-8 letters/numbers
-        		if (/[^\w\.\-\s~ ]/.test(char)) {
-        			// skip any character less than 127, eg: &?@* etc.
-            		if (_toUnicode(char.charCodeAt(0)) < '\\u007F') {
-            			continue;
-            		}
-        		}
-        		
-        		r += char;
-        	}
+        	
         	// remove leading period
-        	s = r.replace(/^\./, '');
+        	s = s.replace(/^\./, '');
         	
             return this.basename(s);
         },
