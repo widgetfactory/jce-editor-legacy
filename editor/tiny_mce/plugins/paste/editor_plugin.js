@@ -1070,11 +1070,6 @@
 				h = h.replace(/<\/?(span)([^>]*)>/gi, '');
 			}
 
-			// remove spans without attributes
-			if (ed.getParam('paste_remove_empty_spans', true)) {
-				h = h.replace(/<\/?(span)>/gi, '');
-			}
-
 			o.content = h;
 		},
 
