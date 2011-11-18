@@ -71,7 +71,8 @@
 			viewable 	: 'jpeg,jpg,gif,png,avi,wmv,wm,asf,asx,wmx,wvx,mov,qt,mpg,mp3,mp4,m4v,mpeg,ogg,ogv,webm,swf,flv,f4v,xml,dcr,rm,ra,ram,divx,html,htm,txt,rtf,pdf,doc,docx,xls,xlsx,ppt,pptx',
 			use_cookies : true,
 			listlimit	: 'all',
-			expandable 	: true
+			expandable 	: true,
+			websafe_mode: 'utf-8'
 		},
 
 		_init : function() {
@@ -456,7 +457,7 @@
 		 */
 		_isWebSafe : function(name) {
 			//return !/[^a-zA-Z0-9:\.\_\-]/.test(name);
-			return /[+\/#\?%&]/.test(name) === false;
+			return name === $.String.safe(name, this.options.websafe_mode);
 		},
 
 		_isViewable : function(name) {
@@ -691,9 +692,9 @@
 
 			var ul = $('<ul/>');
 			
-			$(ul).append('<li>' + self._translate('root', 'Root') + '</li>').click(function() {
+			$('<li/>').html(self._translate('root', 'Root')).click(function() {
 				self._changeDir('/');
-			});
+			}).appendTo(ul);
 			
 			dir = $.trim(dir.replace(/^\//, ''));
 			
@@ -704,20 +705,40 @@
 					var path = s;
 					
 					if (i > 0) {
-						path = parts[i - 1] + '/' + s;
+						path = parts.slice(0, i + 1).join('/');
 					}
 
-					$('<li />').click(function(e) {										
-						self._changeDir(path);
-						
+					$('<li title="' + s + '" />').click(function(e) {
+						self._changeDir(path);						
 					}).html('&rsaquo; ' + s).appendTo(ul);
-				});
+				});		
 			}
 
-			$(ul).append('<li>( ' + this._foldercount + ' ' + this._translate('folders', 'folders') + ', ' + this._filecount + ' ' + this._translate('files', 'files') + ')</li>');
+			$(ul).append('<li>( ' + this._foldercount + ' ' + this._translate('folders', 'folders') + ', ' + this._filecount + ' ' + this._translate('files', 'files') + ')</li>');		
 			
 			this.setStatus({message : '', state : ''});			
 			$(this.options.dialog.status).empty().append(ul);
+			
+			var x = 1, sw = $(this.options.dialog.status).width();
+			
+			function getWidth(el) {
+				var w = 0;
+				
+				$('li', el).each(function() {
+					w += $(this).outerWidth();
+				});
+				
+				return w;
+			}
+			
+			var lw = getWidth(ul);
+			
+			while(lw > sw) {
+				$('li:eq(' + x + ')', ul).html('&rsaquo; ...');				
+				x++;
+				
+				lw = getWidth(ul);
+			}
 		},
 
 		/**
@@ -1108,6 +1129,7 @@
 								fileSelect 	: function(e, file) {
 									return _checkName(file);
 								},
+								websafe_mode: self.options.websafe_mode,
 
 								fileRename : function(e, file) {
 									return _checkName(file);
@@ -1187,7 +1209,7 @@
 						confirm	: function(v) {
 							if (v) {
 								self._setLoader();
-								var args = [dir, $.String.safe(v)];
+								var args = [dir, $.String.safe(v, self.options.websafe_mode)];
 
 								$(':input:not(input[name="prompt"])', $(self._dialog['folder_new']).dialog('widget')).each( function() {
 									args.push($(this).val());
@@ -1293,7 +1315,7 @@
 						value 		: v,
 						elements 	: this._getDialogOptions('rename'),
 						confirm 	: function(v) {
-							var name = $.String.safe(v);
+							var name = $.String.safe(v, self.options.websafe_mode);
 							self._dialog['confirm'] = $.Dialog.confirm(self._translate('rename_item_alert', 'Renaming files/folders will break existing links. Continue?'), function(state) {
 								if (state) {
 									self._setLoader();
