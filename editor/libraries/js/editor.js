@@ -25,19 +25,27 @@ function jInsertEditorText(text, editor) {
  * Widget Factory Editor
  */
 ( function() {
+	var winLoaded = false;
+	
 	var WFEditor = {
 
 		_bookmark : {},
 
 		getSite : function(base) {
+			var site, host;
 			// get url from browser
 			var u = document.location.href;
-			// get the host part of the url eg: www.mysite.com
-			var host = base.substr(base.indexOf('://') + 3);
-			// get the
-			var site = host.substr(host.indexOf('/'));
+			// if bas is a full url
+			if (base.indexOf('http') !== -1) {
+				// get the host part of the url eg: www.mysite.com
+				host = base.substr(base.indexOf('://') + 3);
+				// get the
+				site = host.substr(host.indexOf('/'));
+			} else {
+				site = u.substr(0, u.indexOf(base) + base.length);
+			}
 
-			if(u.indexOf('/administrator/') != -1) {
+			if(u.indexOf('/administrator/') !== -1) {
 				site = site + 'administrator/';
 			}
 
@@ -193,12 +201,17 @@ function jInsertEditorText(text, editor) {
 			var self = this, Event = tinymce.dom.Event, s = this.settings;
 
 			if(!Event.domLoaded) {
+			//if (!winLoaded) {
 				Event.add(document, 'init', function() {
-					self.create();
+				//Event.add(window, 'load', function() {
+					//winLoaded = true;
+					//window.setTimeout(function() {
+						self.create();	
+					//}, 0);									
 				});
 
 				return;
-			} else {
+			} else {				
 				WFEditor.showLoader();
 
 				tinyMCE.onAddEditor.add(function(mgr, ed) {
@@ -275,6 +288,7 @@ function jInsertEditorText(text, editor) {
 					}
 
 					tinyMCE.init(s);
+					
 				} catch (e) {
 					alert(e);
 				}
