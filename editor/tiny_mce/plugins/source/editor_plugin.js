@@ -446,9 +446,10 @@
             var query 	= ed.getParam('site_url') + 'index.php?option=com_jce';
             
             var args 	= {
-                'view' 		: 'editor',
-                'layout'	: 'plugin',
-                'plugin'	: 'source'
+                'view' 			: 'editor',
+                'layout'		: 'plugin',
+                'plugin'		: 'source',
+                'component_id' 	: ed.getParam('component_id')
             };
 
             // set token
@@ -476,8 +477,7 @@
             	var v = ed.getContent(), highlight = ed.getParam('source_highlight', true), wrap = ed.getParam('source_wrap', true), numbers = ed.getParam('source_numbers', true);
 
             	editor.init({
-            		'url'		: ed.getParam('site_url'),
-            		'token'		: ed.settings.token,
+            		'url'		: query,
             		'wrap' 		: wrap,
             		'numbers'	: numbers,
             		'highlight'	: highlight,

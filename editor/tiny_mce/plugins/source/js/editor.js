@@ -25,15 +25,11 @@
 			};
 
 			if(window.CodeMirror) {
-
-				var query = o.url + 'index.php?option=com_jce';
+				var query = o.url;
 				var args = {
-					'view' : 'editor',
-					'layout' : 'plugin',
-					'plugin' : 'source',
-					'task' : 'compile',
-					'editor' : 'codemirror',
-					'theme' : o.theme || 'textmate'
+					'task' 		: 'compile',
+					'editor' 	: 'codemirror',
+					'theme' 	: o.theme || 'textmate'
 				};
 
 				// set token
@@ -44,13 +40,13 @@
 					query += '&' + k + '=' + encodeURIComponent(args[k]);
 				}
 				ed = new CodeMirror(this.container, {
-					width : 'auto',
-					height : '100%',
-					base : '',
-					basefiles : [query + '&type=base'],
-					parserfile : [query + '&type=parser'],
-					stylesheet : [query + '&type=css'],
-					indentUnit : 4,
+					width 		: 'auto',
+					height 		: '100%',
+					base 		: '',
+					basefiles 	: [query + '&type=base'],
+					parserfile 	: [query + '&type=parser'],
+					stylesheet 	: [query + '&type=css'],
+					indentUnit 	: 4,
 					reindentOnLoad : true,
 					onLoad : function() {
 						ed.setWrap = function(s) {
@@ -87,7 +83,7 @@
 						};
 
 						ed.insertContent = function(v) {
-							return ed.replaceSelection(v)
+							return ed.replaceSelection(v);
 						};
 
 						ed.getContent = function() {
