@@ -460,47 +460,76 @@ class WFDocument extends JObject
 		}
 	}
 
-	/**
-	 * Render document head data
-	 */
-	private function getHead()
+	private function getQueryString($query = array())
 	{
-		$output = '';
-		
-		$version = $this->get('version', '000000');
-		
-		$output .= '<title>' . $this->getTitle() . ' : ' . $version . '</title>' . "\n";
-		
+		// get version
+		$version 	= $this->get('version', '000000');		
+		// get layout
 		$layout 	= JRequest::getWord('layout');
-		$item		= JRequest::getWord($layout);
-		$standalone	= '';
-		$dialog		= '';
 		
+		// set layout and item, eg: &layout=plugin&plugin=link
+		$query['layout'] 	= $layout;
+		$query[$layout]		= JRequest::getWord($layout);
+		
+		// set dialog
 		if (JRequest::getWord('dialog')) {
-			$dialog = '&dialog=' . JRequest::getWord('dialog');
+			$query['dialog'] = JRequest::getWord('dialog');
 		}
 		
 		// set standalone mode (for File Browser etc)
 		if ($this->get('standalone') == 1) {
-			$standalone = '&standalone=1';
+			$query['standalone'] = 1;
 		}
-
-		// Render scripts
-		$stamp 	= preg_match('/\d+/', $version) ? '?version=' . $version : '';	
+		
+		// get component id
+		$component_id = JRequest::getInt('component_id');
+		// set component id
+		if ($component_id) {
+			$query['component_id'] = $component_id;
+		}
+		
 		// get token
 		$token	= WFToken::getToken();
+		// set token
+		$query[$token] = 1;
+		
+		if (preg_match('/\d+/', $version)) {
+			// set version
+			$query['version'] = $version;
+		}
 
-		if ($this->get('compress_javascript', 0)) {
-			$script = JURI::base(true) . '/index.php?option=com_jce&view=editor&layout='.$layout.'&'.$layout.'=' . $item . $dialog . $standalone . '&task=pack&' . $token . '=1';
+		$output = array();
+		
+		foreach($query as $key => $value) {
+			$output[] = $key . '=' . $value;
+		}
+		
+		return implode('&', $output);
+	}
+
+	/**
+	 * Render document head data
+	 */
+	private function getHead()
+	{		
+		$version = $this->get('version', '000000');
+		// set title		
+		$output = '<title>' . $this->getTitle() . ' : ' . $version . '</title>' . "\n";
+		// create timestamp
+		$stamp 	= preg_match('/\d+/', $version) ? '?version=' . $version : '';	
+
+		// Render scripts
+		if ($this->get('compress_javascript', 0)) {			
+			$script = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . self::getQueryString(array('task' => 'pack'));
 			$output .= "\t\t<script type=\"text/javascript\" src=\"" . $script . "\"></script>\n";
 		} else {
 			foreach ($this->_scripts as $src => $type) {
 				$output .= "\t\t<script type=\"" . $type . "\" src=\"" . $src . $stamp . "\"></script>\n";
 			}
 		}
-
-		if ($this->get('compress_css', 0)) {
-			$file = JURI::base(true) . '/index.php?option=com_jce&view=editor&layout='.$layout.'&'.$layout.'=' . $item . $dialog . $standalone . '&task=pack&type=css&' . $token . '=1';
+		// render stylesheets
+		if ($this->get('compress_css', 0)) {			
+			$file = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . self::getQueryString(array('task' => 'pack', 'type' => 'css'));
 
 			$output .= "\t\t<link href=\"" . $file . "\" rel=\"stylesheet\" type=\"text/css\" />\n";
 		} else {			
