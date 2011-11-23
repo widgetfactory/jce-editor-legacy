@@ -124,10 +124,15 @@ class WFFileSystem extends WFExtension
 			$pattern	= array('/\$id/', '/\$username/', '/\$usertype/', '/\$(group|profile)/', '/\$day/', '/\$month/', '/\$year/');
 			$replace	= array($user->id, $user->username, $usertype, $profile->name, date('d'), date('m'), date('Y'));	
 			$root 		= preg_replace($pattern, $replace, $root);
+
+			// split into path parts to preserve /
+			$parts = explode('/', $root);
 			
-			// Clean (allow characters A-Za-z0-9:.-_ and space)
-			//$root = preg_replace(array('/$\w+\b/', '/(\.) {2,}/', '/[^A-Za-z0-9:\.\_\-\/ ]/'), '', $root);
-			$root = trim(WFUtility::makeSafe($root));
+			// clean path parts
+			$parts = WFUtility::makeSafe($parts, $wf->getParam('editor.websafe_mode', 'utf-8'));
+
+			//join path parts
+			$root = implode('/', $parts);
     	}
     	
     	return $root;
