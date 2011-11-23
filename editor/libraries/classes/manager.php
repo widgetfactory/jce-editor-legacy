@@ -113,7 +113,8 @@ class WFMediaManager extends WFEditorPlugin
 					'rename' => $this->getParam('file_rename', 1),
 					'move'	 => $this->getParam('file_move', 1)
 				)
-			)
+			),
+			'websafe_mode'	=> $this->getParam('editor.websafe_mode', 'utf-8')
 		);
 		
 		return $config;
