@@ -1204,9 +1204,7 @@
 			if (!ed.selection.isCollapsed() && r.startContainer != r.endContainer)
 				ed.getDoc().execCommand('Delete', false, null);
 
-			ed.execCommand('mceInsertContent', false, h, {
-				skip_undo : skip_undo
-			});
+			ed.execCommand('mceInsertContent', false, h, {skip_undo : skip_undo});
 		}
 
 	});
