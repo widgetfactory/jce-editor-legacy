@@ -915,8 +915,10 @@ var CodeMirror = (function() {
 					updateLine(sel.to.line));
 
 			// Make sure the scroll-size div has the correct height.
-			code.style.height = (doc.height * textHeight() + 2 * paddingTop())
-					+ "px";
+			if (code) {
+				code.style.height = (doc.height * textHeight() + 2 * paddingTop())
+				+ "px";
+			}
 		}
 
 		function replaceRange(code, from, to) {
