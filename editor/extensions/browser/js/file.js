@@ -76,6 +76,18 @@ var WFFileBrowser = WFExtensions.add('FileBrowser', {
 		return this._call('resize', [null, fh]);
 	},
 	
+	startUpload : function() {
+		return this._call('startUpload');
+	},
+	
+	stopUpload : function() {
+		return this._call('stopUpload');
+	},
+	
+	setUploadStatus : function(message, state) {
+		return this._call('setUploadStatus', {message : message, state : state});
+	},
+	
 	/**
 	 * Compatability function
 	 */

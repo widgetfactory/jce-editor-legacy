@@ -878,6 +878,18 @@
 		error : function(error) {
 			this._raiseError(error);
 		},
+		
+		startUpload : function() {
+			$('#upload-queue').uploader('start');
+		},
+		
+		stopUpload : function() {
+			$('#upload-queue').uploader('stop');
+		},
+		
+		setUploadStatus : function(o) {
+			$('#upload-queue').uploader('setStatus', o);
+		},
 
 		/**
 		 * Load the file/folder list into the container div
@@ -1142,7 +1154,8 @@
 										};
 									}
 
-									self._addReturnedItem(file);
+									self._addReturnedItem(file);									
+									self._trigger('onUploadFile', null, file);
 								},
 
 								uploadComplete : function(up, files) {
@@ -1155,8 +1168,9 @@
 										window.setTimeout( function() {
 											$(self._dialog['upload']).dialog('close');
 										}, 1000);
-
-									}
+										
+										self._trigger('onUploadComplete');
+									}									
 								}
 
 							}, self.options.upload));
