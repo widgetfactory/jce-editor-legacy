@@ -201,15 +201,9 @@ function jInsertEditorText(text, editor) {
 			var self = this, Event = tinymce.dom.Event, s = this.settings;
 
 			if(!Event.domLoaded) {
-			//if (!winLoaded) {
 				Event.add(document, 'init', function() {
-				//Event.add(window, 'load', function() {
-					//winLoaded = true;
-					//window.setTimeout(function() {
-						self.create();	
-					//}, 0);									
+					self.create();										
 				});
-
 				return;
 			} else {				
 				WFEditor.showLoader();
