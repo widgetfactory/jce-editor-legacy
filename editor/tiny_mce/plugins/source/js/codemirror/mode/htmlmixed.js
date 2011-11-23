@@ -77,7 +77,7 @@ CodeMirror.defineMode("htmlmixed", function(config, parserConfig) {
     },
 
     electricChars: "/{}:"
-  }
+  };
 });
 
 CodeMirror.defineMIME("text/html", "htmlmixed");

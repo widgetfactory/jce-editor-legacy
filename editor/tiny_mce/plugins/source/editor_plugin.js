@@ -493,20 +493,20 @@
             		'load'		: function() {
             			ed.setProgressState(false);
             			
-            			if (tinymce.isIE && !document.querySelector) {
+            			/*if (tinymce.isIE && !document.querySelector) {
             				ed.hide();
             				ed.show();
-            			}
+            			}*/
             			cm.setActive('highlight', highlight);
             			cm.setActive('numbers', numbers);
-            			cm.setActive('wrap', wrap);          			
+            			cm.setActive('wrap', wrap); 
+            			
+            			editor.resize('100%', h);
             		},
             		change : function() {
             			ed.controlManager.setDisabled('undo', false);
             		}
-            	}, self.indent(v));
-            	
-            	editor.resize('100%', h);
+            	}, self.indent(v));   	
             });
             
             DOM.add(container, iframe);

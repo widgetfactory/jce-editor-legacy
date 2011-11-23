@@ -1,25 +1,32 @@
-( function($) {
-	var SourceEditor = {
-
+( function() {
+	var tinymce = window.parent.tinymce, DOM = tinymce.DOM, Event = tinymce.dom.Event;
+	
+	var SourceEditor = {				
 		init : function(options, content) {
 			var self = this;
-
-			$(window).ready(function() {
-				self.container = $('<div/>').addClass('container').appendTo('body').css({
-				'width'		: options.width 	|| '100%',
-				'height'	: options.height 	|| '100%'
-				}).get(0);
-
-				self._load(options, content);
-			});
-
+			if (Event.domLoaded) {
+				self.container = DOM.add(document.body, 'div', {
+					style : {
+						width : options.width 	|| '100%',
+						height: options.height 	|| '100%'
+					},
+					'class' : 'container'
+				});
+					
+				self._load(options, content);	
+			} else {
+				Event.add(document, 'init', function() {
+					self.init(options, content);
+				});
+			}
 		},
 
 		_load : function(o, content) {
 			var self = this, ed;
-
-			o.load 		= $.isFunction(o.load) ? o.load : function() {};
-			o.change 	= $.isFunction(o.change) ? o.change : function() {};
+			
+			if (tinymce.is(o.change) !== 'function') {
+				o.change = function(){};
+			}
 
 			if(window.CodeMirror) {
 
@@ -59,14 +66,12 @@
 				};
 
 				ed.resize = function(w, h) {
-					$(ed.getScrollerElement()).css({
+					DOM.setStyles(ed.getScrollerElement(), {
 						width : w,
-						height : h
+						height: h
 					});
 					
-					$(ed.getGutterElement()).css({
-						height : h
-					});
+					DOM.setStyle(ed.getGutterElement(), 'height', h);
 				};
 
 				ed.showInvisibles = function(s) {
@@ -87,8 +92,8 @@
 					return ed.getValue();
 				};
 
-				self.editor = ed;
-				self._loaded(o, content);
+				this.editor = ed;
+				this._loaded(o, content);
 			}
 		},
 
@@ -161,4 +166,4 @@
 	};
 
 	window.SourceEditor = SourceEditor;
-}(jQuery));
+}());

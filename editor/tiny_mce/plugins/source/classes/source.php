@@ -52,7 +52,6 @@ class WFSourcePlugin extends WFEditorPlugin {
 		$view->addTemplatePath(WF_EDITOR_PLUGIN .DS. 'tmpl');
 			
 		$document->setTitle(WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')));		
-		$document->addScript('jquery/jquery-' . WF_JQUERY . '.min.js', 'libraries');
 		
 		$theme 	= JRequest::getWord('theme', 'textmate');
 
