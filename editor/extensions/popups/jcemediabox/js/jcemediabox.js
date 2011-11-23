@@ -96,6 +96,19 @@ WFPopups.addPopup('jcemediabox', {
     	$('#jcemediabox_popup_icon').change(function() {
     		self.setIcon();
     	});
+    	
+    	$('span.add', '#jcemediabox_popup_params').click(function() {
+    		// clone item
+    		var $item = $('li:first', '#jcemediabox_popup_params').clone().appendTo('#jcemediabox_popup_params');
+    		// empty input values
+    		$('input', $item).val('');
+    		// add remove button action
+    		$('span.add', $item).hide();
+    		
+    		$('span.remove', $item).css('display', 'inline-block').click(function() {
+    			$item.remove();
+    		});
+    	});
     },
 
     /**
@@ -103,7 +116,7 @@ WFPopups.addPopup('jcemediabox', {
      * @param {Object} n Element
      */
     check: function(n) {
-        return /jce(popup|_popup|lightbox)/.test(n.className);
+    	return /jce(popup|_popup|lightbox)/.test(n.className);
     },
 
     /**
@@ -285,12 +298,29 @@ WFPopups.addPopup('jcemediabox', {
                 $('#jcemediabox_popup_' + k).val(v);
                 // remove from object
                 delete data[k];
-            } else {
-                params.push(k + ':' + decodeURIComponent(v));
             }
         });
-
-        $('#jcemediabox_popup_params').val(params.join(','));
+        var x = 0;
+        // process remaining data values as params
+        $.each(data, function(k, v) {
+        	if (v !== '') {
+        		if (x == 0) {
+            		$('li:first input.name', '#jcemediabox_popup_params').val(k);
+            		$('li:first input.value', '#jcemediabox_popup_params').val(v);
+            	} else {
+            		// clone item
+            		var $item = $('li:first', '#jcemediabox_popup_params').clone().appendTo('#jcemediabox_popup_params');
+            		// set name value
+            		$('input.name', $item).val(k);
+            		// set value value
+            		$('input.value', $item).val(decodeURIComponent(v));
+            		// add remove button action
+            		$('span.add', $item).hide();            		
+            		$('span.remove').css('display', 'inline-block');
+            	}
+        	}
+        	x++;
+        });
 
         // Set type
         $('#jcemediabox_popup_mediatype').val(this.getMediaType(n));
@@ -324,28 +354,27 @@ WFPopups.addPopup('jcemediabox', {
 
         var data = {};
 
-        tinymce.each(['title', 'caption', 'group', 'width', 'height', 'params'], function(k) {
+        tinymce.each(['title', 'caption', 'group', 'width', 'height'], function(k) {
             var v = $('#jcemediabox_popup_' + k).val();
 
-            if (k == 'params') {
-                var params = v.replace(/\n\r/g, '');
-
-                v = params ? self.convertData(params) : '';
-            }
-
-            if (v == '' || v == null) {
-                if (args[k]) {
-                    v = args[k];
-                } else {
-                    return;
+            	if (v == '' || v == null) {
+                    if (args[k]) {
+                        v = args[k];
+                    } else {
+                        return;
+                    }
                 }
-            }
-            
-            if (k == 'params') {
-            	v = encodeURIComponent(v);
-            }
-
-            data[k] = v;
+                
+                data[k] = v;          
+        });
+        
+        $('li', '#jcemediabox_popup_params').each(function() {
+        	var k = $('input.name', this).val();
+        	var v = $('input.value', this).val();
+        	
+        	if (k !== '' && v !== '') {
+        		data[k] = encodeURIComponent(v);
+        	}
         });
         
         // combine args
