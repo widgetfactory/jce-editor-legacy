@@ -243,39 +243,17 @@ var LinkDialog = {
             });
 
             // create link on selection or update existing link
-        } else {
-            var flt;
-            // store and remove float
-            if (n.nodeName == 'IMG' && tinymce.isWebKit) {
-            	flt = n.style.cssFloat;
-            	n.style.cssFloat = null;
-        	}
+        } else {            
+            ed.execCommand('mceInsertLink', false, 'javascript:mctmp(0);');
             
-            if (el = ed.dom.getParent(se.getNode(), "A")) {
-                if (args.href) {
-                    ed.dom.setAttribs(el, args);
-                } else {
-                    ed.dom.remove(el, true);
-                }
+            tinymce.each(ed.dom.select('a[href=javascript:mctmp(0);]'), function(link) {
+                ed.dom.setAttribs(link, args);
 
-            } else {
-                ed.execCommand('CreateLink', false, 'javascript:mctmp(0);');
-
-                tinymce.each(ed.dom.select('a[href=javascript:mctmp(0);]'), function(link) {
-                    ed.dom.setAttribs(link, args);
-
-                    el = link;
-                });
-
-            }
-            
-            // restore float
-        	if (n.nodeName == 'IMG' && tinymce.isWebKit) {
-            	n.style.cssFloat = flt;
-        	}
+                el = link;
+            });
         	
         	// if text selection, update
-        	if (!$('#text').is(':disabled')) {
+        	if (!$('#text').is(':disabled') && el) {
         		ed.dom.setHTML(el, $('#text').val());
         	}
         }
