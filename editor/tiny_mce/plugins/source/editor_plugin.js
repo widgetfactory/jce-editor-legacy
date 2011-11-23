@@ -326,6 +326,11 @@
                     cm.setActive(e, false);
                 });
 
+            } else {
+            	// set all source buttons inactive
+                each(['wrap', 'highlight', 'numbers'], function(e) {
+                    cm.setActive(e, ed.getParam('source_' + e, true));
+                });
             }
 
             each (active, function(n) {
@@ -446,10 +451,10 @@
             var query 	= ed.getParam('site_url') + 'index.php?option=com_jce';
             
             var args 	= {
-                'view' 			: 'editor',
-                'layout'		: 'plugin',
-                'plugin'		: 'source',
-                'component_id' 	: ed.getParam('component_id')
+                'view' 		: 'editor',
+                'layout'	: 'plugin',
+                'plugin'	: 'source',
+                'component_id' : ed.getParam('component_id')
             };
 
             // set token
@@ -477,7 +482,8 @@
             	var v = ed.getContent(), highlight = ed.getParam('source_highlight', true), wrap = ed.getParam('source_wrap', true), numbers = ed.getParam('source_numbers', true);
 
             	editor.init({
-            		'url'		: query,
+            		/*'url'		: ed.getParam('site_url'),
+            		'token'		: ed.settings.token,*/
             		'wrap' 		: wrap,
             		'numbers'	: numbers,
             		'highlight'	: highlight,
@@ -499,6 +505,8 @@
             			ed.controlManager.setDisabled('undo', false);
             		}
             	}, self.indent(v));
+            	
+            	editor.resize('100%', h);
             });
             
             DOM.add(container, iframe);
@@ -536,7 +544,7 @@
 
                 this.setContent();
                 
-                se.indent();
+                //se.indent();
                 
                 DOM.show('wf_' + ed.id + '_source_container');
                 DOM.setAttrib('wf_' + ed.id + '_source_container', 'aria-hidden', false);

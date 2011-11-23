@@ -10,11 +10,11 @@
  */
 
 defined('_JEXEC') or die('RESTRICTED');
-
+/*
 jimport('joomla.application.component.model');
 
 wfimport('admin.models.editor');
 
 $model = JModel::getInstance('editor', 'WFModel');
-echo $model->getToken('source');
+echo $model->getToken('source');*/
 ?>
