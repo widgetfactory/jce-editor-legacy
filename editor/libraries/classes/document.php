@@ -495,7 +495,7 @@ class WFDocument extends JObject
 		
 		if (preg_match('/\d+/', $version)) {
 			// set version
-			$query['version'] = $version;
+			$query['version'] = preg_replace('/[^a-z0-9]/i', '', $version);
 		}
 
 		$output = array();
