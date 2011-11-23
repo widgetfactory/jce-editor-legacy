@@ -53,7 +53,7 @@ class WFEditorPlugin extends WFEditor
 				$this->set('_base_path', 	WF_EDITOR_PLUGIN);
 				$this->set('_template_path', WF_EDITOR_PLUGIN .DS. 'tmpl');
 		} else {
-			die(JError::raiseError(403, WFText::_('ERROR_403')));
+			die(JError::raiseError(403, 'RESTRICTED ACCESS'));
 		}
 	}
 	
