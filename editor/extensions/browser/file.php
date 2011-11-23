@@ -115,7 +115,7 @@ class WFFileBrowser extends WFBrowserExtension
 		//$document->addStyleSheet(array('files', 'tree', 'upload'), 'libraries');
 		$document->addStyleSheet(array('manager'), 'extensions.browser.css');
 		// custom stylesheet
-		$document->addStyleSheet(array('custom'), 'libraries.css');
+		//$document->addStyleSheet(array('custom'), 'libraries.css');
 		
 		// file browser options
 		$document->addScriptDeclaration('WFFileBrowser.settings='.json_encode($this->getSettings()).';');
@@ -820,12 +820,6 @@ class WFFileBrowser extends WFBrowserExtension
 	private function validateUploadedFile($file, &$result)
 	{
 		$chunks = JRequest::getInt('chunks', 1);
-		
-		if (!in_array(strtolower(JFile::getExt($file['name'])), $this->getFileTypes('array'))) {
-			$result->state = false;
-			$result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_EXT_ERROR');
-			return false;
-		}
 
 		if (preg_match('#\.(jpeg|jpg|jpe|png|gif|wbmp|bmp|tiff|tif)$#i', $file['name'])) {
 			if (@getimagesize($file['tmp_name']) === false) {
@@ -1026,9 +1020,18 @@ class WFFileBrowser extends WFBrowserExtension
 		// get file name
 		$name 	= JRequest::getVar('name', $file['name']);
 		$ext 	= WFUtility::getExtension($name);
+		// strip extension
+		$name 	= basename($name, '.' . $ext);
+		// make file name 'web safe'
+		$name 	= WFUtility::makeSafe($name, $this->get('websafe_mode', 'utf-8'));
+		
+		// empty name
+		if ($name == '') {
+			JError::raiseError(403, 'INVALID FILE NAME');
+		}
 
-		// check for extension in file name
-		if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)#i', basename($name, '.' . $ext))) {
+		// check for extension in file name or blank file name
+		if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)#i', $name)) {
 			JError::raiseError(403, 'INVALID FILE NAME');
 		}
 
@@ -1042,15 +1045,29 @@ class WFFileBrowser extends WFBrowserExtension
 		$filesystem = $this->getFileSystem();
 		$complete    = false;
 		$contentType = JRequest::getVar('CONTENT_TYPE', '', 'SERVER');
+		
+		// rebuild file name - name + extension
+		$name = $name . '.' . $ext;
 
 		// Only multipart uploading is supported for now
 		if ($contentType && strpos($contentType, "multipart") !== false) {
 			if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name'])) {
 				// validate file before continuing (first chunk only)
 				if ($chunk == 0) {
+					// check for valid extension
+					if (!in_array(strtolower($ext), $this->getFileTypes('array'))) {
+						$result->state = false;
+						$result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_EXT_ERROR');
+						$complete = true;
+						
+						@unlink($file['tmp_name']);
+					}
+					
 					if ($wf->getParam('validate_mimetype', 0) && !preg_match('#(htm|html|txt)#', $ext)) {
 						if (!$this->validateUploadedFile($file, $result)) {
 							$complete = true;
+							
+							@unlink($file['tmp_name']);
 						}
 					}
 					
@@ -1065,14 +1082,13 @@ class WFFileBrowser extends WFBrowserExtension
 						if ($file_size > $max_size) {
 							$result->message = WFText::sprintf('WF_MANAGER_UPLOAD_SIZE_ERROR', $name, $file_size, ($max_size / 1024) . 'KB');
 							$complete = true;
+							
+							@unlink($file['tmp_name']);
 						}
 					}
 				}	
 				// continue upload
-				if (!$complete) {
-					// make file name 'web safe'
-					$name = WFUtility::makeSafe($name, $this->get('websafe_mode', 'utf-8'));
-					
+				if (!$complete) {					
 					// get current dir
 					$dir  = JRequest::getVar('upload-dir', '');
 					

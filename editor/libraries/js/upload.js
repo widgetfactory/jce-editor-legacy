@@ -151,10 +151,8 @@
                     self._onStart(file);
                 });
 
-                this.uploader.bind('StateChanged', function(up) {
-                    if (up.state == plupload.STOPPED) {
-                        self._onAllComplete();
-                    }
+                this.uploader.bind('UploadComplete', function(up) { 
+                	self._onAllComplete();
                 });
 
                 this.uploader.bind('FileUploaded', function(up, file, o) {
@@ -241,9 +239,7 @@
                     this.uploader.bind('ChunkUploaded', function(file, o) {
                         window.setTimeout( function() {
                         }, 1000);
-
                     });
-
                 }
 
                 this.uploader.init();
@@ -257,6 +253,8 @@
         },
 
         _onStart : function(file) {
+        	this.currentFile = file;
+        	
             var el = file.element;
             // Add loader
             $(el).addClass('load');
@@ -282,16 +280,17 @@
         },
 
         _onComplete: function(file, response, status) {
-            // remove loader
+        	var self = this;
+        	// remove loader
             $(file.element).removeClass('load');
-
-            if (this._isError(response.error)) {
+            
+        	if (this._isError(response.error)) {
                 status = 'error';
                 this.errors++;
                 
                 // pass text to error if available
                 if (response.text) {
-                	response.error = reponse.text;
+                	response.error = response.text;
                 }
                 // join error array
                 if ($.isArray(response.error)) {
@@ -382,6 +381,30 @@
         isUploading : function() {
             return this.uploading;
         },
+        
+        stop : function() {
+        	this.uploader.stop();
+        },
+        
+        start : function() {
+        	this.uploader.start();
+        },
+        
+        setStatus : function(s) {
+        	var file = this.currentFile;
+        	
+        	if (file) {
+        		$(file.element).removeClass('load complete error').addClass(s.state || '');
+        		
+        		if (s.state && s.state == 'error') {
+        			this.errors++;
+        			
+        			if (s.message) {
+        				$(file.element).after('<li class="queue-item-error"><span>' + s.message + '</span></li>');
+        			}
+        		}
+        	}
+        },
 
         _createDragDrop : function() {
             if (this.uploader.features.dragdrop) {
@@ -433,7 +456,7 @@
 
             $.each(files, function(x, file) {
                 // check for extension in file name
-                if (/\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)/i.test($.String.filename(file.name))) {
+                if (/\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)/i.test(file.name)) {
                     self.uploader.trigger('Error', {
                         code 	: self.FILE_INVALID_ERROR,
                         message : 'File invalid error',
@@ -441,6 +464,11 @@
                     });
 
                     self.uploader.removeFile(file);
+                    
+                    if (!self.uploader.files.length) {
+                    	self._createDragDrop();
+                    }
+                    
                     return false;
                 }
 
