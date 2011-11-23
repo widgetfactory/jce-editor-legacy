@@ -31,7 +31,7 @@
 			if(window.CodeMirror) {
 
 				ed = CodeMirror(this.container, {
-					mode		: "text/html",
+					mode		: "htmlmixed",
 					theme		: o.theme || 'textmate',
 					onChange 	: function() {
 						// callback
@@ -42,6 +42,7 @@
 					    hlLine = ed.setLineClass(ed.getCursor().line, "activeline");
 					}
 				});
+				
 				// highlight line
 				var hlLine = ed.setLineClass(0, "activeline");
 				
@@ -57,7 +58,7 @@
 					var c = ed.getCursor();
 					
 					if(s) {
-						ed.setOption('mode', 'text/html');
+						ed.setOption('mode', 'htmlmixed');
 					} else {
 						ed.setOption('mode', 'text/plain');
 					}
