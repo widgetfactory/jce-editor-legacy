@@ -24,7 +24,7 @@
 			if(window.CodeMirror) {
 
 				ed = CodeMirror(this.container, {
-					mode		: "application/x-httpd-php",
+					mode		: "text/html",
 					theme		: o.theme || 'textmate',
 					onChange 	: function() {
 						// callback
@@ -50,7 +50,7 @@
 					var c = ed.getCursor();
 					
 					if(s) {
-						ed.setOption('mode', 'application/x-httpd-php');
+						ed.setOption('mode', 'text/html');
 					} else {
 						ed.setOption('mode', 'text/plain');
 					}

@@ -56,8 +56,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 		
 		$theme 	= JRequest::getWord('theme', 'textmate');
 
-
-		$document->addScript(array('codemirror', 'mode/css', 'mode/javascript', 'mode/xml', 'mode/clike', 'mode/php'), 'jce.tiny_mce.plugins.source.js.codemirror');
+		$document->addScript(array('codemirror', 'mode/css', 'mode/javascript', 'mode/xml', 'mode/htmlmixed'), 'jce.tiny_mce.plugins.source.js.codemirror');
 		$document->addScript(array('editor'), 'plugins');
 		
 		$document->addStyleSheet(array('codemirror', 'dialog', 'theme/' . $theme), 'jce.tiny_mce.plugins.source.css.codemirror');
