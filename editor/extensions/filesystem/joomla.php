@@ -392,7 +392,7 @@ class WFJoomlaFileSystem extends WFFileSystem
 		
 		if (is_file($src)) {
 			$ext 	= JFile::getExt($src);
-			$file 	= $dest.'.'.$ext;
+			$file 	= $dest . '.' .$ext;
 			$path 	= WFUtility::makePath($dir, $file);
 			
 			$result->type 	= 'files';			
@@ -491,7 +491,7 @@ class WFJoomlaFileSystem extends WFFileSystem
 	*/
 	function createFolder($dir, $new)
 	{							
-		$dir 	= WFUtility::makePath(rawurldecode($dir), WFUtility::makeSafe($new));
+		$dir 	= WFUtility::makePath(rawurldecode($dir), $new);
 		$path 	= WFUtility::makePath($this->getBaseDir(), $dir); 
 		$result = new WFFileSystemResult();
 		
@@ -522,7 +522,7 @@ class WFJoomlaFileSystem extends WFFileSystem
 		jimport('joomla.filesystem.file');
 		
 		$path 	= WFUtility::makePath($this->getBaseDir(), rawurldecode($dir));
-		$dest 	= WFUtility::makePath($path, WFUtility::makeSafe($name));
+		$dest 	= WFUtility::makePath($path, $name);
 		
 		// check for safe mode
 		$safe_mode = false;
@@ -550,7 +550,7 @@ class WFJoomlaFileSystem extends WFFileSystem
 					
 					while (JFile::exists($dest)) {
 						$name .= $suffix;	
-						$dest  = WFUtility::makePath($path, WFUtility::makeSafe($name.'.'.$extension));
+						$dest  = WFUtility::makePath($path, $name.'.'.$extension);
 				    }
 				}
 
@@ -573,7 +573,7 @@ class WFJoomlaFileSystem extends WFFileSystem
 						// make unique file name
 					    while (JFile::exists($dest)) {
 							$name .= $suffix;	
-							$dest  = WFUtility::makePath($path, WFUtility::makeSafe($name.'.'.$extension));
+							$dest  = WFUtility::makePath($path, $name.'.'.$extension);
 					    }
 					}
 					
