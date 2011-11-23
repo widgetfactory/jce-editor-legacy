@@ -53,20 +53,14 @@ class WFSourcePlugin extends WFEditorPlugin {
 			
 		$document->setTitle(WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')));		
 		$document->addScript('jquery/jquery-' . WF_JQUERY . '.min.js', 'libraries');
-
-		$editor = 'codemirror';
 		
-		switch ($editor) {
-			case 'codemirror' :
-				$javascript = array('codemirror');
-				$css 		= array('codemirror');
-				break;
-		}
+		$theme 	= JRequest::getWord('theme', 'textmate');
 
-		$document->addScript($javascript, 'jce.tiny_mce.plugins.source.js.' . $editor);
+
+		$document->addScript(array('codemirror', 'mode/css', 'mode/javascript', 'mode/xml', 'mode/clike', 'mode/php'), 'jce.tiny_mce.plugins.source.js.codemirror');
 		$document->addScript(array('editor'), 'plugins');
 		
-		$document->addStyleSheet($css, 'jce.tiny_mce.plugins.source.css.' . $editor);
+		$document->addStyleSheet(array('codemirror', 'dialog', 'theme/' . $theme), 'jce.tiny_mce.plugins.source.css.codemirror');
 		$document->addStyleSheet(array('editor'), 'plugins');				
 	}
 	
