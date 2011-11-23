@@ -132,7 +132,7 @@
 					
 					// process type attributes for scripts
 					o.content = o.content.replace(/<script([^>]*)>/gi, function(a, b) {
-						var re = /\stype="([^]+)"/;
+						var re = /\stype="([^"]+)"/;
 						
 						if (re.test(b)) {
 							b = b.replace(re, ' data-mce-type="$1"');
