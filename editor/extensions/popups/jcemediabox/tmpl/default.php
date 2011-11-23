@@ -98,7 +98,16 @@ $this->popup->checkVersion();
         </td>
 	</tr>
 	<tr>
-		<td><label for="jcemediabox_popup_params" class="hastip" title="<?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_PARAMS_DESC');?>"><?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_PARAMS');?></label></td>
-		<td><textarea id="jcemediabox_popup_params" rows="5" cols="46"></textarea></td>
+		<td colspan="2">
+			<label for="jcemediabox_popup_params" class="hastip" title="<?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_PARAMS_DESC');?>"><?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_PARAMS');?></label>
+
+			<ul id="jcemediabox_popup_params">
+				<li>
+					<label><?php echo WFText::_('WF_LABEL_NAME');?></label><input type="text" class="name" /><label><?php echo WFText::_('WF_LABEL_VALUE');?></label><input type="text" class="value" />
+					<span class="add" role="button" title="<?php echo WFText::_('WF_LABEL_ADD');?>"></span>
+					<span class="remove" role="button" title="<?php echo WFText::_('WF_LABEL_REMOVE');?>"></span>
+				</li>
+			</ul>
+		</td>
 	</tr>
 </table>
