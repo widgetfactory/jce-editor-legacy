@@ -96,8 +96,8 @@
 				switch (n.nodeName) {
 					case 'A' :
 						if ($(p).hasClass('folder')) {
-							var id = p.id || self._getPreviousDir();
-							return self._changeDir(id);
+							var u = $(p).data('url') || self._getPreviousDir();
+							return self._changeDir(u);
 						} else {
 							self._setSelectedItems(e, true);
 							self._trigger('onFileClick', e, p);
@@ -106,14 +106,14 @@
 						break;
 					case 'LI' :
 						if ($(n).hasClass('folder-up')) {
-							var id = n.id || self._getPreviousDir();
-							return self._changeDir(id);
+							var u = $(p).data('url') || self._getPreviousDir();
+							return self._changeDir(u);
 						}
 
 						if ($(n).hasClass('folder')) {
 							if (e.pageX < $('a', p).offset().left) {
-								var id = n.id || self._getPreviousDir();
-								return self._changeDir(id);
+								var u = $(p).data('url') || self._getPreviousDir();
+								return self._changeDir(u);
 							}
 						}
 
@@ -144,8 +144,8 @@
 							return;
 
 						if ($(n).hasClass('folder')) {
-							var id = n.id || self._getPreviousDir();
-							return self._changeDir(id);
+							var u = $(p).data('url') || self._getPreviousDir();
+							return self._changeDir(u);
 						} else {
 							self._setSelectedItems(e, true);
 							self._trigger('onFileClick', e, n);
@@ -491,6 +491,9 @@
 							data.push('data-' + k + '="' + v + '"');
 						}
 					});
+					
+					// add url data
+					data.push('data-url="' + (e.url || e.id) + '"');
 
 					// add websafe class
 					classes.push(self._isWebSafe(e.name) ? 'safe' : 'notsafe');
@@ -501,7 +504,8 @@
 						classes.push(e.classes);
 					}
 
-					h += '<li class="folder ' + classes.join(' ') + '" id="' + e.id + '" title="' + e.name + '"' +
+					//h += '<li class="folder ' + classes.join(' ') + '" id="' + e.id + '" title="' + e.name + '"' +
+					h += '<li class="folder ' + classes.join(' ') + '" title="' + e.name + '"' +
 					data.join(' ') +
 					'><span class="checkbox" role="checkbox" aria-checked="false"></span><a href="javascript:;">'+ e.name +'</a><span class="date" aria-hidden="true">' + $.String.formatDate(e.properties.modified) + '</span></li>';
 				});
@@ -535,7 +539,8 @@
 						classes.push(e.classes);
 					}
 
-					h += '<li class="file ' + $.String.getExt(e.name) + ' ' + classes.join(' ') + '" id="' + e.id + '" title="' + e.name + '"' +
+					//h += '<li class="file ' + $.String.getExt(e.name) + ' ' + classes.join(' ') + '" id="' + e.id + '" title="' + e.name + '"' +
+					h += '<li class="file ' + $.String.getExt(e.name) + ' ' + classes.join(' ') + '" title="' + e.name + '"' +
 					data.join(' ') +
 					'><span class="checkbox" role="checkbox" aria-checked="false"></span><a href="javascript:;">'+ e.name +'</a><span class="date" aria-hidden="true">' + $.String.formatDate(e.properties.modified) + '</span><span class="size" aria-hidden="true">'+ $.String.formatSize(e.properties.size) +'</span></li>';
 				});
@@ -638,6 +643,8 @@
 
 			// uncheck all checkboxes
 			$('span.checkbox', $('#check-all')).removeClass('checked');
+			
+			$('span', '#browser-details-nav').removeClass('visible').attr('aria-hidden', true).filter('span.details-nav-text').empty();
 		},
 
 		/**
@@ -1949,22 +1956,23 @@
 			$.each(files, function(i, file) {
 				if (file && file.name) {
 					var name = decodeURIComponent(file.name);
-
+					
 					if ($list.length) {
-						// escape name for selector
-						name = name.replace(/(\/@%.&?:+)/g,'\\$1');
-
+						var item = [];
+						
 						// find item from name, id or data-url
-						var item = $('li.' + type + '[title="'+ $.String.basename(name) +'"], li.' + type + '[id="'+ name.substr(base.length) +'"], li.' + type + '[data-url="'+ name +'"]', $list);
+						item = $('li.' + type + '[title="'+ $.String.basename(name) +'"], li.' + type + '[data-url="'+ $.String.path(base, name) +'"]', $list);
+						
+						if (item.length) {
+							if (file.insert) {
+								insert = true;
+								items = item;
+								self._trigger('onFileClick', null, $(item).get(0));
+							}
 
-						if (file.insert) {
-							insert = true;
-							items = item;
-							self._trigger('onFileClick', null, $(item).get(0));
-						}
-
-						if (!insert) {
-							$.merge(items, item);
+							if (!insert) {
+								$.merge(items, item);
+							}
 						}
 					}
 				}
