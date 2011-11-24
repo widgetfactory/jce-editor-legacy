@@ -82,7 +82,7 @@ class JoomlalinksContent extends JObject {
 					}
 					
 					if (strpos($id, 'index.php?Itemid=') !== false) {
-						$url 	= $id;
+						$url 	= self::_getMenuLink($id);
 						$id 	= 'index.php?option=com_content&view=' . $view . '&id=' . $section->id;
 					}
 					
@@ -121,7 +121,7 @@ class JoomlalinksContent extends JObject {
 					$id 	= ContentHelperRoute::getCategoryRoute($category->id, $args->id);
 				
 					if (strpos($id, 'index.php?Itemid=') !== false) {
-						$url 	= $id;
+						$url 	= self::_getMenuLink($id);
 						$id 	= 'index.php?option=com_content&view=category&id=' . $category->id;
 					}
 
@@ -171,8 +171,8 @@ class JoomlalinksContent extends JObject {
 
 							// get sub-categories
 							if (count($sub)) {
-								$id 	= 'index.php?option=com_content&view=section&id=' . $category->id;
 								$url 	= $id;
+								$id 	= 'index.php?option=com_content&view=section&id=' . $category->id;
 							// no sub-categories, get articles for category
 							} else {
 								// no com_content, might be link like index.php?ItemId=1
@@ -180,6 +180,10 @@ class JoomlalinksContent extends JObject {
 									$url 	= $id;
 									$id 	= 'index.php?option=com_content&view=category&id=' . $category->id;
 								}
+							}
+							
+							if (strpos($url, 'index.php?Itemid=') !== false) {
+								$url = self::_getMenuLink($url);
 							}
 
 							$items[] = array(
@@ -221,6 +225,25 @@ class JoomlalinksContent extends JObject {
 				break;
 		}
 		return $items;
+	}
+	
+	private function _getMenuLink($url)
+	{
+		$db	= JFactory::getDBO();
+		// get itemid
+		preg_match('#Itemid=([\d]+)#', $url, $matches);
+		// get link from menu
+		if (count($matches) > 1) {
+			$menu = JTable::getInstance('menu');
+			$menu->load($matches[1]);
+				
+			if ($menu->link) {
+				return $menu->link . '&Itemid=' . $menu->id;
+			}
+		}
+	
+		return $url;
+	
 	}
 
 	private function _getSection()

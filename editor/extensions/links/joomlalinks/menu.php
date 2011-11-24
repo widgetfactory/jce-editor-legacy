@@ -84,38 +84,25 @@ class JoomlalinksMenu extends JObject
 						
 					switch ($menu->type) {
 						case 'separator':
-							if ($link) {
-								$link .= '&Itemid='.$menu->id;
-							} else {
+							if (!$link) {
 								$class[] = 'nolink';
 							}
 							break;
-	
-						case 'url':
-							if ((strpos($link, 'index.php?') !== false) && (strpos($link, 'Itemid=') === false)) {
-								// If this is an internal Joomla link, ensure the Itemid is set.
-								$link .= '&Itemid='.$menu->id;
-							}
-							break;
-	
 						case 'alias':
 							$params = new JParameter($menu->params);
 							
 							// If this is an alias use the item id stored in the parameters to make the link.
-							$link = 'index.php?Itemid='.$params->get('aliasoptions');
+							$link .= $params->get('aliasoptions');
 							break;
-	
-						default:
-							$link .= '&Itemid='.$menu->id;
-							break;
-					}		
+					}
+					
+					// internal link with no Itemid
+					if ($link && strpos($link, 'index.php') === 0 && strpos($link, 'Itemid') === false) {
+						$link .= '&Itemid=' . $menu->id;
+					}
 						
 					$children 	= self::_children($menu->id);
 					$title 		= isset($menu->name) ? $menu->name : $menu->title; 
-					
-					if (strpos($link, 'index.php?option') !== false && strpos($link, 'Itemid=') === false) {
-						$link = $menu->link . '&Itemid=' . $menu->id;
-					}
 					
 					if ($children) {
 						$class = array_merge($class, array('folder', 'menu'));
@@ -139,11 +126,12 @@ class JoomlalinksMenu extends JObject
 						//$menu = AdvlinkMenu::_alias($menu->id);
 					}
 					
-					$link = $menu->link;
+					$link 	= $menu->link;
 					$title 	= isset($menu->name) ? $menu->name : $menu->title;
 					
-					if (strpos($link, 'index.php?option') !== false && strpos($link, 'Itemid=') === false) {
-						$link = $menu->link . '&Itemid=' . $menu->id;
+					// internal link with no Itemid
+					if ($link && strpos($link, 'index.php') === 0 && strpos($link, 'Itemid') === false) {
+						$link .= '&Itemid=' . $menu->id;
 					}
 	
 					$items[] = array(
