@@ -1019,9 +1019,10 @@ class WFFileBrowser extends WFBrowserExtension
 
 		// get file name
 		$name 	= JRequest::getVar('name', $file['name']);
+
 		$ext 	= WFUtility::getExtension($name);
 		// strip extension
-		$name 	= basename($name, '.' . $ext);
+		$name 	= WFUtility::stripExtension($name);
 		// make file name 'web safe'
 		$name 	= WFUtility::makeSafe($name, $this->get('websafe_mode', 'utf-8'));
 		
