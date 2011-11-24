@@ -1220,6 +1220,16 @@
         	
         	return s;
         },
+        
+        _toUnicode : function(s) {
+        	var c = s.toString(16).toUpperCase();
+    		
+    		while (c.length < 4) {
+    			c = '0' + c;
+    		}
+    		
+    		return'\\u' + c;
+        },
 
         safe: function (s, mode) {     
         	mode = mode || 'utf-8';
@@ -1233,23 +1243,13 @@
         	} else {
         		s = s.replace(/[+\\\/\?\#%&<>"\'=\[\]\{\},;@^\(\)]/g, '');
             	var r = '';
-            	// convert character code to unicode eg: \\u001A
-            	function _toUnicode(s) {
-            		var c = s.toString(16).toUpperCase();
-            		
-            		while (c.length < 4) {
-            			c = '0' + c;
-            		}
-            		
-            		return'\\u' + c;
-            	}
             	
             	for(var i = 0, ln = s.length; i < ln; i++) {
             		var char = s[i];
             		// only process on possible restricted characters or utf-8 letters/numbers
             		if (/[^\w\.\-\s~ ]/.test(char)) {
             			// skip any character less than 127, eg: &?@* etc.
-                		if (_toUnicode(char.charCodeAt(0)) < '\\u007F') {
+                		if (this._toUnicode(char.charCodeAt(0)) < '\\u007F') {
                 			continue;
                 		}
             		}
@@ -1258,8 +1258,7 @@
             	}
             	
             	s = r;
-        	}
-        	
+        	}        	
         	
         	// remove leading period
         	s = s.replace(/^\./, '');
