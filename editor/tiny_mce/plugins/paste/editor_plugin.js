@@ -837,7 +837,7 @@
 				h = h.replace(/<p><\/p>/gi, '');
 			}
 
-			ed.execCommand('mceInsertContent', false, h);
+			this._insert(h);
 		},
 
 		/**
@@ -1198,13 +1198,19 @@
 		 * Inserts the specified contents at the caret position.
 		 */
 		_insert : function(h, skip_undo) {
-			var ed = this.editor, r = ed.selection.getRng();
-
-			// First delete the contents seems to work better on WebKit when the selection spans multiple list items or multiple table cells.
-			if (!ed.selection.isCollapsed() && r.startContainer != r.endContainer)
-				ed.getDoc().execCommand('Delete', false, null);
+			var ed = this.editor;
+			
+			// reset validate to fix issues in IE7-
+			if (ed.settings.validate === false) {
+				ed.settings.validate = true;
+			}
 
 			ed.execCommand('mceInsertContent', false, h, {skip_undo : skip_undo});
+			
+			// reset validate
+			if (ed.settings.verify_html === false) {
+				ed.settings.validate = false;
+			}
 		}
 
 	});
