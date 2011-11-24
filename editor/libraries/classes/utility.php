@@ -62,20 +62,14 @@ class WFUtility
 
 	public function getExtension($path)
 	{
-		$parts = pathinfo($path);
-		
-		return $parts['extension'];
+		$dot = strrpos($path, '.') + 1;
+		return substr($path, $dot);
 	}
 	
 	public function stripExtension($path)
 	{
-		$parts = pathinfo($path);
-		
-		if (isset($parts['filename'])) {
-			return $parts['filename'];
-		} else {
-			return basename($path, '.' . $parts['extension']);
-		}
+		$dot = strrpos($path, '.');
+		return substr($path, 0, $dot);
 	}
 
 	/**
