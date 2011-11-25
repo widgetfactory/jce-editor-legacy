@@ -11,6 +11,7 @@
 
 defined('_JEXEC') or die('RESTRICTED');
 
+wfimport('editor.libraries.classes.error');
 wfimport('editor.libraries.classes.utility');
 wfimport('editor.libraries.classes.token');
 wfimport('editor.libraries.classes.document');

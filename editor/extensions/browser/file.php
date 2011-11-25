@@ -995,7 +995,7 @@ class WFFileBrowser extends WFBrowserExtension
 		// Check for request forgeries
 		WFToken::checkToken() or die();
 		
-		JError::setErrorHandling(E_ALL, 'callback', array('WFUtility', 'raiseError'));
+		JError::setErrorHandling(E_ALL, 'callback', array('WFError', 'raiseError'));
 		
 		// check for feature access	
 		if (!$this->checkFeature('upload')) {
