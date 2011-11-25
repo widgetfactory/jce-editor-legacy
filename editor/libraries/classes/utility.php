@@ -12,53 +12,6 @@
 defined('_JEXEC') or die('RESTRICTED');
 class WFUtility
 {
-	/**
-	 * Format a JError object as a JSON string
-	 */
-	public function raiseError($error)
-	{
-		$data = array();
-
-		$data[] = JError::translateErrorLevel($error->get('level')) . ' ' . $error->get('code') . ': ';
-
-		if ($error->get('message')) {
-			$data[] = $error->get('message');
-		}
-		
-		if ($error->get('code') >= 500) {
-			if ($error->get('line')) {
-				$data[] = ' IN LINE ' . $error->get('line');
-			}
-	
-			if ($error->get('function')) {
-				$text = ' IN ';
-	
-				if ($error->get('class')) {
-					$text = $error->get('class') . '::';
-				}
-	
-				$text = $error->get('function');
-	
-				$data[] = $text;
-			}
-	
-			if ($error->get('file')) {
-				$data[] = 'IN FILE ' . $error->get('file');
-			}
-		}
-		
-		header('Content-Type: text/json');
-		header('Content-Encoding: UTF-8');
-		
-		$output = array(
-			'result'	=> '',
-        	'error'  	=> true,
-			'code'	 	=> $error->get('code'),
-			'text'		=> $data
-		);
-
-		exit(json_encode($output));
-	}
 
 	public function getExtension($path)
 	{
@@ -79,16 +32,15 @@ class WFUtility
 	 */
 	public function fixPath($path)
 	{
-		//append a slash to the path if it doesn't exists.
-		if (!(substr($path, -1) == '/'))
-		$path .= '/';
-		return $path;
+		jimport('joomla.filesystem.path');
+		
+		return JPath::clean($path . DS);
 	}
 	
 	public function checkPath($path)
 	{
 		if (strpos($path, '..') !== false) {
-			JError::raiseError(403, 'Use of relative paths not permitted'); // don't translate
+			JError::raiseError(403, 'RELATIVE PATHS NOT PERMITTED'); // don't translate
 			exit();
 		}
 	}
@@ -101,11 +53,9 @@ class WFUtility
 	 */
 	public function makePath($a, $b)
 	{
-		$a = self::fixPath($a);
-		if (substr($b, 0, 1) == '/') {
-			$b = substr($b, 1);
-		}
-		return $a . $b;
+		jimport('joomla.filesystem.path');
+		
+		return JPath::clean($a . DS . $b);
 	}
 
 	private function utf8_latin_to_ascii( $subject ){
