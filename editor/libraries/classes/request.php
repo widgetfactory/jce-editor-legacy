@@ -125,7 +125,7 @@ final class WFRequest extends JObject
 				"error"		=> null
 			);
 				
-			JError::setErrorHandling(E_ALL, 'callback', array('WFUtility', 'raiseError'));
+			JError::setErrorHandling(E_ALL, 'callback', array('WFError', 'raiseError'));
 
 			if ($json) {
 				$json 	= json_decode($json);
