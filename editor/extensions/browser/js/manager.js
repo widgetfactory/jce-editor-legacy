@@ -504,7 +504,6 @@
 						classes.push(e.classes);
 					}
 
-					//h += '<li class="folder ' + classes.join(' ') + '" id="' + e.id + '" title="' + e.name + '"' +
 					h += '<li class="folder ' + classes.join(' ') + '" title="' + e.name + '"' +
 					data.join(' ') +
 					'><span class="checkbox" role="checkbox" aria-checked="false"></span><a href="javascript:;">'+ e.name +'</a><span class="date" aria-hidden="true">' + $.String.formatDate(e.properties.modified) + '</span></li>';
@@ -523,6 +522,8 @@
 
 					// add url data
 					data.push('data-url="' + (e.url || e.id) + '"');
+					// add id (legacy support)
+					data.push('id="' + e.id + '"');
 
 					// add websafe class
 					classes.push(self._isWebSafe(e.name) ? 'safe' : 'notsafe');
@@ -539,7 +540,6 @@
 						classes.push(e.classes);
 					}
 
-					//h += '<li class="file ' + $.String.getExt(e.name) + ' ' + classes.join(' ') + '" id="' + e.id + '" title="' + e.name + '"' +
 					h += '<li class="file ' + $.String.getExt(e.name) + ' ' + classes.join(' ') + '" title="' + e.name + '"' +
 					data.join(' ') +
 					'><span class="checkbox" role="checkbox" aria-checked="false"></span><a href="javascript:;">'+ e.name +'</a><span class="date" aria-hidden="true">' + $.String.formatDate(e.properties.modified) + '</span><span class="size" aria-hidden="true">'+ $.String.formatSize(e.properties.size) +'</span></li>';
