@@ -46,10 +46,10 @@ class WFUtility
 	}
 
 	/**
-	 * Concat two paths together. Basically $pathA+$pathB
-	 * @param string $pathA path one
-	 * @param string $pathB path two
-	 * @return string a trailing slash combinded path.
+	 * Concat two paths together. Basically $a + $b
+	 * @param string $a path one
+	 * @param string $b path two
+	 * @return string $a DIRECTORY_SEPARATOR $b
 	 */
 	public function makePath($a, $b)
 	{
