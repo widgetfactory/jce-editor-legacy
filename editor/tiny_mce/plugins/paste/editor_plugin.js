@@ -26,29 +26,32 @@
 
 	tinymce.create('tinymce.plugins.PastePlugin', {
 		init : function(ed, url) {
-			var t = this, cb;
+			var self = this, cb;
 
-			t.editor = ed;
-			t.url = url;
+			self.editor = ed;
+			self.url = url;
+			
+			// set default paste state for dialog trigger
+			this.canPaste = false;
 
 			// Setup plugin events
-			t.onPreProcess 		= new tinymce.util.Dispatcher(t);
-			t.onPostProcess 	= new tinymce.util.Dispatcher(t);
-			t.onBeforeInsert 	= new tinymce.util.Dispatcher(t);
-			t.onAfterPaste 		= new tinymce.util.Dispatcher(t);
+			self.onPreProcess 		= new tinymce.util.Dispatcher(this);
+			self.onPostProcess 		= new tinymce.util.Dispatcher(this);
+			self.onBeforeInsert 	= new tinymce.util.Dispatcher(this);
+			self.onAfterPaste 		= new tinymce.util.Dispatcher(this);
 
 			// Register default handlers
-			t.onPreProcess.add(t._preProcess);
-			t.onPostProcess.add(t._postProcess);
-			t.onBeforeInsert.add(t._onBeforeInsert);
+			self.onPreProcess.add(self._preProcess);
+			self.onPostProcess.add(self._postProcess);
+			self.onBeforeInsert.add(self._onBeforeInsert);
 
 			// Register optional preprocess handler
-			t.onPreProcess.add( function(pl, o) {
+			self.onPreProcess.add( function(pl, o) {
 				ed.execCallback('paste_preprocess', pl, o);
 			});
 
 			// Register optional postprocess
-			t.onPostProcess.add( function(pl, o) {
+			self.onPostProcess.add( function(pl, o) {
 				ed.execCallback('paste_postprocess', pl, o);
 			});
 
@@ -58,8 +61,8 @@
 					return false; // Stop other listeners
 			});
 
-			t.pasteText 	= ed.getParam('paste_text', 1);
-			t.pasteHtml		= ed.getParam('paste_html', 1);
+			self.pasteText 	= ed.getParam('paste_text', 1);
+			self.pasteHtml		= ed.getParam('paste_html', 1);
 
 			// This function executes the process handlers and inserts the contents
 			function process(o) {
@@ -68,33 +71,33 @@
 				ed.setProgressState(1);
 
 				// override states
-				switch(t.command) {
+				switch(self.command) {
 					case 'mcePaste':
-						if (!t.pasteHtml) {
-							t.command = 'mcePasteText';
+						if (!self.pasteHtml) {
+							self.command = 'mcePasteText';
 						}
 						break;
 					case 'mcePasteText':
-						if (!t.pasteText) {
-							t.command = 'mcePaste';
+						if (!self.pasteText) {
+							self.command = 'mcePaste';
 						}
 						break;
 					case 'mcePasteWord':
-						if (!t.pasteWord || !t.pasteHtml) {
-							t.command = 'mcePasteText';
+						if (!self.pasteWord || !self.pasteHtml) {
+							self.command = 'mcePasteText';
 						}
 						break;
 					default:
-						t.command = 'mcePaste';
-						if (!t.pasteHtml && t.pasteText) {
-							t.command = 'mcePasteText';
+						self.command = 'mcePaste';
+						if (!self.pasteHtml && self.pasteText) {
+							self.command = 'mcePasteText';
 						}
 
 						break;
 				}
 
 				// set plainText flag
-				t.plainText = t.command == 'mcePasteText';
+				self.plainText = self.command == 'mcePasteText';
 
 				// set word content flag
 				if (ed.getParam('paste_force_cleanup')) {
@@ -102,7 +105,7 @@
 				}
 
 				// Execute pre process handlers
-				t.onPreProcess.dispatch(t, o);
+				self.onPreProcess.dispatch(self, o);
 
 				// Create DOM structure
 				o.node = dom.create('div', 0, o.content);
@@ -119,7 +122,7 @@
 				}
 
 				// Execute post process handlers
-				t.onPostProcess.dispatch(t, o);
+				self.onPostProcess.dispatch(self, o);
 
 				// Serialize content
 				o.content = ed.serializer.serialize(o.node, {
@@ -127,21 +130,21 @@
 					forced_root_block : ''
 				});
 
-				t.onBeforeInsert.dispatch(t, o);
+				self.onBeforeInsert.dispatch(self, o);
 
-				if (t.plainText) {
-					t._insertPlainText(o.content);
+				if (self.plainText) {
+					self._insertPlainText(o.content);
 				} else {
-					t._insert(o.content);
+					self._insert(o.content);
 				}
 
 				// Trigger onAfterPaste event
-				t.onAfterPaste.dispatch(t);
+				self.onAfterPaste.dispatch(self);
 
 				ed.setProgressState(0);
 
 				// reset to default
-				t.command = 'mcePaste';
+				self.command = 'mcePaste';
 			};
 
 			// Add command for external usage
@@ -164,14 +167,14 @@
 							cmd : 'Copy'
 						}).setDisabled(c);
 
-						if (t.pasteHtml) {
+						if (self.pasteHtml) {
 							m.add({
 								title : 'paste.paste_desc',
 								icon : 'paste',
 								cmd : 'mcePaste'
 							});
 						}
-						if (t.pasteText) {
+						if (self.pasteText) {
 							m.add({
 								title : 'paste.paste_text_desc',
 								icon : 'pastetext',
@@ -201,9 +204,10 @@
 						return;
 					}
 				}
-
-				if (dom.get('_mcePaste'))
+				// don't repeat paste
+				if (dom.get('_mcePaste')) {
 					return;
+				}
 
 				// Create container to paste into
 				n = dom.add(body, 'div', {
@@ -245,17 +249,20 @@
 					// to IE security settings so we pass the junk though better than nothing right
 					if (n.innerHTML === '\uFEFF\uFEFF') {
 						e.preventDefault();
-						return false;
+						return;
 					}
 
 					// Restore the old range and clear the contents before pasting
 					sel.setRng(oldRng);
 					sel.setContent('');
+					
+					// set paste state as true...we got this far right?
+					self.canPaste = true;
 
 					// For some odd reason we need to detach the the mceInsertContent call from the paste event
 					// It's like IE has a reference to the parent element that you paste in and the selection gets messed up
 					// when it tries to restore the selection
-					setTimeout( function() {
+					setTimeout( function() {					
 						// Process contents
 						process({
 							content : n.innerHTML
@@ -263,13 +270,14 @@
 					}, 0);
 
 					// Block the real paste event
-					tinymce.dom.Event.cancel(e);
-
-					return true;
+					tinymce.dom.Event.cancel(e);					
 				} else {
 					function block(e) {
 						e.preventDefault();
 					};
+					
+					// set paste state as true...we got this far right?
+					self.canPaste = true;
 
 					//n.innerHTML = '\uFEFF<br data-mce-bogus="1" />';
 
@@ -373,73 +381,68 @@
 				});
 
 			}
+			
+			each(['Cut', 'Copy'], function(command) {
+				ed.addCommand(command, function() {
+					var doc = ed.getDoc(), failed;
+
+					// Try executing the native command
+					try {
+						doc.execCommand(command, false, null);
+					} catch (ex) {
+						// Command failed
+						failed = true;
+					}
+	
+					// Present alert message about clipboard access not being available
+					if (failed || (tinymce.isIE && !doc.queryCommandSupported('Paste'))) {
+						if (tinymce.isGecko) {
+							ed.windowManager.confirm(ed.getLang('clipboard_msg'), function(state) {
+								if (state) {
+									open('http://www.mozilla.org/editor/midasdemo/securityprefs.html', '_blank');
+								}
+							});
+						} else {
+							ed.windowManager.alert(ed.getLang('clipboard_no_support'));
+						}
+					}
+				});
+			});
 
 			// Add commands
 			each(['mcePasteText', 'mcePaste'], function(cmd) {
 				ed.addCommand(cmd, function() {
-					t.command = cmd;
-
-					if (ed.getParam('paste_use_dialog')) {
-						return t._openWin(cmd);
+					var doc = ed.getDoc();
+					// set command
+					self.command = cmd;
+					
+					// just open the window
+					if (ed.getParam('paste_use_dialog') || (tinymce.isIE && !doc.queryCommandSupported('Paste'))) {
+						return self._openWin(cmd);
 					} else {
 						try {
-							var doc = ed.getDoc();
-
-							// if paste command not supported open window
-							if (!doc.queryCommandSupported('Paste')) {
-								return t._openWin(cmd);
-							} else {
-								// IE will support onPaste method (getContent)
-								if (tinymce.isIE) {
-									if (!ed.onPaste.dispatch()) {
-										return t._openWin(cmd);
-									}
-								} else {
-									doc.execCommand('Paste');
-								}
-							}
+							doc.execCommand('Paste', false, null);
 						} catch (e) {
-							return t._openWin(cmd);
+							self.canPaste = false;
+						}
+						
+						// if paste command not supported open window
+						if (self.canPaste === false) {
+							return self._openWin(cmd);
 						}
 					}
 				});
 
 			});
 
-			each(['Cut', 'Copy'], function(cmd) {
-				ed.addCommand(cmd, function() {
-					var doc = ed.getDoc(), failed;
-					// Try executing the native command
-					try {
-						doc.execCommand(cmd);
-					} catch (ex) {
-						// Command failed
-						failed = true;
-					}
-
-					// Present alert message about clipboard access not being available
-					if (failed || !doc.queryCommandSupported(cmd)) {
-						if (tinymce.isGecko) {
-							ed.windowManager.confirm(ed.getLang('clipboard_msg'), function(state) {
-								if (state)
-									open('http://www.mozilla.org/editor/midasdemo/securityprefs.html', '_blank');
-							});
-
-						} else
-							ed.windowManager.alert(ed.getLang('clipboard_no_support'));
-					}
-				});
-
-			});
-
-			if (t.pasteHtml && !t.pasteText) {
+			if (self.pasteHtml && !self.pasteText) {
 				ed.addButton('paste', {
 					title : 'paste.paste_desc',
 					cmd : 'mcePaste',
 					ui : true
 				});
 			}
-			if (!t.pasteHtml && t.pasteText) {
+			if (!self.pasteHtml && self.pasteText) {
 				ed.addButton('paste', {
 					title : 'paste.paste_text_desc',
 					cmd : 'mcePasteText',
@@ -449,11 +452,11 @@
 		},
 
 		createControl: function(n, cm) {
-			var t = this, ed = t.editor;
+			var self = this, ed = self.editor;
 
 			switch (n) {
 				case 'paste':
-					if(t.pasteHtml && t.pasteText) {
+					if(self.pasteHtml && self.pasteText) {
 						var c = cm.createSplitButton('paste', {
 							title : 'paste.paste_desc',
 							onclick : function(e) {
@@ -502,7 +505,7 @@
 		},
 
 		_openWin : function(cmd) {
-			var t = this, ed = this.editor;
+			var ed = this.editor;
 
 			ed.windowManager.open({
 				file 	: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=paste',
@@ -793,7 +796,7 @@
 		 * Remove all html form pasted contents. Newlines will be converted to paragraphs or linebreaks
 		 */
 		_insertPlainText : function(h) {
-			var t = this, ed = this.editor, dom = ed.dom, entities = null;
+			var ed = this.editor, dom = ed.dom, entities = null;
 
 			if ((typeof(h) === "string") && (h.length > 0)) {
 
