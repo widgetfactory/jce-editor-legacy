@@ -451,10 +451,10 @@
             var query 	= ed.getParam('site_url') + 'index.php?option=com_jce';
             
             var args 	= {
-                'view' 		: 'editor',
-                'layout'	: 'plugin',
-                'plugin'	: 'source',
-                'component_id' : ed.getParam('component_id')
+                'view' 			: 'editor',
+                'layout'		: 'plugin',
+                'plugin'		: 'source',
+                'component_id' 	: ed.getParam('component_id')
             };
 
             // set token
@@ -482,8 +482,7 @@
             	var v = ed.getContent(), highlight = ed.getParam('source_highlight', true), wrap = ed.getParam('source_wrap', true), numbers = ed.getParam('source_numbers', true);
 
             	editor.init({
-            		/*'url'		: ed.getParam('site_url'),
-            		'token'		: ed.settings.token,*/
+            		'url'		: query,
             		'wrap' 		: wrap,
             		'numbers'	: numbers,
             		'highlight'	: highlight,
@@ -493,20 +492,18 @@
             		'load'		: function() {
             			ed.setProgressState(false);
             			
-            			/*if (tinymce.isIE && !document.querySelector) {
+            			if (tinymce.isIE && !document.querySelector) {
             				ed.hide();
             				ed.show();
-            			}*/
+            			}
             			cm.setActive('highlight', highlight);
             			cm.setActive('numbers', numbers);
-            			cm.setActive('wrap', wrap); 
-            			
-            			editor.resize('100%', h);
+            			cm.setActive('wrap', wrap);          			
             		},
             		change : function() {
             			ed.controlManager.setDisabled('undo', false);
             		}
-            	}, self.indent(v));   	
+            	}, self.indent(v));
             });
             
             DOM.add(container, iframe);
@@ -544,7 +541,7 @@
 
                 this.setContent();
                 
-                //se.indent();
+                se.indent();
                 
                 DOM.show('wf_' + ed.id + '_source_container');
                 DOM.setAttrib('wf_' + ed.id + '_source_container', 'aria-hidden', false);

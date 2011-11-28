@@ -1,9 +1,10 @@
 <?php
 /**
- * @package      	JCE
- * @copyright    	@@copyright@@
- * @author			Ryan Demmer
- * @license      	@@licence@@
+ * @version		$Id: source.php 226 2011-06-13 09:59:05Z happy_noodle_boy $
+ * @package      JCE
+ * @copyright    Copyright (C) 2005 - 2009 Ryan Demmer. All rights reserved.
+ * @author		Ryan Demmer
+ * @license      GNU/GPL
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
@@ -51,13 +52,66 @@ class WFSourcePlugin extends WFEditorPlugin {
 		$view->addTemplatePath(WF_EDITOR_PLUGIN .DS. 'tmpl');
 			
 		$document->setTitle(WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')));		
-		
-		$theme 	= JRequest::getWord('theme', 'textmate');
 
-		$document->addScript(array('codemirror-compressed'), 'jce.tiny_mce.plugins.source.js.codemirror');
+		$document->addScript(array('codemirror'), 'jce.tiny_mce.plugins.source.js.codemirror');
 		$document->addScript(array('editor'), 'plugins');
 		
-		$document->addStyleSheet(array('codemirror', 'theme/' . $theme), 'jce.tiny_mce.plugins.source.css.codemirror');
+		$document->addStyleSheet(array('codemirror'), 'jce.tiny_mce.plugins.source.css.codemirror');
 		$document->addStyleSheet(array('editor'), 'plugins');				
+	}
+	
+	function execute() {			
+		$task = JRequest::getWord('task');
+
+		if ($task == 'compile') {
+			return $this->compile();
+		}
+		
+		parent::execute();
+	}
+
+	function compile()
+	{
+		WFToken::checkToken() or die('RESTRICTED ACCESS');
+			
+		wfimport('admin.classes.packer');
+
+		$base 	= dirname(dirname(__FILE__));				
+		$theme 	= JRequest::getWord('theme', 'textmate');
+
+		switch (JRequest::getWord('type', 'base')) {
+			case 'base':
+				$files = array();
+				
+				$files[] = $base . DS . 'js' . DS . 'codemirror' . DS . 'base.js';
+				
+				$type = 'javsacript';
+				
+				break;	
+			case 'parser' :
+				$files = array();
+
+				$files[] = $base . DS . 'js' . DS . 'codemirror' . DS . 'parser.js';
+
+				// javascript
+
+				$type = 'javsacript';
+
+				break;
+			case 'css' :
+				$path = $base . DS . 'css' . DS . 'codemirror';
+				$files = array($path . DS . 'editor.css', $path . DS . 'theme' . DS . $theme . '.css');
+
+				$type = 'css';
+
+				break;
+		}
+
+		$packer = new WFPacker(array('type' => $type));
+
+		// set files
+		$packer->setFiles($files);
+		// pack!
+		$packer->pack(true, $this->getParam('editor.compress_gzip', 0));
 	}
 }
