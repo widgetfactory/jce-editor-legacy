@@ -24,6 +24,11 @@ class WFUtility
 		$dot = strrpos($path, '.');
 		return substr($path, 0, $dot);
 	}
+	
+	public function cleanPath($path)
+	{
+		return preg_replace('#[/\\\\]+#', '/', trim($path));
+	}
 
 	/**
 	 * Append a / to the path if required.
@@ -32,9 +37,7 @@ class WFUtility
 	 */
 	public function fixPath($path)
 	{
-		jimport('joomla.filesystem.path');
-		
-		return JPath::clean($path . DS);
+		return self::cleanPath($path . '/');
 	}
 	
 	public function checkPath($path)
@@ -53,9 +56,7 @@ class WFUtility
 	 */
 	public function makePath($a, $b)
 	{
-		jimport('joomla.filesystem.path');
-		
-		return JPath::clean($a . DS . $b);
+		return self::cleanPath($a . '/' . $b);
 	}
 
 	private function utf8_latin_to_ascii( $subject ){
