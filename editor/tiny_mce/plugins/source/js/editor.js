@@ -1,7 +1,7 @@
-( function() {
+( function($) {
 	var tinymce = window.parent.tinymce, DOM = tinymce.DOM, Event = tinymce.dom.Event;
-	
-	var SourceEditor = {				
+	var SourceEditor = {
+
 		init : function(options, content) {
 			var self = this;
 			if (Event.domLoaded) {
@@ -19,82 +19,98 @@
 					self.init(options, content);
 				});
 			}
+
 		},
 
 		_load : function(o, content) {
 			var self = this, ed;
-			
-			if (tinymce.is(o.change) !== 'function') {
+
+			if (!tinymce.is(o.change, 'function')) {
 				o.change = function(){};
+			}
+			
+			if (!tinymce.is(o.load, 'function')) {
+				o.load = function(){};
 			}
 
 			if(window.CodeMirror) {
 
-				ed = CodeMirror(this.container, {
-					mode		: "htmlmixed",
-					theme		: o.theme || 'textmate',
-					onChange 	: function() {
+				var query = o.url;
+				
+				var args = {
+					'task' 		: 'compile',
+					'editor' 	: 'codemirror',
+					'theme' 	: o.theme || 'textmate'
+				};
+
+				// set token
+				args[o.token] = 1;
+
+				// create query
+				for(k in args) {
+					query += '&' + k + '=' + encodeURIComponent(args[k]);
+				}
+				ed = new CodeMirror(this.container, {
+					width : 'auto',
+					height : '100%',
+					base : '',
+					basefiles : [query + '&type=base'],
+					parserfile : [query + '&type=parser'],
+					stylesheet : [query + '&type=css'],
+					indentUnit : 4,
+					reindentOnLoad : true,
+					onLoad : function() {
+						ed.setWrap = function(s) {
+							ed.setTextWrapping(s);
+						};
+
+						ed.showGutter = function(s) {
+							ed.setLineNumbers(s);
+						};
+
+						ed.highlight = function(s) {
+							if(s) {
+								ed.setParser('HTMLMixedParser');
+							} else {
+								ed.setParser('TextParser');
+							}
+						};
+
+						ed.resize = function(w, h) {
+							DOM.setStyles(self.container, {
+								width : w,
+								height : h
+							});
+						};
+
+						ed.showInvisibles = function(s) {
+						};
+
+						ed.setContent = function(v) {
+							if(v === '') {
+								v = '\u00a0';
+							}
+							return ed.setCode(v);
+						};
+
+						ed.insertContent = function(v) {
+							return ed.replaceSelection(v);
+						};
+
+						ed.getContent = function() {
+							return ed.getCode();
+						};
+
+						self.editor = ed;
+						self._loaded(o, content);
+					},
+
+					onChange : function() {
 						// callback
 						o.change.call();
-					},
-					onCursorActivity: function() {
-						ed.setLineClass(hlLine, null);
-					    hlLine = ed.setLineClass(ed.getCursor().line, "activeline");
 					}
+
 				});
-				
-				// highlight line
-				var hlLine = ed.setLineClass(0, "activeline");
-				
-				ed.setWrap = function(s) {
-					ed.setOption('lineWrapping', s);
-				};
-
-				ed.showGutter = function(s) {
-					ed.setOption('lineNumbers', s);
-				};
-
-				ed.highlight = function(s) {
-					var c = ed.getCursor();
-					
-					if(s) {
-						ed.setOption('mode', 'htmlmixed');
-					} else {
-						ed.setOption('mode', 'text/plain');
-					}
-					
-					ed.setCursor(c);
-				};
-
-				ed.resize = function(w, h) {
-					DOM.setStyles(ed.getScrollerElement(), {
-						width : w,
-						height: h
-					});
-					
-					DOM.setStyle(ed.getGutterElement(), 'height', h);
-				};
-
-				ed.showInvisibles = function(s) {
-				};
-
-				ed.setContent = function(v) {
-					if(v === '') {
-						v = '\u00a0';
-					}
-					return ed.setValue(v);
-				};
-
-				ed.insertContent = function(v) {
-					return ed.replaceSelection(v);
-				};
-
-				ed.getContent = function() {
-					return ed.getValue();
-				};
-
-				this.editor = ed;
-				this._loaded(o, content);
 			}
 		},
 
