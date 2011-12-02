@@ -111,7 +111,7 @@ class WFDocument extends JObject
 	 * @access  public
 	 * @return  object WFDocument
 	 */
-	public function &getInstance($config = array())
+	public static function getInstance($config = array())
 	{
 		static $instance;
 

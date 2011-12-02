@@ -35,7 +35,7 @@ abstract class WFToken
 		return md5($token.$name);
 	}
 
-	public function getToken()
+	public static function getToken()
 	{
 		$session  =JFactory::getSession();
 		$user     =JFactory::getUser();
