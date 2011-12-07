@@ -405,7 +405,11 @@
 						}
 					}
 				} else {
-					html = new tinymce.html.Serializer().serialize(n);
+					if (nn == '#text') {
+						html = n.value;
+					} else {					
+						html = new tinymce.html.Serializer().serialize(n);
+					}
 				}
 			}
 
