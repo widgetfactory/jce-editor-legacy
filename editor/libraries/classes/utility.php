@@ -10,22 +10,22 @@
  */
 
 defined('_JEXEC') or die('RESTRICTED');
-class WFUtility
+abstract class WFUtility
 {
 
-	public function getExtension($path)
+	public static function getExtension($path)
 	{
 		$dot = strrpos($path, '.') + 1;
 		return substr($path, $dot);
 	}
 	
-	public function stripExtension($path)
+	public static function stripExtension($path)
 	{
 		$dot = strrpos($path, '.');
 		return substr($path, 0, $dot);
 	}
 	
-	public function cleanPath($path)
+	public static function cleanPath($path)
 	{
 		return preg_replace('#[/\\\\]+#', '/', trim($path));
 	}
@@ -35,12 +35,12 @@ class WFUtility
 	 * @param string $path the path
 	 * @return string path with trailing /
 	 */
-	public function fixPath($path)
+	public static function fixPath($path)
 	{
 		return self::cleanPath($path . '/');
 	}
 	
-	public function checkPath($path)
+	public static function checkPath($path)
 	{
 		if (strpos($path, '..') !== false) {
 			JError::raiseError(403, 'RELATIVE PATHS NOT PERMITTED'); // don't translate
@@ -54,12 +54,12 @@ class WFUtility
 	 * @param string $b path two
 	 * @return string $a DIRECTORY_SEPARATOR $b
 	 */
-	public function makePath($a, $b)
+	public static function makePath($a, $b)
 	{
 		return self::cleanPath($a . '/' . $b);
 	}
 
-	private function utf8_latin_to_ascii( $subject ){
+	private static function utf8_latin_to_ascii( $subject ){
 
 		static $CHARS = NULL;
 
@@ -95,7 +95,7 @@ class WFUtility
 	 * @param mixed The name of the file (not full path)
 	 * @return mixed The sanitised string or array
 	 */
-	public function makeSafe($subject, $mode = 'utf-8')
+	public static function makeSafe($subject, $mode = 'utf-8')
 	{		
 		// remove multiple . characters
 		$search = array('#(\.){2,}#');
@@ -125,7 +125,7 @@ class WFUtility
 	 * @param int $size the raw filesize
 	 * @return string formated file size.
 	 */
-	public function formatSize($size)
+	public static function formatSize($size)
 	{
 		if ($size < 1024) {
 			return $size . ' ' . WFText::_('WF_LABEL_BYTES');
@@ -141,7 +141,7 @@ class WFUtility
 	 * @param int $date the unix datestamp
 	 * @return string formated date.
 	 */
-	public function formatDate($date, $format = "%d/%m/%Y, %H:%M")
+	public static function formatDate($date, $format = "%d/%m/%Y, %H:%M")
 	{
 		return strftime($format, $date);
 	}
@@ -152,7 +152,7 @@ class WFUtility
 	 * @return Formatted modified date
 	 * @param string $file Absolute path to file
 	 */
-	public function getDate($file)
+	public static function getDate($file)
 	{
 		return self::formatDate(@filemtime($file));
 	}
@@ -163,12 +163,12 @@ class WFUtility
 	 * @return Formatted filesize value
 	 * @param string $file Absolute path to file
 	 */
-	public function getSize($file)
+	public static function getSize($file)
 	{
 		return self::formatSize(@filesize($file));
 	}
 
-	public function isUtf8($string)
+	public static function isUtf8($string)
 	{
 		if (!function_exists('mb_detect_encoding')) {
 			// From http://w3.org/International/questions/qa-forms-utf-8.html 
@@ -190,7 +190,7 @@ class WFUtility
 	/**
 	 * Convert size value to bytes
 	 */
-	public function convertSize($value)
+	public static function convertSize($value)
 	{		
 		// Convert to bytes
 		switch(strtolower($value{strlen($value)-1})) {
