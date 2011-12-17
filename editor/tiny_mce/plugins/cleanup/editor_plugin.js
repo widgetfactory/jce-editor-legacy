@@ -179,6 +179,9 @@
 						o.content = o.content.replace(new RegExp('<([^>]+)(' + s.replace(',', '|', 'g') + ')="([^"]+)"([^>]*)>', 'gi'), '<$1$4>');
 					}
 				}
+				
+				o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)([^>]*)><\/\1>/g, '<$1$2>\u00a0</$1>');
+				
 			});
 			
 			// disable onclick, ondblclick
@@ -194,7 +197,7 @@
 			ed.onPostProcess.add(function(ed, o) {
 				if (o.set) {
 					// Geshi
-					o.content = o.content.replace(/<pre xml:\s*(.*?)>(.*?)<\/pre>/g, '<pre class="geshi-$1">$2</pre>');			
+					o.content = o.content.replace(/<pre xml:\s*(.*?)>(.*?)<\/pre>/g, '<pre class="geshi-$1">$2</pre>');
 				}
 				if (o.get) {					
 					// Geshi
@@ -213,8 +216,9 @@
 					// pad empty paragraphs
 					if (ed.getParam('verify_html') == false) {
 						o.content = o.content.replace(/<body([^>]*)>([\s\S]*)<\/body>/, '$2');
-						o.content = o.content.replace(/<p([^>]*)><\/p>/g, '<p$1>&nbsp;</p>');
-					}		
+					}	
+					
+					o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)([^>]*)>(&nbsp;|\u00a0)<\/\1>/g, '<$1$2></$1>');
 				}
 			});
 			
