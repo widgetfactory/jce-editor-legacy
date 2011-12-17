@@ -59,12 +59,9 @@ final class WFSourcePlugin extends WFEditorPlugin {
 		$document->addStyleSheet(array('codemirror'), 'jce.tiny_mce.plugins.source.css.codemirror');
 		$document->addStyleSheet(array('editor'), 'plugins');				
 	}
-	
-<<<<<<< HEAD
+
 	public function execute() {			
-=======
-	function execute() {			
->>>>>>> 50d22f75307f5ec53fdd4292f83a337d42695cb5
+
 		$task = JRequest::getWord('task');
 
 		if ($task == 'compile') {
@@ -74,11 +71,7 @@ final class WFSourcePlugin extends WFEditorPlugin {
 		parent::execute();
 	}
 
-<<<<<<< HEAD
 	protected function compile()
-=======
-	function compile()
->>>>>>> 50d22f75307f5ec53fdd4292f83a337d42695cb5
 	{
 		WFToken::checkToken() or die('RESTRICTED ACCESS');
 			
@@ -87,11 +80,8 @@ final class WFSourcePlugin extends WFEditorPlugin {
 		$base 	= dirname(dirname(__FILE__));				
 		$theme 	= JRequest::getWord('theme', 'textmate');
 
-<<<<<<< HEAD
 		$pack	= false;
 
-=======
->>>>>>> 50d22f75307f5ec53fdd4292f83a337d42695cb5
 		switch (JRequest::getWord('type', 'base')) {
 			case 'base':
 				$files = array();
@@ -99,11 +89,7 @@ final class WFSourcePlugin extends WFEditorPlugin {
 				$files[] = $base . DS . 'js' . DS . 'codemirror' . DS . 'base.js';
 				
 				$type = 'javsacript';
-<<<<<<< HEAD
-
 				$pack = $this->getParam('editor.compress_javascript', 0);
-=======
->>>>>>> 50d22f75307f5ec53fdd4292f83a337d42695cb5
 				
 				break;	
 			case 'parser' :
@@ -115,11 +101,8 @@ final class WFSourcePlugin extends WFEditorPlugin {
 
 				$type = 'javsacript';
 
-<<<<<<< HEAD
 				$pack = $this->getParam('editor.compress_javascript', 0);
 
-=======
->>>>>>> 50d22f75307f5ec53fdd4292f83a337d42695cb5
 				break;
 			case 'css' :
 				$path = $base . DS . 'css' . DS . 'codemirror';
@@ -127,23 +110,13 @@ final class WFSourcePlugin extends WFEditorPlugin {
 
 				$type = 'css';
 
-<<<<<<< HEAD
 				$pack = $this->getParam('editor.compress_css', 0);
-
-=======
->>>>>>> 50d22f75307f5ec53fdd4292f83a337d42695cb5
 				break;
-		}
-
 		$packer = new WFPacker(array('type' => $type));
 
 		// set files
 		$packer->setFiles($files);
 		// pack!
-<<<<<<< HEAD
 		$packer->pack($pack, $this->getParam('editor.compress_gzip', 0));
-=======
-		$packer->pack(true, $this->getParam('editor.compress_gzip', 0));
->>>>>>> 50d22f75307f5ec53fdd4292f83a337d42695cb5
 	}
 }
