@@ -373,7 +373,7 @@ WFPopups.addPopup('jcemediabox', {
         	var v = $('input.value', this).val();
         	
         	if (k !== '' && v !== '') {
-        		data[k] = encodeURIComponent(v);
+        		data[k] = v;
         	}
         });
         
