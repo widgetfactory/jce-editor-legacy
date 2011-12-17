@@ -1128,7 +1128,7 @@ class WFFileBrowser extends WFBrowserExtension
 		// upload finished
 		if ($complete) {
 			
-			if (is_a($result, 'WFFileSystemResult')) {
+			if ($result instanceof WFFileSystemResult) {
 				if ($result->state === true) {		
 
 					$path = $result->path;
@@ -1165,7 +1165,7 @@ class WFFileBrowser extends WFBrowserExtension
 				
 			$result = $filesystem->delete($item);
 
-			if (is_a($result, 'WFFileSystemResult')) {
+			if ($result instanceof WFFileSystemResult) {
 				if (!$result->state) {
 					if ($result->message) {
 						$this->setResult($result->message, 'error');
@@ -1211,7 +1211,7 @@ class WFFileBrowser extends WFBrowserExtension
 		$filesystem 	= $this->getFileSystem();
 		$result 		= $filesystem->rename($source, WFUtility::makeSafe($destination, $this->get('websafe_mode')), $args);
 
-		if (is_a($result, 'WFFileSystemResult')) {
+		if ($result instanceof WFFileSystemResult) {
 			if (!$result->state) {
 				$this->setResult(WFText::sprintf('WF_MANAGER_RENAME_' . strtoupper($result->type) . '_ERROR', basename($source)), 'error');
 				if ($result->message) {
@@ -1253,7 +1253,7 @@ class WFFileBrowser extends WFBrowserExtension
 				
 			$result = $filesystem->copy($item, $destination);
 
-			if (is_a($result, 'WFFileSystemResult')) {
+			if ($result instanceof WFFileSystemResult) {
 				if (!$result->state) {
 					if ($result->message) {
 						$this->setResult($result->message, 'error');
@@ -1295,7 +1295,7 @@ class WFFileBrowser extends WFBrowserExtension
 
 			$result = $filesystem->move($item, $destination);
 
-			if (is_a($result, 'WFFileSystemResult')) {
+			if ($result instanceof WFFileSystemResult) {
 				if (!$result->state) {
 					if ($result->message) {
 						$this->setResult($result->message, 'error');
@@ -1332,7 +1332,7 @@ class WFFileBrowser extends WFBrowserExtension
 
 		$result = $filesystem->createFolder($dir, WFUtility::makeSafe($new, $this->get('websafe_mode')));
 
-		if (is_a($result, 'WFFileSystemResult')) {
+		if ($result instanceof WFFileSystemResult) {
 			if (!$result->state) {
 				if ($result->message) {
 					$this->setResult($result->message, 'error');
