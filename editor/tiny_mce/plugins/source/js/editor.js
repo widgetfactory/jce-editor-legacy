@@ -43,12 +43,6 @@
 					'theme' 	: o.theme || 'textmate'
 				};
 
-<<<<<<< HEAD
-=======
-				// set token
-				args[o.token] = 1;
-
->>>>>>> 50d22f75307f5ec53fdd4292f83a337d42695cb5
 				// create query
 				for(k in args) {
 					query += '&' + k + '=' + encodeURIComponent(args[k]);
