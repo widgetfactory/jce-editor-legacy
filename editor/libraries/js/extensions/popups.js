@@ -254,47 +254,36 @@ var WFPopups = WFExtensions.add('Popups', {
 		args = args || {};
 
 		// Popup option is enabled
-		if(this.isEnabled()) {			
-			if(n && (n.nodeName == 'A' || ( n = ed.dom.getParent(n, 'A')))) {
+		if(this.isEnabled()) {
+			
+			if(n && (n.nodeName == 'A' || ed.dom.getParent(n, 'A'))) {
+				// get parent node
+				if (n.nodeName != 'A') {
+					n = ed.dom.getParent(n, 'A');
+				}
+
 				// remove all popups
 				this.removePopups(n);
 				// set popup attributes
 				this.setAttributes(n, args);
 			} else {				
+				var se = ed.selection, marker;
+				
 				// no selection
-				if(ed.selection.isCollapsed()) {
+				if(se.isCollapsed()) {
 					ed.execCommand('mceInsertContent', false, '<a href="javascript:mctmp(0);">' + $('#popup_text').val() + '</a>', {
 						skip_undo : 1
 					});
 					// create link on selection or update existing link
 				} else {
-					ed.execCommand('mceInsertLink', false, 'javascript:mctmp(0);');
+					ed.execCommand('mceInsertLink', false, 'javascript:mctmp(0);', {
+						skip_undo : 1
+					});
 				}
 
 				tinymce.each(ed.dom.select('a[href=javascript:mctmp(0);]'), function(link) {
 					self.setAttributes(link, args);
-					el = link;
 				});
-
-				var se = ed.selection, marker;
-				
-				se.collapse();
-
-				if(el.parentNode.nodeName == 'BODY') {					
-					// create marker
-					marker = ed.dom.create('span', {
-						'data-mce-type' : 'bookmark'
-					}, ' ');
-					el.parentNode.appendChild(marker);
-					se.select(marker);
-					// move cursor before marker
-					se.collapse();
-					// remove marker
-					ed.dom.remove(marker);					
-				} else {
-					se.select(el);
-					se.collapse();
-				}
 			}
 		} else {
 			var s = false;
