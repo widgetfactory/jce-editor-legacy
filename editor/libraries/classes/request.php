@@ -33,7 +33,7 @@ final class WFRequest extends JObject
 	 * @access  public
 	 * @return  object WFRequest
 	 */
-	public function &getInstance()
+	public static function getInstance()
 	{
 		static $instance;
 

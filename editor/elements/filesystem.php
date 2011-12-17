@@ -25,7 +25,7 @@ class JElementFilesystem extends JElement
      */
     var $_name = 'Filesystem';
     
-	function fetchElement($name, $value, &$node, $control_name)
+	public function fetchElement($name, $value, &$node, $control_name)
 	{
 		jimport( 'joomla.filesystem.folder' );
 		jimport( 'joomla.filesystem.file' );

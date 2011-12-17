@@ -25,7 +25,7 @@ class JElementMediaplayer extends JElement
      */
     var $_name = 'Mediaplayer';
     
-    function fetchElement($name, $value, &$node, $control_name)
+    public function fetchElement($name, $value, &$node, $control_name)
     {
         jimport('joomla.filesystem.folder');
         
