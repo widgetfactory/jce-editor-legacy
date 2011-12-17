@@ -41,7 +41,7 @@ class WFPopupsExtension extends WFExtension
      * @return  JCE  The editor object.
      * @since 1.5
      */
-    public function &getInstance($config = array())
+    public static function getInstance($config = array())
     {
         static $instance;
         
