@@ -38,7 +38,9 @@ class WFPopupsExtension_Jcemediabox extends JObject
 			$files = JFolder::files($path, '.js');
 				
 			foreach ($files as $file) {
-				$scripts[] = 'plugins/system/jcemediabox/addons/'.JFile::stripExt($file);
+				if (strpos('-src.js', $file) === false) {
+					$scripts[] = 'plugins/system/jcemediabox/addons/'.JFile::stripExt($file);
+				}
 			}
 			$document->addScript($scripts, 'joomla');
 		}
