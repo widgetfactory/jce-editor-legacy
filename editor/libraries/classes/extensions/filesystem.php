@@ -41,7 +41,7 @@ class WFFileSystem extends WFExtension
      * @return  JCE  The editor object.
      * @since 1.5
      */
-    function &getInstance($type = 'joomla', $config = array())
+    public static function getInstance($type = 'joomla', $config = array())
     {
         static $instance;
         

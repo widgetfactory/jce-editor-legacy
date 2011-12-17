@@ -35,7 +35,7 @@ class WFExtension extends JObject
 	 * @access  public
 	 * @return  object WFExtension
 	 */
-	public function &getInstance()
+	public static function getInstance()
 	{
 		static $instance;
 
@@ -64,7 +64,7 @@ class WFExtension extends JObject
 	 * @access  public
 	 * @return 	array
 	 */
-	public function getExtensions($config)
+	public static function getExtensions($config)
 	{
 		jimport('joomla.filesystem.folder');
 		jimport('joomla.filesystem.file');
@@ -120,7 +120,7 @@ class WFExtension extends JObject
 	 * @param	array $config
 	 * @return 	mixed
 	 */
-	public function loadExtensions($config = array())
+	public static function loadExtensions($config = array())
 	{
 		jimport('joomla.filesystem.folder');
 		jimport('joomla.filesystem.file');

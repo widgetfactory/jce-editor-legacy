@@ -41,7 +41,7 @@ class WFMediaPlayerExtension extends WFExtension
      * @return  MediaManager  The manager object.
      * @since 1.5
      */
-	public function &getInstance($name = 'jceplayer')
+	public static function getInstance($name = 'jceplayer')
     {
         static $instance;
         
