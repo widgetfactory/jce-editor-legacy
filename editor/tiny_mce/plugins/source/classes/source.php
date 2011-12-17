@@ -61,7 +61,6 @@ final class WFSourcePlugin extends WFEditorPlugin {
 	}
 
 	public function execute() {			
-
 		$task = JRequest::getWord('task');
 
 		if ($task == 'compile') {
@@ -112,6 +111,8 @@ final class WFSourcePlugin extends WFEditorPlugin {
 
 				$pack = $this->getParam('editor.compress_css', 0);
 				break;
+		}
+
 		$packer = new WFPacker(array('type' => $type));
 
 		// set files
