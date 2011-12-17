@@ -12,7 +12,7 @@
  */
 require_once (WF_EDITOR_LIBRARIES . DS . 'classes' . DS . 'plugin.php');
 
-class WFSourcePlugin extends WFEditorPlugin {
+final class WFSourcePlugin extends WFEditorPlugin {
 	/**
 	 * Constructor activating the default information of the class
 	 *
@@ -33,7 +33,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 	 * @return	JCE  The editor object.
 	 * @since	1.5
 	 */
-	function & getInstance()
+	public function & getInstance()
 	{
 		static $instance;
 
@@ -43,7 +43,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 		return $instance;
 	}
 	
-	function display()
+	public function display()
 	{
 		$document = WFDocument::getInstance();	
 			
@@ -60,7 +60,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 		$document->addStyleSheet(array('editor'), 'plugins');				
 	}
 	
-	function execute() {			
+	public function execute() {			
 		$task = JRequest::getWord('task');
 
 		if ($task == 'compile') {
@@ -70,7 +70,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 		parent::execute();
 	}
 
-	function compile()
+	protected function compile()
 	{
 		WFToken::checkToken() or die('RESTRICTED ACCESS');
 			
@@ -78,6 +78,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 
 		$base 	= dirname(dirname(__FILE__));				
 		$theme 	= JRequest::getWord('theme', 'textmate');
+
 		$pack	= false;
 
 		switch (JRequest::getWord('type', 'base')) {
@@ -87,6 +88,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 				$files[] = $base . DS . 'js' . DS . 'codemirror' . DS . 'base.js';
 				
 				$type = 'javsacript';
+
 				$pack = $this->getParam('editor.compress_javascript', 0);
 				
 				break;	
@@ -98,6 +100,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 				// javascript
 
 				$type = 'javsacript';
+
 				$pack = $this->getParam('editor.compress_javascript', 0);
 
 				break;
@@ -106,6 +109,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 				$files = array($path . DS . 'editor.css', $path . DS . 'theme' . DS . $theme . '.css');
 
 				$type = 'css';
+
 				$pack = $this->getParam('editor.compress_css', 0);
 
 				break;
