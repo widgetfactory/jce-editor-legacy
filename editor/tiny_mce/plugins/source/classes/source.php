@@ -78,6 +78,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 
 		$base 	= dirname(dirname(__FILE__));				
 		$theme 	= JRequest::getWord('theme', 'textmate');
+		$pack	= false;
 
 		switch (JRequest::getWord('type', 'base')) {
 			case 'base':
@@ -86,6 +87,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 				$files[] = $base . DS . 'js' . DS . 'codemirror' . DS . 'base.js';
 				
 				$type = 'javsacript';
+				$pack = $this->getParam('editor.compress_javascript', 0);
 				
 				break;	
 			case 'parser' :
@@ -96,6 +98,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 				// javascript
 
 				$type = 'javsacript';
+				$pack = $this->getParam('editor.compress_javascript', 0);
 
 				break;
 			case 'css' :
@@ -103,6 +106,7 @@ class WFSourcePlugin extends WFEditorPlugin {
 				$files = array($path . DS . 'editor.css', $path . DS . 'theme' . DS . $theme . '.css');
 
 				$type = 'css';
+				$pack = $this->getParam('editor.compress_css', 0);
 
 				break;
 		}
@@ -112,6 +116,6 @@ class WFSourcePlugin extends WFEditorPlugin {
 		// set files
 		$packer->setFiles($files);
 		// pack!
-		$packer->pack(true, $this->getParam('editor.compress_gzip', 0));
+		$packer->pack($pack, $this->getParam('editor.compress_gzip', 0));
 	}
 }
