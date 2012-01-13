@@ -455,8 +455,10 @@
             $(this.element).empty();
 
             $.each(files, function(x, file) {
-                // check for extension in file name
-                if (/\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)/i.test(file.name)) {
+                var title 	= $.String.basename(file.name);                
+                
+                // check for extension in file name, eg. image.php.jpg
+                if (/\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\./i.test(title)) {
                     self.uploader.trigger('Error', {
                         code 	: self.FILE_INVALID_ERROR,
                         message : 'File invalid error',
@@ -493,8 +495,6 @@
 
                     return self._removeFile(file);
                 });
-                
-                var title = $.String.basename(file.name);
 
                 // text
                 $(name).attr({
