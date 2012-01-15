@@ -109,14 +109,8 @@ function jInsertEditorText(text, editor) {
 					if(this.settings.compress.javascript) {
 						this._markLoaded();
 					}
-					// use Mootools to load- fixes some issues with tabs
-					if(window.addEvent) {
-						window.addEvent('domready', function() {
-							WFEditor.create();
-						});
-					} else {
-						WFEditor.load();
-					}
+					// load editor
+					WFEditor.load();
 				} catch (e) {
 					alert('Unable to initialize TinyMCE : ' + e);
 				}
@@ -190,20 +184,28 @@ function jInsertEditorText(text, editor) {
 				}
 			});
 		},
+		
 		load : function() {
 			var self = this, Event = tinymce.dom.Event;
-
-			if(!Event.domLoaded) {
-				Event.add(document, 'init', function() {
+			
+			// wait until dom is ready with delay
+			function _ondomready() {
+				window.setTimeout(function() {
+					// create editor
 					self.create();
-				});
-				return;
+				}, 50);
+			}
+
+			// use mootools domready if available
+			if (window.addEvent) {
+				window.addEvent('domready', _ondomready);
 			} else {
-				this.create();
+				Event.add(document, 'init', _ondomready);
 			}
 		},
+
 		/**
-		 * Create Editors on domloaded
+		 * Create Editors
 		 */
 		create : function(elements) {
 			var self = this, Event = tinymce.dom.Event, s = this.settings;
