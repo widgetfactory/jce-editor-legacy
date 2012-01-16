@@ -111,14 +111,14 @@
 .classicSkin .mceMenuItemTitle a {border:0; background:#EEE; border-bottom:1px solid #DDD}
 .classicSkin .mceMenuItemTitle span.mceText {color:#000; font-weight:bold; padding-left:4px}
 .classicSkin .mceMenuItemDisabled .mceText {color:#888}
-.classicSkin .mceMenuItemSelected .mceIcon {background:url(img/menu_check.gif)}
-.classicSkin .mceNoIcons .mceMenuItemSelected a {background:url(img/menu_arrow.gif) no-repeat -6px center}
+.classicSkin .mceMenuItemSelected .mceIcon {background:url(../default/img/menu_check.gif)}
+.classicSkin .mceNoIcons .mceMenuItemSelected a {background:url(../default/img/menu_arrow.gif) no-repeat -6px center}
 .classicSkin .mceMenu span.mceMenuLine {display:none}
-.classicSkin .mceMenuItemSub a {background:url(img/menu_arrow.gif) no-repeat top right;}
+.classicSkin .mceMenuItemSub a {background:url(../default/img/menu_arrow.gif) no-repeat top right;}
 
 /* Progress,Resize */
 .classicSkin .mceBlocker {position:absolute; left:0; top:0; z-index:1000; opacity:0.5; -ms-filter:'alpha(opacity=50)'; filter:alpha(opacity=50); background:#FFF}
-.classicSkin .mceProgress {position:absolute; left:0; top:0; z-index:1001; background:url(img/progress.gif) no-repeat; width:32px; height:32px; margin:-16px 0 0 -16px}
+.classicSkin .mceProgress {position:absolute; left:0; top:0; z-index:1001; background:url(../default/img/progress.gif) no-repeat; width:32px; height:32px; margin:-16px 0 0 -16px}
 .classicSkin .mcePlaceHolder {border:1px dotted gray}
 
 /* Formats */
