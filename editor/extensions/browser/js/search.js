@@ -20,7 +20,7 @@
 		},
 
 		_init : function() {
-			var self = this, el = this.element;
+			var self = this, el = this.element, busy;
 
 			var clear = this.options.clear;
 
@@ -40,11 +40,15 @@
 			}
 
 			$(el).keyup(function(e) {
-				// wait...
-				window.setTimeout(function() {
-					self._find($(el).val(), e);
-				}, 500);
-			});
+				if (!busy) {
+					busy = true;
+					// wait to collect input...
+					window.setTimeout(function() {
+						self._find($(el).val(), e);
+						busy = false;
+					}, 500);
+				}
+			});;
 		},
 		_find : function(s, e) {
 			var self = this, x = [];
@@ -79,13 +83,18 @@
 
 			self._trigger('onFind', e, x);
 		},
-		_scroll : function(el) {
-			var pos = $(el).position();
-			var top = $(this.options.list).scrollTop();
 
-			$(this.options.list).animate({
+		_scroll : function(el) {
+			var self = this, $list = $(this.options.list);
+			
+			var pos = $(el).position();
+			var top = $list.scrollTop();
+
+			$list.css('overflow', 'hidden').animate({
 				scrollTop : pos.top + top
-			}, 1200);
+			}, 1000, function() {
+				$list.css('overflow', 'auto');
+			});
 		},
 		_sort : function(x) {
 			var a = [];
