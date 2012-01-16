@@ -186,22 +186,28 @@ function jInsertEditorText(text, editor) {
 		},
 		
 		load : function() {
-			var self = this, Event = tinymce.dom.Event;
+			var self = this, Event = tinymce.dom.Event, loaded;
 			
-			// wait until dom is ready with delay
-			function _ondomready() {
-				window.setTimeout(function() {
+			function _load() {
+				if (!loaded) {
+					// set loaded flag
+					loaded = true;
 					// create editor
 					self.create();
-				}, 50);
+				}
 			}
-
-			// use mootools domready if available
-			if (window.addEvent) {
-				window.addEvent('domready', _ondomready);
-			} else {
-				Event.add(document, 'init', _ondomready);
-			}
+			
+			// load editor when page fully loaded
+			Event.add(window, 'load', function() {
+				_load();
+			});
+			
+			// wait until dom is ready with delay
+			Event.add(document, 'init', function() {
+				window.setTimeout(function() {
+					_load();
+				}, 1000);
+			});
 		},
 
 		/**
