@@ -227,7 +227,12 @@ WFMediaPlayer.init({
 	/**
 	 * Action when file selected
 	 */
-	onSelectFile: function() {
+	onSelectFile: function(file) {
+		if (file && /\.mp3$/.test(file)) {
+			$('#mediaplayer_controlBarMode').val('floating').prop('disabled', true);
+		} else {
+			$('#mediaplayer_controlBarMode').val('docked').prop('disabled', false);
+		}		
 	},
 	/**
 	 * Action when file is inserted.

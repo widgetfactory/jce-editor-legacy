@@ -72,14 +72,13 @@ var WFMediaPlayer = WFExtensions.add('MediaPlayer', {
         return this.getParam('path');
     },
 
-    onSelectFile 	: function() {
+    onSelectFile : function(file) {
     },
     
     onInsert : function() {    	
     },
     
-    onChangeType : function() {
-    	
+    onChangeType : function() {   	
     }
 
 });
