@@ -112,7 +112,7 @@ WFMediaPlayer.init({
 		}
 
 		// add src
-		data.push('src=' + $.String.encodeURI(s));
+		data.push('src=' + $.String.encodeURI(s, true));
 
 		$(':input', '#mediaplayer_options').each( function() {
 			k = $(this).attr('id'), v = $(this).val();
@@ -167,7 +167,7 @@ WFMediaPlayer.init({
 		};
 	},
 	parseValues : function(s) {
-		var ed = tinyMCEPopup.editor, data = {}, o = $.String.query(s);
+		var ed = tinyMCEPopup.editor, data = {}, o = $.String.query(s.replace(/\?/, '&'));
 		
 		$.each(o, function(k, v) {			
 			switch(k) {
