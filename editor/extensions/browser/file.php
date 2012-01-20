@@ -1330,7 +1330,7 @@ class WFFileBrowser extends WFBrowserExtension
 			
 		$filesystem = $this->getFileSystem();
 
-		$result = $filesystem->createFolder($dir, WFUtility::makeSafe($new, $this->get('websafe_mode')));
+		$result = $filesystem->createFolder($dir, WFUtility::makeSafe($new, $this->get('websafe_mode')), $args);
 
 		if ($result instanceof WFFileSystemResult) {
 			if (!$result->state) {
@@ -1365,6 +1365,7 @@ class WFFileBrowser extends WFBrowserExtension
 	{
 		$filesystem = $this->getFileSystem();
 		$features 	= $filesystem->get('upload');
+		$elements	= isset($features['elements']) ? $features['elements'] : array();
 
 		$upload_max	= $this->getUploadValue();
 		
@@ -1408,7 +1409,8 @@ class WFFileBrowser extends WFBrowserExtension
             'runtimes' 		=> implode(',', $runtimes),
             'size' 			=> $size,
             'filter' 		=> $this->mapUploadFileTypes(true),
-            'chunk_size' 	=> $chunk_size
+            'chunk_size' 	=> $chunk_size,
+            'elements'		=> $elements
 		);
 		
 		if (isset($features['dialog'])) {
