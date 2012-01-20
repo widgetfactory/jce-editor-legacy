@@ -812,8 +812,9 @@
                     click: function () {
                         if ($.isFunction(options.confirm)) {
                             options.confirm.call(this, $('#' + id).val());
+                        } else {
+                        	$(this).dialog("close");
                         }
-                        $(this).dialog("close");
                     }
 
                 }],
@@ -833,12 +834,12 @@
             var div = document.createElement('div');
 
             $(div).attr('id', 'upload-body').append(
-            '<div id="upload-options"></div>' +
             '<div id="upload-queue-block">' +
             '		<ul id="upload-queue"><li style="display:none;"></li></ul>' +
             '	<input type="hidden" id="upload-dir" name="upload-dir" />' +
             '	<input type="file" name="file" size="40" style="position:relative;" />'+
-            '</div>'
+            '</div>'+
+            '<div id="upload-options"></div>'
             );
 
             $(div).find('#upload-options').append(options.elements);
