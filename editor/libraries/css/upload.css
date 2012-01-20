@@ -232,5 +232,18 @@ ul#upload-queue li#upload-queue-queue {
 }
 
 div#upload-body #upload-options p {
-	margin: 0.5em 0;
+	margin: 0;
+}
+
+#jce #upload-options {
+	 box-shadow: 0 0 2px #333 inset;
+    -moz-box-shadow: 0 0 2px #333 inset;
+    -webkit-box-shadow: 0 0 1.5px #333 inset;
+    background-color: #FFF;
+    padding: 10px 5px;
+    margin: 5px 0;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    clear: both;
 }
