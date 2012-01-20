@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright © 2009-2011 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright ï¿½ 2009-2011 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -969,12 +969,12 @@
 		},
 
 		_getDialogOptions : function(dialog) {
-			var options = this.options[dialog];
-			var elements = '';
+			var options 	= this.options[dialog];
+			var elements 	= '';
 
 			if (options && options.elements) {
-				if ($.isPlainObject(options.dialog)) {
-					$.each(options.options.elements, function(k, v) {
+				if ($.isPlainObject(options.elements)) {
+					$.each(options.elements, function(k, v) {
 						if (v.options) {
 							elements += '<p>';
 							elements += '<label for="' + k + '">' + (v.label || k) + '</label>';
@@ -1335,8 +1335,14 @@
 						text		: self._translate('name', 'Name'),
 						value 		: v,
 						elements 	: this._getDialogOptions('rename'),
-						confirm 	: function(v) {
-							var name = $.String.safe(v, self.options.websafe_mode);
+						confirm 	: function(name) {						
+							name = $.String.safe(name, self.options.websafe_mode);
+							
+							if (v == name) {
+								$.Dialog.alert(self._translate('rename_item_name_new', 'Please specify a new name for the item'));
+								return false;
+							}
+							
 							self._dialog['confirm'] = $.Dialog.confirm(self._translate('rename_item_alert', 'Renaming files/folders will break existing links. Continue?'), function(state) {
 								if (state) {
 									self._setLoader();
