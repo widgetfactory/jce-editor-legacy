@@ -219,6 +219,9 @@ function jInsertEditorText(text, editor) {
 			WFEditor.showLoader();
 
 			tinyMCE.onAddEditor.add(function(mgr, ed) {
+				
+				// set loaded flag
+				Event.domLoaded = true;
 
 				if(s.compress.css) {
 					// load packer css
