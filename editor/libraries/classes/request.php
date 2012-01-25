@@ -181,7 +181,7 @@ final class WFRequest extends JObject
 			);
 				
 			// set output headers
-			header('Content-Type: text/json');
+			header('Content-Type: text/json;charset=UTF-8');
 			header('Content-Encoding: UTF-8');
 			header("Expires: Mon, 4 April 1984 05:00:00 GMT");
 			header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
