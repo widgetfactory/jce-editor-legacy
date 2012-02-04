@@ -279,9 +279,32 @@ class JoomlalinksContent extends JObject {
 			$query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title, u.id AS sectionid, a.access';	
 		}
 		
-		if ($wf->getParam('links.joomlalinks.article_alias', 1) == 1) {			
-			$query .= ', CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug';
-			$query .= ', CASE WHEN CHAR_LENGTH(b.alias) THEN CONCAT_WS(":", b.id, b.alias) ELSE b.id END as catslug';
+		if ($wf->getParam('links.joomlalinks.article_alias', 1) == 1) {
+			$dbquery = $db->getQuery(true);
+			
+			if (is_object($dbquery)) {
+				//sqlsrv changes
+				$case_when1  = ' CASE WHEN ';
+				$case_when1 .= $dbquery->charLength('a.alias');
+				$case_when1 .= ' THEN ';
+				$a_id = $dbquery->castAsChar('a.id');
+				$case_when1 .= $dbquery->concatenate(array($a_id, 'a.alias'), ':');
+				$case_when1 .= ' ELSE ';
+				$case_when1 .= $a_id.' END as slug';
+	
+				$case_when2  = ' CASE WHEN ';
+				$case_when2 .= $dbquery->charLength('b.alias');
+				$case_when2 .= ' THEN ';
+				$c_id = $dbquery->castAsChar('b.id');
+				$case_when2 .= $dbquery->concatenate(array($c_id, 'b.alias'), ':');
+				$case_when2 .= ' ELSE ';
+				$case_when2 .= $c_id.' END as catslug';
+			} else {
+				$case_when1  = ' CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(":", a.id, a.alias) ELSE a.id END as slug';
+				$case_when2  = ' CASE WHEN CHAR_LENGTH(b.alias) THEN CONCAT_WS(":", b.id, b.alias) ELSE b.id END as catslug';
+			}
+						
+			$query .= ',' . $case_when1 . ',' . $case_when2;
 		}
 		
 		$join 	= '';

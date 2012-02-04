@@ -128,7 +128,22 @@ class WFLinkBrowser extends WFBrowserExtension
 		$query = 'SELECT id AS slug, id AS id, title, alias, access';
 		
 		if ($wf->getParam('category_alias', 1) == 1) {
-			$query .= ', CASE WHEN CHAR_LENGTH(alias) THEN CONCAT_WS(":", id, alias) ELSE id END as slug';
+			$dbquery = $db->getQuery(true);
+			
+			if (is_object($dbquery)) {
+				//sqlsrv changes
+		        $case_when = ' CASE WHEN ';
+		        $case_when .= $dbquery->charLength('alias');
+		        $case_when .= ' THEN ';
+		        $a_id = $dbquery->castAsChar('id');
+		        $case_when .= $dbquery->concatenate(array($a_id, 'alias'), ':');
+		        $case_when .= ' ELSE ';
+		        $case_when .= $a_id.' END as slug';
+			} else {
+				$case_when = ' CASE WHEN CHAR_LENGTH(alias) THEN CONCAT_WS(":", id, alias) ELSE id END as slug';
+			}	
+			
+			$query .= ',' . $case_when;			
 		}
 		
 		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
