@@ -184,44 +184,32 @@ function jInsertEditorText(text, editor) {
 				}
 			});
 		},
-		
 		load : function() {
 			var self = this, Event = tinymce.dom.Event, loaded;
-			
+
 			function _load() {
-				if (!loaded) {
+				if(!loaded) {
 					// set loaded flag
 					loaded = true;
 					// create editor
-					self.create();
+					return self.create();
 				}
 			}
-			
+
 			// load editor when page fully loaded
 			Event.add(window, 'load', function() {
 				_load();
 			});
-			
 			// wait until dom is ready with delay
 			Event.add(document, 'init', function() {
 				window.setTimeout(function() {
 					_load();
 				}, 1000);
 			});
-		},
+			var s = this.settings;
 
-		/**
-		 * Create Editors
-		 */
-		create : function(elements) {
-			var self = this, Event = tinymce.dom.Event, s = this.settings;
-
-			WFEditor.showLoader();
-
+			// setup editor before init
 			tinyMCE.onAddEditor.add(function(mgr, ed) {
-				
-				// set loaded flag
-				Event.domLoaded = true;
 
 				if(s.compress.css) {
 					// load packer css
@@ -276,6 +264,15 @@ function jInsertEditorText(text, editor) {
 					n = null;
 				});
 			});
+		},
+		/**
+		 * Create Editors
+		 */
+		create : function(elements) {
+			var self = this, Event = tinymce.dom.Event, s = this.settings;
+
+			WFEditor.showLoader();
+
 			if(elements) {
 				s.mode = 'exact';
 				s.elements = elements;
