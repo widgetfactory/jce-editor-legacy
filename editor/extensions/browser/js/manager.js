@@ -1090,6 +1090,9 @@
 					this._dialog['upload'] = $.Dialog.upload($.extend({
 						elements 	: this._getDialogOptions('upload'),
 						onOpen 		: function() {
+							// hide upload options if empty
+							$('#upload-options:empty').hide();
+							
 							// Set hidden dir value to current dir
 							$('#upload-dir').val(dir);
 
