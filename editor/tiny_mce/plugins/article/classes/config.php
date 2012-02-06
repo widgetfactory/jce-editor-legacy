@@ -11,7 +11,7 @@
 * other free or open source software licenses.
 */
 class WFArticlePluginConfig {
-	public function getConfig( &$settings ){
+	public static function getConfig( &$settings ){
 		$wf = WFEditor::getInstance();
 		
 		$settings['article_hide_xtd_btns'] 	= $wf->getParam('article.hide_xtd_btns', 0, 0);

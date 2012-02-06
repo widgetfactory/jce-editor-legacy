@@ -15,7 +15,7 @@ require_once (WF_EDITOR_LIBRARIES . DS . 'classes' . DS . 'plugin.php');
 
 class WFTablesPlugin extends WFEditorPlugin {
 
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
 	}
 
@@ -26,7 +26,7 @@ class WFTablesPlugin extends WFEditorPlugin {
 	/**
 	 * Display the plugin
 	 */
-	function display() {
+	public function display() {
 		parent::display();
 
 		$document = WFDocument::getInstance();
@@ -59,7 +59,7 @@ class WFTablesPlugin extends WFEditorPlugin {
 	 * @return	FileManager  The manager object.
 	 * @since	1.5
 	 */
-	function & getInstance() {
+	public function & getInstance() {
 		static $instance;
 
 		if(!is_object($instance)) {

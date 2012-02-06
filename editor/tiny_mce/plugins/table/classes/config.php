@@ -11,7 +11,7 @@
 */
 class WFTablePluginConfig 
 {
-	public function getConfig(&$settings)
+	public static function getConfig(&$settings)
 	{
 		$wf = WFEditor::getInstance();
 		

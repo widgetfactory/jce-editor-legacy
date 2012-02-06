@@ -12,7 +12,7 @@
 */
 class WFPluginTabfocusConfig 
 {
-	function getConfig(&$vars) {
+	public static function getConfig(&$vars) {
 		$vars['tabfocus_elements'] = ":prev,:next";		
 	}
 }

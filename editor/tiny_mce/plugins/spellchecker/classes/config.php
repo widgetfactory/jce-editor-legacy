@@ -11,7 +11,7 @@
 * other free or open source software licenses.
 */
 class WFSpellcheckerPluginConfig {
-	public function getConfig( &$settings ){
+	public static function getConfig( &$settings ){
 
 		$wf = WFEditor::getInstance();
 		

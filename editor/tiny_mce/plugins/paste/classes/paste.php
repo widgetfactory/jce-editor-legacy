@@ -17,7 +17,7 @@ require_once( WF_EDITOR_LIBRARIES .DS. 'classes' .DS. 'plugin.php' );
 class WFPastePlugin extends WFEditorPlugin 
 {
 	
-	function __construct() {	
+	public function __construct() {	
 		parent::__construct();
 	}
 	
@@ -31,7 +31,7 @@ class WFPastePlugin extends WFEditorPlugin
 	 * @return	FileManager  The manager object.
 	 * @since	1.5
 	 */
-	function &getInstance(){
+	public function &getInstance(){
 		static $instance;
 
 		if ( !is_object( $instance ) ){
@@ -40,7 +40,7 @@ class WFPastePlugin extends WFEditorPlugin
 		return $instance;
 	}
 	
-	function display()
+	public function display()
 	{
 		parent::display();
 

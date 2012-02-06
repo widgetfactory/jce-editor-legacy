@@ -13,7 +13,7 @@ class WFCleanupPluginConfig
 {
 	private static $invalid_elements = array('iframe','object','param','embed','audio','video','source','script','style','applet','body','bgsound','base','basefont','frame','frameset','head','html','id','ilayer','layer','link','meta','name','title','xml');
 
-	public function getConfig(&$settings)
+	public static function getConfig(&$settings)
 	{
 		$wf 	= WFEditor::getInstance();
 		$model 	= JModel::getInstance('editor', 'WFModel');

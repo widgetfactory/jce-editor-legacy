@@ -17,7 +17,7 @@ require_once( WF_EDITOR_LIBRARIES .DS. 'classes' .DS. 'plugin.php' );
 class WFArticlePlugin extends WFEditorPlugin
 {
 
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
 	}
 
@@ -31,7 +31,7 @@ class WFArticlePlugin extends WFEditorPlugin
 	 * @return	FileManager  The manager object.
 	 * @since	1.5
 	 */
-	function &getInstance(){
+	public function &getInstance(){
 		static $instance;
 
 		if ( !is_object( $instance ) ){
@@ -43,7 +43,7 @@ class WFArticlePlugin extends WFEditorPlugin
 	/**
 	 * Display the plugin
 	 */
-	function display()
+	public function display()
 	{
 		parent::display();
 

@@ -19,7 +19,7 @@ class WFSpellCheckerPlugin extends WFEditorPlugin
 	*
 	* @access	protected
 	*/
-	function __construct()
+	public function __construct()
 	{
 		parent::__construct();
 		
@@ -51,7 +51,7 @@ class WFSpellCheckerPlugin extends WFEditorPlugin
 	 * @return	JCE  The editor object.
 	 * @since	1.5
 	 */
-	function &getInstance()
+	public function &getInstance()
 	{
 		static $instance;
 
@@ -141,7 +141,7 @@ class WFSpellCheckerPlugin extends WFEditorPlugin
 }
 /**
  * @author Moxiecode
- * @copyright Copyright © 2004-2007, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright ï¿½ 2004-2007, Moxiecode Systems AB, All rights reserved.
  */
 class SpellChecker {
 	/**

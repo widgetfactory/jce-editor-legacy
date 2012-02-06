@@ -11,7 +11,7 @@
 * other free or open source software licenses.
 */
 class WFInlinepopupsPluginConfig {
-	public function getStyles(){	
+	public static function getStyles(){	
 		$wf = WFEditor::getInstance(); 
 		// only required if we're packing css
 		if ($wf->getParam('editor.compress_css', 0)) {

@@ -10,7 +10,7 @@
 * other free or open source software licenses.
 */
 class WFBrowserPluginConfig {
-	public function getConfig( &$settings ){
+	public static function getConfig( &$settings ){
 		$settings['file_browser_callback'] = "function(name, url, type, win){tinyMCE.activeEditor.plugins.browser.browse(name, url, type, win);}";
 	}
 }

@@ -12,7 +12,7 @@
  */
 class WFMediaPluginConfig
 {
-	public function getConfig(&$settings)
+	public static function getConfig(&$settings)
 	{
 		$wf 	= WFEditor::getInstance();
 		$model 	= JModel::getInstance('editor', 'WFModel');

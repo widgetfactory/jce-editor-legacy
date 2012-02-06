@@ -12,7 +12,7 @@
  */
 class WFSourcePluginConfig
 {
-	public function getConfig(&$settings)
+	public static function getConfig(&$settings)
 	{
 		$wf = WFEditor::getInstance();
 
@@ -30,7 +30,7 @@ class WFSourcePluginConfig
 		$settings['source_theme'] = $theme;
 	}
 	
-	public function getStyles() {
+	public static function getStyles() {
 		$wf = WFEditor::getInstance();
 		
 		if (JRequest::getWord('layout') === 'plugin') {
