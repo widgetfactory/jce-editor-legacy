@@ -394,9 +394,9 @@
 					return v == sv;
 				});
 
-				if (cur && (cur.value.fontSize == v.fontSize || cur.value['class'] == v['class'])) {
-					c.select(null);
-				}
+				if (cur && (cur.value.fontSize == v.fontSize || cur.value['class'] && cur.value['class'] == v['class'])) {
+           			c.select(null);	
+         		}
 
 				return false; // No auto select
 			}});
