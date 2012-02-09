@@ -67,10 +67,16 @@ class JoomlalinksWeblinks extends JObject
 				$categories = WFLinkBrowser::getCategory('com_weblinks');
 
 				foreach ($categories as $category) {
-					$itemid = WFLinkBrowser::getItemId('com_weblinks', array('categories' => null, 'category' => $category->id));
+
+					if (method_exists('WeblinksHelperRoute', 'getCategoryRoute')) {
+						$id = WeblinksHelperRoute::getCategoryRoute($category->id);
+					} else {
+						$itemid = WFLinkBrowser::getItemId('com_weblinks', array('categories' => null, 'category' => $category->id));	
+						$id 	= 'index.php?option=com_weblinks&view=category&id=' . $category->id . $itemid;
+					}
 					
 					$items[] = array(
-						'id'		=>	'index.php?option=com_weblinks&view=category&id=' . $category->id . $itemid,
+						'id'		=>	$id,
 						'name'		=>	$category->title . ' / ' . $category->alias,
 						'class'		=>	'folder weblink'
 					);
@@ -90,8 +96,12 @@ class JoomlalinksWeblinks extends JObject
 							if ($children) {
 								$id = 'index.php?option=com_weblinks&view=category&id=' . $category->id;
 							} else {
-								$itemid = WFLinkBrowser::getItemId('com_weblinks', array('categories' => null, 'category' => $category->slug));
-								$id 	= 'index.php?option=com_weblinks&view=category&id='. $category->slug . $itemid;
+								if (method_exists('WeblinksHelperRoute', 'getCategoryRoute')) {
+									$id = WeblinksHelperRoute::getCategoryRoute($category->id);
+								} else {
+									$itemid = WFLinkBrowser::getItemId('com_weblinks', array('categories' => null, 'category' => $category->id));	
+									$id 	= 'index.php?option=com_weblinks&view=category&id=' . $category->id . $itemid;
+								}	
 							}
 							
 							$items[] = array(
