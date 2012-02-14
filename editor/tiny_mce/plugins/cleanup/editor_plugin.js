@@ -21,46 +21,65 @@
 				ed.settings.validate = false;
 			}
 
-			ed.onPreInit.add(function() {
-				// Invalid Attribute Values cleanup
-				var av = ed.getParam('invalid_attribute_values', '');
-				if(av) {
-					each(tinymce.explode(av), function(item) {
-						var matches = /([a-z]+)([\^\$]?=)["']([^"']+)["']/i.exec(item);
-
-						if(matches && matches.length == 4) {
-							var attrib = matches[1], expr = matches[2], value = matches[3];
-
-							ed.parser.addAttributeFilter(attrib, function(nodes, name) {
-								var i = nodes.length, node;
-
-								while(i--) {
-									node = nodes[i];
-
-									switch(expr) {
-										default:
-										case '=':
-											re = '(' + value + ')';
-											break;
-										case '^=':
-											re = '^(' + value + ')';
-											break;
-										case '$=':
-											re = '(' + value + ')$';
-											break;
-									}
-									// remove attribute if it matches expression
-									if(new RegExp(re).test(node.attr(name))) {
-										node.attr(name, "");
-										// remove temp attribute
-										if(name == 'src' || name == 'href') {
-											node.attr('data-mce-' + name, "");
-										}
+			ed.onPreInit.add(function() {				
+				// only if "Cleanup HTML" enabled
+				if (ed.settings.validate) {
+					// Invalid Attribute Values cleanup
+					var invalidAttribValue = ed.getParam('invalid_attribute_values', '');
+	
+					if(invalidAttribValue) {
+						function replaceAttributeValue(nodes, name, re) {
+							var i = nodes.length, node;
+	
+							while(i--) {
+								node = nodes[i];
+	
+								// remove attribute if it matches expression
+								if(new RegExp(re).test(node.attr(name))) {
+									node.attr(name, "");
+									// remove temp attribute
+									if(name == 'src' || name == 'href') {
+										node.attr('data-mce-' + name, "");
 									}
 								}
-							});
+							}
 						}
-					});
+	
+						each(tinymce.explode(invalidAttribValue), function(item) {
+							var re, matches = /([a-z\*]+)\[([a-z]+)([\^\$]?=)["']([^"']+)["']\]/i.exec(item);
+	
+							if(matches && matches.length == 5) {
+								var tag = matches[1], attrib = matches[2], expr = matches[3], value = matches[4];
+	
+								switch(expr) {
+									default:
+									case '=':
+										re = '(' + value + ')';
+										break;
+									case '!=':
+										re = '(^' + value + ')';
+										break;
+									case '^=':
+										re = '^(' + value + ')';
+										break;
+									case '$=':
+										re = '(' + value + ')$';
+										break;
+								}
+								// all tags
+								if(tag == '*') {
+									ed.parser.addAttributeFilter(attrib, function(nodes, name) {
+										replaceAttributeValue(nodes, name, re);
+									});
+									// specific tag
+								} else {
+									ed.parser.addNodeFilter(tag, function(nodes, name) {
+										replaceAttributeValue(nodes, attrib, re);
+									});
+								}
+							}
+						});
+					}
 				}
 
 				// add id support for anchors
@@ -97,7 +116,7 @@
 
 						return;
 					});
-				});
+				});				
 			});
 			// run cleanup with default settings
 			if(ed.settings.validate === false && ed.settings.verify_html === false) {
@@ -132,21 +151,19 @@
 			}
 
 			// Cleanup callback
-			ed.onBeforeSetContent.add(function(ed, o) {
+			ed.onBeforeSetContent.add(function(ed, o) {				
 				// Geshi
 				o.content = o.content.replace(/<pre xml:\s*(.*?)>(.*?)<\/pre>/g, '<pre class="geshi-$1">$2</pre>');
-
-				if(ed.getParam('verify_html', true)) {
+				
+				// only if "Cleanup HTML" enabled
+				if(ed.settings.validate) {
 					// remove attributes
 					if(ed.getParam('invalid_attributes')) {
 						var s = ed.getParam('invalid_attributes', '');
 
-						o.content = o.content.replace(new RegExp('<([^>]+)(' + s.replace(',', '|', 'g') + ')="([^"]+)"([^>]*)>', 'gi'), '<$1$4>');
+						o.content = o.content.replace(new RegExp('<([^>]+)(' + s.replace(/,/g, '|') + ')="([^"]+)"([^>]*)>', 'gi'), '<$1$4>');
 					}
 				}
-
-				o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)([^>]*)><\/\1>/g, '<$1$2>\u00a0</$1>');
-
 			});
 			// disable onclick, ondblclick
 			ed.onSetContent.add(function(ed, o) {
@@ -169,21 +186,19 @@
 					o.content = o.content.replace(/<a([^>]*)class="jce(box|popup|lightbox|tooltip|_tooltip)"([^>]*)><\/a>/gi, '');
 					// Remove span elements with jcemediabox / jceutilities classes
 					o.content = o.content.replace(/<span class="jce(box|popup|lightbox|tooltip|_tooltip)">(.*?)<\/span>/gi, '$2');
-					// mce stuff
+					// legacy mce stuff
 					o.content = o.content.replace(/_mce_(src|href|style|coords|shape)="([^"]+)"\s*?/gi, '');
 
 					if(ed.getParam('keep_nbsp', true)) {
 						o.content = o.content.replace(/\u00a0/g, '&nbsp;');
 					}
 
-					// pad empty paragraphs
-					if(ed.getParam('verify_html') == false) {
+					if(ed.settings.validate === false) {
+						// fix body content
 						o.content = o.content.replace(/<body([^>]*)>([\s\S]*)<\/body>/, '$2');
-
-						o.content = o.content.replace(/<p([^>]*)><\/p>/g, '<p$1>&nbsp;</p>');
+						// padd empty elements
+						o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)([^>]*)><\/\1>/gi, '<$1$2>&nbsp;</$1>');
 					}
-
-					o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)([^>]*)>\u00a0<\/\1>/g, '<$1$2></$1>');
 				}
 			});
 			// Save callback
