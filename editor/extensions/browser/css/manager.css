@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright © 2009-2011 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright ï¿½ 2009-2011 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -330,18 +330,24 @@ div#browser-message.load {
 	background: url('../../../libraries/img/load.gif') no-repeat left center;
 }
 
-div#browser-message ul {
-	margin : 0 0 0 30px;
-	padding : 0;
+div#browser-message ul.pathway {
 	list-style : none;
+	overflow: visible;
+	white-space: nowrap;
+    margin : 0 0 0 30px;	
+    padding : 0;
 }
-
-div#browser-message ul li {
+div#browser-message ul.pathway li {
 	display : inline-block;
-	margin: 0 0 0 5px;
+	/* IE7 inline-block hack */
+	*display: inline;
+	*zoom: 1;
+	margin : 0;
+	padding: 0 2px;
 	cursor: pointer;
+	width: auto;
 }
-div#browser-message ul li:last-child {
+div#browser-message ul.pathway li.count {
 	margin: 0 0 0 10px;
 	cursor: default;
 }

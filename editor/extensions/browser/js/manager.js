@@ -695,18 +695,34 @@
 		 * Reset the status display
 		 */
 		_resetStatus : function() {
-			var self = this, dir = decodeURIComponent(this._dir);
+			var self = this, dir = decodeURIComponent(this._dir), $status = $(this.options.dialog.status);
 
-			var ul = $('<ul/>');
+			// reset state
+			this.setStatus({message : '', state : ''});	
+			// add list		
+			$status.empty();
 			
-			$('<li/>').html(self._translate('root', 'Root')).click(function() {
+			var $pathway = $('<ul/>').addClass('pathway').appendTo($status);
+			
+			// get width
+			var sw = $status.width();
+			
+			// add root item
+			$root = $('<li/>').html(self._translate('root', 'Root')).click(function() {
 				self._changeDir('/');
-			}).appendTo(ul);
+			}).appendTo($pathway);
 			
+			// trim path
 			dir = $.trim(dir.replace(/^\//, ''));
 			
+			// add folder count
+			$count = $('<li class="count">( ' + this._foldercount + ' ' + this._translate('folders', 'folders') + ', ' + this._filecount + ' ' + this._translate('files', 'files') + ')</li>').appendTo($pathway);
+			
+			// get base list width
+			var w = bw = $root.outerWidth(true) + $count.outerWidth(true);
+
 			if (dir) {
-				var parts = dir.split('/');
+				var x = 1, parts = dir.split('/');
 				
 				$.each(parts, function(i, s) {	
 					var path = s;
@@ -715,36 +731,17 @@
 						path = parts.slice(0, i + 1).join('/');
 					}
 
-					$('<li title="' + s + '" />').click(function(e) {
+					$item = $('<li title="' + s + '" />').click(function(e) {
 						self._changeDir(path);						
-					}).html('&rsaquo; ' + s).appendTo(ul);
-				});		
-			}
+					}).html('&rsaquo; ' + s).insertBefore($count);
 
-			$(ul).append('<li>( ' + this._foldercount + ' ' + this._translate('folders', 'folders') + ', ' + this._filecount + ' ' + this._translate('files', 'files') + ')</li>');		
-			
-			this.setStatus({message : '', state : ''});			
-			$(this.options.dialog.status).empty().append(ul);
-			
-			var x = 1, sw = $(this.options.dialog.status).width();
-			
-			function getWidth(el) {
-				var w = 0;
-				
-				$('li', el).each(function() {
-					w += $(this).outerWidth();
+					// add item width
+					w += $item.outerWidth(true);
+
+					if (w > (sw - bw)) {						
+						$('li', $pathway).eq(x++).html('&rsaquo; ...');
+					}	
 				});
-				
-				return w;
-			}
-			
-			var lw = getWidth(ul);
-			
-			while(lw > sw) {
-				$('li:eq(' + x + ')', ul).html('&rsaquo; ...');				
-				x++;
-				
-				lw = getWidth(ul);
 			}
 		},
 
