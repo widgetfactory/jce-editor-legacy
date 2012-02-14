@@ -121,11 +121,13 @@ abstract class WFUtility
 		if ($mode == 'utf-8') {
 			try {
 				return preg_replace($search, '', $subject);
-			} catch (Exception $e) {}
+			} catch (Exception $e) {
+				// try ascii
+				return self::makeSafe($subject, 'ascii');
+			}
 		}
-
-		// try ascii
-		return self::makeSafe($subject, 'ascii');
+		
+		return preg_replace($search, '', $subject);
 	}
 
 	/**
