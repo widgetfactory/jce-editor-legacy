@@ -114,10 +114,10 @@ class JoomlalinksWeblinks extends JObject
 				}
 
 				$weblinks = self::_weblinks($args->id);
-				
+
 				foreach ($weblinks as $weblink) {
 					$items[] = array(
-						'id'		=>	WeblinksHelperRoute::getWeblinkRoute($weblink->id, $args->id),
+						'id'		=>	WeblinksHelperRoute::getWeblinkRoute($weblink->slug, $weblink->catslug),
 						'name'		=>	$weblink->title . ' / ' . $weblink->alias,
 						'class'		=>	'file'
 					);
@@ -128,23 +128,56 @@ class JoomlalinksWeblinks extends JObject
 	}
 	function _weblinks($id)
 	{
-		$db		= JFactory::getDBO();
-		$user	= JFactory::getUser();	
+		$wf 		= WFEditorPlugin::getInstance();	
+		$db			= JFactory::getDBO();
+		$user		= JFactory::getUser();	
 		
-		$where 	= '';
+		$dbquery	= $db->getQuery(true);
 		
-		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
-			$where .= ' AND state = 1';
-			$where .= ' AND access IN ('.implode(',', $user->getAuthorisedViewLevels()).')';
-		} else {
-			$where .= ' AND published = 1';	
+		$section 	= JText::_( 'Web Links' );
+
+		$query 		= 'SELECT a.id AS slug, b.id AS catslug, a.title AS title, a.description AS text, a.url, a.alias';	
+
+		if ($wf->getParam('links.joomlalinks.weblinks_alias', 1) == 1) {
+			if (is_object($dbquery)) {		
+		        //sqlsrv changes
+		        $case_when1  = ' CASE WHEN ';
+		        $case_when1 .= $dbquery->charLength('a.alias');
+		        $case_when1 .= ' THEN ';
+		        $a_id 		= $dbquery->castAsChar('a.id');
+		        $case_when1 .= $dbquery->concatenate(array($a_id, 'a.alias'), ':');
+		        $case_when1 .= ' ELSE ';
+		        $case_when1 .= $a_id.' END as slug';
+	
+		        $case_when2  = ' CASE WHEN ';
+		        $case_when2 .= $dbquery->charLength('b.alias');
+		        $case_when2 .= ' THEN ';
+		        $c_id 		 = $dbquery->castAsChar('b.id');
+		        $case_when2 .= $dbquery->concatenate(array($c_id, 'b.alias'), ':');
+		        $case_when2 .= ' ELSE ';
+		        $case_when2 .= $c_id.' END as catslug';
+			} else {
+				$case_when1 = ' CASE WHEN CHAR_LENGTH(a.alias) THEN CONCAT_WS(\':\', a.id, a.alias) ELSE a.id END as slug';
+				$case_when2 = ' CASE WHEN CHAR_LENGTH(b.alias) THEN CONCAT_WS(\':\', b.id, b.alias) ELSE b.id END as catslug';
+			}
+				
+			$query .= ',' . $case_when1 . ',' . $case_when2 ;		
 		}
 		
-		$query = 'SELECT title, id, alias'
-		. ' FROM #__weblinks'
-		. ' WHERE catid = '.(int) $id
+		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
+			$where	 = ' AND a.state = 1';	
+			$where	.= ' AND b.access IN ('.implode(',', $user->getAuthorisedViewLevels()).')';
+		} else {
+			$where	 = ' AND a.published = 1';
+			$where	.= ' AND b.access <= '.(int) $user->get('aid');
+		}
+		
+		$query .= ' FROM #__weblinks AS a'
+		. ' INNER JOIN #__categories AS b ON b.id = '.(int) $id
+		. ' WHERE a.catid = '.(int) $id
 		. $where
-		. ' ORDER BY title'
+		. ' AND b.published = 1'
+		. ' ORDER BY a.title'
 		;
 		
 		$db->setQuery($query, 0);
