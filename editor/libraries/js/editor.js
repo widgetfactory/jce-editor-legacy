@@ -167,7 +167,6 @@ function jInsertEditorText(text, editor) {
 				return DOM.getParent(el, 'div.mceEditor, div.mceSplitButtonMenu, div.mceListBoxMenu, div.mceDropDown');
 			}
 
-
 			Event.add(document.body, 'mousedown', function(e) {
 				var el = e.target;
 
@@ -179,7 +178,7 @@ function jInsertEditorText(text, editor) {
 					var n = ed.selection.getNode();
 
 					if(DOM.getParent(n, 'body#tinymce')) {
-						self._bookmark[ed.id] = ed.selection.getBookmark();
+						ed.lastSelectionBookmark = ed.selection.getBookmark(1);
 					}
 				}
 			});
@@ -237,13 +236,13 @@ function jInsertEditorText(text, editor) {
 				ed.onBeforeRenderUI.add(function() {
 					var n = ed.getElement().form;
 
-					if(!n)
+					if(!n) {
 						return;
-
+					}
 					// Already patched
-					if(n._mceOldSubmit)
+					if(n._mceOldSubmit) {
 						return;
-
+					}
 					// Check page uses id="submit" or name="submit" for it's submit button
 					if(!n.submit.nodeType && !n.submit.length) {
 						ed.formElement = n;
@@ -304,7 +303,7 @@ function jInsertEditorText(text, editor) {
 				var state = getVar(s.toggle_state, 1);
 				// get cookie
 				var cookie = getVar(tinymce.util.Cookie.get('wf_editor_' + el.id + '_state'), 1);
-				var label = getVar(s.toggle_label, '[show/hide]');
+				var label = getVar(s.toggle_label, '[Toggle Editor]');
 
 				var div = DOM.create('span', {
 					'role' : 'button',
@@ -419,7 +418,7 @@ function jInsertEditorText(text, editor) {
 		 * @param {String} v The text to insert
 		 */
 		insert : function(el, v) {
-			var bm, ed;
+			var ed;
 			if( typeof el == 'string') {
 				el = document.getElementById(el);
 			}
@@ -429,14 +428,12 @@ function jInsertEditorText(text, editor) {
 					if(window.parent.tinymce) {
 						var ed = window.parent.tinyMCE.get(el.id);
 
-						if(ed) {
-							if(this._bookmark[ed.id]) {
-								ed.selection.moveToBookmark(this._bookmark[ed.id]);
-							}
+						if(ed && ed.lastSelectionBookmark) {
+							ed.selection.moveToBookmark(ed.lastSelectionBookmark);
 						}
 					}
 				}
-				ed.execCommand('mceInsertContent', false, v, true);
+				ed.execCommand('mceInsertContent', false, v);
 			} else {
 				this.insertIntoTextarea(el, v);
 			}
