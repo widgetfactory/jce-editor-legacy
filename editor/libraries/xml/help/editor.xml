@@ -3,7 +3,6 @@
 	<help>
 		<topic key="editor.about" title="WF_EDITOR_HELP_ABOUT">
 			<subtopic key="editor.toolbar" title="WF_EDITOR_HELP_TOOLBAR" />
-			<subtopic key="editor.tabs" title="WF_EDITOR_HELP_TABS" />
 			<subtopic key="editor.content" title="WF_EDITOR_HELP_CONTENT" />
 			<subtopic key="editor.path" title="WF_EDITOR_HELP_PATH" />
 		</topic>
@@ -20,7 +19,7 @@
 			</subtopic>
 			<subtopic key="editor.lists" title="WF_EDITOR_HELP_LISTS" />		
 			<subtopic key="editor.readmore" title="WF_EDITOR_HELP_READMORE" />
-			<subtopic key="advlink.insert" title="WF_EDITOR_HELP_LINKS" />
+			<subtopic key="link.insert" title="WF_EDITOR_HELP_LINKS" />
 			<subtopic key="imgmanager.insert" title="WF_EDITOR_HELP_IMAGES" />
 			<subtopic key="paste.about" title="WF_EDITOR_HELP_PASTE" />
 			<subtopic key="tables.edit" title="WF_EDITOR_HELP_TABLES" />
