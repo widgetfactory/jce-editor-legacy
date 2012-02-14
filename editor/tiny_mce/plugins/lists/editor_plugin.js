@@ -469,7 +469,7 @@
 						ed.dom.remove(li, true);
 						var textNodes = tinymce.grep(prevLi.childNodes, function(n){ return n.nodeType === 3 });
 						if (textNodes.length === 1) {
-							var textNode = textNodes[0]
+							var textNode = textNodes[0];
 							ed.selection.setCursorLocation(textNode, textNode.length);
 						}
 						ed.undoManager.add();
