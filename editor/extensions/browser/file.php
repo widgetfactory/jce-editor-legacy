@@ -278,7 +278,8 @@ class WFFileBrowser extends WFBrowserExtension
 		$list = $this->getFileTypes();
 		
 		if ($list) {
-			$items = explode(';', $list);
+			$items 	= explode(';', $list);
+			$all  	= array();
 			
 			// [images=jpeg,jpg,gif,png]
 			foreach ($items as $item) {
@@ -286,11 +287,15 @@ class WFFileBrowser extends WFBrowserExtension
 				$kv                                               = explode('=', $item);
 				$extensions                                       = implode(';', preg_replace('/(\w+)/i', '*.$1', explode(',', $kv[1])));
 				$map[WFText::_('WF_FILEGROUP_' . $kv[0], WFText::_($kv[0])) . ' (' . $extensions . ')'] = $kv[1];
+				
+				$all[] = $kv[1];
+			}
+
+			if (count($items) > 1) {
+				// All file types
+				$map[WFText::_('WF_FILEGROUP_ALL') . ' (*.*)'] = implode(',', $all);
 			}
 		}		
-
-		// All file types
-		//$map[WFText::_('WF_FILEGROUP_ALL') . ' (*.*)'] = '*.*';
 		
 		return $map;
 	}
