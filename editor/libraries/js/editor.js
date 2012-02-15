@@ -219,9 +219,9 @@ function jInsertEditorText(text, editor) {
 
 				WFEditor.hideLoader(ed.getElement());
 
-				if(tinymce.isIE) {
+				//if(tinymce.isIE) {
 					self.setBookmark(ed);
-				}
+				//}
 
 				// form submit trigger
 				ed.onInit.add(function() {
@@ -424,7 +424,7 @@ function jInsertEditorText(text, editor) {
 			}
 			if(/wfEditor/.test(el.className)) {
 				ed = tinyMCE.get(el.id);
-				if(tinymce.isIE) {
+				//if(tinymce.isIE) {
 					if(window.parent.tinymce) {
 						var ed = window.parent.tinyMCE.get(el.id);
 
@@ -432,7 +432,7 @@ function jInsertEditorText(text, editor) {
 							ed.selection.moveToBookmark(ed.lastSelectionBookmark);
 						}
 					}
-				}
+				//}
 				ed.execCommand('mceInsertContent', false, v);
 			} else {
 				this.insertIntoTextarea(el, v);
