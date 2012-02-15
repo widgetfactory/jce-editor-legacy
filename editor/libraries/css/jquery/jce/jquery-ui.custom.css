@@ -965,3 +965,20 @@ otherwise color shifts while dragging when bar can't keep up with mouse */
 	padding-bottom:.35ex;
 	/* to 'vertically center' text inside text-span */
 }
+
+/* Placeholder */
+input.placeholder, textarea.placeholder {
+	color: #bbb;
+}
+
+::-webkit-input-placeholder {
+   color: #bbb;
+}
+
+:-moz-placeholder {
+   color: #bbb;
+}
+
+:-ms-input-placeholder {
+    color: #bbb;
+}
