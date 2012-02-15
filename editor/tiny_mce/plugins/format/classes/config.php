@@ -107,6 +107,12 @@ class WFFormatPluginConfig
         
 		// colour picker custom colours
         $settings['custom_colors'] = $wf->getParam('editor.custom_colors', '', '');
+		
+		// Styles list
+		$styles = $wf->getParam('editor.theme_advanced_styles', '');
+		if ($styles) {
+			$settings['theme_advanced_styles'] = implode(';', explode(',', $styles));
+		}
     }
 }
 ?>

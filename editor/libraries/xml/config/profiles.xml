@@ -105,9 +105,10 @@
 			<option value="samp">Sample</option>
 			<option value="span">Span</option>
 		</param>
-		<param name="theme_advanced_fonts_add" type="text" size="50" default="" label="WF_PARAM_FONT_ADD" description="WF_PARAM_FONT_ADD_DESC" />
-		<param name="theme_advanced_fonts_remove" type="text" size="50" default="" label="WF_PARAM_FONT_REMOVE" description="WF_PARAM_FONT_REMOVE_DESC" />
-		<param name="theme_advanced_font_sizes" type="text" size="50" default="8pt,10pt,12pt,14pt,18pt,24pt,36pt" label="WF_PARAM_FONT_STYLES" description="WF_PARAM_FONT_STYLES_DESC" />
+		<param name="theme_advanced_styles" type="text" size="100" default="" label="WF_PARAM_STYLES" description="WF_PARAM_STYLES_DESC" placeholder="eg: Style1=style1,Style2=style2,Style3=style3" />
+		<param name="theme_advanced_fonts_add" type="text" size="100" default="" label="WF_PARAM_FONT_ADD" description="WF_PARAM_FONT_ADD_DESC" placeholder="eg: Arial=arial,helvetica,sans-serif;Georgia=georgia,palatino" />
+		<param name="theme_advanced_fonts_remove" type="text" size="100" default="" label="WF_PARAM_FONT_REMOVE" description="WF_PARAM_FONT_REMOVE_DESC" placeholder="eg: Arial;Georgia;Courier New" />
+		<param name="theme_advanced_font_sizes" type="text" size="100" default="8pt,10pt,12pt,14pt,18pt,24pt,36pt" label="WF_PARAM_FONT_STYLES" description="WF_PARAM_FONT_STYLES_DESC" />
 		<!--param name="allow_iframes" type="list" default="0" label="WF_PARAM_IFRAMES" description="WF_PARAM_IFRAMES_DESC">
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
@@ -129,7 +130,7 @@
 			<option value="0">WF_OPTION_OFF</option>
 		</param>
 		<param name="toggle_label" type="text" default="[Toggle Editor]" label="WF_PARAM_EDITOR_TOGGLE_LABEL" description="WF_PARAM_EDITOR_TOGGLE_LABEL_DESC" />
-		<param name="custom_colors" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_CUSTOM_COLORS" description="WF_PARAM_CUSTOM_COLORS_DESC" />
+		<param name="custom_colors" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_CUSTOM_COLORS" description="WF_PARAM_CUSTOM_COLORS_DESC" placeholder="eg: #CC0000,#FF0000" />
 	</params>
 	<params group="filesystem">
 		<!-- Plugin parameters -->
