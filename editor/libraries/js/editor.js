@@ -167,6 +167,7 @@ function jInsertEditorText(text, editor) {
 				return DOM.getParent(el, 'div.mceEditor, div.mceSplitButtonMenu, div.mceListBoxMenu, div.mceDropDown');
 			}
 
+
 			Event.add(document.body, 'mousedown', function(e) {
 				var el = e.target;
 
@@ -219,9 +220,7 @@ function jInsertEditorText(text, editor) {
 
 				WFEditor.hideLoader(ed.getElement());
 
-				//if(tinymce.isIE) {
-					self.setBookmark(ed);
-				//}
+				self.setBookmark(ed);
 
 				// form submit trigger
 				ed.onInit.add(function() {
@@ -424,15 +423,13 @@ function jInsertEditorText(text, editor) {
 			}
 			if(/wfEditor/.test(el.className)) {
 				ed = tinyMCE.get(el.id);
-				//if(tinymce.isIE) {
-					if(window.parent.tinymce) {
-						var ed = window.parent.tinyMCE.get(el.id);
+				if(window.parent.tinymce) {
+					var ed = window.parent.tinyMCE.get(el.id);
 
-						if(ed && ed.lastSelectionBookmark) {
-							ed.selection.moveToBookmark(ed.lastSelectionBookmark);
-						}
+					if(ed && ed.lastSelectionBookmark) {
+						ed.selection.moveToBookmark(ed.lastSelectionBookmark);
 					}
-				//}
+				}
 				ed.execCommand('mceInsertContent', false, v);
 			} else {
 				this.insertIntoTextarea(el, v);
