@@ -417,29 +417,38 @@
          * @copyright Copyright 2009, Moxiecode Systems AB
          * @licence GNU / LGPL - http://www.gnu.org/copyleft/lesser.html
          */
-        get : function(n) {
-            var c = document.cookie, e, p = n + "=", b;
+        get : function(n, s) {
+            var c = document.cookie, e, p = n + "=", b, v;
 
             // Strict mode
-            if (!c)
-                return;
+            if (!c) {
+                return s;
+            }
 
             b = c.indexOf("; " + p);
 
             if (b == -1) {
                 b = c.indexOf(p);
 
-                if (b != 0)
-                    return null;
-            } else
+                if (b != 0) {
+                	return s;
+                }
+            } else {
                 b += 2;
-
+			}
             e = c.indexOf(";", b);
 
-            if (e == -1)
+            if (e == -1) {
                 e = c.length;
-
-            return unescape(c.substring(b + p.length, e));
+			}
+			
+			v = unescape(c.substring(b + p.length, e));
+			
+			if (typeof v == 'undefined') {
+				return s;
+			}
+			
+            return v;
         },
 
         /**
