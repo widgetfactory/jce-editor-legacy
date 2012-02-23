@@ -93,7 +93,7 @@ defined('_JEXEC') or die('RESTRICTED');
               <td><label for="text_blink">{#style_dlg.text_blink}</label></td>
             </tr>
             <tr>
-              <td><input id="text_none" name="text_none" class="checkbox" type="checkbox" /></td>
+              <td><input id="text_none" name="text_none" class="checkbox" type="checkbox" onclick="StyleDialog.updateTextDecorations();" /></td>
               <td><label for="text_none">{#style_dlg.text_none}</label></td>
             </tr>
           </table>

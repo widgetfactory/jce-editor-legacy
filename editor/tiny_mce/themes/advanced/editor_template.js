@@ -244,7 +244,7 @@
 			ctrl = ctrlMan.createListBox('styleselect', {
 				title : 'advanced.style_select',
 				onselect : function(name) {
-					var matches, formatNames = [];
+					var matches, formatNames = [], removedFormat;
 
 					each(ctrl.items, function(item) {
 						formatNames.push(item.value);
@@ -253,13 +253,19 @@
 					ed.focus();
 					ed.undoManager.add();
 
-					// Toggle off the current format
+					// Toggle off the current format(s)
 					matches = ed.formatter.matchAll(formatNames);
-					if (!name || matches[0] == name) {
-						if (matches[0]) 
-							ed.formatter.remove(matches[0]);
-					} else
-						ed.formatter.apply(name);					
+					tinymce.each(matches, function(match) {
+						if (!name || match == name) {
+							if (match)
+								ed.formatter.remove(match);
+
+							removedFormat = true;
+						}
+					});
+
+					if (!removedFormat)
+						ed.formatter.apply(name);
 
 					ed.undoManager.add();
 					ed.nodeChanged();
@@ -283,7 +289,7 @@
 							ed.formatter.register(name, fmt);
 							ctrl.add(fmt.title, name);
 						} else
-							ctrl.add(fmt.title, name);
+							ctrl.add(fmt.title);
 					});
 				} else {
 					each(ed.getParam('theme_advanced_styles', '', 'hash'), function(val, key) {

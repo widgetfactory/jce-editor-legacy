@@ -612,6 +612,17 @@ var StyleDialog = {
 
 		if (f.elements[fr + "_measurement"])
 			selectByValue(f, to + "_measurement", f.elements[fr + "_measurement"].value);
+	},
+	
+	updateTextDecorations : function(){	
+		var noneChecked = $("#text_none").is(':checked');
+		
+		$("#text_underline, #text_overline, #text_linethrough, #text_blink").each(function() {
+			$(this).prop('disabled', noneChecked);
+			if (noneChecked) {
+				$(this).prop('checked', false);
+			}
+		});
 	}
 };
 

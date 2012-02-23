@@ -421,7 +421,7 @@ var TableDialog = {
 			//elm.outerHTML = elm.outerHTML;
 
 			ed.nodeChanged();
-			ed.execCommand('mceEndUndoLevel');
+			ed.execCommand('mceEndUndoLevel', false, {}, {skip_undo: true});
 
 			// Repaint if dimensions changed
 			if($('#width').val() != this.orgTableWidth || $('#height').val() != this.orgTableHeight) {
@@ -545,7 +545,7 @@ var TableDialog = {
 
 
 		ed.addVisual();
-		ed.execCommand('mceEndUndoLevel');
+		ed.execCommand('mceEndUndoLevel', false, {}, {skip_undo: true});
 
 		tinyMCEPopup.close();
 	},
