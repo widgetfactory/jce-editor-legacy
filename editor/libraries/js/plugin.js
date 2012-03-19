@@ -1247,9 +1247,12 @@
         	// remove multiple period characters and some special characters
         	s = s.replace(/(\.){2,}/g, '');
         	
+        	// replace spaces with underscore
+        	s = s.replace(/[\s ]/g, '_');
+        	
         	if (mode == 'ascii') {
         		s = this.utf8_to_ascii(s);
-        		s = s.replace(/[^a-z0-9_\.\-\s~ ]/gi, '');
+        		s = s.replace(/[^\w\.\-~]/gi, '');
         	} else {
         		s = s.replace(/[+\\\/\?\#%&<>"\'=\[\]\{\},;@^\(\)]/g, '');
             	var r = '';
@@ -1257,7 +1260,7 @@
             	for(var i = 0, ln = s.length; i < ln; i++) {
             		var ch = s[i];
             		// only process on possible restricted characters or utf-8 letters/numbers
-            		if (/[^\w\.\-\s~ ]/.test(ch)) {
+            		if (/[^\w\.\-~]/.test(ch)) {
             			// skip any character less than 127, eg: &?@* etc.
                 		if (this._toUnicode(ch.charCodeAt(0)) < '\\u007F') {
                 			continue;

@@ -98,24 +98,27 @@ abstract class WFUtility
 	public static function makeSafe($subject, $mode = 'utf-8')
 	{		
 		// remove multiple . characters
-		$search = array('#(\.){2,}#');		
+		$search = array('#(\.){2,}#');
+		
+		// replace spaces with underscore
+		$subject = preg_replace('#[\s ]#', '_', $subject);
 
 		switch($mode) {
 			default:
 			case 'utf-8':
-				$search[] 	= '#[^a-zA-Z0-9_\.\-\s~ \p{L}\p{N}]#u';
+				$search[] 	= '#[^a-zA-Z0-9_\.\-~\p{L}\p{N}]#u';
 				$mode 		= 'utf-8';
 				break;
 			case 'ascii':
 				$subject 	= self::utf8_latin_to_ascii($subject);
-				$search[] 	= '#[^a-zA-Z0-9_\.\-\s~ ]#';
+				$search[] 	= '#[^a-zA-Z0-9_\.\-~]#';
 				break;
 		}
 		
 		// strip leading .
 		$search[] = '#^\.*#';
 		// strip whitespace
-		$saerch[] = '#^\s*|\s*$#';
+		$search[] = '#^\s*|\s*$#';
 		
 		// only for utf-8 to avoid PCRE errors - PCRE must be at least version 5
 		if ($mode == 'utf-8') {
