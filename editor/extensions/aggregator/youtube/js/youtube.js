@@ -175,6 +175,10 @@ WFAggregator.add('youtube', {
 				id = s[3];
 			}
 		}
+		// decode playlist
+		if (data.playlist) {
+			data.playlist = decodeURIComponent(data.playlist);
+		}
 
 		// add additional parameter fields
 		$.each(query, function(k, v) {
