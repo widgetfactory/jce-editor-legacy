@@ -160,7 +160,7 @@ WFMediaPlayer.init({
 			'src' 	: this.getPath(),
 			'type'	: 'application/x-shockwave-flash',
 			'param' : {
-				'flashvars' 		: data.join('&').replace(/&/, '?'),
+				'flashvars' 		: data.join('&'),
 				'allowfullscreen' 	: true,
 				'wmode'				: 'opaque'
 			}
