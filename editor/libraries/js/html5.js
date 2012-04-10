@@ -109,8 +109,10 @@
                 }
 
                 if (!new RegExp('^(?:' + pattern + ')$').test(v)) {
-                    var n = new RegExp('(' + pattern + ')').exec(v);
-                    $(this).val(n[0]);
+                    var n = new RegExp('(' + pattern + ')').exec(v);                   
+                    if (n) {
+                    	$(this).val(n[0]);
+                    }
                 }
             });
 
