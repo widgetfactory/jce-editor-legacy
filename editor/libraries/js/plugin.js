@@ -555,9 +555,9 @@
             
             function showError(e) {                        	
                 var txt = $.type(e) == 'array' ? e.join('\n') : e;     	
-                
-                txt = txt.replace(/^<br \/>/, '');
-                
+                // remove linebreaks
+                txt = txt.replace(/<br([^>]+?)>/, '');
+                // show error
                 $.Dialog.alert(txt);
             }
 
@@ -581,12 +581,14 @@
                     if ($.isPlainObject(o)) {
                     	if (o.error) {
                         	showError(o.text || o.error || '');
+                        	return false;
                         }
 
                         r = o.result;
                         
                         if (r.error && r.error.length) {
                         	showError(r.error);
+                        	return false;
                         }
                     // show error
                     } else {
@@ -918,8 +920,10 @@
                 }
 
             }, options);
+            
+            var name = name || $.Plugin.translate('preview', 'Preview');
 
-            return $.Dialog.dialog($.Plugin.translate('preview', 'Preview') + ' - ' + name, div, options);
+            return $.Dialog.dialog(name, div, options);
         },
 
         /**
