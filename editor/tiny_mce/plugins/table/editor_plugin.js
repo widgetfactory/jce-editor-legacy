@@ -251,7 +251,7 @@
 			
 						for(var x = 0; x < cols; x++) {
 							if(!tinymce.isIE)
-								html += '<td><br _mce_bogus="1"/></td>';
+								html += '<td><br data-mce-bogus="1"/></td>';
 							else
 								html += '<td></td>';
 						}
@@ -602,7 +602,22 @@
 				// Set row/col span to start cell
 				startCell = getCell(startX, startY).elm;
 				setSpanVal(startCell, 'colSpan', (endX - startX) + 1);
-				setSpanVal(startCell, 'rowSpan', (endY - startY) + 1);
+                                setSpanVal(startCell, 'rowSpan', (endY - startY) + 1);
+                                
+                                // last cell in table
+                                if (startCell.previousSibling && !startCell.nextSibling) {
+                                    var sib = startCell.previousSibling;
+                                    
+                                    if (sib.getAttribute('rowSpan')) {
+                                        startCell.removeAttribute('rowSpan');
+                                    }
+                                    
+                                    while (sib && sib.getAttribute('rowSpan')) {
+                                        sib.removeAttribute('rowSpan');
+                                        
+                                        sib = sib.previousSibling;
+                                    }
+                                }
 
 				// Remove other cells and add it's contents to the start cell
 				for (y = startY; y <= endY; y++) {
@@ -1449,7 +1464,9 @@
 						}
 
 						function getChildForDirection(parent, up) {
-							return parent && parent[up ? 'lastChild' : 'firstChild'];
+							var child =  parent && parent[up ? 'lastChild' : 'firstChild'];
+							// BR is not a valid table child to return in this case we return the table cell
+							return child && child.nodeName === 'BR' ? ed.dom.getParent(child, 'td,th') : child;
 						}
 
 						function moveCursorToStartOfElement(n) {
