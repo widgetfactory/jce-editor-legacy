@@ -622,7 +622,7 @@
                 });
                 
                 // all cells have a valid rowspan
-                if (rowspan.length === nodes.length) {
+                if (rowspan.length > 1 && rowspan.length === nodes.length) {
                     each(rowspan, function(n) {                        
                         setSpanVal(n, 'rowspan', getSpanVal(n, 'rowspan') - (endY - startY));
                     }); 
