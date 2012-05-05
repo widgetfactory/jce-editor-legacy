@@ -77,7 +77,7 @@ WFMediaPlayer.init({
 		});
 	},
 	isSupported : function(data) {
-		var r, file = '', ext = tinymce.explode(this.getParam('extensions')).join('|'), re = new RegExp('\.(' + ext + ')$');
+		var r, file = '', ext = tinymce.explode(this.getParam('extensions')).join('|'), re = new RegExp('\.(' + ext + ')$', 'i');
 
 		var src = data.src || data.data || '';
 
