@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<install version="1.5" type="extension" extension="picmonkey" folder="imageeditor" method="upgrade" core="0">
+	<name>WF_IMAGEEDITOR_PICMONKEY_TITLE</name>
+	<version>@@version@@</version>
+	<creationDate>@@date@@</creationDate>
+	<author>Ryan Demmer</author>
+	<authorEmail>@@e-mail@@</authorEmail>
+	<authorUrl>http://www.joomlacontenteditor.net/</authorUrl>
+	<copyright>@@copyright@@</copyright>
+	<license>@@licence@@</license>
+	<description>WF_IMAGEEDITOR_PICMONKEY_DESC</description>
+	<files>
+            <filename>picmonkey.php</filename>
+            <folder>picmonkey</folder>
+	</files>
+	<params group="picmonkey" parent="imageeditor"></params>
+</install>
+ 
