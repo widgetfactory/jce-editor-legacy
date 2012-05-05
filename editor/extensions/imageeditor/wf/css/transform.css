@@ -1,0 +1,150 @@
+/** UI Crop / Resize **/
+div#rotate-container {
+	position : relative;
+	margin: auto;
+}		
+div#crop-box {
+	margin: auto;
+	position: relative;
+}	
+div#crop-container {
+	margin: auto;
+}
+div#resize-container {
+	position: absolute;
+	top:0;
+	left:0;
+	cursor: move;
+}
+div#resize-container > img {
+	height: 100%;
+    position: relative;
+    width: 100%;
+}
+div#crop-container #crop-mask {
+	opacity : 0.5;
+	filter: alpha(opacity=50);
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	background-color: #000000;
+	top:0;
+	left:0;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}	
+div#crop-container div#crop-window {
+	position : absolute;
+	top : 0;
+	left: 0;
+	overflow: hidden;
+	cursor: move;	
+}
+div#crop-container div#crop-window img, div#crop-container div#crop-window canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+div#crop-widget, div#resize-widget {
+	top : 0;
+	left: 0;
+	position: absolute;
+	cursor: move;
+}
+div#crop-widget, div#crop-widget *, div#resize-widget, div#resize-widget * {
+	-webkit-user-select: none; -moz-user-select: none; user-select: none;
+}
+
+/** Handles **/
+div.transform-widget div.ui-resizable-handle {
+	opacity : 0.6;
+	filter : alpha(opacity=60);
+	-ms-filter : alpha(opacity=60);
+}
+div.transform-widget.ui-resizable div.ui-resizable-n, 
+div.transform-widget.ui-resizable div.ui-resizable-s, 
+div.transform-widget.ui-resizable div.ui-resizable-e, 
+div.transform-widget.ui-resizable div.ui-resizable-w,
+div.transform-widget.ui-resizable div.ui-resizable-se, 
+div.transform-widget.ui-resizable div.ui-resizable-sw, 
+div.transform-widget.ui-resizable div.ui-resizable-ne, 
+div.transform-widget.ui-resizable div.ui-resizable-nw {
+	background-color: #333333;
+    border: 1px solid #EEEEEE;
+    width : 7px;
+    height: 7px;
+    z-index: 500;
+}
+div.transform-widget.ui-resizable div.ui-resizable-e, 
+div.transform-widget.ui-resizable div.ui-resizable-ne, 
+div.transform-widget.ui-resizable div.ui-resizable-se {
+	right: -4px;
+}
+div.transform-widget.ui-resizable div.ui-resizable-s, 
+div.transform-widget.ui-resizable div.ui-resizable-sw, 
+div.transform-widget.ui-resizable div.ui-resizable-se {
+    bottom: -4px; 
+}
+div.transform-widget.ui-resizable div.ui-resizable-w, 
+div.transform-widget.ui-resizable div.ui-resizable-nw, 
+div.transform-widget.ui-resizable div.ui-resizable-sw {
+	left: -4px;
+}
+div.transform-widget.ui-resizable div.ui-resizable-n, 
+div.transform-widget.ui-resizable div.ui-resizable-nw, 
+div.transform-widget.ui-resizable div.ui-resizable-ne {
+    top: -4px; 
+}
+div.transform-widget.ui-resizable div.ui-resizable-n, 
+div.transform-widget.ui-resizable div.ui-resizable-s {
+	left : 50%;
+	margin-left: -3.5px;
+}
+div.transform-widget.ui-resizable div.ui-resizable-e, 
+div.transform-widget.ui-resizable div.ui-resizable-w {
+	top : 50%;
+	margin-top: -3.5px;
+}
+div#crop-widget div.ui-border-top, 
+div#crop-widget div.ui-border-bottom {
+	height: 1px;
+    left: 0;
+    width: 100%;
+    background: url('../img/crop.gif') repeat-x 0 0;
+} 
+
+div#crop-widget div.ui-border-left, 
+div#crop-widget div.ui-border-right {
+	height: 100%;
+    top: 0;
+    width: 1px;
+	background: url('../img/crop.gif') repeat-y 0 0;
+}
+div#crop-widget div.ui-border-top {
+    top: 0;
+}
+div#crop-widget div.ui-border-bottom {
+	bottom: 0;
+}
+div#crop-widget div.ui-border-right {
+    right: 0;
+}
+div#crop-widget div.ui-border-left {
+    left: 0;
+}
+
+div.grid-middle, div.grid-bottom {
+	border-top: 1px solid #ccc;
+}
+
+div.grid-left, div.grid-center, div.grid-right {
+	width: 33%;
+	height: 33%;
+	float: left;
+	position: relative;
+}
+div.grid-left, div.grid-center {
+	border-right: 1px solid #ccc;
+}
+div.grid-left {
+	clear : left;
+}
