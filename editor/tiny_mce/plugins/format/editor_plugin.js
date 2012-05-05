@@ -10,123 +10,124 @@
 * other free or open source software licenses.
 */
 (function() {
-	tinymce.create('tinymce.plugins.FormatPlugin', {
-		init : function(ed, url) {
-			var t = this;
-			this.editor = ed;
+    tinymce.create('tinymce.plugins.FormatPlugin', {
+        init : function(ed, url) {
+            var t = this;
+            this.editor = ed;
 
-			var blocks = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,dt,dd,code,samp';
+            var blocks = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,dl,dt,dd,code,samp';
 			
-			function isBlock(n) {
-				return new RegExp('^(' + blocks.replace(',', '|', 'g') + ')$', 'i').test(n.nodeName);
-			}
+            function isBlock(n) {
+                return new RegExp('^(' + blocks.replace(',', '|', 'g') + ')$', 'i').test(n.nodeName);
+            }
 			
-			// Format Block fix
-			ed.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
-				var n = ed.selection.getNode(), p;
-				switch (cmd) {
-					case 'FormatBlock':
-						if (!v) {
-							ed.undoManager.add();
-							p = ed.dom.getParent(n, blocks);
-							if (p) {
-								ed.formatter.toggle(p.nodeName.toLowerCase());
-							}
-							o.terminate = true;
-						}
-						break;
-					case 'RemoveFormat':
-						if (!v && isBlock(n)) {
-							ed.undoManager.add();
-							p = ed.dom.getParent(n, blocks);
-							if (p) {
-								ed.formatter.toggle(p.nodeName.toLowerCase());
-							}	
-							o.terminate = true;
-						}
-						break;
-				}
-			});
-			
-			t.onClearBlocks = new tinymce.util.Dispatcher(t);		
-			tinymce.isChrome = tinymce.isWebkit && /chrome/i.test(navigator.userAgent);
+            // Format Block fix
+            ed.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
+                var n = ed.selection.getNode(), p;
+                switch (cmd) {
+                    case 'FormatBlock':
+                        if (!v) {
+                            ed.undoManager.add();
+                            p = ed.dom.getParent(n, blocks);
+                            if (p) {
+                                ed.formatter.toggle(p.nodeName.toLowerCase());
+                            }
+                            o.terminate = true;
+                        }
 
-			ed.onKeyUp.add(function(ed, e) {				
-				if (((e.metaKey || e.ctrlKey) && e.shiftKey && e.keyCode == 13) || e.keyCode == 10) {
-					e.preventDefault();
+                        break;
+                    case 'RemoveFormat':
+                        if (!v && isBlock(n)) {
+                            ed.undoManager.add();
+                            p = ed.dom.getParent(n, blocks);
+                            if (p) {
+                                ed.formatter.toggle(p.nodeName.toLowerCase());
+                            }	
+                            o.terminate = true;
+                        }
+                        break;
+                }
+            });
+			
+            t.onClearBlocks = new tinymce.util.Dispatcher(t);		
+            tinymce.isChrome = tinymce.isWebkit && /chrome/i.test(navigator.userAgent);
+
+            ed.onKeyUp.add(function(ed, e) {				
+                if (((e.metaKey || e.ctrlKey) && e.shiftKey && e.keyCode == 13) || e.keyCode == 10) {
+                    e.preventDefault();
 					
-					t._clearBlocks(e);
-					// Execute post process handlers
-					t.onClearBlocks.dispatch(t);
-				}
-			});
-		},
+                    t._clearBlocks(e);
+                    // Execute post process handlers
+                    t.onClearBlocks.dispatch(t);
+                }
+            });
+        },
 		
-		_select : function(el) {
-			var ed = this.editor, s = ed.selection, pos, br, r, fn;
+        _select : function(el) {
+            var ed = this.editor, s = ed.selection, pos, br, r, fn;
 			
-			if (tinymce.isIE) {
-				s.select(el.firstChild);
-				s.collapse(0);
+            if (tinymce.isIE) {
+                s.select(el.firstChild);
+                s.collapse(0);
 
-				r 		= s.getRng();
-				fn 		= s.getNode().firstChild;
-				br 		= fn.nodeName == 'BR' && fn.getAttribute('mce_bogus');
-				pos 	= br ? -1 : -2;
+                r 		= s.getRng();
+                fn 		= s.getNode().firstChild;
+                br 		= fn.nodeName == 'BR' && fn.getAttribute('mce_bogus');
+                pos 	= br ? -1 : -2;
 				
-				r.move('character', pos);
-				r.select();
-				if(br) {
-					ed.dom.remove(fn);
-				}
+                r.move('character', pos);
+                r.select();
+                if(br) {
+                    ed.dom.remove(fn);
+                }
 				
-			} else {
-				r = ed.getDoc().createRange();
-				r.setStart(el, 0);
-				r.setEnd(el, 0);
-				s.setRng(r);
-			}
-		},
+            } else {
+                r = ed.getDoc().createRange();
+                r.setStart(el, 0);
+                r.setEnd(el, 0);
+                s.setRng(r);
+            }
+        },
 		
-		_clearBlocks : function(ed, e) {
-			var ed = this.editor, dom = ed.dom, s, p, a = [], b, bm;	
+        _clearBlocks : function(ed, e) {
+            var ed = this.editor, dom = ed.dom, s, p, a = [], b, bm;	
 			
-			// Get the element to use
-			var tag = ed.getParam('forced_root_block');
+            // Get the element to use
+            var tag = ed.getParam('forced_root_block');
 			
-			if (!tag) {
-				tag = ed.getParam('force_p_newlines') ? 'p' : 'br';
-			}			
+            if (!tag) {
+                tag = ed.getParam('force_p_newlines') ? 'p' : 'br';
+            }			
 			
-			n = ed.selection.getNode();
+            n = ed.selection.getNode();
 			
-			// Find parent element just before the document body
-			p = dom.getParent(n, function(s){
-				a.push(s);
-			}, ed.getBody());
+            // Find parent element just before the document body
+            p = dom.getParent(n, function(s){
+                a.push(s);
+            }, ed.getBody());
 							
-			// create element
-			var el 	= dom.create(tag);
-			var h 	= (tag == 'br') ? '' : '<br _mce_bogus="1" />';
-			dom.setHTML(el, h);	
+            // create element
+            var el 	= dom.create(tag);
+            var h 	= (tag == 'br') ? '' : '<br _mce_bogus="1" />';
+            dom.setHTML(el, h);	
 			
-			// insert after parent element
-			dom.insertAfter(el, a[a.length - 1]);
-			// move caret to element position
-			this._select(el);
-		},
+            // insert after parent element
+            dom.insertAfter(el, a[a.length - 1]);
+            // move caret to element position
+            this._select(el);
+        },
 		
-		getInfo : function() {
-			return {
-				longname : 'Format',
-				author : 'Ryan Demmer',
-				authorurl : 'http://www.joomlacontenteditor.net',
-				infourl : 'http://www.joomlacontenteditor.net',
-				version : '@@version@@'
-			};
-		}
-	});
+        getInfo : function() {
+            return {
+                longname : 'Format',
+                author : 'Ryan Demmer',
+                authorurl : 'http://www.joomlacontenteditor.net',
+                infourl : 'http://www.joomlacontenteditor.net',
+                version : '@@version@@'
+            };
+        }
+    });
 
-	// Register plugin
-	tinymce.PluginManager.add('format', tinymce.plugins.FormatPlugin);
+    // Register plugin
+    tinymce.PluginManager.add('format', tinymce.plugins.FormatPlugin);
 })();
