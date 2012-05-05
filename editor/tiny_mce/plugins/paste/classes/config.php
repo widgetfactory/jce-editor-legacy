@@ -24,6 +24,7 @@ class WFPastePluginConfig
 		$settings['paste_remove_styles']			= $wf->getParam('paste.remove_styles', 0, 0);
 		$settings['paste_retain_style_properties']	= $wf->getParam('paste.retain_style_properties', '', '');
 		$settings['paste_remove_spans']				= $wf->getParam('paste.remove_spans', 0, 0);
+		$settings['paste_remove_attributes']		= $wf->getParam('paste.remove_attributes', '', '');
 		$settings['paste_remove_styles_if_webkit']	= $wf->getParam('paste.remove_styles_if_webkit', 0, 0);
 		$settings['paste_remove_empty_paragraphs']	= $wf->getParam('paste.remove_empty_paragraphs', 1, 1);
 		$settings['paste_text']						= $wf->getParam('paste.text', 1, 1);
