@@ -24,6 +24,10 @@
 	        	<option value="1">WF_OPTION_YES</option>
 	        	<option value="0">WF_OPTION_NO</option>
 	    	</param>
+	    	<!--param name="article_resolve_alias" type="list" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_ARTICLE_RESOLVE_ALIAS" description="WF_LINKS_JOOMLALINKS_PARAM_ARTICLE_RESOLVE_ALIAS_DESC">
+	           	<option value="1">WF_OPTION_YES</option>
+	           	<option value="0">WF_OPTION_NO</option>
+			</param-->
 			<param name="article_alias" type="list" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_ARTICLE_ALIAS" description="WF_LINKS_JOOMLALINKS_PARAM_ARTICLE_ALIAS_DESC">
 	           	<option value="1">WF_OPTION_YES</option>
 	           	<option value="0">WF_OPTION_NO</option>
@@ -32,6 +36,10 @@
 	           	<option value="1">WF_OPTION_YES</option>
 	           	<option value="0">WF_OPTION_NO</option>
 			</param>
+			<!--param name="menu_resolve_alias" type="list" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_MENU_RESOLVE_ALIAS" description="WF_LINKS_JOOMLALINKS_PARAM_MENU_RESOLVE_ALIAS_DESC">
+	           	<option value="1">WF_OPTION_YES</option>
+	           	<option value="0">WF_OPTION_NO</option>
+			</param-->
 			<param name="content" type="list" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_CONTENT" description="WF_LINKS_JOOMLALINKS_PARAM_CONTENT_DESC">
 	           	<option value="1">WF_OPTION_YES</option>
 	           	<option value="0">WF_OPTION_NO</option>
