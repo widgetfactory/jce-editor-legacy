@@ -126,6 +126,8 @@ var LinkDialog = {
                     $(this).append(new Option(v, v));
                     $(this).val(v);
                 }
+                
+                return v;
             });
 
             if (href.charAt(0) == '#') {
