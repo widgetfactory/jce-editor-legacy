@@ -68,14 +68,23 @@ class JoomlalinksWeblinks extends JObject
 
 				foreach ($categories as $category) {
 
+					$url = '';
+					
+					$itemid = WFLinkBrowser::getItemId('com_weblinks', array('categories' => null, 'category' => $category->id));
+					
 					if (method_exists('WeblinksHelperRoute', 'getCategoryRoute')) {
 						$id = WeblinksHelperRoute::getCategoryRoute($category->id);
-					} else {
-						$itemid = WFLinkBrowser::getItemId('com_weblinks', array('categories' => null, 'category' => $category->id));	
+									
+						if (strpos($id, 'index.php?Itemid=') !== false) {
+							$url 	= $id;
+							$id 	= 'index.php?option=com_weblinks&view=category&id=' . $category->id;
+						}						
+					} else {	
 						$id 	= 'index.php?option=com_weblinks&view=category&id=' . $category->id . $itemid;
 					}
 					
 					$items[] = array(
+						'url'		=> 	$url,
 						'id'		=>	$id,
 						'name'		=>	$category->title . ' / ' . $category->alias,
 						'class'		=>	'folder weblink'
@@ -93,18 +102,29 @@ class JoomlalinksWeblinks extends JObject
 					if (count($categories)) {				
 						foreach ($categories as $category) {				
 							$children 	= WFLinkBrowser::getCategory('com_weblinks', $category->id);				
+							
+							$url = '';
+							
 							if ($children) {
 								$id = 'index.php?option=com_weblinks&view=category&id=' . $category->id;
 							} else {
+								$itemid = WFLinkBrowser::getItemId('com_weblinks', array('categories' => null, 'category' => $category->id));
+								
 								if (method_exists('WeblinksHelperRoute', 'getCategoryRoute')) {
 									$id = WeblinksHelperRoute::getCategoryRoute($category->id);
+									
+									if (strpos($id, 'index.php?Itemid=') !== false) {
+										$url 	= $id;
+										$id 	= 'index.php?option=com_weblinks&view=category&id=' . $category->id;
+									}
+									
 								} else {
-									$itemid = WFLinkBrowser::getItemId('com_weblinks', array('categories' => null, 'category' => $category->id));	
 									$id 	= 'index.php?option=com_weblinks&view=category&id=' . $category->id . $itemid;
 								}	
 							}
 							
 							$items[] = array(
+								'url'		=>  $url,
 								'id'		=>	$id,
 								'name'		=>	$category->title . ' / ' . $category->alias,
 								'class'		=>	'folder weblink'
