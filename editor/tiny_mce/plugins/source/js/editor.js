@@ -1,183 +1,158 @@
-( function($) {
-	var tinymce = window.parent.tinymce, DOM = tinymce.DOM, Event = tinymce.dom.Event;
-	var SourceEditor = {
+(function() {
+    var tinymce = window.parent.tinymce, DOM = tinymce.DOM, Event = tinymce.dom.Event;
+    var SourceEditor = {
 
-		init : function(options, content) {
-			var self = this;
-			if (Event.domLoaded) {
-				self.container = DOM.add(document.body, 'div', {
-					style : {
-						width : options.width 	|| '100%',
-						height: options.height 	|| '100%'
-					},
-					'class' : 'container'
-				});
-					
-				self._load(options, content);	
-			} else {
-				Event.add(document, 'init', function() {
-					self.init(options, content);
-				});
-			}
+        init : function(options, content) {
+            var self = this;
 
-		},
+            if(Event.domLoaded) {
+                self.container = DOM.add(document.body, 'div', {
+                    style : {
+                        width : options.width || '100%',
+                        height : options.height || '100%'
+                    },
+                    'class' : 'container'
+                });
 
-		_load : function(o, content) {
-			var self = this, ed;
+                self._load(options, content);
+            } else {
+                Event.add(document, 'init', function() {
+                    self.init(options, content);
+                });
+            }
 
-			if (!tinymce.is(o.change, 'function')) {
-				o.change = function(){};
-			}
-			
-			if (!tinymce.is(o.load, 'function')) {
-				o.load = function(){};
-			}
+        },
+        _load : function(o, content) {
+            var self = this, ed;
 
-			if(window.CodeMirror) {
+            o.load = tinymce.is(o.load, 'function') ? o.load : function() {
+            };
+            o.change = tinymce.is(o.change, 'function') ? o.change : function() {
+            };
+            if(window.CodeMirror) {
+                ed = CodeMirror(this.container, {
+                    mode : "application/x-httpd-php",
+                    theme : o.theme || 'textmate',
+                    onChange : function() {
+                        // callback
+                        o.change.call();
+                    },
+                    indentWithTabs : true,
+                    tabMode: "indent"
+                    /*onCursorActivity: function() {
+					 ed.setLineClass(hlLine, null);
+					 hlLine = ed.setLineClass(ed.getCursor().line, "activeline");
+					 },*/
+                });
+                // highlight line
+                var hlLine = ed.setLineClass(0, "activeline");
 
-				var query = o.url;
-				
-				var args = {
-					'task' 		: 'compile',
-					'editor' 	: 'codemirror',
-					'theme' 	: o.theme || 'textmate'
-				};
+                ed.setWrap = function(s) {
+                    ed.setOption('lineWrapping', s);
+                };
 
-				// create query
-				for(k in args) {
-					query += '&' + k + '=' + encodeURIComponent(args[k]);
-				}
-				ed = new CodeMirror(this.container, {
-					width : 'auto',
-					height : '100%',
-					base : '',
-					basefiles : [query + '&type=base'],
-					parserfile : [query + '&type=parser'],
-					stylesheet : [query + '&type=css'],
-					indentUnit : 4,
-					reindentOnLoad : true,
-					onLoad : function() {
-						ed.setWrap = function(s) {
-							ed.setTextWrapping(s);
-						};
+                ed.showGutter = function(s) {
+                    ed.setOption('lineNumbers', s);
+                };
 
-						ed.showGutter = function(s) {
-							ed.setLineNumbers(s);
-						};
+                ed.highlight = function(s) {
+                    var c = ed.getCursor();
 
-						ed.highlight = function(s) {
-							if(s) {
-								ed.setParser('HTMLMixedParser');
-							} else {
-								ed.setParser('TextParser');
-							}
-						};
+                    if(s) {
+                        ed.setOption('mode', 'application/x-httpd-php');
+                    } else {
+                        ed.setOption('mode', 'text/plain');
+                    }
 
-						ed.resize = function(w, h) {
-							DOM.setStyles(self.container, {
-								width : w,
-								height : h
-							});
-						};
+                    ed.setCursor(c);
+                };
 
-						ed.showInvisibles = function(s) {
-						};
+                ed.resize = function(w, h) {
+                    DOM.setStyles(ed.getScrollerElement(), {
+                        width : w,
+                        height : h
+                    });
 
-						ed.setContent = function(v) {
-							if(v === '') {
-								v = '\u00a0';
-							}
-							return ed.setCode(v);
-						};
+                    DOM.setStyles(ed.getGutterElement(), {
+                        height : h
+                    });
+                };
 
-						ed.insertContent = function(v) {
-							return ed.replaceSelection(v);
-						};
+                ed.showInvisibles = function(s) {
+                };
 
-						ed.getContent = function() {
-							return ed.getCode();
-						};
+                ed.setContent = function(v) {
+                    if(v === '') {
+                        v = '\u00a0';
+                    }
+                    return ed.setValue(v);
+                };
 
-						self.editor = ed;
-						self._loaded(o, content);
-					},
+                ed.insertContent = function(v) {
+                    return ed.replaceSelection(v);
+                };
 
-					onChange : function() {
-						// callback
-						o.change.call();
-					}
+                ed.getContent = function() {
+                    return ed.getValue();
+                };
 
-				});
-			}
-		},
+                this.editor = ed;
+                this._loaded(o, content);
+            }
+        },
+        _loaded : function(o, content) {
+            this.setContent(content);
 
-		_loaded : function(o, content) {
-			this.setContent(content);
+            // set word wrap
+            this.setWrap(!!o.wrap);
+            // set line numbers / gutter
+            this.setNumbers(!!o.numbers);
 
-			// set word wrap
-			this.setWrap(!!o.wrap);
-			// set line numbers / gutter
-			this.setNumbers(!!o.numbers);
+            this.focus();
 
-			this.focus();
+            // callback
+            o.load.call();
+        },
+        setWrap : function(s) {
+            return this.editor.setWrap(s);
+        },
+        setNumbers : function(s) {
+            return this.editor.showGutter(s);
+        },
+        setHighlight : function(s) {
+            return this.editor.highlight(s);
+        },
+        setContent : function(v) {
+            return this.editor.setContent(v);
+        },
+        insertContent : function(v) {
+            return this.editor.insertContent(v);
+        },
+        getContent : function() {
+            return this.editor.getContent();
+        },
+        showInvisibles : function(s) {
+            return this.editor.showInvisibles(s);
+        },
+        resize : function(w, h) {
+            return this.editor.resize(w, h);
+        },
+        focus : function() {
+            return this.editor.focus();
+        },
+        undo : function() {
+            return this.editor.undo();
+        },
+        redo : function() {
+            return this.editor.redo();
+        },
+        indent : function() {
+        //return this.editor.reindent();
+        },
+        getContainer : function() {
+            return this.container || null;
+        }
+    };
 
-			// callback
-			o.load.call();
-		},
-
-		setWrap : function(s) {
-			return this.editor.setWrap(s);
-		},
-
-		setNumbers : function(s) {
-			return this.editor.showGutter(s);
-		},
-
-		setHighlight : function(s) {
-			return this.editor.highlight(s);
-		},
-
-		setContent : function(v) {
-			return this.editor.setContent(v);
-		},
-
-		insertContent : function(v) {
-			return this.editor.insertContent(v);
-		},
-
-		getContent : function() {
-			return this.editor.getContent();
-		},
-
-		showInvisibles : function(s) {
-			return this.editor.showInvisibles(s);
-		},
-
-		resize : function(w, h) {
-			return this.editor.resize(w, h);
-		},
-
-		focus : function() {
-			return this.editor.focus();
-		},
-
-		undo : function() {
-			return this.editor.undo();
-		},
-
-		redo : function() {
-			return this.editor.redo();
-		},
-		
-		indent : function() {
-			return this.editor.reindent();
-		},
-
-		getContainer : function() {
-			return this.container || null;
-		}
-
-	};
-
-	window.SourceEditor = SourceEditor;
+    window.SourceEditor = SourceEditor;
 }());

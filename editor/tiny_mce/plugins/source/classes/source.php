@@ -51,16 +51,19 @@ final class WFSourcePlugin extends WFEditorPlugin {
 
 		$view->addTemplatePath(WF_EDITOR_PLUGIN .DS. 'tmpl');
 			
-		$document->setTitle(WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')));		
+		$document->setTitle(WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')));
+		
+		$theme = $this->getParam('source.theme', 'textmate');	
 
-		$document->addScript(array('codemirror'), 'jce.tiny_mce.plugins.source.js.codemirror');
+		//$document->addScript(array('codemirror', 'xml.js', 'javascript.js', 'css.js', 'clike.js', 'php.js'), 'jce.tiny_mce.plugins.source.js.codemirror2');
+		$document->addScript(array('codemirror-compressed'), 'jce.tiny_mce.plugins.source.js.codemirror');
 		$document->addScript(array('editor'), 'plugins');
 		
-		$document->addStyleSheet(array('codemirror'), 'jce.tiny_mce.plugins.source.css.codemirror');
+		$document->addStyleSheet(array('codemirror', 'theme/' . $theme), 'jce.tiny_mce.plugins.source.css.codemirror');
 		$document->addStyleSheet(array('editor'), 'plugins');				
 	}
 
-	public function execute() {			
+	/*public function execute() {			
 		$task = JRequest::getWord('task');
 
 		if ($task == 'compile') {
@@ -119,5 +122,5 @@ final class WFSourcePlugin extends WFEditorPlugin {
 		$packer->setFiles($files);
 		// pack!
 		$packer->pack($pack, $this->getParam('editor.compress_gzip', 0));
-	}
+	}*/
 }

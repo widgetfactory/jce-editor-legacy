@@ -35,26 +35,26 @@
             }
             
             ed.onInit.add(function() {
-            	var s = ed.getParam('source_state', false);
+                var s = ed.getParam('source_state', false);
             		
-            	if (typeof s != 'undefined') {
-            		ed.settings.source_state = !s;
-            		self.toggleSource();
-            	}    
+                if (typeof s != 'undefined') {
+                    ed.settings.source_state = !s;
+                    self.toggleSource();
+                }    
             	
-            	if (ed.plugins.fullscreen) {
-	            	ed.onFullScreen.add(function(state, settings) {
-		            	if (!state) {
-		            		ed.settings.source_state = !settings.source_state;
+                if (ed.plugins.fullscreen) {
+                    ed.onFullScreen.add(function(state, settings) {
+                        if (!state) {
+                            ed.settings.source_state = !settings.source_state;
 		            		
-		            		each(['source_highlight', 'source_numbers', 'source_wrap'], function(s) {
-		            			ed.settings[s] = settings[s];
-		            		});
-		            		
-		            		self.toggleSource();
-		            	}
-		            });
-	            }      		
+                            each(['source_highlight', 'source_numbers', 'source_wrap'], function(s) {
+                                ed.settings[s] = settings[s];
+                            });
+
+                            self.toggleSource();
+                        }
+                    });
+                }      		
             });
 
             // Patch in Commands
@@ -63,38 +63,38 @@
 
                 if (self.state && se) {
                     switch(cmd) {
-                    	case 'Undo':
-	                    	o.terminate = true;
-	                        se.undo();
-	                        cm.setDisabled('redo', false);
-	                        return true;
-                    		break;
-                    	case 'Redo':
-                    	 	o.terminate = true;
-                        	se.redo();
-                        	cm.setDisabled('redo', true);
-                        	return true;
-                    		break;
-                    	case 'mcePrint':
-                    		o.terminate = true;
-                        	return self.printSource();
-                    		break;
+                        case 'Undo':
+                            o.terminate = true;
+                            se.undo();
+                            cm.setDisabled('redo', false);
+                            return true;
+                            break;
+                        case 'Redo':
+                            o.terminate = true;
+                            se.redo();
+                            cm.setDisabled('redo', true);
+                            return true;
+                            break;
+                        case 'mcePrint':
+                            o.terminate = true;
+                            return self.printSource();
+                            break;
                     }
                 }
             });
 
             ed.onLoadContent.add( function(ed, o) {
                 if (self.getState()) {
-                	self._disable();
+                    self._disable();
                     self.setContent();                   
                 }
             });
             
             ed.onSetContent.add(function(ed, o) {
-            	if (self.getState()) {
+                if (self.getState()) {
                     self.setContent(); 
-                    self._disable();                 
-               }
+                    self._disable();               
+                }
             });
 
             ed.onSaveContent.add( function(ed, o) {
@@ -160,12 +160,12 @@
                 var s = self.getState();
                 
                 if (s) {
-                	self._disable();
+                    self._disable();
                 }
                 
                 each(['wrap', 'highlight', 'numbers'], function(e) {
-                	cm.setDisabled(e, !s);
-            	});
+                    cm.setDisabled(e, !s);
+                });
             });
 
             // add theme resize
@@ -176,50 +176,50 @@
         },
         
         _disable : function() {
-        	var self = this;
-        	window.setTimeout( function() {
-				self.toggleDisabled();
+            var self = this;
+            window.setTimeout( function() {
+                self.toggleDisabled();
             }, 0);
         },
         
         getWin : function() {
-        	var ed = this.editor, f = tinymce.DOM.get('wf_'+ ed.id +'_source_iframe');
+            var ed = this.editor, f = tinymce.DOM.get('wf_'+ ed.id +'_source_iframe');
         	
-        	if (f) {
-        		return f.contentWindow;
-        	}
+            if (f) {
+                return f.contentWindow;
+            }
         	
-        	return false;	
+            return false;	
         },
         
         getDoc : function() {
-        	var w = this.getWin();
+            var w = this.getWin();
         	
-        	if (w) {
-        		return w.document;
-        	}
+            if (w) {
+                return w.document;
+            }
         	
-        	return false;
+            return false;
         },
         
         getContainer : function() {
-        	var se = this.getEditor();
+            var se = this.getEditor();
         	
-        	if (se) {
-        		return se.getContainer();
-        	}
+            if (se) {
+                return se.getContainer();
+            }
         	
-        	return null;
+            return null;
         },
         
         getEditor : function() {
-        	var win = this.getWin();
+            var win = this.getWin();
         	
-        	if (win) {
-        		return win.SourceEditor || null;
-        	}
+            if (win) {
+                return win.SourceEditor || null;
+            }
         	
-        	return null;
+            return null;
         },
 
         getState : function() {
@@ -238,11 +238,11 @@
         printSource : function() {},
         
         reInit : function() {
-        	this.toggleDisabled(), se = this.getEditor();
+            this.toggleDisabled(), se = this.getEditor();
         	
-        	if (this.getState() && se) {
-        		se.focus();
-        	}
+            if (this.getState() && se) {
+                se.focus();
+            }
         },
 
         setContent : function(v) {
@@ -261,9 +261,9 @@
         },
         
         insertContent : function(v) {
-        	var DOM = tinymce.DOM, se = this.getEditor();
+            var DOM = tinymce.DOM, se = this.getEditor();
         	
-        	if (se) {                
+            if (se) {                
                 // decode and indent
                 v = this.indent(DOM.decode(v));
                 
@@ -318,7 +318,7 @@
                 var print = DOM.get(ed.id + '_source_print');
                 
                 if (print) {
-                	DOM.remove(print);
+                    DOM.remove(print);
                 }
 
                 // set all source buttons inactive
@@ -327,7 +327,7 @@
                 });
 
             } else {
-            	// set all source buttons inactive
+                // set all source buttons inactive
                 each(['wrap', 'highlight', 'numbers'], function(e) {
                     cm.setActive(e, ed.getParam('source_' + e, true));
                 });
@@ -338,16 +338,16 @@
             });
 
             each(DOM.select('.mceButton, .mceListBox, .mceSplitButton', DOM.get(ed.id + '_toolbargroup')), function(n) {            	
-            	var id = n.id;
+                var id = n.id;
             	
-            	// get splitButton id from parent
-            	if (n.className.indexOf('mceSplitButton') !== -1) {
-            		id = n.parentNode.id;
-            	}
+                // get splitButton id from parent
+                if (n.className.indexOf('mceSplitButton') !== -1) {
+                    id = n.parentNode.id;
+                }
             	
-            	if (id) {
-            		cm.setDisabled(id, state);
-            	}
+                if (id) {
+                    cm.setDisabled(id, state);
+                }
             });
 
             cm.setActive('source', state);
@@ -374,7 +374,7 @@
             this.setState(!state);
             
             if (tinymce.isIE) {
-            	DOM.setStyle(iframe.parentNode, 'position', 'relative');
+                DOM.setStyle(iframe.parentNode, 'position', 'relative');
             }
             
             // Path
@@ -385,11 +385,11 @@
             if (!state) {
                 // hide Path
                 if (editorpath) {
-                	DOM.hide(editorpath);
+                    DOM.hide(editorpath);
                 } 
                 // hide word count
                 if (wordcount) {
-                	DOM.hide(wordcount.parentNode);
+                    DOM.hide(wordcount.parentNode);
                 }
  
                 // hide iframe
@@ -397,7 +397,7 @@
                 DOM.setAttrib(iframe, 'aria-hidden', true);
                 
                 window.setTimeout(function() {
-                	self.setHighlight(ed.getParam('source_highlight', true));
+                    self.setHighlight(ed.getParam('source_highlight', true));
                 }, 10);
             } else {
                 if (se) {
@@ -414,16 +414,16 @@
                 
                 // show Path                
                 if (editorpath) {
-                	DOM.show(editorpath);
+                    DOM.show(editorpath);
                 } 
                 // show word count                
                 if (wordcount) {
-                	DOM.show(wordcount.parentNode);
+                    DOM.show(wordcount.parentNode);
                 }
                 
                 cm.setActive('highlight', false);
-            	cm.setActive('numbers', false);
-            	cm.setActive('wrap', false);
+                cm.setActive('numbers', false);
+                cm.setActive('wrap', false);
 
                 ed.setProgressState(false);
             }
@@ -433,7 +433,7 @@
 
         loadEditor : function() {
             var self = this, ed = this.editor, cm = ed.controlManager, DOM = tinymce.DOM, iframe = DOM.get(ed.id + '_ifr');
-			var w = iframe.clientWidth, h = iframe.clientHeight;
+            var w = iframe.clientWidth, h = iframe.clientHeight;
 
             // create the container
             var container = DOM.create('div', {
@@ -451,14 +451,14 @@
             var query 	= ed.getParam('site_url') + 'index.php?option=com_jce';
             
             var args 	= {
-                'view' 			: 'editor',
-                'layout'		: 'plugin',
-                'plugin'		: 'source',
-                'component_id' 	: ed.getParam('component_id')
+                'view' 		: 'editor',
+                'layout'	: 'plugin',
+                'plugin'	: 'source',
+                'component_id' : ed.getParam('component_id')
             };
 
             // set token
-			args[ed.settings.token] = 1;
+            args[ed.settings.token] = 1;
 
             // create query
             for (k in args) {
@@ -466,44 +466,47 @@
             }
             
             var iframe = DOM.create('iframe', {
-            	'frameborder' 	: 0,
-            	'scrolling'		: 'no',
-            	'id'			: 'wf_'+ ed.id +'_source_iframe',
-            	'src'			: query,
-            	'style'			: {
-            		'width' : w,
-            		'height': h 
-            	}
+                'frameborder' 	: 0,
+                'scrolling'		: 'no',
+                'id'			: 'wf_'+ ed.id +'_source_iframe',
+                'src'			: query,
+                'style'			: {
+                    'width' : w,
+                    'height': h 
+                }
             });
             
             tinymce.dom.Event.add(iframe, 'load', function() {
-            	var editor = self.getEditor();
+                var editor = self.getEditor();
             	
-            	var v = ed.getContent(), highlight = ed.getParam('source_highlight', true), wrap = ed.getParam('source_wrap', true), numbers = ed.getParam('source_numbers', true);
+                var v = ed.getContent(), highlight = ed.getParam('source_highlight', true), wrap = ed.getParam('source_wrap', true), numbers = ed.getParam('source_numbers', true);
 
-            	editor.init({
-            		'url'		: query,
-            		'wrap' 		: wrap,
-            		'numbers'	: numbers,
-            		'highlight'	: highlight,
-            		'width'		: w,
-            		'height'	: h,
-            		'theme' 	: ed.getParam('source_theme', 'textmate'),
-            		'load'		: function() {
-            			ed.setProgressState(false);
+                editor.init({
+                    /*'url'		: ed.getParam('site_url'),
+            		'token'		: ed.settings.token,*/
+                    'wrap' 		: wrap,
+                    'numbers'	: numbers,
+                    'highlight'	: highlight,
+                    'width'		: w,
+                    'height'	: h,
+                    'theme' 	: ed.getParam('source_theme', 'textmate'),
+                    'load'		: function() {
+                        ed.setProgressState(false);
             			
-            			if (tinymce.isIE && !document.querySelector) {
-            				ed.hide();
-            				ed.show();
-            			}
-            			cm.setActive('highlight', highlight);
-            			cm.setActive('numbers', numbers);
-            			cm.setActive('wrap', wrap);          			
-            		},
-            		change : function() {
-            			ed.controlManager.setDisabled('undo', false);
-            		}
-            	}, self.indent(v));
+                        if (tinymce.isIE && !document.querySelector) {
+                            ed.hide();
+                            ed.show();
+                        }
+                        cm.setActive('highlight', highlight);
+                        cm.setActive('numbers', numbers);
+                        cm.setActive('wrap', wrap);          			
+                    },
+                    change : function() {
+                        ed.controlManager.setDisabled('undo', false);
+                    }
+                }, self.indent(v));
+            	
+                editor.resize('100%', h);
             });
             
             DOM.add(container, iframe);
@@ -548,10 +551,10 @@
                 
                 this.resize();
 
-            	this.setNumbers(ed.getParam('source_numbers', true));
-            	this.setWrap(ed.getParam('source_wrap', true));
+                this.setNumbers(ed.getParam('source_numbers', true));
+                this.setWrap(ed.getParam('source_wrap', true));
 
-            	ed.focus();
+                ed.focus();
 
                 ed.setProgressState(false);
             } else {
