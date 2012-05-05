@@ -38,7 +38,7 @@ class WFBrowserExtension extends WFExtension
 	 * @return	JCE  The editor object.
 	 * @since	1.5
 	 */
-	public static function getInstance($type, $config = array())
+	public function getInstance($type, $config = array())
 	{
 		static $instance;
 
