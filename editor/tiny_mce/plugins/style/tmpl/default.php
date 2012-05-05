@@ -8,19 +8,22 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
+defined('_JEXEC') or die('RESTRICTED');
 
-defined( '_JEXEC' ) or die('RESTRICTED');
-
-$tabs = WFTabs::getInstance(); 
+$tabs = WFTabs::getInstance();
 ?>
 <form>
-<?php $tabs->render();?>
-<div class="mceActionPanel">
-	<button type="submit" id="insert" name="insert" onclick="StyleDialog.updateAction();">{#update}</button>
-	<button type="button" class="button" id="apply" name="apply" onclick="StyleDialog.applyAction();">{#style_dlg.apply}</button>
-	<button type="button" id="cancel">{#cancel}</button>
-</div>
+    <?php $tabs->render(); ?>
+    <div class="panel_toggle_insert_span">
+        <input type="checkbox" class="checkbox" id="toggle_insert_span" name="toggle_insert_span" onclick="StyleDialog.toggleApplyAction();" />
+        <label for="toggle_insert_span">{#style_dlg.toggle_insert_span}</label>
+    </div>
+    <div class="mceActionPanel">
+        <button type="submit" id="insert" name="insert" onclick="StyleDialog.updateAction();">{#update}</button>
+        <button type="button" class="button" id="apply" name="apply" onclick="StyleDialog.applyAction();">{#style_dlg.apply}</button>
+        <button type="button" id="cancel">{#cancel}</button>
+    </div>
 </form>
 <div style="display: none">
-	<div id="container"></div>
+    <div id="container"></div>
 </div>

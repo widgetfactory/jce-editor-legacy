@@ -59,5 +59,6 @@ visibility:"Visibility",
 zindex:"Z-index",
 overflow:"Overflow",
 placement:"Placement",
-clip:"Clip"
+clip:"Clip",
+toggle_insert_span: "Insert span at selection"
 });

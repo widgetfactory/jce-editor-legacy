@@ -12,3 +12,4 @@ select, #block_text_indent, #box_width, #box_height, #box_padding_top, #box_padd
 #list_type {width:115px;}
 .disabled {background:#EEE;}
 #background_image, #list_bullet_image{width:300px;}
+.panel_toggle_insert_span {padding-top:10px;}
