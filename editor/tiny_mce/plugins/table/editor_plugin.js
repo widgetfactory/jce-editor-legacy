@@ -375,7 +375,7 @@
 
                 each(rows, function(tr, y) {
                     y += startY;
-
+                    
                     each(dom.select('> td, > th', tr), function(td, x) {
                         var x2, y2, rowspan, colspan;
 
@@ -616,6 +616,13 @@
             function normalizeRowSpan(cell) {
                 var nodes = cell.parentNode.childNodes;
                 
+                // only one cell, remove rowspan
+                if (nodes.length === 1) {
+                    setSpanVal(cell, 'rowspan', 0);
+                    
+                    return;
+                }
+                
                 // get all cells that have a rowspan value > 1
                 var rowspan = tinymce.grep(nodes, function(n) {
                     return getSpanVal(n, 'rowspan') > 1;
@@ -623,8 +630,8 @@
                 
                 // all cells have a valid rowspan
                 if (rowspan.length > 1 && rowspan.length === nodes.length) {
-                    each(rowspan, function(n) {                        
-                        setSpanVal(n, 'rowspan', getSpanVal(n, 'rowspan') - (endY - startY));
+                    each(rowspan, function(n) {                                                                        
+                        setSpanVal(n, 'rowspan', getSpanVal(n, 'rowspan') - 1);
                     }); 
                 }
             }
@@ -639,10 +646,7 @@
                 startCell = startCell.elm;
                 setSpanVal(startCell, 'colSpan', (endX - startX) + 1);
                 setSpanVal(startCell, 'rowSpan', (endY - startY) + 1);
-                
-                // fix spans
-                normalizeRowSpan(startCell);
- 
+
                 // Remove other cells and add it's contents to the start cell
                 for (y = startY; y <= endY; y++) {
                     for (x = startX; x <= endX; x++) {
@@ -673,6 +677,9 @@
                         }
                     }
                 }
+                
+                // fix spans
+                normalizeRowSpan(startCell);
 
                 // Remove empty rows etc and restore caret location
                 cleanup();
