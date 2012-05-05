@@ -1,7 +1,24 @@
 (function() {
-    tinymce.create('tinymce.plugins.LinkPlugin', {
+	var each = tinymce.each, extend = tinymce.extend, JSON = tinymce.util.JSON;
+	var Node = tinymce.html.Node;
+	
+	tinymce.create('tinymce.plugins.LinkPlugin', {
         init : function(ed, url) {
             this.editor = ed;
+            this.url = url;
+            var self = this;
+
+            function isLink(n) {            	
+            	if (n && n.nodeName != 'A') {
+                    n = ed.dom.getParent(n, 'A');
+                }
+
+                return n && n.nodeName == 'A' && !n.name;
+            }
+            
+            function isAnchor(n) {
+            	return n && ((n.nodeName == 'IMG' && /mceItemAnchor/.test(n.className)) || (n.nodeName == 'A' && !n.href && (n.name || n.id)));
+            }
 
             // Register commands
             ed.addCommand('mceLink', function() {
@@ -41,14 +58,13 @@
                 }
             });
             
-            ed.onNodeChange.add( function(ed, cm, n, co) {
-                if (n && n.nodeName != 'A') {
-                    n = ed.dom.getParent(n, 'A');
-                }
-
-                cm.setActive('link', n && n.nodeName == 'A' && !n.name);
+            ed.onNodeChange.add( function(ed, cm, n, co) {            	
+                cm.setActive('link', isLink(n));
+                
+                cm.setDisabled('link', isAnchor(n));
             });
         },
+
         getInfo : function() {
             return {
                 longname : 'Link',
