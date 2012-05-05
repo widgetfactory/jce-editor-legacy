@@ -33,6 +33,7 @@
             <option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
         </param>
+        <param name="remove_attributes" type="text" size="50" placeholder="eg: lang,align" default="" label="WF_PASTE_PARAM_ATTRIBUTES" description="WF_PASTE_PARAM_ATTRIBUTES_DESC" />
 		<param name="retain_style_properties" placeholder="eg: font-size,font-family,color" size="50" type="text" default="" label="WF_PASTE_PARAM_RETAIN_STYLES" description="WF_PASTE_PARAM_RETAIN_STYLES_DESC" />
 		<param name="remove_empty_paragraphs" type="list" default="1" label="WF_PASTE_PARAM_REMOVE_PARAGRAPHS" description="WF_PASTE_PARAM_REMOVE_PARAGRAPHS_DESC">
             <option value="1">WF_OPTION_YES</option>
