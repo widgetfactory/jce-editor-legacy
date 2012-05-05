@@ -64,16 +64,16 @@
         },
         
         _createSimple : function() {
-        	$.extend(this.options, {
-        		runtimes : 'html4',
-        		required : ['multipart']
-        	});
+            $.extend(this.options, {
+                runtimes : 'html4',
+                required : ['multipart']
+            });
         	
-        	if (this.uploader) {
-        		this.uploader.destroy();
-        	}
+            if (this.uploader) {
+                this.uploader.destroy();
+            }
 
-        	this._createUploader();
+            this._createUploader();
         },
 
         _createUploader : function() {
@@ -100,8 +100,8 @@
             var container = $('#upload-browse').parent().attr('id');
 
             if (!container) {
-            	container = 'upload_buttons_container';
-            	$('#upload-browse').parent().attr('id', container);
+                container = 'upload_buttons_container';
+                $('#upload-browse').parent().attr('id', container);
             }
 
             try {
@@ -152,7 +152,7 @@
                 });
 
                 this.uploader.bind('UploadComplete', function(up) { 
-                	self._onAllComplete();
+                    self._onAllComplete();
                 });
 
                 this.uploader.bind('FileUploaded', function(up, file, o) {
@@ -170,11 +170,11 @@
                     
                     // no reponse text perhaps server error
                     if (o.response === '') {
-                    	if (o.status === 200) {
-                    		o.response = '{"error":false,"files":["' + file.name + '"]}';
-                    	} else {
-                    		o.response = '{"error":"UPLOAD ERROR"}';
-                    	}
+                        if (o.status === 200) {
+                            o.response = '{"error":false,"files":["' + file.name + '"]}';
+                        } else {
+                            o.response = '{"error":"UPLOAD ERROR"}';
+                        }
                     }
 
                     self._onComplete(file, $.parseJSON(o.response), status);
@@ -185,7 +185,7 @@
                     
                     // no runtime meets requirements, revert to simple html4
                     if (err.code === plupload.INIT_ERROR) {
-                    	self._createSimple();
+                        self._createSimple();
                     }
 
                     if (file) {
@@ -228,7 +228,7 @@
                 });
 
                 this.uploader.bind('FilesRemoved', function(files) {
-                });
+                    });
 
                 this.uploader.bind("UploadProgress", function(o, file) {
                     self._onProgress(file);
@@ -238,7 +238,7 @@
                 if (this.uploader.settings.chunk_size) {
                     this.uploader.bind('ChunkUploaded', function(file, o) {
                         window.setTimeout( function() {
-                        }, 1000);
+                            }, 1000);
                     });
                 }
 
@@ -253,7 +253,7 @@
         },
 
         _onStart : function(file) {
-        	this.currentFile = file;
+            this.currentFile = file;
         	
             var el = file.element;
             // Add loader
@@ -280,17 +280,17 @@
         },
 
         _onComplete: function(file, response, status) {
-        	var self = this;
-        	// remove loader
+            var self = this;
+            // remove loader
             $(file.element).removeClass('load');
             
-        	if (this._isError(response.error)) {
+            if (this._isError(response.error)) {
                 status = 'error';
                 this.errors++;
                 
                 // pass text to error if available
                 if (response.text) {
-                	response.error = response.text;
+                    response.error = response.text;
                 }
                 // join error array
                 if ($.isArray(response.error)) {
@@ -352,7 +352,7 @@
             if (files.length) {
                 this.uploading = true;
 
-				// set resize options
+                // set resize options
                 this.uploader.settings.resize = args.resize;
 
                 this.uploader.settings.multipart_params = args || {};
@@ -383,34 +383,34 @@
         },
         
         stop : function() {
-        	this.uploader.stop();
+            this.uploader.stop();
         },
         
         start : function() {
-        	this.uploader.start();
+            this.uploader.start();
         },
         
         setStatus : function(s) {
-        	var file = this.currentFile;
+            var file = this.currentFile;
         	
-        	if (file) {
-        		$(file.element).removeClass('load complete error').addClass(s.state || '');
+            if (file) {
+                $(file.element).removeClass('load complete error').addClass(s.state || '');
         		
-        		if (s.state && s.state == 'error') {
-        			this.errors++;
+                if (s.state && s.state == 'error') {
+                    this.errors++;
         			
-        			if (s.message) {
-        				$(file.element).after('<li class="queue-item-error"><span>' + s.message + '</span></li>');
-        			}
-        		}
-        	}
+                    if (s.message) {
+                        $(file.element).after('<li class="queue-item-error"><span>' + s.message + '</span></li>');
+                    }
+                }
+            }
         },
 
         _createDragDrop : function() {
             if (this.uploader.features.dragdrop) {
                 $('<li id="upload-queue-drag">' + $.Plugin.translate('upload_drop', 'Drop files here') + '</li>').appendTo('ul#upload-queue').show('slow');
             } else {
-            	$('<li id="upload-queue-queue">' + $.Plugin.translate('upload_queue', 'Upload Queue') + '</li>').appendTo('ul#upload-queue').show('slow');
+                $('<li id="upload-queue-queue">' + $.Plugin.translate('upload_queue', 'Upload Queue') + '</li>').appendTo('ul#upload-queue').show('slow');
             }
         },
 
@@ -445,7 +445,7 @@
             this.uploader.removeFile(file);
             
             if (!this.uploader.files.length) {
-            	this._createDragDrop();
+                this._createDragDrop();
             }
         },
 
@@ -468,7 +468,7 @@
                     self.uploader.removeFile(file);
                     
                     if (!self.uploader.files.length) {
-                    	self._createDragDrop();
+                        self._createDragDrop();
                     }
                     
                     return false;
