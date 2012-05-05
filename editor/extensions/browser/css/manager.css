@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright � 2009-2011 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright © 2009-2011 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -470,6 +470,12 @@ span.checkbox.mixed {
 	background: url('../../../libraries/img/icons.png') no-repeat 0 -780px;
 }
 
+span.checkbox.disabled {
+    opacity : 0.5;
+    filter: alpha(opacity=50);
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+}
+
 div#block-sort-standard,div#block-sort-details,div#block-search-icon,div#block-details-icon
 	{
 	position: relative;
@@ -870,6 +876,10 @@ ul.item-list li a:visited,ul.item-list li a:active,ul.item-list li a:link {
 	color: black;
 }
 
+ul.item-list li.loading {
+    background: url('../../../libraries/img/load.gif') no-repeat left center;
+}
+
 ul.item-list li.selected {
 	background-color: #eee;
 	color: black;
@@ -905,7 +915,6 @@ ul.item-list li span.date {
 	left: 220px;
 }
 
-}
 /**
  * Extension Icons
  */
