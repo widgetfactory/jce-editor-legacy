@@ -22,7 +22,7 @@ abstract class WFToken
 	 * @param int $length lenght of string
 	 * @return string $id generated token
 	 */
-	private function _createToken( $length = 32 )
+	private static function _createToken( $length = 32 )
 	{
 		static $chars = '0123456789abcdef';
 		$max      = strlen( $chars ) - 1;
