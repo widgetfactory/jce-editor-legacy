@@ -57,7 +57,7 @@ class WFMediaManager extends WFEditorPlugin
 	 * Display the plugin
 	 * @access public
 	 */
-	protected function display()
+	public function display()
 	{
 		$view 		= $this->getView();
 		$browser 	= $this->getBrowser();
