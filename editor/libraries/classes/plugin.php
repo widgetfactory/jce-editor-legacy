@@ -166,7 +166,7 @@ class WFEditorPlugin extends WFEditor {
      * Display plugin
      * @access private
      */
-    protected function display() {
+    public function display() {
         jimport('joomla.filesystem.folder');
         $document = WFDocument::getInstance();
 
