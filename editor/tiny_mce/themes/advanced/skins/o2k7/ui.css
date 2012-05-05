@@ -54,9 +54,9 @@
 .o2k7Skin .mceListBox  {padding-left: 3px}
 .o2k7Skin .mceListBox, .o2k7Skin .mceListBox a {display:block}
 .o2k7Skin .mceListBox .mceText {padding-left:4px; text-align:left; width:70px; border:1px solid #b3c7e1; border-right:0; background:#eaf2fb; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; height:20px; line-height:20px; overflow:hidden}
-.o2k7Skin .mceListBox .mceOpen {width:14px; height:22px; background:url(img/button_bg.png) -66px 0}
+.o2k7Skin .mceListBox .mceOpen {width:14px; height:22px; background:url(img/button_bg.png) -70px 0}
 .o2k7Skin table.mceListBoxEnabled:hover .mceText, .o2k7Skin .mceListBoxHover .mceText, .o2k7Skin .mceListBoxSelected .mceText {background:#FFF}
-.o2k7Skin table.mceListBoxEnabled:hover .mceOpen, .o2k7Skin .mceListBoxHover .mceOpen, .o2k7Skin .mceListBoxSelected .mceOpen {background-position:-66px -22px}
+.o2k7Skin table.mceListBoxEnabled:hover .mceOpen, .o2k7Skin .mceListBoxHover .mceOpen, .o2k7Skin .mceListBoxSelected .mceOpen {background-position:-70px -22px}
 .o2k7Skin .mceListBoxDisabled .mceText {color:gray}
 .o2k7Skin .mceListBoxMenu {overflow:auto; overflow-x:hidden; margin-left:3px}
 .o2k7Skin .mceOldBoxModel .mceListBox .mceText {height:22px}
@@ -67,10 +67,10 @@
 .o2k7Skin .mceSplitButton {background:url(img/button_bg.png)}
 .o2k7Skin .mceSplitButton a.mceAction {width:22px}
 .o2k7Skin .mceSplitButton span.mceAction {width:22px; background-image:url(../../img/icons.png)}
-.o2k7Skin .mceSplitButton a.mceOpen {width:10px; background:url(img/button_bg.png) -44px 0}
+.o2k7Skin .mceSplitButton a.mceOpen {width:10px; background:url(img/button_bg.png) -48px 0}
 .o2k7Skin .mceSplitButton span.mceOpen {display:none}
 .o2k7Skin table.mceSplitButtonEnabled:hover a.mceAction, .o2k7Skin .mceSplitButtonHover a.mceAction, .o2k7Skin .mceSplitButtonSelected {background:url(img/button_bg.png) 0 -22px}
-.o2k7Skin table.mceSplitButtonEnabled:hover a.mceOpen, .o2k7Skin .mceSplitButtonHover a.mceOpen, .o2k7Skin .mceSplitButtonSelected a.mceOpen {background-position:-44px -44px}
+.o2k7Skin table.mceSplitButtonEnabled:hover a.mceOpen, .o2k7Skin .mceSplitButtonHover a.mceOpen, .o2k7Skin .mceSplitButtonSelected a.mceOpen {background-position:-48px -44px}
 .o2k7Skin .mceSplitButtonDisabled .mceAction {opacity:0.3; -ms-filter:'alpha(opacity=30)'; filter:alpha(opacity=30)}
 .o2k7Skin .mceSplitButtonActive {background-position:0 -44px}
 
@@ -92,7 +92,7 @@
 .o2k7Skin table.mceTableSplitMenu tfoot td.mceTableGridCount {background-color: #FFF;text-align: center;font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px;}
 
 /* Menu */
-.o2k7Skin .mceMenu {position:absolute; left:0; top:0; z-index:1000; border:1px solid #ABC6DD}
+.o2k7Skin .mceMenu {position:absolute; left:0; top:0; z-index:1000; border:1px solid #ABC6DD; direction:ltr}
 .o2k7Skin .mceNoIcons span.mceIcon {width:0;}
 .o2k7Skin .mceNoIcons a .mceText {padding-left:10px}
 .o2k7Skin .mceMenu table {background:#FFF}
@@ -112,6 +112,10 @@
 .o2k7Skin .mceNoIcons .mceMenuItemSelected a {background:url(../default/img/menu_arrow.gif) no-repeat -6px center}
 .o2k7Skin .mceMenu span.mceMenuLine {display:none}
 .o2k7Skin .mceMenuItemSub a {background:url(../default/img/menu_arrow.gif) no-repeat top right;}
+
+/* Rtl */
+.mceRtl .mceListBox .mceText {text-align: right; padding: 0 4px 0 0}
+.mceRtl .mceMenuItem .mceText {text-align: right}
 
 /* Progress,Resize */
 .o2k7Skin .mceBlocker {position:absolute; left:0; top:0; z-index:1000; opacity:0.5; -ms-filter:'alpha(opacity=30)'; filter:alpha(opacity=50); background:#FFF}
@@ -239,3 +243,5 @@
 .o2k7Skin span.mce_imgmanager {background-position:-380px 0}
 .o2k7Skin span.mce_article {background-position:-920px 0;width:40px;}
 .o2k7Skin span.mce_textcase {background-position:-40px -40px;}
+
+.o2k7Skin span.mce_visualblocks {background-position:-160px -40px;}

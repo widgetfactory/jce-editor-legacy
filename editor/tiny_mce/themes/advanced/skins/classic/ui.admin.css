@@ -1,0 +1,76 @@
+/* Classic Skin */
+
+#jce .classicSkin span.mceIcon.mce_fontselect,
+#jce .classicSkin span.mceIcon.mce_styleselect,
+#jce .classicSkin span.mceIcon.mce_formatselect,
+#jce .classicSkin span.mceIcon.mce_fontsizeselect {
+    background: #FFF url('img/layout.png') no-repeat 13px -1px;
+}
+
+#jce .classicSkin span.mceIcon.mce_paste, 
+#jce .classicSkin span.mceIcon.mce_numlist, 
+#jce .classicSkin span.mceIcon.mce_bullist, 
+#jce .classicSkin span.mceIcon.mce_forecolor, 
+#jce .classicSkin span.mceIcon.mce_backcolor, 
+#jce .classicSkin span.mceIcon.mce_spellchecker, 
+#jce .classicSkin span.mceIcon.mce_textcase { 
+    background-color : #F0F0EE;
+}
+
+#jce .classicSkin .mceListBox {
+    border : 1px solid #ccc;
+    margin: 0 1px 0 0;
+}
+
+#jce .classicSkin .mceSplitButton {
+    border : 1px solid #ccc;
+}
+
+#jce .classicSkin span.mceIcon.mce_paste {
+    background-image: url("img/layout.png"), url("../../img/icons.png");
+    background-position: -41px -1px, -560px 0;
+}
+
+#jce .classicSkin span.mceIcon.mce_numlist {
+    background-image: url("img/layout.png"), url("../../img/icons.png");
+    background-position: -41px -1px, -80px 0;
+}
+
+#jce .classicSkin span.mceIcon.mce_bullist {
+    background-image: url("img/layout.png"), url("../../img/icons.png");
+    background-position: -41px -1px, -20px 0;
+}
+
+#jce .classicSkin span.mceIcon.mce_forecolor {
+    background-image: url("img/layout.png"), url("../../img/icons.png");
+    background-position: -41px -1px, -720px 0;
+}
+
+#jce .classicSkin span.mceIcon.mce_backcolor {
+    background-image: url("img/layout.png"), url("../../img/icons.png");
+    background-position: -41px -1px, -760px 0;
+}
+
+#jce .classicSkin span.mceIcon.mce_spellchecker {
+    background-image: url("img/layout.png"), url("../../img/icons.png");
+    background-position: -41px -1px, -120px -20px;
+}
+
+#jce .classicSkin span.mceIcon.mce_textcase {
+    background-image: url("img/layout.png"), url("../../img/icons.png");
+    background-position: -41px -1px, -60px -40px;
+}
+
+#jce .classicSkin .mceToolbar {
+    border :1px solid #CCC;
+    background:#F0F0EE;
+}
+
+#jce .classicSkin .mceStatusbar {
+    border :1px solid #CCC;
+    background:#F0F0EE;
+}
+
+#jce .classicSkin .mceIframeContainer {
+    border: 1px solid #CCC;
+}
