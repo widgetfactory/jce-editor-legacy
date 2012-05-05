@@ -177,7 +177,7 @@ class JoomlalinksContent extends JObject {
 							} else {
 								// no com_content, might be link like index.php?ItemId=1
 								if (strpos($id, 'index.php?Itemid=') !== false) {
-									$url 	= $id;
+									$url 	= $id;//$id;
 									$id 	= 'index.php?option=com_content&view=category&id=' . $category->id;
 								}
 							}
@@ -229,19 +229,22 @@ class JoomlalinksContent extends JObject {
 	
 	private function _getMenuLink($url)
 	{
-		$db	= JFactory::getDBO();
-		// get itemid
-		preg_match('#Itemid=([\d]+)#', $url, $matches);
-		// get link from menu
-		if (count($matches) > 1) {
-			$menu = JTable::getInstance('menu');
-			$menu->load($matches[1]);
-				
-			if ($menu->link) {
-				return $menu->link . '&Itemid=' . $menu->id;
+		$wf = WFEditorPlugin::getInstance();
+		
+		// resolve the url from the menu link	
+		if ($wf->getParam('links.joomlalinks.article_resolve_alias', 1) == 1) {
+			// get itemid
+			preg_match('#Itemid=([\d]+)#', $url, $matches);
+			// get link from menu
+			if (count($matches) > 1) {
+				$menu = JTable::getInstance('menu');
+				$menu->load($matches[1]);
+					
+				if ($menu->link) {
+					return $menu->link . '&Itemid=' . $menu->id;
+				}
 			}
 		}
-	
 		return $url;
 	
 	}

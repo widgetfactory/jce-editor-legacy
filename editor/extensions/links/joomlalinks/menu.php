@@ -78,29 +78,31 @@ class JoomlalinksMenu extends JObject
 				$menus = self::_menu($id, $type);
 
 				foreach ($menus as $menu) {
-					$link = $menu->link;	
 					
 					$class = array();
 						
 					switch ($menu->type) {
 						case 'separator':
-							if (!$link) {
+							if (!$menu->link) {
 								$class[] = 'nolink';
 							}
-							break;
+							
+							$link = '';
+							break;	
+					
 						case 'alias':
 							$params = new JParameter($menu->params);
 							
 							// If this is an alias use the item id stored in the parameters to make the link.
-							$link .= $params->get('aliasoptions');
+							$link = 'index.php?Itemid=' . $params->get('aliasoptions');
+							break;
+
+						default:
+							// resolve link
+							$link = self::_resolveLink($menu);
 							break;
 					}
-					
-					// internal link with no Itemid
-					if ($link && strpos($link, 'index.php') === 0 && strpos($link, 'Itemid') === false) {
-						$link .= '&Itemid=' . $menu->id;
-					}
-						
+	
 					$children 	= self::_children($menu->id);
 					$title 		= isset($menu->name) ? $menu->name : $menu->title; 
 					
@@ -125,14 +127,11 @@ class JoomlalinksMenu extends JObject
 					if ($menu->type == 'menulink') {
 						//$menu = AdvlinkMenu::_alias($menu->id);
 					}
-					
-					$link 	= $menu->link;
+
 					$title 	= isset($menu->name) ? $menu->name : $menu->title;
 					
-					// internal link with no Itemid
-					if ($link && strpos($link, 'index.php') === 0 && strpos($link, 'Itemid') === false) {
-						$link .= '&Itemid=' . $menu->id;
-					}
+					// resolve link
+					$link = self::_resolveLink($menu);
 	
 					$items[] = array(
 						'id'		=>	$link,
@@ -144,7 +143,31 @@ class JoomlalinksMenu extends JObject
 		}
 		return $items;
 	}
-	function _types()
+
+	private function _resolveLink($menu)
+	{
+		$wf = WFEditorPlugin::getInstance();
+		
+		// get link from menu object
+		$link = $menu->link;
+		
+		// internal link 
+		if ($link && strpos($link, 'index.php') === 0) {
+			if ($wf->getParam('links.joomlalinks.menu_resolve_alias', 1) == 1) {
+				// no Itemid
+				if (strpos($link, 'Itemid=') === false) {
+					$link .= '&Itemid=' . $menu->id;
+				}
+			// short link
+			} else {
+				$link = 'index.php?Itemid=' . $menu->id;
+			}
+		}
+		
+		return $link;
+	}
+
+	private function _types()
 	{
 		$db	= JFactory::getDBO();
 		
@@ -155,7 +178,7 @@ class JoomlalinksMenu extends JObject
 		$db->setQuery($query, 0);
 		return $db->loadObjectList();
 	}
-	function _alias($id)
+	private function _alias($id)
 	{
 		$db		= JFactory::getDBO();
 		$user	= JFactory::getUser();
@@ -179,7 +202,8 @@ class JoomlalinksMenu extends JObject
 		$db->setQuery($query, 0);
 		return $db->loadObject();
 	}
-	function _children($id)
+	
+	private function _children($id)
 	{
 		$db		= JFactory::getDBO();
 		$user	= JFactory::getUser();
@@ -208,7 +232,7 @@ class JoomlalinksMenu extends JObject
 		$db->setQuery($query, 0);
 		return $db->loadResult();
 	}
-	function _menu($parent = 0, $type = 0)
+	private function _menu($parent = 0, $type = 0)
 	{
 		$db		= JFactory::getDBO();
 		$user	= JFactory::getUser();
