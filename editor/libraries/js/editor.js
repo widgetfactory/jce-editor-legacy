@@ -14,469 +14,471 @@
  * Joomla! IeCursor Fix function override
  */
 function IeCursorFix() {
-	return true;
+    return true;
 }
 
 function jInsertEditorText(text, editor) {
-	WFEditor.insert(editor, text);
+    WFEditor.insert(editor, text);
 }
 
 /**
  * Widget Factory Editor
  */
 ( function() {
-	var winLoaded = false;
+    var winLoaded = false;
 
-	var WFEditor = {
+    var WFEditor = {
 
-		_bookmark : {},
+        _bookmark : {},
 
-		getSite : function(base) {
-			var site, host;
-			// get url from browser
-			var u = document.location.href;
-			// if bas is a full url
-			if(base.indexOf('http') !== -1) {
-				// get the host part of the url eg: www.mysite.com
-				host = base.substr(base.indexOf('://') + 3);
-				// get the
-				site = host.substr(host.indexOf('/'));
-			} else {
-				site = u.substr(0, u.indexOf(base) + base.length);
-			}
+        getSite : function(base) {
+            var site, host;
+            // get url from browser
+            var u = document.location.href;
+            // if bas is a full url
+            if(base.indexOf('http') !== -1) {
+                // get the host part of the url eg: www.mysite.com
+                host = base.substr(base.indexOf('://') + 3);
+                // get the
+                site = host.substr(host.indexOf('/'));
+            } else {
+                site = u.substr(0, u.indexOf(base) + base.length);
+            }
 
-			if(u.indexOf('/administrator/') !== -1) {
-				site = site + 'administrator/';
-			}
+            if(u.indexOf('/administrator/') !== -1) {
+                site = site + 'administrator/';
+            }
 
-			return site;
-		},
-		/**
+            return site;
+        },
+        /**
 		 * Initialise JContentEditor
 		 * @param {Object} settings TinyMCE Settings
 		 */
-		init : function(settings) {
-			var self = this;
+        init : function(settings) {
+            var self = this;
 
-			var base = settings.base_url;
-			var site = this.getSite(base);
+            var base = settings.base_url;
+            var site = this.getSite(base);
 
-			// fix https in base url
-			if(/https:\/\//.test(document.location.href)) {
-				base = base.replace(/http:/, 'https:');
-			}
+            // fix https in base url
+            if(/https:\/\//.test(document.location.href)) {
+                base = base.replace(/http:/, 'https:');
+            }
 
-			// set default values
-			settings.token = settings.token || 0;
-			settings.component_id = settings.component_id || 0;
+            // set default values
+            settings.token = settings.token || 0;
+            settings.component_id = settings.component_id || 0;
 
-			// set preinit object to prevent tinymce from generating baseURL
-			window.tinyMCEPreInit = {};
-			// set baseURL, suffix and query string
-			tinymce.extend(tinymce, {
-				baseURL : base + 'components/com_jce/editor/tiny_mce',
-				suffix : '',
-				query : settings.token + '=1&component_id=' + settings.component_id
-			});
+            // set preinit object to prevent tinymce from generating baseURL
+            window.tinyMCEPreInit = {};
+            // set baseURL, suffix and query string
+            tinymce.extend(tinymce, {
+                baseURL : base + 'components/com_jce/editor/tiny_mce',
+                suffix : '',
+                query : settings.token + '=1&component_id=' + settings.component_id
+            });
 
-			// remove submit triggers
-			this.settings = tinymce.extend({
-				document_base_url : base,
-				site_url : site,
-				mode : 'textareas',
-				editor_selector : 'wfEditor',
-				editor_deselector : 'wfNoEditor',
-				urlconverter_callback : 'WFEditor.convertURL',
-				popup_css : base + 'components/com_jce/editor/libraries/css/popup.css',
-				add_form_submit_trigger : false,
-				submit_patch : false,
-				theme : 'none',
-				invalid_elements : 'applet,iframe,object,embed,script,style,body,bgsound,base,basefont,frame,frameset,head,html,id,ilayer,layer,link,meta,name,title,xml',
-				plugins : '',
-				whitespace_elements : 'pre,script,style,textarea,code',
-				allow_html_in_named_anchor : true
-			}, settings);
+            // remove submit triggers
+            this.settings = tinymce.extend({
+                document_base_url : base,
+                site_url : site,
+                mode : 'textareas',
+                editor_selector : 'wfEditor',
+                editor_deselector : 'wfNoEditor',
+                urlconverter_callback : 'WFEditor.convertURL',
+                popup_css : base + 'components/com_jce/editor/libraries/css/popup.css',
+                add_form_submit_trigger : false,
+                submit_patch : false,
+                theme : 'none',
+                invalid_elements : 'applet,iframe,object,embed,script,style,body,bgsound,base,basefont,frame,frameset,head,html,id,ilayer,layer,link,meta,name,title,xml',
+                plugins : '',
+                whitespace_elements : 'pre,script,style,textarea,code',
+                allow_html_in_named_anchor : true,
+                formats: {span : {inline : 'span'}},
+                schema: "html5"
+            }, settings);
 
-			if(this.settings) {
-				try {
-					if(this.settings.compress.css) {
-						tinymce.extend(this.settings, {
-							content_css : false,
-							editor_css : false
-						});
-					}
+            if(this.settings) {
+                try {
+                    if(this.settings.compress.css) {
+                        tinymce.extend(this.settings, {
+                            content_css : false,
+                            editor_css : false
+                        });
+                    }
 
-					// mark javascript files loaded
-					if(this.settings.compress.javascript) {
-						this._markLoaded();
-					}
-					// load editor
-					WFEditor.load();
-				} catch (e) {
-					alert('Unable to initialize TinyMCE : ' + e);
-				}
-			}
-		},
-		_markLoaded : function() {
-			var self = this, s = this.settings, each = tinymce.each, ln = s.language.split(',');
+                    // mark javascript files loaded
+                    if(this.settings.compress.javascript) {
+                        this._markLoaded();
+                    }
+                    // load editor
+                    WFEditor.load();
+                } catch (e) {
+                    alert('Unable to initialize TinyMCE : ' + e);
+                }
+            }
+        },
+        _markLoaded : function() {
+            var self = this, s = this.settings, each = tinymce.each, ln = s.language.split(',');
 
-			var suffix = s.suffix || '';
+            var suffix = s.suffix || '';
 
-			function load(u) {
-				tinymce.ScriptLoader.markDone(tinyMCE.baseURI.toAbsolute(u));
-			}
+            function load(u) {
+                tinymce.ScriptLoader.markDone(tinyMCE.baseURI.toAbsolute(u));
+            }
 
-			// Add core languages
-			each(ln, function(c) {
-				if(c) {
-					load('langs/' + c + '.js');
-				}
-			});
-			// Add themes with languages
-			each(s.theme.split(','), function(n) {
-				if(n) {
-					load('themes/' + n + '/editor_template' + suffix + '.js');
+            // Add core languages
+            each(ln, function(c) {
+                if(c) {
+                    load('langs/' + c + '.js');
+                }
+            });
+            // Add themes with languages
+            each(s.theme.split(','), function(n) {
+                if(n) {
+                    load('themes/' + n + '/editor_template' + suffix + '.js');
 
-					each(ln, function(c) {
-						if(c) {
-							load('themes/' + n + '/langs/' + c + '.js');
-						}
-					});
-				}
-			});
-			// Add plugins with languages
-			each(s.plugins.split(','), function(n) {
-				if(n) {
-					load('plugins/' + n + '/editor_plugin' + suffix + '.js');
+                    each(ln, function(c) {
+                        if(c) {
+                            load('themes/' + n + '/langs/' + c + '.js');
+                        }
+                    });
+                }
+            });
+            // Add plugins with languages
+            each(s.plugins.split(','), function(n) {
+                if(n) {
+                    load('plugins/' + n + '/editor_plugin' + suffix + '.js');
 
-					each(ln, function(c) {
-						if(c) {
-							load('plugins/' + n + '/langs/' + c + '.js');
-						}
-					});
-				}
-			});
-		},
-		setBookmark : function(ed) {
-			var self = this, DOM = tinymce.DOM, Event = tinymce.dom.Event;
+                    each(ln, function(c) {
+                        if(c) {
+                            load('plugins/' + n + '/langs/' + c + '.js');
+                        }
+                    });
+                }
+            });
+        },
+        setBookmark : function(ed) {
+            var self = this, DOM = tinymce.DOM, Event = tinymce.dom.Event;
 
-			function isHidden(ed) {
-				return ed.isHidden() || DOM.getStyle(ed.id + '_ifr', 'visibility') == 'hidden';
-			}
+            function isHidden(ed) {
+                return ed.isHidden() || DOM.getStyle(ed.id + '_ifr', 'visibility') == 'hidden';
+            }
 
-			function isEditor(el) {
-				return DOM.getParent(el, 'div.mceEditor, div.mceSplitButtonMenu, div.mceListBoxMenu, div.mceDropDown');
-			}
+            function isEditor(el) {
+                return DOM.getParent(el, 'div.mceEditor, div.mceSplitButtonMenu, div.mceListBoxMenu, div.mceDropDown');
+            }
 
 
-			Event.add(document.body, 'mousedown', function(e) {
-				var el = e.target;
+            Event.add(document.body, 'mousedown', function(e) {
+                var el = e.target;
 
-				if(isEditor(el)) {
-					return;
-				}
+                if(isEditor(el)) {
+                    return;
+                }
 
-				if(!isHidden(ed) && ed.selection) {
-					var n = ed.selection.getNode();
+                if(!isHidden(ed) && ed.selection) {
+                    var n = ed.selection.getNode();
 
-					if(DOM.getParent(n, 'body#tinymce')) {
-						ed.lastSelectionBookmark = ed.selection.getBookmark(1);
-					}
-				}
-			});
-		},
-		load : function() {
-			var self = this, Event = tinymce.dom.Event, loaded;
+                    if(DOM.getParent(n, 'body#tinymce')) {
+                        ed.lastSelectionBookmark = ed.selection.getBookmark(1);
+                    }
+                }
+            });
+        },
+        load : function() {
+            var self = this, Event = tinymce.dom.Event, loaded;
 
-			function _load() {
-				if(!loaded) {
-					// set loaded flag
-					loaded = true;
-					// create editor
-					return self.create();
-				}
-			}
+            function _load() {
+                if(!loaded) {
+                    // set loaded flag
+                    loaded = true;
+                    // create editor
+                    return self.create();
+                }
+            }
 
-			// load editor when page fully loaded
-			Event.add(window, 'load', function() {
-				_load();
-			});
-			// wait until dom is ready with delay
-			Event.add(document, 'init', function() {
-				window.setTimeout(function() {
-					_load();
-				}, 1000);
-			});
-			var s = this.settings;
+            // load editor when page fully loaded
+            Event.add(window, 'load', function() {
+                _load();
+            });
+            // wait until dom is ready with delay
+            Event.add(document, 'init', function() {
+                window.setTimeout(function() {
+                    _load();
+                }, 1000);
+            });
+            var s = this.settings;
 
-			// setup editor before init
-			tinyMCE.onAddEditor.add(function(mgr, ed) {
+            // setup editor before init
+            tinyMCE.onAddEditor.add(function(mgr, ed) {
 
-				if(s.compress.css) {
-					// load packer css
-					ed.onPreInit.add(function() {
-						ed.dom.loadCSS(s.site_url + 'index.php?option=com_jce&view=editor&layout=editor&task=pack&type=css&context=content&component_id=' + s.component_id + '&' + s.token + '=1');
-					});
-				}
+                if(s.compress.css) {
+                    // load packer css
+                    ed.onPreInit.add(function() {
+                        ed.dom.loadCSS(s.site_url + 'index.php?option=com_jce&view=editor&layout=editor&task=pack&type=css&context=content&component_id=' + s.component_id + '&' + s.token + '=1');
+                    });
+                }
 
-				WFEditor.hideLoader(ed.getElement());
+                WFEditor.hideLoader(ed.getElement());
 
-				self.setBookmark(ed);
+                self.setBookmark(ed);
 
-				// form submit trigger
-				ed.onInit.add(function() {
-					ed.onSubmit.addToTop(function() {
-						if(ed.initialized && !ed.isHidden()) {
-							ed.save();
-							ed.isNotDirty = 1;
-						}
-					});
-				});
-				// Form submit patch
-				ed.onBeforeRenderUI.add(function() {
-					var n = ed.getElement().form;
+                // form submit trigger
+                ed.onInit.add(function() {
+                    ed.onSubmit.addToTop(function() {
+                        if(ed.initialized && !ed.isHidden()) {
+                            ed.save();
+                            ed.isNotDirty = 1;
+                        }
+                    });
+                });
+                // Form submit patch
+                ed.onBeforeRenderUI.add(function() {
+                    var n = ed.getElement().form;
 
-					if(!n) {
-						return;
-					}
-					// Already patched
-					if(n._mceOldSubmit) {
-						return;
-					}
-					// Check page uses id="submit" or name="submit" for it's submit button
-					if(!n.submit.nodeType && !n.submit.length) {
-						ed.formElement = n;
-						n._mceOldSubmit = n.submit;
-						n.submit = function() {
-							// Save all instances
-							tinymce.each(tinymce.editors, function(e) {
-								if(e.initialized && !e.isHidden()) {
-									e.save();
-								}
-							});
+                    if(!n) {
+                        return;
+                    }
+                    // Already patched
+                    if(n._mceOldSubmit) {
+                        return;
+                    }
+                    // Check page uses id="submit" or name="submit" for it's submit button
+                    if(!n.submit.nodeType && !n.submit.length) {
+                        ed.formElement = n;
+                        n._mceOldSubmit = n.submit;
+                        n.submit = function() {
+                            // Save all instances
+                            tinymce.each(tinymce.editors, function(e) {
+                                if(e.initialized && !e.isHidden()) {
+                                    e.save();
+                                }
+                            });
 
-							ed.isNotDirty = 1;
+                            ed.isNotDirty = 1;
 
-							return ed.formElement._mceOldSubmit(ed.formElement);
-						};
-					}
-					n = null;
-				});
-			});
-		},
-		/**
+                            return ed.formElement._mceOldSubmit(ed.formElement);
+                        };
+                    }
+                    n = null;
+                });
+            });
+        },
+        /**
 		 * Create Editors
 		 */
-		create : function(elements) {
-			var self = this, Event = tinymce.dom.Event, s = this.settings;
+        create : function(elements) {
+            var self = this, Event = tinymce.dom.Event, s = this.settings;
 
-			WFEditor.showLoader();
+            WFEditor.showLoader();
 
-			if(elements) {
-				s.mode = 'exact';
-				s.elements = elements;
-			}
+            if(elements) {
+                s.mode = 'exact';
+                s.elements = elements;
+            }
 
-			try {
-				// only create toggle for advanced theme
-				if(s.theme == 'advanced' && ( typeof s.toggle == 'undefined' ? 1 : s.toggle)) {
-					this._createToggle(elements);
-				}
+            try {
+                // only create toggle for advanced theme
+                if(s.theme == 'advanced' && ( typeof s.toggle == 'undefined' ? 1 : s.toggle)) {
+                    this._createToggle(elements);
+                }
 
-				tinyMCE.init(s);
+                tinyMCE.init(s);
 
-			} catch (e) {
-				alert(e);
-			}
-		},
-		_createToggle : function(elements) {
-			var self = this, DOM = tinymce.DOM, Event = tinymce.dom.Event, s = this.settings;
+            } catch (e) {
+                alert(e);
+            }
+        },
+        _createToggle : function(elements) {
+            var self = this, DOM = tinymce.DOM, Event = tinymce.dom.Event, s = this.settings;
 
-			function getVar(s, dv) {
-				return ( typeof s == 'undefined' || s === null) ? dv : s;
-			}
+            function getVar(s, dv) {
+                return ( typeof s == 'undefined' || s === null) ? dv : s;
+            }
 
-			var use_cookies = getVar(s.use_cookies, true);
-			elements = elements || DOM.select('.wfEditor');
+            var use_cookies = getVar(s.use_cookies, true);
+            elements = elements || DOM.select('.wfEditor');
 
-			tinymce.each(elements, function(el) {
-				var state = getVar(s.toggle_state, 1);
-				// get cookie
-				var cookie = getVar(tinymce.util.Cookie.get('wf_editor_' + el.id + '_state'), 1);
-				var label = getVar(s.toggle_label, '[Toggle Editor]');
+            tinymce.each(elements, function(el) {
+                var state = getVar(s.toggle_state, 1);
+                // get cookie
+                var cookie = getVar(tinymce.util.Cookie.get('wf_editor_' + el.id + '_state'), 1);
+                var label = getVar(s.toggle_label, '[Toggle Editor]');
 
-				var div = DOM.create('span', {
-					'role' : 'button',
-					'class' : 'wf_editor_toggle',
-					'aria-labelledby' : 'wf_editor_' + el.id + '_toggle'
-				}, '<span id="wf_editor_' + el.id + '_toggle">' + label + '</span>');
+                var div = DOM.create('span', {
+                    'role' : 'button',
+                    'class' : 'wf_editor_toggle',
+                    'aria-labelledby' : 'wf_editor_' + el.id + '_toggle'
+                }, '<span id="wf_editor_' + el.id + '_toggle">' + label + '</span>');
 
-				DOM.setStyle(div, 'cursor', 'pointer');
-				el.parentNode.insertBefore(div, el);
+                DOM.setStyle(div, 'cursor', 'pointer');
+                el.parentNode.insertBefore(div, el);
 
-				Event.add(div, 'click', function(e) {
-					self.toggle(el, use_cookies);
-				});
-				if(!state) {
-					el.className = 'wfNoEditor';
-					self._wrapText(el, true);
-				} else {
-					if(parseInt(cookie) == 0) {
-						el.className = 'wfNoEditor';
-						self._wrapText(el, true);
-					} else {
-						el.className = 'wfEditor';
-					}
-				}
-			});
-		},
-		toggle : function(el, use_cookies) {
-			var self = this, ed = tinyMCE.get(el.id);
+                Event.add(div, 'click', function(e) {
+                    self.toggle(el, use_cookies);
+                });
+                if(!state) {
+                    el.className = 'wfNoEditor';
+                    self._wrapText(el, true);
+                } else {
+                    if(parseInt(cookie) == 0) {
+                        el.className = 'wfNoEditor';
+                        self._wrapText(el, true);
+                    } else {
+                        el.className = 'wfEditor';
+                    }
+                }
+            });
+        },
+        toggle : function(el, use_cookies) {
+            var self = this, ed = tinyMCE.get(el.id);
 
-			// turn it on
-			if(!ed) {
-				if(use_cookies) {
-					tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
-				}
+            // turn it on
+            if(!ed) {
+                if(use_cookies) {
+                    tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
+                }
 
-				el.className = 'wfEditor';
+                el.className = 'wfEditor';
 
-				tinyMCE.execCommand('mceAddEditor', 0, el.id);
-			} else {
-				self._wrapText(ed.getElement(), true);
+                tinyMCE.execCommand('mceAddEditor', 0, el.id);
+            } else {
+                self._wrapText(ed.getElement(), true);
 
-				if(ed.isHidden()) {
-					if(use_cookies) {
-						tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
-					}
-					el.className = 'wfEditor';
+                if(ed.isHidden()) {
+                    if(use_cookies) {
+                        tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
+                    }
+                    el.className = 'wfEditor';
 
-					ed.load();
-					ed.show();
-				} else {
-					if(use_cookies) {
-						tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 0);
-					}
-					el.className = 'wfNoEditor';
+                    ed.load();
+                    ed.show();
+                } else {
+                    if(use_cookies) {
+                        tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 0);
+                    }
+                    el.className = 'wfNoEditor';
 
-					ed.save();
-					ed.hide();
-				}
-			}
-		},
-		_wrapText : function(el, s) {
-			var v, n;
+                    ed.save();
+                    ed.hide();
+                }
+            }
+        },
+        _wrapText : function(el, s) {
+            var v, n;
 
-			el.setAttribute("wrap", s);
+            el.setAttribute("wrap", s);
 
-			if(!tinymce.isIE) {
-				v = el.value;
-				n = el.cloneNode(false);
-				n.setAttribute("wrap", s);
-				el.parentNode.replaceChild(n, el);
-				n.value = v;
-			}
-		},
-		showLoader : function(el) {
-			tinymce.DOM.addClass('.wfEditor', 'loading');
-		},
-		hideLoader : function(el) {
-			tinymce.DOM.removeClass(el, 'loading');
-		},
-		/**
+            if(!tinymce.isIE) {
+                v = el.value;
+                n = el.cloneNode(false);
+                n.setAttribute("wrap", s);
+                el.parentNode.replaceChild(n, el);
+                n.value = v;
+            }
+        },
+        showLoader : function(el) {
+            tinymce.DOM.addClass('.wfEditor', 'loading');
+        },
+        hideLoader : function(el) {
+            tinymce.DOM.removeClass(el, 'loading');
+        },
+        /**
 		 * Set the editor content
 		 * @param {String} id The editor id
 		 * @param {String} html The html content to set
 		 */
-		setContent : function(id, html) {
-			var ed = tinyMCE.get(id);
+        setContent : function(id, html) {
+            var ed = tinyMCE.get(id);
 
-			if(ed) {
-				ed.setContent(html);
-			} else {
-				document.getElementById(id).value = html;
-			}
-		},
-		/**
+            if(ed) {
+                ed.setContent(html);
+            } else {
+                document.getElementById(id).value = html;
+            }
+        },
+        /**
 		 * Get the editor content
 		 * @param {String} id The editor id
 		 */
-		getContent : function(id) {
-			var ed = tinyMCE.get(id);
+        getContent : function(id) {
+            var ed = tinyMCE.get(id);
 
-			// pass content to textarea and return
-			if(ed && !ed.isHidden()) {
-				return ed.save();
-			}
+            // pass content to textarea and return
+            if(ed && !ed.isHidden()) {
+                return ed.save();
+            }
 
-			// return textarea content
-			return document.getElementById(id).value;
-		},
-		/**
+            // return textarea content
+            return document.getElementById(id).value;
+        },
+        /**
 		 * Insert content into the editor. This function is provided for editor-xtd buttons and includes methods for inserting into textareas
 		 * @param {String} el The editor id
 		 * @param {String} v The text to insert
 		 */
-		insert : function(el, v) {
-			var ed;
-			if( typeof el == 'string') {
-				el = document.getElementById(el);
-			}
-			if(/wfEditor/.test(el.className)) {
-				ed = tinyMCE.get(el.id);
-				if(window.parent.tinymce) {
-					var ed = window.parent.tinyMCE.get(el.id);
+        insert : function(el, v) {
+            var ed;
+            if( typeof el == 'string') {
+                el = document.getElementById(el);
+            }
+            if(/wfEditor/.test(el.className)) {
+                ed = tinyMCE.get(el.id);
+                if(window.parent.tinymce) {
+                    var ed = window.parent.tinyMCE.get(el.id);
 
-					if(ed && ed.lastSelectionBookmark) {
-						ed.selection.moveToBookmark(ed.lastSelectionBookmark);
-					}
-				}
-				ed.execCommand('mceInsertContent', false, v);
-			} else {
-				this.insertIntoTextarea(el, v);
-			}
-		},
-		insertIntoTextarea : function(el, v) {
-			// IE
-			if(document.selection) {
-				el.focus();
-				var s = document.selection.createRange();
-				s.text = v;
-				// Mozilla / Netscape
-			} else {
-				if(el.selectionStart || el.selectionStart == '0') {
-					var startPos = el.selectionStart;
-					var endPos = el.selectionEnd;
-					el.value = el.value.substring(0, startPos) + v + el.value.substring(endPos, el.value.length);
-					// Other
-				} else {
-					el.value += v;
-				}
-			}
-		},
-		convertURL : function(u, e, save) {
-			var ed = tinymce.EditorManager.activeEditor, s = tinymce.settings, base = s.document_base_url;
+                    if(ed && ed.lastSelectionBookmark) {
+                        ed.selection.moveToBookmark(ed.lastSelectionBookmark);
+                    }
+                }
+                ed.execCommand('mceInsertContent', false, v);
+            } else {
+                this.insertIntoTextarea(el, v);
+            }
+        },
+        insertIntoTextarea : function(el, v) {
+            // IE
+            if(document.selection) {
+                el.focus();
+                var s = document.selection.createRange();
+                s.text = v;
+            // Mozilla / Netscape
+            } else {
+                if(el.selectionStart || el.selectionStart == '0') {
+                    var startPos = el.selectionStart;
+                    var endPos = el.selectionEnd;
+                    el.value = el.value.substring(0, startPos) + v + el.value.substring(endPos, el.value.length);
+                // Other
+                } else {
+                    el.value += v;
+                }
+            }
+        },
+        convertURL : function(u, e, save) {
+            var ed = tinymce.EditorManager.activeEditor, s = tinymce.settings, base = s.document_base_url;
 
-			if(!u)
-				return u;
+            if(!u)
+                return u;
 
-			// Don't convert link href since thats the CSS files that gets loaded into the editor also skip local file URLs
-			if(!s.convert_urls || (e && e.nodeName == 'LINK') || u.indexOf('file:') === 0)
-				return u;
+            // Don't convert link href since thats the CSS files that gets loaded into the editor also skip local file URLs
+            if(!s.convert_urls || (e && e.nodeName == 'LINK') || u.indexOf('file:') === 0)
+                return u;
 
-			if(u == base || u == base.substring(0, base.length - 1) || u.charAt(0) == '/') {
-				return u;
-			}
+            if(u == base || u == base.substring(0, base.length - 1) || u.charAt(0) == '/') {
+                return u;
+            }
 
-			// Convert to relative
-			if(s.relative_urls)
-				return ed.documentBaseURI.toRelative(u);
+            // Convert to relative
+            if(s.relative_urls)
+                return ed.documentBaseURI.toRelative(u);
 
-			// Convert to absolute
-			u = ed.documentBaseURI.toAbsolute(u, s.remove_script_host);
+            // Convert to absolute
+            u = ed.documentBaseURI.toAbsolute(u, s.remove_script_host);
 
-			return u;
-		}
-	};
-	window.WFEditor = WFEditor;
+            return u;
+        }
+    };
+    window.WFEditor = WFEditor;
 }());
