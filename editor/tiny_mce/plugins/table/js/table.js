@@ -366,7 +366,7 @@ var TableDialog = {
 				capEl = elm.ownerDocument.createElement('caption');
 
 				if(!tinymce.isIE) {
-					capEl.innerHTML = '<br _mce_bogus="1"/>';
+					capEl.innerHTML = '<br data-mce-bogus="1"/>';
 				}
 
 				elm.insertBefore(capEl, elm.firstChild);
@@ -440,7 +440,7 @@ var TableDialog = {
 		}
 		html += this.makeAttrib('cellpadding', cellpadding);
 		html += this.makeAttrib('cellspacing', cellspacing);
-		html += this.makeAttrib('_mce_new', '1');
+		html += this.makeAttrib('data-mce-new', '1');
 
 		if(width && ed.settings.inline_styles) {
 			if(style) {
@@ -479,7 +479,7 @@ var TableDialog = {
 
 		if(caption) {
 			if(!tinymce.isIE) {
-				html += '<caption><br _mce_bogus="1"/></caption>';
+				html += '<caption><br data-mce-bogus="1"/></caption>';
 			} else {
 				html += '<caption></caption>';
 			}
@@ -490,7 +490,7 @@ var TableDialog = {
 
 			for(var x = 0; x < cols; x++) {
 				if(!tinymce.isIE) {
-					html += '<td><br _mce_bogus="1"/></td>';
+					html += '<td><br data-mce-bogus="1"/></td>';
 				} else {
 					html += '<td></td>';
 				}
@@ -526,7 +526,7 @@ var TableDialog = {
 			ed.execCommand('mceInsertContent', false, html);
 		}
 
-		tinymce.each(dom.select('table[_mce_new]'), function(node) {
+		tinymce.each(dom.select('table[data-mce-new]'), function(node) {
 			// Fixes a bug in IE where the caret cannot be placed after the table if the table is at the end of the document
 			if (tinymce.isIE && node.nextSibling == null) {
 				dom.insertAfter(dom.create('p'), node);
