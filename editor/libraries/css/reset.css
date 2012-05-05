@@ -160,3 +160,9 @@ h1, h2, h3, h4, h5, h6 { font-weight: bold; }
 
 a, a:active, a:visited { color: #607890; }
 a:hover { color: #036; }
+
+/* HTML5 Draggable */
+[draggable=true] {
+  -khtml-user-drag: element;
+  -moz-user-select:none;
+}
