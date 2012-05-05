@@ -95,7 +95,33 @@ function jInsertEditorText(text, editor) {
                 plugins : '',
                 whitespace_elements : 'pre,script,style,textarea,code',
                 allow_html_in_named_anchor : true,
-                formats: {span : {inline : 'span'}},
+                formats: {
+                    'span' : {
+                        inline : 'span'
+                    }, 
+                    'section' : {
+                        block : 'section', 
+                        wrapper: true, 
+                        merge_siblings: false
+                    },
+                    'article' : {
+                        block : 'article', 
+                        wrapper: true, 
+                        merge_siblings: false
+                    },
+                    'hroup' : {
+                        block : 'hgroup', 
+                        wrapper: true
+                    },
+                    'aside' : {
+                        block : 'aside', 
+                        wrapper: true
+                    },
+                    'figure' : {
+                        block : 'figure', 
+                        wrapper: true
+                    }
+                },
                 schema: "html5"
             }, settings);
 

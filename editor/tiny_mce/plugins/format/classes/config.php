@@ -46,12 +46,17 @@ class WFFormatPluginConfig {
             'dt' => 'advanced.dt',
             'dd' => 'advanced.dd',
             'samp' => 'advanced.samp',
-            'span' => 'advanced.span'
+            'span' => 'advanced.span',
+            'section' => 'advanced.section',
+            'article' => 'advanced.article',
+            'hgroup' => 'advanced.hgroup',
+            'aside' => 'advanced.aside',
+            'figure' => 'advanced.figure'
         );
 
-        $tmpblocks  = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,dt,dd', 'p,address,pre,h1,h2,h3,h4,h5,h6');
-        $list       = array();
-        $blocks     = array();
+        $tmpblocks = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,dt,dd,section,article,hgroup,aside,figure', 'p,address,pre,h1,h2,h3,h4,h5,h6');
+        $list = array();
+        $blocks = array();
 
         if (is_string($tmpblocks)) {
             $tmpblocks = explode(',', $tmpblocks);
@@ -85,7 +90,6 @@ class WFFormatPluginConfig {
 
         // add span 'format'
         //$settings['formats'] = "{span : {inline : 'span'}}";
-
         // new lines (paragraphs or linebreaks)
         if ($wf->getParam('editor.newlines', 0)) {
             $settings['force_br_newlines'] = true;
