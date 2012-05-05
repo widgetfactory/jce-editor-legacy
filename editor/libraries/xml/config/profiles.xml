@@ -69,6 +69,11 @@
             <option value="span">Span</option>
             <option value="dt">Definition Term</option>
             <option value="dd">Definition Description</option>
+            <option value="section">Section</option>
+            <option value="article">Article</option>
+            <option value="hgroup">HGroup</option>
+            <option value="aside">Aside</option>
+            <option value="figure">Figure</option>
         </param>
         <param name="theme_advanced_styles" type="text" size="100" default="" label="WF_PARAM_STYLES" description="WF_PARAM_STYLES_DESC" placeholder="eg: Style1=style1,Style2=style2,Style3=style3" />
         <param name="theme_advanced_fonts_add" type="text" size="100" default="" label="WF_PARAM_FONT_ADD" description="WF_PARAM_FONT_ADD_DESC" placeholder="eg: Arial=arial,helvetica,sans-serif;Georgia=georgia,palatino" />
