@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright � 2009-2011 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright © 2009-2011 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -10,112 +10,112 @@
 
 (function($) {
 
-	$.widget("ui.searchables", {
+    $.widget("ui.searchables", {
 
-		options : {
-			list : null,
-			items : null,
-			clear : null,
-			sort : null
-		},
+        options : {
+            list : null,
+            items : null,
+            clear : null,
+            sort : null
+        },
 
-		_init : function() {
-			var self = this, el = this.element, busy;
+        _init : function() {
+            var self = this, el = this.element, busy;
 
-			var clear = this.options.clear;
+            var clear = this.options.clear;
 
-			if(clear) {
-				$(clear).click(function(e) {
-					if($(clear).hasClass('clear')) {
-						$(clear).removeClass('clear');
+            if(clear) {
+                $(clear).click(function(e) {
+                    if($(clear).hasClass('clear')) {
+                        $(clear).removeClass('clear');
 
-						if($(el).val()) {
-							self._reset();
+                        if($(el).val()) {
+                            self._reset();
 
-							$(el).val('');
-							self._trigger('onFind', e, []);
-						}
-					}
-				});
-			}
+                            $(el).val('');
+                            self._trigger('onFind', e, []);
+                        }
+                    }
+                });
+            }
 
-			$(el).keyup(function(e) {
-				if (!busy) {
-					busy = true;
-					// wait to collect input...
-					window.setTimeout(function() {
-						self._find($(el).val(), e);
-						busy = false;
-					}, 500);
-				}
-			});;
-		},
-		_find : function(s, e) {
-			var self = this, x = [];
+            $(el).keyup(function(e) {
+                if (!busy) {
+                    busy = true;
+                    // wait to collect input...
+                    window.setTimeout(function() {
+                        self._find($(el).val(), e);
+                        busy = false;
+                    }, 500);
+                }
+            });;
+        },
+        _find : function(s, e) {
+            var self = this, x = [];
 
-			$(this.options.clear).toggleClass('clear', !!s);
+            $(this.options.clear).toggleClass('clear', !!s);
 
-			if(/[a-z0-9_\.-]/i.test(s)) {
-				$(this.options.items).each(function() {
-					var f = $.String.basename($(this).attr('title')).substring(0, s.length);
+            if(/[a-z0-9_\.-]/i.test(s)) {
+                $(this.options.items).each(function() {
+                    var f = $.String.basename($(this).attr('title')).substring(0, s.length);
 
-					if(f.toLowerCase() == s.toLowerCase()) {
-						if($.inArray(this, x) == -1) {
-							x.push(this);
-						}
-					} else {
-						var i = $.inArray(this, x);
-						if(i != -1) {
-							x.splice(i, 1);
-						}
-					}
-				});
-			} else {
-				x = [];
-			}
+                    if(f.toLowerCase() == s.toLowerCase()) {
+                        if($.inArray(this, x) == -1) {
+                            x.push(this);
+                        }
+                    } else {
+                        var i = $.inArray(this, x);
+                        if(i != -1) {
+                            x.splice(i, 1);
+                        }
+                    }
+                });
+            } else {
+                x = [];
+            }
 
-			if(x.length) {
-				x = self._sort(x);
-				self._scroll(x[0]);
-			} else {
-				self._reset();
-			}
+            if(x.length) {
+                x = self._sort(x);
+                self._scroll(x[0]);
+            } else {
+                self._reset();
+            }
 
-			self._trigger('onFind', e, x);
-		},
+            self._trigger('onFind', e, x);
+        },
 
-		_scroll : function(el) {
-			var self = this, $list = $(this.options.list);
+        _scroll : function(el) {
+            var self = this, $list = $(this.options.list);
 			
-			var pos = $(el).position();
-			var top = $list.scrollTop();
+            var pos = $(el).position();
+            var top = $list.scrollTop();
 
-			$list.css('overflow', 'hidden').animate({
-				scrollTop : pos.top + top
-			}, 1000, function() {
-				$list.css('overflow', 'auto');
-			});
-		},
-		_sort : function(x) {
-			var a = [];
+            $list.css('overflow', 'hidden').animate({
+                scrollTop : pos.top + top
+            }, 1000, function() {
+                $list.css('overflow', 'auto');
+            });
+        },
+        _sort : function(x) {
+            var a = [];
 
-			$(this.options.items).each(function() {
-				if($.inArray(this, x) != -1) {
-					a.push(this);
-				}
-			});
-			return a;
-		},
-		_reset : function() {
-			this._scroll($('li:first', this.options.list));
-		},
-		destroy : function() {
-			$.Widget.prototype.destroy.apply(this, arguments);
-		}
-	});
+            $(this.options.items).each(function() {
+                if($.inArray(this, x) != -1) {
+                    a.push(this);
+                }
+            });
+            return a;
+        },
+        _reset : function() {
+            this._scroll($('li:first', this.options.list));
+        },
+        destroy : function() {
+            $.Widget.prototype.destroy.apply(this, arguments);
+        }
+    });
 
-	$.extend($.ui.searchables, {
-		version : "@@version@@"
-	});
+    $.extend($.ui.searchables, {
+        version : "@@version@@"
+    });
 
 })(jQuery);
