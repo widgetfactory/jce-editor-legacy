@@ -801,10 +801,10 @@ class WFFileBrowser extends WFBrowserExtension {
     }
 
     private function validateUploadedFile($file, &$result) {
-        $chunk = JRequest::getInt('chunk', 0);
-        $chunks = JRequest::getInt('chunks', 1);
+        //$chunk = JRequest::getInt('chunk', 0);
+        //$chunks = JRequest::getInt('chunks', 1);
 
-        if ($chunks === 1) {
+        //if ($chunks === 1) {
             // validate image
             if (preg_match('#\.(jpeg|jpg|jpe|png|gif|wbmp|bmp|tiff|tif)$#i', $file['name'])) {
                 if (@getimagesize($file['tmp_name']) === false) {
@@ -825,10 +825,10 @@ class WFFileBrowser extends WFBrowserExtension {
                     return false;
                 }
             }
-        }
+        //}
 
         // skip html and text files or chunked data
-        if (preg_match('#(html|htm|txt)#i', WFUtility::getExtension($file)) || $chunk > 0) {
+        if (preg_match('#(html|htm|txt)#i', WFUtility::getExtension($file))) {
             return true;
         }
 
@@ -1025,8 +1025,8 @@ class WFFileBrowser extends WFBrowserExtension {
         }
 
         // get chunks
-        $chunk = JRequest::getInt('chunk', 0);
-        $chunks = JRequest::getInt('chunks', 1);
+        //$chunk = JRequest::getInt('chunk', 0);
+        //$chunks = JRequest::getInt('chunks', 1);
 
         // create a filesystem result object
         $result = new WFFileSystemResult();
@@ -1057,7 +1057,7 @@ class WFFileBrowser extends WFBrowserExtension {
                 }
 
                 // check file size
-                if (!$complete && $chunks == 1) {
+                if (!$complete) {
                     @clearstatcache();
                     $upload = $this->get('upload');
                     $max_size = intval(preg_replace('/[^0-9]/', '', $upload['max_size'])) * 1024;
@@ -1081,7 +1081,7 @@ class WFFileBrowser extends WFBrowserExtension {
                     WFUtility::checkPath($dir);
 
                     // Normal upload
-                    if ($chunks == 1) {
+                    //if ($chunks == 1) {
                         $result = $filesystem->upload('multipart', trim($file['tmp_name']), $dir, $name);
 
                         if (!$result->state) {
@@ -1091,7 +1091,7 @@ class WFFileBrowser extends WFBrowserExtension {
 
                         $complete = true;
                         // Chunk uploading
-                    } else {
+                    /*} else {
                         $result = $filesystem->upload('multipart-chunking', trim($file['tmp_name']), $dir, $name, $chunks, $chunk);
 
                         if (!$result->state) {
@@ -1099,7 +1099,7 @@ class WFFileBrowser extends WFBrowserExtension {
                             $result->code = 103;
                         }
                         $complete = ($chunk == $chunks - 1);
-                    }
+                    }*/
                 }
             }
         } else {
@@ -1349,8 +1349,8 @@ class WFFileBrowser extends WFBrowserExtension {
 
         $upload = $this->get('upload');
 
-        $chunk_size = $upload_max ? $upload_max / 1024 . 'KB' : '1MB';
-        $chunk_size = isset($upload['chunk_size']) ? $upload['chunk_size'] : $chunk_size;
+        /*$chunk_size = $upload_max ? $upload_max / 1024 . 'KB' : '1MB';
+        $chunk_size = isset($upload['chunk_size']) ? $upload['chunk_size'] : $chunk_size;*/
 
         // chunking not yet supported in safe_mode, check base directory is writable and chunking supported by filesystem
         if (!$features['chunking']) {
@@ -1379,15 +1379,15 @@ class WFFileBrowser extends WFBrowserExtension {
         $runtimes[] = 'html4';
 
         // remove flash runtime if $chunk_size is 0 (no chunking)
-        if (!$chunk_size) {
+        /*if (!$chunk_size) {
             unset($runtimes[array_search('flash', $runtimes)]);
-        }
+        }*/
 
         $defaults = array(
             'runtimes' => implode(',', $runtimes),
             'size' => $size,
             'filter' => $this->mapUploadFileTypes(true),
-            'chunk_size' => $chunk_size,
+            //'chunk_size' => $chunk_size,
             'elements' => $elements
         );
 

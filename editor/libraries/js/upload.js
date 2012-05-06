@@ -30,7 +30,7 @@
             swf				: 'uploader.swf',
             xap				: 'uploader.xap',
             runtimes		: 'html5,flash,html4',
-            chunk_size		: 0,
+            //chunk_size		: 0,
             urlstream_upload: true,
             insert			: true,
             buttons			: {},
@@ -119,7 +119,7 @@
                     flash_swf_url 		: options.swf,
                     silverlight_xap_url : options.xap,
                     filters 			: filters,
-                    chunk_size			: options.chunk_size,
+                    //chunk_size			: options.chunk_size,
                     multipart			: true,
                     required_features	: self.options.required.join(','),
                     rename				: true
