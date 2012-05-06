@@ -85,7 +85,7 @@ class WFImageEditorExtension_Wf extends WFImageEditorExtension {
             $data = base64_decode($data, true);
 
             if (!$data) {
-                JError::raiseError(403, 'INVALID IMAGE DATA');
+                throw new RuntimeException('Invalid image data');
             }
             
             require_once(WFIMAGE_PATH . DS . 'image.php');
@@ -234,12 +234,10 @@ class WFImageEditorExtension_Wf extends WFImageEditorExtension {
             $data = base64_decode($data, true);
 
             if (!$data) {
-                JError::raiseError(403, 'INVALID IMAGE DATA');
+                throw new RuntimeException('Invalid image data');
             }
             
-            if (!self::validateImageData($data, $ext)) {
-                JError::raiseError(403, 'INVALID IMAGE DATA');
-            }
+            self::validateImageData($data);
 
             // absolute path to original image
             $src = WFUtility::makePath(JPATH_SITE, $file);
@@ -330,19 +328,15 @@ class WFImageEditorExtension_Wf extends WFImageEditorExtension {
     }
     
     public static function validateImageData($data, $type)
-    {                        
-        if (function_exists('imagecreatefromstring')) {
-            // validate image
-            $img = imagecreatefromstring($data);
-
-            if (is_resource($img) && get_resource_type($img) == 'gd') {
-                // free memory
-                imagedestroy($img);
-                return true;
-            }  
+    {                                        
+        require_once(WFIMAGE_PATH . DS . 'image.php');
+        
+        // create image resource to validate
+        $image = new WFImage();            
+        
+        if ($image->loadString($data)) {
+            $image->destroy();
         }
-
-        return false;
     }
 
 }
