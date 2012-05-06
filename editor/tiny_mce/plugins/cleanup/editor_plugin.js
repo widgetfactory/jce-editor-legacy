@@ -129,18 +129,7 @@
                         o.content = o.content.replace(new RegExp('<([^>]+)(' + s.replace(/,/g, '|') + ')="([^"]+)"([^>]*)>', 'gi'), '<$1$4>');
                     }
                 }
-                
-                //o.content = '<pre class="mcePreformatted">' + o.content.replace(/^<pre class="mcePreformatted">([\s\S]*)<\/pre>$/, '$1') + '</pre>';
             });
-            // disable onclick, ondblclick
-            /*ed.onSetContent.add(function(ed, o) {
-				each(ed.dom.select('*[onclick], *[ondblclick]'), function(n) {
-					n.onclick = n.ondblclick = function(e) {
-						tinymce.dom.Event.cancel(e);
-					};
-				});
-			});*/
-            
             
             // Cleanup callback
             ed.onPostProcess.add(function(ed, o) {
@@ -168,8 +157,6 @@
                         // padd empty elements
                         o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)([^>]*)><\/\1>/gi, '<$1$2>&nbsp;</$1>');
                     }
-                    
-                    //o.content = o.content.replace(/^\s*<pre class="mcePreformatted">([\s\S]*)<\/pre>\s*$/, '$1');
                 }
             });
             // Save callback
