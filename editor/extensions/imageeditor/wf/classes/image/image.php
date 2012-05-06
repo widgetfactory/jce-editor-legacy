@@ -412,6 +412,7 @@ class WFImage {
         if (is_resource($handle) && get_resource_type($handle) == 'gd') {
             $this->handle = $handle;
         } else {
+            imagedestroy($handle);
             throw new RuntimeException('Attempting to load an image of unsupported type.');
         }
     }
@@ -757,5 +758,8 @@ class WFImage {
 
         return $width;
     }
-
+    
+    public function destroy() {
+        imagedestroy($this->handle);
+    }
 }
