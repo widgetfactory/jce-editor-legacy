@@ -73,7 +73,7 @@ class WFImageEditorExtension_Wf extends WFImageEditorExtension {
 
         if (preg_match('#^(data:image\/(jpeg|jpg|png|bmp);base64,)#', $data, $matches)) {
 
-            $ext = $matches[2];
+            $ext    = $matches[2];
             $header = $matches[1];
 
             //self::validateImageData($data);
@@ -222,7 +222,10 @@ class WFImageEditorExtension_Wf extends WFImageEditorExtension {
 
         $data = JRequest::getVar('data', '', 'POST', 'STRING', JREQUEST_ALLOWRAW);
 
-        if (preg_match('#^data:image\/(jpeg|jpg|png|bmp);base64#', $data)) {
+        if (preg_match('#^data:image\/(jpeg|jpg|png|bmp);base64#', $data, $matches)) {
+            $ext    = $matches[2];
+            $header = $matches[1];
+
             // replace spaces
             $data = str_replace(' ', '+', $data);
             // remove header
@@ -231,6 +234,10 @@ class WFImageEditorExtension_Wf extends WFImageEditorExtension {
             $data = base64_decode($data, true);
 
             if (!$data) {
+                JError::raiseError(403, 'INVALID IMAGE DATA');
+            }
+            
+            if (!self::validateImageData($data, $ext)) {
                 JError::raiseError(403, 'INVALID IMAGE DATA');
             }
 
@@ -317,6 +324,22 @@ class WFImageEditorExtension_Wf extends WFImageEditorExtension {
         if (file_exists($dest)) {
             @JPath::setPermissions($dest);
             return $dest;
+        }
+
+        return false;
+    }
+    
+    public static function validateImageData($data, $type)
+    {                        
+        if (function_exists('imagecreatefromstring')) {
+            // validate image
+            $img = imagecreatefromstring($data);
+
+            if (is_resource($img) && get_resource_type($img) == 'gd') {
+                // free memory
+                imagedestroy($img);
+                return true;
+            }  
         }
 
         return false;
