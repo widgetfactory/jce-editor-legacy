@@ -412,7 +412,7 @@ class WFImage {
         if (is_resource($handle) && get_resource_type($handle) == 'gd') {
             $this->handle = $handle;
         } else {
-            throw new RuntimeException('Attempting to load an image of unsupported type GIF.');
+            throw new RuntimeException('Attempting to load an image of unsupported type.');
         }
     }
 
