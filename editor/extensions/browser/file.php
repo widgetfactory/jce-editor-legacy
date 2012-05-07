@@ -801,31 +801,27 @@ class WFFileBrowser extends WFBrowserExtension {
     }
 
     private function validateUploadedFile($file, &$result) {
-        //$chunk = JRequest::getInt('chunk', 0);
-        //$chunks = JRequest::getInt('chunks', 1);
 
-        //if ($chunks === 1) {
-            // validate image
-            if (preg_match('#\.(jpeg|jpg|jpe|png|gif|wbmp|bmp|tiff|tif)$#i', $file['name'])) {
-                if (@getimagesize($file['tmp_name']) === false) {
-                    $result->state = false;
-                    $result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_IMAGE_ERROR');
-                    return false;
-                }
+        // validate image
+        if (preg_match('#\.(jpeg|jpg|jpe|png|gif|wbmp|bmp|tiff|tif)$#i', $file['name'])) {
+            if (@getimagesize($file['tmp_name']) === false) {
+                $result->state = false;
+                $result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_IMAGE_ERROR');
+                return false;
             }
-            $upload = $this->get('upload');
+        }
+        $upload = $this->get('upload');
 
-            // validate mimetype
-            if ($upload['validate_mimetype']) {
-                wfimport('editor.libraries.classes.mime');
+        // validate mimetype
+        if ($upload['validate_mimetype']) {
+            wfimport('editor.libraries.classes.mime');
 
-                if (!WFMimeType::check($file['name'], $file['tmp_name'], $file['type'])) {
-                    $result->state = false;
-                    $result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_IMAGE_ERROR');
-                    return false;
-                }
+            if (!WFMimeType::check($file['name'], $file['tmp_name'], $file['type'])) {
+                $result->state = false;
+                $result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_IMAGE_ERROR');
+                return false;
             }
-        //}
+        }
 
         // skip html and text files or chunked data
         if (preg_match('#(html|htm|txt)#i', WFUtility::getExtension($file))) {
@@ -1024,10 +1020,6 @@ class WFFileBrowser extends WFBrowserExtension {
             JError::raiseError(403, 'INVALID FILE NAME');
         }
 
-        // get chunks
-        //$chunk = JRequest::getInt('chunk', 0);
-        //$chunks = JRequest::getInt('chunks', 1);
-
         // create a filesystem result object
         $result = new WFFileSystemResult();
 
@@ -1080,26 +1072,14 @@ class WFFileBrowser extends WFBrowserExtension {
                     // check destination path
                     WFUtility::checkPath($dir);
 
-                    // Normal upload
-                    //if ($chunks == 1) {
-                        $result = $filesystem->upload('multipart', trim($file['tmp_name']), $dir, $name);
+                    $result = $filesystem->upload('multipart', trim($file['tmp_name']), $dir, $name);
 
-                        if (!$result->state) {
-                            $result->message = WFText::_('WF_MANAGER_UPLOAD_ERROR');
-                            $result->code = 103;
-                        }
+                    if (!$result->state) {
+                        $result->message = WFText::_('WF_MANAGER_UPLOAD_ERROR');
+                        $result->code = 103;
+                    }
 
-                        $complete = true;
-                        // Chunk uploading
-                    /*} else {
-                        $result = $filesystem->upload('multipart-chunking', trim($file['tmp_name']), $dir, $name, $chunks, $chunk);
-
-                        if (!$result->state) {
-                            $result->message = WFText::_('WF_MANAGER_UPLOAD_ERROR');
-                            $result->code = 103;
-                        }
-                        $complete = ($chunk == $chunks - 1);
-                    }*/
+                    $complete = true;
                 }
             }
         } else {
@@ -1349,8 +1329,8 @@ class WFFileBrowser extends WFBrowserExtension {
 
         $upload = $this->get('upload');
 
-        /*$chunk_size = $upload_max ? $upload_max / 1024 . 'KB' : '1MB';
-        $chunk_size = isset($upload['chunk_size']) ? $upload['chunk_size'] : $chunk_size;*/
+        /* $chunk_size = $upload_max ? $upload_max / 1024 . 'KB' : '1MB';
+          $chunk_size = isset($upload['chunk_size']) ? $upload['chunk_size'] : $chunk_size; */
 
         // chunking not yet supported in safe_mode, check base directory is writable and chunking supported by filesystem
         if (!$features['chunking']) {
@@ -1379,9 +1359,9 @@ class WFFileBrowser extends WFBrowserExtension {
         $runtimes[] = 'html4';
 
         // remove flash runtime if $chunk_size is 0 (no chunking)
-        /*if (!$chunk_size) {
-            unset($runtimes[array_search('flash', $runtimes)]);
-        }*/
+        /* if (!$chunk_size) {
+          unset($runtimes[array_search('flash', $runtimes)]);
+          } */
 
         $defaults = array(
             'runtimes' => implode(',', $runtimes),
