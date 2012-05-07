@@ -34,18 +34,11 @@ class WFJoomlaFileSystem extends WFFileSystem {
             $safe_mode = true;
         }
 
-        $chunking = true;
-
-        // no chunking in safe_mode or FTP mode or if base dir not writable
-        if ($safe_mode || $this->isFTP() || !is_writable($this->getBaseDir())) {
-            $chunking = false;
-        }
-
         $this->setProperties(array(
             'local' => true,
             'upload' => array(
                 'stream' => false,
-                'chunking' => $chunking,
+                'chunking' => false,
                 'unique_filenames' => true
             )
         ));
