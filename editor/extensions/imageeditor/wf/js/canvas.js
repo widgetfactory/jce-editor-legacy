@@ -959,6 +959,9 @@
                 case 'bmp':
                     mime = 'image/bmp';
                     break;
+                case 'gif':
+                    mime = 'image/gif';
+                    break;    
             }
 
             return mime;
