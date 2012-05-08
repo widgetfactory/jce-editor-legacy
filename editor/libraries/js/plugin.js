@@ -580,20 +580,18 @@
                     // process object result
                     if ($.isPlainObject(o)) {
                     	if (o.error) {
-                        	showError(o.text || o.error || '');
-                        	return false;
+                            showError(o.text || o.error || '');
                         }
 
-                        r = o.result;
+                        var r = o.result || null;
                         
-                        if (r.error && r.error.length) {
-                        	showError(r.error);
-                        	return false;
+                        if (r && r.error && r.error.length) {
+                            showError(r.error);
                         }
                     // show error
                     } else {
                     	if (o) {
-                        	showError(o);
+                            showError(o);
                         }
                        	return false;
                     }
