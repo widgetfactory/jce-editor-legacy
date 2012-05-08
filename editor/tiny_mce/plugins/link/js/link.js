@@ -16,19 +16,19 @@ var LinkDialog = {
     },
 
     init : function() {
-    	tinyMCEPopup.restoreSelection();
+        tinyMCEPopup.restoreSelection();
     	
-    	var self = this, ed = tinyMCEPopup.editor, se = ed.selection, n, el;
+        var self = this, ed = tinyMCEPopup.editor, se = ed.selection, n, el;
 
-    	$('button#insert').click(function(e) {
-    		self.insert();
-    		e.preventDefault();
-    	});
+        $('button#insert').click(function(e) {
+            self.insert();
+            e.preventDefault();
+        });
     	
-    	$('button#help').click(function(e) {
-    		self.openHelp();
-    		e.preventDefault();
-    	});
+        $('button#help').click(function(e) {
+            self.openHelp();
+            e.preventDefault();
+        });
 
         tinyMCEPopup.resizeToInnerSize();       
 
@@ -44,9 +44,9 @@ var LinkDialog = {
 
         // Create Browser Tree
         WFLinkBrowser.init({
-        	onClick : function(v) {
-        		self.insertLink(v);
-        	}
+            onClick : function(v) {
+                self.insertLink(v);
+            }
         });
         
         // setup popups
@@ -70,24 +70,30 @@ var LinkDialog = {
             }
 
             if (n) {
-            	n = ed.dom.getParent(n, 'A') || n;
+                n = ed.dom.getParent(n, 'A') || n;
                 
                 if (n.nodeName == 'A') {
-                	var c = n.childNodes;
-                	if (c.length == 1 && c[0].nodeType == 3) {
-                		state = true;
-                		v = se.getContent({format: 'text'});
-                	}
+                    var c = n.childNodes;
+                    if (c.length == 1 && c[0].nodeType == 3) {
+                        state = true;
+                        v = se.getContent({
+                            format: 'text'
+                        });
+                    }
                 } else {
-                	if (ed.dom.isBlock(n) || n.nodeName === 'BODY') {
-                		state = true;
-                		v = se.getContent({format: 'text'});
-                	}
+                    if (ed.dom.isBlock(n) || n.nodeName === 'BODY') {
+                        state = true;
+                        v = se.getContent({
+                            format: 'text'
+                        });
+                    }
                 }
-             } else {
-             	state = true;
-             	v = se.getContent({format: 'text'});
-             }
+            } else {
+                state = true;
+                v = se.getContent({
+                    format: 'text'
+                });
+            }
 
             // set text value and state
             setText(state, v);
@@ -97,12 +103,12 @@ var LinkDialog = {
 
         TinyMCE_Utils.fillClassList('classlist');
         
-         // Enable / disable attributes
-	     $.each(this.settings.attributes, function(k, v) {
-			if (parseInt(v) === 0) {
-				$('#attributes-' + k).hide();
-	        }
-		});
+        // Enable / disable attributes
+        $.each(this.settings.attributes, function(k, v) {
+            if (parseInt(v) === 0) {
+                $('#attributes-' + k).hide();
+            }
+        });
 
         if (n && n.nodeName == 'A') {
             $('#insert').button('option', 'label', tinyMCEPopup.getLang('update', 'Update', true));
@@ -112,9 +118,9 @@ var LinkDialog = {
             // Setup form data
             $('#href').val(href);
             // attributes
-			$.each(['title', 'id', 'style', 'dir', 'lang', 'tabindex', 'accesskey', 'class', 'charset', 'hreflang', 'target'], function(i, k) {
-				$('#' + k).val(ed.dom.getAttrib(n, k));
-			});
+            $.each(['title', 'id', 'style', 'dir', 'lang', 'tabindex', 'accesskey', 'class', 'charset', 'hreflang', 'target'], function(i, k) {
+                $('#' + k).val(ed.dom.getAttrib(n, k));
+            });
 
             $('#dir').val(ed.dom.getAttrib(n, 'dir'));
             $('#rev').val(ed.dom.getAttrib(n, 'rel'), true);
@@ -213,51 +219,55 @@ var LinkDialog = {
     },
 
     insertAndClose : function() {
-    	tinyMCEPopup.restoreSelection();
+        tinyMCEPopup.restoreSelection();
     	
-    	var ed = tinyMCEPopup.editor, se = ed.selection, n = se.getNode(), args = {}, el;
+        var ed = tinyMCEPopup.editor, se = ed.selection, n = se.getNode(), args = {}, el;
     	
-    	var attribs = ['href', 'title', 'target', 'id', 'style', 'class', 'rel', 'rev', 'charset', 'hreflang', 'dir', 'lang', 'tabindex', 'accesskey', 'type'];
+        var attribs = ['href', 'title', 'target', 'id', 'style', 'class', 'rel', 'rev', 'charset', 'hreflang', 'dir', 'lang', 'tabindex', 'accesskey', 'type'];
     	
-    	tinymce.each(attribs, function(k) {
-    		var v = $('#' + k).val();
+        tinymce.each(attribs, function(k) {
+            var v = $('#' + k).val();
     		
-    		if (k == 'href') {
-    			// prepare URL
-    			v = $.String.buildURI(v);
-    		}
+            if (k == 'href') {
+                // prepare URL
+                v = $.String.buildURI(v);
+            }
     		
-    		if (k == 'class') {
-    			v = $('#classlist').val() || $('#classes').val() || '';
-    		}
+            if (k == 'class') {
+                v = $('#classlist').val() || $('#classes').val() || '';
+            }
     		
-    		args[k] = v;
-    	});
-    	
+            args[k] = v;
+        });
+        
+        var selector = 'a[href=javascript\\:mctmp\\(0\\)\\;]';
+
         // no selection
         if (se.isCollapsed()) {
-            ed.execCommand('mceInsertContent', false, '<a href="javascript:mctmp(0);">' + $('#text').val() + '</a>', {skip_undo : 1});
+            ed.execCommand('mceInsertContent', false, '<a href="javascript:mctmp(0);">' + $('#text').val() + '</a>', {
+                skip_undo : 1
+            });
 
-            tinymce.each(ed.dom.select('a[href=javascript:mctmp(0);]'), function(link) {
+            tinymce.each(ed.dom.select(selector), function(link) {
                 ed.dom.setAttribs(link, args);
 
                 el = link;
             });
 
-            // create link on selection or update existing link
+        // create link on selection or update existing link
         } else {            
             ed.execCommand('mceInsertLink', false, 'javascript:mctmp(0);');
             
-            tinymce.each(ed.dom.select('a[href=javascript:mctmp(0);]'), function(link) {
+            tinymce.each(ed.dom.select(selector), function(link) {
                 ed.dom.setAttribs(link, args);
 
                 el = link;
             });
         	
-        	// if text selection, update
-        	if (!$('#text').is(':disabled') && el) {
-        		ed.dom.setHTML(el, $('#text').val());
-        	}
+            // if text selection, update
+            if (!$('#text').is(':disabled') && el) {
+                ed.dom.setHTML(el, $('#text').val());
+            }
         }
 
         // Create or remove popup
