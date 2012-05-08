@@ -27,7 +27,7 @@
 
             // add context menu blocker
             if (ed.onContextMenu) {
-                cMenu = ed.onContextMenu.addToTop( function(ed, e) {
+                var cMenu = ed.onContextMenu.addToTop( function(ed, e) {
                     if (ed.plugins.source.state) {
                         return false;
                     }
@@ -43,7 +43,8 @@
                 }    
             	
                 if (ed.plugins.fullscreen) {
-                    ed.onFullScreen.add(function(state, settings) {
+                    ed.onFullScreen.add(function(state, settings) {                                                
+
                         if (!state) {
                             ed.settings.source_state = !settings.source_state;
 		            		
@@ -78,6 +79,11 @@
                         case 'mcePrint':
                             o.terminate = true;
                             return self.printSource();
+                            break;
+                        case 'mceFullScreen':                            
+                            if (self.getState()) {                            
+                                ed.setContent(self.getContent());
+                            }
                             break;
                     }
                 }
