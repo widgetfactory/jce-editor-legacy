@@ -103,6 +103,22 @@ class WFJoomlaFileSystem extends WFFileSystem {
 
         return $root;
     }
+    
+    function toAbsolute($path)
+    {
+        return WFUtility::makePath($this->getBaseDir(), $path);
+    }
+    
+    function toRelative($path, $isabsolute = true)
+    {
+        // path is relative to Joomla! root, eg: images/folder
+        if ($isabsolute === false) {
+            return rtrim($path, $this->getRootDir());
+        }
+
+        // path is absolute
+        return rtrim($path, $this->getBaseDir());
+    }
 
     /**
      * Determine whether FTP mode is enabled

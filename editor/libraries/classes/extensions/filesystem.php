@@ -146,6 +146,14 @@ class WFFileSystem extends WFExtension {
         return $root;
     }
 
+    function toAbsolute($path) {
+        return $path;
+    }
+
+    function toRelative($path) {
+        return $path;
+    }
+
     function getFiles($path, $filter) {
         return array();
     }
