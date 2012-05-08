@@ -281,7 +281,7 @@ var WFPopups = WFExtensions.add('Popups', {
                     });
                 }
 
-                tinymce.each(ed.dom.select('a[href=javascript:mctmp(0);]'), function(link) {
+                tinymce.each(ed.dom.select('a[href=javascript\\:mctmp\\(0\\)\\;]'), function(link) {
                     self.setAttributes(link, args);
                 });
             }
