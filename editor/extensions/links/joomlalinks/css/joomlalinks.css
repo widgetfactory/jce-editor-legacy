@@ -15,3 +15,6 @@ div.tree ul li div.tree-row span.folder.weblink {
 div.tree ul li div.tree-row span.folder.menu {
 	background: url(../img/icons.png) no-repeat  0 -80px;
 }
+div.tree ul li div.tree-row span.file.anchor {
+	background: url(../img/icons.png) no-repeat  0 -160px;
+}
