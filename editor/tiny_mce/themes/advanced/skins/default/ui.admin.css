@@ -87,8 +87,20 @@
     width : 30px;
 }
 
-#jce span.mceSplitButton span.mceIcon {
+#jce.multiplebg span.mceSplitButton span.mceIcon {
     background-image: url("img/button_bg.png"), url("../../img/icons.png");
+}
+
+#jce span.mceSplitButton {
+    position: relative;
+}
+
+#jce span.mceSplitButton span.mceIcon + span {
+    position : absolute;
+    top : 0px;
+    right : -1px;
+    background: url("img/button_bg.png") no-repeat 0 0;
+    width : 10px;
 }
 
 #jce span.mceIcon.mce_paste {

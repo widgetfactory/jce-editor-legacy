@@ -123,6 +123,19 @@
     width : 84px;
 }
 
+/* IE8 splitbutton icon */
+#jce .o2k7Skin span.mceSplitButton span.mceIcon + span {
+    top : 0px;
+    right : 0;
+    background: url("img/button_bg.png") no-repeat -48px 0;
+    width :11px;
+    height : 21px;
+}
+
+#jce .o2k7Skin span.mceSplitButton span.mceIcon + span:hover {
+    background-position: -48px -22px;
+}
+
 #jce .o2k7Skin span.mceListBox:hover {
     background: url('img/button_bg.png') no-repeat 4px -23px;
 }
@@ -137,8 +150,8 @@
     background-color: #fff;
 }
 
-#jce .o2k7Skin .mceSplitButton .mceIcon, 
-#jce .o2k7Skin .mceSplitButton .mceIcon:hover {
+#jce.multiplebg .o2k7Skin .mceSplitButton .mceIcon, 
+#jce.multiplebg .o2k7Skin .mceSplitButton .mceIcon:hover {
     background-image: url("img/button_bg.png"), url("../../img/icons.png");
     height : 20px;
 }
@@ -233,8 +246,17 @@
     border-color : #FCB557;
 }
 
-#jce .o2k7Skin.o2k7SkinSilver .mceSplitButton .mceIcon, 
-#jce .o2k7Skin.o2k7SkinSilver .mceSplitButton .mceIcon:hover {
+/* IE8 splitbutton icon */
+#jce .o2k7Skin.o2k7SkinSilver span.mceSplitButton span.mceIcon + span {
+    background: url("img/button_bg_silver.png") no-repeat -47px 0;
+}
+
+#jce .o2k7Skin.o2k7SkinSilver span.mceSplitButton span.mceIcon + span:hover {
+    background-position: -47px -22px;
+}
+
+#jce.multiplebg .o2k7Skin.o2k7SkinSilver .mceSplitButton .mceIcon, 
+#jce.multiplebg .o2k7Skin.o2k7SkinSilver .mceSplitButton .mceIcon:hover {
     background-image: url("img/button_bg_silver.png"), url("../../img/icons.png");
     height : 20px;
 }
@@ -339,6 +361,15 @@
     border-color : #FFE7A1;
 }
 
+/* IE8 splitbutton icon */
+#jce .o2k7Skin.o2k7SkinBlack span.mceSplitButton span.mceIcon + span {
+    background: url("img/button_bg_black.png") no-repeat -47px 0;
+}
+
+#jce .o2k7Skin.o2k7SkinBlack span.mceSplitButton span.mceIcon + span:hover {
+    background-position: -47px -22px;
+}
+
 #jce .o2k7Skin.o2k7SkinBlack span.mceListBox {
     background: #fff url('img/button_bg_black.png') no-repeat 4px -1px;
     margin: 0 2px;
@@ -356,8 +387,8 @@
     background : #fff;
 }
 
-#jce .o2k7Skin.o2k7SkinBlack .mceSplitButton .mceIcon, 
-#jce .o2k7Skin.o2k7SkinBlack .mceSplitButton .mceIcon:hover {
+#jce.multiplebg .o2k7Skin.o2k7SkinBlack .mceSplitButton .mceIcon, 
+#jce.multiplebg .o2k7Skin.o2k7SkinBlack .mceSplitButton .mceIcon:hover {
     background-image: url("img/button_bg_black.png"), url("../../img/icons.png");
     height : 20px;
 }
