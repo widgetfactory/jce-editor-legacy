@@ -20,12 +20,17 @@
             function isBlock(n) {
                 return new RegExp('^(' + blocks.replace(',', '|', 'g') + ')$', 'i').test(n.nodeName);
             }
-			
+            
             // Format Block fix
             ed.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
-                var n = ed.selection.getNode(), p;
+                var se = ed.selection, n = se.getNode(), p;
                 switch (cmd) {
                     case 'FormatBlock':
+                        // must be a selection
+                        if (se.isCollapsed()) {
+                            return;
+                        }
+                        // remove format
                         if (!v) {
                             ed.undoManager.add();
                             p = ed.dom.getParent(n, blocks);
@@ -70,9 +75,9 @@
                 s.select(el.firstChild);
                 s.collapse(0);
 
-                r 		= s.getRng();
-                fn 		= s.getNode().firstChild;
-                br 		= fn.nodeName == 'BR' && fn.getAttribute('mce_bogus');
+                r 	= s.getRng();
+                fn 	= s.getNode().firstChild;
+                br 	= fn.nodeName == 'BR' && fn.getAttribute('mce_bogus');
                 pos 	= br ? -1 : -2;
 				
                 r.move('character', pos);
@@ -108,7 +113,7 @@
 							
             // create element
             var el 	= dom.create(tag);
-            var h 	= (tag == 'br') ? '' : '<br _mce_bogus="1" />';
+            var h 	= (tag == 'br') ? '' : '<br data-mce-bogus="1" />';
             dom.setHTML(el, h);	
 			
             // insert after parent element

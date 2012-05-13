@@ -53,7 +53,7 @@
             <option value="0">WF_OPTION_NO</option>
         </param>
 		<!-- Formatting parameters -->
-        <param name="theme_advanced_blockformats" class="checklist sortable" type="list" multiple="multiple" default="p,div,h1,h2,h3,h4,h5,h6,address,code,pre,samp,span,dt,dd,section,article,hgroup,aside,figure" label="WF_PARAM_BLOCK_FORMAT" description="WF_PARAM_BLOCK_FORMAT_DESC">
+        <param name="theme_advanced_blockformats" class="checklist sortable" type="list" multiple="multiple" default="p,div,h1,h2,h3,h4,h5,h6,address,code,pre,samp,span,section,article,hgroup,aside,figure" label="WF_PARAM_BLOCK_FORMAT" description="WF_PARAM_BLOCK_FORMAT_DESC">
             <option value="p">Paragraph</option>
             <option value="div">Div</option>
             <option value="h1">Heading1</option>
@@ -67,8 +67,6 @@
             <option value="pre">Preformatted</option>
             <option value="samp">Sample</option>
             <option value="span">Span</option>
-            <option value="dt">Definition Term</option>
-            <option value="dd">Definition Description</option>
             <option value="section">Section</option>
             <option value="article">Article</option>
             <option value="hgroup">HGroup</option>

@@ -43,8 +43,6 @@ class WFFormatPluginConfig {
             'div' => 'advanced.div',
             'blockquote' => 'advanced.blockquote',
             'code' => 'advanced.code',
-            'dt' => 'advanced.dt',
-            'dd' => 'advanced.dd',
             'samp' => 'advanced.samp',
             'span' => 'advanced.span',
             'section' => 'advanced.section',
@@ -54,7 +52,7 @@ class WFFormatPluginConfig {
             'figure' => 'advanced.figure'
         );
 
-        $tmpblocks = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,dt,dd,section,article,hgroup,aside,figure', 'p,address,pre,h1,h2,h3,h4,h5,h6');
+        $tmpblocks = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,hgroup,aside,figure', 'p,address,pre,h1,h2,h3,h4,h5,h6');
         $list = array();
         $blocks = array();
 
