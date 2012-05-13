@@ -152,8 +152,8 @@ class JoomlalinksContent extends JObject {
 
                         foreach ($anchors as $anchor) {
                             $items[] = array(
-                                'id' => $id . '#' . $anchor,
-                                'name' => $article->title . ' / ' . $article->alias . '#' . $anchor,
+                                'id'    => $id . '#' . $anchor,
+                                'name'  => '#' . $anchor,
                                 'class' => 'file anchor'
                             );
                         }
@@ -225,7 +225,7 @@ class JoomlalinksContent extends JObject {
                     foreach ($anchors as $anchor) {
                         $items[] = array(
                             'id'    => $id . '#' . $anchor,
-                            'name'  => $article->title . ' / ' . $article->alias . '#' . $anchor,
+                            'name'  => '#' . $anchor,
                             'class' => 'file anchor'
                         );
                     }
@@ -247,8 +247,8 @@ class JoomlalinksContent extends JObject {
 
                     foreach ($anchors as $anchor) {
                         $items[] = array(
-                            'id' => $id . '#' . $anchor,
-                            'name' => $static->title . ' / ' . $static->alias . '#' . $anchor,
+                            'id'    => $id . '#' . $anchor,
+                            'name'  => '#' . $anchor,
                             'class' => 'file anchor'
                         );
                     }
@@ -346,6 +346,7 @@ class JoomlalinksContent extends JObject {
 
         if (method_exists('JUser', 'getAuthorisedViewLevels')) {
             $where .= ' AND a.access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')';
+            $where .= ' AND b.access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')';
         } else {
             $join .= ' INNER JOIN #__sections AS u ON u.id = a.sectionid';
             $where .= ' AND a.access <= ' . (int) $user->get('aid');
