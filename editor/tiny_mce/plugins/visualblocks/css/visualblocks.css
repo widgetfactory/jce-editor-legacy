@@ -1,11 +1,10 @@
 p, h1, h2, h3, h4, h5, h6, hgroup, aside, div, section, article, blockquote, address, pre, figure, ul, ol, dl, dt, dd  {display: block; padding-top : 10px; border: 1px dashed #BBB;background: transparent no-repeat 2px 2px;}
-p, h1, h2, h3, h4, h5, h6, hgroup, aside, div, section, article, address, pre, figure, ul, ol, dl {margin-left: 2px}
+p, h1, h2, h3, h4, h5, h6, hgroup, aside, div, section, article, address, pre, figure, ul, ol, dl, dt, dd {margin-left: 2px; margin-right : 2px;}
 section, article, address, hgroup, aside, figure {margin: 0 0 1em 2px}
 figcaption {border: 1px dashed #BBB}
 
 dd, dt {
     margin-bottom : 2px;
-    margin-left : 30px;
 }
 
 p {background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAICAYAAAA1BOUGAAAAcklEQVQIW2NkwAMYp02bpsTMzBwBVfP9////OzMyMq6B+IwzZszwYGRk3A5kLwFKcAFpPyDfOz09fReypABQ4CNQ8SGg5CUgOwcuCdTVAhTkBurMBLJjgUavQZZcA5R4D5TYw8TEtB6o8zeGsciOxysJAFsxQAl0kP1+AAAAAElFTkSuQmCC);} 
