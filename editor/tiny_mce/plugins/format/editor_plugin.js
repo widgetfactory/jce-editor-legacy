@@ -1,14 +1,14 @@
 /**
-* @version		$Id: editor_plugin.js 221 2011-06-11 17:30:33Z happy_noodle_boy $
-* @package      JCE
-* @copyright    Copyright (C) 2005 - 2009 Ryan Demmer. All rights reserved.
-* @author		Ryan Demmer
-* @license      GNU/GPL 2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-* JCE is free software. This version may have been modified pursuant
-* to the GNU General Public License, and as distributed it includes or
-* is derivative of works licensed under the GNU General Public License or
-* other free or open source software licenses.
-*/
+ * @version		$Id: editor_plugin.js 221 2011-06-11 17:30:33Z happy_noodle_boy $
+ * @package      JCE
+ * @copyright    Copyright (C) 2005 - 2009 Ryan Demmer. All rights reserved.
+ * @author		Ryan Demmer
+ * @license      GNU/GPL 2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * JCE is free software. This version may have been modified pursuant
+ * to the GNU General Public License, and as distributed it includes or
+ * is derivative of works licensed under the GNU General Public License or
+ * other free or open source software licenses.
+ */
 (function() {
     tinymce.create('tinymce.plugins.FormatPlugin', {
         init : function(ed, url) {
@@ -53,6 +53,20 @@
                         break;
                 }
             });
+            
+            ed.onExecCommand.add(function(ed, cmd, ui, v, o) {
+                var se = ed.selection, n = se.getNode();
+                // add Definition List
+                switch (cmd) {
+                    case 'FormatBlock':
+                        if (v == 'dt' || v == 'dd') {
+                            if (n && n.nodeName !== 'DL') {
+                                ed.formatter.apply('dl');
+                            }
+                        }
+                        break;
+                }
+            });
 			
             t.onClearBlocks = new tinymce.util.Dispatcher(t);		
             tinymce.isChrome = tinymce.isWebkit && /chrome/i.test(navigator.userAgent);
@@ -65,6 +79,42 @@
                     // Execute post process handlers
                     t.onClearBlocks.dispatch(t);
                 }
+            });
+            
+            ed.onPreInit.add(function() {
+                
+                function wrapList(node) {
+                    var sibling = node.prev;
+                    
+                    if (node.parent && node.parent.name == 'dl') {
+                        return;
+                    }
+                        
+                    if (sibling && (sibling.name === 'dl' || sibling.name === 'dl')) {
+                        sibling.append(node);
+                        return;
+                    }
+
+                    sibling = node.next;
+                    if (sibling && (sibling.name === 'dl' || sibling.name === 'dl')) {
+                        sibling.insert(node, sibling.firstChild, true);
+                        return;
+                    }
+
+                    node.wrap(ed.parser.filterNode(new tinymce.html.Node('dl', 1)));
+                }
+                
+                ed.parser.addNodeFilter('dt,dd', function(nodes) {
+                    for (var i = 0, len = nodes.length; i < len; i++) {
+                        wrapList(nodes[i]);
+                    }
+                });
+                
+                ed.serializer.addNodeFilter('dt,dd', function(nodes) {
+                    for (var i = 0, len = nodes.length; i < len; i++) {
+                        wrapList(nodes[i]);
+                    }
+                });
             });
         },
 		
