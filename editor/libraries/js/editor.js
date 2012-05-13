@@ -120,6 +120,10 @@ function jInsertEditorText(text, editor) {
                     'figure' : {
                         block : 'figure', 
                         wrapper: true
+                    },
+                    'dl' : {
+                        block : 'dl', 
+                        wrapper: true
                     }
                 },
                 schema: "html5"
