@@ -65,38 +65,41 @@ var AnchorDialog = {
         }
 		
         var n = ed.selection.getNode(), data;
-		
-        if (n.nodeName == 'IMG' && /mceItemAnchor/.test(n.className)) {
-            var o = tinymce.util.JSON.parse(ed.dom.getAttrib(n, 'data-mce-json'));
-			
+	
+        // existing img anchor link (webkit)
+        if (ed.dom.is(n, 'img.mceItemAnchor')) {
+            var o = {};
+            
             if (name) {
                 o.name = name;
             }
-			
+            
             if (id) {
                 o.id = id;
             }
-			
-            data = {
-                'data-mce-json'	: tinymce.util.JSON.serialize(o)
-            };			
+            // update
+            ed.dom.setAttrib(n, 'data-mce-json',  tinymce.util.JSON.serialize(o));		
+        // normal anchor link or new
         } else {
             n = ed.dom.getParent(n, 'A');
-			
-            data = {
-                name 	: name,
-                id		: id
+            
+            var at = {
+              'class' :  'mceItemAnchor' 
             };
-        }
-		
-        if (data) {
-            ed.dom.setAttribs(n, data);
-        } else {
-            ed.execCommand('mceInsertContent', 0, ed.dom.createHTML('a', {
-                name : name, 
-                id : id, 
-                'class' : 'mceItemAnchor'
-            }, ''));
+            
+            if (name) {
+                at.name = name;
+            }
+            
+            if (id) {
+                at.id = id;
+            }
+            
+            if (n) {
+                ed.dom.setAttribs(n, at); 
+            } else {
+                ed.execCommand('mceInsertContent', 0, ed.dom.createHTML('a', at, '\uFEFF'));
+            }
         }
         tinyMCEPopup.close();
     }
