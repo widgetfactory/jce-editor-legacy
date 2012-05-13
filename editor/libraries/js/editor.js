@@ -25,7 +25,7 @@ function jInsertEditorText(text, editor) {
  * Widget Factory Editor
  */
 ( function() {
-    var winLoaded = false;
+    var winLoaded = false, each = tinymce.each;
 
     var WFEditor = {
 
@@ -141,7 +141,7 @@ function jInsertEditorText(text, editor) {
                     // load editor
                     WFEditor.load();
                 } catch (e) {
-                    alert('Unable to initialize TinyMCE : ' + e);
+                    //alert('Unable to initialize TinyMCE : ' + e);
                 }
             }
         },
@@ -239,12 +239,12 @@ function jInsertEditorText(text, editor) {
 
             // setup editor before init
             tinyMCE.onAddEditor.add(function(mgr, ed) {
-
+               
+                // load packer css
                 if(s.compress.css) {
-                    // load packer css
-                    ed.onPreInit.add(function() {
+                    ed.onPreInit.add(function() {                    
                         ed.dom.loadCSS(s.site_url + 'index.php?option=com_jce&view=editor&layout=editor&task=pack&type=css&context=content&component_id=' + s.component_id + '&' + s.token + '=1');
-                    });
+                    }); 
                 }
 
                 WFEditor.hideLoader(ed.getElement());
