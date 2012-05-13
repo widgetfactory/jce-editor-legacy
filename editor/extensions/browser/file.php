@@ -1003,7 +1003,10 @@ class WFFileBrowser extends WFBrowserExtension {
 
         // get file name
         $name = JRequest::getVar('name', $file['name']);
-
+        
+        // decode name
+        $name = rawurldecode($name);
+        // get extension
         $ext = WFUtility::getExtension($name);
         // strip extension
         $name = WFUtility::stripExtension($name);
@@ -1123,6 +1126,9 @@ class WFFileBrowser extends WFBrowserExtension {
         $items = explode(",", rawurldecode($items));
 
         foreach ($items as $item) {
+            // decode
+            $item = rawurldecode($item);
+
             // check path	
             WFUtility::checkPath($item);
 
@@ -1161,6 +1167,9 @@ class WFFileBrowser extends WFBrowserExtension {
 
         $source = array_shift($args);
         $destination = array_shift($args);
+        
+        $source         = rawurldecode($source);
+        $destination    = rawurldecode($destination);
 
         WFUtility::checkPath($source);
         WFUtility::checkPath($destination);
@@ -1203,11 +1212,16 @@ class WFFileBrowser extends WFBrowserExtension {
         $filesystem = $this->getFileSystem();
 
         $items = explode(",", rawurldecode($items));
+        
+        // decode
+        $destination = rawurldecode($destination);
 
         // check destination path
         WFUtility::checkPath($destination);
 
         foreach ($items as $item) {
+            // decode
+            $item = rawurldecode($item);
 
             // check source path
             WFUtility::checkPath($item);
@@ -1246,10 +1260,15 @@ class WFFileBrowser extends WFBrowserExtension {
 
         $items = explode(",", rawurldecode($items));
 
+        // decode
+        $destination = rawurldecode($destination);
+        
         // check destination path
         WFUtility::checkPath($destination);
 
         foreach ($items as $item) {
+            // decode
+            $item = rawurldecode($item);
             // check source path
             WFUtility::checkPath($item);
 
@@ -1286,6 +1305,10 @@ class WFFileBrowser extends WFBrowserExtension {
 
         $dir = array_shift($args);
         $new = array_shift($args);
+        
+        // decode
+        $dir = rawurldecode($dir);
+        $new = rawurldecode($new);
 
         $filesystem = $this->getFileSystem();
 
