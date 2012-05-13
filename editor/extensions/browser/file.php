@@ -1356,9 +1356,9 @@ class WFFileBrowser extends WFBrowserExtension {
           $chunk_size = isset($upload['chunk_size']) ? $upload['chunk_size'] : $chunk_size; */
 
         // chunking not yet supported in safe_mode, check base directory is writable and chunking supported by filesystem
-        if (!$features['chunking']) {
+        /*if (!$features['chunking']) {
             $chunk_size = 0;
-        }
+        }*/
 
         // get upload size
         $size = intval(preg_replace('/[^0-9]/', '', $upload['max_size'])) . 'kb';
