@@ -1,1 +1,97 @@
-(function(){tinymce.create("tinymce.plugins.VisualBlocks",{init:function(a,b){var c;if(!window.NodeList){return}a.addCommand("mceVisualBlocks",function(){var e=a.dom,d;if(!c){c=e.uniqueId();d=e.create("link",{id:c,rel:"stylesheet",href:b+"/css/visualblocks.css"});a.getDoc().getElementsByTagName("head")[0].appendChild(d)}else{d=e.get(c);d.disabled=!d.disabled}a.controlManager.setActive("visualblocks",!d.disabled)});a.addButton("visualblocks",{title:"visualblocks.desc",cmd:"mceVisualBlocks"});a.onInit.add(function(){if(a.settings.visualblocks_default_state){a.execCommand("mceVisualBlocks",false,null,{skip_focus:true})}})},getInfo:function(){return{longname:"Visual blocks",author:"Moxiecode Systems AB",authorurl:"http://tinymce.moxiecode.com",infourl:"http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/visualblocks",version:tinymce.majorVersion+"."+tinymce.minorVersion}}});tinymce.PluginManager.add("visualblocks",tinymce.plugins.VisualBlocks)})();
+/**
+ * editor_plugin_src.js
+ *
+ * Copyright 2012, Moxiecode Systems AB
+ * Released under LGPL License.
+ *
+ * License: http://tinymce.moxiecode.com/license
+ * Contributing: http://tinymce.moxiecode.com/contributing
+ */
+
+(function() {
+    tinymce.create('tinymce.plugins.VisualBlocks', {
+        init : function(ed, url) {
+            var cssId;
+
+            // We don't support older browsers like IE6/7 and they don't provide prototypes for DOM objects
+            if (!window.NodeList) {
+                return;
+            }
+
+            ed.addCommand('mceVisualBlocks', function() {
+                var dom = ed.dom, linkElm;
+
+                if (!cssId) {
+                    cssId = dom.uniqueId();
+                    linkElm = dom.create('link', {
+                        id: cssId,
+                        rel : 'stylesheet',
+                        href : url + '/css/visualblocks.css'
+                    });
+
+                    ed.getDoc().getElementsByTagName('head')[0].appendChild(linkElm);
+                } else {
+                    linkElm = dom.get(cssId);
+                    linkElm.disabled = !linkElm.disabled;
+                }
+
+                ed.controlManager.setActive('visualblocks', !linkElm.disabled);
+            });
+
+            ed.addButton('visualblocks', {
+                title : 'visualblocks.desc', 
+                cmd : 'mceVisualBlocks'
+            });
+
+            ed.onInit.add(function() {
+                if (ed.settings.visualblocks_default_state) {
+                    ed.execCommand('mceVisualBlocks', false, null, {
+                        skip_focus : true
+                    });
+                }
+            });
+        },
+
+        getInfo : function() {
+            return {
+                longname : 'Visual blocks',
+                author : 'Moxiecode Systems AB',
+                authorurl : 'http://tinymce.moxiecode.com',
+                infourl : 'http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/visualblocks',
+                version : tinymce.majorVersion + "." + tinymce.minorVersion
+            };
+        }
+    });
+    
+    /*
+       Useful little script for creating images 
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext("2d");
+
+        canvas.width = 10;
+        canvas.height = 8;
+
+        $('<div id="output"/ >').appendTo('body');
+
+        $.each(['P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'HGROUP', 'ASIDE', 'DIV', 'SECTION', 'ARTICLE', 'BLOCKQUOTE', 'ADDRESS', 'PRE', 'FIGURE', 'UL', 'OL', 'DL', 'DT', 'DD'], function(i, s) {
+            var metrics = ctx.measureText(s);
+            canvas.width = metrics.width;
+
+            ctx.fillStyle = '#999999';
+            ctx.font = 'bold 7pt Helvetica';
+            ctx.textBaseline = "bottom";
+            ctx.fillText(s, 0, 10);
+
+            var text = $('#output').text();
+
+            $('<p><img src="' + canvas.toDataURL('image/png') + '" />').insertBefore('#output');
+
+            $('#output').text(text + '\n\r' + s.toLowerCase() + ' {background-image: url(' + canvas.toDataURL('image/png') + ');}');
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });​
+     */
+
+    // Register plugin
+    tinymce.PluginManager.add('visualblocks', tinymce.plugins.VisualBlocks);
+})();
