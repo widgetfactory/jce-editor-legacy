@@ -229,7 +229,7 @@
             ed.onPreInit.add(function() {
                 // fix for WebKit anchor selection
                 if (tinymce.isWebKit) {	
-                    // Convert video elements to image placeholder
+                    // Convert anchor elements to image placeholder
                     ed.parser.addNodeFilter('a', function(nodes) {
                         for (var i = 0, len = nodes.length; i < len; i++) {
                             var node = nodes[i];
