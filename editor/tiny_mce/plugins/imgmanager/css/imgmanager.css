@@ -8,13 +8,23 @@
 	background-position: 0 -72px;
 }
 
+#jce #image_tab fieldset {
+    border : 0 none;
+}
+
+#jce #image_tab legend {
+    padding : 0;
+}
+
 div.preview {
   overflow: hidden;
-  padding: 6px 0;
+  padding: 6px 5px;
   margin: 0;
   text-align:left;
   height: 150px;
   position: relative;
+  
+  border-left : 1px solid #B6B6B6;
 }
 
 #width, #height {
