@@ -3,10 +3,24 @@
 	min-width: 20px;
 	cursor: move;
 }
-#jce span.mceButton, #jce span.mceListBox, #jce span.mceSplitButton {
+
+#jce div.mceToolbar span.plugin.focus span,
+#jce div.mceToolbar span.command.focus span,
+#jce div.mceToolbar span.plugin.focus span:after,
+#jce div.mceToolbar span.command.focus span:after {
+    background-color : #ADD8E6;
+}
+
+#jce span.mceButton, #jce span.mceSplitButton {
 	width: auto;
 	display: inline-block;
+        background: #F0F0EE;
 }
+
+#jce span.mceListBox {
+    display: inherit;
+}
+
 #jce span.mceIcon.mceButton {
 	width: auto;
 	min-width: 20px;
@@ -17,7 +31,7 @@
 }
 
 #jce span.plugin span.mceSeparator {
-    top : -7px;
+    /*top : -7px;*/
     margin-left: 2px;
 }
 
@@ -45,7 +59,6 @@
 
 #jce .defaultSkin span.mceListBox {
     background: #F0F0EE url('img/button_bg.png') no-repeat 75px 0;
-    border: 1px solid #CCC !important;
 }
 
 #jce .defaultSkin span.mceListBox span.mceIcon:after {

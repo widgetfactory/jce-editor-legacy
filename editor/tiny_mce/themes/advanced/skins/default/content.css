@@ -3,7 +3,6 @@ html, body{height:100%;}
 body, td, pre {color:#000; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:11px; margin:8px;}
 body {background:#FFF;}
 body.mceContentReset {background: #FFFFFF none !important; color:#000000 !important; text-align:left !important;}
-/*body.mceContentReset a:link, body.mceContentReset a:visited {color: #000000 !important;}*/
 h1 {font-size: 2em}
 h2 {font-size: 1.5em}
 h3 {font-size: 1.17em}

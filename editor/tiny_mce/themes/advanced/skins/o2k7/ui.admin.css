@@ -19,9 +19,10 @@
     height : 20px;
 }
 
-#jce .o2k7Skin .sortableRowItem .mceButton.ui-sortable-helper {
+#jce .o2k7Skin .sortableRowItem.ui-sortable-helper .mceButton {
     border-right-width : 1px;
     border-left-width : 1px;
+    border-radius: 2px;
 }
 
 #jce .o2k7Skin .mceButton:hover,
@@ -30,36 +31,22 @@
 
     border-color : #FCB557;
 }
-#jce .o2k7Skin span.sortableRowItem:first-of-type span.mceButton:only-child,
-#jce .o2k7Skin span.sortableRowItem:first-of-type span.mceButton:first-child,
-#jce .o2k7Skin span.sortableRowItem:first-of-type span.mceSplitButton:only-child,
-#jce .o2k7Skin span.sortableRowItem:first-of-type span.mceSplitButton:first-child,
+#jce .o2k7Skin span.sortableRowItem:first-child span.mceButton:first-child,
+#jce .o2k7Skin span.sortableRowItem:first-child span.mceSplitButton:first-child,
 #jce .o2k7Skin span.sortableRowItem.spacer + span.sortableRowItem span.mceButton:first-child,
 #jce .o2k7Skin span.mceSeparator + span.mceButton,
 #jce .o2k7Skin span.sortableRowItem span.mceButton.mceStart,
 #jce .o2k7Skin span.sortableRowItem span.mceSplitButton.mceStart {
     border-left-width : 1px;
-
-    -webkit-border-top-left-radius: 2px;
-    -webkit-border-bottom-left-radius: 2px;
-    -moz-border-radius-topleft: 2px;
-    -moz-border-radius-bottomleft: 2px;
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
 } 
 
-#jce .o2k7Skin span.sortableRowItem:last-of-type span.mceButton:only-child,
-#jce .o2k7Skin span.sortableRowItem:last-of-type span.mceButton:last-child,
-#jce .o2k7Skin span.sortableRowItem:last-of-type span.mceSplitButton:only-child,
-#jce .o2k7Skin span.sortableRowItem:last-of-type span.mceSplitButton:last-child,
+#jce .o2k7Skin span.sortableRowItem:last-child span.mceButton:first-child,
+#jce .o2k7Skin span.sortableRowItem:last-child span.mceSplitButton:first-child,
 #jce .o2k7Skin span.sortableRowItem span.mceButton.mceEnd,
 #jce .o2k7Skin span.sortableRowItem span.mceSplitButton.mceEnd {
     border-right-width : 1px;
-
-    -webkit-border-top-right-radius: 2px;
-    -webkit-border-bottom-right-radius: 2px;
-    -moz-border-radius-topright: 2px;
-    -moz-border-radius-bottomright: 2px;
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
 }
@@ -101,10 +88,6 @@
 
 #jce .o2k7Skin span.mceButton + span.mceSeparator,
 #jce .o2k7Skin span.sortableRowItem + span.sortableRowItem span.mceSeparator{    
-    -webkit-border-top-right-radius: 2px;
-    -webkit-border-bottom-right-radius: 2px;
-    -moz-border-radius-topright: 2px;
-    -moz-border-radius-bottomright: 2px;
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
 }
