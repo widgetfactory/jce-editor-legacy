@@ -823,8 +823,8 @@ class WFFileBrowser extends WFBrowserExtension {
             }
         }
 
-        // skip html and text files or chunked data
-        if (preg_match('#(html|htm|txt)#i', WFUtility::getExtension($file))) {
+        // skip html and text files
+        if (preg_match('#\.(html|htm|txt)$#i', $file['name'])) {
             return true;
         }
 
