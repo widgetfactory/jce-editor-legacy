@@ -9,6 +9,8 @@
  */
 
 (function() {
+    var cookie = tinymce.util.Cookie;
+    
     tinymce.create('tinymce.plugins.VisualBlocks', {
         init : function(ed, url) {
             var cssId;
@@ -17,6 +19,19 @@
             if (!window.NodeList) {
                 return;
             }
+            
+            // get state from cookie
+            var state = cookie.get('wf_visualblocks_state');
+            
+            if (state && tinymce.is(state, 'string')) {
+                if (state == 'null') {
+                    state = 0;
+                }
+                
+                state = parseFloat(state);
+            }
+            
+            state = ed.getParam('visualblocks_default_state', state);
 
             ed.addCommand('mceVisualBlocks', function() {
                 var dom = ed.dom, linkElm;
@@ -36,6 +51,12 @@
                 }
 
                 ed.controlManager.setActive('visualblocks', !linkElm.disabled);
+                
+                if (linkElm.disabled) {
+                    cookie.set('wf_visualblocks_state', 0);
+                } else {
+                    cookie.set('wf_visualblocks_state', 1);
+                }
             });
 
             ed.addButton('visualblocks', {
@@ -44,7 +65,7 @@
             });
 
             ed.onInit.add(function() {
-                if (ed.settings.visualblocks_default_state) {
+                if (state) {
                     ed.execCommand('mceVisualBlocks', false, null, {
                         skip_focus : true
                     });
