@@ -37,8 +37,8 @@ abstract class WFUtility {
     }
 
     public static function checkPath($path) {
-        if (strpos(urldecode($path), '..') !== false) {
-            JError::raiseError(403, 'RELATIVE PATHS NOT PERMITTED'); // don't translate
+        if (preg_match('/[:@&%=\?#]/', $path) || strpos(urldecode($path), '..') !== false) {
+            JError::raiseError(403, 'INVALID PATH'); // don't translate
             exit();
         }
     }
