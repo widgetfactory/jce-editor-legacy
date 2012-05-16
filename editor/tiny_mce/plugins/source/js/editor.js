@@ -39,7 +39,7 @@
                     },
                     indentWithTabs : true,
                     tabMode: "indent"
-                    /*onCursorActivity: function() {
+                /*onCursorActivity: function() {
 					 ed.setLineClass(hlLine, null);
 					 hlLine = ed.setLineClass(ed.getCursor().line, "activeline");
 					 },*/
@@ -97,6 +97,53 @@
                 };
 
                 this.editor = ed;
+                this._loaded(o, content);
+            }
+            
+            if (window.ace) {
+                var editor = ace.edit(this.container);
+                
+                editor.getSession().on('change', o.change);
+                
+                // set mode
+                editor.getSession().setMode("ace/mode/html");
+                
+                editor.indent();
+                
+                // hide print margin
+                editor.setShowPrintMargin(false);
+                
+                editor.setWrap = function(s) {
+                    editor.getSession().setUseWrapMode(s);
+                };
+                
+                editor.showGutter = function(s) {
+                    editor.renderer.setShowGutter(s);
+                };
+                
+                editor.highlight = function(s) {
+                    if (s) {
+                        editor.getSession().setMode("ace/mode/html");
+                    } else {
+                        editor.getSession().setMode("ace/mode/text");
+                    }
+                };
+                
+                editor.insertContent = function(v) {
+                    editor.insert(v);
+                };
+                
+                editor.getContent = function() {
+                    return editor.getSession().getValue();
+                };
+                
+                editor.setContent = function(v) {
+                    return editor.getSession().setValue(v);
+                };
+                
+                editor.showInvisibles = function(v) {};
+                
+                this.editor = editor;
                 this._loaded(o, content);
             }
         },

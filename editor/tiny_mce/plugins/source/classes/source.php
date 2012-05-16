@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @version		$Id: source.php 226 2011-06-13 09:59:05Z happy_noodle_boy $
  * @package      JCE
@@ -13,114 +14,124 @@
 require_once (WF_EDITOR_LIBRARIES . DS . 'classes' . DS . 'plugin.php');
 
 final class WFSourcePlugin extends WFEditorPlugin {
-	/**
-	 * Constructor activating the default information of the class
-	 *
-	 * @access	protected
-	 */
-	function __construct()
-	{
-		parent::__construct();
-	}
 
-	/**
-	 * Returns a reference to a plugin object
-	 *
-	 * This method must be invoked as:
-	 * 		<pre>  $advlink =AdvLink::getInstance();</pre>
-	 *
-	 * @access	public
-	 * @return	JCE  The editor object.
-	 * @since	1.5
-	 */
-	public function & getInstance()
-	{
-		static $instance;
+    /**
+     * Constructor activating the default information of the class
+     *
+     * @access	protected
+     */
+    function __construct() {
+        parent::__construct();
+    }
 
-		if(!is_object($instance)) {
-			$instance = new WFSourcePlugin();
-		}
-		return $instance;
-	}
-	
-	public function display()
-	{
-		$document = WFDocument::getInstance();	
-			
-		$view = $this->getView();
+    /**
+     * Returns a reference to a plugin object
+     *
+     * This method must be invoked as:
+     * 		<pre>  $advlink =AdvLink::getInstance();</pre>
+     *
+     * @access	public
+     * @return	JCE  The editor object.
+     * @since	1.5
+     */
+    public function & getInstance() {
+        static $instance;
 
-		$view->addTemplatePath(WF_EDITOR_PLUGIN .DS. 'tmpl');
-			
-		$document->setTitle(WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')));
-		
-		$theme = $this->getParam('source.theme', 'textmate');	
+        if (!is_object($instance)) {
+            $instance = new WFSourcePlugin();
+        }
+        return $instance;
+    }
 
-		//$document->addScript(array('codemirror', 'xml.js', 'javascript.js', 'css.js', 'clike.js', 'php.js'), 'jce.tiny_mce.plugins.source.js.codemirror2');
-		$document->addScript(array('codemirror-compressed'), 'jce.tiny_mce.plugins.source.js.codemirror');
-		$document->addScript(array('editor'), 'plugins');
-		
-		$document->addStyleSheet(array('codemirror', 'theme/' . $theme), 'jce.tiny_mce.plugins.source.css.codemirror');
-		$document->addStyleSheet(array('editor'), 'plugins');				
-	}
+    public function display() {
+        $document = WFDocument::getInstance();
 
-	/*public function execute() {			
-		$task = JRequest::getWord('task');
+        $view = $this->getView();
 
-		if ($task == 'compile') {
-			return $this->compile();
-		}
-		
-		parent::execute();
-	}
+        $view->addTemplatePath(WF_EDITOR_PLUGIN . DS . 'tmpl');
 
-	protected function compile()
-	{
-		WFToken::checkToken() or die('RESTRICTED ACCESS');
-			
-		wfimport('admin.classes.packer');
+        $document->setTitle(WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')));
 
-		$base 	= dirname(dirname(__FILE__));				
-		$theme 	= JRequest::getWord('theme', 'textmate');
+        $theme  = $this->getParam('source.theme', 'textmate');
+        $editor = 'codemirror';
+        
+        $document->addScript(array('editor'), 'plugins');
+        $document->addStyleSheet(array('editor'), 'plugins');
+        
+        switch ($editor) {
+            case 'ace':
+                $document->addScript(array('ace', 'mode-html'), 'jce.tiny_mce.plugins.source.js.ace');
+                
+                if ($theme != 'textmate') {
+                    $document->addScript(array('theme-' . $theme), 'jce.tiny_mce.plugins.source.js.ace');
+                }
+                break;
+            case 'codemirror':
+                $document->addScript(array('codemirror-compressed'), 'jce.tiny_mce.plugins.source.js.codemirror');
+                $document->addStyleSheet(array('codemirror', 'theme/' . $theme), 'jce.tiny_mce.plugins.source.css.codemirror');
 
-		$pack	= false;
+                break;
+        }
+    }
 
-		switch (JRequest::getWord('type', 'base')) {
-			case 'base':
-				$files = array();
-				
-				$files[] = $base . DS . 'js' . DS . 'codemirror' . DS . 'base.js';
-				
-				$type = 'javsacript';
-				$pack = $this->getParam('editor.compress_javascript', 0);
-				
-				break;	
-			case 'parser' :
-				$files = array();
+    /* public function execute() {			
+      $task = JRequest::getWord('task');
 
-				$files[] = $base . DS . 'js' . DS . 'codemirror' . DS . 'parser.js';
+      if ($task == 'compile') {
+      return $this->compile();
+      }
 
-				// javascript
+      parent::execute();
+      }
 
-				$type = 'javsacript';
+      protected function compile()
+      {
+      WFToken::checkToken() or die('RESTRICTED ACCESS');
 
-				$pack = $this->getParam('editor.compress_javascript', 0);
+      wfimport('admin.classes.packer');
 
-				break;
-			case 'css' :
-				$path = $base . DS . 'css' . DS . 'codemirror';
-				$files = array($path . DS . 'editor.css', $path . DS . 'theme' . DS . $theme . '.css');
+      $base 	= dirname(dirname(__FILE__));
+      $theme 	= JRequest::getWord('theme', 'textmate');
 
-				$type = 'css';
+      $pack	= false;
 
-				$pack = $this->getParam('editor.compress_css', 0);
-				break;
-		}
+      switch (JRequest::getWord('type', 'base')) {
+      case 'base':
+      $files = array();
 
-		$packer = new WFPacker(array('type' => $type));
+      $files[] = $base . DS . 'js' . DS . 'codemirror' . DS . 'base.js';
 
-		// set files
-		$packer->setFiles($files);
-		// pack!
-		$packer->pack($pack, $this->getParam('editor.compress_gzip', 0));
-	}*/
+      $type = 'javsacript';
+      $pack = $this->getParam('editor.compress_javascript', 0);
+
+      break;
+      case 'parser' :
+      $files = array();
+
+      $files[] = $base . DS . 'js' . DS . 'codemirror' . DS . 'parser.js';
+
+      // javascript
+
+      $type = 'javsacript';
+
+      $pack = $this->getParam('editor.compress_javascript', 0);
+
+      break;
+      case 'css' :
+      $path = $base . DS . 'css' . DS . 'codemirror';
+      $files = array($path . DS . 'editor.css', $path . DS . 'theme' . DS . $theme . '.css');
+
+      $type = 'css';
+
+      $pack = $this->getParam('editor.compress_css', 0);
+      break;
+      }
+
+      $packer = new WFPacker(array('type' => $type));
+
+      // set files
+      $packer->setFiles($files);
+      // pack!
+      $packer->pack($pack, $this->getParam('editor.compress_gzip', 0));
+      } */
 }

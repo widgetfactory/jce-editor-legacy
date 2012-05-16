@@ -412,6 +412,8 @@
                     
                     DOM.hide('wf_' + ed.id + '_source_container');
                     DOM.setAttrib('wf_' + ed.id + '_source_container', 'aria-hidden', true);
+                    
+                    se.focus();
                 }
 
                 // show iframe
