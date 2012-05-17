@@ -382,7 +382,7 @@
 
             }
 			
-            each(['Cut', 'Copy'], function(command) {
+            /*each(['Cut', 'Copy'], function(command) {
                 ed.addCommand(command, function() {
                     var doc = ed.getDoc(), failed;
 
@@ -407,7 +407,7 @@
                         }
                     }
                 });
-            });
+            });*/
 
             // Add commands
             each(['mcePasteText', 'mcePaste'], function(cmd) {
