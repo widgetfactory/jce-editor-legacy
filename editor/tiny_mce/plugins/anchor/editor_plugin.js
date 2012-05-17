@@ -37,15 +37,15 @@
             });
 
             ed.onInit.add(function() {                
-                // Display "media" instead of "img" in element path
+                // Display "a#name" instead of "img" in element path
                 if (ed.theme && ed.theme.onResolveName) {
                     ed.theme.onResolveName.add( function(theme, o) {
                         var n = o.node, v;
 
-                        /*if (o.name === 'img' && /mceItemAnchor/.test(n.className)) {
+                        if (o.name === 'img' && /mceItemAnchor/.test(n.className)) {
                             var data = JSON.parse(ed.dom.getAttrib(n, 'data-mce-json'));
                             v = data.name || data.id;
-                        }*/
+                        }
 
                         if (o.name === 'a' && !n.href && (n.name || n.id)) {
                             v = n.name || n.id;
@@ -63,7 +63,7 @@
             
             
             // Pre-init			
-            /*ed.onPreInit.add(function() {                
+            ed.onPreInit.add(function() {                
                 // fix for WebKit anchor selection
                 if (tinymce.isWebKit) {	
                     // Convert anchor elements to image placeholder
@@ -87,10 +87,10 @@
                         }
                     });
                 }
-            });*/
+            });
         },
         
-        /*_restoreAnchor : function(n) {
+        _restoreAnchor : function(n) {
             var self = this, ed = this.editor, p, v, node, text;
 
             if (!n.parent)
@@ -162,7 +162,7 @@
             });
 
             n.replace(img);
-        },*/
+        },
 
         getInfo : function() {
             return {

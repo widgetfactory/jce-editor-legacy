@@ -20,17 +20,17 @@ var AnchorDialog = {
 		
         var n = ed.selection.getNode();
 		
-        /*if (n.nodeName == 'IMG' && /mceItemAnchor/.test(n.className)) {
+        if (n.nodeName == 'IMG' && /mceItemAnchor/.test(n.className)) {
             var data = tinymce.util.JSON.parse(ed.dom.getAttrib(n, 'data-mce-json'));
 			
             name 	= data.name || '';
             id		= data.id || '';
-        } else {*/
+        } else {
             n 		= ed.dom.getParent(n, 'A');
 			
             name 	= ed.dom.getAttrib(n, 'name');
             id 		= ed.dom.getAttrib(n, 'id');
-        //}
+        }
 
         if (name || id) {
             this.action = 'update';
@@ -69,7 +69,7 @@ var AnchorDialog = {
         var n = ed.selection.getNode(), data;
 	
         // existing img anchor link (webkit)
-        /*if (ed.dom.is(n, 'img.mceItemAnchor')) {
+        if (ed.dom.is(n, 'img.mceItemAnchor')) {
             var o = {};
             
             if (name) {
@@ -82,7 +82,7 @@ var AnchorDialog = {
             // update
             ed.dom.setAttrib(n, 'data-mce-json',  tinymce.util.JSON.serialize(o));		
         // normal anchor link or new
-        } else {*/
+        } else {
             n = ed.dom.getParent(n, 'A');
             
             var at = {
@@ -102,7 +102,7 @@ var AnchorDialog = {
             } else {
                 ed.execCommand('mceInsertContent', 0, ed.dom.createHTML('a', at, '\uFEFF'));
             }
-        //}
+        }
         tinyMCEPopup.close();
     }
 };

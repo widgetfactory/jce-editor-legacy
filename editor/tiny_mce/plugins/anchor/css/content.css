@@ -1,5 +1,5 @@
 a.mceItemAnchor {display:inline-block; -webkit-user-select:all; -webkit-user-modify:read-only; -moz-user-select:all; -moz-user-modify:read-only; width:11px !important; height:11px !important; background:url(../img/anchor.gif) no-repeat center;}
 /* Anchor selection */
 img.mceItemAnchor::selection {
-    background: #3399ff;
+    background: #b4d4ff;
 }
