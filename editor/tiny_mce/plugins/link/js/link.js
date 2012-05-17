@@ -153,8 +153,8 @@ var LinkDialog = {
     },
 
     getAnchorListHTML : function(id, target) {
-        var ed = tinyMCEPopup.editor;
-        var n = ed.getBody().getElementsByTagName("a");
+        var ed = tinyMCEPopup.editor, name;
+        var nodes = ed.dom.select('a.mceItemAnchor, img.mceItemAnchor');
 
         var html = "";
 
@@ -162,10 +162,21 @@ var LinkDialog = {
         html += 'this.options[this.selectedIndex].value;">';
         html += '<option value="">---</option>';
 
-        for (var i=0; i<n.length; i++) {
-            if ((name = ed.dom.getAttrib(n[i], "name")) != "")
+        tinymce.each(nodes, function(n) {
+            if (n.nodeName == 'IMG') {
+                var data = tinymce.util.JSON.parse(ed.dom.getAttrib(n, 'data-mce-json'));
+                    
+                name = data.name || data.id || '';
+            } else {                
+                if (!n.href) {
+                    name = ed.dom.getAttrib(n, 'name') || ed.dom.getAttrib(n, 'id');
+                }
+            }
+                
+            if (name) {
                 html += '<option value="#' + name + '">' + name + '</option>';
-        }
+            }
+        });
 
         html += '</select>';
 
