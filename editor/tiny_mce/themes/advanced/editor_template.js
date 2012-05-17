@@ -144,7 +144,7 @@
             backcolorpicker : ['backcolor_desc', 'mceBackColor'],
             charmap : ['charmap_desc', 'mceCharMap'],
             visualaid : ['visualaid_desc', 'mceToggleVisualAid'],
-            anchor : ['anchor_desc', 'mceInsertAnchor'],
+            //anchor : ['anchor_desc', 'mceInsertAnchor'],
             newdocument : ['newdocument_desc', 'mceNewDocument'],
             blockquote : ['blockquote_desc', 'mceBlockQuote']
         },
@@ -224,34 +224,7 @@
 
             if (!ed.settings.compress.css && ed.settings.content_css !== false)
                 ed.contentCSS.push(ed.baseURI.toAbsolute(url + "/skins/" + ed.settings.skin + "/content.css"));
-
-            // Pre-init			
-            ed.onPreInit.add(function() {
-                // fix for WebKit anchor selection
-                if (tinymce.isWebKit) {	
-                    // Convert anchor elements to image placeholder
-                    ed.parser.addNodeFilter('a', function(nodes) {
-                        for (var i = 0, len = nodes.length; i < len; i++) {
-                            var node = nodes[i];
-    						
-                            if (!node.attr('href') && (node.attr('name') || node.attr('id'))) {
-                                t._createAnchorImage(node);
-                            }
-                        }
-                    });
-
-                    // Convert image placeholders to anchor elements
-                    ed.serializer.addNodeFilter('img', function(nodes, name, args) {
-                        for (var i = 0, len = nodes.length; i < len; i++) {
-                            var node = nodes[i];
-                            if (/mceItemAnchor/.test(node.attr('class') || '')) {
-                                t._restoreAnchor(node, args);
-                            }
-                        }
-                    });
-                }
-            });
-			
+	
             // Init editor
             ed.onInit.add(function() {
                 if (!ed.settings.readonly) {
@@ -399,7 +372,9 @@
                                         return;
 
                                     if (!lo[v]) {
-                                        cl.push({'class' : v});
+                                        cl.push({
+                                            'class' : v
+                                        });
                                         lo[v] = 1;
                                     }
                                 });
@@ -407,701 +382,701 @@
                             break;
 
                         // Import
-                    case 3:
-                        // only local imports
-                        if (tinymce.isGecko && /:\/\//.test(r.href)) {
-                            return;
-                        }
+                        case 3:
+                            // only local imports
+                            if (tinymce.isGecko && /:\/\//.test(r.href)) {
+                                return;
+                            }
                         
-                        addClasses(r.styleSheet);
-                        break;
-                }
-            });
-        };
-
-        try {
-            each(doc.styleSheets, addClasses);
-        } catch (ex) {
-            // Ignore
-        }
-
-        if (cl.length > 0)
-            t.classes = cl;
-
-        return cl;
-    },
-
-    _importClasses : function(e) {
-        var ed = this.editor, ctrl = ed.controlManager.get('styleselect');
-
-        if (ctrl.getLength() == 0) {                
-            each(this._getClasses(), function(o, idx) {
-                var name = 'style_' + idx, fmt;
-
-                fmt = {
-                    inline : 'span',
-                    attributes : {
-                        'class' : o['class']
-                    },
-                    selector : '*'
+                            addClasses(r.styleSheet);
+                                break;
+                        }
+                    });
                 };
 
-                ed.formatter.register(name, fmt);
+                try {
+                    each(doc.styleSheets, addClasses);
+                } catch (ex) {
+                // Ignore
+                }
 
-                ctrl.add(o['class'], name, {
-                    style: function() {
-                        return getPreviewCss(ed, fmt);
-                    }
-                });
-            });
-        }
-    },
+                if (cl.length > 0)
+                    t.classes = cl;
 
-    _createStyleSelect : function(n) {
-        var t = this, ed = t.editor, ctrlMan = ed.controlManager, ctrl;
+                return cl;
+            },
 
-        // Setup style select box
-        ctrl = ctrlMan.createListBox('styleselect', {
-            title : 'advanced.style_select',
-            onselect : function(name) {
-                var matches, formatNames = [], removedFormat;
+            _importClasses : function(e) {
+                var ed = this.editor, ctrl = ed.controlManager.get('styleselect');
 
-                each(ctrl.items, function(item) {
-                    formatNames.push(item.value);
-                });
+                if (ctrl.getLength() == 0) {                
+                    each(this._getClasses(), function(o, idx) {
+                        var name = 'style_' + idx, fmt;
 
-                ed.focus();
-                ed.undoManager.add();
-
-                // Toggle off the current format(s)
-                matches = ed.formatter.matchAll(formatNames);
-                tinymce.each(matches, function(match) {
-                    if (!name || match == name) {
-                        if (match)
-                            ed.formatter.remove(match);
-
-                        removedFormat = true;
-                    }
-                });
-
-                if (!removedFormat)
-                    ed.formatter.apply(name);
-
-                ed.undoManager.add();
-                ed.nodeChanged();
-
-                return false; // No auto select
-            }
-        });
-
-        // Handle specified format
-        ed.onPreInit.add(function() {
-            var counter = 0, formats = ed.getParam('style_formats');
-
-            if (formats) {
-                each(formats, function(fmt) {
-                    var name, keys = 0;
-
-                    each(fmt, function() {
-                        keys++;
-                    });
-
-                    if (keys > 1) {
-                        name = fmt.name = fmt.name || 'style_' + (counter++);
-                        ed.formatter.register(name, fmt);
-                        ctrl.add(fmt.title, name, {
-                            style: function() {
-                                return getPreviewCss(ed, fmt);
-                            }
-                        });
-                    } else
-                        ctrl.add(fmt.title);
-                });
-            } else {
-                each(ed.getParam('theme_advanced_styles', '', 'hash'), function(val, key) {
-                    var name, fmt;
-
-                    if (val) {
-                        name = 'style_' + (counter++);
                         fmt = {
                             inline : 'span',
-                            classes : val,
+                            attributes : {
+                                'class' : o['class']
+                            },
                             selector : '*'
                         };
 
                         ed.formatter.register(name, fmt);
-                        ctrl.add(t.editor.translate(key), name, {
+
+                        ctrl.add(o['class'], name, {
                             style: function() {
                                 return getPreviewCss(ed, fmt);
                             }
                         });
-                    }
-                });
-            }
-        });
-
-        // Auto import classes if the ctrl box is empty
-        if (ctrl.getLength() == 0) {
-            ctrl.onPostRender.add(function(ed, n) {
-                if (!ctrl.NativeListBox) {
-                    Event.add(n.id + '_text', 'focus', t._importClasses, t);
-                    Event.add(n.id + '_text', 'mousedown', t._importClasses, t);
-                    Event.add(n.id + '_open', 'focus', t._importClasses, t);
-                    Event.add(n.id + '_open', 'mousedown', t._importClasses, t);
-                } else
-                    Event.add(n.id, 'focus', t._importClasses, t);
-            });
-        }
-
-        return ctrl;
-    },
-
-    _createFontSelect : function() {
-        var c, t = this, ed = t.editor;
-
-        c = ed.controlManager.createListBox('fontselect', {
-            title : 'advanced.fontdefault',
-            onselect : function(v) {
-                var cur = c.items[c.selectedIndex];
-
-                if (!v && cur) {
-                    ed.execCommand('FontName', false, cur.value);
-                    return;
+                    });
                 }
+            },
 
-                ed.execCommand('FontName', false, v);
+            _createStyleSelect : function(n) {
+                var t = this, ed = t.editor, ctrlMan = ed.controlManager, ctrl;
 
-                // Fake selection, execCommand will fire a nodeChange and update the selection
-                c.select(function(sv) {
-                    return v == sv;
-                });
+                // Setup style select box
+                ctrl = ctrlMan.createListBox('styleselect', {
+                    title : 'advanced.style_select',
+                    onselect : function(name) {
+                        var matches, formatNames = [], removedFormat;
 
-                if (cur && cur.value == v) {
-                    c.select(null);
-                }
-
-                return false; // No auto select
-            }
-        });
-
-        if (c) {
-            each(ed.getParam('theme_advanced_fonts', t.settings.theme_advanced_fonts, 'hash'), function(v, k) {					
-                if (/\d/.test(v)) {
-                    v = "'" + v + "'";
-                }
-                c.add(ed.translate(k), v, {
-                    style : v.indexOf('dings') == -1 ? 'font-family:' + v : ''
-                });
-            });
-        }
-
-        return c;
-    },
-
-    _createFontSizeSelect : function() {
-        var t = this, ed = t.editor, c, i = 0, cl = [];
-
-        c = ed.controlManager.createListBox('fontsizeselect', {
-            title : 'advanced.font_size', 
-            onselect : function(v) {
-                var cur = c.items[c.selectedIndex];
-
-                if (!v && cur) {
-                    cur = cur.value;
-
-                    if (cur['class']) {
-                        ed.formatter.toggle('fontsize_class', {
-                            value : cur['class']
+                        each(ctrl.items, function(item) {
+                            formatNames.push(item.value);
                         });
+
+                        ed.focus();
+                        ed.undoManager.add();
+
+                        // Toggle off the current format(s)
+                        matches = ed.formatter.matchAll(formatNames);
+                        tinymce.each(matches, function(match) {
+                            if (!name || match == name) {
+                                if (match)
+                                    ed.formatter.remove(match);
+
+                                removedFormat = true;
+                            }
+                        });
+
+                        if (!removedFormat)
+                            ed.formatter.apply(name);
+
                         ed.undoManager.add();
                         ed.nodeChanged();
-                    } else {
-                        ed.execCommand('FontSize', false, cur.fontSize);
+
+                        return false; // No auto select
                     }
-
-                    return;
-                }
-
-                if (v['class']) {
-                    ed.focus();
-                    ed.undoManager.add();
-                    ed.formatter.toggle('fontsize_class', {
-                        value : v['class']
-                    });
-                    ed.undoManager.add();
-                    ed.nodeChanged();
-                } else
-                    ed.execCommand('FontSize', false, v.fontSize);
-
-                // Fake selection, execCommand will fire a nodeChange and update the selection
-                c.select(function(sv) {
-                    return v == sv;
                 });
 
-                if (cur && (cur.value.fontSize == v.fontSize || cur.value['class'] && cur.value['class'] == v['class'])) {
-                    c.select(null);	
-                }
+                // Handle specified format
+                ed.onPreInit.add(function() {
+                    var counter = 0, formats = ed.getParam('style_formats');
 
-                return false; // No auto select
-            }
-        });
+                    if (formats) {
+                        each(formats, function(fmt) {
+                            var name, keys = 0;
 
-        if (c) {
-            each(t.settings.theme_advanced_font_sizes, function(v, k) {
-                var fz = v.fontSize;
+                            each(fmt, function() {
+                                keys++;
+                            });
 
-                if (fz >= 1 && fz <= 7)
-                    fz = t.sizes[parseInt(fz) - 1] + 'pt';
+                            if (keys > 1) {
+                                name = fmt.name = fmt.name || 'style_' + (counter++);
+                                ed.formatter.register(name, fmt);
+                                ctrl.add(fmt.title, name, {
+                                    style: function() {
+                                        return getPreviewCss(ed, fmt);
+                                    }
+                                });
+                            } else
+                                ctrl.add(fmt.title);
+                        });
+                    } else {
+                        each(ed.getParam('theme_advanced_styles', '', 'hash'), function(val, key) {
+                            var name, fmt;
 
-                c.add(k, v, {
-                    'style' : 'font-size:' + fz, 
-                    'class' : 'mceFontSize' + (i++) + (' ' + (v['class'] || ''))
-                });
-            });
-        }
+                            if (val) {
+                                name = 'style_' + (counter++);
+                                fmt = {
+                                    inline : 'span',
+                                    classes : val,
+                                    selector : '*'
+                                };
 
-        return c;
-    },
-
-    _createBlockFormats : function() {
-        var c, fmts = {
-            p : 'advanced.paragraph',
-            address : 'advanced.address',
-            pre : 'advanced.pre',
-            h1 : 'advanced.h1',
-            h2 : 'advanced.h2',
-            h3 : 'advanced.h3',
-            h4 : 'advanced.h4',
-            h5 : 'advanced.h5',
-            h6 : 'advanced.h6',
-            div : 'advanced.div',
-            blockquote : 'advanced.blockquote',
-            code : 'advanced.code',
-            dt : 'advanced.dt',
-            dd : 'advanced.dd',
-            samp : 'advanced.samp',
-            span : 'advanced.span'
-        }, t = this;
-            
-        c = t.editor.controlManager.createListBox('formatselect', {
-            title : 'advanced.block', 
-            onselect : function(v) {
-                t.editor.execCommand('FormatBlock', false, v);
-                return false;
-            }
-        });
-
-        if (c) {
-            each(t.editor.getParam('theme_advanced_blockformats', t.settings.theme_advanced_blockformats, 'hash'), function(v, k) {
-                c.add(t.editor.translate(k != v ? k : fmts[v]), v, {
-                    'class' : 'mce_formatPreview mce_' + v, 
-                    style: function() {
-                        return getPreviewCss(t.editor, {
-                            block: v
+                                ed.formatter.register(name, fmt);
+                                ctrl.add(t.editor.translate(key), name, {
+                                    style: function() {
+                                        return getPreviewCss(ed, fmt);
+                                    }
+                                });
+                            }
                         });
                     }
                 });
-            });
-        }
 
-        return c;
-    },
-
-    _createForeColorMenu : function() {
-        var c, t = this, s = t.settings, o = {}, v;
-
-        if (s.theme_advanced_more_colors) {
-            o.more_colors_func = function() {
-                t._mceColorPicker(0, {
-                    color : c.value,
-                    func : function(co) {
-                        c.setColor(co);
-                    }
-                });
-            };
-        }
-
-        if (v = s.theme_advanced_text_colors)
-            o.colors = v;
-
-        if (s.theme_advanced_default_foreground_color)
-            o.default_color = s.theme_advanced_default_foreground_color;
-
-        o.title = 'advanced.forecolor_desc';
-        o.cmd = 'ForeColor';
-        o.scope = this;
-
-        c = t.editor.controlManager.createColorSplitButton('forecolor', o);
-
-        return c;
-    },
-
-    _createBackColorMenu : function() {
-        var c, t = this, s = t.settings, o = {}, v;
-
-        if (s.theme_advanced_more_colors) {
-            o.more_colors_func = function() {
-                t._mceColorPicker(0, {
-                    color : c.value,
-                    func : function(co) {
-                        c.setColor(co);
-                    }
-                });
-            };
-        }
-
-        if (v = s.theme_advanced_background_colors)
-            o.colors = v;
-
-        if (s.theme_advanced_default_background_color)
-            o.default_color = s.theme_advanced_default_background_color;
-
-        o.title = 'advanced.backcolor_desc';
-        o.cmd = 'HiliteColor';
-        o.scope = this;
-
-        c = t.editor.controlManager.createColorSplitButton('backcolor', o);
-
-        return c;
-    },
-
-    renderUI : function(o) {
-        var n, ic, tb, t = this, ed = t.editor, s = t.settings, sc, p, nl;
-
-        if (ed.settings) {
-            ed.settings.aria_label = s.aria_label + ed.getLang('advanced.help_shortcut');
-        }
-
-        // TODO: ACC Should have an aria-describedby attribute which is user-configurable to describe what this field is actually for.
-        // Maybe actually inherit it from the original textara?
-			
-        // WFEDITOR - Change UI Container SPAN Element to DIV
-			
-        n = p = DOM.create('div', {
-            role : 'application', 
-            'aria-labelledby' : ed.id + '_voice', 
-            id : ed.id + '_parent', 
-            'class' : 'mceEditor ' + ed.settings.skin + 'Skin' + (s.skin_variant ? ' ' + ed.settings.skin + 'Skin' + t._ufirst(s.skin_variant) : '') + (ed.settings.directionality == "rtl" ? ' mceRtl' : '')
-        });
-        DOM.add(n, 'span', {
-            'class': 'mceVoiceLabel', 
-            'style': 'display:none;', 
-            id: ed.id + '_voice'
-        }, s.aria_label);
-
-        if (!DOM.boxModel)
-            n = DOM.add(n, 'div', {
-                'class' : 'mceOldBoxModel'
-            });
-
-        n = sc = DOM.add(n, 'table', {
-            role : "presentation", 
-            id : ed.id + '_tbl', 
-            'class' : 'mceLayout', 
-            cellSpacing : 0, 
-            cellPadding : 0
-        });
-        n = tb = DOM.add(n, 'tbody');
-
-        switch ((s.theme_advanced_layout_manager || '').toLowerCase()) {
-            case "rowlayout":
-                ic = t._rowLayout(s, tb, o);
-                break;
-
-            case "customlayout":
-                ic = ed.execCallback("theme_advanced_custom_layout", s, tb, o, p);
-                break;
-
-            default:
-                ic = t._simpleLayout(s, tb, o, p);
-        }
-
-        n = o.targetNode;
-
-        // Add classes to first and last TRs
-        nl = sc.rows;
-        DOM.addClass(nl[0], 'mceFirst');
-        DOM.addClass(nl[nl.length - 1], 'mceLast');
-
-        // Add classes to first and last TDs
-        each(DOM.select('tr', tb), function(n) {
-            DOM.addClass(n.firstChild, 'mceFirst');
-            DOM.addClass(n.childNodes[n.childNodes.length - 1], 'mceLast');
-        });
-
-        if (DOM.get(s.theme_advanced_toolbar_container))
-            DOM.get(s.theme_advanced_toolbar_container).appendChild(p);
-        else
-            DOM.insertAfter(p, n);
-
-        Event.add(ed.id + '_path_row', 'click', function(e) {
-            e = e.target;
-
-            if (e.nodeName == 'A') {
-                t._sel(e.className.replace(/^.*mcePath_([0-9]+).*$/, '$1'));
-
-                return false;
-            }
-        });
-
-        if (!ed.getParam('accessibility_focus'))
-            Event.add(DOM.add(p, 'a', {
-                href : '#'
-            }, '<!-- IE -->'), 'focus', function() {
-            tinyMCE.get(ed.id).focus();
-        });
-
-        if (s.theme_advanced_toolbar_location == 'external')
-            o.deltaHeight = 0;
-
-        t.deltaHeight = o.deltaHeight;
-        o.targetNode = null;
-
-        ed.onKeyDown.add(function(ed, evt) {
-            var DOM_VK_F10 = 121, DOM_VK_F11 = 122;
-
-            if (evt.altKey) {
-                if (evt.keyCode === DOM_VK_F10) {
-                    // Make sure focus is given to toolbar in Safari.
-                    // We can't do this in IE as it prevents giving focus to toolbar when editor is in a frame
-                    if (tinymce.isWebKit) {
-                        window.focus();
-                    }
-                    t.toolbarGroup.focus();
-                    return Event.cancel(evt);
-                } else if (evt.keyCode === DOM_VK_F11) {
-                    DOM.get(ed.id + '_path_row').focus();
-                    return Event.cancel(evt);
+                // Auto import classes if the ctrl box is empty
+                if (ctrl.getLength() == 0) {
+                    ctrl.onPostRender.add(function(ed, n) {
+                        if (!ctrl.NativeListBox) {
+                            Event.add(n.id + '_text', 'focus', t._importClasses, t);
+                            Event.add(n.id + '_text', 'mousedown', t._importClasses, t);
+                            Event.add(n.id + '_open', 'focus', t._importClasses, t);
+                            Event.add(n.id + '_open', 'mousedown', t._importClasses, t);
+                        } else
+                            Event.add(n.id, 'focus', t._importClasses, t);
+                    });
                 }
-            }
-        });
 
-        if (ed.getParam('accessibility_shortcut', 1)) {
-            // alt+0 is the UK recommended shortcut for accessing the list of access controls.
-            ed.addShortcut('alt+0', '', 'mceShortcuts', t);
-        }
-			
-        return {
-            iframeContainer : ic,
-            editorContainer : ed.id + '_parent',
-            sizeContainer : sc,
-            deltaHeight : o.deltaHeight
-        };
-    },
+                return ctrl;
+            },
 
-    getInfo : function() {
-        return {
-            longname : 'Advanced theme',
-            author : 'Moxiecode Systems AB',
-            authorurl : 'http://tinymce.moxiecode.com',
-            version : tinymce.majorVersion + "." + tinymce.minorVersion
-        };
-    },
+            _createFontSelect : function() {
+                var c, t = this, ed = t.editor;
 
-    resizeBy : function(dw, dh) {
-        var e = DOM.get(this.editor.id + '_ifr');
+                c = ed.controlManager.createListBox('fontselect', {
+                    title : 'advanced.fontdefault',
+                    onselect : function(v) {
+                        var cur = c.items[c.selectedIndex];
 
-        this.resizeTo(e.clientWidth + dw, e.clientHeight + dh);
-    },
+                        if (!v && cur) {
+                            ed.execCommand('FontName', false, cur.value);
+                            return;
+                        }
 
-    resizeTo : function(w, h, store) {
-        var ed = this.editor, s = this.settings, e = DOM.get(ed.id + '_tbl'), ifr = DOM.get(ed.id + '_ifr');
-			
-        // Boundery fix box
-        w = Math.max(s.theme_advanced_resizing_min_width || 100, w);
-        h = Math.max(s.theme_advanced_resizing_min_height || 100, h);
-        w = Math.min(s.theme_advanced_resizing_max_width || 0xFFFF, w);
-        h = Math.min(s.theme_advanced_resizing_max_height || 0xFFFF, h);
+                        ed.execCommand('FontName', false, v);
 
-        // Resize iframe and container
-        DOM.setStyle(e, 'height', '');
-        DOM.setStyle(ifr, 'height', h);
+                        // Fake selection, execCommand will fire a nodeChange and update the selection
+                        c.select(function(sv) {
+                            return v == sv;
+                        });
 
-        if (s.theme_advanced_resize_horizontal) {
-            DOM.setStyle(e, 'width', '');
-            DOM.setStyle(ifr, 'width', w);
+                        if (cur && cur.value == v) {
+                            c.select(null);
+                        }
 
-            // Make sure that the size is never smaller than the over all ui
-            if (w < e.clientWidth) {
-                w = e.clientWidth;
-                DOM.setStyle(ifr, 'width', e.clientWidth);
-            }
-        }
-
-        // Store away the size
-        if (store && s.theme_advanced_resizing_use_cookie) {
-            Cookie.setHash("TinyMCE_" + ed.id + "_size", {
-                cw : w,
-                ch : h
-            });
-        }
-			
-        // dispatch
-        this.onResize.dispatch();
-    },
-
-    destroy : function() {
-        var id = this.editor.id;
-
-        Event.clear(id + '_resize');
-        Event.clear(id + '_path_row');
-        Event.clear(id + '_external_close');
-    },
-
-    // Internal functions
-
-    _simpleLayout : function(s, tb, o, p) {
-        var t = this, ed = t.editor, lo = s.theme_advanced_toolbar_location, sl = s.theme_advanced_statusbar_location, n, ic, etb, c;
-
-        if (s.readonly) {
-            n = DOM.add(tb, 'tr');
-            n = ic = DOM.add(n, 'td', {
-                'class' : 'mceIframeContainer'
-            });
-            return ic;
-        }
-
-        // Create toolbar container at top
-        if (lo == 'top')
-            t._addToolbars(tb, o);
-
-        // Create external toolbar
-        if (lo == 'external') {
-            n = c = DOM.create('div', {
-                style : 'position:relative'
-            });
-            n = DOM.add(n, 'div', {
-                id : ed.id + '_external', 
-                'class' : 'mceExternalToolbar'
-            });
-            DOM.add(n, 'a', {
-                id : ed.id + '_external_close', 
-                href : 'javascript:;', 
-                'class' : 'mceExternalClose'
-            });
-            n = DOM.add(n, 'table', {
-                id : ed.id + '_tblext', 
-                cellSpacing : 0, 
-                cellPadding : 0
-            });
-            etb = DOM.add(n, 'tbody');
-
-            if (p.firstChild.className == 'mceOldBoxModel')
-                p.firstChild.appendChild(c);
-            else
-                p.insertBefore(c, p.firstChild);
-
-            t._addToolbars(etb, o);
-
-            ed.onMouseUp.add(function() {
-                var e = DOM.get(ed.id + '_external');
-                DOM.show(e);
-
-                DOM.hide(lastExtID);
-
-                var f = Event.add(ed.id + '_external_close', 'click', function() {
-                    DOM.hide(ed.id + '_external');
-                    Event.remove(ed.id + '_external_close', 'click', f);
+                        return false; // No auto select
+                    }
                 });
 
-                DOM.show(e);
-                DOM.setStyle(e, 'top', 0 - DOM.getRect(ed.id + '_tblext').h - 1);
+                if (c) {
+                    each(ed.getParam('theme_advanced_fonts', t.settings.theme_advanced_fonts, 'hash'), function(v, k) {					
+                        if (/\d/.test(v)) {
+                            v = "'" + v + "'";
+                        }
+                        c.add(ed.translate(k), v, {
+                            style : v.indexOf('dings') == -1 ? 'font-family:' + v : ''
+                        });
+                    });
+                }
 
-                // Fixes IE rendering bug
-                DOM.hide(e);
-                DOM.show(e);
-                e.style.filter = '';
+                return c;
+            },
 
-                lastExtID = ed.id + '_external';
+            _createFontSizeSelect : function() {
+                var t = this, ed = t.editor, c, i = 0, cl = [];
 
-                e = null;
-            });
-        }
+                c = ed.controlManager.createListBox('fontsizeselect', {
+                    title : 'advanced.font_size', 
+                    onselect : function(v) {
+                        var cur = c.items[c.selectedIndex];
 
-        if (sl == 'top')
-            t._addStatusBar(tb, o);
+                        if (!v && cur) {
+                            cur = cur.value;
 
-        // Create iframe container
-        if (!s.theme_advanced_toolbar_container) {
-            n = DOM.add(tb, 'tr');
-            n = ic = DOM.add(n, 'td', {
-                'class' : 'mceIframeContainer'
-            });
-        }
+                            if (cur['class']) {
+                                ed.formatter.toggle('fontsize_class', {
+                                    value : cur['class']
+                                });
+                                ed.undoManager.add();
+                                ed.nodeChanged();
+                            } else {
+                                ed.execCommand('FontSize', false, cur.fontSize);
+                            }
 
-        // Create toolbar container at bottom
-        if (lo == 'bottom')
-            t._addToolbars(tb, o);
+                            return;
+                        }
 
-        if (sl == 'bottom')
-            t._addStatusBar(tb, o);
+                        if (v['class']) {
+                            ed.focus();
+                            ed.undoManager.add();
+                            ed.formatter.toggle('fontsize_class', {
+                                value : v['class']
+                            });
+                            ed.undoManager.add();
+                            ed.nodeChanged();
+                        } else
+                            ed.execCommand('FontSize', false, v.fontSize);
 
-        return ic;
-    },
+                        // Fake selection, execCommand will fire a nodeChange and update the selection
+                        c.select(function(sv) {
+                            return v == sv;
+                        });
 
-    _rowLayout : function(s, tb, o) {
-        var t = this, ed = t.editor, dc, da, cf = ed.controlManager, n, ic, to, a;
+                        if (cur && (cur.value.fontSize == v.fontSize || cur.value['class'] && cur.value['class'] == v['class'])) {
+                            c.select(null);	
+                        }
 
-        dc = s.theme_advanced_containers_default_class || '';
-        da = s.theme_advanced_containers_default_align || 'center';
+                        return false; // No auto select
+                    }
+                });
 
-        each(explode(s.theme_advanced_containers || ''), function(c, i) {
-            var v = s['theme_advanced_container_' + c] || '';
+                if (c) {
+                    each(t.settings.theme_advanced_font_sizes, function(v, k) {
+                        var fz = v.fontSize;
 
-            switch (c.toLowerCase()) {
-                case 'mceeditor':
+                        if (fz >= 1 && fz <= 7)
+                            fz = t.sizes[parseInt(fz) - 1] + 'pt';
+
+                        c.add(k, v, {
+                            'style' : 'font-size:' + fz, 
+                            'class' : 'mceFontSize' + (i++) + (' ' + (v['class'] || ''))
+                        });
+                    });
+                }
+
+                return c;
+            },
+
+            _createBlockFormats : function() {
+                var c, fmts = {
+                    p : 'advanced.paragraph',
+                    address : 'advanced.address',
+                    pre : 'advanced.pre',
+                    h1 : 'advanced.h1',
+                    h2 : 'advanced.h2',
+                    h3 : 'advanced.h3',
+                    h4 : 'advanced.h4',
+                    h5 : 'advanced.h5',
+                    h6 : 'advanced.h6',
+                    div : 'advanced.div',
+                    blockquote : 'advanced.blockquote',
+                    code : 'advanced.code',
+                    dt : 'advanced.dt',
+                    dd : 'advanced.dd',
+                    samp : 'advanced.samp',
+                    span : 'advanced.span'
+                }, t = this;
+            
+                c = t.editor.controlManager.createListBox('formatselect', {
+                    title : 'advanced.block', 
+                    onselect : function(v) {
+                        t.editor.execCommand('FormatBlock', false, v);
+                        return false;
+                    }
+                });
+
+                if (c) {
+                    each(t.editor.getParam('theme_advanced_blockformats', t.settings.theme_advanced_blockformats, 'hash'), function(v, k) {
+                        c.add(t.editor.translate(k != v ? k : fmts[v]), v, {
+                            'class' : 'mce_formatPreview mce_' + v, 
+                            style: function() {
+                                return getPreviewCss(t.editor, {
+                                    block: v
+                                });
+                            }
+                        });
+                    });
+                }
+
+                return c;
+            },
+
+            _createForeColorMenu : function() {
+                var c, t = this, s = t.settings, o = {}, v;
+
+                if (s.theme_advanced_more_colors) {
+                    o.more_colors_func = function() {
+                        t._mceColorPicker(0, {
+                            color : c.value,
+                            func : function(co) {
+                                c.setColor(co);
+                            }
+                        });
+                    };
+                }
+
+                if (v = s.theme_advanced_text_colors)
+                    o.colors = v;
+
+                if (s.theme_advanced_default_foreground_color)
+                    o.default_color = s.theme_advanced_default_foreground_color;
+
+                o.title = 'advanced.forecolor_desc';
+                o.cmd = 'ForeColor';
+                o.scope = this;
+
+                c = t.editor.controlManager.createColorSplitButton('forecolor', o);
+
+                return c;
+            },
+
+            _createBackColorMenu : function() {
+                var c, t = this, s = t.settings, o = {}, v;
+
+                if (s.theme_advanced_more_colors) {
+                    o.more_colors_func = function() {
+                        t._mceColorPicker(0, {
+                            color : c.value,
+                            func : function(co) {
+                                c.setColor(co);
+                            }
+                        });
+                    };
+                }
+
+                if (v = s.theme_advanced_background_colors)
+                    o.colors = v;
+
+                if (s.theme_advanced_default_background_color)
+                    o.default_color = s.theme_advanced_default_background_color;
+
+                o.title = 'advanced.backcolor_desc';
+                o.cmd = 'HiliteColor';
+                o.scope = this;
+
+                c = t.editor.controlManager.createColorSplitButton('backcolor', o);
+
+                return c;
+            },
+
+            renderUI : function(o) {
+                var n, ic, tb, t = this, ed = t.editor, s = t.settings, sc, p, nl;
+
+                if (ed.settings) {
+                    ed.settings.aria_label = s.aria_label + ed.getLang('advanced.help_shortcut');
+                }
+
+                // TODO: ACC Should have an aria-describedby attribute which is user-configurable to describe what this field is actually for.
+                // Maybe actually inherit it from the original textara?
+			
+                // WFEDITOR - Change UI Container SPAN Element to DIV
+			
+                n = p = DOM.create('div', {
+                    role : 'application', 
+                    'aria-labelledby' : ed.id + '_voice', 
+                    id : ed.id + '_parent', 
+                    'class' : 'mceEditor ' + ed.settings.skin + 'Skin' + (s.skin_variant ? ' ' + ed.settings.skin + 'Skin' + t._ufirst(s.skin_variant) : '') + (ed.settings.directionality == "rtl" ? ' mceRtl' : '')
+                });
+                DOM.add(n, 'span', {
+                    'class': 'mceVoiceLabel', 
+                    'style': 'display:none;', 
+                    id: ed.id + '_voice'
+                }, s.aria_label);
+
+                if (!DOM.boxModel)
+                    n = DOM.add(n, 'div', {
+                        'class' : 'mceOldBoxModel'
+                    });
+
+                n = sc = DOM.add(n, 'table', {
+                    role : "presentation", 
+                    id : ed.id + '_tbl', 
+                    'class' : 'mceLayout', 
+                    cellSpacing : 0, 
+                    cellPadding : 0
+                });
+                n = tb = DOM.add(n, 'tbody');
+
+                switch ((s.theme_advanced_layout_manager || '').toLowerCase()) {
+                    case "rowlayout":
+                        ic = t._rowLayout(s, tb, o);
+                        break;
+
+                    case "customlayout":
+                        ic = ed.execCallback("theme_advanced_custom_layout", s, tb, o, p);
+                        break;
+
+                    default:
+                        ic = t._simpleLayout(s, tb, o, p);
+                }
+
+                n = o.targetNode;
+
+                // Add classes to first and last TRs
+                nl = sc.rows;
+                DOM.addClass(nl[0], 'mceFirst');
+                DOM.addClass(nl[nl.length - 1], 'mceLast');
+
+                // Add classes to first and last TDs
+                each(DOM.select('tr', tb), function(n) {
+                    DOM.addClass(n.firstChild, 'mceFirst');
+                    DOM.addClass(n.childNodes[n.childNodes.length - 1], 'mceLast');
+                });
+
+                if (DOM.get(s.theme_advanced_toolbar_container))
+                    DOM.get(s.theme_advanced_toolbar_container).appendChild(p);
+                else
+                    DOM.insertAfter(p, n);
+
+                Event.add(ed.id + '_path_row', 'click', function(e) {
+                    e = e.target;
+
+                    if (e.nodeName == 'A') {
+                        t._sel(e.className.replace(/^.*mcePath_([0-9]+).*$/, '$1'));
+
+                        return false;
+                    }
+                });
+
+                if (!ed.getParam('accessibility_focus'))
+                    Event.add(DOM.add(p, 'a', {
+                        href : '#'
+                    }, '<!-- IE -->'), 'focus', function() {
+                        tinyMCE.get(ed.id).focus();
+                    });
+
+                if (s.theme_advanced_toolbar_location == 'external')
+                    o.deltaHeight = 0;
+
+                t.deltaHeight = o.deltaHeight;
+                o.targetNode = null;
+
+                ed.onKeyDown.add(function(ed, evt) {
+                    var DOM_VK_F10 = 121, DOM_VK_F11 = 122;
+
+                    if (evt.altKey) {
+                        if (evt.keyCode === DOM_VK_F10) {
+                            // Make sure focus is given to toolbar in Safari.
+                            // We can't do this in IE as it prevents giving focus to toolbar when editor is in a frame
+                            if (tinymce.isWebKit) {
+                                window.focus();
+                            }
+                            t.toolbarGroup.focus();
+                            return Event.cancel(evt);
+                        } else if (evt.keyCode === DOM_VK_F11) {
+                            DOM.get(ed.id + '_path_row').focus();
+                            return Event.cancel(evt);
+                        }
+                    }
+                });
+
+                if (ed.getParam('accessibility_shortcut', 1)) {
+                    // alt+0 is the UK recommended shortcut for accessing the list of access controls.
+                    ed.addShortcut('alt+0', '', 'mceShortcuts', t);
+                }
+			
+                return {
+                    iframeContainer : ic,
+                    editorContainer : ed.id + '_parent',
+                    sizeContainer : sc,
+                    deltaHeight : o.deltaHeight
+                };
+            },
+
+            getInfo : function() {
+                return {
+                    longname : 'Advanced theme',
+                    author : 'Moxiecode Systems AB',
+                    authorurl : 'http://tinymce.moxiecode.com',
+                    version : tinymce.majorVersion + "." + tinymce.minorVersion
+                };
+            },
+
+            resizeBy : function(dw, dh) {
+                var e = DOM.get(this.editor.id + '_ifr');
+
+                this.resizeTo(e.clientWidth + dw, e.clientHeight + dh);
+            },
+
+            resizeTo : function(w, h, store) {
+                var ed = this.editor, s = this.settings, e = DOM.get(ed.id + '_tbl'), ifr = DOM.get(ed.id + '_ifr');
+			
+                // Boundery fix box
+                w = Math.max(s.theme_advanced_resizing_min_width || 100, w);
+                h = Math.max(s.theme_advanced_resizing_min_height || 100, h);
+                w = Math.min(s.theme_advanced_resizing_max_width || 0xFFFF, w);
+                h = Math.min(s.theme_advanced_resizing_max_height || 0xFFFF, h);
+
+                // Resize iframe and container
+                DOM.setStyle(e, 'height', '');
+                DOM.setStyle(ifr, 'height', h);
+
+                if (s.theme_advanced_resize_horizontal) {
+                    DOM.setStyle(e, 'width', '');
+                    DOM.setStyle(ifr, 'width', w);
+
+                    // Make sure that the size is never smaller than the over all ui
+                    if (w < e.clientWidth) {
+                        w = e.clientWidth;
+                        DOM.setStyle(ifr, 'width', e.clientWidth);
+                    }
+                }
+
+                // Store away the size
+                if (store && s.theme_advanced_resizing_use_cookie) {
+                    Cookie.setHash("TinyMCE_" + ed.id + "_size", {
+                        cw : w,
+                        ch : h
+                    });
+                }
+			
+                // dispatch
+                this.onResize.dispatch();
+            },
+
+            destroy : function() {
+                var id = this.editor.id;
+
+                Event.clear(id + '_resize');
+                Event.clear(id + '_path_row');
+                Event.clear(id + '_external_close');
+            },
+
+            // Internal functions
+
+            _simpleLayout : function(s, tb, o, p) {
+                var t = this, ed = t.editor, lo = s.theme_advanced_toolbar_location, sl = s.theme_advanced_statusbar_location, n, ic, etb, c;
+
+                if (s.readonly) {
                     n = DOM.add(tb, 'tr');
                     n = ic = DOM.add(n, 'td', {
                         'class' : 'mceIframeContainer'
                     });
-                    break;
+                    return ic;
+                }
 
-                case 'mceelementpath':
+                // Create toolbar container at top
+                if (lo == 'top')
+                    t._addToolbars(tb, o);
+
+                // Create external toolbar
+                if (lo == 'external') {
+                    n = c = DOM.create('div', {
+                        style : 'position:relative'
+                    });
+                    n = DOM.add(n, 'div', {
+                        id : ed.id + '_external', 
+                        'class' : 'mceExternalToolbar'
+                    });
+                    DOM.add(n, 'a', {
+                        id : ed.id + '_external_close', 
+                        href : 'javascript:;', 
+                        'class' : 'mceExternalClose'
+                    });
+                    n = DOM.add(n, 'table', {
+                        id : ed.id + '_tblext', 
+                        cellSpacing : 0, 
+                        cellPadding : 0
+                    });
+                    etb = DOM.add(n, 'tbody');
+
+                    if (p.firstChild.className == 'mceOldBoxModel')
+                        p.firstChild.appendChild(c);
+                    else
+                        p.insertBefore(c, p.firstChild);
+
+                    t._addToolbars(etb, o);
+
+                    ed.onMouseUp.add(function() {
+                        var e = DOM.get(ed.id + '_external');
+                        DOM.show(e);
+
+                        DOM.hide(lastExtID);
+
+                        var f = Event.add(ed.id + '_external_close', 'click', function() {
+                            DOM.hide(ed.id + '_external');
+                            Event.remove(ed.id + '_external_close', 'click', f);
+                        });
+
+                        DOM.show(e);
+                        DOM.setStyle(e, 'top', 0 - DOM.getRect(ed.id + '_tblext').h - 1);
+
+                        // Fixes IE rendering bug
+                        DOM.hide(e);
+                        DOM.show(e);
+                        e.style.filter = '';
+
+                        lastExtID = ed.id + '_external';
+
+                        e = null;
+                    });
+                }
+
+                if (sl == 'top')
                     t._addStatusBar(tb, o);
-                    break;
 
-                default:
-                    a = (s['theme_advanced_container_' + c + '_align'] || da).toLowerCase();
-                    a = 'mce' + t._ufirst(a);
+                // Create iframe container
+                if (!s.theme_advanced_toolbar_container) {
+                    n = DOM.add(tb, 'tr');
+                    n = ic = DOM.add(n, 'td', {
+                        'class' : 'mceIframeContainer'
+                    });
+                }
 
-                    n = DOM.add(DOM.add(tb, 'tr'), 'td', {
-                        'class' : 'mceToolbar ' + (s['theme_advanced_container_' + c + '_class'] || dc) + ' ' + a || da
+                // Create toolbar container at bottom
+                if (lo == 'bottom')
+                    t._addToolbars(tb, o);
+
+                if (sl == 'bottom')
+                    t._addStatusBar(tb, o);
+
+                return ic;
+            },
+
+            _rowLayout : function(s, tb, o) {
+                var t = this, ed = t.editor, dc, da, cf = ed.controlManager, n, ic, to, a;
+
+                dc = s.theme_advanced_containers_default_class || '';
+                da = s.theme_advanced_containers_default_align || 'center';
+
+                each(explode(s.theme_advanced_containers || ''), function(c, i) {
+                    var v = s['theme_advanced_container_' + c] || '';
+
+                    switch (c.toLowerCase()) {
+                        case 'mceeditor':
+                            n = DOM.add(tb, 'tr');
+                            n = ic = DOM.add(n, 'td', {
+                                'class' : 'mceIframeContainer'
+                            });
+                            break;
+
+                        case 'mceelementpath':
+                            t._addStatusBar(tb, o);
+                            break;
+
+                        default:
+                            a = (s['theme_advanced_container_' + c + '_align'] || da).toLowerCase();
+                            a = 'mce' + t._ufirst(a);
+
+                            n = DOM.add(DOM.add(tb, 'tr'), 'td', {
+                                'class' : 'mceToolbar ' + (s['theme_advanced_container_' + c + '_class'] || dc) + ' ' + a || da
+                            });
+
+                            to = cf.createToolbar("toolbar" + i);
+                            t._addControls(v, to);
+                            DOM.setHTML(n, to.renderHTML());
+                            o.deltaHeight -= s.theme_advanced_row_height;
+                    }
+                });
+
+                return ic;
+            },
+
+            _addControls : function(v, tb) {
+                var t = this, s = t.settings, di, cf = t.editor.controlManager;
+
+                if (s.theme_advanced_disable && !t._disabled) {
+                    di = {};
+
+                    each(explode(s.theme_advanced_disable), function(v) {
+                        di[v] = 1;
                     });
 
-                    to = cf.createToolbar("toolbar" + i);
-                    t._addControls(v, to);
-                    DOM.setHTML(n, to.renderHTML());
-                    o.deltaHeight -= s.theme_advanced_row_height;
-            }
-        });
+                    t._disabled = di;
+                } else
+                    di = t._disabled;
 
-        return ic;
-    },
+                each(explode(v), function(n) {
+                    var c;
 
-    _addControls : function(v, tb) {
-        var t = this, s = t.settings, di, cf = t.editor.controlManager;
+                    if (di && di[n])
+                        return;
 
-        if (s.theme_advanced_disable && !t._disabled) {
-            di = {};
-
-            each(explode(s.theme_advanced_disable), function(v) {
-                di[v] = 1;
-            });
-
-            t._disabled = di;
-        } else
-            di = t._disabled;
-
-        each(explode(v), function(n) {
-            var c;
-
-            if (di && di[n])
-                return;
-
-            // WFEDITOR - Remove Table Compatability
+                    // WFEDITOR - Remove Table Compatability
 				
-            // Compatiblity with 2.x
-            /*if (n == 'tablecontrols') {
+                    // Compatiblity with 2.x
+                    /*if (n == 'tablecontrols') {
 					each(["table","|","row_props","cell_props","|","row_before","row_after","delete_row","|","col_before","col_after","delete_col","|","split_cells","merge_cells"], function(n) {
 						n = t.createControl(n, cf);
 
@@ -1112,664 +1087,564 @@
 					return;
 				}*/
 
-            c = t.createControl(n, cf);
+                    c = t.createControl(n, cf);
 
-            if (c)
-                tb.add(c);
-        });
-    },
+                    if (c)
+                        tb.add(c);
+                });
+            },
 
-    _addToolbars : function(c, o) {
-        var t = this, i, tb, ed = t.editor, s = t.settings, v, cf = ed.controlManager, di, n, h = [], a, toolbarGroup, toolbarsExist = false;
+            _addToolbars : function(c, o) {
+                var t = this, i, tb, ed = t.editor, s = t.settings, v, cf = ed.controlManager, di, n, h = [], a, toolbarGroup, toolbarsExist = false;
 
-        toolbarGroup = cf.createToolbarGroup('toolbargroup', {
-            'name': ed.getLang('advanced.toolbar'),
-            'tab_focus_toolbar':ed.getParam('theme_advanced_tab_focus_toolbar')
-        });
+                toolbarGroup = cf.createToolbarGroup('toolbargroup', {
+                    'name': ed.getLang('advanced.toolbar'),
+                    'tab_focus_toolbar':ed.getParam('theme_advanced_tab_focus_toolbar')
+                });
 
-        t.toolbarGroup = toolbarGroup;
+                t.toolbarGroup = toolbarGroup;
 
-        a = s.theme_advanced_toolbar_align.toLowerCase();
-        a = 'mce' + t._ufirst(a);
+                a = s.theme_advanced_toolbar_align.toLowerCase();
+                a = 'mce' + t._ufirst(a);
 
-        n = DOM.add(DOM.add(c, 'tr', {
-            role: 'presentation'
-        }), 'td', {
-            'class' : 'mceToolbar ' + a, 
-            "role":"presentation"
-        });
+                n = DOM.add(DOM.add(c, 'tr', {
+                    role: 'presentation'
+                }), 'td', {
+                    'class' : 'mceToolbar ' + a, 
+                    "role":"presentation"
+                });
 
-        // Create toolbar and add the controls
-        for (i=1; (v = s['theme_advanced_buttons' + i]); i++) {
-            toolbarsExist = true;
+                // Create toolbar and add the controls
+                for (i=1; (v = s['theme_advanced_buttons' + i]); i++) {
+                    toolbarsExist = true;
             
-            tb = cf.createToolbar("toolbar" + i, {
-                'class' : 'mceToolbarRow' + i
-            });
+                    tb = cf.createToolbar("toolbar" + i, {
+                        'class' : 'mceToolbarRow' + i
+                    });
 
-            if (s['theme_advanced_buttons' + i + '_add'])
-                v += ',' + s['theme_advanced_buttons' + i + '_add'];
+                    if (s['theme_advanced_buttons' + i + '_add'])
+                        v += ',' + s['theme_advanced_buttons' + i + '_add'];
 
-            if (s['theme_advanced_buttons' + i + '_add_before'])
-                v = s['theme_advanced_buttons' + i + '_add_before'] + ',' + v;
+                    if (s['theme_advanced_buttons' + i + '_add_before'])
+                        v = s['theme_advanced_buttons' + i + '_add_before'] + ',' + v;
 
-            t._addControls(v, tb);
-            toolbarGroup.add(tb);
+                    t._addControls(v, tb);
+                    toolbarGroup.add(tb);
 
-            o.deltaHeight -= s.theme_advanced_row_height;
-        }
+                    o.deltaHeight -= s.theme_advanced_row_height;
+                }
         
-        // Handle case when there are no toolbar buttons and ensure editor height is adjusted accordingly
-        if (!toolbarsExist) {
-            o.deltaHeight -= s.theme_advanced_row_height;
-        }
+                // Handle case when there are no toolbar buttons and ensure editor height is adjusted accordingly
+                if (!toolbarsExist) {
+                    o.deltaHeight -= s.theme_advanced_row_height;
+                }
         
-        h.push(toolbarGroup.renderHTML());
-        h.push(DOM.createHTML('a', {
-            href : '#', 
-            accesskey : 'z', 
-            title : ed.getLang("advanced.toolbar_focus"), 
-            onfocus : 'tinyMCE.getInstanceById(\'' + ed.id + '\').focus();'
-        }, '<!-- IE -->'));
-        DOM.setHTML(n, h.join(''));
-    },
+                h.push(toolbarGroup.renderHTML());
+                h.push(DOM.createHTML('a', {
+                    href : '#', 
+                    accesskey : 'z', 
+                    title : ed.getLang("advanced.toolbar_focus"), 
+                    onfocus : 'tinyMCE.getInstanceById(\'' + ed.id + '\').focus();'
+                }, '<!-- IE -->'));
+                DOM.setHTML(n, h.join(''));
+            },
 
-    _addStatusBar : function(tb, o) {
-        var n, t = this, ed = t.editor, s = t.settings, r, mf, me, td;
+            _addStatusBar : function(tb, o) {
+                var n, t = this, ed = t.editor, s = t.settings, r, mf, me, td;
 
-        n = DOM.add(tb, 'tr');
-        n = td = DOM.add(n, 'td', {
-            'class' : 'mceStatusbar'
-        }); 
-        n = DOM.add(n, 'div', {
-            id : ed.id + '_path_row', 
-            'role': 'group', 
-            'aria-labelledby': ed.id + '_path_voice', 
-            'class' : 'mcePathRow'
-        });
-			
-        // WFEditor Path modifications
-			
-        if (s.theme_advanced_path) {
-            DOM.add(n, 'span', {
-                id: ed.id + '_path_voice', 
-                'class' : 'mcePathLabel'
-            }, ed.translate('advanced.path') + ': ');
-            //DOM.add(n, 'span', {}, ': ');
-        } else {
-            DOM.add(n, 'span', {}, '&#160;');
-        }
-			
-
-        if (s.theme_advanced_resizing) {
-            DOM.add(td, 'a', {
-                id : ed.id + '_resize', 
-                href : 'javascript:;', 
-                onclick : "return false;", 
-                'class' : 'mceResize', 
-                tabIndex:"-1"
-            });
-
-            if (s.theme_advanced_resizing_use_cookie) {
-                ed.onPostRender.add(function() {
-                    var o = Cookie.getHash("TinyMCE_" + ed.id + "_size"), c = DOM.get(ed.id + '_tbl');
-
-                    if (!o)
-                        return;
-
-                    t.resizeTo(o.cw, o.ch);
+                n = DOM.add(tb, 'tr');
+                n = td = DOM.add(n, 'td', {
+                    'class' : 'mceStatusbar'
+                }); 
+                n = DOM.add(n, 'div', {
+                    id : ed.id + '_path_row', 
+                    'role': 'group', 
+                    'aria-labelledby': ed.id + '_path_voice', 
+                    'class' : 'mcePathRow'
                 });
-            }
+			
+                // WFEditor Path modifications
+			
+                if (s.theme_advanced_path) {
+                    DOM.add(n, 'span', {
+                        id: ed.id + '_path_voice', 
+                        'class' : 'mcePathLabel'
+                    }, ed.translate('advanced.path') + ': ');
+                //DOM.add(n, 'span', {}, ': ');
+                } else {
+                    DOM.add(n, 'span', {}, '&#160;');
+                }
+			
 
-            ed.onPostRender.add(function() {
-                Event.add(ed.id + '_resize', 'click', function(e) {
-                    e.preventDefault();
+                if (s.theme_advanced_resizing) {
+                    DOM.add(td, 'a', {
+                        id : ed.id + '_resize', 
+                        href : 'javascript:;', 
+                        onclick : "return false;", 
+                        'class' : 'mceResize', 
+                        tabIndex:"-1"
+                    });
+
+                    if (s.theme_advanced_resizing_use_cookie) {
+                        ed.onPostRender.add(function() {
+                            var o = Cookie.getHash("TinyMCE_" + ed.id + "_size"), c = DOM.get(ed.id + '_tbl');
+
+                            if (!o)
+                                return;
+
+                            t.resizeTo(o.cw, o.ch);
+                        });
+                    }
+
+                    ed.onPostRender.add(function() {
+                        Event.add(ed.id + '_resize', 'click', function(e) {
+                            e.preventDefault();
+                        });
+
+                        Event.add(ed.id + '_resize', 'mousedown', function(e) {
+                            var mouseMoveHandler1, mouseMoveHandler2,
+                            mouseUpHandler1, mouseUpHandler2,
+                            startX, startY, startWidth, startHeight, width, height, ifrElm;
+
+                            function resizeOnMove(e) {
+                                e.preventDefault();
+
+                                width = startWidth + (e.screenX - startX);
+                                height = startHeight + (e.screenY - startY);
+
+                                t.resizeTo(width, height);
+                            };
+
+                            function endResize(e) {
+                                // Stop listening
+                                Event.remove(DOM.doc, 'mousemove', mouseMoveHandler1);
+                                Event.remove(ed.getDoc(), 'mousemove', mouseMoveHandler2);
+                                Event.remove(DOM.doc, 'mouseup', mouseUpHandler1);
+                                Event.remove(ed.getDoc(), 'mouseup', mouseUpHandler2);
+
+                                width = startWidth + (e.screenX - startX);
+                                height = startHeight + (e.screenY - startY);
+                                t.resizeTo(width, height, true);
+                            };
+
+                            e.preventDefault();
+
+                            // Get the current rect size
+                            startX = e.screenX;
+                            startY = e.screenY;
+                            ifrElm = DOM.get(t.editor.id + '_ifr');
+                            startWidth = width = ifrElm.clientWidth;
+                            startHeight = height = ifrElm.clientHeight;
+
+                            // Register envent handlers
+                            mouseMoveHandler1 = Event.add(DOM.doc, 'mousemove', resizeOnMove);
+                            mouseMoveHandler2 = Event.add(ed.getDoc(), 'mousemove', resizeOnMove);
+                            mouseUpHandler1 = Event.add(DOM.doc, 'mouseup', endResize);
+                            mouseUpHandler2 = Event.add(ed.getDoc(), 'mouseup', endResize);
+                        });
+                    });
+                }
+
+                o.deltaHeight -= 21;
+                n = tb = null;
+            },
+
+            _updateUndoStatus : function(ed) {
+                var cm = ed.controlManager, um = ed.undoManager;
+
+                cm.setDisabled('undo', !um.hasUndo() && !um.typing);
+                cm.setDisabled('redo', !um.hasRedo());
+            },
+
+            _nodeChanged : function(ed, cm, n, co, ob) {
+                var t = this, p, de = 0, v, c, s = t.settings, cl, fz, fn, fc, bc, formatNames, matches;
+
+                tinymce.each(t.stateControls, function(c) {
+                    cm.setActive(c, ed.queryCommandState(t.controls[c][1]));
                 });
 
-                Event.add(ed.id + '_resize', 'mousedown', function(e) {
-                    var mouseMoveHandler1, mouseMoveHandler2,
-                    mouseUpHandler1, mouseUpHandler2,
-                    startX, startY, startWidth, startHeight, width, height, ifrElm;
+                function getParent(name) {
+                    var i, parents = ob.parents, func = name;
 
-                    function resizeOnMove(e) {
-                        e.preventDefault();
+                    if (typeof(name) == 'string') {
+                        func = function(node) {
+                            return node.nodeName == name;
+                        };
+                    }
 
-                        width = startWidth + (e.screenX - startX);
-                        height = startHeight + (e.screenY - startY);
-
-                        t.resizeTo(width, height);
-                    };
-
-                    function endResize(e) {
-                        // Stop listening
-                        Event.remove(DOM.doc, 'mousemove', mouseMoveHandler1);
-                        Event.remove(ed.getDoc(), 'mousemove', mouseMoveHandler2);
-                        Event.remove(DOM.doc, 'mouseup', mouseUpHandler1);
-                        Event.remove(ed.getDoc(), 'mouseup', mouseUpHandler2);
-
-                        width = startWidth + (e.screenX - startX);
-                        height = startHeight + (e.screenY - startY);
-                        t.resizeTo(width, height, true);
-                    };
-
-                    e.preventDefault();
-
-                    // Get the current rect size
-                    startX = e.screenX;
-                    startY = e.screenY;
-                    ifrElm = DOM.get(t.editor.id + '_ifr');
-                    startWidth = width = ifrElm.clientWidth;
-                    startHeight = height = ifrElm.clientHeight;
-
-                    // Register envent handlers
-                    mouseMoveHandler1 = Event.add(DOM.doc, 'mousemove', resizeOnMove);
-                    mouseMoveHandler2 = Event.add(ed.getDoc(), 'mousemove', resizeOnMove);
-                    mouseUpHandler1 = Event.add(DOM.doc, 'mouseup', endResize);
-                    mouseUpHandler2 = Event.add(ed.getDoc(), 'mouseup', endResize);
-                });
-            });
-        }
-
-        o.deltaHeight -= 21;
-        n = tb = null;
-    },
-
-    _updateUndoStatus : function(ed) {
-        var cm = ed.controlManager, um = ed.undoManager;
-
-        cm.setDisabled('undo', !um.hasUndo() && !um.typing);
-        cm.setDisabled('redo', !um.hasRedo());
-    },
-
-    _nodeChanged : function(ed, cm, n, co, ob) {
-        var t = this, p, de = 0, v, c, s = t.settings, cl, fz, fn, fc, bc, formatNames, matches;
-
-        tinymce.each(t.stateControls, function(c) {
-            cm.setActive(c, ed.queryCommandState(t.controls[c][1]));
-        });
-
-        function getParent(name) {
-            var i, parents = ob.parents, func = name;
-
-            if (typeof(name) == 'string') {
-                func = function(node) {
-                    return node.nodeName == name;
+                    for (i = 0; i < parents.length; i++) {
+                        if (func(parents[i]))
+                            return parents[i];
+                    }
                 };
-            }
 
-            for (i = 0; i < parents.length; i++) {
-                if (func(parents[i]))
-                    return parents[i];
-            }
-        };
+                cm.setActive('visualaid', ed.hasVisual);
+                t._updateUndoStatus(ed);
+                cm.setDisabled('outdent', !ed.queryCommandState('Outdent'));
 
-        cm.setActive('visualaid', ed.hasVisual);
-        t._updateUndoStatus(ed);
-        cm.setDisabled('outdent', !ed.queryCommandState('Outdent'));
-
-        // WFEDITOR - Remove Link NodeChange event
+                // WFEDITOR - Remove Link NodeChange event
 			
-        /*if (c = cm.get('link')) {
+                /*if (c = cm.get('link')) {
 				if (!p || !p.name) {
 					c.setDisabled(!p && co);
 					c.setActive(!!p);
 				}
 			}*/
 			
-        var link	= getParent('A');
-        var img 	= getParent('IMG');
+                var link	= getParent('A');
+                var img 	= getParent('IMG');
 			
-        function isLink(n) {
-            return !!n && n.href && (!n.name || !n.id);
-        }
+                function isLink(n) {
+                    return !!n && n.href && (!n.name || !n.id);
+                }
 
-        if (c = cm.get('unlink')) {				
-            c.setDisabled(!isLink(link));
-            c.setActive(isLink(link));
-        }
+                if (c = cm.get('unlink')) {				
+                    c.setDisabled(!isLink(link));
+                    c.setActive(isLink(link));
+                }
 
-        if (c = cm.get('anchor')) {				
-            c.setActive(!co && (!!img && /mceItemAnchor/.test(img.className)) || (!!link && !link.href && (link.name || link.id)));
-        }
-
-        /*p = getParent('IMG');
+                /*p = getParent('IMG');
 			
 			if (c = cm.get('image'))
 				c.setActive(!co && !!p && n.className.indexOf('mceItem') == -1);*/
 
-        if (c = cm.get('styleselect')) {
-            t._importClasses();
+                if (c = cm.get('styleselect')) {
+                    t._importClasses();
 
-            formatNames = [];
-            each(c.items, function(item) {
-                formatNames.push(item.value);
-            });
+                    formatNames = [];
+                    each(c.items, function(item) {
+                        formatNames.push(item.value);
+                    });
 
-            matches = ed.formatter.matchAll(formatNames);
-            c.select(matches[0]);
+                    matches = ed.formatter.matchAll(formatNames);
+                    c.select(matches[0]);
                 
-            tinymce.each(matches, function(match, index) {
-                if (index > 0) {
-                    c.mark(match);
+                    tinymce.each(matches, function(match, index) {
+                        if (index > 0) {
+                            c.mark(match);
+                        }
+                    });
                 }
-            });
-        }
 
-        if (c = cm.get('formatselect')) {
-            p = getParent(ed.dom.isBlock);
+                if (c = cm.get('formatselect')) {
+                    p = getParent(ed.dom.isBlock);
 
-            if (p)
-                c.select(p.nodeName.toLowerCase());
-        }
+                    if (p)
+                        c.select(p.nodeName.toLowerCase());
+                }
 
-        // Find out current fontSize, fontFamily and fontClass
-        getParent(function(n) {
-            if (n.nodeName === 'SPAN') {
-                if (!cl && n.className)
-                    cl = n.className;
-            }
+                // Find out current fontSize, fontFamily and fontClass
+                getParent(function(n) {
+                    if (n.nodeName === 'SPAN') {
+                        if (!cl && n.className)
+                            cl = n.className;
+                    }
 
-            if (ed.dom.is(n, s.theme_advanced_font_selector)) {
-                if (!fz && n.style.fontSize)
-                    fz = n.style.fontSize;
+                    if (ed.dom.is(n, s.theme_advanced_font_selector)) {
+                        if (!fz && n.style.fontSize)
+                            fz = n.style.fontSize;
 
-                if (!fn && n.style.fontFamily)
-                    fn = n.style.fontFamily.replace(/[\"\']+/g, '').replace(/^([^,]+).*/, '$1').toLowerCase();
+                        if (!fn && n.style.fontFamily)
+                            fn = n.style.fontFamily.replace(/[\"\']+/g, '').replace(/^([^,]+).*/, '$1').toLowerCase();
 					
-                if (!fc && n.style.color)
-                    fc = n.style.color;
+                        if (!fc && n.style.color)
+                            fc = n.style.color;
 
-                if (!bc && n.style.backgroundColor)
-                    bc = n.style.backgroundColor;
-            }
+                        if (!bc && n.style.backgroundColor)
+                            bc = n.style.backgroundColor;
+                    }
 
-            return false;
-        });
+                    return false;
+                });
 
-        if (c = cm.get('fontselect')) {
-            c.select(function(v) {
-                return v.replace(/^([^,]+).*/, '$1').toLowerCase() == fn;
-            });
-        }
+                if (c = cm.get('fontselect')) {
+                    c.select(function(v) {
+                        return v.replace(/^([^,]+).*/, '$1').toLowerCase() == fn;
+                    });
+                }
 
-        // Select font size
-        if (c = cm.get('fontsizeselect')) {
-            // Use computed style
-            if (s.theme_advanced_runtime_fontsize && !fz && !cl)
-                fz = ed.dom.getStyle(n, 'fontSize', true);
+                // Select font size
+                if (c = cm.get('fontsizeselect')) {
+                    // Use computed style
+                    if (s.theme_advanced_runtime_fontsize && !fz && !cl)
+                        fz = ed.dom.getStyle(n, 'fontSize', true);
 
-            c.select(function(v) {
-                if (v.fontSize && v.fontSize === fz)
-                    return true;
+                    c.select(function(v) {
+                        if (v.fontSize && v.fontSize === fz)
+                            return true;
 
-                if (v['class'] && v['class'] === cl)
-                    return true;
-            });
-        }
+                        if (v['class'] && v['class'] === cl)
+                            return true;
+                    });
+                }
 			
-        if (s.theme_advanced_show_current_color) {
-            function updateColor(controlId, color) {
-                if (c = cm.get(controlId)) {
-                    if (!color)
-                        color = c.settings.default_color;
-                    if (color !== c.value) {
-                        c.displayColor(color);
+                if (s.theme_advanced_show_current_color) {
+                    function updateColor(controlId, color) {
+                        if (c = cm.get(controlId)) {
+                            if (!color)
+                                color = c.settings.default_color;
+                            if (color !== c.value) {
+                                c.displayColor(color);
+                            }
+                        }
                     }
+                    updateColor('forecolor', fc);
+                    updateColor('backcolor', bc);
                 }
-            }
-            updateColor('forecolor', fc);
-            updateColor('backcolor', bc);
-        }
 
-        if (s.theme_advanced_show_current_color) {
-            function updateColor(controlId, color) {
-                if (c = cm.get(controlId)) {
-                    if (!color)
-                        color = c.settings.default_color;
-                    if (color !== c.value) {
-                        c.displayColor(color);
+                if (s.theme_advanced_show_current_color) {
+                    function updateColor(controlId, color) {
+                        if (c = cm.get(controlId)) {
+                            if (!color)
+                                color = c.settings.default_color;
+                            if (color !== c.value) {
+                                c.displayColor(color);
+                            }
+                        }
+                    };
+
+                    updateColor('forecolor', fc);
+                    updateColor('backcolor', bc);
+                }
+
+                if (s.theme_advanced_path && s.theme_advanced_statusbar_location) {
+                    p = DOM.get(ed.id + '_path') || DOM.add(ed.id + '_path_row', 'span', {
+                        id : ed.id + '_path', 
+                        'class' : 'mcePathPath'
+                    });
+
+                    if (t.statusKeyboardNavigation) {
+                        t.statusKeyboardNavigation.destroy();
+                        t.statusKeyboardNavigation = null;
                     }
-                }
-            };
 
-            updateColor('forecolor', fc);
-            updateColor('backcolor', bc);
-        }
+                    DOM.setHTML(p, '');
 
-        if (s.theme_advanced_path && s.theme_advanced_statusbar_location) {
-            p = DOM.get(ed.id + '_path') || DOM.add(ed.id + '_path_row', 'span', {
-                id : ed.id + '_path', 
-                'class' : 'mcePathPath'
-            });
+                    getParent(function(n) {
+                        var na = n.nodeName.toLowerCase(), u, pi, ti = '';
 
-            if (t.statusKeyboardNavigation) {
-                t.statusKeyboardNavigation.destroy();
-                t.statusKeyboardNavigation = null;
-            }
+                        // Ignore non element and bogus/hidden elements
+                        if (n.nodeType != 1 || na === 'br' || n.getAttribute('data-mce-bogus') || DOM.hasClass(n, 'mceItemHidden') || DOM.hasClass(n, 'mceItemRemoved'))
+                            return;
 
-            DOM.setHTML(p, '');
+                        // Handle prefix
+                        if (tinymce.isIE && n.scopeName && n.scopeName !== 'HTML')
+                            na = n.scopeName + ':' + na;
 
-            getParent(function(n) {
-                var na = n.nodeName.toLowerCase(), u, pi, ti = '';
+                        // Remove internal prefix
+                        na = na.replace(/mce\:/g, '');
 
-                // Ignore non element and bogus/hidden elements
-                if (n.nodeType != 1 || na === 'br' || n.getAttribute('data-mce-bogus') || DOM.hasClass(n, 'mceItemHidden') || DOM.hasClass(n, 'mceItemRemoved'))
-                    return;
+                        // Handle node name
+                        switch (na) {
+                            case 'b':
+                                na = 'strong';
+                                break;
 
-                // Handle prefix
-                if (tinymce.isIE && n.scopeName && n.scopeName !== 'HTML')
-                    na = n.scopeName + ':' + na;
+                            case 'i':
+                                na = 'em';
+                                break;
 
-                // Remove internal prefix
-                na = na.replace(/mce\:/g, '');
+                            case 'img':
+                                if (v = DOM.getAttrib(n, 'src'))
+                                    ti += 'src: ' + v + ' ';
 
-                // Handle node name
-                switch (na) {
-                    case 'b':
-                        na = 'strong';
-                        break;
+                                break;
 
-                    case 'i':
-                        na = 'em';
-                        break;
+                            case 'a':
+                                if (v = DOM.getAttrib(n, 'href'))
+                                    ti += 'href: ' + v + ' ';
 
-                    case 'img':
-                        if (v = DOM.getAttrib(n, 'src'))
-                            ti += 'src: ' + v + ' ';
+                                break;
 
-                        break;
+                            case 'font':
+                                if (v = DOM.getAttrib(n, 'face'))
+                                    ti += 'font: ' + v + ' ';
 
-                    case 'a':
-                        if (v = DOM.getAttrib(n, 'name')) {
-                            ti += 'name: ' + v + ' ';
-                            na += '#' + v;
+                                if (v = DOM.getAttrib(n, 'size'))
+                                    ti += 'size: ' + v + ' ';
+
+                                if (v = DOM.getAttrib(n, 'color'))
+                                    ti += 'color: ' + v + ' ';
+
+                                break;
+
+                            case 'span':
+                                if (v = DOM.getAttrib(n, 'style'))
+                                    ti += 'style: ' + v + ' ';
+
+                                break;
                         }
 
-                        if (v = DOM.getAttrib(n, 'href'))
-                            ti += 'href: ' + v + ' ';
+                        if (v = DOM.getAttrib(n, 'id'))
+                            ti += 'id: ' + v + ' ';
 
-                        break;
+                        if (v = n.className) {
+                            v = v.replace(/\b\s*(webkit|mce|Apple-)\w+\s*\b/g, '');
 
-                    case 'font':
-                        if (v = DOM.getAttrib(n, 'face'))
-                            ti += 'font: ' + v + ' ';
+                            if (v) {
+                                ti += 'class: ' + v + ' ';
 
-                        if (v = DOM.getAttrib(n, 'size'))
-                            ti += 'size: ' + v + ' ';
+                                if (ed.dom.isBlock(n) || na == 'img' || na == 'span')
+                                    na += '.' + v;
+                            }
+                        }
 
-                        if (v = DOM.getAttrib(n, 'color'))
-                            ti += 'color: ' + v + ' ';
+                        na = na.replace(/(html:)/g, '');
+                        na = {
+                            name : na, 
+                            node : n, 
+                            title : ti
+                        };
+                        t.onResolveName.dispatch(t, na);
+                        ti = na.title;
+                        na = na.name;
 
-                        break;
+                        //u = "javascript:tinymce.EditorManager.get('" + ed.id + "').theme._sel('" + (de++) + "');";
+                        pi = DOM.create('a', {
+                            'href' : "javascript:;", 
+                            role: 'button', 
+                            onmousedown : "return false;", 
+                            title : ti, 
+                            'class' : 'mcePath_' + (de++)
+                        }, na);
 
-                    case 'span':
-                        if (v = DOM.getAttrib(n, 'style'))
-                            ti += 'style: ' + v + ' ';
+                        // WFEditor - Added mcePath class to path span
 
-                        break;
-                }
-
-                if (v = DOM.getAttrib(n, 'id'))
-                    ti += 'id: ' + v + ' ';
-
-                if (v = n.className) {
-                    v = v.replace(/\b\s*(webkit|mce|Apple-)\w+\s*\b/g, '');
-
-                    if (v) {
-                        ti += 'class: ' + v + ' ';
-
-                        if (ed.dom.isBlock(n) || na == 'img' || na == 'span')
-                            na += '.' + v;
-                    }
-                }
-
-                na = na.replace(/(html:)/g, '');
-                na = {
-                    name : na, 
-                    node : n, 
-                    title : ti
-                };
-                t.onResolveName.dispatch(t, na);
-                ti = na.title;
-                na = na.name;
-
-                //u = "javascript:tinymce.EditorManager.get('" + ed.id + "').theme._sel('" + (de++) + "');";
-                pi = DOM.create('a', {
-                    'href' : "javascript:;", 
-                    role: 'button', 
-                    onmousedown : "return false;", 
-                    title : ti, 
-                    'class' : 'mcePath_' + (de++)
-                }, na);
-
-                // WFEditor - Added mcePath class to path span
-
-                if (p.hasChildNodes()) {
-                    p.insertBefore(DOM.create('span', {
-                        'aria-hidden': 'true'
-                    }, '\u00a0\u00bb '), p.firstChild);
-                    p.insertBefore(pi, p.firstChild);
-                } else
-                    p.appendChild(pi);	
+                        if (p.hasChildNodes()) {
+                            p.insertBefore(DOM.create('span', {
+                                'aria-hidden': 'true'
+                            }, '\u00a0\u00bb '), p.firstChild);
+                            p.insertBefore(pi, p.firstChild);
+                        } else
+                            p.appendChild(pi);	
 					
-            }, ed.getBody());
+                    }, ed.getBody());
 
-            if (DOM.select('a', p).length > 0) {
-                t.statusKeyboardNavigation = new tinymce.ui.KeyboardNavigation({
-                    root: ed.id + "_path_row",
-                    items: DOM.select('a', p),
-                    excludeFromTabOrder: true,
-                    onCancel: function() {
-                        ed.focus();
+                    if (DOM.select('a', p).length > 0) {
+                        t.statusKeyboardNavigation = new tinymce.ui.KeyboardNavigation({
+                            root: ed.id + "_path_row",
+                            items: DOM.select('a', p),
+                            excludeFromTabOrder: true,
+                            onCancel: function() {
+                                ed.focus();
+                            }
+                        }, DOM);
                     }
-                }, DOM);
-            }
-        }
-    },
+                }
+            },
 
-    // Commands gets called by execCommand
+            // Commands gets called by execCommand
 
-    _sel : function(v) {
-        this.editor.execCommand('mceSelectNodeDepth', false, v);
-    },
+            _sel : function(v) {
+                this.editor.execCommand('mceSelectNodeDepth', false, v);
+            },
 		
-    /**
-     * WF Editor Custom Anchor Command
-     */
-    _mceInsertAnchor : function(ui, v) {
-        var ed = this.editor;
-
-        ed.windowManager.open({
-            url	: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=theme&theme=' + ed.getParam('theme') + '&dialog=anchor',
-            width : 320 + parseInt(ed.getLang('advanced.anchor_delta_width', 0)),
-            height : 100 + parseInt(ed.getLang('advanced.anchor_delta_height', 0)),
-            inline : true,
-            popup_css : false
-        }, {
-            theme_url : this.url
-        });
-    },
-		
-    /**
+            /**
      * WF Editor Custom Charmap Command
      */
-    _mceCharMap : function() {
-        var ed = this.editor;
+            _mceCharMap : function() {
+                var ed = this.editor;
 
-        ed.windowManager.open({
-            url	: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=theme&theme=' + ed.getParam('theme') + '&dialog=charmap',
-            width : 550 + parseInt(ed.getLang('advanced.charmap_delta_width', 0)),
-            height : 250 + parseInt(ed.getLang('advanced.charmap_delta_height', 0)),
-            inline : true,
-            popup_css : false
-        }, {
-            theme_url : this.url
-        });
-    },
+                ed.windowManager.open({
+                    url	: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=theme&theme=' + ed.getParam('theme') + '&dialog=charmap',
+                    width : 550 + parseInt(ed.getLang('advanced.charmap_delta_width', 0)),
+                    height : 250 + parseInt(ed.getLang('advanced.charmap_delta_height', 0)),
+                    inline : true,
+                    popup_css : false
+                }, {
+                    theme_url : this.url
+                });
+            },
 		
-    /**
+            /**
      * WF Editor Custom Help Command
      */
-    _mceHelp : function() {
-        var ed = this.editor;
+            _mceHelp : function() {
+                var ed = this.editor;
 
-        ed.windowManager.open({
-            url : ed.getParam('site_url') + 'index.php?option=com_jce&view=help&tmpl=component&lang='+ ed.getParam('language') +'&section=editor&category=editor&article=about',
-            width : 760,
-            height : 640,
-            inline : true,
-            popup_css : false
-        }, {
-            theme_url : this.url
-        });
-    },
+                ed.windowManager.open({
+                    url : ed.getParam('site_url') + 'index.php?option=com_jce&view=help&tmpl=component&lang='+ ed.getParam('language') +'&section=editor&category=editor&article=about',
+                    width : 760,
+                    height : 640,
+                    inline : true,
+                    popup_css : false
+                }, {
+                    theme_url : this.url
+                });
+            },
 
-    /**
+            /**
      * WF Editor Custom ColorPicker Command
      */
-    _mceColorPicker : function(u, v) {
-        var ed = this.editor;
+            _mceColorPicker : function(u, v) {
+                var ed = this.editor;
 
-        v = v || {};
+                v = v || {};
 
-        ed.windowManager.open({
-            url	: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=theme&theme=' + ed.getParam('theme') + '&dialog=colorpicker',
-            width : 375 + parseInt(ed.getLang('advanced.colorpicker_delta_width', 0)),
-            height : 310 + parseInt(ed.getLang('advanced.colorpicker_delta_height', 0)),
-            close_previous : false,
-            inline : true,
-            popup_css : false
-        }, {
-            input_color : v.color,
-            func : v.func,
-            theme_url : this.url
-        });
-    },
+                ed.windowManager.open({
+                    url	: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=theme&theme=' + ed.getParam('theme') + '&dialog=colorpicker',
+                    width : 375 + parseInt(ed.getLang('advanced.colorpicker_delta_width', 0)),
+                    height : 310 + parseInt(ed.getLang('advanced.colorpicker_delta_height', 0)),
+                    close_previous : false,
+                    inline : true,
+                    popup_css : false
+                }, {
+                    input_color : v.color,
+                    func : v.func,
+                    theme_url : this.url
+                });
+            },
 
-    _mceNewDocument : function() {
-        var ed = this.editor;
+            _mceNewDocument : function() {
+                var ed = this.editor;
 
-        ed.windowManager.confirm('advanced.newdocument', function(s) {
-            if (s)
-                ed.execCommand('mceSetContent', false, '');
-        });
-    },
+                ed.windowManager.confirm('advanced.newdocument', function(s) {
+                    if (s)
+                        ed.execCommand('mceSetContent', false, '');
+                });
+            },
 
-    _mceForeColor : function() {
-        var t = this;
+            _mceForeColor : function() {
+                var t = this;
 
-        this._mceColorPicker(0, {
-            color: t.fgColor,
-            func : function(co) {
-                t.fgColor = co;
-                t.editor.execCommand('ForeColor', false, co);
-            }
-        });
-    },
+                this._mceColorPicker(0, {
+                    color: t.fgColor,
+                    func : function(co) {
+                        t.fgColor = co;
+                        t.editor.execCommand('ForeColor', false, co);
+                    }
+                });
+            },
 
-    _mceBackColor : function() {
-        var t = this;
+            _mceBackColor : function() {
+                var t = this;
 
-        this._mceColorPicker(0, {
-            color: t.bgColor,
-            func : function(co) {
-                t.bgColor = co;
-                t.editor.execCommand('HiliteColor', false, co);
-            }
-        });
-    },
+                this._mceColorPicker(0, {
+                    color: t.bgColor,
+                    func : function(co) {
+                        t.bgColor = co;
+                        t.editor.execCommand('HiliteColor', false, co);
+                    }
+                });
+            },
 		
-    _mceShortcuts : function() {
-        var ed = this.editor;
-        ed.windowManager.open({
-            url: this.url + '/shortcuts.htm',
-            width: 480,
-            height: 380,
-            inline: true,
-            popup_css : false
-        }, {
-            theme_url: this.url
-        });
-    },
+            _mceShortcuts : function() {
+                var ed = this.editor;
+                ed.windowManager.open({
+                    url: this.url + '/shortcuts.htm',
+                    width: 480,
+                    height: 380,
+                    inline: true,
+                    popup_css : false
+                }, {
+                    theme_url: this.url
+                });
+            },
 
-    _ufirst : function(s) {
-        return s.substring(0, 1).toUpperCase() + s.substring(1);
-    },
-		
-    _restoreAnchor : function(n) {
-        var self = this, ed = this.editor, p, v, node, text;
-
-        if (!n.parent)
-            return;
-
-        // get data
-        p = tinymce.util.JSON.parse(n.attr('data-mce-json')) || {};
-			
-        node = new tinymce.html.Node('a', 1);
-			
-        if (p.html) {
-            var value = new tinymce.html.Node('#text', 3);
-            value.raw = true;
-            value.value = p.html;
-            node.append(value);
-				
-            delete p.html;
-        }
-
-        each(p, function(v, k) {
-            node.attr(k, v);
-        });
-
-        n.replace(node);
-    },
-        
-    _getInnerHTML : function(node) {
-        return new tinymce.html.Serializer({
-            inner	: true,
-            validate: false
-        }).serialize(node);
-    },
-        
-    _createAnchorImage: function(n) {
-        var self = this, ed = this.editor, dom = ed.dom, v, k, p = {};
-
-        if (!n.parent)
-            return;
-			
-        each(n.attributes, function(at) {
-            if (at.name == 'class') {
-                return;
+            _ufirst : function(s) {
+                return s.substring(0, 1).toUpperCase() + s.substring(1);
             }
-            p[at.name] = at.value;
-        });
-			
-        if (n.firstChild) {
-            p.html = this._getInnerHTML(n);
-        }
-			
-        // get classes as array
-        var classes = [];
-
-        if (n.attr('class')) {
-            classes = n.attr('class').split(' ');
-        }
-        
-        if (classes.indexOf('mceItemAnchor') == -1) {
-            // add identifier
-            classes.push('mceItemAnchor');
-        }
-
-        var img = new tinymce.html.Node('img', 1);
-			
-        img.attr({
-            src             : this.url + '/skins/default/img/items.gif',
-            'class'         : classes.join(' '),
-            'data-mce-json' : tinymce.util.JSON.serialize(p)
         });
 
-        n.replace(img);
-    }
-});
-
-tinymce.ThemeManager.add('advanced', tinymce.themes.AdvancedTheme);
-}(tinymce));
+    tinymce.ThemeManager.add('advanced', tinymce.themes.AdvancedTheme);
+    }(tinymce));

@@ -1,0 +1,5 @@
+a.mceItemAnchor {padding-left:15px;background:url(../img/anchor.gif) no-repeat center;}
+/* Anchor selection */
+img.mceItemAnchor::selection {
+    background: #3399ff;
+}
