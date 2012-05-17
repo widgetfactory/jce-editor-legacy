@@ -30,7 +30,6 @@
             swf				: 'uploader.swf',
             xap				: 'uploader.xap',
             runtimes		: 'html5,flash,html4',
-            //chunk_size		: 0,
             urlstream_upload: true,
             insert			: true,
             buttons			: {},
@@ -122,7 +121,8 @@
                     //chunk_size			: options.chunk_size,
                     multipart			: true,
                     required_features	: self.options.required.join(','),
-                    rename				: true
+                    rename				: true,
+                    urlstream_upload    : true
                 });
 
                 // on Uploader init
