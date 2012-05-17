@@ -1003,7 +1003,13 @@ class WFFileBrowser extends WFBrowserExtension {
 
         // get file name
         $name = JRequest::getVar('name', $file['name']);
-        
+
+        // target directory
+        $dir = JRequest::getVar('upload-dir');
+        // deocode directory
+        $dir = rawurldecode($dir);
+        // check destination path
+        WFUtility::checkPath($dir);
         // decode name
         $name = rawurldecode($name);
         // get extension
@@ -1043,44 +1049,18 @@ class WFFileBrowser extends WFBrowserExtension {
                     $complete = true;
 
                     @unlink($file['tmp_name']);
-                }
-
-                if (!$complete && $this->validateUploadedFile($file, $result) === false) {
+                } else if ($this->validateUploadedFile($file, $result) === false) {
                     $complete = true;
-
                     @unlink($file['tmp_name']);
-                }
-
-                // check file size
-                if (!$complete) {
-                    @clearstatcache();
-                    $upload = $this->get('upload');
-                    $max_size = intval(preg_replace('/[^0-9]/', '', $upload['max_size'])) * 1024;
-                    $file_size = @filesize($file['tmp_name']);
-
-                    // check size and finish
-                    if ($file_size > $max_size) {
-                        $result->message = WFText::sprintf('WF_MANAGER_UPLOAD_SIZE_ERROR', $name, $file_size, ($max_size / 1024) . 'KB');
-                        $complete = true;
-
-                        @unlink($file['tmp_name']);
-                    }
-                }
-
-                // continue upload
-                if (!$complete) {
-                    // get current dir
-                    $dir = JRequest::getVar('upload-dir', '');
-
-                    // check destination path
-                    WFUtility::checkPath($dir);
-
+                } else {
                     $result = $filesystem->upload('multipart', trim($file['tmp_name']), $dir, $name);
 
                     if (!$result->state) {
                         $result->message = WFText::_('WF_MANAGER_UPLOAD_ERROR');
                         $result->code = 103;
                     }
+
+                    @unlink($file['tmp_name']);
 
                     $complete = true;
                 }
@@ -1167,9 +1147,9 @@ class WFFileBrowser extends WFBrowserExtension {
 
         $source = array_shift($args);
         $destination = array_shift($args);
-        
-        $source         = rawurldecode($source);
-        $destination    = rawurldecode($destination);
+
+        $source = rawurldecode($source);
+        $destination = rawurldecode($destination);
 
         WFUtility::checkPath($source);
         WFUtility::checkPath($destination);
@@ -1212,7 +1192,7 @@ class WFFileBrowser extends WFBrowserExtension {
         $filesystem = $this->getFileSystem();
 
         $items = explode(",", rawurldecode($items));
-        
+
         // decode
         $destination = rawurldecode($destination);
 
@@ -1262,7 +1242,7 @@ class WFFileBrowser extends WFBrowserExtension {
 
         // decode
         $destination = rawurldecode($destination);
-        
+
         // check destination path
         WFUtility::checkPath($destination);
 
@@ -1305,7 +1285,7 @@ class WFFileBrowser extends WFBrowserExtension {
 
         $dir = array_shift($args);
         $new = array_shift($args);
-        
+
         // decode
         $dir = rawurldecode($dir);
         $new = rawurldecode($new);
@@ -1352,11 +1332,11 @@ class WFFileBrowser extends WFBrowserExtension {
 
         $upload = $this->get('upload');
 
-        /* $chunk_size = $upload_max ? $upload_max / 1024 . 'KB' : '1MB';
-          $chunk_size = isset($upload['chunk_size']) ? $upload['chunk_size'] : $chunk_size; */
+        /*$chunk_size = '512KB'; //$upload_max ? $upload_max / 1024 . 'KB' : '1MB';
+        $chunk_size = isset($upload['chunk_size']) ? $upload['chunk_size'] : $chunk_size;
 
         // chunking not yet supported in safe_mode, check base directory is writable and chunking supported by filesystem
-        /*if (!$features['chunking']) {
+        if (!$features['chunking']) {
             $chunk_size = 0;
         }*/
 
@@ -1382,17 +1362,21 @@ class WFFileBrowser extends WFBrowserExtension {
         $runtimes[] = 'html4';
 
         // remove flash runtime if $chunk_size is 0 (no chunking)
-        /* if (!$chunk_size) {
-          unset($runtimes[array_search('flash', $runtimes)]);
-          } */
+        /*if (!$chunk_size) {
+            unset($runtimes[array_search('flash', $runtimes)]);
+        }*/
 
         $defaults = array(
             'runtimes' => implode(',', $runtimes),
             'size' => $size,
             'filter' => $this->mapUploadFileTypes(true),
-            //'chunk_size' => $chunk_size,
             'elements' => $elements
         );
+
+        // only add chunk size if it has a value
+        /*if ($chunk_size) {
+            $defaults['chunk_size'] = $chunk_size;
+        }*/
 
         if (isset($features['dialog'])) {
             $defaults['dialog'] = $features['dialog'];
