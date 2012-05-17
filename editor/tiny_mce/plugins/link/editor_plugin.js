@@ -13,7 +13,7 @@
                     n = ed.dom.getParent(n, 'A');
                 }
 
-                return n && n.nodeName == 'A' && !n.name;
+                return n && n.nodeName == 'A' && !isAnchor(n);
             }
             
             function isAnchor(n) {
