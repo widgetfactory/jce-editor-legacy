@@ -37,7 +37,7 @@ abstract class WFUtility {
     }
 
     public static function checkPath($path) {
-        if (preg_match('/[:@&%=\?#]/', $path) || strpos(urldecode($path), '..') !== false) {
+        if (preg_match('/[\+\\\?\#%&<>"\'=\[\]\{\},;@^\(\)]/', $path) || strpos(urldecode($path), '..') !== false) {
             JError::raiseError(403, 'INVALID PATH'); // don't translate
             exit();
         }
