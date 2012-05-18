@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<install version="2.1.0" type="plugin" plugin="anchor" core="1" editable="1">
+<install version="2.1.0" type="plugin" plugin="anchor" core="1" editable="0">
 	<name>WF_ANCHOR_TITLE</name>
 	<version>@@version@@</version>
 	<creationDate>@@date@@</creationDate>
