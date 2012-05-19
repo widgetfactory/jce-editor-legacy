@@ -430,6 +430,17 @@
 
             });
         },
+        
+        /**
+         *Check if the path is local and /or a valid local file url
+         */
+        _validatePath : function(s) {
+            if (/[+\\\?\#%&<>"\'=\[\]\{\},;@^\(\)]/.test(s) || /:\/\//.test(s) && s.indexOf($.Plugin.getURI(true)) == -1) {
+                return false;
+            }
+            
+            return true;
+        },
 
         /**
 		 * Set up the base directory
@@ -440,11 +451,21 @@
 
             // get the file src from the widget element
             var src = $(this.element).val();
+            
+            // invalid src or not a local file resource
+            if (!this._validatePath(src)) {
+                src = '';
+            }
 
             // get directory from cookie
             if (!src) {
                 dir = $.Cookie.get('wf_' + $.Plugin.getName() + '_dir') || '';
             }
+            
+            if (!this._validatePath(dir)) {
+              
+               dir = '';
+            } 
 
             // store directory
             this._dir = $.String.encodeURI(dir);
@@ -860,12 +881,17 @@
         _getList : function(src) {
             // get path from src or stored directory
             var path = src || this._dir;
+            
+            // make relative
+            if (path) {
+                path = $.URL.toRelative(path);
+            }
 			
             // remove leading slash
             path = path.replace(/^[\/\\]+/, '');
 			
             // store directory in cookie
-            if (this.options.use_cookies) {
+            if (path && this.options.use_cookies) {
                 $.Cookie.set("wf_" + $.Plugin.getName() + '_dir', $.String.dirname(path));
             }
 
