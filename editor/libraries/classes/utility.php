@@ -36,8 +36,23 @@ abstract class WFUtility {
         return self::cleanPath($path . '/');
     }
 
+    private static function checkCharValue($string) {
+        if (preg_match('/([^\w\.\-~\/\s ])/i', $string, $matches)) {
+            foreach ($matches as $match) {
+                // not a UTF-8 character
+                if (ord($match) < 127) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     public static function checkPath($path) {
-        if (preg_match('/[\+\\\?\#%&<>"\'=\[\]\{\},;@^\(\)]/', $path) || strpos(urldecode($path), '..') !== false) {
+        $path = urldecode($path);
+
+        if (self::checkCharValue($path) === false || strpos($path, '..') !== false) {
             JError::raiseError(403, 'INVALID PATH'); // don't translate
             exit();
         }
