@@ -435,8 +435,32 @@
          *Check if the path is local and /or a valid local file url
          */
         _validatePath : function(s) {
-            if (/[+\\\?\#%&<>"\'=\[\]\{\},;@^\(\)]/.test(s) || /:\/\//.test(s) && s.indexOf($.Plugin.getURI(true)) == -1) {
+            function _toUnicode(c) {
+                c = c.toString(16).toUpperCase();
+    		
+                while (c.length < 4) {
+                    c = '0' + c;
+                }
+    		
+                return'\\u' + c;
+            }
+            
+            // contains .. or is not local
+            if (/\.{2,}/.test(s) || (/:\/\//.test(s) && s.indexOf($.Plugin.getURI(true)) == -1)) {
                 return false;
+            }
+            
+            // make relative if an absolute local file
+            if (/:\/\//.test(s)) {
+                s = $.URL.toRelative(s);
+            }
+            
+            // contains non-standard characters
+            if (/[^\w\.\-~\s \/]/i.test(s)) {
+                // skip any character less than 127, eg: &?@* etc.
+                if (_toUnicode(s.charCodeAt(0)) < '\\u007F') {
+                    return false;
+                }
             }
             
             return true;
@@ -462,9 +486,8 @@
                 dir = $.Cookie.get('wf_' + $.Plugin.getName() + '_dir') || '';
             }
             
-            if (!this._validatePath(dir)) {
-              
-               dir = '';
+            if (!this._validatePath(dir)) {              
+                dir = '';
             } 
 
             // store directory
@@ -614,6 +637,11 @@
             var self = this, dialog = this.options.dialog;
             // use src or stored directory
             var path = src || this._dir;
+            
+            // make relative
+            if (path) {
+                path = $.URL.toRelative(path);
+            }
 
             /* Initialise tree */
             this.setStatus({
@@ -2106,13 +2134,13 @@
             $(file).addClass('loading disabled').children('span.checkbox').addClass('disabled');
             
             img.onload = function() {
-               $(file).attr({
-                  'data-preview'    : src, 
-                  'data-width'      : img.width,
-                  'data-height'     : img.height
-               });
+                $(file).attr({
+                    'data-preview'    : src, 
+                    'data-width'      : img.width,
+                    'data-height'     : img.height
+                });
                
-               $(file).removeClass('loading disabled').children('span.checkbox').removeClass('disabled');
+                $(file).removeClass('loading disabled').children('span.checkbox').removeClass('disabled');
             };
             
             img.src = src;
