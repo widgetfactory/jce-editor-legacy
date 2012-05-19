@@ -457,9 +457,15 @@
             
             // contains non-standard characters
             if (/[^\w\.\-~\s \/]/i.test(s)) {
-                // skip any character less than 127, eg: &?@* etc.
-                if (_toUnicode(s.charCodeAt(0)) < '\\u007F') {
-                    return false;
+                for(var i = 0, ln = s.length; i < ln; i++) {
+                    var ch = s[i];
+                    // only process on possible restricted characters or utf-8 letters/numbers
+                    if (/[^\w\.\-~\s \/]/i.test(ch)) {
+                        // skip any character less than 127, eg: &?@* etc.
+                        if (_toUnicode(ch.charCodeAt(0)) < '\\u007F') {
+                            return false;
+                        }
+                    }
                 }
             }
             
@@ -639,7 +645,7 @@
             var path = src || this._dir;
             
             // make relative
-            if (path) {
+            if (path && /:\/\//.test(path)) {
                 path = $.URL.toRelative(path);
             }
 
@@ -694,486 +700,486 @@
 
             });
 
-        },
+            },
 
-        /**
+            /**
 		 * Reset the Manager
 		 */
-        _reset : function() {
-            // Clear selects
-            this._deselectItems();
-            // Clear returns
-            this._returnedItems	= [];
+            _reset : function() {
+                // Clear selects
+                this._deselectItems();
+                // Clear returns
+                this._returnedItems	= [];
 
-            // Close any dialogs
-            $.each(this._dialog, function(i, n) {
-                $(n).dialog('close');
-            });
+                // Close any dialogs
+                $.each(this._dialog, function(i, n) {
+                    $(n).dialog('close');
+                });
 
-            // uncheck all checkboxes
-            $('span.checkbox', $('#check-all')).removeClass('checked');
+                // uncheck all checkboxes
+                $('span.checkbox', $('#check-all')).removeClass('checked');
 			
-            $('span', '#browser-details-nav').removeClass('visible').attr('aria-hidden', true).filter('span.details-nav-text').empty();
-        },
+                $('span', '#browser-details-nav').removeClass('visible').attr('aria-hidden', true).filter('span.details-nav-text').empty();
+            },
 
-        /**
+            /**
 		 * Clear the Paste action
 		 */
-        _clearPaste : function() {
-            // Clear paste
-            this._pasteaction = '';
-            this._pasteitems  = '';
+            _clearPaste : function() {
+                // Clear paste
+                this._pasteaction = '';
+                this._pasteitems  = '';
 
-            this._hideButtons($('div.paste', '#buttons'));
-        },
+                this._hideButtons($('div.paste', '#buttons'));
+            },
 
-        /**
+            /**
 		 * Set a status message
 		 * @param {String} message
 		 * @param {String} loading
 		 */
-        setStatus : function(o) {			
-            $(this.options.dialog.status).attr('class', o.state || '');
-            $(this.options.dialog.status).html('<span>' + o.message || '' + '</span>');
-        },
+            setStatus : function(o) {			
+                $(this.options.dialog.status).attr('class', o.state || '');
+                $(this.options.dialog.status).html('<span>' + o.message || '' + '</span>');
+            },
 
-        /**
+            /**
 		 * Set a message
 		 * @param {String} message
 		 * @param {String} classname
 		 */
-        _setMessage : function(message, classname) {
-            return true;
-        },
+            _setMessage : function(message, classname) {
+                return true;
+            },
 
-        /**
+            /**
 		 * Sets a loading message
 		 */
-        _setLoader : function() {
-            this.setStatus({
-                message : this._translate('message_load', 'Loading...'), 
-                state : 'load'
-            });
-        },
+            _setLoader : function() {
+                this.setStatus({
+                    message : this._translate('message_load', 'Loading...'), 
+                    state : 'load'
+                });
+            },
 
-        /**
+            /**
 		 * Reset the message display
 		 */
-        _resetMessage : function() {
-            return true;
-        },
+            _resetMessage : function() {
+                return true;
+            },
 
-        /**
+            /**
 		 * Reset the status display
 		 */
-        _resetStatus : function() {
-            var self = this, dir = decodeURIComponent(this._dir), $status = $(this.options.dialog.status);
+            _resetStatus : function() {
+                var self = this, dir = decodeURIComponent(this._dir), $status = $(this.options.dialog.status);
 
-            // reset state
-            this.setStatus({
-                message : '', 
-                state : ''
-            });	
-            // add list		
-            $status.empty();
+                // reset state
+                this.setStatus({
+                    message : '', 
+                    state : ''
+                });	
+                // add list		
+                $status.empty();
 			
-            var $pathway = $('<ul/>').addClass('pathway').appendTo($status);
+                var $pathway = $('<ul/>').addClass('pathway').appendTo($status);
 			
-            // get width
-            var sw = $status.width();
+                // get width
+                var sw = $status.width();
 			
-            // add root item
-            $root = $('<li/>').html(self._translate('root', 'Root')).click(function() {
-                self._changeDir('/');
-            }).appendTo($pathway);
+                // add root item
+                $root = $('<li/>').html(self._translate('root', 'Root')).click(function() {
+                    self._changeDir('/');
+                }).appendTo($pathway);
 			
-            // trim path
-            dir = $.trim(dir.replace(/^\//, ''));
+                // trim path
+                dir = $.trim(dir.replace(/^\//, ''));
 			
-            // add folder count
-            $count = $('<li class="count">( ' + this._foldercount + ' ' + this._translate('folders', 'folders') + ', ' + this._filecount + ' ' + this._translate('files', 'files') + ')</li>').appendTo($pathway);
+                // add folder count
+                $count = $('<li class="count">( ' + this._foldercount + ' ' + this._translate('folders', 'folders') + ', ' + this._filecount + ' ' + this._translate('files', 'files') + ')</li>').appendTo($pathway);
 			
-            // get base list width
-            var w = bw = $root.outerWidth(true) + $count.outerWidth(true);
+                // get base list width
+                var w = bw = $root.outerWidth(true) + $count.outerWidth(true);
 
-            if (dir) {
-                var x = 1, parts = dir.split('/');
+                if (dir) {
+                    var x = 1, parts = dir.split('/');
 				
-                $.each(parts, function(i, s) {	
-                    var path = s;
+                    $.each(parts, function(i, s) {	
+                        var path = s;
 					
-                    if (i > 0) {
-                        path = parts.slice(0, i + 1).join('/');
-                    }
+                        if (i > 0) {
+                            path = parts.slice(0, i + 1).join('/');
+                        }
 
-                    $item = $('<li title="' + s + '" />').click(function(e) {
-                        self._changeDir(path);						
-                    }).html('&rsaquo; ' + s).insertBefore($count);
+                        $item = $('<li title="' + s + '" />').click(function(e) {
+                            self._changeDir(path);						
+                        }).html('&rsaquo; ' + s).insertBefore($count);
 
-                    // add item width
-                    w += $item.outerWidth(true);
+                        // add item width
+                        w += $item.outerWidth(true);
 
-                    if (w > (sw - bw)) {						
-                        $('li', $pathway).eq(x++).html('&rsaquo; ...');
-                    }	
-                });
-            }
-        },
+                        if (w > (sw - bw)) {						
+                            $('li', $pathway).eq(x++).html('&rsaquo; ...');
+                        }	
+                    });
+                }
+            },
 
-        /**
+            /**
 		 * Get the parent directory
 		 * @return {String} s The parent/previous directory.
 		 */
-        _getPreviousDir : function() {
-            if (this._dir.length < 2) {
-                return this._dir;
-            }
-            var dirs = this._dir.split('/');
-            var s = '';
+            _getPreviousDir : function() {
+                if (this._dir.length < 2) {
+                    return this._dir;
+                }
+                var dirs = this._dir.split('/');
+                var s = '';
 
-            for (var i = 0; i < dirs.length-1; i++) {
-                s = $.String.path(s, dirs[i]);
-            }
+                for (var i = 0; i < dirs.length-1; i++) {
+                    s = $.String.path(s, dirs[i]);
+                }
 
-            return s;
-        },
+                return s;
+            },
 
-        /**
+            /**
 		 * Add an item to the returnedItems array
 		 * @return {Object} file The item.
 		 */
-        _addReturnedItem : function(items) {
-            if ($.type(items) == 'array') {
-                $.merge(this._returnedItems, items);
-            } else {
-                this._returnedItems.push(items);
-            }
-        },
+            _addReturnedItem : function(items) {
+                if ($.type(items) == 'array') {
+                    $.merge(this._returnedItems, items);
+                } else {
+                    this._returnedItems.push(items);
+                }
+            },
 
-        /**
+            /**
 		 * Setup the returned file after upload
 		 * @param {String} file The returning file name.
 		 */
-        _returnFile : function(file) {
-            this._addReturnedItem({
-                name: $.String.basename(file)
-            });
+            _returnFile : function(file) {
+                this._addReturnedItem({
+                    name: $.String.basename(file)
+                });
 
-            this._changeDir($.String.dirname(file));
-        },
+                this._changeDir($.String.dirname(file));
+            },
 
-        /**
+            /**
 		 * Set the current directory
 		 * @param {String} dir
 		 */
-        _setDir: function(dir) {
-            this._dir = dir;
-        },
+            _setDir: function(dir) {
+                this._dir = dir;
+            },
 
-        /**
+            /**
 		 * Get the base directory
 		 */
-        getBaseDir : function() {
-            return this.options.dir;
-        },
+            getBaseDir : function() {
+                return this.options.dir;
+            },
 
-        /**
+            /**
 		 * Get the current directory
 		 */
-        getCurrentDir: function() {
-            return this._dir;
-        },
+            getCurrentDir: function() {
+                return this._dir;
+            },
 
-        /**
+            /**
 		 Determine whether current directory is root
 		 */
-        _isRoot : function() {
-            return this._dir == '' || this._dir == '/';
-        },
+            _isRoot : function() {
+                return this._dir == '' || this._dir == '/';
+            },
 
-        /**
+            /**
 		 * Change Directory
 		 * @param {String} dir
 		 */
-        _changeDir: function(dir) {			
-            this._reset();
-            this._limitcount = 0;
-            this._setDir(dir);
-            this._getList();
-        },
+            _changeDir: function(dir) {			
+                this._reset();
+                this._limitcount = 0;
+                this._setDir(dir);
+                this._getList();
+            },
 
-        /**
+            /**
 		 * Retrieve a list of files and folders
 		 * @param {String} src optional src url eg: images/stories/fruit.jpg
 		 */
-        _getList : function(src) {
-            // get path from src or stored directory
-            var path = src || this._dir;
+            _getList : function(src) {
+                // get path from src or stored directory
+                var path = src || this._dir;
             
-            // make relative
-            if (path) {
-                path = $.URL.toRelative(path);
-            }
+                // make relative
+                if (path && /:\/\//.test(path)) {
+                    path = $.URL.toRelative(path);
+                }
 			
-            // remove leading slash
-            path = path.replace(/^[\/\\]+/, '');
-			
-            // store directory in cookie
-            if (path && this.options.use_cookies) {
-                $.Cookie.set("wf_" + $.Plugin.getName() + '_dir', $.String.dirname(path));
-            }
+                // remove leading slash
+                path = path.replace(/^[\/\\]+/, '');
+	
+                    // store directory in cookie
+                    if (path && this.options.use_cookies) {
+                        $.Cookie.set("wf_" + $.Plugin.getName() + '_dir', $.String.dirname(path));
+                    }
 
-            // show loading message
-            this._setLoader();
+                    // show loading message
+                    this._setLoader();
 
-            // hide all buttons
-            this._hideButtons($('div.button', '#buttons'));
+                    // hide all buttons
+                    this._hideButtons($('div.button', '#buttons'));
 
-            // get list limit
-            this._limit = $('#browser-list-limit-select').val() || this.options.listlimit;
+                    // get list limit
+                    this._limit = $('#browser-list-limit-select').val() || this.options.listlimit;
 
-            // send request
-            $.JSON.request('getItems', [path, this._limit, this._limitcount], this._loadList, this);
-        },
+                    // send request
+                    $.JSON.request('getItems', [path, this._limit, this._limitcount], this._loadList, this);
+                },
 
-        /**
+                /**
 		 * Refresh the file list
 		 */
-        refresh : function() {
-            this._reset();
-            this._getList();
-        },
+                refresh : function() {
+                    this._reset();
+                    this._getList();
+                },
 
-        /**
+                /**
 		 * Load the browser list
 		 */
-        load : function(items) {
-            // add returned items
-            if (items) {
-                this._addReturnedItem(items);
-            }
+                load : function(items) {
+                    // add returned items
+                    if (items) {
+                        this._addReturnedItem(items);
+                    }
 
-            this._getList();
-        },
+                    this._getList();
+                },
 
-        /**
+                /**
 		 * Show an error message
 		 */
-        error : function(error) {
-            this._raiseError(error);
-        },
+                error : function(error) {
+                    this._raiseError(error);
+                },
 		
-        startUpload : function() {
-            $('#upload-queue').uploader('start');
-        },
+                startUpload : function() {
+                    $('#upload-queue').uploader('start');
+                },
 		
-        stopUpload : function() {
-            $('#upload-queue').uploader('stop');
-        },
+                stopUpload : function() {
+                    $('#upload-queue').uploader('stop');
+                },
 		
-        setUploadStatus : function(o) {
-            $('#upload-queue').uploader('setStatus', o);
-        },
+                setUploadStatus : function(o) {
+                    $('#upload-queue').uploader('setStatus', o);
+                },
 
-        /**
+                /**
 		 * Load the file/folder list into the container div
 		 * @param {Object} The folder/file JSON object
 		 */
-        _loadList: function(o) {
-            var dialog = this.options.dialog;
+                _loadList: function(o) {
+                    var dialog = this.options.dialog;
 
-            // add unselectable (IE)
-            if (!$.support.cssFloat) {
-                $('#browser-list').attr('unselectable', 'on');
-            }
+                    // add unselectable (IE)
+                    if (!$.support.cssFloat) {
+                        $('#browser-list').attr('unselectable', 'on');
+                    }
 
-            this._foldercount 	= o.total.folders;
-            this._filecount 	= o.total.files;
+                    this._foldercount 	= o.total.folders;
+                    this._filecount 	= o.total.files;
 
-            this._limitend		= (o.total.folders + o.total.files) - this._limit;
-            var count			= this._limitcount + o.folders.length + o.files.length;
+                    this._limitend		= (o.total.folders + o.total.files) - this._limit;
+                    var count			= this._limitcount + o.folders.length + o.files.length;
 
-            if (count < (o.total.folders + o.total.files)) {
-                $('#browser-list-limit ul.limit-right li').css('display', 'inline-block').attr('aria-hidden', false);
-            } else {
-                $('#browser-list-limit ul.limit-right li').hide().attr('aria-hidden', true);
-            }
+                    if (count < (o.total.folders + o.total.files)) {
+                        $('#browser-list-limit ul.limit-right li').css('display', 'inline-block').attr('aria-hidden', false);
+                    } else {
+                        $('#browser-list-limit ul.limit-right li').hide().attr('aria-hidden', true);
+                    }
 
-            if ((count - this._limit) > 0) {
-                $('#browser-list-limit ul.limit-left li').css('display', 'inline-block').attr('aria-hidden', false);
-            } else {
-                $('#browser-list-limit ul.limit-left li').hide().attr('aria-hidden', true);
-            }
+                    if ((count - this._limit) > 0) {
+                        $('#browser-list-limit ul.limit-left li').css('display', 'inline-block').attr('aria-hidden', false);
+                    } else {
+                        $('#browser-list-limit ul.limit-left li').hide().attr('aria-hidden', true);
+                    }
 
-            if (o.folders.length) {
-                this._dir = $.String.encodeURI($.String.dirname(o.folders[0].id) || '/', true);
-            } else if (o.files.length) {
-                this._dir = $.String.encodeURI($.String.dirname(o.files[0].id) || '/', true);
-            }
+                    if (o.folders.length) {
+                        this._dir = $.String.encodeURI($.String.dirname(o.folders[0].id) || '/', true);
+                    } else if (o.files.length) {
+                        this._dir = $.String.encodeURI($.String.dirname(o.files[0].id) || '/', true);
+                    }
 
-            // Add folder-up button
-            if (!this._isRoot()) {
-                $('#folder-list').append('<li class="folder-up" title="Up"><a href="javascript:;>...</a></li>');
-            }
+                    // Add folder-up button
+                    if (!this._isRoot()) {
+                        $('#folder-list').append('<li class="folder-up" title="Up"><a href="javascript:;>...</a></li>');
+                    }
 
-            if (this._treeLoaded()) {
-                $(dialog.tree).tree('createNode', o.folders, this._dir);
-            }
+                    if (this._treeLoaded()) {
+                        $(dialog.tree).tree('createNode', o.folders, this._dir);
+                    }
 
-            // Alternate loadList function
-            this._trigger('onBeforeBuildList', null, o);
+                    // Alternate loadList function
+                    this._trigger('onBeforeBuildList', null, o);
 
-            // Build the file / folder list
-            this._buildList(o);
+                    // Build the file / folder list
+                    this._buildList(o);
 
-            // Alternate loadList function
-            this._trigger('onAfterBuildList', null, o);
+                    // Alternate loadList function
+                    this._trigger('onAfterBuildList', null, o);
             
-            // select returned items
-            if (this._returnedItems.length) {
-                this._findItem(this._returnedItems);
-                this._returnedItems = [];
-            }
+                    // select returned items
+                    if (this._returnedItems.length) {
+                        this._findItem(this._returnedItems);
+                        this._returnedItems = [];
+                    }
 
-            // show paste button if files in 'clipboard'
-            if (this._pasteitems) {
-                this._showPasteButton();
-            }
+                    // show paste button if files in 'clipboard'
+                    if (this._pasteitems) {
+                        this._showPasteButton();
+                    }
 
-            this._resetStatus();
-            this._resetMessage();
-            this._trigger('onListComplete');
-        },
+                    this._resetStatus();
+                    this._resetMessage();
+                    this._trigger('onListComplete');
+                },
 
-        _getDialogOptions : function(dialog) {
-            var options 	= this.options[dialog];
-            var elements 	= '';
+                _getDialogOptions : function(dialog) {
+                    var options 	= this.options[dialog];
+                    var elements 	= '';
 
-            if (options && options.elements) {
-                if ($.isPlainObject(options.elements)) {
-                    $.each(options.elements, function(k, v) {
-                        if (v.options) {
-                            elements += '<p>';
-                            elements += '<label for="' + k + '">' + (v.label || k) + '</label>';
-                            elements += '<select id="' + k + '" name="' + k + '">';
+                    if (options && options.elements) {
+                        if ($.isPlainObject(options.elements)) {
+                            $.each(options.elements, function(k, v) {
+                                if (v.options) {
+                                    elements += '<p>';
+                                    elements += '<label for="' + k + '">' + (v.label || k) + '</label>';
+                                    elements += '<select id="' + k + '" name="' + k + '">';
 
-                            $.each(v.options, function(value, name) {
-                                elements += '<option value="' + value + '">' + name + '</option>';
+                                    $.each(v.options, function(value, name) {
+                                        elements += '<option value="' + value + '">' + name + '</option>';
+                                    });
+
+                                    elements += '</select>';
+                                    elements += '</p>';
+                                } else {
+                                    elements += '<p><label for="' + k + '">' + v.label || k + '</label><input id="' + k + '" type="text" name="' + k + '" value="' + v.value || '' + '" /></p>';
+                                }
                             });
 
-                            elements += '</select>';
-                            elements += '</p>';
                         } else {
-                            elements += '<p><label for="' + k + '">' + v.label || k + '</label><input id="' + k + '" type="text" name="' + k + '" value="' + v.value || '' + '" /></p>';
+                            return options.elements;
                         }
-                    });
+                    }
 
-                } else {
-                    return options.elements;
-                }
-            }
+                    return elements;
+                },
 
-            return elements;
-        },
-
-        /**
+                /**
 		 * Execute a command
 		 * @param {String} The command name
 		 * @param {String} The command type
 		 */
-        _execute : function(name) {
-            var self 	= this;
-            var dir 	= this._dir;
-            // trim dir - remove leading /
-            dir = dir.replace(/^[\/\\]+/, '');
+                _execute : function(name) {
+                    var self 	= this;
+                    var dir 	= this._dir;
+                    // trim dir - remove leading /
+                    dir = dir.replace(/^[\/\\]+/, '');
 			
-            var list	= this._serializeSelectedItems();
+                    var list	= this._serializeSelectedItems();
 
-            var site 	= $.Plugin.getURI(true);
+                    var site 	= $.Plugin.getURI(true);
 
-            switch(name) {
-                case 'help':
-                    $.Plugin.help();
-                    break;
-                case 'insert':
-                    this._trigger('onFileInsert', null, $('li.selected', '#item-list').get(0));
-                    break;
-                case 'view':
-                    var $item		= $('li.selected.active:first', '#item-list');
-                    var url			= $item.data('url');
-                    url 			= /http(s)?:\/\//.test(url) ? url : $.String.path(site, url);
+                    switch(name) {
+                        case 'help':
+                            $.Plugin.help();
+                            break;
+                        case 'insert':
+                            this._trigger('onFileInsert', null, $('li.selected', '#item-list').get(0));
+                            break;
+                        case 'view':
+                            var $item		= $('li.selected.active:first', '#item-list');
+                            var url			= $item.data('url');
+                            url 			= /http(s)?:\/\//.test(url) ? url : $.String.path(site, url);
 
-                    // use preview url if available
-                    if ($item.data('preview')) {
-                        url = $item.data('preview');
-                    }
+                            // use preview url if available
+                            if ($item.data('preview')) {
+                                url = $item.data('preview');
+                            }
 
-                    var name 		= $.String.basename($item.attr('title'));
+                            var name 		= $.String.basename($item.attr('title'));
 
-                    if (this._isViewable(name)) {
-                        if(/\.(jpeg|jpg|gif|png|avi|wmv|wm|asf|asx|wmx|wvx|mov|qt|mpg|mp3|mp4|m4v|mpeg|ogg|ogv|webm|swf|flv|f4v|xml|dcr|rm|ra|ram|divx)/i.test(name)) {
-                            $.Dialog.media(name, url);
-                        } else {
-                            $.Dialog.iframe(name, url, {
-                                onFrameLoad : function(e) {
-                                    var iframe 	= $('div.iframe-preview iframe').get(0);
-                                    var h 		= iframe.contentWindow.document.body.innerHTML;
-                                    var tmpDiv 	= document.createElement('div');
+                            if (this._isViewable(name)) {
+                                if(/\.(jpeg|jpg|gif|png|avi|wmv|wm|asf|asx|wmx|wvx|mov|qt|mpg|mp3|mp4|m4v|mpeg|ogg|ogv|webm|swf|flv|f4v|xml|dcr|rm|ra|ram|divx)/i.test(name)) {
+                                    $.Dialog.media(name, url);
+                                } else {
+                                    $.Dialog.iframe(name, url, {
+                                        onFrameLoad : function(e) {
+                                            var iframe 	= $('div.iframe-preview iframe').get(0);
+                                            var h 		= iframe.contentWindow.document.body.innerHTML;
+                                            var tmpDiv 	= document.createElement('div');
 
-                                    $(tmpDiv).html(h);
+                                            $(tmpDiv).html(h);
 
-                                    function toRelative(s) {
-                                        s = $.URL.toRelative(s);
-                                        return s.replace(/^administrator\//, '');
-                                    }
-
-                                    $('img, embed', $(tmpDiv)).each( function() {
-                                        var s = toRelative($(this).attr('src'));
-
-                                        if (!/http(s)?:\/\//.test(s)) {
-                                            s = $.String.path(site, s);
-                                        }
-                                        $(this).attr('src', s);
-                                    });
-
-                                    $('a, area', $(tmpDiv)).each( function() {
-                                        var s = toRelative($(this).attr('href'));
-
-                                        if (!/http(s)?:\/\//.test(s)) {
-                                            s = $.String.path(site, s);
-                                        }
-                                        $(this).attr('href', s);
-                                    });
-
-                                    $('object', $(tmpDiv)).each( function() {
-                                        $('param[name=movie], param[name=src]', this).each( function() {
-                                            var s = toRelative($(this).attr('value'));
-                                            if (!/http(s)?:\/\//.test(s)) {
-                                                s = string.path(site, s);
+                                            function toRelative(s) {
+                                                s = $.URL.toRelative(s);
+                                                return s.replace(/^administrator\//, '');
                                             }
-                                            $(this).attr('value', s);
-                                        });
+
+                                            $('img, embed', $(tmpDiv)).each( function() {
+                                                var s = toRelative($(this).attr('src'));
+
+                                                if (!/http(s)?:\/\//.test(s)) {
+                                                    s = $.String.path(site, s);
+                                                }
+                                                $(this).attr('src', s);
+                                            });
+
+                                            $('a, area', $(tmpDiv)).each( function() {
+                                                var s = toRelative($(this).attr('href'));
+
+                                                if (!/http(s)?:\/\//.test(s)) {
+                                                    s = $.String.path(site, s);
+                                                }
+                                                $(this).attr('href', s);
+                                            });
+
+                                            $('object', $(tmpDiv)).each( function() {
+                                                $('param[name=movie], param[name=src]', this).each( function() {
+                                                    var s = toRelative($(this).attr('value'));
+                                                    if (!/http(s)?:\/\//.test(s)) {
+                                                        s = string.path(site, s);
+                                                    }
+                                                    $(this).attr('value', s);
+                                                });
+
+                                            });
+
+                                            iframe.contentWindow.document.body.innerHTML = tmpDiv.innerHTML;
+                                        }
 
                                     });
-
-                                    iframe.contentWindow.document.body.innerHTML = tmpDiv.innerHTML;
                                 }
-
-                            });
-                        }
-                    }
-                    break;
-                case 'upload':
-                    this._dialog['upload'] = $.Dialog.upload($.extend({
-                        elements 	: this._getDialogOptions('upload'),
-                        onOpen 		: function() {
-                            // hide upload options if empty
-                            $('#upload-options:empty').hide();
+                            }
+                            break;
+                        case 'upload':
+                            this._dialog['upload'] = $.Dialog.upload($.extend({
+                                elements 	: this._getDialogOptions('upload'),
+                                onOpen 		: function() {
+                                    // hide upload options if empty
+                                    $('#upload-options:empty').hide();
 							
-                            // Set hidden dir value to current dir
-                            $('#upload-dir').val(dir);
+                                    // Set hidden dir value to current dir
+                                    $('#upload-dir').val(dir);
 
-                            /*$('#upload-overwrite').empty().append( function() {
+                                    /*$('#upload-overwrite').empty().append( function() {
 								return $.map(self.options.upload.conflict, function(v, k) {
 									var o = document.createElement('option');
 
@@ -1184,1125 +1190,1125 @@
 
 							});*/
 
-                            /**
+                                    /**
 							 * Private internal function
 							 * Check file name against list
 							 * @param {Object} name File name
 							 */
-                            function _checkName(file) {
-                                var found = false, msg = self._translate('file_exists_alert', 'A file with the same name exists in the target folder.');
-                                var name = $.String.safe(file.name);
+                                    function _checkName(file) {
+                                        var found = false, msg = self._translate('file_exists_alert', 'A file with the same name exists in the target folder.');
+                                        var name = $.String.safe(file.name);
 
-                                $('li', 'file-list').each( function() {
-                                    if (name == $(this).attr('title')) {
-                                        found = true;
-                                    }
-                                });
+                                        $('li', 'file-list').each( function() {
+                                            if (name == $(this).attr('title')) {
+                                                found = true;
+                                            }
+                                        });
 
-                                var el = file.element, span = $('span.queue-name:first', el);
+                                        var el = file.element, span = $('span.queue-name:first', el);
 
-                                if (found) {
-                                    if (!$(el).hasClass('exists')) {
-                                        $(el).addClass('exists');
-                                        $(span).attr('title', name + '::' + msg);
+                                        if (found) {
+                                            if (!$(el).hasClass('exists')) {
+                                                $(el).addClass('exists');
+                                                $(span).attr('title', name + '::' + msg);
 
-                                        $(span).tips();
-                                    }
-                                } else {
-                                    if ($(el).hasClass('exists')) {
-                                        $(el).removeClass('exists');
+                                                $(span).tips();
+                                            }
+                                        } else {
+                                            if ($(el).hasClass('exists')) {
+                                                $(el).removeClass('exists');
 
-                                        $(span).attr('title', name);
-                                    }
-                                }
-
-                                return true;
-                            }
-
-                            // Initialize uploader
-                            $('#upload-queue').uploader($.extend({
-                                swf 	: 	site + 'components/com_jce/editor/libraries/plupload/plupload.flash.swf',
-                                xap		: 	site + 'components/com_jce/editor/libraries/plupload/plupload.silverlight.xap',
-                                url		:	$('form:first').attr('action'),
-                                field	:	$('input[name=file]:first'),
-                                fileSelect 	: function(e, file) {
-                                    return _checkName(file);
-                                },
-                                websafe_mode: self.options.websafe_mode,
-
-                                fileRename : function(e, file) {
-                                    return _checkName(file);
-                                },
-
-                                fileComplete : function(e, file) {
-                                    if ($.type(file) == 'string') {
-                                        file = {
-                                            name : file
-                                        };
-                                    }
-
-                                    self._addReturnedItem(file);									
-                                    self._trigger('onUploadFile', null, file);
-                                },
-
-                                uploadComplete : function(up, files) {
-                                    $('#upload-submit').disabled = false;
-
-                                    if (up.total == files.length && $('#upload-queue').uploader('getErrors') == 0) {
-                                        // Refresh file list
-                                        self._getList();
-
-                                        window.setTimeout( function() {
-                                            $(self._dialog['upload']).dialog('close');
-                                        }, 1000);
-										
-                                        self._trigger('onUploadComplete');
-                                    }									
-                                }
-
-                            }, self.options.upload));
-
-                            self._trigger('onUploadOpen');
-                        },
-
-                        dragStop : function() {
-                            $('#upload-queue').uploader('refresh');
-                        },
-
-                        upload : function() {
-                            if ($('#upload-queue').uploader('isUploading')) {
-                                return false;
-                            }
-
-                            var data = {
-                                'action' : 'upload',
-                                'format' : 'raw'
-                            }, fields = $.merge($(':input', 'form').serializeArray(), $(':input', '#upload-body').serializeArray());
-
-                            $.each(fields, function(i, field) {
-                                data[field.name] = field.value;
-                            });
-							
-                            self._trigger('onUpload', null, data);
-
-                            $('#upload-queue').uploader('upload', data);
-
-                            return false;
-                        },
-
-                        beforeClose : function() {
-                            $('#upload-queue').uploader('close');
-                        },
-						
-                        resize : function() {
-                            $('#upload-queue').uploader('refresh');
-                        }
-
-                    }, self.options.upload.dialog));
-                    break;
-                case 'folder_new':
-                    var elements = this._getDialogOptions('folder_new');
-
-                    this._dialog['folder_new'] = $.Dialog.prompt(self._translate('folder_new', 'New Folder'), {
-                        text	: self._translate('name', 'Name'),
-                        elements: elements,
-                        height	: elements ? 200 : 150,
-                        confirm	: function(v) {
-                            if (v) {
-                                self._setLoader();
-                                var args = [dir, $.String.safe(v, self.options.websafe_mode)];
-
-                                $(':input:not(input[name="prompt"])', $(self._dialog['folder_new']).dialog('widget')).each( function() {
-                                    args.push($(this).val());
-                                });
-
-                                $.JSON.request('folderNew', args, function(o) {
-                                    if (o) {
-                                        self._trigger('onFolderNew');
-                                        $(self._dialog['folder_new']).dialog('close');
-                                    }
-                                    self.refresh();
-                                });
-
-                            }
-                        }
-
-                    });
-                    break;
-
-                // Cut / Copy operation
-                case 'copy':
-                case 'cut':
-                    this._pasteaction 	= name;
-                    this._pasteitems 	= list;
-
-                    this._showPasteButton();
-
-                    break;
-
-                // Paste the file
-                case 'paste':
-                    var fn = (this._pasteaction == 'copy') ? 'copyItem' : 'moveItem';
-                    this._setLoader();
-
-                    var items = this._pasteitems;
-
-                    $.JSON.request(fn, [items, dir], function(o) {						
-                        if (o) {
-                            if (o.folders.length) {
-                                // remove from tree
-                                if (self._treeLoaded()) {
-                                    $.each(items.split(','), function(i, item) {
-                                        if (fn == 'moveItem') {
-                                            $(self.options.dialog.tree).tree('removeNode', item);
+                                                $(span).attr('title', name);
+                                            }
                                         }
+
+                                        return true;
+                                    }
+
+                                    // Initialize uploader
+                                    $('#upload-queue').uploader($.extend({
+                                        swf 	: 	site + 'components/com_jce/editor/libraries/plupload/plupload.flash.swf',
+                                        xap		: 	site + 'components/com_jce/editor/libraries/plupload/plupload.silverlight.xap',
+                                        url		:	$('form:first').attr('action'),
+                                        field	:	$('input[name=file]:first'),
+                                        fileSelect 	: function(e, file) {
+                                            return _checkName(file);
+                                        },
+                                        websafe_mode: self.options.websafe_mode,
+
+                                        fileRename : function(e, file) {
+                                            return _checkName(file);
+                                        },
+
+                                        fileComplete : function(e, file) {
+                                            if ($.type(file) == 'string') {
+                                                file = {
+                                                    name : file
+                                                };
+                                            }
+
+                                            self._addReturnedItem(file);									
+                                            self._trigger('onUploadFile', null, file);
+                                        },
+
+                                        uploadComplete : function(up, files) {
+                                            $('#upload-submit').disabled = false;
+
+                                            if (up.total == files.length && $('#upload-queue').uploader('getErrors') == 0) {
+                                                // Refresh file list
+                                                self._getList();
+
+                                                window.setTimeout( function() {
+                                                    $(self._dialog['upload']).dialog('close');
+                                                }, 1000);
+										
+                                                self._trigger('onUploadComplete');
+                                            }									
+                                        }
+
+                                    }, self.options.upload));
+
+                                    self._trigger('onUploadOpen');
+                                },
+
+                                dragStop : function() {
+                                    $('#upload-queue').uploader('refresh');
+                                },
+
+                                upload : function() {
+                                    if ($('#upload-queue').uploader('isUploading')) {
+                                        return false;
+                                    }
+
+                                    var data = {
+                                        'action' : 'upload',
+                                        'format' : 'raw'
+                                    }, fields = $.merge($(':input', 'form').serializeArray(), $(':input', '#upload-body').serializeArray());
+
+                                    $.each(fields, function(i, field) {
+                                        data[field.name] = field.value;
                                     });
+							
+                                    self._trigger('onUpload', null, data);
 
+                                    $('#upload-queue').uploader('upload', data);
+
+                                    return false;
+                                },
+
+                                beforeClose : function() {
+                                    $('#upload-queue').uploader('close');
+                                },
+						
+                                resize : function() {
+                                    $('#upload-queue').uploader('refresh');
                                 }
-                            }
-                            self._trigger('onPaste');
-                        }
-                        self._clearPaste();
-                        self.refresh();
-                    });
 
-                    break;
+                            }, self.options.upload.dialog));
+                            break;
+                        case 'folder_new':
+                            var elements = this._getDialogOptions('folder_new');
 
-                // Delete a file or folder
-                case 'delete':
-                    var msg = self._translate('delete_item_alert', 'Delete Selected Item(s)');
+                            this._dialog['folder_new'] = $.Dialog.prompt(self._translate('folder_new', 'New Folder'), {
+                                text	: self._translate('name', 'Name'),
+                                elements: elements,
+                                height	: elements ? 200 : 150,
+                                confirm	: function(v) {
+                                    if (v) {
+                                        self._setLoader();
+                                        var args = [dir, $.String.safe(v, self.options.websafe_mode)];
 
-                    this._dialog['confirm'] = $.Dialog.confirm(msg, function(state) {
-                        if (state) {
-                            self._setLoader();
-                            $.JSON.request('deleteItem', list, function(o) {
+                                        $(':input:not(input[name="prompt"])', $(self._dialog['folder_new']).dialog('widget')).each( function() {
+                                            args.push($(this).val());
+                                        });
+
+                                        $.JSON.request('folderNew', args, function(o) {
+                                            if (o) {
+                                                self._trigger('onFolderNew');
+                                                $(self._dialog['folder_new']).dialog('close');
+                                            }
+                                            self.refresh();
+                                        });
+
+                                    }
+                                }
+
+                            });
+                            break;
+
+                        // Cut / Copy operation
+                        case 'copy':
+                        case 'cut':
+                            this._pasteaction 	= name;
+                            this._pasteitems 	= list;
+
+                            this._showPasteButton();
+
+                            break;
+
+                        // Paste the file
+                        case 'paste':
+                            var fn = (this._pasteaction == 'copy') ? 'copyItem' : 'moveItem';
+                            this._setLoader();
+
+                            var items = this._pasteitems;
+
+                            $.JSON.request(fn, [items, dir], function(o) {						
                                 if (o) {
-
                                     if (o.folders.length) {
                                         // remove from tree
                                         if (self._treeLoaded()) {
-                                            $.each(list.split(','), function(i, item) {
-                                                $(self.options.dialog.tree).tree('removeNode', item);
+                                            $.each(items.split(','), function(i, item) {
+                                                if (fn == 'moveItem') {
+                                                    $(self.options.dialog.tree).tree('removeNode', item);
+                                                }
                                             });
 
                                         }
-                                        self._trigger('onFolderDelete', null, o.folders);
                                     }
-
-                                    if (o.files.length) {
-                                        self._trigger('onFileDelete', null, o.files);
-                                    }
+                                    self._trigger('onPaste');
                                 }
+                                self._clearPaste();
                                 self.refresh();
                             });
 
-                        }
-                    }
+                            break;
 
-                    );
-                    break;
+                        // Delete a file or folder
+                        case 'delete':
+                            var msg = self._translate('delete_item_alert', 'Delete Selected Item(s)');
 
-                // Rename a file or folder
-                case 'rename':
-                    var s = this.getSelectedItems(0);
-                    var v = $.String.basename(list);
-
-                    if ($(s).hasClass('file')) {
-                        v = $.String.basename($.String.stripExt(list));
-                    }
-
-                    this._dialog['rename'] = $.Dialog.prompt(self._translate('rename', 'Rename Item'), {
-                        text		: self._translate('name', 'Name'),
-                        value 		: v,
-                        elements 	: this._getDialogOptions('rename'),
-                        confirm 	: function(name) {						
-                            name = $.String.safe(name, self.options.websafe_mode);
-							
-                            if (v == name) {
-                                $.Dialog.alert(self._translate('rename_item_name_new', 'Please specify a new name for the item'));
-                                return false;
-                            }
-							
-                            self._dialog['confirm'] = $.Dialog.confirm(self._translate('rename_item_alert', 'Renaming files/folders will break existing links. Continue?'), function(state) {
+                            this._dialog['confirm'] = $.Dialog.confirm(msg, function(state) {
                                 if (state) {
                                     self._setLoader();
-
-                                    var args = [list, name];
-
-                                    $(':input:not(input[name="prompt"])', $(self._dialog['rename']).dialog('widget')).each( function() {
-                                        args.push($(this).val());
-                                    });
-
-                                    $.JSON.request('renameItem', args, function(o) {
+                                    $.JSON.request('deleteItem', list, function(o) {
                                         if (o) {
-                                            self._reset();
-                                            var item = $.String.path(self._dir, name);
 
-                                            // folder rename successful
                                             if (o.folders.length) {
-                                                // rename in tree
+                                                // remove from tree
                                                 if (self._treeLoaded()) {
-                                                    $(self.options.dialog.tree).tree('renameNode', list, item);
+                                                    $.each(list.split(','), function(i, item) {
+                                                        $(self.options.dialog.tree).tree('removeNode', item);
+                                                    });
+
                                                 }
-
-                                                self._trigger('onFolderRename', null, list, item);
+                                                self._trigger('onFolderDelete', null, o.folders);
                                             }
 
-                                            // file rename successful
                                             if (o.files.length) {
-                                                self._trigger('onFileDelete', null, item);
+                                                self._trigger('onFileDelete', null, o.files);
                                             }
-
-                                            if (item) {
-                                                self._addReturnedItem({
-                                                    name: item
-                                                });
-                                            }
-
-                                            $(self._dialog['rename']).dialog('close');
                                         }
                                         self.refresh();
                                     });
 
                                 }
+                            }
+
+                            );
+                            break;
+
+                        // Rename a file or folder
+                        case 'rename':
+                            var s = this.getSelectedItems(0);
+                            var v = $.String.basename(list);
+
+                            if ($(s).hasClass('file')) {
+                                v = $.String.basename($.String.stripExt(list));
+                            }
+
+                            this._dialog['rename'] = $.Dialog.prompt(self._translate('rename', 'Rename Item'), {
+                                text		: self._translate('name', 'Name'),
+                                value 		: v,
+                                elements 	: this._getDialogOptions('rename'),
+                                confirm 	: function(name) {						
+                                    name = $.String.safe(name, self.options.websafe_mode);
+							
+                                    if (v == name) {
+                                        $.Dialog.alert(self._translate('rename_item_name_new', 'Please specify a new name for the item'));
+                                        return false;
+                                    }
+							
+                                    self._dialog['confirm'] = $.Dialog.confirm(self._translate('rename_item_alert', 'Renaming files/folders will break existing links. Continue?'), function(state) {
+                                        if (state) {
+                                            self._setLoader();
+
+                                            var args = [list, name];
+
+                                            $(':input:not(input[name="prompt"])', $(self._dialog['rename']).dialog('widget')).each( function() {
+                                                args.push($(this).val());
+                                            });
+
+                                            $.JSON.request('renameItem', args, function(o) {
+                                                if (o) {
+                                                    self._reset();
+                                                    var item = $.String.path(self._dir, name);
+
+                                                    // folder rename successful
+                                                    if (o.folders.length) {
+                                                        // rename in tree
+                                                        if (self._treeLoaded()) {
+                                                            $(self.options.dialog.tree).tree('renameNode', list, item);
+                                                        }
+
+                                                        self._trigger('onFolderRename', null, list, item);
+                                                    }
+
+                                                    // file rename successful
+                                                    if (o.files.length) {
+                                                        self._trigger('onFileDelete', null, item);
+                                                    }
+
+                                                    if (item) {
+                                                        self._addReturnedItem({
+                                                            name: item
+                                                        });
+                                                    }
+
+                                                    $(self._dialog['rename']).dialog('close');
+                                                }
+                                                self.refresh();
+                                            });
+
+                                        }
+                                    });
+
+                                }
+
+                            });
+                            break;
+                    }
+                },
+
+                /**
+		 * Show an error dialog
+		 * @param {String} error
+		 */
+                _raiseError : function(error) {
+                    var self = this, err = '';
+
+                    switch($.type(error)) {
+                        case 'array':
+                            err += '<ul class="error-list">';
+                            $.each(error, function(k, v) {
+                                err += '<li>' + v + '</li>';
+                            });
+
+                            err += '</ul>';
+                            break;
+                        case 'string':
+                        default:
+                            err = error;
+                            break;
+                    }
+
+                    this._dialog['alert'] = $.Dialog.alert(err, {
+                        close : function() {
+                            self.refresh();
+                        }
+
+                    });
+                },
+
+                /**
+		 * Add an array of actions
+		 * @param {Object} actions
+		 */
+                _addActions : function(actions) {
+                    var self = this;
+
+                    $.each(actions, function(i, action) {
+                        self._addAction(action);
+                    });
+
+                },
+
+                /**
+		 * Add an action to the Manager
+		 * @param {Object} options
+		 */
+                _addAction : function(o) {
+                    var self = this, name = o.name || '', fn = this._execute;
+
+                    if (o.action) {
+                        fn = o.action;
+                    }
+
+                    var action = document.createElement('span');
+
+                    $(action).addClass('action');
+
+                    if (name) {
+                        $(action).attr({
+                            'id': name,
+                            'title': o.title,
+                            'role' : 'button',
+                            'labelledby' : name + '_label'
+                        }).addClass(name).append('<span id="' + name + '_label" aria-hidden="true">' + o.title + '</span>');
+
+                        if (o.icon) {
+                            $(action).css('background-image', $.String.path($.Plugin.getPath(this.options.plugin), o.icon));
+                        }
+
+                        if (o.name) {
+                            $(action).click( function() {
+                                if ($.type(fn) == 'function') {
+                                    return fn.call(self, name);
+                                }
+
+                                return self._trigger(fn, name);
                             });
 
                         }
 
-                    });
-                    break;
-            }
-        },
+                        this._actions[name] = action;
+                    }
 
-        /**
-		 * Show an error dialog
-		 * @param {String} error
-		 */
-        _raiseError : function(error) {
-            var self = this, err = '';
+                    $(this.options.dialog.actions).append('<span class="spacer"></span>').append(action);
 
-            switch($.type(error)) {
-                case 'array':
-                    err += '<ul class="error-list">';
-                    $.each(error, function(k, v) {
-                        err += '<li>' + v + '</li>';
-                    });
+                    if (!$.support.cssFloat && !window.XMLHttpRequest) {
+                        $(action).hover( function() {
+                            $(this).addClass('hover');
+                        }, function() {
+                            $(this).removeClass('hover');
+                        });
 
-                    err += '</ul>';
-                    break;
-                case 'string':
-                default:
-                    err = error;
-                    break;
-            }
+                    }
+                },
 
-            this._dialog['alert'] = $.Dialog.alert(err, {
-                close : function() {
-                    self.refresh();
-                }
-
-            });
-        },
-
-        /**
-		 * Add an array of actions
-		 * @param {Object} actions
-		 */
-        _addActions : function(actions) {
-            var self = this;
-
-            $.each(actions, function(i, action) {
-                self._addAction(action);
-            });
-
-        },
-
-        /**
-		 * Add an action to the Manager
-		 * @param {Object} options
-		 */
-        _addAction : function(o) {
-            var self = this, name = o.name || '', fn = this._execute;
-
-            if (o.action) {
-                fn = o.action;
-            }
-
-            var action = document.createElement('span');
-
-            $(action).addClass('action');
-
-            if (name) {
-                $(action).attr({
-                    'id': name,
-                    'title': o.title,
-                    'role' : 'button',
-                    'labelledby' : name + '_label'
-                }).addClass(name).append('<span id="' + name + '_label" aria-hidden="true">' + o.title + '</span>');
-
-                if (o.icon) {
-                    $(action).css('background-image', $.String.path($.Plugin.getPath(this.options.plugin), o.icon));
-                }
-
-                if (o.name) {
-                    $(action).click( function() {
-                        if ($.type(fn) == 'function') {
-                            return fn.call(self, name);
-                        }
-
-                        return self._trigger(fn, name);
-                    });
-
-                }
-
-                this._actions[name] = action;
-            }
-
-            $(this.options.dialog.actions).append('<span class="spacer"></span>').append(action);
-
-            if (!$.support.cssFloat && !window.XMLHttpRequest) {
-                $(action).hover( function() {
-                    $(this).addClass('hover');
-                }, function() {
-                    $(this).removeClass('hover');
-                });
-
-            }
-        },
-
-        /**
+                /**
 		 * Get an action by name
 		 * @param {String} name
 		 */
-        _getAction : function(name) {
-            return this._actions[name];
-        },
+                _getAction : function(name) {
+                    return this._actions[name];
+                },
 
-        /**
+                /**
 		 * Add an array of buttons to the Manager
 		 * @param {Object} buttons
 		 */
-        _addButtons : function(buttons) {
-            var self = this;
+                _addButtons : function(buttons) {
+                    var self = this;
 
-            if (buttons) {
-                if (buttons.folder) {
-                    $.each(buttons.folder, function(i, button) {
-                        if (button) {
-                            self._addButton(button, 'folder');
+                    if (buttons) {
+                        if (buttons.folder) {
+                            $.each(buttons.folder, function(i, button) {
+                                if (button) {
+                                    self._addButton(button, 'folder');
+                                }
+                            });
                         }
-                    });
-                }
 				
-                if (buttons.file) {
-                    $.each(buttons.file, function(i, button) {
-                        if (button) {
-                            self._addButton(button, 'file');
+                        if (buttons.file) {
+                            $.each(buttons.file, function(i, button) {
+                                if (button) {
+                                    self._addButton(button, 'file');
+                                }
+                            });
                         }
-                    });
-                }
-            }
-        },
+                    }
+                },
 
-        /**
+                /**
 		 * Add a button to the Manager
 		 * @param {Object} o Button Object
 		 * @param {String} type
 		 */
-        _addButton : function(o, type) {
-            var self = this, dialog = this.options.dialog, fn = this._execute;
+                _addButton : function(o, type) {
+                    var self = this, dialog = this.options.dialog, fn = this._execute;
 
-            if (o.action) {
-                fn = o.action;
-            }
+                    if (o.action) {
+                        fn = o.action;
+                    }
 
-            // only create button type once
-            var button = $('div.' + o.name, $(dialog.buttons));
+                    // only create button type once
+                    var button = $('div.' + o.name, $(dialog.buttons));
 
-            if (!button.length) {
-                button = document.createElement('div');
+                    if (!button.length) {
+                        button = document.createElement('div');
 
-                $(button).attr({
-                    'title' : o.title,
-                    'role' : 'button',
-                    'aria-labelledby' : o.name + '_label'
-                }).append('<span id="' + o.name + '_label" aria-hidden="true">' + o.title + '</span>');
+                        $(button).attr({
+                            'title' : o.title,
+                            'role' : 'button',
+                            'aria-labelledby' : o.name + '_label'
+                        }).append('<span id="' + o.name + '_label" aria-hidden="true">' + o.title + '</span>');
 
-                if (o.icon) {
-                    $(button).css('background-image', $.String.path($.Plugin.getPath(this.options.plugin), o.icon));
-                }
-
-                if (o.name) {
-                    var n = o.name;
-					
-                    $(button).click( function() {
-                        if ($('li.selected', '#item-list').length || self._pasteitems) {
-                            if (o.sticky) {
-                                $(button).toggleClass('ui-state-active');
-                            }
-
-                            if ($.type(fn) == 'function') {
-                                return fn.call(self, n, type);
-                            }
-
-                            return self._trigger(fn, type);
+                        if (o.icon) {
+                            $(button).css('background-image', $.String.path($.Plugin.getPath(this.options.plugin), o.icon));
                         }
-                    });
 
-                }
+                        if (o.name) {
+                            var n = o.name;
+					
+                            $(button).click( function() {
+                                if ($('li.selected', '#item-list').length || self._pasteitems) {
+                                    if (o.sticky) {
+                                        $(button).toggleClass('ui-state-active');
+                                    }
 
-                if (!$.support.cssFloat && !window.XMLHttpRequest) {
-                    $(button).hover( function() {
-                        $(this).addClass('hover');
-                    }, function() {
-                        $(this).removeClass('hover');
-                    });
+                                    if ($.type(fn) == 'function') {
+                                        return fn.call(self, n, type);
+                                    }
 
-                }
+                                    return self._trigger(fn, type);
+                                }
+                            });
 
-                $(dialog.buttons).append(button);
-                $(button).addClass('button ' + o.name + ' hide');
-            }
+                        }
 
-            this._buttons[type][o.name] = {
-                'name'		: o.name,
-                'element'	: button,
-                'trigger'	: o.trigger,
-                'multiple'	: o.multiple,
-                'single'	: $.type(o.single) === 'undefined' ? true : o.single,
-                'restrict'	: o.restrict || '',
-                'sticky'	: o.sticky
-            };
-        },
+                        if (!$.support.cssFloat && !window.XMLHttpRequest) {
+                            $(button).hover( function() {
+                                $(this).addClass('hover');
+                            }, function() {
+                                $(this).removeClass('hover');
+                            });
 
-        /**
+                        }
+
+                        $(dialog.buttons).append(button);
+                        $(button).addClass('button ' + o.name + ' hide');
+                    }
+
+                    this._buttons[type][o.name] = {
+                        'name'		: o.name,
+                        'element'	: button,
+                        'trigger'	: o.trigger,
+                        'multiple'	: o.multiple,
+                        'single'	: $.type(o.single) === 'undefined' ? true : o.single,
+                        'restrict'	: o.restrict || '',
+                        'sticky'	: o.sticky
+                    };
+                },
+
+                /**
 		 * Hide all buttons
 		 */
-        _hideAllButtons : function() {
-            var self = this;
+                _hideAllButtons : function() {
+                    var self = this;
 
-            $('div.button').each( function() {
-                self._hideButton(this);
-            });
+                    $('div.button').each( function() {
+                        self._hideButton(this);
+                    });
 
-        },
+                },
 
-        /**
+                /**
 		 * Hide buttons by type
 		 * @param {String} type The button type
 		 */
-        _hideButtons : function(buttons) {
-            var self = this;
+                _hideButtons : function(buttons) {
+                    var self = this;
 
-            $.each(buttons, function(i, button) {
-                self._hideButton(button);
-            });
+                    $.each(buttons, function(i, button) {
+                        self._hideButton(button);
+                    });
 
-        },
+                },
 
-        /**
+                /**
 		 * Hide a button
 		 * @param {String} button The button to hide
 		 */
-        _hideButton : function(button) {
-            $(button).removeClass('show').addClass('hide').attr('aria-hidden', true);
-        },
+                _hideButton : function(button) {
+                    $(button).removeClass('show').addClass('hide').attr('aria-hidden', true);
+                },
 
-        /**
+                /**
 		 * Show all buttons
 		 * @param {String} type The button type to show
 		 */
-        _showButtons : function() {
-            var self = this;
+                _showButtons : function() {
+                    var self = this;
 
-            this._hideAllButtons();
+                    this._hideAllButtons();
 
-            var folder 	= $('li.folder.selected', '#item-list');
-            var file	= $('li.file.selected', '#item-list');
+                    var folder 	= $('li.folder.selected', '#item-list');
+                    var file	= $('li.file.selected', '#item-list');
 
-            // multiple type selection
-            if (file.length && folder.length) {
-                var buttons = {};
+                    // multiple type selection
+                    if (file.length && folder.length) {
+                        var buttons = {};
 
-                var filebtns 	= this._buttons['file'];
-                var folderbtns 	= this._buttons['folder'];
+                        var filebtns 	= this._buttons['file'];
+                        var folderbtns 	= this._buttons['folder'];
 
-                $.each(filebtns, function(k, o) {
-                    if (!o.trigger && o.multiple) {
-                        if (folderbtns[k]) {
-                            buttons[k] = o;
-                        }
+                        $.each(filebtns, function(k, o) {
+                            if (!o.trigger && o.multiple) {
+                                if (folderbtns[k]) {
+                                    buttons[k] = o;
+                                }
+                            }
+                        });
+
+                        $.each(folderbtns, function(k, o) {
+                            if (!o.trigger && o.multiple) {
+                                if (filebtns[k]) {
+                                    buttons[k] = o;
+                                }
+                            }
+                        });
+
+                        $.each(buttons, function(k, o) {
+                            self._showButton(o.element, o.single, true);
+                        });
+
+                    } else {
+                        // set folder as default type
+                        var type = file.length ? 'file' : 'folder';
+
+                        $.each(this._buttons[type], function(k, o) {
+                            if (!o.trigger && !o.restrict) {
+                                self._showButton(o.element, o.single, o.multiple);
+                            }
+
+                            if (o.restrict) {
+                                var re 		= o.restrict.replace(/,/g, '|');
+                                var item 	= self.getSelectedItems(0);
+
+                                if (new RegExp('\\.(' + re + ')$', 'i').test($(item).attr('title'))) {
+                                    self._showButton(o.element, o.single, o.multiple);
+                                }
+                            }
+                        });
+
                     }
-                });
 
-                $.each(folderbtns, function(k, o) {
-                    if (!o.trigger && o.multiple) {
-                        if (filebtns[k]) {
-                            buttons[k] = o;
-                        }
+                    if (this._pasteitems) {
+                        this._showPasteButton();
                     }
-                });
+                },
 
-                $.each(buttons, function(k, o) {
-                    self._showButton(o.element, o.single, true);
-                });
-
-            } else {
-                // set folder as default type
-                var type = file.length ? 'file' : 'folder';
-
-                $.each(this._buttons[type], function(k, o) {
-                    if (!o.trigger && !o.restrict) {
-                        self._showButton(o.element, o.single, o.multiple);
-                    }
-
-                    if (o.restrict) {
-                        var re 		= o.restrict.replace(/,/g, '|');
-                        var item 	= self.getSelectedItems(0);
-
-                        if (new RegExp('\\.(' + re + ')$', 'i').test($(item).attr('title'))) {
-                            self._showButton(o.element, o.single, o.multiple);
-                        }
-                    }
-                });
-
-            }
-
-            if (this._pasteitems) {
-                this._showPasteButton();
-            }
-        },
-
-        /**
+                /**
 		 * Show a button
 		 * @param {String} button The button to show
 		 * @param {Boolean} multiple Whether a button is a multiple selection action
 		 */
-        _showButton : function(button, single, multiple) {
-            if (button) {
-                var show = false, n = $('li.selected', '#item-list').length;
+                _showButton : function(button, single, multiple) {
+                    if (button) {
+                        var show = false, n = $('li.selected', '#item-list').length;
 
-                if (n > 1) {
-                    if (multiple) {
-                        show = true;
+                        if (n > 1) {
+                            if (multiple) {
+                                show = true;
+                            }
+                        } else {
+                            if (single) {
+                                show = true;
+                            }
+                        }
+
+                        $(button).toggleClass('hide', !show).toggleClass('show', !show);
+
+                        if (!show) {
+                            $(button).attr('aria-hidden', false);
+                        }
                     }
-                } else {
-                    if (single) {
-                        show = true;
-                    }
-                }
+                },
 
-                $(button).toggleClass('hide', !show).toggleClass('show', !show);
-
-                if (!show) {
-                    $(button).attr('aria-hidden', false);
-                }
-            }
-        },
-
-        /**
+                /**
 		 * Get a button
 		 * @param {String} type The button type
 		 * @param {String} name The button name
 		 */
-        _getButton : function(type, name) {
-            return this._buttons[type][name] || null;
-        },
+                _getButton : function(type, name) {
+                    return this._buttons[type][name] || null;
+                },
 
-        /**
+                /**
 		 * Show the paste button
 		 */
-        _showPasteButton : function() {
-            this._showButton($('div.paste', '#browser-buttons'), true, true);
-        },
+                _showPasteButton : function() {
+                    this._showButton($('div.paste', '#browser-buttons'), true, true);
+                },
 
-        /**
+                /**
 		 * Determine whether an item is selected
 		 * @param {Object} el The list item
 		 */
-        _isSelectedItem : function(el) {
-            return $(el).is('li.selected');
-        },
+                _isSelectedItem : function(el) {
+                    return $(el).is('li.selected');
+                },
 
-        /**
+                /**
 		 * Deselect all list items
 		 */
-        _deselectItems : function() {
-            var dialog = this.options.dialog;
+                _deselectItems : function() {
+                    var dialog = this.options.dialog;
 
-            // deselect item and uncheck checkboxes
-            $('li.selected', '#item-list').removeClass('selected active').children('span.checkbox').removeClass('checked').attr('aria-checked', false);
+                    // deselect item and uncheck checkboxes
+                    $('li.selected', '#item-list').removeClass('selected active').children('span.checkbox').removeClass('checked').attr('aria-checked', false);
 
-            $(dialog.info).empty();
-            $(dialog.comments).empty();
+                    $(dialog.info).empty();
+                    $(dialog.comments).empty();
 
-            // Shortcut for nav
-            var nav = dialog.nav;
+                    // Shortcut for nav
+                    var nav = dialog.nav;
 
-            $.each([nav + '-left', nav + '-right', nav + '-text'], function(i, el) {
-                $(el).css('visibility', 'hidden').attr('aria-hidden', true);
-            });
+                    $.each([nav + '-left', nav + '-right', nav + '-text'], function(i, el) {
+                        $(el).css('visibility', 'hidden').attr('aria-hidden', true);
+                    });
 
-            this._hideAllButtons();
+                    this._hideAllButtons();
 
-            $('span.checkbox', '#check-all').removeClass('checked');
-        },
+                    $('span.checkbox', '#check-all').removeClass('checked');
+                },
 
-        /**
+                /**
 		 * Select an array of items
 		 * @param {Array} items The array of items to select
 		 * @param {Boolean} show Show item properties
 		 */
-        _selectItems : function(items, show) {
-            $(items).addClass('selected').children('span.checkbox').addClass('checked').attr('aria-checked', true);
+                _selectItems : function(items, show) {
+                    $(items).addClass('selected').children('span.checkbox').addClass('checked').attr('aria-checked', true);
 
-            if (show) {
-                this._showSelectedItems();
-            }
+                    if (show) {
+                        this._showSelectedItems();
+                    }
 
-            var $list = $('#item-list');
+                    var $list = $('#item-list');
 
-            if ($('span.checked', $list).length == $('li', $list).length) {
-                $('span.checkbox', '#check-all').addClass('checked').attr('aria-checked', true);
-            }
+                    if ($('span.checked', $list).length == $('li', $list).length) {
+                        $('span.checkbox', '#check-all').addClass('checked').attr('aria-checked', true);
+                    }
 
-            this._trigger('onSelectItems', null, items);
-        },
+                    this._trigger('onSelectItems', null, items);
+                },
 
-        /**
+                /**
 		 * Remove items from a selection
 		 * @param {Array} el Array of elements to remove
 		 * @param {Boolean} show Show remaining item properties
 		 */
-        _removeSelectedItems : function(items, show) {
-            $(items).removeClass('selected').children('span.checkbox').removeClass('checked').attr('aria-checked', false);
+                _removeSelectedItems : function(items, show) {
+                    $(items).removeClass('selected').children('span.checkbox').removeClass('checked').attr('aria-checked', false);
 
-            if (show) {
-                this._showSelectedItems();
-            }
+                    if (show) {
+                        this._showSelectedItems();
+                    }
 
-            this._trigger('onRemoveItems', null, items);
-        },
+                    this._trigger('onRemoveItems', null, items);
+                },
 
-        /**
+                /**
 		 * Return selected items by key or all selected items
 		 * @param {String} key Item key
 		 */
-        getSelectedItems : function(key) {
-            var $items = $('li.selected', '#item-list');
+                getSelectedItems : function(key) {
+                    var $items = $('li.selected', '#item-list');
 
-            return $items.get(key) || $items;
-        },
+                    return $items.get(key) || $items;
+                },
 
-        /**
+                /**
 		 * Process a selection click
 		 * @param {String} e The click event.
 		 * @param {Boolean} multiple Allow multiple selections.
 		 */
-        _setSelectedItems : function(e, multiple) {
-            var checkbox = false;
+                _setSelectedItems : function(e, multiple) {
+                    var checkbox = false;
 
-            // the selected element
-            var el = e.target;
-            // cache list
-            var $list = $('#item-list');
+                    // the selected element
+                    var el = e.target;
+                    // cache list
+                    var $list = $('#item-list');
 
-            if (e.type == 'keydown') {
-                // element is probably parent ul, so get last selected item
-                el = $('li.selected:last', $list).get(0);
+                    if (e.type == 'keydown') {
+                        // element is probably parent ul, so get last selected item
+                        el = $('li.selected:last', $list).get(0);
 
-                $list = $(this.options.dialog.list);
+                        $list = $(this.options.dialog.list);
 
-                // change target for keydown
-                if (e.which == 38) {
-                    el = el.previousSibling;
-                }
+                        // change target for keydown
+                        if (e.which == 38) {
+                            el = el.previousSibling;
+                        }
 
-                if (e.which == 40) {
-                    el = el.nextSibling;
-                }
+                        if (e.which == 40) {
+                            el = el.nextSibling;
+                        }
 
-                if (!el) {
-                    return;
-                }
+                        if (!el) {
+                            return;
+                        }
 
-                if (el.offsetTop > $list.innerHeight() || el.offsetTop < $list.scrollTop()) {
-                    $list.scrollTop((el.offsetTop + $(el).innerHeight()) - $list.height());
-                }
-            }
-
-            if ($(el).hasClass('checkbox')) {
-                multiple = true;
-                checkbox = true;
-            }
-
-            // If not li element, must be a so get parent li
-            if (el.nodeName != 'LI')
-                el = el.parentNode;
-
-            var selected = $('li.selected', $list);
-
-            // Prevent double clicking
-            if (this._isSelectedItem(el) && selected.length == 1) {
-                e.preventDefault();
-                return false;
-            }
-
-            // Get items
-            var items = $('li.folder, li.file', $list);
-            // get key
-            var ctrl = (e.ctrlKey || e.metaKey), shift = e.shiftKey;
-
-            // Single click
-            if (!ctrl && !shift && !checkbox || !multiple) {
-                // uncheck all boxes
-                $('span.checkbox', el).removeClass('checked').attr('aria-checked', false);
-
-                // deselect all
-                this._deselectItems();
-                // select item
-                this._selectItems([el], true);
-
-            // ctrl & shift
-            } else if (multiple && (ctrl || shift || checkbox)) {
-                // ctrl
-                if (ctrl || checkbox) {
-                    if (this._isSelectedItem(el)) {
-                        this._removeSelectedItems([el], true);
-                    } else {
-                        this._selectItems([el], true);
+                        if (el.offsetTop > $list.innerHeight() || el.offsetTop < $list.scrollTop()) {
+                            $list.scrollTop((el.offsetTop + $(el).innerHeight()) - $list.height());
+                        }
                     }
-                }
 
-                // shift
-                if (shift) {
-                    if (selected.length) {
-                        // selected item index
-                        var si 			= $(el, selected).index();
-                        // click item index
-                        var ci			= $(el, items).index();
-                        var selection 	= [];
+                    if ($(el).hasClass('checkbox')) {
+                        multiple = true;
+                        checkbox = true;
+                    }
 
-                        // Clear selection
+                    // If not li element, must be a so get parent li
+                    if (el.nodeName != 'LI')
+                        el = el.parentNode;
+
+                    var selected = $('li.selected', $list);
+
+                    // Prevent double clicking
+                    if (this._isSelectedItem(el) && selected.length == 1) {
+                        e.preventDefault();
+                        return false;
+                    }
+
+                    // Get items
+                    var items = $('li.folder, li.file', $list);
+                    // get key
+                    var ctrl = (e.ctrlKey || e.metaKey), shift = e.shiftKey;
+
+                    // Single click
+                    if (!ctrl && !shift && !checkbox || !multiple) {
+                        // uncheck all boxes
+                        $('span.checkbox', el).removeClass('checked').attr('aria-checked', false);
+
+                        // deselect all
                         this._deselectItems();
+                        // select item
+                        this._selectItems([el], true);
 
-                        // Clicked item further up list than selected item
-                        if (ci > si) {
-                            for (var i=ci; i>=si; i--) {
-                                selection.push(items[i]);
-                            }
-                        } else {
-                            // Clicked item further down list than selected item
-                            for (var i=si; i>=ci; i--) {
-                                selection.push(items[i]);
+                    // ctrl & shift
+                    } else if (multiple && (ctrl || shift || checkbox)) {
+                        // ctrl
+                        if (ctrl || checkbox) {
+                            if (this._isSelectedItem(el)) {
+                                this._removeSelectedItems([el], true);
+                            } else {
+                                this._selectItems([el], true);
                             }
                         }
-                        this._selectItems(selection, true);
-                    } else {
-                        this._selectItems([el], true);
-                    }
-                }
-            }
-        },
 
-        /**
+                        // shift
+                        if (shift) {
+                            if (selected.length) {
+                                // selected item index
+                                var si 			= $(el, selected).index();
+                                // click item index
+                                var ci			= $(el, items).index();
+                                var selection 	= [];
+
+                                // Clear selection
+                                this._deselectItems();
+
+                                // Clicked item further up list than selected item
+                                if (ci > si) {
+                                    for (var i=ci; i>=si; i--) {
+                                        selection.push(items[i]);
+                                    }
+                                } else {
+                                    // Clicked item further down list than selected item
+                                    for (var i=si; i>=ci; i--) {
+                                        selection.push(items[i]);
+                                    }
+                                }
+                                this._selectItems(selection, true);
+                            } else {
+                                this._selectItems([el], true);
+                            }
+                        }
+                    }
+                },
+
+                /**
 		 * Show the selected items' details
 		 */
-        _showSelectedItems : function() {
-            var $items = $('li.selected', '#item-list'), n = $items.length;
+                _showSelectedItems : function() {
+                    var $items = $('li.selected', '#item-list'), n = $items.length;
 
-            // reset if no selection
-            if (!n) {
-                this._reset();
-            } else {
-                // make the first item active
-                $items.first().addClass('active');
+                    // reset if no selection
+                    if (!n) {
+                        this._reset();
+                    } else {
+                        // make the first item active
+                        $items.first().addClass('active');
 
-                this._showItemDetails();
-            }
-        },
+                        this._showItemDetails();
+                    }
+                },
 
-        /**
+                /**
 		 * Find a select an item (file) by name, id or url
 		 * @param {String} name The file name.
 		 */
-        _findItem : function(files, type) {
-            var self = this, items = [];
-            type = type || 'file';
+                _findItem : function(files, type) {
+                    var self = this, items = [];
+                    type = type || 'file';
 
-            if ($.type(files) == 'string') {
-                files = [files];
-            }
+                    if ($.type(files) == 'string') {
+                        files = [files];
+                    }
 
-            var insert 	= false;
-            var $list 	= $('#item-list');
+                    var insert 	= false;
+                    var $list 	= $('#item-list');
 
-            var base 	= self.getBaseDir();
+                    var base 	= self.getBaseDir();
 
-            $.each(files, function(i, file) {
-                if (file && file.name) {
-                    var name = decodeURIComponent(file.name);
+                    $.each(files, function(i, file) {
+                        if (file && file.name) {
+                            var name = decodeURIComponent(file.name);
 					
-                    if ($list.length) {
-                        var item = [];
+                            if ($list.length) {
+                                var item = [];
 						
-                        // find item from name, id or data-url
-                        item = $('li.' + type + '[title="'+ $.String.basename(name) +'"], li.' + type + '[data-url="'+ $.String.path(base, name) +'"]', $list);
+                                // find item from name, id or data-url
+                                item = $('li.' + type + '[title="'+ $.String.basename(name) +'"], li.' + type + '[data-url="'+ $.String.path(base, name) +'"]', $list);
 						
-                        if (item.length) {
-                            if (file.insert) {
-                                insert = true;
-                                items = item;
-                                self._trigger('onFileClick', null, $(item).get(0));
-                            }
+                                if (item.length) {
+                                    if (file.insert) {
+                                        insert = true;
+                                        items = item;
+                                        self._trigger('onFileClick', null, $(item).get(0));
+                                    }
 
-                            if (!insert) {
-                                $.merge(items, item);
+                                    if (!insert) {
+                                        $.merge(items, item);
+                                    }
+                                }
                             }
                         }
+                    });
+
+                    if (items.length) {
+                        var pos = $(items[0]).position();
+                        $(this.options.dialog.list).animate({
+                            scrollTop : pos.top
+                        }, 1500);
                     }
-                }
-            });
 
-            if (items.length) {
-                var pos = $(items[0]).position();
-                $(this.options.dialog.list).animate({
-                    scrollTop : pos.top
-                }, 1500);
-            }
+                    // Select items and display properties
+                    this._selectItems(items, true);
+                },
 
-            // Select items and display properties
-            this._selectItems(items, true);
-        },
-
-        /**
+                /**
 		 * Serialize the current item selection, add current dir to path
 		 */
-        _serializeSelectedItems : function() {
-            var self = this;
+                _serializeSelectedItems : function() {
+                    var self = this;
 
-            return $('li.selected', '#item-list').map( function() {
-                return $.String.path(self._dir, $(this).attr('title'));
-            }).get().join(',');
+                    return $('li.selected', '#item-list').map( function() {
+                        return $.String.path(self._dir, $(this).attr('title'));
+                    }).get().join(',');
 
-        },
+                },
 
-        /**
+                /**
 		 * Show a file /folder properties / details
 		 */
-        _showItemDetails : function() {
-            var self = this, $items = $('li.selected', '#item-list'), n = $items.length;
-            var $nav = $('#browser-details-nav');
+                _showItemDetails : function() {
+                    var self = this, $items = $('li.selected', '#item-list'), n = $items.length;
+                    var $nav = $('#browser-details-nav');
 
-            // show navigation buttons
-            if (n > 1) {
+                    // show navigation buttons
+                    if (n > 1) {
 				
-                // get active item index				
-                var index = $items.index($items.filter('.active'));
+                        // get active item index				
+                        var index = $items.index($items.filter('.active'));
 
-                if (index) {
-                    $('span.details-nav-left', $nav).addClass('visible').attr('aria-hidden', false);
-                } else {
-                    $('span.details-nav-left', $nav).removeClass('visible').attr('aria-hidden', true);
-                }
-
-                if (index + 1 < n) {
-                    $('span.details-nav-right', $nav).addClass('visible').attr('aria-hidden', false);
-                } else {
-                    $('span.details-nav-right', $nav).removeClass('visible').attr('aria-hidden', true);
-                }
-
-                $('span.details-nav-text', $nav).addClass('visible').html( function() {
-                    return self._translate('one_of_many', '%o of %m').replace('%o', index + 1).replace('%m', n);
-                });
-
-            // hide navigation buttons
-            } else {
-                $('span', $nav).removeClass('visible').attr('aria-hidden', true);
-            }
-
-            // show relevant buttons
-            this._showButtons();
-            // get item details
-            this._getItemDetails();
-        },
-        
-        _getDimensions : function(file) {
-            var img = new Image();
-            var src = $.String.path($.Plugin.getURI(), $(file).data('url'));
-            
-            $(file).addClass('loading disabled').children('span.checkbox').addClass('disabled');
-            
-            img.onload = function() {
-                $(file).attr({
-                    'data-preview'    : src, 
-                    'data-width'      : img.width,
-                    'data-height'     : img.height
-                });
-               
-                $(file).removeClass('loading disabled').children('span.checkbox').removeClass('disabled');
-            };
-            
-            img.src = src;
-        },
-
-        /**
-		 * Get a file or folder's properties
-		 */
-        _getItemDetails : function() {
-            var self = this, dialog = this.options.dialog;
-            var item = $('li.selected.active', '#item-list'), title = $.String.basename($(item).attr('title'));
-            var type = $(item).hasClass('folder') ? 'folder' : 'file';
-
-            $(dialog.info).empty().addClass('loader');
-
-            // create item path
-            var path = $.String.path(this._dir, $.String.encodeURI(title));
-            var name = title;
-            var ext  = '';
-
-            if (type == 'file') {
-                name = $.String.stripExt(title);
-                ext  = $.String.getExt(title) + ' ';
-            }
-
-            // create properties list
-            var info = document.createElement('dl');
-            $(info).append('<dt>' + name + '</dt><dd>' + ext + self._translate(type, $.String.ucfirst(type)) + '</dd><dd id="info-properties"><dl></dl></dd>');
-
-            // additional data for file items
-            if (type == 'file') {
-                $(info).append('<dd id="info-preview"></dd>');
-            }
-
-            // remove the loader and append info
-            $(dialog.info).removeClass('loader').empty().append(info);
-
-            var comments = '';
-
-            // check if item writable - show warning
-            if ($(item).hasClass('notwritable')) {
-                comments +=
-                '<li class="comments ' + type + ' notwritable">' +
-                '<span class="hastip" title="'+ self._translate('notwritable_desc', 'Unwritable') +'">' +self._translate('notwritable', 'Unwritable') +'</span>' +
-                '</li>';
-            }
-
-            // check if item websafe - show warning
-            if ($(item).hasClass('notsafe')) {
-                comments +=
-                '<li class="comments ' + type + ' notsafe">' +
-                '<span class="hastip" title="'+ self._translate('bad_name_desc', 'Bad file or folder name') +'">'+ self._translate('bad_name', 'Bad file or folder name') +'</span>' +
-                '</li>';
-            }
-
-            // process triggered buttons
-            if ($(item).data('trigger')) {
-                $.each($(item).data('trigger').split(','), function(i, v) {
-                    if (v !== '') {
-                        var button = self._getButton(type, v);
-
-                        if (button) {
-                            self._showButton(button.element, button.single, button.multiple);
-                        }
-                    }
-                });
-
-            }
-
-            // Properties
-            $.each($(item).data(), function(k, v) {
-                // skip these core data attributes
-                if (/^(preview|trigger|width|height|url)$/.test(k)) {
-                    return;
-                }
-
-                if (k == 'size') {
-                    v = $.String.formatSize(v);
-                }
-
-                if (k == 'modified') {
-                    v = $.String.formatDate(v);
-                }
-
-                $('#info-properties dl').append('<dd id="info-' + k.toLowerCase() + '">' + self._translate('' + k, k) + ': ' + v + '</dd>');
-            });
-
-            // Dimensions (will only apply to file items)
-            if ($(item).data('width') && $(item).data('height')) {
-                $('#info-properties dl').append('<dd id="info-dimensions">' + self._translate('dimensions', 'Dimensions') + ': ' + $(item).data('width') + ' x ' + $(item).data('height') + '</dd>');
-            }
-
-            // Preview (will only apply to file items)
-            if ($(item).data('preview')) {
-                $('#info-preview').empty().append(
-                    '<dl>' +
-                    '<dt>' + self._translate('preview', 'Preview') + ': </dt>' +
-                    '<dd class="loader"></dd>' +
-                    '</dl>'
-                    );
-
-                var src = decodeURIComponent($(item).data('preview'));
-
-                var img = new Image();
-
-                img.onload = function() {
-                    var w = img.width;
-                    var h = img.height;
-
-                    // set dimensions
-                    if ($(item).attr('data-width') || $(item).attr('data-height')) {
-                        $('#info-dimensions').html(self._translate('dimensions', 'Dimensions') + ': ' + w + ' x ' + h);
-                    }
-
-                    // check for background-size support
-                    if ($.support.backgroundSize) {
-                        $('dd', '#info-preview').css('background-image', 'url("' + img.src + '")');
-
-                        if (w > 100 || h > 80) {
-                            $('dd', '#info-preview').addClass('resize');
+                        if (index) {
+                            $('span.details-nav-left', $nav).addClass('visible').attr('aria-hidden', false);
+                        } else {
+                            $('span.details-nav-left', $nav).removeClass('visible').attr('aria-hidden', true);
                         }
 
-                    } else {
-                        // size img
-                        var dim = $.Plugin.sizeToFit(img, {
-                            width : 100,
-                            height: 80
+                        if (index + 1 < n) {
+                            $('span.details-nav-right', $nav).addClass('visible').attr('aria-hidden', false);
+                        } else {
+                            $('span.details-nav-right', $nav).removeClass('visible').attr('aria-hidden', true);
+                        }
+
+                        $('span.details-nav-text', $nav).addClass('visible').html( function() {
+                            return self._translate('one_of_many', '%o of %m').replace('%o', index + 1).replace('%m', n);
                         });
 
-                        $('dd', '#info-preview').append($(img).attr('alt', self._translate('preview', 'Preview')).css(dim));
+                    // hide navigation buttons
+                    } else {
+                        $('span', $nav).removeClass('visible').attr('aria-hidden', true);
                     }
 
-                    $('dd', '#info-preview').removeClass('loader');
-                };
+                    // show relevant buttons
+                    this._showButtons();
+                    // get item details
+                    this._getItemDetails();
+                },
+        
+                _getDimensions : function(file) {
+                    var img = new Image();
+                    var src = $.String.path($.Plugin.getURI(), $(file).data('url'));
+            
+                    $(file).addClass('loading disabled').children('span.checkbox').addClass('disabled');
+            
+                    img.onload = function() {
+                        $(file).attr({
+                            'data-preview'    : src, 
+                            'data-width'      : img.width,
+                            'data-height'     : img.height
+                        });
+               
+                        $(file).removeClass('loading disabled').children('span.checkbox').removeClass('disabled');
+                    };
+            
+                    img.src = src;
+                },
 
-                img.onerror = function() {
-                    $('dd', $('#info-preview')).removeClass('loader').addClass('preview-error');
-                };
+                /**
+		 * Get a file or folder's properties
+		 */
+                _getItemDetails : function() {
+                    var self = this, dialog = this.options.dialog;
+                    var item = $('li.selected.active', '#item-list'), title = $.String.basename($(item).attr('title'));
+                    var type = $(item).hasClass('folder') ? 'folder' : 'file';
 
-                src = /http(s)?:\/\//.test(src) ? src : $.String.encodeURI(src);
+                    $(dialog.info).empty().addClass('loader');
 
-                img.src = src + (/\?/.test(src) ? '&' : '?') + new Date().getTime();
-            }
+                    // create item path
+                    var path = $.String.path(this._dir, $.String.encodeURI(title));
+                    var name = title;
+                    var ext  = '';
 
-            if (comments) {
-                $(dialog.comments).empty().append('<ul>' + comments + '</ul>');
-            }
+                    if (type == 'file') {
+                        name = $.String.stripExt(title);
+                        ext  = $.String.getExt(title) + ' ';
+                    }
 
-            $('span.hastip', $(dialog.comments)).tips();
+                    // create properties list
+                    var info = document.createElement('dl');
+                    $(info).append('<dt>' + name + '</dt><dd>' + ext + self._translate(type, $.String.ucfirst(type)) + '</dd><dd id="info-properties"><dl></dl></dd>');
 
-            var cb = (type == 'folder') ? 'onFolderDetails' : 'onFileDetails';
+                    // additional data for file items
+                    if (type == 'file') {
+                        $(info).append('<dd id="info-preview"></dd>');
+                    }
 
-            self._trigger(cb, null, item);
-        },
+                    // remove the loader and append info
+                    $(dialog.info).removeClass('loader').empty().append(info);
 
-        destroy: function() {
-            $.Widget.prototype.destroy.apply( this, arguments );
-        }
+                    var comments = '';
 
-    });
+                    // check if item writable - show warning
+                    if ($(item).hasClass('notwritable')) {
+                        comments +=
+                        '<li class="comments ' + type + ' notwritable">' +
+                        '<span class="hastip" title="'+ self._translate('notwritable_desc', 'Unwritable') +'">' +self._translate('notwritable', 'Unwritable') +'</span>' +
+                        '</li>';
+                    }
 
-    $.extend($.ui.MediaManager, {
-        version: "@@version@@"
-    });
-})(jQuery);
+                    // check if item websafe - show warning
+                    if ($(item).hasClass('notsafe')) {
+                        comments +=
+                        '<li class="comments ' + type + ' notsafe">' +
+                        '<span class="hastip" title="'+ self._translate('bad_name_desc', 'Bad file or folder name') +'">'+ self._translate('bad_name', 'Bad file or folder name') +'</span>' +
+                        '</li>';
+                    }
+
+                    // process triggered buttons
+                    if ($(item).data('trigger')) {
+                        $.each($(item).data('trigger').split(','), function(i, v) {
+                            if (v !== '') {
+                                var button = self._getButton(type, v);
+
+                                if (button) {
+                                    self._showButton(button.element, button.single, button.multiple);
+                                }
+                            }
+                        });
+
+                    }
+
+                    // Properties
+                    $.each($(item).data(), function(k, v) {
+                        // skip these core data attributes
+                        if (/^(preview|trigger|width|height|url)$/.test(k)) {
+                            return;
+                        }
+
+                        if (k == 'size') {
+                            v = $.String.formatSize(v);
+                        }
+
+                        if (k == 'modified') {
+                            v = $.String.formatDate(v);
+                        }
+
+                        $('#info-properties dl').append('<dd id="info-' + k.toLowerCase() + '">' + self._translate('' + k, k) + ': ' + v + '</dd>');
+                    });
+
+                    // Dimensions (will only apply to file items)
+                    if ($(item).data('width') && $(item).data('height')) {
+                        $('#info-properties dl').append('<dd id="info-dimensions">' + self._translate('dimensions', 'Dimensions') + ': ' + $(item).data('width') + ' x ' + $(item).data('height') + '</dd>');
+                    }
+
+                    // Preview (will only apply to file items)
+                    if ($(item).data('preview')) {
+                        $('#info-preview').empty().append(
+                            '<dl>' +
+                            '<dt>' + self._translate('preview', 'Preview') + ': </dt>' +
+                            '<dd class="loader"></dd>' +
+                            '</dl>'
+                            );
+
+                        var src = decodeURIComponent($(item).data('preview'));
+
+                        var img = new Image();
+
+                        img.onload = function() {
+                            var w = img.width;
+                            var h = img.height;
+
+                            // set dimensions
+                            if ($(item).attr('data-width') || $(item).attr('data-height')) {
+                                $('#info-dimensions').html(self._translate('dimensions', 'Dimensions') + ': ' + w + ' x ' + h);
+                            }
+
+                            // check for background-size support
+                            if ($.support.backgroundSize) {
+                                $('dd', '#info-preview').css('background-image', 'url("' + img.src + '")');
+
+                                if (w > 100 || h > 80) {
+                                    $('dd', '#info-preview').addClass('resize');
+                                }
+
+                            } else {
+                                // size img
+                                var dim = $.Plugin.sizeToFit(img, {
+                                    width : 100,
+                                    height: 80
+                                });
+
+                                $('dd', '#info-preview').append($(img).attr('alt', self._translate('preview', 'Preview')).css(dim));
+                            }
+
+                            $('dd', '#info-preview').removeClass('loader');
+                        };
+
+                        img.onerror = function() {
+                            $('dd', $('#info-preview')).removeClass('loader').addClass('preview-error');
+                        };
+
+                        src = /http(s)?:\/\//.test(src) ? src : $.String.encodeURI(src);
+
+                        img.src = src + (/\?/.test(src) ? '&' : '?') + new Date().getTime();
+                    }
+
+                    if (comments) {
+                        $(dialog.comments).empty().append('<ul>' + comments + '</ul>');
+                    }
+
+                    $('span.hastip', $(dialog.comments)).tips();
+
+                    var cb = (type == 'folder') ? 'onFolderDetails' : 'onFileDetails';
+
+                    self._trigger(cb, null, item);
+                },
+
+                destroy: function() {
+                    $.Widget.prototype.destroy.apply( this, arguments );
+                }
+
+            });
+
+        $.extend($.ui.MediaManager, {
+            version: "@@version@@"
+        });
+    })(jQuery);
