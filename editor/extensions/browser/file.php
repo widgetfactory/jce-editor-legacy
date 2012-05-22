@@ -818,7 +818,7 @@ class WFFileBrowser extends WFBrowserExtension {
 
             if (!WFMimeType::check($file['name'], $file['tmp_name'], $file['type'])) {
                 $result->state = false;
-                $result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_IMAGE_ERROR');
+                $result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_EXT_ERROR');
                 return false;
             }
         }
