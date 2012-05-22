@@ -404,6 +404,9 @@
                 
                 window.setTimeout(function() {
                     self.setHighlight(ed.getParam('source_highlight', true));
+                    if (se) {
+                        se.focus();
+                    }
                 }, 10);
             } else {
                 if (se) {
