@@ -251,23 +251,20 @@ var LinkDialog = {
             args[k] = v;
         });
         
-        var selector = 'a[href=javascript\\:mctmp\\(0\\)\\;]';
+        var selector = 'a[href="#mce_temp_url#"]';
 
         // no selection
         if (se.isCollapsed()) {
-            ed.execCommand('mceInsertContent', false, '<a href="javascript:mctmp(0);">' + $('#text').val() + '</a>', {
-                skip_undo : 1
-            });
+            ed.execCommand('mceInsertContent', false, '<a href="#mce_temp_url#">' + $('#text').val() + '</a>', {skip_undo : 1});
 
             tinymce.each(ed.dom.select(selector), function(link) {
                 ed.dom.setAttribs(link, args);
 
                 el = link;
             });
-
         // create link on selection or update existing link
         } else {            
-            ed.execCommand('mceInsertLink', false, 'javascript:mctmp(0);');
+            ed.execCommand('mceInsertLink', false, '#mce_temp_url#', {skip_undo : 1});
             
             tinymce.each(ed.dom.select(selector), function(link) {
                 ed.dom.setAttribs(link, args);

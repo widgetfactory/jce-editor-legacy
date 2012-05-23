@@ -271,17 +271,17 @@ var WFPopups = WFExtensions.add('Popups', {
 				
                 // no selection
                 if(se.isCollapsed()) {
-                    ed.execCommand('mceInsertContent', false, '<a href="javascript:mctmp(0);">' + $('#popup_text').val() + '</a>', {
+                    ed.execCommand('mceInsertContent', false, '<a href="#mce_temp_url#">' + $('#popup_text').val() + '</a>', {
                         skip_undo : 1
                     });
                 // create link on selection or update existing link
                 } else {
-                    ed.execCommand('mceInsertLink', false, 'javascript:mctmp(0);', {
+                    ed.execCommand('mceInsertLink', false, '#mce_temp_url#', {
                         skip_undo : 1
                     });
                 }
 
-                tinymce.each(ed.dom.select('a[href=javascript\\:mctmp\\(0\\)\\;]'), function(link) {
+                tinymce.each(ed.dom.select('a[href="#mce_temp_url#"]'), function(link) {
                     self.setAttributes(link, args);
                 });
             }
