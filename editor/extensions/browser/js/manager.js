@@ -925,8 +925,15 @@
                 path = path.replace(/^[\/\\]+/, '');
 	
                 // store directory in cookie
-                if (path && this.options.use_cookies) {
-                    $.Cookie.set("wf_" + $.Plugin.getName() + '_dir', $.String.dirname(path));
+                if (path && this.options.use_cookies) {                    
+                    // get the directory if its a file
+                    if (/\.([a-z0-9]{2,4})/i.test(path)) {
+                        path = $.String.dirname(path);
+                    }
+                    
+                    if (path) {
+                        $.Cookie.set("wf_" + $.Plugin.getName() + '_dir', path);
+                    }
                 }
 
                 // show loading message
