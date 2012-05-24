@@ -22,15 +22,15 @@
 	init : function(ed, url) {
 		var t = this;
 
-		// Internet Explorer has built-in automatic linking for most cases
-		if (tinyMCE.isIE)
-			return;
-                
-                // Add a key down handler
+		// Add a key down handler
 		ed.onKeyDown.addToTop(function(ed, e) {
 			if (e.keyCode == 13)
 				return t.handleEnter(ed);
 		});
+
+		// Internet Explorer has built-in automatic linking for most cases
+		if (tinyMCE.isIE)
+			return;
 
 		ed.onKeyPress.add(function(ed, e) {
 			if (e.which == 41)
@@ -131,12 +131,12 @@
 			}
 
 			text = r.toString();
-			matches = text.match(/^(https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.|[A-Z0-9._%+-]+@)(.+)$/i);
+			matches = text.match(/^(https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.|(?:mailto:)?[A-Z0-9._%+-]+@)(.+)$/i);
 
 			if (matches) {
 				if (matches[1] == 'www.') {
 					matches[1] = 'http://www.';
-				} else if (/@$/.test(matches[1])) {
+				} else if (/@$/.test(matches[1]) && !/^mailto:/.test(matches[1])) {
 					matches[1] = 'mailto:' + matches[1];
 				}
 
