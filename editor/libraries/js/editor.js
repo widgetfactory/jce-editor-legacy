@@ -125,8 +125,7 @@ function jInsertEditorText(text, editor) {
                         block : 'dl', 
                         wrapper: true
                     }
-                },
-                schema: "html5"
+                }
             }, settings);
 
             if(this.settings) {
