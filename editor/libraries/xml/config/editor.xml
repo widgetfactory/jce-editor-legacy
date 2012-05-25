@@ -5,6 +5,10 @@
 			<option value="0">WF_OPTION_NO</option>
 			<option value="1">WF_OPTION_YES</option>
 		</param>
+                <param name="schema" type="list" default="html4" label="WF_PARAM_DOCTYPE" description="WF_PARAM_DOCTYPE_DESC" parent="verify_html[1]">
+			<option value="html4">HTML4</option>
+			<option value="html5">HTML5</option>
+		</param>
 		<param name="entity_encoding" type="list" default="raw" label="WF_PARAM_ENTITY_ENCODING" description="WF_PARAM_ENTITY_ENCODING_DESC">
 			<option value="raw">UTF-8</option>
 			<option value="named">WF_PARAM_NAMED</option>
@@ -25,10 +29,10 @@
 			<option value="div">WF_PARAM_DIV</option>
 			<option value="0">WF_OPTION_DISABLED</option>
 		</param>
-		<param name="newlines" type="list" default="0" label="WF_PARAM_NEWLINES" description="WF_PARAM_NEWLINES_DESC">
+		<!--param name="newlines" type="list" default="0" label="WF_PARAM_NEWLINES" description="WF_PARAM_NEWLINES_DESC">
 			<option value="1">WF_PARAM_LINEBREAKS</option>
 			<option value="0">WF_PARAM_PARAGRAPHS</option>
-		</param>
+		</param-->
 		<param name="content_style_reset" type="list" default="0" label="WF_PARAM_EDITOR_STYLE_RESET" description="WF_PARAM_EDITOR_STYLE_RESET_DESC">
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
@@ -38,7 +42,7 @@
 			<option value="1">WF_PARAM_CSS_TEMPLATE</option>
 			<option value="2">WF_OPTION_DEFAULT</option>
 		</param>
-		<param name="content_css_custom" type="textarea" rows="2" cols="55" default="" placeholder="eg: templates/$template/css/content.css" label="WF_PARAM_CSS_CUSTOM" description="WF_PARAM_CSS_CUSTOM_DESC" />		
+		<param name="content_css_custom" type="textarea" rows="2" cols="55" default="" placeholder="eg: templates/$template/css/content.css" label="WF_PARAM_CSS_CUSTOM" description="WF_PARAM_CSS_CUSTOM_DESC" parent="content_css[0]" />		
 	</params>
 	<params group="compression">
 		<param name="compress_javascript" type="list" default="0" label="WF_PARAM_COMPRESS_JAVASCRIPT" description="WF_PARAM_COMPRESS_JAVASCRIPT_DESC">
