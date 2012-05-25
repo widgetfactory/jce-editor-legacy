@@ -18,9 +18,11 @@ class WFCleanupPluginConfig
 		$wf 	= WFEditor::getInstance();
 		$model 	= JModel::getInstance('editor', 'WFModel');
 
-		$settings['cleanup_pluginmode'] = $wf->getParam('cleanup.pluginmode', 0, 0, 'boolean');
-		
-		$settings['verify_html'] = $wf->getParam('editor.verify_html', 0, 1, 'boolean');
+		$settings['cleanup_pluginmode'] = $wf->getParam('cleanup.pluginmode', 0, 0, 'boolean');		
+		$settings['verify_html']        = $wf->getParam('editor.verify_html', 0, 1, 'boolean');
+                
+                // set schema
+                $settings['schema'] = $wf->getParam('editor.schema', 'html4', 'html4');
 
 		// Tables & Lists
 		$settings['table_inline_editing'] 	= true;
