@@ -1,9 +1,8 @@
 /**
- * $Id: editor_plugin.js 221 2011-06-11 17:30:33Z happy_noodle_boy $
  * @author Moxiecode
  * @author Ryan Demmer
  * @copyright Copyright (c) 2004-2008, Moxiecode Systems AB, All rights reserved.
- * @copyright Copyright (c) 2009-2010, Ryan Demmer, All rights reserved.
+ * @copyright Copyright (c) 2009-2012, Ryan Demmer, All rights reserved.
  */
 
 (function() {
@@ -519,7 +518,7 @@
         },
 
         _preProcess : function(pl, o) {
-            var ed = pl.editor, h = o.content;
+            var ed = pl.editor, h = o.content, rb;
 
             if (ed.settings.paste_enable_default_filters == false) {
                 return;
@@ -576,13 +575,13 @@
             }
 
             // replace double linebreaks with paragraphs
-            if (ed.getParam('force_p_newlines')) {
+            if (rb = ed.getParam('forced_root_block')) {
                 var blocks = '';
                 // only split if a double break exists
                 if (h.indexOf('<br><br>') != -1) {
                     // convert marker to paragraphs
                     tinymce.each(h.split('<br><br>'), function(block) {
-                        blocks += '<p>' + block + '</p>';
+                        blocks += '<' + rb + '>' + block + '</' + rb + '>';
                     });
 
                     h = blocks;
@@ -590,7 +589,7 @@
             }
 
             // replace paragraphs with linebreaks
-            if (ed.getParam('force_br_newlines')) {
+            if (!ed.getParam('forced_root_block')) {
                 h = h.replace(/<\/p>/gi, '<br /><br />').replace(/<p([^>]*)>/g, '').replace(/(<br \/>){2}$/g, '');
             }
 
@@ -791,7 +790,7 @@
             }
 
             // remove double linebreaks (IE issue?)
-            if (ed.getParam('force_p_newlines')) {
+            if (ed.getParam('forced_root_block')) {
                 h = h.replace(/<br><br>/gi, '');
             }
 
@@ -803,7 +802,7 @@
 		 * Remove all html form pasted contents. Newlines will be converted to paragraphs or linebreaks
 		 */
         _insertPlainText : function(h) {
-            var ed = this.editor, dom = ed.dom, entities = null;
+            var ed = this.editor, dom = ed.dom, rb, entities = null;
 
             if ((typeof(h) === "string") && (h.length > 0)) {
 
@@ -834,11 +833,11 @@
                 h = h.replace(/[\x93\x94\u201c\u201d]/g, '"');
                 h = h.replace(/[\x60\x91\x92\u2018\u2019]/g, "'");
 
-                if (ed.getParam("force_p_newlines")) {
+                if (rb = ed.getParam("forced_root_block")) {
                     // strip whitespace
                     h = h.replace(/^\s+|\s+$/g, '');
                     // replace double linebreaks with paragraphs
-                    h = h.replace(/\n\n/g, '</p><p>');
+                    h = h.replace(/\n\n/g, '</' + rb + '><' + rb + '>');
                 }
                 // replace single linebreak with br element
                 h = h.replace(/\n+?/g, '<br />');
