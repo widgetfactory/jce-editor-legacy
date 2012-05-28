@@ -306,12 +306,12 @@ class JoomlalinksContent extends JObject {
         $dbquery = $db->getQuery(true);
 
         if (method_exists('JUser', 'getAuthorisedViewLevels')) {
-            $query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title, a.access, CONCAT("", a.introtext, a.fulltext) AS content';
+            $query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title, a.access, CONCAT(a.introtext, a.fulltext) AS content';
         } else {
-            $query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title, u.id AS sectionid, a.access';
+            $query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title, u.id AS sectionid, a.access, a.introtext, a.fulltext';
 
             if (is_object($dbquery)) {
-                $query .= $dbquery->concatenate(array('a.introtext', 'a.fulltext'), '') . ' AS content';
+                $query .= $dbquery->concatenate(array('a.introtext', 'a.fulltext')) . ' AS content';
             }
         }
 
@@ -379,13 +379,13 @@ class JoomlalinksContent extends JObject {
             $where .= ' AND access <= ' . (int) $user->get('aid') . ' AND sectionid = 0';
         }
 
-        $query = 'SELECT id, title, alias, access';
+        $query = 'SELECT id, title, alias, access, introtext AS content';
 
-        if (is_object($dbquery)) {
+        /*if (is_object($dbquery)) {
             $query .= $dbquery->concatenate(array('introtext', 'fulltext'), '') . ' AS content';
         } else {
-            $query .= ', CONCAT("", introtext, fulltext) AS content';
-        }
+            $query .= ', CONCAT_WS(" ", introtext, fulltext) AS content';
+        }*/
 
         $query .= ' FROM #__content'
                 . ' WHERE state = 1'
@@ -416,7 +416,6 @@ class JoomlalinksContent extends JObject {
 
         return $anchors;
     }
-
 }
 
 ?>
