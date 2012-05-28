@@ -290,25 +290,27 @@ class WFEditor extends JObject {
 		
 		$param = $params->get($keys, $fallback, $allowempty);
 
-		if (is_string($param) && $type === 'string') {
-			$param = self::cleanParam($param);
+		if (is_string($param) && $type == 'string') {
+                    $param = self::cleanParam($param);
 		}
 
 		if (is_numeric($default)) {
-			$default = floatval($default);
+                    $default = floatval($default);
+                    settype($default, 'float');
 		}
 
 		if (is_numeric($param)) {
-			$param = floatval($param);
+                    $param = floatval($param);
+                    settype($param, 'float');
 		}
 
 		if ($param === $default) {
 			return '';
 		}
-
-		if ($type === 'boolean') {
-			$param = (bool)$param;
-		}
+                
+                if ($type == 'boolean') {
+                    settype($param, $type);
+                }
 
 		return $param;
 	}

@@ -375,19 +375,21 @@ class WFEditorPlugin extends WFEditor {
             }
 
             if (is_numeric($default)) {
-                $default = intval($default);
+                $default = floatval($default);
+                settype($default, 'float');
             }
 
             if (is_numeric($param)) {
-                $param = intval($param);
+                $param = floatval($param);
+                settype($param, 'float');
             }
 
             if ($param === $default) {
                 return '';
             }
 
-            if ($type === 'boolean') {
-                $param = (bool) $param;
+            if ($type == 'boolean') {
+                settype($param, $type);
             }
 
             return $param;
