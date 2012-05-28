@@ -148,6 +148,11 @@ var LinkDialog = {
         } else {
             $.Plugin.setDefaults(this.settings.defaults);
         }
+        
+        // hide HTML4 only attributes
+        if (ed.settings.schema == 'html5' && ed.settings.validate) {
+            $('#rev').parent().parent().hide();
+        }
 
         window.focus();
     },
