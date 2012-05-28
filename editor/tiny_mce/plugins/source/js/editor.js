@@ -30,19 +30,17 @@
             o.change = tinymce.is(o.change, 'function') ? o.change : function() {
             };
             if(window.CodeMirror) {
+                                
                 ed = CodeMirror(this.container, {
-                    mode : "application/x-httpd-php",
+                    mode : "text/html",
                     theme : o.theme || 'textmate',
                     onChange : function() {
                         // callback
                         o.change.call();
                     },
                     indentWithTabs : true,
+                    smartIndent : true,
                     tabMode: "indent"
-                /*onCursorActivity: function() {
-					 ed.setLineClass(hlLine, null);
-					 hlLine = ed.setLineClass(ed.getCursor().line, "activeline");
-					 },*/
                 });
                 // highlight line
                 var hlLine = ed.setLineClass(0, "activeline");
@@ -59,7 +57,7 @@
                     var c = ed.getCursor();
 
                     if(s) {
-                        ed.setOption('mode', 'application/x-httpd-php');
+                        ed.setOption('mode', 'text/html');
                     } else {
                         ed.setOption('mode', 'text/plain');
                     }
@@ -194,7 +192,7 @@
             return this.editor.redo();
         },
         indent : function() {
-        //return this.editor.reindent();
+            //return this.editor.reindent();
         },
         getContainer : function() {
             return this.container || null;

@@ -78,6 +78,8 @@ function jInsertEditorText(text, editor) {
                 suffix : '',
                 query : settings.token + '=1&component_id=' + settings.component_id
             });
+            
+            var indent = 'p,h1,h2,h3,h4,h5,h6,blockquote,div,title,style,pre,script,td,ul,li,area,table,thead,tfoot,tbody,tr,section,article,hgroup,aside,figure,object,video,audio';
 
             // remove submit triggers
             this.settings = tinymce.extend({
@@ -125,7 +127,9 @@ function jInsertEditorText(text, editor) {
                         block : 'dl', 
                         wrapper: true
                     }
-                }
+                },
+                indent_before   : indent,
+		indent_after    : indent
             }, settings);
 
             if(this.settings) {
@@ -263,6 +267,7 @@ function jInsertEditorText(text, editor) {
                         }
                     });
                 });
+
                 // Form submit patch
                 ed.onBeforeRenderUI.add(function() {
                     var n = ed.getElement().form;
@@ -292,6 +297,11 @@ function jInsertEditorText(text, editor) {
                         };
                     }
                     n = null;
+                });
+                
+                // indent
+                ed.onSaveContent.add(function(ed, o) {
+                    o.content = self.indent(o.content);
                 });
             });
         },
@@ -399,7 +409,7 @@ function jInsertEditorText(text, editor) {
                     DOM.removeClass(el, 'wfEditor');
                     DOM.addClass(el, 'wfNoEditor');
 
-                    ed.save();
+                    ed.save({no_events : false});
                     ed.hide();
                 }
             }
@@ -516,6 +526,22 @@ function jInsertEditorText(text, editor) {
             u = ed.documentBaseURI.toAbsolute(u, s.remove_script_host);
 
             return u;
+        },
+        
+        indent : function(h) {
+            // simple indentation
+            h = h.replace(/<(\/?)(ul|hr|table|meta|link|tbody|tr|object|audio|video|body|head|html|map)(|[^>]+)>\s*/g, '\n<$1$2$3>\n');
+            h = h.replace(/\s*<(p|h[1-6]|blockquote|div|title|style|pre|script|td|li|area|param|source)(|[^>]+)>/g, '\n<$1$2>');
+            h = h.replace(/<\/(p|h[1-6]|blockquote|div|title|style|pre|script|td|li)>\s*/g, '</$1>\n');
+            h = h.replace(/\n\n/g, '\n');
+            
+            h = h.replace(/\n<(li|dt|dd|param|source|td|tr|th|thead|tbody|tfoot)\b/gi, '\n\t<$1');
+            
+            // indent conditional comments
+            h = h.replace(/<!--\[if([^\]]*)\]>(<!)?-->/gi, '\n<!--[if$1]>$2-->');
+            h = h.replace(/<!(--<!)?\[endif\](--)?>/gi, '<!$1[endif]$2>\n');
+
+            return tinymce.trim(h);
         }
     };
     window.WFEditor = WFEditor;

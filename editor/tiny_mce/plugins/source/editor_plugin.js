@@ -80,7 +80,7 @@
                             o.terminate = true;
                             return self.printSource();
                             break;
-                        case 'mceFullScreen':                            
+                        case 'mceFullScreen':
                             if (self.getState()) {                            
                                 ed.setContent(self.getContent());
                             }
@@ -528,17 +528,7 @@
          * @param {String} h HTML string to indent
          */
         indent : function(h) {
-            // simple indentation
-            h = h.replace(/<(\/?)(ul|hr|table|meta|link|tbody|tr|object|audio|video|body|head|html|map)(|[^>]+)>\s*/g, '\n<$1$2$3>\n');
-            h = h.replace(/\s*<(p|h[1-6]|blockquote|div|title|style|pre|script|td|li|area|param|source)(|[^>]+)>/g, '\n<$1$2>');
-            h = h.replace(/<\/(p|h[1-6]|blockquote|div|title|style|pre|script|td|li)>\s*/g, '</$1>\n');
-            h = h.replace(/\n\n/g, '\n');
-
-            // indent conditional comments
-            h = h.replace(/<!--\[if([^\]]*)\]>(<!)?-->/gi, '\n<!--[if$1]>$2-->');
-            h = h.replace(/<!(--<!)?\[endif\](--)?>/gi, '<!$1[endif]$2>\n');
-
-            return tinymce.trim(h);
+            return WFEditor.indent(h);
         },
 
         /**
