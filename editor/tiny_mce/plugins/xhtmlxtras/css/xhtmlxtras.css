@@ -7,10 +7,16 @@
 }
 
 #jce label {
-	display: inline-block;
-	min-width: 70px;
+    display: inline-block;
+    min-width: 70px;
 }
 
-#standard_tab input, #events_tab input {
-	width: 200px;
+#standard_tab input[type="text"], #events_tab input[type="text"] {
+    width: 300px;
+}
+#class {
+    width : 280px;
+}
+#events_tab {
+    overflow: auto;
 }

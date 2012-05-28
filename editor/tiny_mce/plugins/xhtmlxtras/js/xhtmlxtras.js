@@ -33,6 +33,19 @@ var XHTMLXtrasDialog = {
 		}).toggle(!!element);
 
 		$.Plugin.init();
+                
+                // hide HTML5 fields
+                if (ed.settings.schema !== 'html5' && ed.settings.validate === true) {
+                    $('input.html5').parent('td').parent('tr').hide();
+                }
+                // hide for non-form nodes
+                if (!tinymce.is(el, ':input, form')) {
+                    $('input.form').parent('td').parent('tr').hide();
+                }
+                // hide for non-media nodes
+                if (!tinymce.is(el, 'img')) {
+                    $('input.media').parent('td').parent('tr').hide();
+                }
 	},
 
 	insert : function() {

@@ -18,10 +18,17 @@ class WFXHTMLXtrasPlugin extends WFEditorPlugin {
 		parent::__construct();
 	}
 
-	function getElementName()
+	public function getElementName()
 	{
 		return JRequest::getWord('element', 'attributes');
 	}
+        
+        public function isHTML5()
+        {
+            $wf = WFEditor::getInstance();
+            
+            return $wf->getParam('editor.schema', 'html4') == 'html5' && (bool)$wf->getParam('editor.verify_html', 0) === true;
+        }
 
 	/**
 	 * Returns a reference to a manager object
