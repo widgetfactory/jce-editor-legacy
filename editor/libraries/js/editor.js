@@ -349,28 +349,34 @@ function jInsertEditorText(text, editor) {
                     self.toggle(el, use_cookies);
                 });
                 if(!state) {
-                    el.className = 'wfNoEditor';
+                    DOM.removeClass(el, 'wfEditor');
+                    DOM.addClass(el, 'wfNoEditor');
                     self._wrapText(el, true);
                 } else {
                     if(parseInt(cookie) == 0) {
-                        el.className = 'wfNoEditor';
+                        DOM.removeClass(el, 'wfEditor');
+                        DOM.addClass(el, 'wfNoEditor');
                         self._wrapText(el, true);
                     } else {
-                        el.className = 'wfEditor';
+                        DOM.removeClass(el, 'wfNoEditor');
+                        DOM.addClass(el, 'wfEditor');
                     }
                 }
             });
         },
         toggle : function(el, use_cookies) {
-            var self = this, ed = tinyMCE.get(el.id);
+            var self = this, ed = tinyMCE.get(el.id), DOM = tinymce.DOM;
 
             // turn it on
             if(!ed) {
                 if(use_cookies) {
                     tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
                 }
+                
+                DOM.removeClass(el, 'wfNoEditor');
+                DOM.addClass(el, 'wfEditor');
 
-                el.className = 'wfEditor';
+                //el.className = 'wfEditor';
 
                 tinyMCE.execCommand('mceAddEditor', 0, el.id);
             } else {
@@ -380,7 +386,9 @@ function jInsertEditorText(text, editor) {
                     if(use_cookies) {
                         tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
                     }
-                    el.className = 'wfEditor';
+                    
+                    DOM.removeClass(el, 'wfNoEditor');
+                    DOM.addClass(el, 'wfEditor');
 
                     ed.load();
                     ed.show();
@@ -388,7 +396,8 @@ function jInsertEditorText(text, editor) {
                     if(use_cookies) {
                         tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 0);
                     }
-                    el.className = 'wfNoEditor';
+                    DOM.removeClass(el, 'wfEditor');
+                    DOM.addClass(el, 'wfNoEditor');
 
                     ed.save();
                     ed.hide();
