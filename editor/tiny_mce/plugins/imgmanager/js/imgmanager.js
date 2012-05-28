@@ -167,6 +167,10 @@
             // Setup Styles
             this.updateStyles();
 
+            // hide HTML4 only attributes
+            if (ed.settings.schema == 'html5' && ed.settings.validate) {
+                $('#longdesc').parent().parent().hide();
+            }
         },
 
         insert : function() {
