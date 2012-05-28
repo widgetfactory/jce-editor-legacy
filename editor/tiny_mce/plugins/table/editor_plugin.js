@@ -1182,6 +1182,24 @@
             });
 			
             ed.onPreInit.add(function(ed, o) {
+                // add support for border attribute
+                if (ed.settings.schema == 'html5') {
+                    // add border attribute
+                    ed.schema.addValidElements('table[border|*]');
+                    // force border to 1 or remove
+                    ed.parser.addNodeFilter('table', function(nodes) {
+                        for (var i = 0, len = nodes.length; i < len; i++) {
+                            var node = nodes[i];
+                            // only on table
+                            if (node.attr('border')) {
+                                node.attr('border', '1');
+                            } else {
+                                node.attr('border', null);
+                            }
+                        }
+                    });
+                }
+
                 if (!tinymce.isIE) {
                     ed.parser.addNodeFilter('td', function(nodes) {
                         for (var i = 0, len = nodes.length; i < len; i++) {
