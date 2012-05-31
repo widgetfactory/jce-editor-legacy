@@ -14,8 +14,11 @@ class WFVisualcharsPluginConfig {
 	public static function getConfig( &$settings ){
 
 		$wf = WFEditor::getInstance();
+                
+                // legacy
+                $state = $wf->getParam('editor.visualchars', 0);
 		
-		$settings['visualchars'] = $wf->getParam('editor.visualchars', 0, 0, 'boolean');
+		$settings['visualchars_default_state'] = $wf->getParam('editor.visualchars_state', $state, 0, 'boolean');
 	}
 }
 ?>
