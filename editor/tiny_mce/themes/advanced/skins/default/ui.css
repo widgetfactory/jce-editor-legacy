@@ -247,6 +247,8 @@
 
 .defaultSkin span.mce_visualblocks {background-position:-160px -40px;}
 
+.defaultSkin span.mce_kitchensink {background-position:-180px -40px;}
+
 /** Path **/
 div.mcePathRow {
 	overflow: hidden;

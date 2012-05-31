@@ -82,3 +82,5 @@
 #jce .classicSkin .mceIframeContainer {
     border: 1px solid #CCC;
 }
+
+#jce .classicSkin span.mce_readmore img, #jce .classicSkin span.mce_pagebreak img {display: none;}
