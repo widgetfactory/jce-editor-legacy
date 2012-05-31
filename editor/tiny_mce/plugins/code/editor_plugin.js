@@ -10,365 +10,367 @@
  * other free or open source software licenses.
  */
 (function() {
-	var each = tinymce.each, JSON = tinymce.util.JSON, Node = tinymce.html.Node, Entities = tinymce.html.Entities;
+    var each = tinymce.each, JSON = tinymce.util.JSON, Node = tinymce.html.Node, Entities = tinymce.html.Entities;
 
-	tinymce.create('tinymce.plugins.CodePlugin', {
-		init: function(ed, url) {
-			var self = this;
+    tinymce.create('tinymce.plugins.CodePlugin', {
+        init: function(ed, url) {
+            var self = this;
 
-			this.editor = ed;
-			this.url 	= url;
+            this.editor = ed;
+            this.url 	= url;
 
-			ed.onPreInit.add( function() {
-				if (ed.getParam('code_style')) {
-					ed.schema.addValidElements('style[scoped|*]');
-					ed.schema.addValidChildren('+body[style]');
-				}
+            ed.onPreInit.add( function() {
+                if (ed.getParam('code_style')) {
+                    ed.schema.addValidElements('style[scoped|*]');
+                    ed.schema.addValidChildren('+body[style]');
+                }
 
-				// Convert script elements to span placeholder
-				ed.parser.addNodeFilter('script,style', function(nodes) {
-					for (var i = 0, len = nodes.length; i < len; i++) {
-						self._serializeSpan(nodes[i]);
-					}
-				});
+                // Convert script elements to span placeholder
+                ed.parser.addNodeFilter('script,style', function(nodes) {
+                    for (var i = 0, len = nodes.length; i < len; i++) {
+                        self._serializeSpan(nodes[i]);
+                    }
+                });
 				
-				ed.parser.addNodeFilter('noscript', function(nodes) {
-					for (var i = 0, len = nodes.length; i < len; i++) {
-						self._serializeNoScript(nodes[i]);
-					}
-				});
+                ed.parser.addNodeFilter('noscript', function(nodes) {
+                    for (var i = 0, len = nodes.length; i < len; i++) {
+                        self._serializeNoScript(nodes[i]);
+                    }
+                });
 
-				// Convert span placeholders to script elements
-				ed.serializer.addNodeFilter('span,script,div', function(nodes, name, args) {
-					for (var i = 0, len = nodes.length; i < len; i++) {
-						var node = nodes[i];
+                // Convert span placeholders to script elements
+                ed.serializer.addNodeFilter('span,script,div', function(nodes, name, args) {
+                    for (var i = 0, len = nodes.length; i < len; i++) {
+                        var node = nodes[i];
 
-						if (node.name == 'span' && /mceItemScript/.test(node.attr('class'))) {
-							self._buildScript(node);
-						}
+                        if (node.name == 'span' && /mceItemScript/.test(node.attr('class'))) {
+                            self._buildScript(node);
+                        }
 
-						if (node.name == 'span' && /mceItemStyle/.test(node.attr('class'))) {
-							self._buildStyle(node);
-						}
+                        if (node.name == 'span' && /mceItemStyle/.test(node.attr('class'))) {
+                            self._buildStyle(node);
+                        }
 						
-						if (node.name == 'div' && node.attr('data-mce-type') == 'noscript') {
-							self._buildNoScript(node);
-						}
-					}
-				});
-			});
+                        if (node.name == 'div' && node.attr('data-mce-type') == 'noscript') {
+                            self._buildNoScript(node);
+                        }
+                    }
+                });
+            });
 
-			ed.onInit.add( function() {
-				// Display "script" instead of "span" in element path
-				if (ed.theme && ed.theme.onResolveName) {
-					ed.theme.onResolveName.add( function(theme, o) {
-						if (o.name === 'span' && /mceItemScript/.test(o.node.className)) {
-							o.name = 'script';
-						}
+            ed.onInit.add( function() {
+                // Display "script" instead of "span" in element path
+                if (ed.theme && ed.theme.onResolveName) {
+                    ed.theme.onResolveName.add( function(theme, o) {
+                        if (o.name === 'span' && /mceItemScript/.test(o.node.className)) {
+                            o.name = 'script';
+                        }
 
-						if (o.name === 'span' && /mceItemStyle/.test(o.node.className)) {
-							o.name = 'style';
-						}
+                        if (o.name === 'span' && /mceItemStyle/.test(o.node.className)) {
+                            o.name = 'style';
+                        }
 
-						if (o.name === 'span' && /mcePhp/.test(o.node.className)) {
-							o.name = 'php';
-						}
-					});
+                        if (o.name === 'span' && /mcePhp/.test(o.node.className)) {
+                            o.name = 'php';
+                        }
+                    });
 
-				}
+                }
 
-				if (ed.settings.content_css !== false)
-					ed.dom.loadCSS(url + "/css/content.css");
-			});
+                if (ed.settings.content_css !== false)
+                    ed.dom.loadCSS(url + "/css/content.css");
+            });
 
-			ed.onBeforeSetContent.add( function(ed, o) {
-				// test for PHP, Script or Style
-				if (/<(\?|script|style)/.test(o.content)) {
-					// Remove javascript if not enabled
-					if (!ed.getParam('code_script')) {
-						o.content = o.content.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '');
-					}
+            ed.onBeforeSetContent.add( function(ed, o) {
+                // test for PHP, Script or Style
+                if (/<(\?|script|style)/.test(o.content)) {
+                    
+                    // Remove javascript if not enabled
+                    if (!ed.getParam('code_script')) {
+                        o.content = o.content.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '');
+                    }
 					
-					if (!ed.getParam('code_style')) {
-						o.content = o.content.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, '');
-					}
+                    if (!ed.getParam('code_style')) {
+                        o.content = o.content.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, '');
+                    }
 
-					// Remove PHP if not enabled
-					if (!ed.getParam('code_php')) {
-						o.content = o.content.replace(/<\?(php)?([\s\S]*?)\?>/gi, '');
-					}
-					// PHP code within an attribute
-					o.content = o.content.replace(/\="([^"]+?)"/g, function(a, b) {
-						if (/<\?(php)?/.test(b)) {
-							b = ed.dom.encode(b);
-						}
-						return '="' + b + '"';
-					});
+                    // Remove PHP if not enabled
+                    if (!ed.getParam('code_php')) {
+                        o.content = o.content.replace(/<\?(php)?([\s\S]*?)\?>/gi, '');
+                    }
+                    // PHP code within an attribute
+                    o.content = o.content.replace(/\="([^"]+?)"/g, function(a, b) {                        
+                        b = b.replace(/<\?(php)?(.+?)\?>/gi, function(x, y, z) {
+                            return '{php:start}' + ed.dom.encode(z) + '{php:end}';
+                        });  
+                        
+                        return '="' + b + '"';
+                    });
 
-					// PHP code within a textarea
-					if (/<textarea/.test(o.content)) {
-						o.content = o.content.replace(/<textarea([^>]*)>([\s\S]*?)<\/textarea>/gi, function(a, b, c) {
-							if (/<\?(php)?/.test(c)) {
-								c = ed.dom.encode(c);
-							}
-							return '<textarea' + b + '>' + c + '</textarea>';
-						});
+                    // PHP code within a textarea
+                    if (/<textarea/.test(o.content)) {
+                        o.content = o.content.replace(/<textarea([^>]*)>([\s\S]*?)<\/textarea>/gi, function(a, b, c) {
+                            c = c.replace(/<\?(php)?(.+?)\?>/gi, function(x, y, z) {
+                                return '{php:start}' + ed.dom.encode(z) + '{php:end}';
+                            });
+                            return '<textarea' + b + '>' + c + '</textarea>';
+                        });
 
-					}
+                    }
 
-					// PHP code within an element
-					o.content = o.content.replace(/<([^>]+)<\?(php)?(.+?)\?>([^>]*?)>/gi, function(a, b, c, d, e) {
-						if (b.charAt(b.length) !== ' ') {
-							b += ' ';
-						}
-						return '<' + b + 'data-mce-php="' + d + '" ' + e + '>';
-					});
+                    // PHP code within an element
+                    o.content = o.content.replace(/<([^>]+)<\?(php)?(.+?)\?>([^>]*?)>/gi, function(a, b, c, d, e) {
+                        if (b.charAt(b.length) !== ' ') {
+                            b += ' ';
+                        }
+                        return '<' + b + 'data-mce-php="' + d + '" ' + e + '>';
+                    });
 
-					// PHP code other
-					o.content = o.content.replace(/<\?(php)?([\s\S]+?)\?>/gi, '<span class="mcePhp" data-mce-type="php"><!--$2-->\u00a0</span>');
+                    // PHP code other
+                    o.content = o.content.replace(/<\?(php)?([\s\S]+?)\?>/gi, '<span class="mcePhp" data-mce-type="php"><!--$2-->\u00a0</span>');
 
-					// padd empty script tags
-					o.content = o.content.replace(/<script([^>]+)><\/script>/gi, '<script$1>\u00a0</script>');
+                    // padd empty script tags
+                    o.content = o.content.replace(/<script([^>]+)><\/script>/gi, '<script$1>\u00a0</script>');
 					
-					// process type attributes for scripts
-					o.content = o.content.replace(/<script([^>]*)>/gi, function(a, b) {
-						var re = /\stype="([^"]+)"/;
+                    // process type attributes for scripts
+                    o.content = o.content.replace(/<script([^>]*)>/gi, function(a, b) {
+                        var re = /\stype="([^"]+)"/;
 						
-						if (re.test(b)) {
-							b = b.replace(re, ' data-mce-type="$1"');
-						} else {
-							b += ' data-mce-type="text/javascript"';
-						}
+                        if (re.test(b)) {
+                            b = b.replace(re, ' data-mce-type="$1"');
+                        } else {
+                            b += ' data-mce-type="text/javascript"';
+                        }
 						
-						return '<script' + b + '>';
-					});
-				}
-			});
+                        return '<script' + b + '>';
+                    });
+                }
+            });
 
-			ed.onPostProcess.add( function(ed, o) {
-				if (o.get) {
-					// Process converted php
-					if (/(mcePhp|data-mce-php|&lt;\?(php)?)/.test(o.content)) {
-						// attribute value
-						o.content = o.content.replace(/"(.*?)&lt;\?(php)?([^"]+)\?&gt;(.*?)"/g, function(a, b, c, d, e) {
-							return '"' + b + '<?php' + ed.dom.decode(d) + '?>' + e + '"';
-						});
+            ed.onPostProcess.add( function(ed, o) {
+                if (o.get) {
+                    // Process converted php
+                    if (/(mcePhp|data-mce-php|\{php:start\})/.test(o.content)) {
+                        // attribute value
+                        o.content = o.content.replace(/\{php:start\}([^\{]+)\{php:end\}/g, function(a, b) {
+                            return '<?php' + ed.dom.decode(b) + '?>';
+                        });
 
-						// textarea
-						o.content = o.content.replace(/<textarea([^>]*)>([\s\S]*?)<\/textarea>/gi, function(a, b, c) {
-							if (/&lt;\?php/.test(c)) {
-								c = ed.dom.decode(c);
-							}
-							return '<textarea' + b + '>' + c + '</textarea>';
-						});
+                        // textarea
+                        o.content = o.content.replace(/<textarea([^>]*)>([\s\S]*?)<\/textarea>/gi, function(a, b, c) {
+                            if (/&lt;\?php/.test(c)) {
+                                c = ed.dom.decode(c);
+                            }
+                            return '<textarea' + b + '>' + c + '</textarea>';
+                        });
 
-						// as attribute
-						o.content = o.content.replace(/data-mce-php="([^"]+?)"/g, function(a, b) {
-							return '<?php' + ed.dom.decode(b) + '?>';
-						});
+                        // as attribute
+                        o.content = o.content.replace(/data-mce-php="([^"]+?)"/g, function(a, b) {
+                            return '<?php' + ed.dom.decode(b) + '?>';
+                        });
 
-						// other
-						o.content = o.content.replace(/<span([^>]+)class="mcePhp"([^>]+)><!--([\s\S]*?)-->(&nbsp;|\u00a0)<\/span>/g, function(a, b, c, d) {
-							return '<?php' + ed.dom.decode(d) + '?>';
-						});
-					}
-				}
-			});
+                        // other
+                        o.content = o.content.replace(/<span([^>]+)class="mcePhp"([^>]+)><!--([\s\S]*?)-->(&nbsp;|\u00a0)<\/span>/g, function(a, b, c, d) {
+                            return '<?php' + ed.dom.decode(d) + '?>';
+                        });
+                    }
+                }
+            });
 
-		},
+        },
 
-		_buildScript: function(n) {
-			var self = this, ed = this.editor, v, node, text;
+        _buildScript: function(n) {
+            var self = this, ed = this.editor, v, node, text;
 
-			if (!n.parent)
-				return;
+            if (!n.parent)
+                return;
 
-			// element text
-			if (n.firstChild) {
-				v = n.firstChild.value;
-			}
+            // element text
+            if (n.firstChild) {
+                v = n.firstChild.value;
+            }
 
-			p = JSON.parse(n.attr('data-mce-json')) || {};
+            p = JSON.parse(n.attr('data-mce-json')) || {};
 
-			p.type = n.attr('data-mce-type') || p.type || 'text/javascript';
+            p.type = n.attr('data-mce-type') || p.type || 'text/javascript';
 
-			node = new Node('script', 1);
+            node = new Node('script', 1);
 
-			if (v) {
+            if (v) {
 				
-				v = tinymce.trim(v);
+                v = tinymce.trim(v);
 				
-				if (v) {
-					text = new Node('#text', 3);
-					text.raw = true;
-					// add cdata
-					if (ed.getParam('code_cdata', true)) {
-						v = '// <![CDATA[\n' + self._clean(tinymce.trim(v)) + '\n// ]]>';
-					}
-					text.value = v;
-					node.append(text);
-				}
-			}
+                if (v) {
+                    text = new Node('#text', 3);
+                    text.raw = true;
+                    // add cdata
+                    if (ed.getParam('code_cdata', true)) {
+                        v = '// <![CDATA[\n' + self._clean(tinymce.trim(v)) + '\n// ]]>';
+                    }
+                    text.value = v;
+                    node.append(text);
+                }
+            }
 
-			each(p, function(v, k) {
-				node.attr(k, v);
-			});
+            each(p, function(v, k) {
+                node.attr(k, v);
+            });
 
-			n.replace(node);
+            n.replace(node);
 			
-			return true;
-		},
+            return true;
+        },
 
-		_buildStyle: function(n) {
-			var self = this, ed = this.editor, v, node, text;
+        _buildStyle: function(n) {
+            var self = this, ed = this.editor, v, node, text;
 
-			if (!n.parent)
-				return;
+            if (!n.parent)
+                return;
 
-			// element text
-			if (n.firstChild) {
-				v = n.firstChild.value;
-			}
+            // element text
+            if (n.firstChild) {
+                v = n.firstChild.value;
+            }
 
-			p = JSON.parse(n.attr('data-mce-json')) || {};
+            p = JSON.parse(n.attr('data-mce-json')) || {};
 
-			p.type = 'text/css';
+            p.type = 'text/css';
 
-			node = new Node('style', 1);
+            node = new Node('style', 1);
 
-			if (v) {
+            if (v) {
 				
-				v = tinymce.trim(v);
+                v = tinymce.trim(v);
 				
-				if (v) {
-					text = new Node('#text', 3);
-					text.raw = true;
-					// add cdata
-					if (ed.getParam('code_cdata', true)) {
-						v = '<!--\n' + self._clean(tinymce.trim(v)) + '\n-->';
-					}
-					text.value = v;
-					node.append(text);
-				}
-			}
+                if (v) {
+                    text = new Node('#text', 3);
+                    text.raw = true;
+                    // add cdata
+                    if (ed.getParam('code_cdata', true)) {
+                        v = '<!--\n' + self._clean(tinymce.trim(v)) + '\n-->';
+                    }
+                    text.value = v;
+                    node.append(text);
+                }
+            }
 			
-			// add scoped attribute
-			if (n.parent.name == 'head') {
-				p.scoped = null;
-			} else {
-				p.scoped = "scoped";
-			}
+            // add scoped attribute
+            if (n.parent.name == 'head') {
+                p.scoped = null;
+            } else {
+                p.scoped = "scoped";
+            }
 
-			each(p, function(v, k) {
-				node.attr(k, v);
-			});
+            each(p, function(v, k) {
+                node.attr(k, v);
+            });
 
-			n.replace(node);
+            n.replace(node);
 
-			return true;
-		},
+            return true;
+        },
 		
-		_buildNoScript: function(n) {
-			var self = this, ed = this.editor, p, node;
+        _buildNoScript: function(n) {
+            var self = this, ed = this.editor, p, node;
 
-			if (!n.parent)
-				return;
+            if (!n.parent)
+                return;
 
-			p = JSON.parse(n.attr('data-mce-json')) || {};
+            p = JSON.parse(n.attr('data-mce-json')) || {};
 
-			node = new Node('noscript', 1);
+            node = new Node('noscript', 1);
 
-			each(p, function(v, k) {
-				node.attr(k, v);
-			});
+            each(p, function(v, k) {
+                node.attr(k, v);
+            });
 
-			n.wrap(node);
-			n.unwrap();
+            n.wrap(node);
+            n.unwrap();
 			
-			return true;
-		},
+            return true;
+        },
 
-		_serializeSpan: function(n) {
-			var self = this, ed = this.editor, dom = ed.dom, v, k, p = {};
+        _serializeSpan: function(n) {
+            var self = this, ed = this.editor, dom = ed.dom, v, k, p = {};
 
-			if (!n.parent)
-				return;
+            if (!n.parent)
+                return;
 			
-			each(n.attributes, function(at) {
-				if (at.name.indexOf('data-mce-') !== -1 || at.name == 'type')
-					return;
+            each(n.attributes, function(at) {
+                if (at.name.indexOf('data-mce-') !== -1 || at.name == 'type')
+                    return;
 				
-				p[at.name] = at.value;
-			});
+                p[at.name] = at.value;
+            });
 
-			var span = new Node('span', 1);
+            var span = new Node('span', 1);
 
-			span.attr('class', 'mceItem' + this._ucfirst(n.name));
-			span.attr('data-mce-json', JSON.serialize(p));
-			span.attr('data-mce-type', n.attr('data-mce-type') || p.type);
+            span.attr('class', 'mceItem' + this._ucfirst(n.name));
+            span.attr('data-mce-json', JSON.serialize(p));
+            span.attr('data-mce-type', n.attr('data-mce-type') || p.type);
 
-			v = n.firstChild ? n.firstChild.value : '';
+            v = n.firstChild ? n.firstChild.value : '';
 
-			if (v.length) {
-				var text = new Node('#comment', 8);
-				text.value = this._clean(v);
-				span.append(text);
-			}
-			// padd empty span to prevent it being removed
-			span.append(new tinymce.html.Node('#text', 3)).value = '\u00a0';
+            if (v.length) {
+                var text = new Node('#comment', 8);
+                text.value = this._clean(v);
+                span.append(text);
+            }
+            // padd empty span to prevent it being removed
+            span.append(new tinymce.html.Node('#text', 3)).value = '\u00a0';
 
-			n.replace(span);
-		},
+            n.replace(span);
+        },
 		
-		_serializeNoScript: function(n) {
-			var self = this, ed = this.editor, dom = ed.dom, v, k, p = {};
+        _serializeNoScript: function(n) {
+            var self = this, ed = this.editor, dom = ed.dom, v, k, p = {};
 
-			if (!n.parent)
-				return;
+            if (!n.parent)
+                return;
 
-			each(n.attributes, function(at) {
-				if (at.name == 'type')
-					return;
+            each(n.attributes, function(at) {
+                if (at.name == 'type')
+                    return;
 
-				p[at.name] = at.value;
-			});
+                p[at.name] = at.value;
+            });
 
-			var div = new Node('div', 1);
+            var div = new Node('div', 1);
 
-			div.attr('data-mce-json', JSON.serialize(p));
-			div.attr('data-mce-type', n.name);
+            div.attr('data-mce-json', JSON.serialize(p));
+            div.attr('data-mce-type', n.name);
 			
-			n.wrap(div);
-			n.unwrap();
-		},
+            n.wrap(div);
+            n.unwrap();
+        },
 
-		_ucfirst : function(s) {
-			return s.charAt(0).toUpperCase() + s.substring(1);
-		},
+        _ucfirst : function(s) {
+            return s.charAt(0).toUpperCase() + s.substring(1);
+        },
 
-		// Private internal function
-		_clean: function(s) {
-			// Remove prefix and suffix code for element
-			s = s.replace(/(\/\/\s+<!\[CDATA\[)/gi, '\n');
-			s = s.replace(/(<!--\[CDATA\[|\]\]-->)/gi, '\n');
-			s = s.replace(/^[\r\n]*|[\r\n]*$/g, '');
-			s = s.replace(/^\s*(\/\/\s*<!--|\/\/\s*<!\[CDATA\[|<!--|<!\[CDATA\[)[\r\n]*/gi, '');
-			s = s.replace(/\s*(\/\/\s*\]\]>|\/\/\s*-->|\]\]>|-->|\]\]-->)\s*$/g, '');
+        // Private internal function
+        _clean: function(s) {
+            // Remove prefix and suffix code for element
+            s = s.replace(/(\/\/\s+<!\[CDATA\[)/gi, '\n');
+            s = s.replace(/(<!--\[CDATA\[|\]\]-->)/gi, '\n');
+            s = s.replace(/^[\r\n]*|[\r\n]*$/g, '');
+            s = s.replace(/^\s*(\/\/\s*<!--|\/\/\s*<!\[CDATA\[|<!--|<!\[CDATA\[)[\r\n]*/gi, '');
+            s = s.replace(/\s*(\/\/\s*\]\]>|\/\/\s*-->|\]\]>|-->|\]\]-->)\s*$/g, '');
 
-			return s;
-		},
+            return s;
+        },
 
-		getInfo: function() {
-			return {
-				longname: 'Code',
-				author: 'Ryan Demmer',
-				authorurl: 'http://www.joomlacontenteditor.net',
-				infourl: 'http://www.joomlacontenteditor.net',
-				version: '@@version@@'
-			};
-		}
+        getInfo: function() {
+            return {
+                longname: 'Code',
+                author: 'Ryan Demmer',
+                authorurl: 'http://www.joomlacontenteditor.net',
+                infourl: 'http://www.joomlacontenteditor.net',
+                version: '@@version@@'
+            };
+        }
 
-	});
-	// Register plugin
-	tinymce.PluginManager.add('code', tinymce.plugins.CodePlugin);
+    });
+    // Register plugin
+    tinymce.PluginManager.add('code', tinymce.plugins.CodePlugin);
 })();
