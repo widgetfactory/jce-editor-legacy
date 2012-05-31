@@ -15,7 +15,7 @@ class WFVisualblocksPluginConfig {
 
 		$wf = WFEditor::getInstance();
 		
-		$settings['visualblocks_default_state'] = $wf->getParam('editor.visualblocks', 0, 0, 'boolean');
+		$settings['visualblocks_default_state'] = $wf->getParam('editor.visualblocks_state', 0, 0, 'boolean');
 	}
 }
 ?>
