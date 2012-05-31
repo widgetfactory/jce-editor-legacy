@@ -1,58 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <params group="setup">
-        <param name="resizing" type="list" default="1" label="WF_PARAM_EDITOR_RESIZING" description="WF_PARAM_EDITOR_RESIZING_DESC">
-            <option value="1">WF_OPTION_YES</option>
-            <option value="0">WF_OPTION_NO</option>
-        </param>
-        <param name="resize_horizontal" type="list" default="1" label="WF_PARAM_EDITOR_RESIZE_HORIZONTAL" description="WF_PARAM_EDITOR_RESIZE_HORIZONTAL_DESC">
-            <option value="1">WF_OPTION_YES</option>
-            <option value="0">WF_OPTION_NO</option>
-        </param>
-        <param name="resizing_use_cookie" type="list" default="1" label="WF_PARAM_EDITOR_RESIZE_COOKIE" description="WF_PARAM_EDITOR_RESIZE_COOKIE_DESC">
-            <option value="1">WF_OPTION_YES</option>
-            <option value="0">WF_OPTION_NO</option>
-        </param>
         <param name="dialog_theme" type="folderlist" directory="components/com_jce/editor/libraries/css/jquery" hide_none="true" hide_default="true" default="smoothness" label="WF_PARAM_EDITOR_DIALOG_THEME" description="WF_PARAM_EDITOR_DIALOG_THEME_DESC" />
-        <param name="profile_content_css" type="list" default="2" label="WF_PARAM_EDITOR_PROFILE_CSS" description="WF_PARAM_EDITOR_PROFILE_CSS_DESC">
-            <option value="0">WF_PARAM_CSS_ADD</option>
-            <option value="1">WF_PARAM_CSS_OVERWRITE</option>
-            <option value="2">WF_PARAM_CSS_INHERIT</option>
-        </param>
-        <param name="profile_content_css_custom" placeholder="eg: templates/$template/css/content.css" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_CSS_CUSTOM" description="WF_PARAM_CSS_CUSTOM_DESC" parent="editorprofile_content_css[0,1]" />		
-    </params>
-    <params group="options">
-		<!-- URLS -->
+        <!-- URLS -->
         <param name="relative_urls" type="list" default="1" label="WF_PARAM_RELATIVE" description="WF_PARAM_RELATIVE_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-		<!-- Elements -->
-        <param name="invalid_elements" type="text" size="50" default="" label="WF_PARAM_NO_ELEMENTS" description="WF_PARAM_NO_ELEMENTS_DESC" />
-        <param name="invalid_attributes" type="text" size="50" default="dynsrc,lowsrc" label="WF_PARAM_INVALID_ATTRIBUTES" description="WF_PARAM_INVALID_ATTRIBUTES_DESC" />
-        <param name="invalid_attribute_values" type="text" size="50" default="" label="WF_PARAM_INVALID_ATTRIBUTE_VALUES" description="WF_PARAM_INVALID_ATTRIBUTE_VALUES_DESC" />
-        <param name="extended_elements" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_ELEMENTS" description="WF_PARAM_ELEMENTS_DESC" />
-        <param name="allow_javascript" type="list" default="0" label="WF_PARAM_JAVASCRIPT" description="WF_PARAM_JAVASCRIPT_DESC">
-            <option value="1">WF_OPTION_YES</option>
-            <option value="0">WF_OPTION_NO</option>
+    </params>
+    <params group="typography">
+	<param name="profile_content_css" type="list" default="2" label="WF_PARAM_EDITOR_PROFILE_CSS" description="WF_PARAM_EDITOR_PROFILE_CSS_DESC">
+            <option value="0">WF_PARAM_CSS_ADD</option>
+            <option value="1">WF_PARAM_CSS_OVERWRITE</option>
+            <option value="2">WF_PARAM_CSS_INHERIT</option>
         </param>
-        <param name="allow_css" type="list" default="0" label="WF_PARAM_CSS" description="WF_PARAM_CSS_DESC">
-            <option value="1">WF_OPTION_YES</option>
-            <option value="0">WF_OPTION_NO</option>
-        </param>
-        <param name="allow_php" type="list" default="0" label="WF_PARAM_PHP" description="WF_PARAM_PHP_DESC">
-            <option value="1">WF_OPTION_YES</option>
-            <option value="0">WF_OPTION_NO</option>
-        </param>
-        <param name="inline_styles" type="list" default="1" label="WF_PARAM_INLINE_STYLES" description="WF_PARAM_INLINE_STYLES_DESC">
-            <option value="1">WF_OPTION_YES</option>
-            <option value="0">WF_OPTION_NO</option>
-        </param>
-        <param name="cdata" type="list" default="1" label="WF_PARAM_CDATA" description="WF_PARAM_CDATA_DESC">
-            <option value="1">WF_OPTION_YES</option>
-            <option value="0">WF_OPTION_NO</option>
-        </param>
-		<!-- Formatting parameters -->
+        <param name="profile_content_css_custom" placeholder="eg: templates/$template/css/content.css" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_CSS_CUSTOM" description="WF_PARAM_CSS_CUSTOM_DESC" parent="editor.profile_content_css[0,1]" />		
+        <param name="theme_advanced_styles" type="text" size="100" default="" label="WF_PARAM_STYLES" description="WF_PARAM_STYLES_DESC" placeholder="eg: Style1=style1,Style2=style2,Style3=style3" />
+        <!-- Formatting parameters -->
         <param name="theme_advanced_blockformats" class="checklist sortable" type="list" multiple="multiple" default="p,div,h1,h2,h3,h4,h5,h6,address,code,pre,samp,span,section,article,hgroup,aside,figure,dt,dd" label="WF_PARAM_BLOCK_FORMAT" description="WF_PARAM_BLOCK_FORMAT_DESC">
             <option value="p">Paragraph</option>
             <option value="div">Div</option>
@@ -75,31 +39,9 @@
             <option value="dt">Definition Term</option>
             <option value="dd">Definition List</option>
         </param>
-        <param name="theme_advanced_styles" type="text" size="100" default="" label="WF_PARAM_STYLES" description="WF_PARAM_STYLES_DESC" placeholder="eg: Style1=style1,Style2=style2,Style3=style3" />
         <param name="theme_advanced_fonts_add" type="text" size="100" default="" label="WF_PARAM_FONT_ADD" description="WF_PARAM_FONT_ADD_DESC" placeholder="eg: Arial=arial,helvetica,sans-serif;Georgia=georgia,palatino" />
         <param name="theme_advanced_fonts_remove" type="text" size="100" default="" label="WF_PARAM_FONT_REMOVE" description="WF_PARAM_FONT_REMOVE_DESC" placeholder="eg: Arial;Georgia;Courier New" />
         <param name="theme_advanced_font_sizes" type="text" size="100" default="8pt,10pt,12pt,14pt,18pt,24pt,36pt" label="WF_PARAM_FONT_STYLES" description="WF_PARAM_FONT_STYLES_DESC" />
-		<!--param name="allow_iframes" type="list" default="0" label="WF_PARAM_IFRAMES" description="WF_PARAM_IFRAMES_DESC">
-			<option value="1">WF_OPTION_YES</option>
-			<option value="0">WF_OPTION_NO</option>
-		</param-->
-		<!--param name="allow_applet" type="list" default="0" label="WF_PARAM_APPLET" description="WF_PARAM_APPLET_DESC">
-			<option value="1">WF_OPTION_YES</option>
-			<option value="0">WF_OPTION_NO</option>
-		</param-->
-        <param name="visualchars" type="list" default="0" label="WF_PARAM_VISUALCHARS" description="WF_PARAM_VISUALCHARS_DESC">
-            <option value="1">WF_OPTION_YES</option>
-            <option value="0">WF_OPTION_NO</option>
-        </param>
-        <param name="toggle" type="list" default="1" label="WF_PARAM_EDITOR_TOGGLE" description="WF_PARAM_EDITOR_TOGGLE_DESC">
-            <option value="1">WF_OPTION_YES</option>
-            <option value="0">WF_OPTION_NO</option>
-        </param>
-        <param name="toggle_state" type="list" default="1" label="WF_PARAM_EDITOR_STATE" description="WF_PARAM_EDITOR_STATE_DESC">
-            <option value="1">WF_OPTION_ON</option>
-            <option value="0">WF_OPTION_OFF</option>
-        </param>
-        <param name="toggle_label" type="text" default="[Toggle Editor]" label="WF_PARAM_EDITOR_TOGGLE_LABEL" description="WF_PARAM_EDITOR_TOGGLE_LABEL_DESC" />
         <param name="custom_colors" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_CUSTOM_COLORS" description="WF_PARAM_CUSTOM_COLORS_DESC" placeholder="eg: #CC0000,#FF0000" />
     </params>
     <params group="filesystem">
@@ -138,5 +80,28 @@
             <option value="utf-8">UTF-8</option>
             <option value="ascii">ASCII</option>
         </param>  
+    </params>
+    <params group="advanced">
+	<!-- Elements -->
+        <param name="invalid_elements" type="text" size="50" default="" label="WF_PARAM_NO_ELEMENTS" description="WF_PARAM_NO_ELEMENTS_DESC" />
+        <param name="invalid_attributes" type="text" size="50" default="dynsrc,lowsrc" label="WF_PARAM_INVALID_ATTRIBUTES" description="WF_PARAM_INVALID_ATTRIBUTES_DESC" />
+        <param name="invalid_attribute_values" type="text" size="50" default="" label="WF_PARAM_INVALID_ATTRIBUTE_VALUES" description="WF_PARAM_INVALID_ATTRIBUTE_VALUES_DESC" />
+        <param name="extended_elements" type="textarea" rows="2" cols="46" default="" label="WF_PARAM_ELEMENTS" description="WF_PARAM_ELEMENTS_DESC" />
+        <param name="allow_javascript" type="list" default="0" label="WF_PARAM_JAVASCRIPT" description="WF_PARAM_JAVASCRIPT_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>
+        </param>
+        <param name="allow_css" type="list" default="0" label="WF_PARAM_CSS" description="WF_PARAM_CSS_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>
+        </param>
+        <param name="allow_php" type="list" default="0" label="WF_PARAM_PHP" description="WF_PARAM_PHP_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>
+        </param>
+        <param name="cdata" type="list" default="1" label="WF_PARAM_CDATA" description="WF_PARAM_CDATA_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>
+        </param>
     </params>
 </config>
