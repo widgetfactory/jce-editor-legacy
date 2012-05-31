@@ -17,7 +17,7 @@
             // get state from cookie
             var state = tinymce.util.Cookie.get('wf_visualchars_state');
             
-            state = tinymce.is(state, 'string') ? parseFloat(state) : ed.getParam('visualchars', 0);
+            state = tinymce.is(state, 'string') ? parseFloat(state) : ed.getParam('visualchars_default_state', 0);
 
             ed.onInit.add(function() {
                 ed.controlManager.setActive('visualchars', state);
