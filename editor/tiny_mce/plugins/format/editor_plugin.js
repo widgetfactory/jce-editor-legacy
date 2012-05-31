@@ -145,14 +145,10 @@
         },
 		
         _clearBlocks : function(ed, e) {
-            var ed = this.editor, dom = ed.dom, s, p, a = [], b, bm;	
+            var ed = this.editor, dom = ed.dom, s, p, a = [], b, bm, n;	
 			
             // Get the element to use
-            var tag = ed.getParam('forced_root_block');
-			
-            if (!tag) {
-                tag = ed.getParam('force_p_newlines') ? 'p' : 'br';
-            }			
+            var tag = ed.getParam('forced_root_block') || 'br';	
 			
             n = ed.selection.getNode();
 			
