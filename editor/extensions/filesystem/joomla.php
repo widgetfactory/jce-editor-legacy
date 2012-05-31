@@ -284,7 +284,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
             return $path;
         }
 
-        // relative url to file
+        // file url relative to site root
         if (is_file(WFUtility::makePath(JPATH_SITE, $path))) {
             return substr(dirname($path), strlen($this->getRootDir()));
         }

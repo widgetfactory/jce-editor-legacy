@@ -430,11 +430,15 @@ class WFFileBrowser extends WFBrowserExtension {
      * @return Tree node array
      */
     public function getTreeItem($path) {
+        $filesystem = $this->getFileSystem();
         $path = rawurldecode($path);
 
         WFUtility::checkPath($path);
 
-        $folders = $this->getFolders($path);
+        // get source dir from path eg: images/stories/fruit.jpg = images/stories
+        $dir = $filesystem->getSourceDir($path);
+
+        $folders = $this->getFolders($dir);
         $array = array();
         if (!empty($folders)) {
             foreach ($folders as $folder) {
@@ -503,8 +507,11 @@ class WFFileBrowser extends WFBrowserExtension {
      */
     public function getTreeItems($dir, $root = true, $init = true) {
         $result = '';
+        
+        static $treedir = null;
+        
         if ($init) {
-            $this->treedir = $dir;
+            $treedir = $dir;
             if ($root) {
                 $result = '<ul><li id="/" class="open"><div class="tree-row"><div class="tree-image"></div><span class="root"><a href="javascript:;">' . WFText::_('WF_LABEL_ROOT') . '</a></span></div>';
                 $dir = '/';
@@ -514,14 +521,16 @@ class WFFileBrowser extends WFBrowserExtension {
 
         if ($folders) {
             $result .= '<ul class="tree-node">';
-            foreach ($folders as $folder) {
-                $open = strpos($this->treedir, $folder['id']) !== false ? ' open' : '';
+            foreach ($folders as $folder) {                
+                $open    = strpos($treedir, ltrim($folder['id'], '/')) === 0 ? ' open' : '';
                 $result .= '<li id="' . $this->escape($folder['id']) . '" class="' . $open . '"><div class="tree-row"><div class="tree-image"></div><span class="folder"><a href="javascript:;">' . $folder['name'] . '</a></span></div>';
+                
                 if ($open) {
                     if ($h = $this->getTreeItems($folder['id'], false, false)) {
                         $result .= $h;
                     }
                 }
+                
                 $result .= '</li>';
             }
             $result .= '</ul>';
@@ -1332,13 +1341,13 @@ class WFFileBrowser extends WFBrowserExtension {
 
         $upload = $this->get('upload');
 
-        /*$chunk_size = '512KB'; //$upload_max ? $upload_max / 1024 . 'KB' : '1MB';
-        $chunk_size = isset($upload['chunk_size']) ? $upload['chunk_size'] : $chunk_size;
+        /* $chunk_size = '512KB'; //$upload_max ? $upload_max / 1024 . 'KB' : '1MB';
+          $chunk_size = isset($upload['chunk_size']) ? $upload['chunk_size'] : $chunk_size;
 
-        // chunking not yet supported in safe_mode, check base directory is writable and chunking supported by filesystem
-        if (!$features['chunking']) {
-            $chunk_size = 0;
-        }*/
+          // chunking not yet supported in safe_mode, check base directory is writable and chunking supported by filesystem
+          if (!$features['chunking']) {
+          $chunk_size = 0;
+          } */
 
         // get upload size
         $size = intval(preg_replace('/[^0-9]/', '', $upload['max_size'])) . 'kb';
@@ -1362,9 +1371,9 @@ class WFFileBrowser extends WFBrowserExtension {
         $runtimes[] = 'html4';
 
         // remove flash runtime if $chunk_size is 0 (no chunking)
-        /*if (!$chunk_size) {
-            unset($runtimes[array_search('flash', $runtimes)]);
-        }*/
+        /* if (!$chunk_size) {
+          unset($runtimes[array_search('flash', $runtimes)]);
+          } */
 
         $defaults = array(
             'runtimes' => implode(',', $runtimes),
@@ -1374,9 +1383,9 @@ class WFFileBrowser extends WFBrowserExtension {
         );
 
         // only add chunk size if it has a value
-        /*if ($chunk_size) {
-            $defaults['chunk_size'] = $chunk_size;
-        }*/
+        /* if ($chunk_size) {
+          $defaults['chunk_size'] = $chunk_size;
+          } */
 
         if (isset($features['dialog'])) {
             $defaults['dialog'] = $features['dialog'];
