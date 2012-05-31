@@ -258,11 +258,8 @@
                 v = ed.getContent();
             }
 
-            if (se) {                
-                // decode and indent
-                v = this.indent(v);
-                
-                se.setContent(v);
+            if (se) {                                
+                se.setContent(v, ed.getParam('source_format', true));
             }
         },
         
@@ -495,12 +492,13 @@
                 editor.init({
                     /*'url'		: ed.getParam('site_url'),
             		'token'		: ed.settings.token,*/
-                    'wrap' 		: wrap,
+                    'wrap' 	: wrap,
                     'numbers'	: numbers,
                     'highlight'	: highlight,
-                    'width'		: w,
+                    'width'	: w,
                     'height'	: h,
                     'theme' 	: ed.getParam('source_theme', 'textmate'),
+                    'format'    : ed.getParam('source_format', true),
                     'load'		: function() {
                         ed.setProgressState(false);
             			
@@ -515,7 +513,7 @@
                     change : function() {
                         ed.controlManager.setDisabled('undo', false);
                     }
-                }, self.indent(v));
+                }, v);
             	
                 editor.resize('100%', h);
             });
@@ -524,16 +522,8 @@
         },
 
         /**
-         * Simple HTML Indentation
-         * @param {String} h HTML string to indent
-         */
-        indent : function(h) {
-            return WFEditor.indent(h);
-        },
-
-        /**
          * Toggle Syntax Highlighting editor
-         * Will create / show / hide the textarea source editor or ACE editor
+         * Will create / show / hide the textarea source editor or Codemirror editor
          */
         setHighlight : function(s) {
             var ed = this.editor, DOM = tinymce.DOM, cm = ed.controlManager, se = this.getEditor();
@@ -542,7 +532,7 @@
 
             if (se) {            	
                 se.setHighlight(s);
-
+                
                 this.setContent();
                 
                 se.indent();

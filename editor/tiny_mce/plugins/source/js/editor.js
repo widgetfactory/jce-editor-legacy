@@ -1,39 +1,66 @@
 (function() {
     var tinymce = window.parent.tinymce, DOM = tinymce.DOM, Event = tinymce.dom.Event;
+    
     var SourceEditor = {
+        
+        options : {
+            format  : true,
+            width   : '100%',
+            height  : '100%',
+            theme   : 'textmate',
+            load    : function(){},
+            change  : function(){}
+        },
 
         init : function(options, content) {
             var self = this;
 
-            if(Event.domLoaded) {
-                self.container = DOM.add(document.body, 'div', {
-                    style : {
-                        width : options.width || '100%',
-                        height : options.height || '100%'
+            if(Event.domLoaded) {                
+                tinymce.extend(this.options, options);
+                
+                this.container = DOM.add(document.body, 'div', {
+                    'style' : {
+                        width   : this.options.width,
+                        height  : this.options.height
                     },
-                    'class' : 'container'
+                    'id' : 'source-container'
                 });
-
-                self._load(options, content);
+                
+                // format content
+                if (this.options.format) {
+                    content = this._format(content);
+                }
+                // load editor
+                this._load(content);
+            // keep trying...
             } else {
                 Event.add(document, 'init', function() {
                     self.init(options, content);
                 });
             }
-
         },
-        _load : function(o, content) {
-            var self = this, ed;
+        
+        _format : function(v) {
+            var inline = ['a','abbr','acronym','b','bdo','big','br','cite','code','dfn','em','i','img','input','kbd','label','q','samp','select','small','span','strong','sub','sup','textarea','tt','var','li','dt','dd'];
+            
+            v = style_html(v, {
+                'indent_size'   : 1, 
+                'indent_char'   : '\t', 
+                'unformatted'   : inline, 
+                'max_char'      : 0
+            });
+            
+            return v.replace(new RegExp('\n\t<(' + inline.join('|') + ')', 'gi' ), '<$1');
+        },
+        
+        _load : function(content) {
+            var self = this, ed, o = this.options;
 
-            o.load = tinymce.is(o.load, 'function') ? o.load : function() {
-            };
-            o.change = tinymce.is(o.change, 'function') ? o.change : function() {
-            };
             if(window.CodeMirror) {
                                 
                 ed = CodeMirror(this.container, {
-                    mode : "text/html",
-                    theme : o.theme || 'textmate',
+                    mode    : "text/html",
+                    theme   : o.theme,
                     onChange : function() {
                         // callback
                         o.change.call();
@@ -42,8 +69,6 @@
                     smartIndent : true,
                     tabMode: "indent"
                 });
-                // highlight line
-                var hlLine = ed.setLineClass(0, "activeline");
 
                 ed.setWrap = function(s) {
                     ed.setOption('lineWrapping', s);
@@ -95,10 +120,10 @@
                 };
 
                 this.editor = ed;
-                this._loaded(o, content);
+                this._loaded(content);
             }
             
-            if (window.ace) {
+        /*if (window.ace) {
                 var editor = ace.edit(this.container);
                 
                 editor.getSession().on('change', o.change);
@@ -143,9 +168,11 @@
                 
                 this.editor = editor;
                 this._loaded(o, content);
-            }
+            }*/
         },
-        _loaded : function(o, content) {
+        _loaded : function(content) {
+            var o = this.options;
+            
             this.setContent(content);
 
             // set word wrap
@@ -167,7 +194,11 @@
         setHighlight : function(s) {
             return this.editor.highlight(s);
         },
-        setContent : function(v) {
+        setContent : function(v, format) {
+            if (format) {
+                v = this._format(v);
+            }
+            
             return this.editor.setContent(v);
         },
         insertContent : function(v) {
@@ -192,10 +223,14 @@
             return this.editor.redo();
         },
         indent : function() {
-            //return this.editor.reindent();
+        //return this.editor.reindent();
         },
         getContainer : function() {
             return this.container || null;
+        },
+        format : function() {
+            var v = this.getContent();
+            return this.setContent(v, true);
         }
     };
 
