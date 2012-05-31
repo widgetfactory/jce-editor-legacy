@@ -292,6 +292,9 @@ tinyMCE.addI18n({
         },
         visualblocks: {
             desc: 'Show/hide block elements'
+        },
+        kitchensink : {
+            desc : 'Toggle Toolbars'
         }
     }
 });
