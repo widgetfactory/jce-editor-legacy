@@ -53,12 +53,15 @@ final class WFSourcePlugin extends WFEditorPlugin {
         $document->setTitle(WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')));
 
         $theme  = $this->getParam('source.theme', 'textmate');
-        $editor = 'codemirror';
+        //$editor = 'codemirror';
         
-        $document->addScript(array('editor'), 'plugins');
+        $document->addScript(array('editor', 'beautify-html'), 'plugins');
         $document->addStyleSheet(array('editor'), 'plugins');
         
-        switch ($editor) {
+        $document->addScript(array('codemirror-compressed'), 'jce.tiny_mce.plugins.source.js.codemirror');
+        $document->addStyleSheet(array('codemirror', 'theme/' . $theme), 'jce.tiny_mce.plugins.source.css.codemirror');
+        
+        /*switch ($editor) {
             case 'ace':
                 $document->addScript(array('ace', 'mode-html'), 'jce.tiny_mce.plugins.source.js.ace');
                 
@@ -71,6 +74,6 @@ final class WFSourcePlugin extends WFEditorPlugin {
                 $document->addStyleSheet(array('codemirror', 'theme/' . $theme), 'jce.tiny_mce.plugins.source.css.codemirror');
 
                 break;
-        }
+        }*/
     }
 }
