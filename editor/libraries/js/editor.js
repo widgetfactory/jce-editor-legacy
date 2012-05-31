@@ -528,15 +528,19 @@ function jInsertEditorText(text, editor) {
             return u;
         },
         
-        indent : function(h) {
+        indent : function(h, withTabs) {
             // simple indentation
             h = h.replace(/<(\/?)(ul|hr|table|meta|link|tbody|tr|object|audio|video|body|head|html|map)(|[^>]+)>\s*/g, '\n<$1$2$3>\n');
             h = h.replace(/\s*<(p|h[1-6]|blockquote|div|title|style|pre|script|td|li|area|param|source)(|[^>]+)>/g, '\n<$1$2>');
             h = h.replace(/<\/(p|h[1-6]|blockquote|div|title|style|pre|script|td|li)>\s*/g, '</$1>\n');
             h = h.replace(/\n\n/g, '\n');
-            
-            h = h.replace(/\n<(li|dt|dd|param|source|td|tr|th|thead|tbody|tfoot)\b/gi, '\n\t<$1');
-            
+
+            if (withTabs) {
+                h = h.replace(/<(h1|h2|h3|h4|h5|h6|hr|p|div|address|pre|form|table|tbody|thead|tfoot|th|tr|td|li|ol|ul|caption|blockquote|center|dl|dt|dd|dir|fieldset|noscript|menu|isindex|samp|header|footer|article|section|hgroup|aside|nav|figure|dt|dd|param|source|video|audio|embed|object)([^>]*)>([\s\S]+?)<\/\1>/gi, function(a, b, c, d) {
+                    return '<' + b + c + '>' + d.replace(/\n/g, '\n\t').replace(/\t$/, '') + '</' + b + '>';
+                });
+            }
+
             // indent conditional comments
             h = h.replace(/<!--\[if([^\]]*)\]>(<!)?-->/gi, '\n<!--[if$1]>$2-->');
             h = h.replace(/<!(--<!)?\[endif\](--)?>/gi, '<!$1[endif]$2>\n');
