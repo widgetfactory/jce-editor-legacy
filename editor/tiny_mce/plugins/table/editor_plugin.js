@@ -1208,8 +1208,6 @@
             ed.onPreInit.add(function(ed, o) {
                 // add support for border attribute
                 if (ed.settings.schema == 'html5') {
-                    // add border attribute
-                    ed.schema.addValidElements('table[border|*]');
                     // force border to 1 or remove
                     ed.parser.addNodeFilter('table', function(nodes) {
                         for (var i = 0, len = nodes.length; i < len; i++) {
