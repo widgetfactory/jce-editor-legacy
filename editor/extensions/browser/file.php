@@ -107,7 +107,7 @@ class WFFileBrowser extends WFBrowserExtension {
         $document->addScript(array(
             'file',
             'sort',
-            'search',
+            'filter',
             'manager'
                 ), 'extensions.browser.js');
 
