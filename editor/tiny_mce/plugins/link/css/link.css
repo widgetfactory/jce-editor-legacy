@@ -3,7 +3,7 @@
 	margin-top: 7px;
 }
 .ui-tabs-panel {
-	height: 390px;
+	height: 420px;
 }
 
 input[type="text"] {
@@ -29,9 +29,16 @@ select {
 	width: 380px;
 }
 
-#link-options {
-	height: 200px;
-	overflow: auto;
+#link-options {}
+
+#link-browser {
+    height: 200px;
+    overflow : auto;
+}
+
+#search-browser {
+    padding : 5px 0;
+    position: relative;
 }
 
 input.disabled {

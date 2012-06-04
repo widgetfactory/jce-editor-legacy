@@ -49,6 +49,12 @@ var LinkDialog = {
             }
         });
         
+        WFLinkSearch.init({
+            onClick : function(v) {
+                self.insertLink(v);
+            }
+        });
+        
         // setup popups
         WFPopups.setup();
 
