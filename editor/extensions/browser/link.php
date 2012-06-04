@@ -72,7 +72,7 @@ class WFLinkBrowser extends WFBrowserExtension {
         return $links[$name];
     }
 
-    public function getLinkBrowser() {
+    public function render() {
         $list = array();
 
         foreach ($this->extensions as $extension) {
