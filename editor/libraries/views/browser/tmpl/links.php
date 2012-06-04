@@ -8,14 +8,8 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-
 defined('_JEXEC') or die('RESTRICTED');
 ?>
-<div id="link-browser">
-	<fieldset>
-		<legend><?php echo WFText::_('WF_LABEL_LINKBROWSER');?></legend>
-		<div id="link-options" class="tree">
-			<ul class="root"><?php echo $this->list;?></ul>
-		</div>
-	</fieldset>
+<div id="link-browser" class="tree">
+    <ul class="root"><?php echo $this->list; ?></ul>
 </div>
