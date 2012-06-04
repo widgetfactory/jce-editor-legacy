@@ -280,9 +280,15 @@ tinyMCE.addI18n({
         },
         source:{
             source_desc:"Toggle Source Code",
-            wrap_desc:"Toggle Word Wrap",
-            numbers_desc:"Toggle Line Numbers",
-            highlight_desc:"Toggle Code Highlighting"
+            wrap:"Toggle Word Wrap",
+            numbers:"Toggle Line Numbers",
+            highlight:"Toggle Code Highlighting",
+            replace : "Replace",
+            replace_all : "Replace All",
+            search : "Find",
+            search_prev : "Find Previous",
+            regex : "Regular Expression",
+            format : "Format HTML"
         },
         textcase : {
             uppercase:"Uppercase",
