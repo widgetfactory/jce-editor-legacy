@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright © 2009-2011 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright ï¿½ 2009-2011 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -9,33 +9,33 @@
  */
 var WFLinkBrowser = WFExtensions.add('LinkBrowser', {
 	
-	options : {
-		element		: '#link-options',
-		onClick 	: $.noop	
-	},
+    options : {
+        element		: '#link-browser',
+        onClick 	: $.noop	
+    },
 	
-	init : function(options) {
-		$.extend(this.options, options);		
-		this._createTree();
-	},
+    init : function(options) {
+        $.extend(this.options, options);		
+        this._createTree();
+    },
 	
-	// create tree
-	_createTree : function() {
-		var self = this;
+    // create tree
+    _createTree : function() {
+        var self = this;
 
-		$(this.options.element).tree({
+        $(this.options.element).tree({
             collapseTree: true,
             charLength	: 50,
             
             onInit : function(e, callback) {
-				if ($.isFunction(callback)) {
-	                callback.apply();
-	            }
+                if ($.isFunction(callback)) {
+                    callback.apply();
+                }
             },
             
             // When a node is clicked
             onNodeClick : function(e, node) {
-				var v;
+                var v;
 
                 if (!$('span.nolink', node).length) {
                     v = $('a', node).attr('href');
@@ -44,7 +44,7 @@ var WFLinkBrowser = WFExtensions.add('LinkBrowser', {
                         v = $(node).attr('id');
                     
                     if ($.isFunction(self.options.onClick)) {
-                    	self.options.onClick.call(this, $.String.decode(v));
+                        self.options.onClick.call(this, $.String.decode(v));
                     }
                 }
 
@@ -63,7 +63,9 @@ var WFLinkBrowser = WFExtensions.add('LinkBrowser', {
                 
                 var query = $.String.query($.String.unescape($(node).attr('id')));
 
-                $.JSON.request('getLinks', {'json' : query}, function(o) {
+                $.JSON.request('getLinks', {
+                    'json' : query
+                }, function(o) {
                     if (o) {
                         if (!o.error) {
                             var ul = $('ul:first', node);
@@ -82,5 +84,5 @@ var WFLinkBrowser = WFExtensions.add('LinkBrowser', {
                 }, self);
             }
         });
-	}
+    }
 });
