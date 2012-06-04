@@ -55,7 +55,8 @@ final class WFSourcePlugin extends WFEditorPlugin {
         $theme  = $this->getParam('source.theme', 'textmate');
         //$editor = 'codemirror';
         
-        $document->addScript(array('editor', 'beautify-html'), 'plugins');
+        $document->addScript(array('tiny_mce_popup'), 'tiny_mce');
+        $document->addScript(array('editor', 'format'), 'plugins');
         $document->addStyleSheet(array('editor'), 'plugins');
         
         $document->addScript(array('codemirror-compressed'), 'jce.tiny_mce.plugins.source.js.codemirror');

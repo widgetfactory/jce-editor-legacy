@@ -135,43 +135,12 @@
                 cmd : 'mceSource'
             });
 
-            ed.addButton('wrap', {
-                title : 'source.wrap_desc',
-                onclick : function() {
-                    self.setWrap(!ed.getParam('source_wrap', true));
-                    return true;
-                }
-
-            });
-
-            ed.addButton('highlight', {
-                title : 'source.highlight_desc',
-                onclick : function() {
-                    self.setHighlight(!ed.getParam('source_highlight', true));
-                    return true;
-                }
-
-            });
-
-            ed.addButton('numbers', {
-                title : 'source.numbers_desc',
-                onclick : function() {
-                    self.setNumbers(!ed.getParam('source_numbers', true));
-                    return true;
-                }
-
-            });
-
             ed.onNodeChange.add( function(ed, cm, n) {
                 var s = self.getState();
                 
                 if (s) {
                     self._disable();
                 }
-                
-                each(['wrap', 'highlight', 'numbers'], function(e) {
-                    cm.setDisabled(e, !s);
-                });
             });
 
             // add theme resize
@@ -238,7 +207,7 @@
 
         getTop : function() {
             var ed = this.editor, container = ed.getContentAreaContainer();
-            return container.offsetTop + Math.round((container.offsetHeight - container.clientHeight) / 2);
+            return container.offsetTop + 1;
         },
 
         printSource : function() {},
@@ -316,26 +285,6 @@
             // store active buttons
             var active 	= DOM.select('.mceButtonActive', DOM.get(ed.id + '_toolbargroup'));
 
-            if (!state) {
-                // remove print iframe
-                var print = DOM.get(ed.id + '_source_print');
-                
-                if (print) {
-                    DOM.remove(print);
-                }
-
-                // set all source buttons inactive
-                each(['wrap', 'highlight', 'numbers'], function(e) {
-                    cm.setActive(e, false);
-                });
-
-            } else {
-                // set all source buttons inactive
-                each(['wrap', 'highlight', 'numbers'], function(e) {
-                    cm.setActive(e, ed.getParam('source_' + e, true));
-                });
-            }
-
             each (active, function(n) {
                 cm.setActive(n.id, !state);
             });
@@ -358,10 +307,6 @@
 
             cm.setDisabled('source', false);
             cm.setDisabled('fullscreen', false);
-
-            each(['wrap', 'highlight', 'numbers'], function(e) {
-                cm.setDisabled(e, !state);
-            });
         },
 
         toggleSource : function() {
@@ -428,10 +373,6 @@
                 if (wordcount) {
                     DOM.show(wordcount.parentNode);
                 }
-                
-                cm.setActive('highlight', false);
-                cm.setActive('numbers', false);
-                cm.setActive('wrap', false);
 
                 ed.setProgressState(false);
             }
@@ -490,11 +431,9 @@
                 var v = ed.getContent(), highlight = ed.getParam('source_highlight', true), wrap = ed.getParam('source_wrap', true), numbers = ed.getParam('source_numbers', true);
 
                 editor.init({
-                    /*'url'		: ed.getParam('site_url'),
-            		'token'		: ed.settings.token,*/
-                    'wrap' 	: wrap,
-                    'numbers'	: numbers,
-                    'highlight'	: highlight,
+                    'wrap'          : wrap,
+                    'linenumbers'   : numbers,
+                    'highlight'     : highlight,
                     'width'	: w,
                     'height'	: h,
                     'theme' 	: ed.getParam('source_theme', 'textmate'),
@@ -505,10 +444,7 @@
                         if (tinymce.isIE && !document.querySelector) {
                             ed.hide();
                             ed.show();
-                        }
-                        cm.setActive('highlight', highlight);
-                        cm.setActive('numbers', numbers);
-                        cm.setActive('wrap', wrap);          			
+                        }       			
                     },
                     change : function() {
                         ed.controlManager.setDisabled('undo', false);
@@ -526,12 +462,10 @@
          * Will create / show / hide the textarea source editor or Codemirror editor
          */
         setHighlight : function(s) {
-            var ed = this.editor, DOM = tinymce.DOM, cm = ed.controlManager, se = this.getEditor();
-
-            cm.setActive('highlight', !!s);
+            var ed = this.editor, DOM = tinymce.DOM, se = this.getEditor();
 
             if (se) {            	
-                se.setHighlight(s);
+                se.highlight(s);
                 
                 this.setContent();
                 
@@ -540,10 +474,12 @@
                 DOM.show('wf_' + ed.id + '_source_container');
                 DOM.setAttrib('wf_' + ed.id + '_source_container', 'aria-hidden', false);
                 
+                DOM.setStyle('wf_' + ed.id + '_source_container', 'top', tinymce.isIE ? 0 : this.getTop());
+                
                 this.resize();
 
-                this.setNumbers(ed.getParam('source_numbers', true));
-                this.setWrap(ed.getParam('source_wrap', true));
+                this.linenumbers(ed.getParam('source_numbers', true));
+                this.wrap(ed.getParam('source_wrap', true));
 
                 ed.focus();
 
@@ -564,27 +500,21 @@
         setWrap: function(s) {
             var ed = this.editor, se = this.getEditor();
 
-            var cm = ed.controlManager;
-
             ed.settings.source_wrap = !!s;
 
-            cm.setActive('wrap', !!s);
-
             if (se) {
-                se.setWrap(s);
+                se.wrap(s);
             }
 
         },
 
         setNumbers : function(s) {
-            var ed = this.editor, cm = ed.controlManager, se = this.getEditor();
+            var ed = this.editor, se = this.getEditor();
 
             ed.settings.source_numbers = !!s;
 
-            cm.setActive('numbers', !!s);
-
             if (se) {
-                return se.setNumbers(!!s);
+                return se.linenumbers(!!s);
             }
 
         },
