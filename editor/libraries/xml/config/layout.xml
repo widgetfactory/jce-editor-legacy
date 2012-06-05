@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <params group="layout">
-        <param name="width" type="text" size="5" default="" pattern="[0-9%]+" placeholder="auto" label="WF_PARAM_EDITOR_WIDTH" description="WF_PARAM_EDITOR_WIDTH_DESC" />
-        <param name="height" type="text" size="5" default="" pattern="[0-9%]+" placeholder="auto" label="WF_PARAM_EDITOR_HEIGHT" description="WF_PARAM_EDITOR_HEIGHT_DESC" />
+        <param name="width" type="text" size="5" default="" pattern="([0-9]+)(%|px)?" placeholder="auto" label="WF_PARAM_EDITOR_WIDTH" description="WF_PARAM_EDITOR_WIDTH_DESC" />
+        <param name="height" type="text" size="5" default="" pattern="([0-9]+)(%|px)?" placeholder="auto" label="WF_PARAM_EDITOR_HEIGHT" description="WF_PARAM_EDITOR_HEIGHT_DESC" />
 		<!--param name="theme_advanced_toolbar_location" type="list" default="top" label="WF_PARAM_TOOLBAR_LOCATION" description="WF_PARAM_TOOLBAR_LOCATION_DESC">
 			<option value="top">JWF_OPTION_TOP</option>
 			<option value="bottom">WF_OPTION_BOTTOM</option>
