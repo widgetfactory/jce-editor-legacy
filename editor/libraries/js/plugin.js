@@ -71,7 +71,11 @@
             if ($.browser.gecko) {
                 $('#jce').addClass('gecko');
             }
-
+            
+            // ie8 flag
+            if (!$.support.cssFloat && document.querySelector) {
+                $('#jce').addClass('ie8');
+            }
             // ie7 flag
             if (!$.support.cssFloat && !!window.XMLHttpRequest && !document.querySelector) {
                 $('#jce').addClass('ie7');
