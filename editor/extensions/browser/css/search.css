@@ -26,6 +26,9 @@ div#search-browser span#searchbox input#search-input {
     width: 350px;
     vertical-align : middle;
 }
+#jce.ie8 div#search-browser span#searchbox input#search-input {
+    width : 346px;
+}
 div#search-browser span#searchbox span.search-icon {
     position: absolute;
     right: 1px;
