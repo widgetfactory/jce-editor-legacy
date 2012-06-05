@@ -1,5 +1,5 @@
 .mceItemFlash, .mceItemShockWave, .mceItemQuickTime, .mceItemWindowsMedia, .mceItemRealMedia, .mceItemDivX, .mceItemSilverlight, .mceItemGeneric, .mceItemEmbed, .mceItemAudio, .mceItemVideo, .mceItemIframe {
-    border:1px dotted #cc0000;
+    border:1px dotted #cc0000 !important;
     background-position:center;
     background-repeat:no-repeat;
     background-color:#ffffcc;
