@@ -278,7 +278,7 @@
             });
 
             // Searchables
-            $(dialog.search).searchables({
+            $(dialog.search).filter({
                 list 	: dialog.list,
                 items	: '#item-list li.file',
                 clear 	: $('span.search-icon', '#searchbox'),
@@ -484,7 +484,7 @@
 
                 // get dir if file (relative to site url)
                 if (/\.([a-z0-9]{2,}$)/i.test(path)) {
-                    path = $.String.dirname(path);                 
+                    path = $.String.dirname(path);                      
                     path = path.replace(new RegExp(this.options.dir), '').replace(/^[\/\\]+/, '');
                 }
             }
@@ -931,12 +931,10 @@
         _getList : function(src) {
             // get path from src or stored directory
             var path = src || this._dir;
-            
-            path = this._cleanPath(path);
 
             // store directory in cookie
-            if (path && this.options.use_cookies) {                    
-                $.Cookie.set("wf_" + $.Plugin.getName() + '_dir', path);
+            if (this.options.use_cookies) {
+                $.Cookie.set("wf_" + $.Plugin.getName() + '_dir', this._cleanPath(path));
             }
 
             // show loading message
