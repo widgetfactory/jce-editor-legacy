@@ -55,6 +55,11 @@ class WFSearchBrowser extends WFBrowserExtension {
         return $areas;
     }
 
+    /*
+     * Render Search fields
+     * This method uses portions of SearchViewSearch::display from components/com_search/views/search/view.html.php
+     * @copyright Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
+     */
     public function render() {
         // built select lists
         $orders = array();
@@ -81,6 +86,14 @@ class WFSearchBrowser extends WFBrowserExtension {
         $view->display();
     }
 
+    /**
+     * Process search
+     * @param type $query Search query
+     * @return array Rerach Results 
+     * 
+     * This method uses portions of SearchController::search from components/com_search/controller.php
+     * @copyright Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
+     */
     public function doSearch($query) {
         // get SearchHelper
         require_once(JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_search' . DS . 'helpers' . DS . 'search.php');
