@@ -57,7 +57,7 @@ var WFLinkSearch = WFExtensions.add('LinkSearch', {
    
         var query = $(el).val();
         
-        if (!query) {
+        if (!query || $(el).hasClass('placeholder')) {
             return;
         }
         
