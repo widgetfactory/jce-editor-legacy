@@ -260,7 +260,7 @@
     };
 
     $.fn.pattern = function() {
-        if (!$.support.input.attr.pattern) {
+        //if (!$.support.input.attr.pattern) {
             this.change( function() {
                 var pattern = $(this).attr('pattern'), v = $(this).val(), pv = $(this).attr('placeholder');
 
@@ -276,7 +276,7 @@
                 }
             });
 
-        }
+        //}
 
         return this;
     };
