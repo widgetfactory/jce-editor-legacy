@@ -948,7 +948,7 @@
                     v = tinymce.trim(v.replace(/\s?mceItem([\w]+)/g, ''));
                 }
 
-                if (/[\w\d]+/.test(v)) {
+                if (v && /[\w\d]+/.test(v)) {
                     root[at] = v;
                 }
             });
