@@ -1593,7 +1593,7 @@
                     this.pos++;
                     this.line_char_count++;
 
-                    if (this.Utils.in_array(input_char, this.Utils.whitespace)) {                                                
+                    if (this.Utils.in_array(input_char, this.Utils.whitespace) && input_char != ' ') { // change to remove spaces                                               
                         if (content.length) {
                             space = true;
                         }
