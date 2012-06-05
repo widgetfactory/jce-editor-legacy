@@ -27,6 +27,7 @@ $plugin = WFLinkPlugin::getInstance();
     <legend><?php echo WFText::_('WF_LABEL_LINKS'); ?></legend>
     <div id="link-options">
         <?php echo $plugin->renderBrowser('search'); ?>
+        <h3><?php echo WFText::_('WF_LABEL_BROWSE'); ?></h3>
         <?php echo $plugin->renderBrowser('link'); ?>
     </div>
 </fieldset>
