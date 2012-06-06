@@ -129,7 +129,7 @@ function jInsertEditorText(text, editor) {
                     }
                 },
                 indent_before   : indent,
-		indent_after    : indent
+                indent_after    : indent
             }, settings);
 
             if(this.settings) {
@@ -148,7 +148,7 @@ function jInsertEditorText(text, editor) {
                     // load editor
                     WFEditor.load();
                 } catch (e) {
-                    //alert('Unable to initialize TinyMCE : ' + e);
+                //alert('Unable to initialize TinyMCE : ' + e);
                 }
             }
         },
@@ -223,6 +223,67 @@ function jInsertEditorText(text, editor) {
         load : function() {
             var self = this, Event = tinymce.dom.Event, loaded;
 
+            var s = this.settings;
+
+            // setup editor before init
+            tinyMCE.onAddEditor.add(function(mgr, ed) {               
+                
+                // load packer css
+                if(s.compress.css) {
+                    ed.onPreInit.add(function() {                    
+                        ed.dom.loadCSS(s.site_url + 'index.php?option=com_jce&view=editor&layout=editor&task=pack&type=css&context=content&component_id=' + s.component_id + '&' + s.token + '=1');
+                    }); 
+                }
+
+                WFEditor.hideLoader(ed.getElement());
+
+                self.setBookmark(ed);
+
+                // form submit trigger
+                ed.onInit.add(function() {
+                    ed.onSubmit.addToTop(function() {                        
+                        if(ed.initialized && !ed.isHidden()) {
+                            ed.save();
+                            ed.isNotDirty = 1;
+                        }
+                    });
+                });
+
+                // Form submit patch
+                ed.onBeforeRenderUI.add(function() {     
+                    var n = ed.getElement().form;
+
+                    if(!n || n._mceOldSubmit) {
+                        return;
+                    }
+
+                    // Check page uses id="submit" or name="submit" for it's submit button
+                    if(!n.submit.nodeType && !n.submit.length) {
+                        ed.formElement = n;
+                        n._mceOldSubmit = n.submit;
+                        n.submit = function() {
+                               
+                            // Save all instances
+                            tinymce.each(tinymce.editors, function(e) {                                
+                                if(e.initialized && !e.isHidden()) {
+                                    e.save();
+                                }
+                            });
+
+                            ed.isNotDirty = 1;
+
+                            return ed.formElement._mceOldSubmit(ed.formElement);
+                        };
+                    }
+                    n = null;
+                });
+                
+                // indent
+                ed.onSaveContent.add(function(ed, o) {
+                    o.content = self.indent(o.content);
+                });
+            });
+                       
             function _load() {
                 if(!loaded) {
                     // set loaded flag
@@ -241,68 +302,6 @@ function jInsertEditorText(text, editor) {
                 window.setTimeout(function() {
                     _load();
                 }, 1000);
-            });
-            var s = this.settings;
-
-            // setup editor before init
-            tinyMCE.onAddEditor.add(function(mgr, ed) {
-               
-                // load packer css
-                if(s.compress.css) {
-                    ed.onPreInit.add(function() {                    
-                        ed.dom.loadCSS(s.site_url + 'index.php?option=com_jce&view=editor&layout=editor&task=pack&type=css&context=content&component_id=' + s.component_id + '&' + s.token + '=1');
-                    }); 
-                }
-
-                WFEditor.hideLoader(ed.getElement());
-
-                self.setBookmark(ed);
-
-                // form submit trigger
-                ed.onInit.add(function() {
-                    ed.onSubmit.addToTop(function() {
-                        if(ed.initialized && !ed.isHidden()) {
-                            ed.save();
-                            ed.isNotDirty = 1;
-                        }
-                    });
-                });
-
-                // Form submit patch
-                ed.onBeforeRenderUI.add(function() {
-                    var n = ed.getElement().form;
-
-                    if(!n) {
-                        return;
-                    }
-                    // Already patched
-                    if(n._mceOldSubmit) {
-                        return;
-                    }
-                    // Check page uses id="submit" or name="submit" for it's submit button
-                    if(!n.submit.nodeType && !n.submit.length) {
-                        ed.formElement = n;
-                        n._mceOldSubmit = n.submit;
-                        n.submit = function() {
-                            // Save all instances
-                            tinymce.each(tinymce.editors, function(e) {
-                                if(e.initialized && !e.isHidden()) {
-                                    e.save();
-                                }
-                            });
-
-                            ed.isNotDirty = 1;
-
-                            return ed.formElement._mceOldSubmit(ed.formElement);
-                        };
-                    }
-                    n = null;
-                });
-                
-                // indent
-                ed.onSaveContent.add(function(ed, o) {
-                    o.content = self.indent(o.content);
-                });
             });
         },
         /**
@@ -409,7 +408,9 @@ function jInsertEditorText(text, editor) {
                     DOM.removeClass(el, 'wfEditor');
                     DOM.addClass(el, 'wfNoEditor');
 
-                    ed.save({no_events : false});
+                    ed.save({
+                        no_events : false
+                    });
                     ed.hide();
                 }
             }
@@ -528,22 +529,9 @@ function jInsertEditorText(text, editor) {
             return u;
         },
         
-        indent : function(h, withTabs) {
+        indent : function(h) {
             // simple indentation
-            h = h.replace(/<(\/?)(ul|hr|table|meta|link|tbody|tr|object|audio|video|body|head|html|map)(|[^>]+)>\s*/g, '\n<$1$2$3>\n');
-            h = h.replace(/\s*<(p|h[1-6]|blockquote|div|title|style|pre|script|td|li|area|param|source)(|[^>]+)>/g, '\n<$1$2>');
-            h = h.replace(/<\/(p|h[1-6]|blockquote|div|title|style|pre|script|td|li)>\s*/g, '</$1>\n');
-            h = h.replace(/\n\n/g, '\n');
-
-            if (withTabs) {
-                h = h.replace(/<(h1|h2|h3|h4|h5|h6|hr|p|div|address|pre|form|table|tbody|thead|tfoot|th|tr|td|li|ol|ul|caption|blockquote|center|dl|dt|dd|dir|fieldset|noscript|menu|isindex|samp|header|footer|article|section|hgroup|aside|nav|figure|dt|dd|param|source|video|audio|embed|object)([^>]*)>([\s\S]+?)<\/\1>/gi, function(a, b, c, d) {
-                    return '<' + b + c + '>' + d.replace(/\n/g, '\n\t').replace(/\t$/, '') + '</' + b + '>';
-                });
-            }
-
-            // indent conditional comments
-            h = h.replace(/<!--\[if([^\]]*)\]>(<!)?-->/gi, '\n<!--[if$1]>$2-->');
-            h = h.replace(/<!(--<!)?\[endif\](--)?>/gi, '<!$1[endif]$2>\n');
+            h = h.replace(/\n+/g, '\n');
 
             return tinymce.trim(h);
         }
