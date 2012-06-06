@@ -59,6 +59,16 @@
                 }
             });
 
+            ed.onSetContent.add(function() {
+                var dom = ed.dom, linkElm;
+                
+                if (cssId) {
+                    linkElm = dom.get(cssId);
+                    ed.controlManager.setActive('visualblocks', !linkElm.disabled);
+                }
+                
+            });
+
             ed.addButton('visualblocks', {
                 title : 'visualblocks.desc', 
                 cmd : 'mceVisualBlocks'
