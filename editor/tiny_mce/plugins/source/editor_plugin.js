@@ -478,8 +478,8 @@
                 
                 this.resize();
 
-                this.linenumbers(ed.getParam('source_numbers', true));
-                this.wrap(ed.getParam('source_wrap', true));
+                this.setNumbers(ed.getParam('source_numbers', true));
+                this.setWrap(ed.getParam('source_wrap', true));
 
                 ed.focus();
 
