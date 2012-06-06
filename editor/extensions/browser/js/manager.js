@@ -278,7 +278,7 @@
             });
 
             // Searchables
-            $(dialog.search).filter({
+            $(dialog.search).listFilter({
                 list 	: dialog.list,
                 items	: '#item-list li.file',
                 clear 	: $('span.search-icon', '#searchbox'),

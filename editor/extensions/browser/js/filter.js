@@ -10,7 +10,7 @@
 
 (function($) {
 
-    $.widget("ui.filter", {
+    $.widget("ui.listFilter", {
 
         options : {
             list : null,
