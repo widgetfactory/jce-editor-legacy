@@ -69,14 +69,14 @@ div#source-toolbar span.button.active {
     background-color:#C2CBE0;    
 }
 
-div#source-toolbar span.button.source_wrap {background-position:-100px -40px}
-div#source-toolbar span.button.source_linenumbers {background-position:-120px -40px}
-div#source-toolbar span.button.source_highlight {background-position:-140px -40px}
-div#source-toolbar span.button.source_format {background-position:-400px 0}
+div#source-toolbar span.button.source_wrap {background-position:-100px -40px;}
+div#source-toolbar span.button.source_linenumbers {background-position:-120px -40px;}
+div#source-toolbar span.button.source_highlight {background-position:-140px -40px;}
+div#source-toolbar span.button.source_format {background-position:-400px 0;}
 
 div#source-toolbar span.button.source_search {background-image: url('../img/icons.png'); background-repeat : no-repeat; background-position: 0 0;}
 div#source-toolbar span.button.source_search_prev {background-image: url('../img/icons.png'); background-repeat : no-repeat; background-position: -20px 0;}
-div#source-toolbar span.button.source_replace {background-position:-500px -20px}
+div#source-toolbar span.button.source_replace {background-position:-500px -20px;}
 div#source-toolbar span.button.source_replace_all {background-image: url('../img/icons.png'); background-repeat : no-repeat; background-position: -40px 0;}
 
 label[for="source_search_regex"] {
@@ -86,6 +86,6 @@ label[for="source_search_regex"] {
     display: inline-block;
 }
 
-label[for="source_search_regex"] input[type="checkbox"] {
+#source_search_regex {
     vertical-align : middle;
 }

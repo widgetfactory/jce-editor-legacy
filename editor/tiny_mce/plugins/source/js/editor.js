@@ -135,9 +135,14 @@
                 });
             });
             
+            DOM.add(search, 'input', {
+                'id'    : 'source_search_regex',
+                'type'  : 'checkbox'
+            });
+            
             DOM.add(search, 'label', {
                 'for' : 'source_search_regex'
-            }, '<input type="checkbox" id="source_search_regex" />' + ed.getLang('source.regex', 'Regular Expression'));
+            }, ed.getLang('source.regex', 'Regular Expression'));
         },
         
         _format : function(html, validate) {
