@@ -18081,6 +18081,16 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 				if (container.nodeName === "TABLE" || (container.previousSibling && container.previousSibling.nodeName == "TABLE")) {
                                         return (isAfterLastNodeInContainer && !start) || (!isAfterLastNodeInContainer && start);
 				}
+                                
+                                if (container.nodeName == 'IMG') {                                    
+                                    if (container.nextSibling && container.nextSibling.nodeName == 'IMG') {
+                                        return false;
+                                    }
+                                    
+                                    if (container.previousSibling && container.previousSibling.nodeName == 'IMG') {
+                                        return false;
+                                    }
+                                }
 
 				// Walk the DOM and look for text nodes or non empty elements
 				walker = new TreeWalker(container, parentBlock);
@@ -18102,7 +18112,7 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 					}
 				}
 
-				return false;
+				return true;
 			};
 
 			// Wraps any text nodes or inline elements in the specified forced root block name
