@@ -18069,39 +18069,40 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 
 				// Caret is in the middle of a text node like "a|b"
 				if (container.nodeType == 3 && (start ? offset > 0 : offset < container.nodeValue.length)) {
-					return false;
+                                        return false;
 				}
 
 				// If after the last element in block node edge case for #5091
 				if (container.parentNode == parentBlock && isAfterLastNodeInContainer && !start) {
-					return true;
+                                        return true;
 				}
 
 				// Caret can be before/after a table
 				if (container.nodeName === "TABLE" || (container.previousSibling && container.previousSibling.nodeName == "TABLE")) {
-					return (isAfterLastNodeInContainer && !start) || (!isAfterLastNodeInContainer && start);
+                                        return (isAfterLastNodeInContainer && !start) || (!isAfterLastNodeInContainer && start);
 				}
 
 				// Walk the DOM and look for text nodes or non empty elements
 				walker = new TreeWalker(container, parentBlock);
+                                
 				while (node = (start ? walker.prev() : walker.next())) {
-					if (node.nodeType === 1) {
-						// Ignore bogus elements
+                                        if (node.nodeType === 1) {
+                                                // Ignore bogus elements
 						if (node.getAttribute('data-mce-bogus')) {
-							continue;
+                                                        continue;
 						}
-
 						// Keep empty elements like <img />
 						name = node.nodeName;
+                                                
 						if (name === 'IMG') {
                                                     return false;
 						}
-					} else if (node.nodeType === 3 && !/^[ \t\r\n]*$/.test(node.nodeValue)) {
-						return false;
+					} else if (node.nodeType === 3 && !/^[ \t\r\n]*$/.test(node.nodeValue)) {                                                
+                                                return false;
 					}
 				}
 
-				return true;
+				return false;
 			};
 
 			// Wraps any text nodes or inline elements in the specified forced root block name
@@ -18375,7 +18376,7 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 					newBlock = dom.split(containerBlock, parentBlock);
 				} else {
 					dom.insertAfter(newBlock, parentBlock);
-				}
+				}                                
 			} else if (isCaretAtStartOrEndOfBlock(true)) {
 				// Insert new block before
 				newBlock = parentBlock.parentNode.insertBefore(createNewBlock(), parentBlock);
