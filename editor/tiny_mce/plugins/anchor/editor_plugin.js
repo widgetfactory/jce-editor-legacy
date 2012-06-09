@@ -1,6 +1,7 @@
 (function() {
-    var each = tinymce.each, extend = tinymce.extend, JSON = tinymce.util.JSON;
+    var each = tinymce.each, extend = tinymce.extend, Event = tinymce.dom.Event;
     var Node = tinymce.html.Node;
+    var VK = tinymce.VK, BACKSPACE = VK.BACKSPACE, DELETE = VK.DELETE;
 	
     tinymce.create('tinymce.plugins.AnchorPlugin', {
         init : function(ed, url) {
@@ -9,8 +10,10 @@
             var self = this;
             
             function isAnchor(n) {
-                return n && ((n.nodeName == 'IMG' && /mceItemAnchor/.test(n.className)) || (n.nodeName == 'A' && !n.href && (n.name || n.id)));
+                return ed.dom.is(n, 'a.mceItemAnchor') || ed.dom.is(n, 'span.mceItemAnchor') || (n = ed.dom.getParent(n, 'A') && ed.dom.is(n, 'a.mceItemAnchor'));
             }
+            
+            ed.settings.allow_html_in_named_anchor = true;
 
             // Register commands
             ed.addCommand('mceInsertAnchor', function() {
@@ -19,11 +22,11 @@
                 ed.windowManager.open({
                     url	: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=anchor',
                     width : 320 + parseInt(ed.getLang('advanced.anchor_delta_width', 0)),
-                    height : 100 + parseInt(ed.getLang('advanced.anchor_delta_height', 0)),
+                    height : 90 + parseInt(ed.getLang('advanced.anchor_delta_height', 0)),
                     inline : true,
                     popup_css : false
                 }, {
-                    plugin_url : this.url
+                    plugin_url : url
                 });
             });
             // Register buttons
@@ -34,6 +37,27 @@
             
             ed.onNodeChange.add( function(ed, cm, n, co) {            	
                 cm.setActive('anchor', isAnchor(n));
+                
+                ed.dom.removeClass(ed.dom.select('span.mceItemAnchor.mceItemSelected'), 'mceItemSelected');
+                
+                if (isAnchor(n) && n.nodeName == 'SPAN') {
+                    ed.dom.addClass(n, 'mceItemSelected');
+                }
+            });
+            
+            ed.onKeyDown.add(function(ed, e) {				
+                if (e.keyCode == BACKSPACE || e.keyCode == DELETE) {                                        
+                    var s = ed.selection;
+                    
+                    if (ed.dom.is(s.getNode(), 'span.mceItemAnchor')) {
+                        ed.dom.remove(s.getNode());
+                    }
+                    
+                    if (!s.isCollapsed() && ed.dom.is(s.getNode(), 'a.mceItemAnchor')) {
+                        ed.formatter.remove('link');
+                        e.preventDefault();
+                    }
+                }
             });
 
             ed.onInit.add(function() {                
@@ -42,9 +66,8 @@
                     ed.theme.onResolveName.add( function(theme, o) {
                         var n = o.node, v;
 
-                        if (o.name === 'img' && /mceItemAnchor/.test(n.className)) {
-                            var data = JSON.parse(ed.dom.getAttrib(n, 'data-mce-json'));
-                            v = data.name || data.id;
+                        if (o.name === 'span' && /mceItemAnchor/.test(n.className)) {
+                            v = n['data-mce-name'] || n.id;
                         }
 
                         if (o.name === 'a' && !n.href && (n.name || n.id)) {
@@ -63,83 +86,82 @@
             
             
             // Pre-init			
-            ed.onPreInit.add(function() {                
-                // fix for WebKit anchor selection
-                if (tinymce.isWebKit) {	
-                    // Convert anchor elements to image placeholder
-                    ed.parser.addNodeFilter('a', function(nodes) {
-                        for (var i = 0, len = nodes.length; i < len; i++) {
-                            var node = nodes[i];
+            ed.onPreInit.add(function() {                	
+                // Convert anchor elements to image placeholder
+                ed.parser.addNodeFilter('a', function(nodes) {
+                    for (var i = 0, len = nodes.length; i < len; i++) {
+                        var node = nodes[i];
     						
-                            if (!node.attr('href') && (node.attr('name') || node.attr('id'))) {
-                                self._createAnchorImage(node);
-                            }
+                        if (!node.firstChild &&!node.attr('href') && (node.attr('name') || node.attr('id'))) {
+                            self._createAnchorImage(node);
                         }
-                    });
+                    }
+                });
 
-                    // Convert image placeholders to anchor elements
-                    ed.serializer.addNodeFilter('img', function(nodes, name, args) {
-                        for (var i = 0, len = nodes.length; i < len; i++) {
-                            var node = nodes[i];
-                            if (/mceItemAnchor/.test(node.attr('class') || '')) {
-                                self._restoreAnchor(node, args);
-                            }
+                // Convert image placeholders to anchor elements
+                ed.serializer.addNodeFilter('span', function(nodes, name, args) {
+                    for (var i = 0, len = nodes.length; i < len; i++) {
+                        var node = nodes[i];
+                        if (/mceItemAnchor/.test(node.attr('class'))) {
+                            self._restoreAnchor(node, args);
                         }
-                    });
+                    }
+                });
+            });
+            
+            function _cancelResize() {
+                each(ed.dom.select('span.mceItemAnchor'), function(n) {
+                    n.onresizestart = function() {
+                        return false;
+                    };
+                
+                    n.onbeforeeditfocus = function() {
+                        return false;
+                    };
+                });
+            };
+            
+            ed.onSetContent.add(function() {                              
+                if (tinymce.isIE) {
+                    _cancelResize();
+                }
+            });
+            
+            ed.onGetContent.add(function() {                              
+                if (tinymce.isIE) {
+                    _cancelResize();
                 }
             });
         },
-        
+
         _restoreAnchor : function(n) {
-            var self = this, ed = this.editor, p, v, node, text;
+            var self = this, ed = this.editor, at, v, node, text;
 
             if (!n.parent)
                 return;
 
             // get data
-            p = JSON.parse(n.attr('data-mce-json')) || {};
+            at = {
+                name    : n.attr('data-mce-name'),
+                id      : n.attr('id')
+            };
 			
             node = new Node('a', 1);
-			
-            if (p.html) {
-                var value = new Node('#text', 3);
-                value.raw = true;
-                value.value = p.html;
-                node.append(value);
-				
-                delete p.html;
-            }
 
-            each(p, function(v, k) {
-                node.attr(k, v);
-            });
-
+            node.attr(at);
             n.replace(node);
         },
         
-        _getInnerHTML : function(node) {
-            return new tinymce.html.Serializer({
-                inner	: true,
-                validate: false
-            }).serialize(node);
-        },
-        
         _createAnchorImage: function(n) {
-            var self = this, ed = this.editor, dom = ed.dom, v, k, p = {};
+            var self = this, ed = this.editor, dom = ed.dom, at = {};
 
             if (!n.parent)
                 return;
 			
-            each(n.attributes, function(at) {
-                if (at.name == 'class') {
-                    return;
-                }
-                p[at.name] = at.value;
-            });
-			
-            if (n.firstChild) {
-                p.html = this._getInnerHTML(n);
-            }
+            at = {
+                'data-mce-name'   : n.attr('name'),
+                id                : n.attr('id')
+            };
 			
             // get classes as array
             var classes = [];
@@ -153,13 +175,12 @@
                 classes.push('mceItemAnchor');
             }
 
-            var img = new Node('img', 1);
+            var img = new Node('span', 1);
 			
-            img.attr({
-                src             : this.url + '/img/anchor.gif',
-                'class'         : classes.join(' '),
-                'data-mce-json' : JSON.serialize(p)
-            });
+            img.attr(tinymce.extend(at, {
+                // src      : this.url + '/img/trans.gif',
+                'class'  : classes.join(' ')
+            }));
 
             n.replace(img);
         },

@@ -8,25 +8,20 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-
-defined( '_JEXEC' ) or die('RESTRICTED');
+defined('_JEXEC') or die('RESTRICTED');
 ?>
 <form onsubmit="AnchorDialog.update();return false;" action="#">
-	<table border="0" cellpadding="4" cellspacing="0">
-		<tr>
-			<td nowrap="nowrap"><?php echo WFText::_('WF_LABEL_NAME');?>:</td>
-			<td><input type="text" class="mceFocus" id="anchorName" value="" style="width: 200px" /></td>
-		</tr>
-		<tr>
-			<td nowrap="nowrap"><?php echo WFText::_('WF_LABEL_ID');?>:</td>
-			<td><input type="text" class="mceFocus" id="anchorID" value="" style="width: 200px" /></td>
-		</tr>
-	</table>
+    <table border="0" cellpadding="4" cellspacing="0">
+        <tr>
+            <td nowrap="nowrap"><?php echo WFText::_('WF_LABEL_NAME'); ?>:</td>
+            <td><input type="text" class="mceFocus" id="anchor" value="" style="width: 200px" /></td>
+        </tr>
+    </table>
 
-	<div class="mceActionPanel">
-		<div style="float: right">
-			<button type="submit" id="insert">{#update}</button>
-			<button type="button" id="cancel" onclick="tinyMCEPopup.close();">{#cancel}</button>
-		</div>
-	</div>
+    <div class="mceActionPanel">
+        <div style="float: right">
+            <button type="submit" id="insert">{#update}</button>
+            <button type="button" id="cancel" onclick="tinyMCEPopup.close();">{#cancel}</button>
+        </div>
+    </div>
 </form>

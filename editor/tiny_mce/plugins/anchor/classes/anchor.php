@@ -47,7 +47,6 @@ class WFAnchorPlugin extends WFEditorPlugin
 		$document = WFDocument::getInstance();
 
 		$document->addScript(array('anchor'), 'plugins');
-		$document->addStyleSheet(array('anchor'), 'plugins');
 	}
 	
 	function getSettings()
