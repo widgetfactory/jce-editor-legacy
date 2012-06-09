@@ -96,7 +96,6 @@ function jInsertEditorText(text, editor) {
                 invalid_elements : 'applet,iframe,object,embed,script,style,body,bgsound,base,basefont,frame,frameset,head,html,id,ilayer,layer,link,meta,name,title,xml',
                 plugins : '',
                 whitespace_elements : 'pre,script,style,textarea,code',
-                allow_html_in_named_anchor : true,
                 formats: {
                     'span' : {
                         inline : 'span'
