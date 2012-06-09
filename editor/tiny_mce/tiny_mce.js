@@ -18092,9 +18092,9 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 						}
 
 						// Keep empty elements like <img />
-						name = node.nodeName.toLowerCase();
+						name = node.nodeName;
 						if (name === 'IMG') {
-							return false;
+                                                    return false;
 						}
 					} else if (node.nodeType === 3 && !/^[ \t\r\n]*$/.test(node.nodeValue)) {
 						return false;
@@ -18362,7 +18362,7 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 
 			// Insert new block before/after the parent block depending on caret location
 			if (isCaretAtStartOrEndOfBlock()) {
-				// If the caret is at the end of a header we produce a P tag after it similar to Word unless we are in a hgroup
+                                // If the caret is at the end of a header we produce a P tag after it similar to Word unless we are in a hgroup
 				if (/^(H[1-6]|PRE)$/.test(parentBlockName) && containerBlockName != 'HGROUP') {
 					newBlock = createNewBlock(newBlockName);
 				} else {
