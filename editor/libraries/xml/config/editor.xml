@@ -5,7 +5,7 @@
 			<option value="0">WF_OPTION_NO</option>
 			<option value="1">WF_OPTION_YES</option>
 		</param>
-                <param name="schema" type="list" default="html4" label="WF_PARAM_DOCTYPE" description="WF_PARAM_DOCTYPE_DESC" parent="verify_html[1]">
+                <param name="schema" type="list" default="html4" label="WF_PARAM_DOCTYPE" description="WF_PARAM_DOCTYPE_DESC">
 			<option value="html4">HTML4</option>
 			<option value="html5">HTML5</option>
 		</param>
