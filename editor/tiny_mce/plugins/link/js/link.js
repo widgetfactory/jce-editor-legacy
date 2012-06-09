@@ -175,9 +175,7 @@ var LinkDialog = {
 
         tinymce.each(nodes, function(n) {
             if (n.nodeName == 'IMG') {
-                var data = tinymce.util.JSON.parse(ed.dom.getAttrib(n, 'data-mce-json'));
-                    
-                name = data.name || data.id || '';
+                name = ed.dom.getAttrib('data-mce-name') || ed.dom.getAttrib(n, 'id');
             } else {                
                 if (!n.href) {
                     name = ed.dom.getAttrib(n, 'name') || ed.dom.getAttrib(n, 'id');

@@ -17,7 +17,7 @@
             }
             
             function isAnchor(n) {
-            	return n && ((n.nodeName == 'IMG' && /mceItemAnchor/.test(n.className)) || (n.nodeName == 'A' && !n.href && (n.name || n.id)));
+            	return ed.dom.is(n, 'a.mceItemAnchor') || ed.dom.is(n, 'img.mceItemAnchor');
             }
 
             // Register commands
