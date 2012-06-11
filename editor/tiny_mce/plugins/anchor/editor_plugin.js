@@ -10,7 +10,7 @@
             var self = this;
             
             function isAnchor(n) {
-                return ed.dom.is(n, 'a.mceItemAnchor') || ed.dom.is(n, 'span.mceItemAnchor') || (n = ed.dom.getParent(n, 'A') && ed.dom.is(n, 'a.mceItemAnchor'));
+                return ed.dom.is(n, 'a.mceItemAnchor, span.mceItemAnchor') || (n = ed.dom.getParent(n, 'A') && ed.dom.is(n, 'a.mceItemAnchor'));
             }
             
             ed.settings.allow_html_in_named_anchor = true;
@@ -35,12 +35,12 @@
                 cmd : 'mceInsertAnchor'
             });
             
-            ed.onNodeChange.add( function(ed, cm, n, co) {            	
+            ed.onNodeChange.add( function(ed, cm, n, co) {                
                 cm.setActive('anchor', isAnchor(n));
                 
                 ed.dom.removeClass(ed.dom.select('span.mceItemAnchor.mceItemSelected'), 'mceItemSelected');
                 
-                if (isAnchor(n) && n.nodeName == 'SPAN') {
+                if (isAnchor(n) && n.nodeName == 'SPAN') {                 
                     ed.dom.addClass(n, 'mceItemSelected');
                 }
             });
@@ -51,6 +51,7 @@
                     
                     if (ed.dom.is(s.getNode(), 'span.mceItemAnchor')) {
                         ed.dom.remove(s.getNode());
+                        e.preventDefault();
                     }
                     
                     if (!s.isCollapsed() && ed.dom.is(s.getNode(), 'a.mceItemAnchor')) {
@@ -93,7 +94,7 @@
                         var node = nodes[i];
     						
                         if (!node.firstChild &&!node.attr('href') && (node.attr('name') || node.attr('id'))) {
-                            self._createAnchorImage(node);
+                            self._createAnchorSpan(node);
                         }
                     }
                 });
@@ -152,7 +153,7 @@
             n.replace(node);
         },
         
-        _createAnchorImage: function(n) {
+        _createAnchorSpan: function(n) {
             var self = this, ed = this.editor, dom = ed.dom, at = {};
 
             if (!n.parent)
@@ -175,14 +176,16 @@
                 classes.push('mceItemAnchor');
             }
 
-            var img = new Node('span', 1);
+            var span = new Node('span', 1);
 			
-            img.attr(tinymce.extend(at, {
-                // src      : this.url + '/img/trans.gif',
-                'class'  : classes.join(' ')
-            }));
+            span.attr(tinymce.extend(at, {'class'  : classes.join(' ')}));
+            
+            var text = new Node('#text', 3);
+            text.value = '<!--anchor-->';
+            
+            span.append(text);
 
-            n.replace(img);
+            n.replace(span);
         },
 
         getInfo : function() {
