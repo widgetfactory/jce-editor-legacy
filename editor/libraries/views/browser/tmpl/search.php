@@ -13,7 +13,7 @@ defined('_JEXEC') or die('RESTRICTED');
 <div id="search-browser">
     <span id="searchbox"><input id="search-input" placeholder="<?php echo WFText::_('WF_LABEL_SEARCH'); ?>..." /><span class="search-icon"></span></span>
     <button class="button" id="search-button" role="button"><?php echo WFText::_('WF_LABEL_SEARCH'); ?></button>
-    <span id="search-options-button" role="button"><span class="icon"></span></span>
+    <span id="search-options-button" role="button" title="<?php echo WFText::_('WF_LABEL_SEARCH_OPTIONS'); ?>"><span class="icon"></span></span>
     <div id="search-options">
         <fieldset class="phrases">
             <legend><?php echo JText::_('WF_SEARCH_FOR'); ?>
