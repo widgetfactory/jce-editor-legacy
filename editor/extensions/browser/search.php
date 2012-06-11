@@ -76,7 +76,7 @@ class WFSearchBrowser extends WFBrowserExtension {
         $searchphrases[] = JHtml::_('select.option', 'all', JText::_('WF_SEARCH_ALL_WORDS'));
         $searchphrases[] = JHtml::_('select.option', 'any', JText::_('WF_SEARCH_ANY_WORDS'));
         $searchphrases[] = JHtml::_('select.option', 'exact', JText::_('WF_SEARCH_EXACT_PHRASE'));
-        $lists['searchphrase'] = JHtml::_('select.radiolist', $searchphrases, 'searchphrase', '', 'value', 'text');
+        $lists['searchphrase'] = JHtml::_('select.radiolist', $searchphrases, 'searchphrase', '', 'value', 'text', 'all');
 
 
         $view = $this->getView('search');
@@ -95,8 +95,13 @@ class WFSearchBrowser extends WFBrowserExtension {
      * @copyright Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
      */
     public function doSearch($query) {
+        $app = JFactory::getApplication();
         // get SearchHelper
         require_once(JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_search' . DS . 'helpers' . DS . 'search.php');
+        
+        // set router mode to RAW
+        $router = $app->getRouter();
+        $router->setMode(0);
 
         // get saerch plugins
         JPluginHelper::importPlugin('search');
@@ -166,8 +171,14 @@ class WFSearchBrowser extends WFBrowserExtension {
             }
             $searchRegex .= ')#iu';
 
-            $row->text = preg_replace($searchRegex, '<span class="highlight">\0</span>', $row->text);
-            $row->link = preg_replace('#^administrator\/#', '', $row->href);
+            $row->text = preg_replace($searchRegex, '<span class="highlight">\0</span>', $row->text); 
+            
+            // remove base url
+            if (strpos($row->href, JURI::base(true)) !== false) {
+                $row->href = substr_replace($row->href, '', 0, strlen(JURI::base(true)) + 1);
+            }
+            
+            $row->link = $row->href;
         }
 
         return $rows;
