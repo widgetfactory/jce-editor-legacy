@@ -94,7 +94,7 @@ var AnchorDialog = {
                     //at.src = tinyMCEPopup.getWindowArg('plugin_url') + '/img/trans.gif';
                         
                     //ed.execCommand('mceInsertContent', 0, ed.dom.createHTML('a', at, '\uFEFF'));
-                    ed.execCommand('mceInsertContent', 0, ed.dom.createHTML('span', at));
+                    ed.execCommand('mceInsertContent', 0, ed.dom.createHTML('span', at, '<!--anchor-->'));
                 } else {
                     at[attrib] = v;
                     
