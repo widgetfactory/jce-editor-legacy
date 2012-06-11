@@ -1,6 +1,6 @@
-a.mceItemAnchor {width:11px !important; height:11px !important; background:url(../img/anchor.gif) no-repeat 2px center; padding-left : 14px;vertical-align:middle;border: 1px dashed #B4D4FF;}
+a.mceItemAnchor {width:11px !important; height:11px !important; background:url(../img/anchor.gif) no-repeat 2px center; padding-left : 14px;border: 1px dashed #B4D4FF;}
 a.mceItemAnchor::selection {
-    background: #b4d4ff;
+    background-color: #b4d4ff;
 }
 /* Anchor selection */
 span.mceItemAnchor {
@@ -12,6 +12,10 @@ span.mceItemAnchor {
     border: 1px dashed #B4D4FF;
     cursor: pointer;
     font-size : 0;
+    line-height : 0;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-indent : -9999px;
 }
 span.mceItemAnchor::selection {
     background-color: #b4d4ff;
