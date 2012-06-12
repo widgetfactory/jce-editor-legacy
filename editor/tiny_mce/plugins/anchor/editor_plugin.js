@@ -68,7 +68,7 @@
                         var n = o.node, v;
 
                         if (o.name === 'span' && /mceItemAnchor/.test(n.className)) {
-                            v = n['data-mce-name'] || n.id;
+                            v = ed.dom.getAttrib(n, 'data-mce-name') || n.id;
                         }
 
                         if (o.name === 'a' && !n.href && (n.name || n.id)) {
