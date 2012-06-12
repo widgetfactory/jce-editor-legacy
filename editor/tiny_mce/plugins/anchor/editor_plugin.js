@@ -1,8 +1,8 @@
 (function() {
-    var each = tinymce.each, extend = tinymce.extend, Event = tinymce.dom.Event;
+    var DOM = tinymce.DOM, Event = tinymce.dom.Event, is = tinymce.is, each = tinymce.each;
     var Node = tinymce.html.Node;
     var VK = tinymce.VK, BACKSPACE = VK.BACKSPACE, DELETE = VK.DELETE;
-	
+
     tinymce.create('tinymce.plugins.AnchorPlugin', {
         init : function(ed, url) {
             this.editor = ed;
@@ -16,23 +16,8 @@
             ed.settings.allow_html_in_named_anchor = true;
 
             // Register commands
-            ed.addCommand('mceInsertAnchor', function() {
-                var se = ed.selection, n = se.getNode();
-
-                ed.windowManager.open({
-                    url	: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=anchor',
-                    width : 320 + parseInt(ed.getLang('advanced.anchor_delta_width', 0)),
-                    height : 90 + parseInt(ed.getLang('advanced.anchor_delta_height', 0)),
-                    inline : true,
-                    popup_css : false
-                }, {
-                    plugin_url : url
-                });
-            });
-            // Register buttons
-            ed.addButton('anchor', {
-                title : 'advanced.anchor_desc',
-                cmd : 'mceInsertAnchor'
+            ed.addCommand('mceInsertAnchor', function(ui, value) {            
+                return self._insertAnchor(value);
             });
             
             ed.onNodeChange.add( function(ed, cm, n, co) {                
@@ -47,17 +32,9 @@
             
             ed.onKeyDown.add(function(ed, e) {				
                 if (e.keyCode == BACKSPACE || e.keyCode == DELETE) {                                        
-                    var s = ed.selection;
-                    
-                    if (ed.dom.is(s.getNode(), 'span.mceItemAnchor')) {
-                        ed.dom.remove(s.getNode());
-                        e.preventDefault();
-                    }
-                    
-                    if (!s.isCollapsed() && ed.dom.is(s.getNode(), 'a.mceItemAnchor')) {
-                        ed.formatter.remove('link');
-                        e.preventDefault();
-                    }
+                    self._removeAnchor();
+                
+                    e.preventDefault();
                 }
             });
 
@@ -134,6 +111,113 @@
                 }
             });
         },
+        
+        _removeAnchor : function() {
+            var ed = this.editor, s = ed.selection;
+                    
+            if (ed.dom.is(s.getNode(), 'span.mceItemAnchor')) {
+                ed.dom.remove(s.getNode());
+            }
+                    
+            if (!s.isCollapsed() && ed.dom.is(s.getNode(), 'a.mceItemAnchor')) {
+                ed.formatter.remove('link');
+            }
+        },
+        
+        _getAnchor : function() {
+            var ed = this.editor, n = ed.selection.getNode(), v;
+        
+            // Webkit img
+            if (n.nodeName == 'SPAN' && /mceItemAnchor/.test(n.className)) {
+                v = ed.dom.getAttrib(n, 'data-mce-name') || ed.dom.getAttrib(n, 'id');
+            } else {
+                n = ed.dom.getParent(n, 'A');
+                v = ed.dom.getAttrib(n, 'name') || ed.dom.getAttrib(n, 'id');
+            }
+
+            return v;
+        },
+        
+        _insertAnchor : function(v) {
+            var ed = this.editor, attrib;
+        
+            if (!v) {
+                ed.windowManager.alert('anchor.invalid');
+                return false;
+            }
+		
+            if (!/^[a-z][a-z0-9\-\_:\.]*$/i.test(v)) {
+                ed.windowManager.alert('anchor.invalid');
+                return false;
+            }
+        
+            var aRule = ed.schema.getElementRule('a');
+        
+            if (!aRule || aRule.attributes.name) {
+                attrib = 'name';
+            } else {
+                attrib = 'id';
+            }
+
+            var n = ed.selection.getNode();
+        
+            var at = {
+                'class' :  'mceItemAnchor' 
+            };
+
+            if (n.nodeName == 'SPAN' && /mceItemAnchor/.test(n.className)) {
+                if (attrib == 'name') {
+                    attrib = 'data-mce-name';
+                }
+            
+                at[attrib] = v;
+            
+                ed.dom.setAttribs(n, at); 
+                ed.undoManager.add();
+            } else {
+                if (n = ed.dom.getParent(n, 'A')) {
+                    at[attrib] = v;
+                
+                    ed.dom.setAttribs(n, at); 
+                    ed.undoManager.add();
+                } else {                
+                    if (ed.dom.select('a[' + attrib + '="' + v + '"], img[data-mce-name="' + v + '"], img[id="' + v + '"]', ed.getBody()).length) {
+                        ed.windowManager.alert('anchor.exists');
+                        return false;
+                    }
+                    
+                    if (ed.selection.isCollapsed()) {                        
+                        if (attrib == 'name') {
+                            attrib = 'data-mce-name';
+                        }
+            
+                        at[attrib] = v;
+                    
+                        //at.src = tinyMCEPopup.getWindowArg('plugin_url') + '/img/trans.gif';
+                        
+                        //ed.execCommand('mceInsertContent', 0, ed.dom.createHTML('a', at, '\uFEFF'));
+                        ed.execCommand('mceInsertContent', 0, ed.dom.createHTML('span', at, '<!--anchor-->'));
+                    } else {
+                        at[attrib] = v;
+                    
+                        ed.execCommand('mceInsertLink', false, '#mce_temp_url#', {
+                            skip_undo : 1
+                        });
+                    
+                        at.href = at['data-mce-href'] = null;
+            
+                        each(ed.dom.select('a[href="#mce_temp_url#"]'), function(link) {
+                            ed.dom.setAttribs(link, at);
+                        });
+                    }
+                    //}
+                
+                    ed.nodeChanged();
+                }
+            }
+        
+            return true;
+        },
 
         _restoreAnchor : function(n) {
             var self = this, ed = this.editor, at, v, node, text;
@@ -178,7 +262,9 @@
 
             var span = new Node('span', 1);
 			
-            span.attr(tinymce.extend(at, {'class'  : classes.join(' ')}));
+            span.attr(tinymce.extend(at, {
+                'class'  : classes.join(' ')
+            }));
             
             var text = new Node('#text', 3);
             text.value = '<!--anchor-->';
@@ -186,6 +272,85 @@
             span.append(text);
 
             n.replace(span);
+        },
+        
+        createControl: function(n, cm) {
+            var self = this, ed = this.editor;
+
+            switch (n) {
+                case 'anchor':
+                    var content = DOM.create('div', {}, '<label>' + ed.getLang('anchor.name', 'Name') + '</label>');
+                    var input   = DOM.add(content, 'input', {
+                        type    : 'text',
+                        id      : ed.id + '_anchor'
+                    });
+                    
+                    var remove = DOM.add(content, 'a', {
+                        'href' : 'javascript:;', 
+                        'class' : 'mceButton'
+                    }, ed.getLang('anchor.remove', 'Remove'));
+                    
+                    var btn = DOM.add(content, 'a', {
+                        'href' : 'javascript:;', 
+                        'class' : 'mceButton'
+                    }, ed.getLang('common.insert', 'Insert'));
+
+                    var c = new tinymce.ui.ButtonDialog(cm.prefix + 'anchor', {
+                        title           : ed.getLang('anchor.desc', 'Inserts an Anchor'),
+                        'class'         : 'mce_anchor',
+                        'dialog_class'  : ed.getParam('skin') + 'Skin',
+                        'content'       : content,
+                        'width'         : 200
+                    }, ed);
+
+                    c.onShowDialog.add(function() {
+                        input.value = '';
+                        input.focus();
+                        
+                        var label = ed.getLang('common.insert', 'Insert');
+                       
+                        var v = self._getAnchor();
+                    
+                        DOM.addClass(remove, 'disabled');
+                        
+                        if (v) {
+                            input.value = v;  
+                            label = ed.getLang('common.update', 'Update');
+                        
+                            DOM.removeClass(remove, 'disabled');
+                        }
+                        
+                        DOM.setHTML(btn, label);
+                    });
+                    
+                    c.onHideDialog.add(function() {
+                        input.value = '';
+                    });
+
+                    Event.add(btn, 'click', function() {
+                        ed.execCommand('mceInsertAnchor', false, input.value);
+                        c.hideDialog();
+                    });
+                    
+                    Event.add(remove, 'click', function() {
+                        if (!DOM.hasClass(remove, 'disabled')) {
+                            self._removeAnchor();
+                            c.hideDialog();
+                        }
+                    });
+					
+                    ed.onMouseDown.add(c.hideDialog, c);
+					
+                    // Remove the menu element when the editor is removed
+                    ed.onRemove.add(function() {
+                        c.destroy();
+                    });
+
+                    return cm.add(c);
+                    break;
+            }
+
+            return null;
         },
 
         getInfo : function() {

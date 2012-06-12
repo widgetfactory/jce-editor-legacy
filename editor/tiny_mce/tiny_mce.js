@@ -4,11 +4,11 @@
 		undef, isRegExpBroken = 'B'.replace(/A(.)|B/, '$1') === '$1';
 
 	var tinymce = {
-		majorVersion : '3',
+		majorVersion : '@@tinymce_major_version@@',
 
-		minorVersion : '5.2',
+		minorVersion : '@@tinymce_minor_version@@',
 
-		releaseDate : '2012-05-31',
+		releaseDate : '@@tinymce_release_date@@',
 
 		_init : function() {
 			var t = this, d = document, na = navigator, ua = na.userAgent, i, nl, n, base, p, v;
@@ -500,9 +500,6 @@
 	// Describe the different namespaces
 
 	})(window);
-
-
-
 tinymce.create('tinymce.util.Dispatcher', {
 	scope : null,
 	listeners : null,
@@ -567,7 +564,6 @@ tinymce.create('tinymce.util.Dispatcher', {
 	}
 
 	});
-
 (function() {
 	var each = tinymce.each;
 
@@ -818,7 +814,6 @@ tinymce.create('tinymce.util.Dispatcher', {
 		}
 	});
 })();
-
 (function() {
 	var each = tinymce.each;
 
@@ -889,7 +884,6 @@ tinymce.create('tinymce.util.Dispatcher', {
 		}
 	});
 })();
-
 (function() {
 	function serialize(o, quote) {
 		var i, v, t, name;
@@ -955,7 +949,6 @@ tinymce.create('tinymce.util.Dispatcher', {
 
 		};
 })();
-
 tinymce.create('static tinymce.util.XHR', {
 	send : function(o) {
 		var x, t, w = window, c = 0;
@@ -1014,7 +1007,6 @@ tinymce.create('static tinymce.util.XHR', {
 		}
 	}
 });
-
 (function() {
 	var extend = tinymce.extend, JSON = tinymce.util.JSON, XHR = tinymce.util.XHR;
 
@@ -1086,7 +1078,6 @@ tinymce.create('static tinymce.util.XHR', {
 		}
 	};
 })(tinymce);
-
 tinymce.util.Quirks = function(editor) {
 	var VK = tinymce.VK, BACKSPACE = VK.BACKSPACE, DELETE = VK.DELETE, dom = editor.dom, selection = editor.selection, settings = editor.settings;
 
@@ -1097,6 +1088,12 @@ tinymce.util.Quirks = function(editor) {
 			// Ignore
 		}
 	}
+
+	function getDocumentMode() {
+		var documentMode = editor.getDoc().documentMode;
+
+		return documentMode ? documentMode : 6;
+	};
 
 	function cleanupStylesWhenDeleting() {
 		function removeMergedFormatSpans(isDelete) {
@@ -1393,16 +1390,15 @@ tinymce.util.Quirks = function(editor) {
 	}
 
 	function addNewLinesBeforeBrInPre() {
-		var documentMode = editor.getDoc().documentMode;
-
 		// IE8+ rendering mode does the right thing with BR in PRE
-		if (documentMode && documentMode > 7) {
+		if (getDocumentMode() > 7) {
 			return;
 		}
 
 		 // Enable display: none in area and add a specific class that hides all BR elements in PRE to
 		 // avoid the caret from getting stuck at the BR elements while pressing the right arrow key
 		setEditorCommandState('RespectVisibilityInDesign', true);
+		editor.contentStyles.push('.mceHideBrInPre pre br {display: none}');
 		dom.addClass(editor.getBody(), 'mceHideBrInPre');
 
 		// Adds a \n before all BR elements in PRE to get them visual
@@ -1608,15 +1604,34 @@ tinymce.util.Quirks = function(editor) {
 		editor.onSetContent.add(repaint);
 	};
 
-	function deleteImageOnBackSpace() {
+	function deleteControlItemOnBackSpace() {
 		editor.onKeyDown.add(function(editor, e) {
-			if (!e.isDefaultPrevented() && e.keyCode == 8 && selection.getNode().nodeName == 'IMG') {
-				e.preventDefault();
-				editor.undoManager.beforeChange();
-				dom.remove(selection.getNode());
-				editor.undoManager.add();
+			var rng;
+
+			if (!e.isDefaultPrevented() && e.keyCode == BACKSPACE) {
+				rng = editor.getDoc().selection.createRange();
+				if (rng && rng.item) {
+					e.preventDefault();
+					editor.undoManager.beforeChange();
+					dom.remove(rng.item(0));
+					editor.undoManager.add();
+				}
 			}
 		});
+	};
+
+	function renderEmptyBlocksFix() {
+		var emptyBlocksCSS;
+
+		// IE10+
+		if (getDocumentMode() >= 10) {
+			emptyBlocksCSS = '';
+			tinymce.each('p div h1 h2 h3 h4 h5 h6'.split(' '), function(name, i) {
+				emptyBlocksCSS += (i > 0 ? ',' : '') + name + ':empty';
+			});
+
+			editor.contentStyles.push(emptyBlocksCSS + '{padding-right: 1px !important}');
+		}
 	};
 
 	// All browsers
@@ -1644,7 +1659,8 @@ tinymce.util.Quirks = function(editor) {
 		ensureBodyHasRoleApplication();
 		addNewLinesBeforeBrInPre();
 		removePreSerializedStylesWhenSelectingControls();
-		deleteImageOnBackSpace();
+		deleteControlItemOnBackSpace();
+		renderEmptyBlocksFix();
 	}
 
 	// Gecko
@@ -1842,7 +1858,6 @@ tinymce.util.Quirks = function(editor) {
 		}
 	};
 })(tinymce);
-
 tinymce.html.Styles = function(settings, schema) {
 	var rgbRegExp = /rgb\s*\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)/gi,
 		urlOrStrRegExp = /(?:url(?:(?:\(\s*\"([^\"]+)\"\s*\))|(?:\(\s*\'([^\']+)\'\s*\))|(?:\(\s*([^)\s]+)\s*\))))|(?:\'([^\']+)\')|(?:\"([^\"]+)\")/gi,
@@ -2065,7 +2080,6 @@ tinymce.html.Styles = function(settings, schema) {
 		}
 	};
 };
-
 (function(tinymce) {
 	var mapCache = {}, makeMap = tinymce.makeMap, each = tinymce.each;
 
@@ -2109,7 +2123,7 @@ tinymce.html.Styles = function(settings, schema) {
 			html5 = mapCache.html5 = unpack({
 					A : 'id|accesskey|class|dir|draggable|item|hidden|itemprop|role|spellcheck|style|subject|title',
 					B : '#|a|abbr|area|audio|b|bdo|br|button|canvas|cite|code|command|datalist|del|dfn|em|embed|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|meta|' +
-						'meter|noscript|object|output|progress|q|ruby|samp|script|select|small|span|strong|sub|sup|svg|textarea|time|var|video',
+						'meter|noscript|object|output|progress|q|ruby|samp|script|select|small|span|strong|sub|sup|svg|textarea|time|var|video|wbr',
 					C : '#|a|abbr|area|address|article|aside|audio|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|' +
 						'figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|' +
 						'p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var|video'
@@ -2218,7 +2232,8 @@ tinymce.html.Styles = function(settings, schema) {
 					'tbody[A][tr]' +
 					'tr[A][th|td]' +
 					'th[A|headers|rowspan|colspan|scope][B]' +
-					'td[A|headers|rowspan|colspan][C]'
+					'td[A|headers|rowspan|colspan][C]' +
+					'wbr[A][]'
 			);
 		}
 
@@ -2399,7 +2414,7 @@ tinymce.html.Styles = function(settings, schema) {
 		// Setup map objects
 		whiteSpaceElementsMap = createLookupTable('whitespace_elements', 'pre script style textarea');
 		selfClosingElementsMap = createLookupTable('self_closing_elements', 'colgroup dd dt li option p td tfoot th thead tr');
-		shortEndedElementsMap = createLookupTable('short_ended_elements', 'area base basefont br col frame hr img input isindex link meta param embed source');
+		shortEndedElementsMap = createLookupTable('short_ended_elements', 'area base basefont br col frame hr img input isindex link meta param embed source wbr');
 		boolAttrMap = createLookupTable('boolean_attributes', 'checked compact declare defer disabled ismap multiple nohref noresize noshade nowrap readonly selected autoplay loop controls');
 		nonEmptyElementsMap = createLookupTable('non_empty_elements', 'td th iframe video audio object', shortEndedElementsMap);
 		blockElementsMap = createLookupTable('block_elements', 'h1 h2 h3 h4 h5 h6 hr p div address pre form table tbody thead tfoot ' + 
@@ -2771,7 +2786,6 @@ tinymce.html.Styles = function(settings, schema) {
 		self.addValidChildren = addValidChildren;
 	};
 })(tinymce);
-
 (function(tinymce) {
 	tinymce.html.SaxParser = function(settings, schema) {
 		var self = this, noop = function() {};
@@ -3062,7 +3076,6 @@ tinymce.html.Styles = function(settings, schema) {
 		};
 	}
 })(tinymce);
-
 (function(tinymce) {
 	var whiteSpaceRegExp = /^[ \t\r\n]*$/, typeLookup = {
 		'#text' : 3,
@@ -3395,7 +3408,6 @@ tinymce.html.Styles = function(settings, schema) {
 
 	tinymce.html.Node = Node;
 })(tinymce);
-
 (function(tinymce) {
 	var Node = tinymce.html.Node;
 
@@ -3994,7 +4006,6 @@ tinymce.html.Styles = function(settings, schema) {
 		}
 	}
 })(tinymce);
-
 tinymce.html.Writer = function(settings) {
 	var html = [], indent, indentBefore, indentAfter, encode, htmlOutput;
 
@@ -4094,7 +4105,6 @@ tinymce.html.Writer = function(settings) {
 		}
 	};
 };
-
 (function(tinymce) {
 	tinymce.html.Serializer = function(settings, schema) {
 		var self = this, writer = new tinymce.html.Writer(settings);
@@ -4210,7 +4220,6 @@ tinymce.html.Writer = function(settings) {
 		};
 	}
 })(tinymce);
-
 // JSLint defined globals
 /*global tinymce:false, window:false */
 
@@ -4750,7 +4759,6 @@ tinymce.dom = {};
 
 	namespace = 0;
 })(tinymce.dom, 'data-mce-expando'); // Namespace and expando
-
 tinymce.dom.TreeWalker = function(start_node, root_node) {
 	var node = start_node;
 
@@ -4790,7 +4798,6 @@ tinymce.dom.TreeWalker = function(start_node, root_node) {
 		return (node = findSibling(node, 'lastChild', 'previousSibling', shallow));
 	};
 };
-
 (function(tinymce) {
 	// Shorten names
 	var each = tinymce.each,
@@ -5499,6 +5506,32 @@ tinymce.dom.TreeWalker = function(start_node, root_node) {
 			return this.styles.serialize(o, name);
 		},
 
+		addStyle: function(cssText) {
+			var doc = this.doc, head;
+
+			// Create style element if needed
+			styleElm = doc.getElementById('mceDefaultStyles');
+			if (!styleElm) {
+				styleElm = doc.createElement('style'),
+				styleElm.id = 'mceDefaultStyles';
+				styleElm.type = 'text/css';
+
+				head = doc.getElementsByTagName('head')[0]
+				if (head.firstChild) {
+					head.insertBefore(styleElm, head.firstChild);
+				} else {
+					head.appendChild(styleElm);
+				}
+			}
+
+			// Append style data to old or new style element
+			if (styleElm.styleSheet) {
+				styleElm.styleSheet.cssText += cssText;
+			} else {
+				styleElm.appendChild(doc.createTextNode(cssText));
+			}
+		},
+
 		loadCSS : function(u) {
 			var t = this, d = t.doc, head;
 
@@ -5622,11 +5655,11 @@ tinymce.dom.TreeWalker = function(start_node, root_node) {
 						// This seems to fix this problem
 
 						// Create new div with HTML contents and a BR infront to keep comments
-						element = self.create('div');
-						element.innerHTML = '<br />' + html;
+						var newElement = self.create('div');
+						newElement.innerHTML = '<br />' + html;
 
 						// Add all children from div to target
-						each (element.childNodes, function(node, i) {
+						each (tinymce.grep(newElement.childNodes), function(node, i) {
 							// Skip br element
 							if (i)
 								element.appendChild(node);
@@ -6174,7 +6207,6 @@ tinymce.dom.TreeWalker = function(start_node, root_node) {
 
 	tinymce.DOM = new tinymce.dom.DOMUtils(document, {process_html : 0});
 })(tinymce);
-
 (function(ns) {
 	// Range constructor
 	function Range(dom) {
@@ -6879,7 +6911,6 @@ tinymce.dom.TreeWalker = function(start_node, root_node) {
 		return this.toStringIE();
 	};
 })(tinymce.dom);
-
 (function() {
 	function Selection(selection) {
 		var self = this, dom = selection.dom, TRUE = true, FALSE = false;
@@ -7344,7 +7375,6 @@ tinymce.dom.TreeWalker = function(start_node, root_node) {
 	// Expose the selection object
 	tinymce.dom.TridentSelection = Selection;
 })();
-
 
 /*
  * Sizzle CSS Selector Engine
@@ -8788,7 +8818,6 @@ window.tinymce.dom.Sizzle = Sizzle;
 
 })();
 
-
 (function(tinymce) {
 	tinymce.dom.Element = function(id, settings) {
 		var t = this, dom, el;
@@ -8897,7 +8926,6 @@ window.tinymce.dom.Sizzle = Sizzle;
 		});
 	};
 })(tinymce);
-
 (function(tinymce) {
 	function trimNl(s) {
 		return s.replace(/[\n\r]+/g, '');
@@ -10021,7 +10049,6 @@ window.tinymce.dom.Sizzle = Sizzle;
 		}
 	});
 })(tinymce);
-
 (function(tinymce) {
 	tinymce.dom.Serializer = function(settings, dom, schema) {
 		var onPreProcess, onPostProcess, isIE = tinymce.isIE, each = tinymce.each, htmlParser;
@@ -10486,7 +10513,6 @@ window.tinymce.dom.Sizzle = Sizzle;
 	// Global script loader
 	tinymce.ScriptLoader = new tinymce.dom.ScriptLoader();
 })(tinymce);
-
 (function(tinymce) {
 	tinymce.dom.RangeUtils = function(dom) {
 		var INVISIBLE_CHAR = '\uFEFF';
@@ -10685,7 +10711,6 @@ window.tinymce.dom.Sizzle = Sizzle;
 		return false;
 	};
 })(tinymce);
-
 (function(tinymce) {
 	var Event = tinymce.dom.Event, each = tinymce.each;
 
@@ -10838,7 +10863,6 @@ window.tinymce.dom.Sizzle = Sizzle;
 		}
 	});
 })(tinymce);
-
 (function(tinymce) {
 	// Shorten class names
 	var DOM = tinymce.DOM, is = tinymce.is;
@@ -10963,7 +10987,6 @@ tinymce.create('tinymce.ui.Container:tinymce.ui.Control', {
 	}
 });
 
-
 tinymce.create('tinymce.ui.Separator:tinymce.ui.Control', {
 	Separator : function(id, s) {
 		this.parent(id, s);
@@ -10975,7 +10998,6 @@ tinymce.create('tinymce.ui.Separator:tinymce.ui.Control', {
 		return tinymce.DOM.createHTML('span', {'class' : this.classPrefix, role : 'separator', 'aria-orientation' : 'vertical', tabindex : '-1'});
 	}
 });
-
 (function(tinymce) {
 	var is = tinymce.is, DOM = tinymce.DOM, each = tinymce.each, walk = tinymce.walk;
 
@@ -11006,7 +11028,6 @@ tinymce.create('tinymce.ui.Separator:tinymce.ui.Control', {
 		}
 	});
 })(tinymce);
-
 (function(tinymce) {
 	var is = tinymce.is, DOM = tinymce.DOM, each = tinymce.each, walk = tinymce.walk;
 
@@ -11511,7 +11532,6 @@ tinymce.create('tinymce.ui.Separator:tinymce.ui.Control', {
 		}
 	});
 })(tinymce);
-
 (function(tinymce) {
 	var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each, Dispatcher = tinymce.util.Dispatcher, undef;
 
@@ -11807,7 +11827,6 @@ tinymce.create('tinymce.ui.Separator:tinymce.ui.Control', {
 		}
 	});
 })(tinymce);
-
 (function(tinymce) {
 	var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each, Dispatcher = tinymce.util.Dispatcher, undef;
 
@@ -11946,7 +11965,6 @@ tinymce.create('tinymce.ui.Separator:tinymce.ui.Control', {
 		}
 	});
 })(tinymce);
-
 (function(tinymce) {
 	var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each;
 
@@ -12039,7 +12057,6 @@ tinymce.create('tinymce.ui.Separator:tinymce.ui.Control', {
 		}
 	});
 })(tinymce);
-
 (function(tinymce) {
 	var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each;
 
@@ -12123,7 +12140,6 @@ tinymce.create('tinymce.ui.Separator:tinymce.ui.Control', {
 		}
 	});
 })(tinymce);
-
 (function(tinymce) {
 	var DOM = tinymce.DOM, Event = tinymce.dom.Event, is = tinymce.is, each = tinymce.each;
 
@@ -12325,7 +12341,6 @@ tinymce.create('tinymce.ui.Separator:tinymce.ui.Control', {
 		}
 	});
 })(tinymce);
-
 (function(tinymce) {
 // Shorten class names
 var dom = tinymce.DOM, each = tinymce.each, Event = tinymce.dom.Event;
@@ -12385,7 +12400,6 @@ tinymce.create('tinymce.ui.ToolbarGroup:tinymce.ui.Container', {
 	}
 });
 })(tinymce);
-
 (function(tinymce) {
 // Shorten class names
 var dom = tinymce.DOM, each = tinymce.each;
@@ -12452,7 +12466,6 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 	}
 });
 })(tinymce);
-
 (function(tinymce) {
 	var Dispatcher = tinymce.util.Dispatcher, each = tinymce.each;
 
@@ -12965,6 +12978,8 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 
 			self.contentCSS = [];
 
+			self.contentStyles = [];
+
 			// Creates all events like onClick, onSetContent etc see Editor.Events.js for the actual logic
 			self.setupEvents();
 
@@ -13321,7 +13336,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 		},
 
 		initContentBody : function() {
-			var self = this, settings = self.settings, targetElm = DOM.get(self.id), doc = self.getDoc(), html, body;
+			var self = this, settings = self.settings, targetElm = DOM.get(self.id), doc = self.getDoc(), html, body, contentCssText;
 
 			// Setup iframe body
 			if ((!isIE || !tinymce.relaxedDomain) && !settings.content_editable) {
@@ -13491,6 +13506,17 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 			self.execCallback('init_instance_callback', self);
 			self.focus(true);
 			self.nodeChanged({initial : true});
+
+			// Add editor specific CSS styles
+			if (self.contentStyles.length > 0) {
+				contentCssText = '';
+
+				each(self.contentStyles, function(style) {
+					contentCssText += style + "\r\n";
+				});
+
+				self.dom.addStyle(contentCssText);
+			}
 
 			// Load specified content CSS last
 			each(self.contentCSS, function(url) {
@@ -14148,13 +14174,12 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 				// Don't clear the window or document if content editable
 				// is enabled since other instances might still be present
 				if (!self.settings.content_editable) {
-					Event.clear(self.getWin());
-					Event.clear(self.getDoc());
+					Event.unbind(self.getWin());
+					Event.unbind(self.getDoc());
 				}
 
-				Event.clear(self.getBody());
-				Event.clear(self.formElement);
-				Event.unbind(elm);
+				Event.unbind(self.getBody());
+				Event.clear(elm);
 
 				self.execCallback('remove_instance_callback', self);
 				self.onRemove.dispatch(self);
@@ -15059,7 +15084,6 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 		});
 	};
 })(tinymce);
-
 (function(tinymce) {
 	var Dispatcher = tinymce.util.Dispatcher;
 
@@ -15279,12 +15303,11 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 		return self;
 	};
 })(tinymce);
-
 tinymce.ForceBlocks = function(editor) {
 	var settings = editor.settings, dom = editor.dom, selection = editor.selection, blockElements = editor.schema.getBlockElements();
 
 	function addRootBlocks() {
-		var node = selection.getStart(), rootNode = editor.getBody(), rng, startContainer, startOffset, endContainer, endOffset, rootBlockNode, tempNode, offset = -0xFFFFFF, wrapped;
+		var node = selection.getStart(), rootNode = editor.getBody(), rng, startContainer, startOffset, endContainer, endOffset, rootBlockNode, tempNode, offset = -0xFFFFFF, wrapped, isInEditorDocument;
 
 		if (!node || node.nodeType !== 1 || !settings.forced_root_block)
 			return;
@@ -15312,6 +15335,7 @@ tinymce.ForceBlocks = function(editor) {
 				rng.moveToElementText(node);
 			}
 
+			isInEditorDocument = rng.parentElement().ownerDocument === editor.getDoc();
 			tmpRng = rng.duplicate();
 			tmpRng.collapse(true);
 			startOffset = tmpRng.move('character', offset) * -1;
@@ -15342,28 +15366,30 @@ tinymce.ForceBlocks = function(editor) {
 			}
 		}
 
-		if (rng.setStart) {
-			rng.setStart(startContainer, startOffset);
-			rng.setEnd(endContainer, endOffset);
-			selection.setRng(rng);
-		} else {
-			try {
-				rng = editor.getDoc().body.createTextRange();
-				rng.moveToElementText(rootNode);
-				rng.collapse(true);
-				rng.moveStart('character', startOffset);
-
-				if (endOffset > 0)
-					rng.moveEnd('character', endOffset);
-
-				rng.select();
-			} catch (ex) {
-				// Ignore
-			}
-		}
-
-		// Only trigger nodeChange when we wrapped nodes to prevent a forever loop
 		if (wrapped) {
+			if (rng.setStart) {
+				rng.setStart(startContainer, startOffset);
+				rng.setEnd(endContainer, endOffset);
+				selection.setRng(rng);
+			} else {
+				// Only select if the previous selection was inside the document to prevent auto focus in quirks mode
+				if (isInEditorDocument) {
+					try {
+						rng = editor.getDoc().body.createTextRange();
+						rng.moveToElementText(rootNode);
+						rng.collapse(true);
+						rng.moveStart('character', startOffset);
+
+						if (endOffset > 0)
+							rng.moveEnd('character', endOffset);
+
+						rng.select();
+					} catch (ex) {
+						// Ignore
+					}
+				}
+			}
+
 			editor.nodeChanged();
 		}
 	};
@@ -15374,7 +15400,6 @@ tinymce.ForceBlocks = function(editor) {
 		editor.onNodeChange.add(addRootBlocks);
 	}
 };
-
 (function(tinymce) {
 	// Shorten names
 	var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each, extend = tinymce.extend;
@@ -15767,7 +15792,6 @@ tinymce.ForceBlocks = function(editor) {
 		}
 	});
 })(tinymce);
-
 (function(tinymce) {
 	var Dispatcher = tinymce.util.Dispatcher, each = tinymce.each, isIE = tinymce.isIE, isOpera = tinymce.isOpera;
 
@@ -17887,7 +17911,6 @@ tinymce.ForceBlocks = function(editor) {
 		};
 	};
 })(tinymce);
-
 tinymce.onAddEditor.add(function(tinymce, ed) {
 	var filters, fontSizes, dom, settings = ed.settings;
 
@@ -17944,15 +17967,11 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 		});
 	}
 });
-
 (function(tinymce) {
 	var TreeWalker = tinymce.dom.TreeWalker;
 
-	/**
-	 * Contains logic for handling the enter key to split/generate block elements.
-	 */
 	tinymce.EnterKey = function(editor) {
-		var dom = editor.dom, selection = editor.selection, settings = editor.settings, undoManager = editor.undoManager, schema = editor.schema;
+		var dom = editor.dom, selection = editor.selection, settings = editor.settings, undoManager = editor.undoManager, nonEmptyElementsMap = editor.schema.getNonEmptyElements();
 
 		function handleEnterKey(evt) {
 			var rng = selection.getRng(true), tmpRng, editableRoot, container, offset, parentBlock, documentMode,
@@ -17969,7 +17988,7 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 
 			// Moves the caret to a suitable position within the root for example in the first non pure whitespace text node or before an image
 			function moveToCaretPosition(root) {
-				var walker, node, rng, y, viewPort, lastNode = root, tempElm, nonEmptyElementsMap = schema.getNonEmptyElements();
+				var walker, node, rng, y, viewPort, lastNode = root, tempElm;
 
 				rng = dom.createRng();
 
@@ -18068,15 +18087,20 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 
 			// Returns true/false if the caret is at the start/end of the parent block element
 			function isCaretAtStartOrEndOfBlock(start) {
-				var walker, node, name, nonEmptyElementsMap = schema.getNonEmptyElements();
+				var walker, node, name;
 
 				// Caret is in the middle of a text node like "a|b"
-				if (container.nodeType == 3 && (start ? offset == 0 : offset == container.nodeValue.length)) {
-					return true;
+				if (container.nodeType == 3 && (start ? offset > 0 : offset < container.nodeValue.length)) {
+					return false;
 				}
 
 				// If after the last element in block node edge case for #5091
 				if (container.parentNode == parentBlock && isAfterLastNodeInContainer && !start) {
+					return true;
+				}
+
+				// If the caret if before the first element in parentBlock
+				if (start && container.nodeType == 1 && container == parentBlock.firstChild) {
 					return true;
 				}
 
@@ -18087,6 +18111,16 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 
 				// Walk the DOM and look for text nodes or non empty elements
 				walker = new TreeWalker(container, parentBlock);
+	
+				// If caret is in beginning or end of a text block then jump to the next/previous node
+				if (container.nodeType == 3) {
+					if (start && offset == 0) {
+						walker.prev();
+					} else if (!start && offset == container.nodeValue.length) {
+						walker.next();
+					}
+				}
+
 				while (node = walker.current()) {
 					if (node.nodeType === 1) {
 						// Ignore bogus elements
@@ -18282,6 +18316,22 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 				return parent !== root ? editableRoot : root;
 			};
 
+			// Adds a BR at the end of blocks that only contains an IMG or INPUT since these might be floated and then they won't expand the block
+			function addBrToBlockIfNeeded(block) {
+				var lastChild;
+
+				// IE will render the blocks correctly other browsers needs a BR
+				if (!tinymce.isIE) {
+					block.normalize(); // Remove empty text nodes that got left behind by the extract
+
+					// Check if the block is empty or contains a floated last child
+					lastChild = block.lastChild;
+					if (!lastChild || (/^(left|right)$/gi.test(dom.getStyle(lastChild, 'float', true)))) {
+						dom.add(block, 'br');
+					}
+				}
+			};
+
 			// Delete any selected contents
 			if (!rng.collapsed) {
 				editor.execCommand('Delete');
@@ -18304,7 +18354,11 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 			if (container.nodeType == 1 && container.hasChildNodes()) {
 				isAfterLastNodeInContainer = offset > container.childNodes.length - 1;
 				container = container.childNodes[Math.min(offset, container.childNodes.length - 1)] || container;
-				offset = 0;
+				if (isAfterLastNodeInContainer && container.nodeType == 3) {
+					offset = container.nodeValue.length;
+				} else {
+					offset = 0;
+				}
 			}
 
 			// Get editable root node normaly the body element but sometimes a div or span
@@ -18396,6 +18450,7 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 				trimLeadingLineBreaks(fragment);
 				newBlock = fragment.firstChild;
 				dom.insertAfter(fragment, parentBlock);
+				addBrToBlockIfNeeded(parentBlock);
 			}
 
 			dom.setAttrib(newBlock, 'id', ''); // Remove ID since it needs to be document unique
@@ -18412,4 +18467,3 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 		});
 	};
 })(tinymce);
-

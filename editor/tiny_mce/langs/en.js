@@ -301,6 +301,12 @@ tinyMCE.addI18n({
         },
         kitchensink : {
             desc : 'Toggle Toolbars'
+        },
+        anchor : {
+            desc    : "Insert/edit anchor",
+            name    : "Name",
+            invalid : "Please specify a valid anchor Name or ID. The value must start with a letter.",
+            exists  : "An anchor with that name or id already exists"
         }
     }
 });

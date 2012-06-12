@@ -113,6 +113,19 @@
 .o2k7Skin .mceMenu span.mceMenuLine {display:none}
 .o2k7Skin .mceMenuItemSub a {background:url(../default/img/menu_arrow.gif) no-repeat top right;}
 
+/* Dialog */
+.o2k7Skin .mceDialog {position:absolute; left:0; top:0; z-index:1000; border:1px solid #ccc; direction:ltr; background : #fff; padding : 2px;}
+.o2k7Skin .mceDialog label {margin : 5px;}
+.o2k7Skin .mceDialog input {margin : 5px;}
+.o2k7Skin .mceDialog a.mceButton {cursor : pointer; min-width:50px; height:auto; text-align:center; float : right; margin : 5px 5px 5px 0; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px; border:1px solid #ccc}
+.o2k7Skin .mceDialog a.mceButton:hover {border:1px solid #0A246A; background-color:#B6BDD2}
+.o2k7Skin a.mceButton.disabled {border-color:#eee; color : #ccc; cursor : default;}
+.o2k7Skin a.mceButton.disabled:hover {border-color:#eee; background-color:#fff; color : #ccc}
+
+.o2k7Skin .mceDialog div, .o2k7Skin .mceDialog input {
+    font-family:Verdana, Arial, Helvetica, sans-serif; font-size:11px;
+}
+
 /* Rtl */
 .mceRtl .mceListBox .mceText {text-align: right; padding: 0 4px 0 0}
 .mceRtl .mceMenuItem .mceText {text-align: right}

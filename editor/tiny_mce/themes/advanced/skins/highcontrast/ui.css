@@ -74,6 +74,19 @@
 .highcontrastSkin .mceMenu span.mceMenuLine {display:none}
 .highcontrastSkin .mceMenuItemSub a .mceText:after {content: "\A0\25B8"}
 
+/* Dialog */
+.highcontrastSkin .mceDialog {position:absolute; left:0; top:0; z-index:1000; border:1px solid #000; direction:ltr; background : #fff; padding : 2px;}
+.highcontrastSkin .mceDialog label {margin : 5px;}
+.highcontrastSkin .mceDialog input {margin : 5px;}
+.highcontrastSkin .mceDialog a.mceButton {cursor : pointer; min-width:50px; height:auto; text-align:center; float : right; margin : 5px 5px 5px 0; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px; border:1px solid #000}
+.highcontrastSkin .mceDialog a.mceButton:hover {border:1px solid #0A246A; background-color:#B6BDD2}
+.highcontrastSkin a.mceButton.disabled {border-color:#eee; color : #ccc; cursor : default;}
+.highcontrastSkin a.mceButton.disabled:hover {border-color:#eee; background-color:#fff; color : #ccc}
+
+.highcontrastSkin .mceDialog div, .highcontrastSkin .mceDialog input {
+    font-family:Verdana, Arial, Helvetica, sans-serif; font-size:11px;
+}
+
 /* ColorSplitButton */
 .highcontrastSkin div.mceColorSplitMenu table {background:#FFF; border:1px solid; color: #000}
 .highcontrastSkin .mceColorSplitMenu td {padding:2px}

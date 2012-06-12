@@ -52,7 +52,6 @@ tinyMCE.addI18n('en.advanced',{
     backcolor_desc:"Select background color",
     charmap_desc:"Insert custom character",
     visualaid_desc:"Toggle guidelines/invisible elements",
-    anchor_desc:"Insert/edit anchor",
     cut_desc:"Cut",
     copy_desc:"Copy",
     paste_desc:"Paste",
