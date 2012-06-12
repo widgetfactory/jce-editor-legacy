@@ -17948,8 +17948,11 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 (function(tinymce) {
 	var TreeWalker = tinymce.dom.TreeWalker;
 
+	/**
+	 * Contains logic for handling the enter key to split/generate block elements.
+	 */
 	tinymce.EnterKey = function(editor) {
-		var dom = editor.dom, selection = editor.selection, settings = editor.settings, undoManager = editor.undoManager;
+		var dom = editor.dom, selection = editor.selection, settings = editor.settings, undoManager = editor.undoManager, schema = editor.schema;
 
 		function handleEnterKey(evt) {
 			var rng = selection.getRng(true), tmpRng, editableRoot, container, offset, parentBlock, documentMode,
@@ -17966,7 +17969,7 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 
 			// Moves the caret to a suitable position within the root for example in the first non pure whitespace text node or before an image
 			function moveToCaretPosition(root) {
-				var walker, node, rng, y, viewPort, lastNode = root, tempElm;
+				var walker, node, rng, y, viewPort, lastNode = root, tempElm, nonEmptyElementsMap = schema.getNonEmptyElements();
 
 				rng = dom.createRng();
 
@@ -17980,7 +17983,7 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 							break;
 						}
 
-						if (/^(BR|IMG)$/.test(node.nodeName)) {
+						if (nonEmptyElementsMap[node.nodeName.toLowerCase()]) {
 							rng.setStartBefore(node);
 							rng.setEndBefore(node);
 							break;
@@ -18065,50 +18068,45 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 
 			// Returns true/false if the caret is at the start/end of the parent block element
 			function isCaretAtStartOrEndOfBlock(start) {
-				var walker, node, name;
+				var walker, node, name, nonEmptyElementsMap = schema.getNonEmptyElements();
 
 				// Caret is in the middle of a text node like "a|b"
-				if (container.nodeType == 3 && (start ? offset > 0 : offset < container.nodeValue.length)) {
-                                        return false;
+				if (container.nodeType == 3 && (start ? offset == 0 : offset == container.nodeValue.length)) {
+					return true;
 				}
 
 				// If after the last element in block node edge case for #5091
 				if (container.parentNode == parentBlock && isAfterLastNodeInContainer && !start) {
-                                        return true;
+					return true;
 				}
 
 				// Caret can be before/after a table
 				if (container.nodeName === "TABLE" || (container.previousSibling && container.previousSibling.nodeName == "TABLE")) {
-                                        return (isAfterLastNodeInContainer && !start) || (!isAfterLastNodeInContainer && start);
+					return (isAfterLastNodeInContainer && !start) || (!isAfterLastNodeInContainer && start);
 				}
-                                
-                                if (container.nodeName == 'IMG') {                                    
-                                    if (container.nextSibling && container.nextSibling.nodeName == 'IMG') {
-                                        return false;
-                                    }
-                                    
-                                    if (container.previousSibling && container.previousSibling.nodeName == 'IMG') {
-                                        return false;
-                                    }
-                                }
 
 				// Walk the DOM and look for text nodes or non empty elements
 				walker = new TreeWalker(container, parentBlock);
-                                
-				while (node = (start ? walker.prev() : walker.next())) {
-                                        if (node.nodeType === 1) {
-                                                // Ignore bogus elements
+				while (node = walker.current()) {
+					if (node.nodeType === 1) {
+						// Ignore bogus elements
 						if (node.getAttribute('data-mce-bogus')) {
-                                                        continue;
+							continue;
 						}
-						// Keep empty elements like <img />
-						name = node.nodeName;
-                                                
-						if (name === 'IMG') {
-                                                    return false;
+
+						// Keep empty elements like <img /> <input /> but not trailing br:s like <p>text|<br></p>
+						name = node.nodeName.toLowerCase();
+						if (nonEmptyElementsMap[name] && name !== 'br') {
+							return false;
 						}
-					} else if (node.nodeType === 3 && !/^[ \t\r\n]*$/.test(node.nodeValue)) {                                                
-                                                return false;
+					} else if (node.nodeType === 3 && !/^[ \t\r\n]*$/.test(node.nodeValue)) {
+						return false;
+					}
+
+					if (start) {
+						walker.prev();
+					} else {
+						walker.next();
 					}
 				}
 
@@ -18373,7 +18371,7 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 
 			// Insert new block before/after the parent block depending on caret location
 			if (isCaretAtStartOrEndOfBlock()) {
-                                // If the caret is at the end of a header we produce a P tag after it similar to Word unless we are in a hgroup
+				// If the caret is at the end of a header we produce a P tag after it similar to Word unless we are in a hgroup
 				if (/^(H[1-6]|PRE)$/.test(parentBlockName) && containerBlockName != 'HGROUP') {
 					newBlock = createNewBlock(newBlockName);
 				} else {
@@ -18386,7 +18384,7 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 					newBlock = dom.split(containerBlock, parentBlock);
 				} else {
 					dom.insertAfter(newBlock, parentBlock);
-				}                                
+				}
 			} else if (isCaretAtStartOrEndOfBlock(true)) {
 				// Insert new block before
 				newBlock = parentBlock.parentNode.insertBefore(createNewBlock(), parentBlock);
