@@ -570,21 +570,25 @@ var TableDialog = {
         }
 
         tinymce.each(dom.select('table[data-mce-new]'), function(node) {
-            // Fixes a bug in IE where the caret cannot be placed after the table if the table is at the end of the document
-            if (tinymce.isIE && node.nextSibling == null) {
-                dom.insertAfter(dom.create('p'), node);
-            }
-	
-            var tdorth = dom.select('td,th', node);
-            try {
-                // IE9 might fail to do this selection 
-                inst.selection.setCursorLocation(tdorth[0], 0);
-            } catch (ex) {
-            // Ignore
-            }
-	
-            dom.setAttrib(node, 'data-mce-new', '');
-        });
+		var tdorth = dom.select('td,th', node);
+
+		// Fixes a bug in IE where the caret cannot be placed after the table if the table is at the end of the document
+		if (tinymce.isIE && node.nextSibling == null) {
+			if (ed.settings.forced_root_block)
+				dom.insertAfter(dom.create(ed.settings.forced_root_block), node);
+			else
+				dom.insertAfter(dom.create('br', {'data-mce-bogus': '1'}), node);
+		}
+
+		try {
+			// IE9 might fail to do this selection 
+			ed.selection.setCursorLocation(tdorth[0], 0);
+		} catch (ex) {
+			// Ignore
+		}
+
+		dom.setAttrib(node, 'data-mce-new', '');
+	});
 
 
         ed.addVisual();
