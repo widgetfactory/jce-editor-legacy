@@ -71,7 +71,7 @@
             t.onClearBlocks = new tinymce.util.Dispatcher(t);		
             tinymce.isChrome = tinymce.isWebkit && /chrome/i.test(navigator.userAgent);
 
-            ed.onKeyUp.add(function(ed, e) {				
+            /*ed.onKeyUp.add(function(ed, e) {				
                 if (((e.metaKey || e.ctrlKey) && e.shiftKey && e.keyCode == 13) || e.keyCode == 10) {
                     e.preventDefault();
 					
@@ -79,7 +79,7 @@
                     // Execute post process handlers
                     t.onClearBlocks.dispatch(t);
                 }
-            });
+            });*/
             
             ed.onPreInit.add(function() {
                 
