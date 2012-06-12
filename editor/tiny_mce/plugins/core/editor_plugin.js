@@ -1,0 +1,167 @@
+(function(tinymce) {
+    var DOM = tinymce.DOM, Event = tinymce.dom.Event, is = tinymce.is, each = tinymce.each;
+    tinymce.create('tinymce.ui.ButtonDialog:tinymce.ui.Button', {
+        /**
+         * Constructs a new split button control instance.
+         *
+         * @constructor
+         * @method MenuButton
+         * @param {String} id Control id for the split button.
+         * @param {Object} s Optional name/value settings object.
+         * @param {Editor} ed Optional the editor instance this button is for.
+         */
+        ButtonDialog : function(id, s, ed) {
+            this.parent(id, s, ed);
+
+            this.settings = s = tinymce.extend({
+                content : ''
+            }, this.settings);
+            /**
+             * Fires when the menu is rendered.
+             *
+             * @event onRenderMenu
+             */
+            this.onRenderDialog = new tinymce.util.Dispatcher(this);
+            
+            this.onShowDialog   = new tinymce.util.Dispatcher(this);
+            
+            this.onHideDialog   = new tinymce.util.Dispatcher(this);
+
+            s.dialog_container = s.dialog_container || DOM.doc.body;
+        },
+
+        /**
+         * Shows the menu.
+         *
+         * @method showMenu
+         */
+        showDialog : function() {
+            var t = this, p1, p2, e = DOM.get(t.id), m;
+
+            if (t.isDisabled())
+                return;
+
+            if (!t.isDialogRendered) {
+                t.renderDialog();
+                t.isDialogRendered = true;
+            }
+
+            if (t.isDialogVisible)
+                return t.hideDialog();
+
+            e = DOM.get(t.id);
+            DOM.show(t.id + '_dialog');
+            DOM.addClass(e, 'mceButtonDialog');
+            p2 = DOM.getPos(e);
+            DOM.setStyles(t.id + '_dialog', {
+                left : p2.x,
+                top : p2.y + e.clientHeight,
+                zIndex : 200000
+            });
+            e = 0;
+
+            Event.add(DOM.doc, 'mousedown', t.hideDialog, t);
+            
+            t.onShowDialog.dispatch(t);
+
+            if (t._focused) {
+                t._keyHandler = Event.add(t.id + '_dialog', 'keydown', function(e) {
+                    if (e.keyCode == 27)
+                        t.hideDialog();
+                });
+            }
+
+            t.isDialogVisible = 1;
+        },
+
+        /**
+         * Renders the menu to the DOM.
+         *
+         * @method renderMenu
+         */
+        renderDialog : function() {
+            var t = this, m, s = t.settings, w;
+
+            w = DOM.add(s.dialog_container, 'div', {
+                role    : 'presentation', 
+                id      : t.id + '_dialog', 
+                'class' : s['dialog_class'] + ' mceDialog mceButtonDialog ' + s['class'], 
+                style   : 'position:absolute;left:0;top:-1000px;'
+            });
+            
+            DOM.add(w, 'span', {
+                'class' : 'mceDialogLine'
+            });
+            
+            m = DOM.add(w, 'div', {
+                'class' : s['class'] + ' mceDialog mceButtonDialog'
+            });
+            
+            if (s.width) {
+                DOM.setStyle(m, 'width', s.width);
+            }
+            
+            if (tinymce.is(s.content, 'string')) {
+                DOM.setHTML(m, s.content);
+            } else {
+                DOM.add(m, s.content);
+            }
+            
+            t.onRenderDialog.dispatch(t);
+            
+            return w;
+        },
+
+        /**
+         * Hides the menu. The optional event parameter is used to check where the event occured so it
+         * doesn't close them menu if it was a event inside the menu.
+         *
+         * @method hideMenu
+         * @param {Event} e Optional event object.
+         */
+        hideDialog : function(e) {
+            var t = this;
+
+            // Prevent double toogles by canceling the mouse click event to the button
+            if (e && e.type == "mousedown" && DOM.getParent(e.target, function(e) {
+                return e.id === t.id || e.id === t.id + '_open';
+            }))
+                return;
+
+            if (!e || !DOM.getParent(e.target, '.mceDialog')) {
+                t.setState('Selected', 0);
+                Event.remove(DOM.doc, 'mousedown', t.hideDialog, t);
+                
+                DOM.hide(t.id + '_dialog');
+            }
+
+            t.isDialogVisible = 0;
+        },
+
+        /**
+     * Post render handler. This function will be called after the UI has been
+     * rendered so that events can be added.
+     *
+     * @method postRender
+     */
+        postRender : function() {
+            var t = this, s = t.settings;
+
+            Event.add(t.id, 'click', function() {
+                if (!t.isDisabled()) {
+                    if (s.onclick)
+                        s.onclick(t.value);
+
+                    t.showDialog();
+                }
+            });
+        },
+    
+        destroy : function() {
+            this.parent();
+
+            Event.clear(this.id + '_dialog');
+            DOM.remove(this.id + '_dialog');
+        }
+    });
+})(tinymce);
