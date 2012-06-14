@@ -149,8 +149,6 @@
             if (validate) {
                 // parse content
                 parser.parse(html);
-                // write to html string
-                console.log(writer.getContent());
             }
             
             // format
@@ -161,6 +159,10 @@
             var self = this, cm, o = this.options;
 
             if(window.CodeMirror) {
+                
+                if (o.theme == 'codemirror') {
+                    o.theme = 'default';
+                }
                                 
                 cm = CodeMirror(this.container, {
                     mode    : "text/html",
@@ -424,7 +426,11 @@
         highlight : function(s) {
             return this.editor.highlight(s);
         },
-        setContent : function(v) {
+        setContent : function(v, format) {
+            if (format) {
+                v = this._format(v);
+            }
+            
             return this.editor.setContent(v);
         },
         insertContent : function(v) {
