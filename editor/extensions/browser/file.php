@@ -43,7 +43,7 @@ class WFFileBrowser extends WFBrowserExtension {
             'filesystem' => 'joomla',
             'filetypes' => 'images=jpg,jpeg,png,gif',
             'upload' => array(
-                'runtimes' => 'html5,flash',
+                'runtimes' => 'html5,flash,silverlight',
                 'chunk_size' => null,
                 'max_size' => 1024,
                 'validate_mimetype' => 0
@@ -1361,7 +1361,7 @@ class WFFileBrowser extends WFBrowserExtension {
 
         if (is_string($upload['runtimes'])) {
             $runtimes = explode(',', $upload['runtimes']);
-        } else {
+        } else {            
             foreach ($upload['runtimes'] as $k => $v) {
                 $runtimes[] = $v;
             }
