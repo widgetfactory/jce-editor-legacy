@@ -116,6 +116,24 @@
 .classicSkin .mceMenu span.mceMenuLine {display:none}
 .classicSkin .mceMenuItemSub a {background:url(../default/img/menu_arrow.gif) no-repeat top right;}
 
+/* Dialog */
+.classicSkin .mceButtonDialog {position:absolute; left:0; top:1px; z-index:1000; border:1px solid #ccc; direction:ltr; background : #F0F0EE; padding : 3px;}
+.classicSkin.mceButtonDialogActive .mceButtonDialog {border-color:#0A246A; background-color : #C2CBE0;}
+.classicSkin.mceButtonDialogActive .mceButtonDialog:before {background-color:#C2CBE0; border-color : #0A246A;}
+.classicSkin .mceButtonDialog fieldset {margin:0; padding:4px; border: 0 none; font-family:Verdana, Arial; font-size:10px;}
+.classicSkin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px;}
+.classicSkin .mceButtonDialog .mceButtonDialogContent {background-color : #fff;}
+.classicSkin .mceButtonDialog label {margin : 5px; min-width : 30px; display : inline-block;}
+.classicSkin .mceButtonDialog input {margin : 5px;}
+.classicSkin .mceButtonDialog input[type="text"] {border:1px solid #ccc; padding: 2px;}
+.classicSkin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton {display:inline-block; background-color : #fff; cursor : pointer; min-width:50px; height:auto; text-align:center; margin : 5px 5px 5px 0; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px; border:1px solid #ccc}
+.classicSkin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton:hover {border:1px solid #0A246A; background-color:#B6BDD2}
+.classicSkin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton.disabled {opacity:0.5; -ms-filter:'alpha(opacity=50)'; filter:alpha(opacity=50);}
+.classicSkin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton.disabled:hover {background-color:#fff; cursor: pointer;border-color:#ccc;}
+.classicSkin .mceButtonDialog .mceButtonDialogButtons {text-align : right; background-color : #fff;}
+.classicSkin .mceButtonDialog:before {content : ""; display: block; position : absolute; width : 20px; background-color:#F0F0EE; height : 6px; left : -1px; top : -6px; border-left : 1px solid #ccc; border-right : 1px solid #ccc;}
+.classicSkin .mceButtonDialog div, .classicSkin .mceButtonDialog input {font-family:Verdana, Arial, Helvetica, sans-serif; font-size:11px;}
+
 /* Progress,Resize */
 .classicSkin .mceBlocker {position:absolute; left:0; top:0; z-index:1000; opacity:0.5; -ms-filter:'alpha(opacity=50)'; filter:alpha(opacity=50); background:#FFF}
 .classicSkin .mceProgress {position:absolute; left:0; top:0; z-index:1001; background:url(../default/img/progress.gif) no-repeat; width:32px; height:32px; margin:-16px 0 0 -16px}
@@ -232,9 +250,9 @@
 .classicSkin span.mce_readmore {background-position:-920px 0}
 .classicSkin span.mce_pagebreak {background-position:-940px 0}
 
-.classicSkin span.mce_wrap {background-position:-100px -40px}
+/*.classicSkin span.mce_wrap {background-position:-100px -40px}
 .classicSkin span.mce_numbers {background-position:-120px -40px}
-.classicSkin span.mce_highlight {background-position:-140px -40px}
+.classicSkin span.mce_highlight {background-position:-140px -40px}*/
 .classicSkin span.mce_imgmanager {background-position:-380px 0}
 .classicSkin span.mce_article {background-position:-920px 0;width:40px;}
 .classicSkin span.mce_textcase {background-position:-40px -40px;}

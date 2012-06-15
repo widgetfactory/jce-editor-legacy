@@ -21,3 +21,10 @@
 #jce .o2k7SkinSilver .mceIframeContainer {
     border: 1px solid #bbb;
 }
+
+/* Dialog */
+.o2k7SkinSilver .mceButtonDialog {border-color:#bbb; background-color : #eee;}
+.o2k7SkinSilver .mceButtonDialog input[type="text"] {border-color:#bbb}
+.o2k7SkinSilver .mceButtonDialog div.mceButtonDialogButtons a.mceDialogButton {border-color:#bbb}
+.o2k7SkinSilver .mceButtonDialog div.mceButtonDialogButtons a.mceDialogButton:hover {border-color:#bbb; background-color:#eee;}
+.o2k7SkinSilver .mceButtonDialog:before {background-color:#eee; border-color:#bbb;}

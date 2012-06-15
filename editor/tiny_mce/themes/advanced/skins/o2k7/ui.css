@@ -114,17 +114,20 @@
 .o2k7Skin .mceMenuItemSub a {background:url(../default/img/menu_arrow.gif) no-repeat top right;}
 
 /* Dialog */
-.o2k7Skin .mceDialog {position:absolute; left:0; top:0; z-index:1000; border:1px solid #ccc; direction:ltr; background : #fff; padding : 2px;}
-.o2k7Skin .mceDialog label {margin : 5px;}
-.o2k7Skin .mceDialog input {margin : 5px;}
-.o2k7Skin .mceDialog a.mceButton {cursor : pointer; min-width:50px; height:auto; text-align:center; float : right; margin : 5px 5px 5px 0; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px; border:1px solid #ccc}
-.o2k7Skin .mceDialog a.mceButton:hover {border:1px solid #0A246A; background-color:#B6BDD2}
-.o2k7Skin a.mceButton.disabled {border-color:#eee; color : #ccc; cursor : default;}
-.o2k7Skin a.mceButton.disabled:hover {border-color:#eee; background-color:#fff; color : #ccc}
-
-.o2k7Skin .mceDialog div, .o2k7Skin .mceDialog input {
-    font-family:Verdana, Arial, Helvetica, sans-serif; font-size:11px;
-}
+.o2k7Skin .mceButtonDialog {position:absolute; left:0; top:1px; z-index:1000; border:1px solid #ABC6DD; direction:ltr; background : #E5EFFD; padding : 3px;}
+.o2k7Skin .mceButtonDialog fieldset {margin:0; padding:4px; border: 0 none; font-family:Verdana, Arial; font-size:10px;}
+.o2k7Skin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px;}
+.o2k7Skin .mceButtonDialog .mceButtonDialogContent {background-color : #fff;}
+.o2k7Skin .mceButtonDialog label {margin : 5px; min-width : 30px; display : inline-block;}
+.o2k7Skin .mceButtonDialog input {margin : 5px;}
+.o2k7Skin .mceButtonDialog input[type="text"] {border:1px solid #ABC6DD; padding: 2px;}
+.o2k7Skin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton {display:inline-block; background-color : #fff; cursor : pointer; min-width:50px; height:auto; text-align:center; margin : 5px 5px 5px 0; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px; border:1px solid #ABC6DD}
+.o2k7Skin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton:hover {border:1px solid #ABC6DD; background-color:#B2BBD0}
+.o2k7Skin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton.disabled {opacity:0.5; -ms-filter:'alpha(opacity=50)'; filter:alpha(opacity=50);}
+.o2k7Skin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton.disabled:hover {background-color:#fff; cursor: pointer;color : grey;}
+.o2k7Skin .mceButtonDialog .mceButtonDialogButtons {text-align : right; background-color : #fff;}
+.o2k7Skin .mceButtonDialog:before {content : ""; display: block; position : absolute; width : 20px; background-color:#E5EFFD; height : 8px; left : -1px; top : -8px; border-left : 1px solid #ABC6DD; border-right : 1px solid #ABC6DD;}
+.o2k7Skin .mceButtonDialog div, .o2k7Skin .mceButtonDialog input {font-family:Verdana, Arial, Helvetica, sans-serif; font-size:11px;}
 
 /* Rtl */
 .mceRtl .mceListBox .mceText {text-align: right; padding: 0 4px 0 0}
@@ -247,9 +250,9 @@
 .o2k7Skin span.mce_spellchecker {background-position:-540px -20px}
 .o2k7Skin span.mce_autosave {background-position:-20px -40px}
 
-.o2k7Skin span.mce_wrap {background-position:-100px -40px}
+/*.o2k7Skin span.mce_wrap {background-position:-100px -40px}
 .o2k7Skin span.mce_numbers {background-position:-120px -40px}
-.o2k7Skin span.mce_highlight {background-position:-140px -40px}
+.o2k7Skin span.mce_highlight {background-position:-140px -40px}*/
 .o2k7Skin span.mce_templatemanager {background-position:-820px -20px}
 .o2k7Skin span.mce_mediamanager {background-position:-320px -20px}
 .o2k7Skin span.mce_filemanager {background-position:-300px -20px}

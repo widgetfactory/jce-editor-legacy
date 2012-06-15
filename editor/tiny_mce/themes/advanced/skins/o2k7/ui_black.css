@@ -29,3 +29,10 @@
 #jce .o2k7SkinBlack .mceIframeContainer {
     border: 1px solid #535353;
 }
+
+/* Dialog */
+.o2k7SkinBlack .mceButtonDialog {border-color:#989FA9; background-color : #989FA9;}
+.o2k7SkinBlack .mceButtonDialog input[type="text"] {border-color:#989FA9}
+.o2k7SkinBlack .mceButtonDialog div.mceButtonDialogButtons a.mceDialogButton {border-color:#989FA9}
+.o2k7SkinBlack .mceButtonDialog div.mceButtonDialogButtons a.mceDialogButton:hover {border-color:#CBCFD4; background-color:#FFE7A1;}
+.o2k7SkinBlack .mceButtonDialog:before {background-color:#989FA9; border-color:#989FA9;}
