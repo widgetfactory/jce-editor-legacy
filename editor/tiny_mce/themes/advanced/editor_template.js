@@ -325,6 +325,9 @@
 
                 case "backcolor":
                     return this._createBackColorMenu();
+                    
+                /*case "charmap":
+                    return this._createCharMap(cf);*/
             }
 
             if ((cd = this.controls[n]))
@@ -748,6 +751,28 @@
 
                 return c;
             },
+            
+            /*_createCharMap : function(cf) {
+                var ed = this.editor;
+                
+                var c = new tinymce.ui.ButtonDialog(cf.prefix + 'charmap', {
+                    title   : ed.getLang('advanced.charmap_desc'),
+                    'class' : 'mce_charmap',
+                    url     : this.url + '/charmap.htm',
+                    width   : 550 + parseInt(ed.getLang('advanced.charmap_delta_width', 0))
+                }, ed);
+					
+                ed.onMouseDown.add(c.hideDialog, c);
+					
+                // Remove the menu element when the editor is removed
+                ed.onRemove.add(function() {
+                    c.destroy();
+                });
+
+                cf.add(c);
+                
+                return c;
+            },*/
 
             renderUI : function(o) {
                 var n, ic, tb, t = this, ed = t.editor, s = t.settings, sc, p, nl;
@@ -1063,7 +1088,7 @@
             },
 
             _addControls : function(v, tb) {
-                var t = this, s = t.settings, di, cf = t.editor.controlManager;
+                var t = this, s = t.settings, ed = t.editor, di, cf = t.editor.controlManager;
 
                 if (s.theme_advanced_disable && !t._disabled) {
                     di = {};
@@ -1081,21 +1106,7 @@
 
                     if (di && di[n])
                         return;
-
-                    // WFEDITOR - Remove Table Compatability
-				
-                    // Compatiblity with 2.x
-                    /*if (n == 'tablecontrols') {
-					each(["table","|","row_props","cell_props","|","row_before","row_after","delete_row","|","col_before","col_after","delete_col","|","split_cells","merge_cells"], function(n) {
-						n = t.createControl(n, cf);
-
-						if (n)
-							tb.add(n);
-					});
-
-					return;
-				}*/
-
+                    
                     c = t.createControl(n, cf);
 
                     if (c)
