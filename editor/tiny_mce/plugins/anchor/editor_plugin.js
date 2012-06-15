@@ -32,9 +32,7 @@
             
             ed.onKeyDown.add(function(ed, e) {				
                 if (e.keyCode == BACKSPACE || e.keyCode == DELETE) {                                        
-                    self._removeAnchor();
-                
-                    e.preventDefault();
+                    self._removeAnchor(e);
                 }
             });
 
@@ -112,15 +110,23 @@
             });
         },
         
-        _removeAnchor : function() {
+        _removeAnchor : function(e) {
             var ed = this.editor, s = ed.selection;
                     
             if (ed.dom.is(s.getNode(), 'span.mceItemAnchor')) {
                 ed.dom.remove(s.getNode());
+                
+                if (e) {
+                    e.preventDefault();
+                }
             }
                     
             if (!s.isCollapsed() && ed.dom.is(s.getNode(), 'a.mceItemAnchor')) {
                 ed.formatter.remove('link');
+                
+                if (e) {
+                    e.preventDefault();
+                }
             }
         },
         
@@ -266,8 +272,8 @@
                 'class'  : classes.join(' ')
             }));
             
-            var text = new Node('#text', 3);
-            text.value = '<!--anchor-->';
+            var text    = new Node('#comment', 8);
+            text.value  = 'anchor';
             
             span.append(text);
 
@@ -279,67 +285,70 @@
 
             switch (n) {
                 case 'anchor':
-                    var content = DOM.create('div', {}, '<label>' + ed.getLang('anchor.name', 'Name') + '</label>');
-                    var input   = DOM.add(content, 'input', {
+                    var content = DOM.create('div');
+                    
+                    var fieldset = DOM.add(content, 'fieldset', {}, '<legend>' + ed.getLang('anchor.desc', 'Insert / Edit Anchor') + '</legend>');
+                    
+                    DOM.add(fieldset, 'label', {'for' : ed.id + '_anchor'}, ed.getLang('anchor.name', 'Name'));
+                    
+                    var input   = DOM.add(fieldset, 'input', {
                         type    : 'text',
                         id      : ed.id + '_anchor'
                     });
-                    
-                    var remove = DOM.add(content, 'a', {
-                        'href' : 'javascript:;', 
-                        'class' : 'mceButton'
-                    }, ed.getLang('anchor.remove', 'Remove'));
-                    
-                    var btn = DOM.add(content, 'a', {
-                        'href' : 'javascript:;', 
-                        'class' : 'mceButton'
-                    }, ed.getLang('common.insert', 'Insert'));
 
                     var c = new tinymce.ui.ButtonDialog(cm.prefix + 'anchor', {
                         title           : ed.getLang('anchor.desc', 'Inserts an Anchor'),
                         'class'         : 'mce_anchor',
-                        'dialog_class'  : ed.getParam('skin') + 'Skin',
                         'content'       : content,
-                        'width'         : 200
+                        'width'         : 210,
+                        'buttons'       : [{
+                            title : ed.getLang('common.insert', 'Insert'),
+                            id    : 'insert',
+                            click : function(e) {
+                                c.restoreSelection();
+                                
+                                return self._insertAnchor(input.value);
+                            },
+                            scope : self
+                        }, {
+                            title : ed.getLang('anchor.remove', 'Remove'),
+                            id    : 'remove',
+                            click : function(e) {
+                                c.restoreSelection();
+                                
+                                if (!DOM.hasClass(e.target, 'disabled')) {
+                                    self._removeAnchor();
+                                }
+                                
+                                return true;
+                            },
+                            scope : self
+                        }] 
                     }, ed);
 
                     c.onShowDialog.add(function() {
                         input.value = '';
-                        input.focus();
-                        
+
                         var label = ed.getLang('common.insert', 'Insert');
                        
                         var v = self._getAnchor();
-                    
-                        DOM.addClass(remove, 'disabled');
                         
                         if (v) {
                             input.value = v;  
                             label = ed.getLang('common.update', 'Update');
-                        
-                            DOM.removeClass(remove, 'disabled');
                         }
                         
-                        DOM.setHTML(btn, label);
+                        c.setActive(!!v);
+                        
+                        c.setButtonDisabled('remove', !v); 
+                        c.setButtonLabel('insert', label);
+                        
+                        input.focus();
                     });
                     
                     c.onHideDialog.add(function() {
                         input.value = '';
                     });
-
-                    Event.add(btn, 'click', function() {
-                        ed.execCommand('mceInsertAnchor', false, input.value);
-                        c.hideDialog();
-                    });
-                    
-                    Event.add(remove, 'click', function() {
-                        if (!DOM.hasClass(remove, 'disabled')) {
-                            self._removeAnchor();
-                            c.hideDialog();
-                        }
-                    });
-					
-                    ed.onMouseDown.add(c.hideDialog, c);
 					
                     // Remove the menu element when the editor is removed
                     ed.onRemove.add(function() {
