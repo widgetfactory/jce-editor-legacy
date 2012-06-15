@@ -1,5 +1,4 @@
 /**
- * @version		$Id: editor_plugin.js 257 2011-06-30 11:37:36Z happy_noodle_boy $
  * @package      JCE
  * @copyright    Copyright (C) 2005 - 2009 Ryan Demmer. All rights reserved.
  * @author		Ryan Demmer
@@ -10,7 +9,8 @@
  * other free or open source software licenses.
  */
 (function() {
-    var each = tinymce.each, Node = tinymce.html.Node;
+    var DOM = tinymce.DOM, Event = tinymce.dom.Event, each = tinymce.each, Node = tinymce.html.Node;
+    var VK = tinymce.VK, BACKSPACE = VK.BACKSPACE, DELETE = VK.DELETE;
     
     tinymce.create('tinymce.plugins.ArticlePlugin', {
         init: function(ed, url) {
@@ -20,11 +20,11 @@
             t.url = url;
             
             function isReadMore(n) {
-                return n.nodeName == 'IMG' && ed.dom.hasClass(n, 'mceItemReadMore');
+                return ed.dom.is(n, 'hr.mceItemReadMore');
             };
             
             function isPageBreak(n) {
-                return n.nodeName == 'IMG' && ed.dom.hasClass(n, 'mceItemPageBreak');
+                return ed.dom.is(n, 'hr.mceItemPageBreak');
             };
 
             // Register commands
@@ -37,20 +37,12 @@
                     id: 'system-readmore'
                 });
             });
-            ed.addCommand('mcePageBreak', function(ui, v) {
-                if (ui) {
-                    ed.windowManager.open({
-                        file: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=article',
-                        width: 400,
-                        height: 140,
-                        inline: 1
-                    }, {
-                        plugin_url: url
-                    });
+            ed.addCommand('mcePageBreak', function(ui, v) {                
+                var n = ed.selection.getNode();
+                
+                if (isPageBreak(n)) {
+                    t._updatePageBreak(n, v);
                 } else {
-                    tinymce.extend(v, {
-                        'id': 'system-pagebreak'
-                    });
                     t._insertBreak('pagebreak', v);
                 }
             });
@@ -62,188 +54,337 @@
                     cmd: 'mceReadMore'
                 });
             }
-            if (ed.getParam('article_show_pagebreak', true)) {
-                ed.addButton('pagebreak', {
-                    title: 'article.pagebreak',
-                    cmd: 'mcePageBreak',
-                    ui: true
-                });
-            }
-            
+
             ed.onInit.add(function() {
-            	if (!ed.settings.compress.css)
-            	   ed.dom.loadCSS(url + "/css/content.css");
+                if (!ed.settings.compress.css)
+                    ed.dom.loadCSS(url + "/css/content.css");
                 
                 if (ed.getParam('article_hide_xtd_btns')) {
                     // Remove Joomla! Readmore / PageBreak buttons
                     tinymce.DOM.hide(ed.dom.select('div.readmore, div.pagebreak', tinymce.DOM.get('editor-xtd-buttons')));
                 }
+                
+                // Display "a#name" instead of "img" in element path
+                if (ed.theme && ed.theme.onResolveName) {
+                    ed.theme.onResolveName.add( function(theme, o) {
+                        var n = o.node, v;
+
+                        if (o.name === 'hr' && /mceItemPageBreak/.test(n.className)) {
+                            v = 'pagebreak';
+                        }
+                        
+                        if (o.name === 'hr' && /mceItemReadMore/.test(n.className)) {
+                            v = 'readmore';
+                        }
+                        
+                        if (v) {
+                            o.name = v;
+                        }
+                    });
+                }
+                
             });
             
             ed.onNodeChange.add(function(ed, cm, n) {
-				cm.setActive('readmore', isReadMore(n));
+                cm.setActive('readmore', isReadMore(n));
                 cm.setActive('pagebreak', isPageBreak(n));
-            });  
-            
-            // replace hr alt attribute with data-mce-alt
-            ed.onBeforeSetContent.add( function(ed, o) {
-            	o.content = o.content.replace(/<hr([^>]+)alt="([^"]+)"([^>]+)>/gi, '<hr$1data-mce-alt="$2"$3>');
+                
+                ed.dom.removeClass(ed.dom.select('hr.mceItemPageBreak.mceItemSelected, hr.mceItemReadMore.mceItemSelected'), 'mceItemSelected');
+                
+                if (isPageBreak(n) || isReadMore(n)) {                 
+                    ed.dom.addClass(n, 'mceItemSelected');
+                }
             });
             
-            ed.onPostProcess.add(function(ed, o) {   
-				if (o.get) {
-					if (ed.getParam('forced_root_block')) {
-						o.content = o.content.replace(/<(p|div)>[\s\n]*?<hr([\s\S]+)(id|class)="system-(readmore|pagebreak)"([^>]+?)>[\s\n]*?<\/(p|div)>/gi, '<hr$2$3="system-$4"$5>');
-                	}
-				}				
+            function _cancelResize() {
+                each(ed.dom.select('hr.mceItemPageBreak, hr.mceItemReadMore'), function(n) {
+                    n.onresizestart = function() {
+                        return false;
+                    };
+                
+                    n.onbeforeeditfocus = function() {
+                        return false;
+                    };
+                });
+            };
+            
+            ed.onBeforeSetContent.add( function(ed, o) {
+                o.content = o.content.replace(/<hr([^>]+)\balt="([^"]+)"([^>]+)>/gi, '<hr$1data-mce-alt="$2"$3>');
+            });
+            
+            ed.onSetContent.add(function() {                              
+                if (tinymce.isIE) {
+                    _cancelResize();
+                }
+            });
+            
+            ed.onGetContent.add(function() {                              
+                if (tinymce.isIE) {
+                    _cancelResize();
+                }
+            });
+            
+            ed.onKeyDown.add(function(ed, e) {				
+                if (e.keyCode == BACKSPACE || e.keyCode == DELETE) {                                        
+                    var s = ed.selection, n = s.getNode();
+                    
+                    if (ed.dom.is(n, 'hr.mceItemPageBreak, hr.mceItemReadMore')) {
+                        ed.dom.remove(n);
+
+                        e.preventDefault();
+                    }
+                }
             });
             
             ed.onPreInit.add( function() {            	
-            	// Convert video elements to image placeholder
+                // Convert video elements to image placeholder
                 ed.parser.addNodeFilter('hr', function(nodes) {
                     for (var i = 0; i < nodes.length; i++) {
-                    	var id = nodes[i].attr('id') || '', cls = nodes[i].attr('class') || '';
+                        var node = nodes[i], id = node.attr('id') || '', cls = node.attr('class') || '';
                     	
-                    	if (id == 'system-readmore' || /system-pagebreak/.test(cls)) {
-                    		t._createImg(nodes[i]);
-                    	}
+                        if (id == 'system-readmore' || /system-pagebreak/.test(cls)) {
+                            var cls = /system-pagebreak/.test(cls) ? 'mceItemPageBreak' : 'mceItemReadMore';
+                            
+                            node.attr('class', cls);
+                            if (node.attr('alt')) {
+                                node.attr('data-mce-alt', node.attr('alt'));
+                                node.attr('alt', '');
+                            }
+                        }
                     }
                 });
 
                 // Convert image placeholders to video elements
-                ed.serializer.addNodeFilter('img', function(nodes, name, args) {
+                ed.serializer.addNodeFilter('hr', function(nodes, name, args) {
                     for (var i = 0; i < nodes.length; i++) {
                         var node = nodes[i];
-                    	if (/mceItem(PageBreak|ReadMore)/.test(node.attr('class') || '')) {
-                            t._buildHR(node, args);
+                        if (/mceItem(PageBreak|ReadMore)/.test(node.attr('class') || '')) {
+                            if (/mceItemPageBreak/.test(node.attr('class'))) {
+                                node.attr('class', 'system-pagebreak');
+                            } else {
+                                node.attr('class', '');
+                                node.attr('id', 'system-readmore');
+                            }
+
+                            if (node.attr('data-mce-alt')) {
+                                node.attr('alt', node.attr('data-mce-alt'));
+                                
+                                node.attr('data-mce-alt', '');
+                            }
                         }
                     }
                 });
 
             });
         },
-		
-        _insertBreak: function(s, args) {
-            var t = this, ed = this.editor, dom = ed.dom, n = ed.selection.getNode(), ns, h, c, re, isBlock = false, desc = '';
+        
+        _getPageBreak : function() {
+            var t = this, ed = this.editor, dom = ed.dom, n = ed.selection.getNode(), o;
             
-            var bElm = 'P,DIV,ADDRESS,PRE,FORM,TABLE,OL,UL,CAPTION,BLOCKQUOTE,CENTER,DL,DIR,FIELDSET,NOSCRIPT,NOFRAMES,MENU,ISINDEX,SAMP';
+            if (ed.dom.is(n, 'hr.mceItemPageBreak')) {
+                o = {
+                    title   : ed.dom.getAttrib(n, 'title', ''),
+                    alt     : ed.dom.getAttrib(n, 'data-mce-alt', '')
+                }
+            }
             
-            n = dom.getParent(n, bElm, 'BODY') || n;
+            return o;
+        },
+        
+        _updatePageBreak : function(n, v) {
+            var t = this, ed = this.editor;
             
-            tinymce.extend(args, {
-                'class'			: s == 'pagebreak' ? 'mceItemPageBreak mceItemNoResize' : 'mceItemReadMore mceItemNoResize',
-                'data-mce-type' : 'system-' + s,
-                id				: 'system-' + s
+            tinymce.extend(v, {
+               'data-mce-alt' : v.alt || '' 
             });
             
-            // Insert initial node			
-			ed.execCommand('mceInsertContent', false, '<img id="__mce_tmp" src="' + t.url + '/img/trans.gif" />', {skip_undo : 1});
-
-			img = dom.get('__mce_tmp');		
-			dom.setAttribs(img, args);
+            v.alt = null;
+            
+            ed.dom.setAttribs(n, v);
+        },
+		
+        _insertBreak: function(s, args) {
+            var t = this, ed = this.editor, dom = ed.dom, n = ed.selection.getNode(), ns, h, c, re, isBlock = false, hr, p, desc = '', bElm = [];
+            
+            var blocks = 'H1,H2,H3,H4,H5,H6,P,DIV,ADDRESS,PRE,FORM,TABLE,OL,UL,CAPTION,BLOCKQUOTE,CENTER,DL,DIR,FIELDSET,NOSCRIPT,NOFRAMES,MENU,ISINDEX,SAMP,SECTION,ARTICLE,HGROUP,ASIDE,FIGURE';
+            
+            n = dom.getParent(n, blocks, 'BODY') || n;
+            
+            tinymce.extend(args, {
+                'class'         : s == 'pagebreak' ? 'mceItemPageBreak' : 'mceItemReadMore',
+                'data-mce-alt'  : args.alt || null
+            });
+            
+            // remove alt
+            args.alt = null;
+            
+            // set id for readmore
+            if (s == 'readmore') {
+                args.id = 'system-readmore';
+            }
+            
+            ed.execCommand('mceInsertContent', false, '<span id="mce_hr_marker" data-mce-type="bookmark">\uFEFF</span>', {
+                skip_undo : 1
+            });
+            
+            var marker  = dom.get('mce_hr_marker');
+            var hr      = dom.create('hr', args);
             
             if (dom.isBlock(n)) {
-            	// get the img parent
-            	p = dom.getParent(img, bElm, 'BODY');
-            	// split paragraphs / divs
-            	if (p.nodeName == 'P' || p.nodeName == 'DIV') {
-                	dom.split(p, img);
-					ns = img.nextSibling;
+                // get the img parent
+                p = dom.getParent(marker, blocks, 'BODY');
+                // split paragraphs / divs
+                if (p.nodeName == 'P' || p.nodeName == 'DIV') {
+                    
+                    // split
+                    dom.split(p, marker);
+                    
+                    ns = marker.nextSibling;
 					
-					if (ns && ns.nodeName == p.nodeName) {						
-						if (/^(\s|&nbsp;|\u00a00)*?$/.test(h) || h == '<br>') {
-							dom.remove(ns);
-						}
-					}
+                    if (ns && ns.nodeName == p.nodeName) {						
+                        if (/^(\s|&nbsp;|\u00a00)*?$/.test(h) || h == '<br>') {
+                            dom.remove(ns);
+                        }
+                    }
                 } else {
-                	// If in block
+                    // If in block
                     if (p) {
                         if (p.parentNode.nodeName == 'BODY') {
-							dom.insertAfter(img, p);
-						} else {
-							p.insertBefore(img, p);
-						}
+                            dom.insertAfter(marker, p);
+                        } else {                            
+                            p.parentNode.insertBefore(marker, p);
+                        }
                     } else {
                         if (n.parentNode.nodeName == 'BODY') {
-							dom.insertAfter(img, n);
-						} else {
-							n.parentNode.insertBefore(img, n);
-						}
+                            dom.insertAfter(marker, n);
+                        } else {
+                            n.parentNode.insertBefore(marker, n);
+                        }
                     }
-                    p = img.parentNode;
+                    p = marker.parentNode;
                     
-                    while (/^(ADDRESS|PRE|FORM|TABLE|OL|UL|CAPTION|BLOCKQUOTE|CENTER|DL|DIR|FIELDSET|NOSCRIPT|NOFRAMES|MENU|ISINDEX|SAMP)$/.test(p.nodeName)) {
-                        p.parentNode.insertBefore(img, p);
-                        p = img.parentNode;
+                    while (/^(H[1-6]|ADDRESS|PRE|FORM|TABLE|OL|UL|CAPTION|BLOCKQUOTE|CENTER|DL|DIR|FIELDSET|NOSCRIPT|NOFRAMES|MENU|ISINDEX|SAMP)$/.test(p.nodeName)) {
+                        p.parentNode.insertBefore(marker, p);
+                        p = marker.parentNode;
                     }
                 }
-				ns = img.nextSibling;
+                ns = marker.nextSibling;
 					
-				if (!ns) {
-                    var el = ed.getParam('forced_root_block') || (ed.getParam('force_p_newlines') ? 'p' : 'br'); 
-					ns = ed.dom.create(el);
-					if (el != 'br') {
-						ns.innerHTML = '\u00a0';
-					}
-                    ed.dom.insertAfter(ns, img);
-					s = ed.selection.select(ns);
-					ed.selection.collapse(1);
+                if (!ns) {
+                    var el = ed.getParam('forced_root_block') || 'br'; 
+                    ns = ed.dom.create(el);
+                    
+                    if (el != 'br') {
+                        ns.innerHTML = '\u00a0';
+                    }
+                    ed.dom.insertAfter(ns, marker);
+                    s = ed.selection.select(ns);
+                    ed.selection.collapse(1);
                 }
             }
-            dom.setAttrib(dom.get('system-pagebreak'), 'id', '');            
+            
+            ed.dom.replace(hr, marker);      
             ed.undoManager.add();
         },
-        // Private methods
-        
-        _buildHR: function(n) {
-            var ed = this.editor, dom = ed.dom, args = {};
-            
-            if (/mceItemPageBreak/.test(n.attr('class'))) {
-                args = {
-                    title			: n.attr('title'),
-                    'alt'			: n.attr('alt'),
-                    'class'			: 'system-pagebreak'
-                };
-            } else {
-                args = {
-                    id: 'system-readmore'
-                };
+
+        createControl: function(n, cm) {
+            var self = this, ed = this.editor;
+
+            switch (n) {
+                case 'pagebreak':
+                    if (ed.getParam('article_show_pagebreak', true)) {
+
+                        var content = DOM.create('div');
+                        
+                        var fieldset = DOM.add(content, 'fieldset', {}, '<legend>' + ed.getLang('article.pagebreak', 'Insert / Edit Pagebreak') + '</legend>');
+                        
+                        var n = DOM.add(fieldset, 'div');
+
+                        DOM.add(n, 'label', {
+                            'for' : ed.id + '_title'
+                        }, ed.getLang('article.title', 'Title'));
+
+                        var title   = DOM.add(n, 'input', {
+                            type    : 'text',
+                            id      : ed.id + '_title',
+                            style : {
+                                'width' : 180
+                            }
+                        });
+                        
+                        n = DOM.add(fieldset, 'div');
+                    
+                        DOM.add(n, 'label', {
+                            'for' : ed.id + '_alt'
+                        }, ed.getLang('article.alias', 'Alias'));
+                    
+                        var alt   = DOM.add(n, 'input', {
+                            type    : 'text',
+                            id      : ed.id + '_alt',
+                            style : {
+                                'width' : 180
+                            }
+                        });
+
+                        var c = new tinymce.ui.ButtonDialog(cm.prefix + 'pagebreak', {
+                            title           : ed.getLang('article.pagebreak', 'Insert / Edit Pagebreak'),
+                            'class'         : 'mce_pagebreak',
+                            'dialog_class'  : ed.getParam('skin') + 'Skin',
+                            'content'       : content,
+                            'width'         : 250,
+                            buttons         : [{
+                                title : ed.getLang('common.insert', 'Insert'),
+                                id    : 'insert',
+                                click : function(e) {
+                                    c.restoreSelection();
+                                    
+                                    ed.execCommand('mcePageBreak', false, {
+                                        title   : title.value, 
+                                        alt     : alt.value
+                                    });
+                                    
+                                    return true;
+                                },
+                                scope : self
+                            }]
+                        }, ed);
+
+                        c.onShowDialog.add(function() {
+                            title.value = alt.value = '';
+                            var label = ed.getLang('common.insert', 'Insert');
+                       
+                            var o = self._getPageBreak(), active = false;
+                        
+                            if (o) {
+                                title.value = o.title || '';
+                                alt.value   = o.alt || '';
+                                label = ed.getLang('common.update', 'Update');
+                                
+                                active = true;
+                            }
+                            
+                            c.setActive(active);
+                        
+                            c.setButtonLabel('insert', label);
+                            
+                            title.focus();
+                        });
+                    
+                        c.onHideDialog.add(function() {
+                            title.value = alt.value = '';
+                        });
+					
+                        // Remove the menu element when the editor is removed
+                        ed.onRemove.add(function() {
+                            c.destroy();
+                        });
+
+                        return cm.add(c);
+                        break;
+                    }
             }
-            
-            var hr = new Node('hr', 1).attr(args);
-            hr.shortEnded = true;
-            
-            return n.replace(hr);
-        },
-        
-        _createImg: function(n) {
-            var ed = this.editor, t = this, args;
-            
-            args = {
-                src			: t.url + '/img/trans.gif',
-                'class'		: 'mceItemReadMore'
-            };
-            
-            if (n.attr('id') == 'system-readmore') {
-            	tinymce.extend(args, {
-                    id				: 'system-readmore',
-                    alt				: ed.getLang('article.readmore_title', ed.getLang('article.readmore_title', 'Read More')),
-                    title			: ed.getLang('article.readmore_title', ed.getLang('article.readmore_title', 'Read More')),
-					'data-mce-type'	: 'system-readmore'
-                });
-            } else {
-            	tinymce.extend(args, {
-                    'class'			: 'mceItemPageBreak',
-                    title			: n.attr('title'),
-                    'alt'			: n.attr('data-mce-alt'),
-					'data-mce-type'	: 'system-pagebreak'
-                });
-            }
-            
-            var img = new Node('img', 1).attr(args);
-            img.shortEnded = true;
-            
-            return n.replace(img);
+
+            return null;
         },
         
         getInfo: function() {
