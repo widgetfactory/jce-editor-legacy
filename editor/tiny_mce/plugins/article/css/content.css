@@ -1,3 +1,10 @@
-.mceItemReadMore, .mceItemPageBreak {padding:0;margin:0;border:1px dotted #000000;background-color:#cccccc;background-repeat:no-repeat;background-position:center;height:16px;width:99%;}
+.mceItemReadMore, .mceItemPageBreak {disaply: inline-block; padding:0;margin:0;border:1px dotted #000000;background-color:#cccccc;background-repeat:no-repeat;background-position:center;height:16px;width:99%;
+font-size : 0;line-height : 0;letter-spacing: normal;word-spacing: normal; cursor:pointer;}
 .mceItemReadMore {background-image:url(../img/readmore.png);}
 .mceItemPageBreak {background-image:url(../img/pagebreak.png);}
+.mceItemReadMore::selection, .mceItemPageBreak::selection {
+    background-color: #b4d4ff;
+}
+.mceItemReadMore.mceItemSelected, .mceItemPageBreak.mceItemSelected {
+    background-color: #b4d4ff;
+}
