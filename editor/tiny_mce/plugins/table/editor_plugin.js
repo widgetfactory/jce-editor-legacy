@@ -104,6 +104,8 @@
             }
 
             t.isMenuVisible = 1;
+
+            t.setActive(1);
         },
 
         /**
@@ -135,6 +137,8 @@
                 }
 
                 t.isMenuVisible = 0;
+
+                t.setActive(0);
             }
         },
 
