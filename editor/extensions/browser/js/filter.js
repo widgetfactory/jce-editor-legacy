@@ -17,7 +17,8 @@
             items : null,
             clear : null,
             sort : null,
-            hide : false
+            hide : false,
+            filter : null
         },
 
         _init : function() {
@@ -52,15 +53,26 @@
             });
         },
         _find : function(s, e) {
-            var self = this, x = [];
+            var self = this, x = [], f, v, filter;
 
             $(this.options.clear).toggleClass('clear', !!s);
 
             if(/[a-z0-9_\.-]/i.test(s)) {
                 $(this.options.items).each(function() {
-                    var f = $.String.basename($(this).attr('title')).substring(0, s.length);
+                    var n = $.String.basename($(this).attr('title'));
+                      
+                    if (s.charAt(0) == '.') {
+                        v = s.substr(1);
+                        f = n.substr(n.lastIndexOf('.') + 1);   
 
-                    if(f.toLowerCase() == s.toLowerCase()) {
+                        filter = true;
+
+                    } else {
+                        f = n.substring(0, s.length);
+                        v = s;
+                    }
+
+                    if(f.toLowerCase() == v.toLowerCase()) {
                         if($.inArray(this, x) == -1) {
                             x.push(this);
                         }
@@ -78,6 +90,11 @@
             if(x.length) {
                 x = self._sort(x);
                 self._scroll(x[0]);
+                
+                if (this.options.filter && filter) {
+                    $(this.options.filter).not(x).hide();
+                }
+                
             } else {
                 self._reset();
             }
@@ -108,6 +125,8 @@
             return a;
         },
         _reset : function() {
+            $(this.options.filter).show();
+            
             this._scroll($('li:first', this.options.list));
         },
         destroy : function() {

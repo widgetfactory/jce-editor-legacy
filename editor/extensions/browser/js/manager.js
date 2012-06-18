@@ -282,7 +282,8 @@
                 list 	: dialog.list,
                 items	: '#item-list li.file',
                 clear 	: $('span.search-icon', '#searchbox'),
-                onFind 	: function(e, items) {
+                filter  : '#item-list li',
+                onFind 	: function(e, items, filter) {
                     if (items.length) {
                         self._deselectItems();
                         self._selectItems(items, true);
