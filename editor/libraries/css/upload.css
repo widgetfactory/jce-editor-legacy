@@ -247,3 +247,8 @@ div#upload-body #upload-options p {
     -webkit-border-radius: 3px;
     clear: both;
 }
+
+#jce #upload-browse.loading span.ui-icon {
+    background:	url(../img/load.gif) no-repeat center;
+    margin-top : -7px;
+}
