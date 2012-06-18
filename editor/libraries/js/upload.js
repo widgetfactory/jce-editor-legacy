@@ -11,6 +11,7 @@
  */
 
 (function($) {
+    
     $.widget("ui.uploader", {
 
         // uploader object
@@ -22,19 +23,20 @@
         uploading : false,
 
         options : {
-            field			: $('input[name=file]:first'),
-            size			: false,
-            limit			: 5,
-            debug			: false,
-            filter			: null,
-            swf				: 'uploader.swf',
-            xap				: 'uploader.xap',
+            field		: $('input[name=file]:first'),
+            size		: false,
+            limit		: 5,
+            debug		: false,
+            filter		: null,
+            swf			: 'uploader.swf',
+            xap			: 'uploader.xap',
             runtimes		: 'html5,flash,html4',
-            urlstream_upload: true,
-            insert			: true,
-            buttons			: {},
+            urlstream_upload    : true,
+            insert		: true,
+            buttons		: {},
             required		: ['multipart'],
-            websafe_mode	: 'utf-8'
+            websafe_mode	: 'utf-8',
+            canvasResize        : true
         },
 
         /**
@@ -68,9 +70,11 @@
                 required : ['multipart']
             });
         	
-            if (this.uploader) {
+            if (this.uploader) {                                
                 this.uploader.destroy();
             }
+            
+            $('#upload-queue').empty();
 
             this._createUploader();
         },
@@ -102,6 +106,18 @@
                 container = 'upload_buttons_container';
                 $('#upload-browse').parent().attr('id', container);
             }
+            
+            $('#upload-browse').addClass('loading').button('disable');
+            
+            /*var runtimes = options.runtimes.split(',');
+            
+            if (runtimes.length > 1) {
+                var required = options.required.join(',');
+            
+                if (!options.canvasResize && runtimes.indexOf('html5') != -1 && /(jpg|png)resize/.test(required)) {
+                    runtimes.splice(runtimes.indexOf('html5'), 1);
+                }
+            }*/
 
             try {
 
@@ -110,23 +126,24 @@
                     runtimes 			: options.runtimes,
                     unique_names		: false,
                     browse_button 		: 'upload-browse',
-                    browse_button_hover : 'ui-state-hover',
-                    browse_button_active: 'ui-state-active',
+                    browse_button_hover         : 'ui-state-hover',
+                    browse_button_active        : 'ui-state-active',
                     drop_element		: 'upload-queue-block',
                     max_file_size 		: size,
-                    url 				: options.url,
+                    url 			: options.url,
                     flash_swf_url 		: options.swf,
-                    silverlight_xap_url : options.xap,
+                    silverlight_xap_url         : options.xap,
                     filters 			: filters,
-                    //chunk_size			: options.chunk_size,
+                    //chunk_size		: options.chunk_size,
                     multipart			: true,
-                    required_features	: self.options.required.join(','),
-                    rename				: true,
-                    urlstream_upload    : true
+                    required_features           : options.required.join(','),
+                    rename			: true,
+                    urlstream_upload            : true
                 });
 
                 // on Uploader init
                 this.uploader.bind('Init', function(up) {
+                    $('#upload-browse').removeClass('loading').button('enable');
                     self._createDragDrop();
                     up.features.triggerDialog = false;
                 });
@@ -243,9 +260,7 @@
                 }
 
                 this.uploader.init();
-            } catch(e) {
-                alert(e);
-            }
+            } catch(e) {}
         },
 
         _getUploader : function() {
@@ -351,10 +366,16 @@
 
             if (files.length) {
                 this.uploading = true;
-
+                
+                if (this.uploader.runtime == 'html5') {
+                    if (!this.options.canvasResize) {
+                        args.resize = null;
+                    }
+                }
+                
                 // set resize options
                 this.uploader.settings.resize = args.resize;
-
+                // set multipart params
                 this.uploader.settings.multipart_params = args || {};
 
                 this.uploader.start();
