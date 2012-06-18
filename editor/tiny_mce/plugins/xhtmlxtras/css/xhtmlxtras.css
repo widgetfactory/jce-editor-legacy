@@ -1,9 +1,14 @@
 #jce .ui-tabs-panel {
-	height: 255px;
+	height: 285px;
 }
 
 #jce div#attributes .ui-tabs-panel {
 	height: 335px;
+}
+
+#jce div#del .ui-tabs-panel,
+#jce div#ins .ui-tabs-panel {
+	height: 350px;
 }
 
 #jce label {
