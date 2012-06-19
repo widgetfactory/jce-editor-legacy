@@ -30,14 +30,18 @@ defined('_JEXEC') or die('RESTRICTED');
         </fieldset>
         <fieldset class="only">
             <legend><?php echo JText::_('WF_SEARCH_SEARCH_ONLY'); ?></legend>
+            <ul>
             <?php
             foreach ($this->searchareas as $val => $txt) :
                 ?>
-                <input type="checkbox" name="areas[]" value="<?php echo $val; ?>" id="area-<?php echo $val; ?>" />
+                <li>
+                    <input type="checkbox" name="areas[]" value="<?php echo $val; ?>" id="area-<?php echo $val; ?>" />
                 <label for="area-<?php echo $val; ?>">
                     <?php echo JText::_($txt); ?>
                 </label>
+                </li>
             <?php endforeach; ?>
+            </ul>
         </fieldset>
     </div>
     <div id="search-result"></div>

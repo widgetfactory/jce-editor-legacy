@@ -159,3 +159,13 @@ div#search-browser #search-options-button.active {
 div#search-browser #search-options-button.active span.icon {
     margin : 2px;
 }
+
+div#search-options fieldset.only ul {
+    list-style: none;
+    padding : 0;
+    margin : 0;
+}
+
+div#search-options fieldset.only ul li {
+    display : inline-block;
+}
