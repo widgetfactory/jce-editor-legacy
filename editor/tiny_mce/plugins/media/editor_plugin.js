@@ -9,12 +9,7 @@
     var each = tinymce.each, extend = tinymce.extend, JSON = tinymce.util.JSON;
     var Node = tinymce.html.Node;
 
-    var Styles = new tinymce.html.Styles({
-        url_converter: function(url) {
-            return self.convertUrl(url);
-        }
-
-    });
+    var Styles = new tinymce.html.Styles();
 
     function toArray(obj) {
         var undef, out, i;
@@ -167,7 +162,7 @@
             self.url    = url;
 
             // Parse media types into a lookup table
-            scriptRegExp = '';
+            var scriptRegExp = '';
 
             each (mediaTypes, function(v, k) {
                 v.name = k;
@@ -191,21 +186,22 @@
             };
 
             ed.onPreInit.add( function() {
-                // element support
-                ed.schema.addValidElements('object[id|style|width|height|classid|codebase|*],param[name|value],embed[id|style|width|height|type|src|*],video[*],audio[*],source[*]');
-                // iframes
-                ed.schema.addValidElements('iframe[longdesc|name|src|frameborder|marginwidth|marginheight|scrolling|align|width|height|allowtransparency|*]');
+                var invalid = ed.settings.invalid_elements;
+                
+                if (ed.settings.schema != 'html5') {
+                    ed.schema.addValidElements('video[src|autobuffer|autoplay|loop|controls|width|height|poster|*],audio[src|autobuffer|autoplay|loop|controls|*],source[src|type|media|*]');
+                }
 
                 // Add custom 'comment' element
                 ed.schema.addCustomElements('comment');
 
-                var invalid = tinymce.explode(ed.settings.invalid_elements, ',');
+                invalid = tinymce.explode(invalid, ',');
 
                 // Convert video elements to image placeholder
                 ed.parser.addNodeFilter('object,embed,video,audio,script,iframe', function(nodes) {
-                    for (var i = 0, len = nodes.length; i < len; i++) {
-                        // if valid node
-                        if (tinymce.inArray(invalid, nodes[i]) == -1) {
+                    for (var i = 0, len = nodes.length; i < len; i++) {                        
+                        // if valid node (validate == false)
+                        if (tinymce.inArray(invalid, nodes[i].name) == -1) {
                             self.toImage(nodes[i]);
                         // remove node
                         } else {
