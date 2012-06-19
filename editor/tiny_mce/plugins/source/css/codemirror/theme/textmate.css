@@ -24,3 +24,5 @@
 	border: 1px solid gray;
 	color:black !important;;
 }
+.cm-s-textmate .activeline {background: #e8f2ff !important;}
+.cm-s-textmate .CodeMirror-matchhighlight { background: #e9e9e9 }
