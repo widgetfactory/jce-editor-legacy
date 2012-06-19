@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright © 2009-2011 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright © 2009-2012 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -39,12 +39,15 @@ class WFSearchBrowser extends WFBrowserExtension {
      * Method to get the search areas
      */
     private static function getAreas() {
-
+        $app = JFactory::getApplication('site');
+        
         $areas = array();
 
         JPluginHelper::importPlugin('search');
-        $dispatcher = JDispatcher::getInstance();
-        $searchareas = $dispatcher->trigger('onContentSearchAreas');
+        $searchareas = $app->triggerEvent('onContentSearchAreas');
+        
+        // Joomla! 1.5
+        $searchareas = array_merge($searchareas, $app->triggerEvent('onSearchAreas'));
 
         foreach ($searchareas as $area) {
             if (is_array($area)) {
@@ -95,16 +98,13 @@ class WFSearchBrowser extends WFBrowserExtension {
      * @copyright Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
      */
     public function doSearch($query) {
-        $app = JFactory::getApplication();
+        $app = JFactory::getApplication('site');
         // get SearchHelper
         require_once(JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_search' . DS . 'helpers' . DS . 'search.php');
         
         // set router mode to RAW
         $router = $app->getRouter();
         $router->setMode(0);
-
-        // get saerch plugins
-        JPluginHelper::importPlugin('search');
 
         // slashes cause errors, <> get stripped anyway later on. # causes problems.
         $badchars = array('#', '>', '<', '\\');
@@ -125,23 +125,33 @@ class WFSearchBrowser extends WFBrowserExtension {
                 $areas[] = JFilterInput::getInstance()->clean($area, 'cmd');
             }
         }
+        
+        if (!class_exists('JSite')) {
+            // Load JSite class
+            JLoader::register('JSite',  JPATH_SITE . DS . 'includes' . DS . 'application.php');
+        }
 
-        $dispatcher = JDispatcher::getInstance();
-        $results = $dispatcher->trigger('onContentSearch', array(
+        // get saerch plugins
+        JPluginHelper::importPlugin('search');
+
+        $searches = $app->triggerEvent('onContentSearch', array(
             $searchword,
             $searchphrase,
             $ordering,
             $areas
         ));
 
-        $rows = array();
-
-        foreach ($results as $result) {
-            $rows = array_merge((array) $rows, (array) $result);
+        $results = array();
+        $rows 	 = array();
+        
+        foreach ($searches as $search) {
+            $rows = array_merge((array) $rows, (array) $search);
         }
 
         for ($i = 0, $count = count($rows); $i < $count; $i++) {
             $row = &$rows[$i];
+            
+            $result = new StdClass();
 
             if ($searchphrase == 'exact') {
                 $searchwords = array($searchword);
@@ -159,7 +169,12 @@ class WFSearchBrowser extends WFBrowserExtension {
                 $row->anchors = $anchors;
             }
 
-            $row->text = SearchHelper::prepareSearchContent($row->text, $needle);
+            if (method_exists('SearchHelper', 'getActions')) {
+            	$row->text = SearchHelper::prepareSearchContent($row->text, $needle);
+            } else {
+            	$row->text = SearchHelper::prepareSearchContent($row->text, 200, $needle);
+            }
+            
             $searchwords = array_unique($searchwords);
             $searchRegex = '#(';
             $x = 0;
@@ -178,10 +193,14 @@ class WFSearchBrowser extends WFBrowserExtension {
                 $row->href = substr_replace($row->href, '', 0, strlen(JURI::base(true)) + 1);
             }
             
-            $row->link = $row->href;
+            $result->title 	= $row->title;
+            $result->text 	= $row->text;
+            $result->link 	= $row->href;
+            
+            $results[] = $result;
         }
 
-        return $rows;
+        return $results;
     }
     
     private static function getAnchors($content) {
