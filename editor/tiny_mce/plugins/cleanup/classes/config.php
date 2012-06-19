@@ -24,10 +24,6 @@ class WFCleanupPluginConfig
                 // set schema
                 $settings['schema'] = $wf->getParam('editor.schema', 'html4', 'html4');
 
-		// Tables & Lists
-		$settings['table_inline_editing'] 	= true;
-		$settings['fix_list_elements'] 		= true;
-		
 		// Get Extended elements
 		$settings['extended_valid_elements'] = $wf->getParam('editor.extended_elements', '', '');
 		// Configuration list of invalid elements as array
