@@ -75,6 +75,10 @@ div#search-browser div#search-result dl dt {
     font-weight: bold;
     margin : 10px 0 5px 0;
     text-decoration: underline;
+    
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: pre;
 }
 
 div#search-browser div#search-result dl dt:first-child {
