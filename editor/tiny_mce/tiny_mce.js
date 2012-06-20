@@ -2152,7 +2152,7 @@ tinymce.html.Styles = function(settings, schema) {
 					'style[E|type|media|scoped][#]' +
 					'script[E|charset|type|src|defer|async][#]' +
 					'noscript[E][C]' +
-					'body[E][C]' +
+					'body[E|onafterprint|onbeforeprint|onbeforeonload|onblur|onerror|onfocus|onhaschange|onload|onmessage|onoffline|ononline|onpagehide|onpageshow|onpopstate|onredo|onresize|onstorage|onundo|onunload][C]' +
 					'section[E][C]' +
 					'nav[E][C]' +
 					'article[E][C]' +
