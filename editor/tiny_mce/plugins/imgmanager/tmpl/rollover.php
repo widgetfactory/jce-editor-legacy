@@ -19,7 +19,7 @@ defined('_JEXEC') or die('RESTRICTED');
 		</label>
 		</td>
 		<td>
-		<input id="onmouseover" type="text" value="" />
+		<input id="onmouseover" type="text" value="" class="focus" />
 		</td>
 	</tr>
 	<tr>

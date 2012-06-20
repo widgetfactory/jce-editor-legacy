@@ -46,13 +46,8 @@
             }
 
             // add focus behaviour to onmoueover / onmouseout
-            $('#onmouseover').click( function() {
-                $('#onmouseout').removeClass('focus');
-                $(this).addClass('focus');
-            });
-
-            $('#onmouseout').click( function() {
-                $('#onmouseover').removeClass('focus');
+            $('#onmouseover, #onmouseout').focus( function() {
+                $('#onmouseover, #onmouseout').removeClass('focus');
                 $(this).addClass('focus');
             });
 
@@ -600,7 +595,7 @@
         },
 
         _setRollover : function(src) {
-            if ($('#onmouseout').hasClass('focus')) {
+            /*if ($('#onmouseout').hasClass('focus')) {
                 $('#onmouseout').val(src);
             }
 
@@ -616,7 +611,9 @@
                 } else {
                     $('#onmouseover').val(src).addClass('focus').focus();
                 }
-            }
+            }*/
+            
+            $('input.focus', '#rollover_tab').val(src);    
         },
 
         selectFile : function(file) {
