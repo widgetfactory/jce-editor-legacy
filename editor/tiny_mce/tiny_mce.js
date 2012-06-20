@@ -2092,6 +2092,16 @@ tinymce.html.Styles = function(settings, schema) {
 	};
 };
 
+/**
+ * Schema.js
+ *
+ * Copyright, Moxiecode Systems AB
+ * Released under LGPL License.
+ *
+ * License: http://www.tinymce.com/license
+ * Contributing: http://www.tinymce.com/contributing
+ */
+
 (function(tinymce) {
 	var mapCache = {}, makeMap = tinymce.makeMap, each = tinymce.each;
 
@@ -2099,6 +2109,10 @@ tinymce.html.Styles = function(settings, schema) {
 		return str.split(delim || ',');
 	};
 
+	/**
+	 * Unpacks the specified lookup and string data it will also parse it into an object
+	 * map with sub object for it's children. This will later also include the attributes.
+	 */
 	function unpack(lookup, data) {
 		var key, elements = {};
 
@@ -2128,134 +2142,138 @@ tinymce.html.Styles = function(settings, schema) {
 		return elements;
 	};
 
+	/**
+	 * Returns the HTML5 schema and caches it in the mapCache.
+	 */
 	function getHTML5() {
 		var html5 = mapCache.html5;
 
 		if (!html5) {
-                    html5 = mapCache.html5 = unpack({
-			A : 'id|accesskey|class|dir|draggable|item|hidden|itemprop|role|spellcheck|style|subject|title',
-			B : '#|a|abbr|area|audio|b|bdo|br|button|canvas|cite|code|command|datalist|del|dfn|em|embed|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|meta|' +
-                            'meter|noscript|object|output|progress|q|ruby|samp|script|select|small|span|strong|sub|sup|svg|textarea|time|var|video|wbr',
-			C : '#|a|abbr|area|address|article|aside|audio|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|' +
-                            'figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|' +
-                            'p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var|video',
-                        D : 'onclick|ondblclick|ondrag|ondragend|ondragenter|ondragleave|ondragover|ondragstart|ondrop|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onmousewheel|onscroll|onkeydown|onkeypress|onkeyup',
-                	E : 'A|D',
-                	F : 'onblur|onchange|oncontextmenu|onfocus|onformchange|onforminput|oninput|oninvalid|onselect|onsubmit',
-                	G : 'onabort|oncanplay|oncanplaythrough|ondurationchange|onemptied|onended|onerror|onloadeddata|onloadedmetadata|onloadstart|onpause|onplay|onplaying|onprogress|onratechange|onreadystatechange|onseeked|onseeking|onstalled|onsuspend|ontimeupdate|onvolumechange|onwaiting'
-				}, 'html[E|manifest][body|head]' +
-					'head[E][base|command|link|meta|noscript|script|style|title]' +
-					'title[E][#]' +
-					'base[E|href|target][]' +
-					'link[E|href|rel|media|type|sizes][]' +
-					'meta[E|http-equiv|name|content|charset][]' +
-					'style[E|type|media|scoped][#]' +
-					'script[E|charset|type|src|defer|async][#]' +
-					'noscript[E][C]' +
-					'body[E|onafterprint|onbeforeprint|onbeforeonload|onblur|onerror|onfocus|onhaschange|onload|onmessage|onoffline|ononline|onpagehide|onpageshow|onpopstate|onredo|onresize|onstorage|onundo|onunload][C]' +
-					'section[E][C]' +
-					'nav[E][C]' +
-					'article[E][C]' +
-					'aside[E][C]' +
-					'h1[E][B]' +
-					'h2[E][B]' +
-					'h3[E][B]' +
-					'h4[E][B]' +
-					'h5[E][B]' +
-					'h6[E][B]' +
-					'hgroup[E][h1|h2|h3|h4|h5|h6]' +
-					'header[E][C]' +
-					'footer[E][C]' +
-					'address[E][C]' +
-					'p[E][B]' +
-					'br[E][]' +
-					'pre[E][B]' +
-					'dialog[E][dd|dt]' +
-					'blockquote[E|cite][C]' +
-					'ol[E|start|reversed][li]' +
-					'ul[E][li]' +
-					'li[E|value][C]' +
-					'dl[E][dd|dt]' +
-					'dt[E][B]' +
-					'dd[E][C]' +
-					'a[E|href|target|ping|rel|media|type][B]' +
-					'em[E][B]' +
-					'strong[E][B]' +
-					'small[E][B]' +
-					'cite[E][B]' +
-					'q[E|cite][B]' +
-					'dfn[E][B]' +
-					'abbr[E][B]' +
-					'code[E][B]' +
-					'var[E][B]' +
-					'samp[E][B]' +
-					'kbd[E][B]' +
-					'sub[E][B]' +
-					'sup[E][B]' +
-					'i[E][B]' +
-					'b[E][B]' +
-					'mark[E][B]' +
-					'progress[E|value|max][B]' +
-					'meter[E|value|min|max|low|high|optimum][B]' +
-					'time[E|datetime][B]' +
-					'ruby[E][B|rt|rp]' +
-					'rt[E][B]' +
-					'rp[E][B]' +
-					'bdo[E][B]' +
-					'span[E][B]' +
-					'ins[E|cite|datetime][B]' +
-					'del[E|cite|datetime][B]' +
-					'figure[E][C|legend|figcaption]' +
-					'figcaption[E][C]' +
-					'img[E|G|alt|src|height|width|usemap|ismap][]' +
-					'iframe[E|name|src|height|width|sandbox|seamless][]' +
-					'embed[E|G|src|height|width|type][]' +
-					'object[E|G|data|type|height|width|usemap|name|form|classid][param]' +
-					'param[E|name|value][]' +
-					'details[E|open][C|legend]' +
-					'command[E|type|label|icon|disabled|checked|radiogroup][]' +
-					'menu[E|type|label][C|li]' +
-					'legend[E][C|B]' +
-					'div[E][C]' +
-					'source[E|src|type|media][]' +
-					'audio[E|G|src|autobuffer|autoplay|loop|controls][source]' +
-					'video[E|G|src|autobuffer|autoplay|loop|controls|width|height|poster][source]' +
-					'hr[E][]' +
-					'form[E|accept-charset|action|autocomplete|enctype|method|name|novalidate|target][C]' +
-					'fieldset[E|disabled|form|name][C|legend]' +
-					'label[E|form|for][B]' +
-					'input[E|F|type|accept|alt|autocomplete|checked|disabled|form|formaction|formenctype|formmethod|formnovalidate|formtarget|height|list|max|maxlength|min|' +
+			html5 = mapCache.html5 = unpack({
+					A : 'id|accesskey|class|dir|draggable|item|hidden|itemprop|role|spellcheck|style|subject|title|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup',
+					B : '#|a|abbr|area|audio|b|bdo|br|button|canvas|cite|code|command|datalist|del|dfn|em|embed|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|meta|' +
+						'meter|noscript|object|output|progress|q|ruby|samp|script|select|small|span|strong|sub|sup|svg|textarea|time|var|video|wbr',
+					C : '#|a|abbr|area|address|article|aside|audio|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|' +
+						'figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|' +
+						'p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var|video',
+					D : 'onblur|onchange|oncontextmenu|onfocus|onformchange|onforminput|oninput|oninvalid|onselect|onsubmit',
+					E : 'onabort|oncanplay|oncanplaythrough|ondurationchange|onemptied|onended|onerror|onloadeddata|onloadedmetadata|onloadstart|onpause|onplay|onplaying|onprogress|onratechange|onreadystatechange|onseeked|onseeking|onstalled|onsuspend|ontimeupdate|onvolumechange|onwaiting'
+				}, 'html[A|manifest][body|head]' +
+					'head[A][base|command|link|meta|noscript|script|style|title]' +
+					'title[A][#]' +
+					'base[A|href|target][]' +
+					'link[A|href|rel|media|type|sizes][]' +
+					'meta[A|http-equiv|name|content|charset][]' +
+					'style[A|type|media|scoped][#]' +
+					'script[A|charset|type|src|defer|async][#]' +
+					'noscript[A][C]' +
+					'body[A|onafterprint|onbeforeprint|onbeforeonload|onblur|onerror|onfocus|onhaschange|onload|onmessage|onoffline|ononline|onpagehide|onpageshow|onpopstate|onredo|onresize|onstorage|onundo|onunload][C]' +
+					'section[A][C]' +
+					'nav[A][C]' +
+					'article[A][C]' +
+					'aside[A][C]' +
+					'h1[A][B]' +
+					'h2[A][B]' +
+					'h3[A][B]' +
+					'h4[A][B]' +
+					'h5[A][B]' +
+					'h6[A][B]' +
+					'hgroup[A][h1|h2|h3|h4|h5|h6]' +
+					'header[A][C]' +
+					'footer[A][C]' +
+					'address[A][C]' +
+					'p[A][B]' +
+					'br[A][]' +
+					'pre[A][B]' +
+					'dialog[A][dd|dt]' +
+					'blockquote[A|cite][C]' +
+					'ol[A|start|reversed][li]' +
+					'ul[A][li]' +
+					'li[A|value][C]' +
+					'dl[A][dd|dt]' +
+					'dt[A][B]' +
+					'dd[A][C]' +
+					'a[A|href|target|ping|rel|media|type][B]' +
+					'em[A][B]' +
+					'strong[A][B]' +
+					'small[A][B]' +
+					'cite[A][B]' +
+					'q[A|cite][B]' +
+					'dfn[A][B]' +
+					'abbr[A][B]' +
+					'code[A][B]' +
+					'var[A][B]' +
+					'samp[A][B]' +
+					'kbd[A][B]' +
+					'sub[A][B]' +
+					'sup[A][B]' +
+					'i[A][B]' +
+					'b[A][B]' +
+					'mark[A][B]' +
+					'progress[A|value|max][B]' +
+					'meter[A|value|min|max|low|high|optimum][B]' +
+					'time[A|datetime][B]' +
+					'ruby[A][B|rt|rp]' +
+					'rt[A][B]' +
+					'rp[A][B]' +
+					'bdo[A][B]' +
+					'span[A][B]' +
+					'ins[A|cite|datetime][B]' +
+					'del[A|cite|datetime][B]' +
+					'figure[A][C|legend|figcaption]' +
+					'figcaption[A][C]' +
+					'img[A|E|alt|src|height|width|usemap|ismap][]' +
+					'iframe[A|name|src|height|width|sandbox|seamless][]' +
+					'embed[A|E|src|height|width|type][]' +
+					'object[A|E|data|type|height|width|usemap|name|form|classid][param]' +
+					'param[A|name|value][]' +
+					'details[A|open][C|legend]' +
+					'command[A|type|label|icon|disabled|checked|radiogroup][]' +
+					'menu[A|type|label][C|li]' +
+					'legend[A][C|B]' +
+					'div[A][C]' +
+					'source[A|src|type|media][]' +
+					'audio[A|E|src|autobuffer|autoplay|loop|controls][source]' +
+					'video[A|E|src|autobuffer|autoplay|loop|controls|width|height|poster][source]' +
+					'hr[A][]' +
+					'form[A|accept-charset|action|autocomplete|enctype|method|name|novalidate|target][C]' +
+					'fieldset[A|disabled|form|name][C|legend]' +
+					'label[A|form|for][B]' +
+					'input[A|D|type|accept|alt|autocomplete|checked|disabled|form|formaction|formenctype|formmethod|formnovalidate|formtarget|height|list|max|maxlength|min|' +
 						'multiple|pattern|placeholder|readonly|required|size|src|step|width|files|value|name][]' +
-					'button[E|autofocus|disabled|form|formaction|formenctype|formmethod|formnovalidate|formtarget|name|value|type][B]' +
-					'select[E|F|autofocus|disabled|form|multiple|name|size][option|optgroup]' +
-					'datalist[E][B|option]' +
-					'optgroup[E|disabled|label][option]' +
-					'option[E|disabled|selected|label|value][]' +
-					'textarea[E|autofocus|disabled|form|maxlength|name|placeholder|readonly|required|rows|cols|wrap][]' +
-					'keygen[E|autofocus|challenge|disabled|form|keytype|name][]' +
-					'output[E|for|form|name][B]' +
-					'canvas[E|width|height][]' +
-					'map[E|name][B|C]' +
-					'area[E|shape|coords|href|alt|target|media|rel|ping|type][]' +
-					'mathml[E][]' +
-					'svg[E][]' +
-					'table[E|border][caption|colgroup|thead|tfoot|tbody|tr]' +
-					'caption[E][C]' +
-					'colgroup[E|span][col]' +
-					'col[E|span][]' +
-					'thead[E][tr]' +
-					'tfoot[E][tr]' +
-					'tbody[E][tr]' +
-					'tr[E][th|td]' +
-					'th[E|headers|rowspan|colspan|scope][B]' +
-					'td[E|headers|rowspan|colspan][C]' +
-					'wbr[E][]'
+					'button[A|autofocus|disabled|form|formaction|formenctype|formmethod|formnovalidate|formtarget|name|value|type][B]' +
+					'select[A|D|autofocus|disabled|form|multiple|name|size][option|optgroup]' +
+					'datalist[A][B|option]' +
+					'optgroup[A|disabled|label][option]' +
+					'option[A|disabled|selected|label|value][]' +
+					'textarea[A|autofocus|disabled|form|maxlength|name|placeholder|readonly|required|rows|cols|wrap][]' +
+					'keygen[A|autofocus|challenge|disabled|form|keytype|name][]' +
+					'output[A|for|form|name][B]' +
+					'canvas[A|width|height][]' +
+					'map[A|name][B|C]' +
+					'area[A|shape|coords|href|alt|target|media|rel|ping|type][]' +
+					'mathml[A][]' +
+					'svg[A][]' +
+					'table[A|border][caption|colgroup|thead|tfoot|tbody|tr]' +
+					'caption[A][C]' +
+					'colgroup[A|span][col]' +
+					'col[A|span][]' +
+					'thead[A][tr]' +
+					'tfoot[A][tr]' +
+					'tbody[A][tr]' +
+					'tr[A][th|td]' +
+					'th[A|headers|rowspan|colspan|scope][B]' +
+					'td[A|headers|rowspan|colspan][C]' +
+					'wbr[A][]'
 			);
 		}
 
 		return html5;
 	};
 
+	/**
+	 * Returns the HTML4 schema and caches it in the mapCache.
+	 */
 	function getHTML4() {
 		var html4 = mapCache.html4;
 
@@ -2384,6 +2402,28 @@ tinymce.html.Styles = function(settings, schema) {
 		return html4;
 	};
 
+	/**
+	 * Schema validator class.
+	 *
+	 * @class tinymce.html.Schema
+	 * @example
+	 *  if (tinymce.activeEditor.schema.isValidChild('p', 'span'))
+	 *    alert('span is valid child of p.');
+	 *
+	 *  if (tinymce.activeEditor.schema.getElementRule('p'))
+	 *    alert('P is a valid element.');
+	 *
+	 * @class tinymce.html.Schema
+	 * @version 3.4
+	 */
+
+	/**
+	 * Constructs a new Schema instance.
+	 *
+	 * @constructor
+	 * @method Schema
+	 * @param {Object} settings Name/value settings object.
+	 */
 	tinymce.html.Schema = function(settings) {
 		var self = this, elements = {}, children = {}, patternElements = [], validStyles, schemaItems;
 		var whiteSpaceElementsMap, selfClosingElementsMap, shortEndedElementsMap, boolAttrMap, blockElementsMap, nonEmptyElementsMap, customElementsMap = {};
@@ -2723,40 +2763,111 @@ tinymce.html.Styles = function(settings, schema) {
 		if (!getElementRule('span'))
 			addValidElements('span[!data-mce-type|*]');
 
+		/**
+		 * Name/value map object with valid parents and children to those parents.
+		 *
+		 * @example
+		 * children = {
+		 *    div:{p:{}, h1:{}}
+		 * };
+		 * @field children
+		 * @type {Object}
+		 */
 		self.children = children;
 
+		/**
+		 * Name/value map object with valid styles for each element.
+		 *
+		 * @field styles
+		 * @type {Object}
+		 */
 		self.styles = validStyles;
 
+		/**
+		 * Returns a map with boolean attributes.
+		 *
+		 * @method getBoolAttrs
+		 * @return {Object} Name/value lookup map for boolean attributes.
+		 */
 		self.getBoolAttrs = function() {
 			return boolAttrMap;
 		};
 
+		/**
+		 * Returns a map with block elements.
+		 *
+		 * @method getBoolAttrs
+		 * @return {Object} Name/value lookup map for block elements.
+		 */
 		self.getBlockElements = function() {
 			return blockElementsMap;
 		};
 
+		/**
+		 * Returns a map with short ended elements such as BR or IMG.
+		 *
+		 * @method getShortEndedElements
+		 * @return {Object} Name/value lookup map for short ended elements.
+		 */
 		self.getShortEndedElements = function() {
 			return shortEndedElementsMap;
 		};
 
+		/**
+		 * Returns a map with self closing tags such as <li>.
+		 *
+		 * @method getSelfClosingElements
+		 * @return {Object} Name/value lookup map for self closing tags elements.
+		 */
 		self.getSelfClosingElements = function() {
 			return selfClosingElementsMap;
 		};
 
+		/**
+		 * Returns a map with elements that should be treated as contents regardless if it has text
+		 * content in them or not such as TD, VIDEO or IMG.
+		 *
+		 * @method getNonEmptyElements
+		 * @return {Object} Name/value lookup map for non empty elements.
+		 */
 		self.getNonEmptyElements = function() {
 			return nonEmptyElementsMap;
 		};
 
+		/**
+		 * Returns a map with elements where white space is to be preserved like PRE or SCRIPT.
+		 *
+		 * @method getWhiteSpaceElements
+		 * @return {Object} Name/value lookup map for white space elements.
+		 */
 		self.getWhiteSpaceElements = function() {
 			return whiteSpaceElementsMap;
 		};
 
+		/**
+		 * Returns true/false if the specified element and it's child is valid or not
+		 * according to the schema.
+		 *
+		 * @method isValidChild
+		 * @param {String} name Element name to check for.
+		 * @param {String} child Element child to verify.
+		 * @return {Boolean} True/false if the element is a valid child of the specified parent.
+		 */
 		self.isValidChild = function(name, child) {
 			var parent = children[name];
 
 			return !!(parent && parent[child]);
 		};
 
+		/**
+		 * Returns true/false if the specified element name and optional attribute is
+		 * valid according to the schema.
+		 *
+		 * @method isValid
+		 * @param {String} name Name of element to check.
+		 * @param {String} attr Optional attribute name to check for.
+		 * @return {Boolean} True/false if the element and attribute is valid.
+		 */
 		self.isValid = function(name, attr) {
 			var attrPatterns, i, rule = getElementRule(name);
 
@@ -2787,18 +2898,58 @@ tinymce.html.Styles = function(settings, schema) {
 			return false;
 		};
 		
+		/**
+		 * Returns true/false if the specified element is valid or not
+		 * according to the schema.
+		 *
+		 * @method getElementRule
+		 * @param {String} name Element name to check for.
+		 * @return {Object} Element object or undefined if the element isn't valid.
+		 */
 		self.getElementRule = getElementRule;
 
+		/**
+		 * Returns an map object of all custom elements.
+		 *
+		 * @method getCustomElements
+		 * @return {Object} Name/value map object of all custom elements.
+		 */
 		self.getCustomElements = function() {
 			return customElementsMap;
 		};
 
+		/**
+		 * Parses a valid elements string and adds it to the schema. The valid elements format is for example "element[attr=default|otherattr]".
+		 * Existing rules will be replaced with the ones specified, so this extends the schema.
+		 *
+		 * @method addValidElements
+		 * @param {String} valid_elements String in the valid elements format to be parsed.
+		 */
 		self.addValidElements = addValidElements;
 
+		/**
+		 * Parses a valid elements string and sets it to the schema. The valid elements format is for example "element[attr=default|otherattr]".
+		 * Existing rules will be replaced with the ones specified, so this extends the schema.
+		 *
+		 * @method setValidElements
+		 * @param {String} valid_elements String in the valid elements format to be parsed.
+		 */
 		self.setValidElements = setValidElements;
 
+		/**
+		 * Adds custom non HTML elements to the schema.
+		 *
+		 * @method addCustomElements
+		 * @param {String} custom_elements Comma separated list of custom elements to add.
+		 */
 		self.addCustomElements = addCustomElements;
 
+		/**
+		 * Parses a valid children string and adds them to the schema structure. The valid children format is for example: "element[child1|child2]".
+		 *
+		 * @method addValidChildren
+		 * @param {String} valid_children Valid children elements string to parse
+		 */
 		self.addValidChildren = addValidChildren;
 	};
 })(tinymce);
