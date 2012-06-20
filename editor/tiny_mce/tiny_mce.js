@@ -2091,7 +2091,6 @@ tinymce.html.Styles = function(settings, schema) {
 		}
 	};
 };
-
 /**
  * Schema.js
  *
@@ -2156,115 +2155,114 @@ tinymce.html.Styles = function(settings, schema) {
 					C : '#|a|abbr|area|address|article|aside|audio|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|' +
 						'figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|' +
 						'p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var|video',
-					D : 'onblur|onchange|oncontextmenu|onfocus|onformchange|onforminput|oninput|oninvalid|onselect|onsubmit',
-					E : 'onabort|oncanplay|oncanplaythrough|ondurationchange|onemptied|onended|onerror|onloadeddata|onloadedmetadata|onloadstart|onpause|onplay|onplaying|onprogress|onratechange|onreadystatechange|onseeked|onseeking|onstalled|onsuspend|ontimeupdate|onvolumechange|onwaiting'
-				}, 'html[A|manifest][body|head]' +
-					'head[A][base|command|link|meta|noscript|script|style|title]' +
-					'title[A][#]' +
-					'base[A|href|target][]' +
-					'link[A|href|rel|media|type|sizes][]' +
-					'meta[A|http-equiv|name|content|charset][]' +
-					'style[A|type|media|scoped][#]' +
-					'script[A|charset|type|src|defer|async][#]' +
-					'noscript[A][C]' +
-					'body[A|onafterprint|onbeforeprint|onbeforeonload|onblur|onerror|onfocus|onhaschange|onload|onmessage|onoffline|ononline|onpagehide|onpageshow|onpopstate|onredo|onresize|onstorage|onundo|onunload][C]' +
-					'section[A][C]' +
-					'nav[A][C]' +
-					'article[A][C]' +
-					'aside[A][C]' +
-					'h1[A][B]' +
-					'h2[A][B]' +
-					'h3[A][B]' +
-					'h4[A][B]' +
-					'h5[A][B]' +
-					'h6[A][B]' +
-					'hgroup[A][h1|h2|h3|h4|h5|h6]' +
-					'header[A][C]' +
-					'footer[A][C]' +
-					'address[A][C]' +
-					'p[A][B]' +
-					'br[A][]' +
-					'pre[A][B]' +
-					'dialog[A][dd|dt]' +
-					'blockquote[A|cite][C]' +
-					'ol[A|start|reversed][li]' +
-					'ul[A][li]' +
-					'li[A|value][C]' +
-					'dl[A][dd|dt]' +
-					'dt[A][B]' +
-					'dd[A][C]' +
-					'a[A|href|target|ping|rel|media|type][B]' +
-					'em[A][B]' +
-					'strong[A][B]' +
-					'small[A][B]' +
-					'cite[A][B]' +
-					'q[A|cite][B]' +
-					'dfn[A][B]' +
-					'abbr[A][B]' +
-					'code[A][B]' +
-					'var[A][B]' +
-					'samp[A][B]' +
-					'kbd[A][B]' +
-					'sub[A][B]' +
-					'sup[A][B]' +
-					'i[A][B]' +
-					'b[A][B]' +
-					'mark[A][B]' +
-					'progress[A|value|max][B]' +
-					'meter[A|value|min|max|low|high|optimum][B]' +
-					'time[A|datetime][B]' +
-					'ruby[A][B|rt|rp]' +
-					'rt[A][B]' +
-					'rp[A][B]' +
-					'bdo[A][B]' +
-					'span[A][B]' +
-					'ins[A|cite|datetime][B]' +
-					'del[A|cite|datetime][B]' +
-					'figure[A][C|legend|figcaption]' +
-					'figcaption[A][C]' +
-					'img[A|E|alt|src|height|width|usemap|ismap][]' +
-					'iframe[A|name|src|height|width|sandbox|seamless][]' +
-					'embed[A|E|src|height|width|type][]' +
-					'object[A|E|data|type|height|width|usemap|name|form|classid][param]' +
-					'param[A|name|value][]' +
-					'details[A|open][C|legend]' +
-					'command[A|type|label|icon|disabled|checked|radiogroup][]' +
-					'menu[A|type|label][C|li]' +
-					'legend[A][C|B]' +
-					'div[A][C]' +
-					'source[A|src|type|media][]' +
-					'audio[A|E|src|autobuffer|autoplay|loop|controls][source]' +
-					'video[A|E|src|autobuffer|autoplay|loop|controls|width|height|poster][source]' +
-					'hr[A][]' +
-					'form[A|accept-charset|action|autocomplete|enctype|method|name|novalidate|target][C]' +
-					'fieldset[A|disabled|form|name][C|legend]' +
-					'label[A|form|for][B]' +
+					D : 'onabort|onblur|oncancel|oncanplay|oncanplaythrough|onchange|onclick|onclose|oncontextmenu|oncuechange|ondblclick|ondrag|ondragend|ondragenter|ondragleave|ondragover|ondragstart|ondrop|ondurationchange|onemptied|onended|onerror|onfocus|oninput|oninvalid|onkeydown|onkeypress|onkeyup|onload|onloadeddata|onloadedmetadata|onloadstart|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onmousewheel|onpause|onplay|onplaying|onprogress|onratechange|onreset|onscroll|onseeked|onseeking|onselect|onshow|onstalled|onsubmit|onsuspend|ontimeupdate|onvolumechange|onwaiting'
+				}, 'html[A|D|manifest][body|head]' +
+					'head[A|D][base|command|link|meta|noscript|script|style|title]' +
+					'title[A|D][#]' +
+					'base[A|D|href|target][]' +
+					'link[A|D|href|rel|media|type|sizes][]' +
+					'meta[A|D|http-equiv|name|content|charset][]' +
+					'style[A|D|type|media|scoped][#]' +
+					'script[A|D|charset|type|src|defer|async][#]' +
+					'noscript[A|D][C]' +
+					'body[A|D|onafterprint|onbeforeprint|onbeforeonload|onblur|onerror|onfocus|onhaschange|onload|onmessage|onoffline|ononline|onpagehide|onpageshow|onpopstate|onredo|onresize|onstorage|onundo|onunload][C]' +
+					'section[A|D][C]' +
+					'nav[A|D][C]' +
+					'article[A|D][C]' +
+					'aside[A|D][C]' +
+					'h1[A|D][B]' +
+					'h2[A|D][B]' +
+					'h3[A|D][B]' +
+					'h4[A|D][B]' +
+					'h5[A|D][B]' +
+					'h6[A|D][B]' +
+					'hgroup[A|D][h1|h2|h3|h4|h5|h6]' +
+					'header[A|D][C]' +
+					'footer[A|D][C]' +
+					'address[A|D][C]' +
+					'p[A|D][B]' +
+					'br[A|D][]' +
+					'pre[A|D][B]' +
+					'dialog[A|D][dd|dt]' +
+					'blockquote[A|D|cite][C]' +
+					'ol[A|D|start|reversed][li]' +
+					'ul[A|D][li]' +
+					'li[A|D|value][C]' +
+					'dl[A|D][dd|dt]' +
+					'dt[A|D][B]' +
+					'dd[A|D][C]' +
+					'a[A|D|href|target|ping|rel|media|type][B]' +
+					'em[A|D][B]' +
+					'strong[A|D][B]' +
+					'small[A|D][B]' +
+					'cite[A|D][B]' +
+					'q[A|D|cite][B]' +
+					'dfn[A|D][B]' +
+					'abbr[A|D][B]' +
+					'code[A|D][B]' +
+					'var[A|D][B]' +
+					'samp[A|D][B]' +
+					'kbd[A|D][B]' +
+					'sub[A|D][B]' +
+					'sup[A|D][B]' +
+					'i[A|D][B]' +
+					'b[A|D][B]' +
+					'mark[A|D][B]' +
+					'progress[A|D|value|max][B]' +
+					'meter[A|D|value|min|max|low|high|optimum][B]' +
+					'time[A|D|datetime][B]' +
+					'ruby[A|D][B|rt|rp]' +
+					'rt[A|D][B]' +
+					'rp[A|D][B]' +
+					'bdo[A|D][B]' +
+					'span[A|D][B]' +
+					'ins[A|D|cite|datetime][B]' +
+					'del[A|D|cite|datetime][B]' +
+					'figure[A|D][C|legend|figcaption]' +
+					'figcaption[A|D][C]' +
+					'img[A|D|alt|src|height|width|usemap|ismap][]' +
+					'iframe[A|D|name|src|height|width|sandbox|seamless][]' +
+					'embed[A|D|src|height|width|type][]' +
+					'object[A|D|data|type|height|width|usemap|name|form|classid][param]' +
+					'param[A|D|name|value][]' +
+					'details[A|D|open][C|legend]' +
+					'command[A|D|type|label|icon|disabled|checked|radiogroup][]' +
+					'menu[A|D|type|label][C|li]' +
+					'legend[A|D][C|B]' +
+					'div[A|D][C]' +
+					'source[A|D|src|type|media][]' +
+					'audio[A|D|src|autobuffer|autoplay|loop|controls][source]' +
+					'video[A|D|src|autobuffer|autoplay|loop|controls|width|height|poster][source]' +
+					'hr[A|D][]' +
+					'form[A|D|accept-charset|action|autocomplete|enctype|method|name|novalidate|target][C]' +
+					'fieldset[A|D|disabled|form|name][C|legend]' +
+					'label[A|D|form|for][B]' +
 					'input[A|D|type|accept|alt|autocomplete|checked|disabled|form|formaction|formenctype|formmethod|formnovalidate|formtarget|height|list|max|maxlength|min|' +
 						'multiple|pattern|placeholder|readonly|required|size|src|step|width|files|value|name][]' +
-					'button[A|autofocus|disabled|form|formaction|formenctype|formmethod|formnovalidate|formtarget|name|value|type][B]' +
+					'button[A|D|autofocus|disabled|form|formaction|formenctype|formmethod|formnovalidate|formtarget|name|value|type][B]' +
 					'select[A|D|autofocus|disabled|form|multiple|name|size][option|optgroup]' +
-					'datalist[A][B|option]' +
-					'optgroup[A|disabled|label][option]' +
-					'option[A|disabled|selected|label|value][]' +
-					'textarea[A|autofocus|disabled|form|maxlength|name|placeholder|readonly|required|rows|cols|wrap][]' +
-					'keygen[A|autofocus|challenge|disabled|form|keytype|name][]' +
-					'output[A|for|form|name][B]' +
-					'canvas[A|width|height][]' +
-					'map[A|name][B|C]' +
-					'area[A|shape|coords|href|alt|target|media|rel|ping|type][]' +
-					'mathml[A][]' +
-					'svg[A][]' +
-					'table[A|border][caption|colgroup|thead|tfoot|tbody|tr]' +
-					'caption[A][C]' +
-					'colgroup[A|span][col]' +
-					'col[A|span][]' +
-					'thead[A][tr]' +
-					'tfoot[A][tr]' +
-					'tbody[A][tr]' +
-					'tr[A][th|td]' +
-					'th[A|headers|rowspan|colspan|scope][B]' +
-					'td[A|headers|rowspan|colspan][C]' +
-					'wbr[A][]'
+					'datalist[A|D][B|option]' +
+					'optgroup[A|D|disabled|label][option]' +
+					'option[A|D|disabled|selected|label|value][]' +
+					'textarea[A|D|autofocus|disabled|form|maxlength|name|placeholder|readonly|required|rows|cols|wrap][]' +
+					'keygen[A|D|autofocus|challenge|disabled|form|keytype|name][]' +
+					'output[A|D|for|form|name][B]' +
+					'canvas[A|D|width|height][]' +
+					'map[A|D|name][B|C]' +
+					'area[A|D|shape|coords|href|alt|target|media|rel|ping|type][]' +
+					'mathml[A|D][]' +
+					'svg[A|D][]' +
+					'table[A|D|border][caption|colgroup|thead|tfoot|tbody|tr]' +
+					'caption[A|D][C]' +
+					'colgroup[A|D|span][col]' +
+					'col[A|D|span][]' +
+					'thead[A|D][tr]' +
+					'tfoot[A|D][tr]' +
+					'tbody[A|D][tr]' +
+					'tr[A|D][th|td]' +
+					'th[A|D|headers|rowspan|colspan|scope][B]' +
+					'td[A|D|headers|rowspan|colspan][C]' +
+					'wbr[A|D][]'
 			);
 		}
 
