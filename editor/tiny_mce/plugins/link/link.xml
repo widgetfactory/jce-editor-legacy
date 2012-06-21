@@ -39,6 +39,9 @@
             <option value="0">WF_OPTION_NO</option>
 		</param>
 	</params>
+        <params group="search">
+             <param name="search" type="search" default="" label="WF_PARAM_LINK_SEARCH" description="WF_PARAM_LINK_SEARCH_DESC" />
+        </params>
 	<extensions>links,popups</extensions>
 	<languages></languages>
 	<help>
