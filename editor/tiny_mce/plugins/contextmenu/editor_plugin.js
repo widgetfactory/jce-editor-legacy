@@ -27,7 +27,7 @@
 		 * @param {string} url Absolute URL to where the plugin is located.
 		 */
 		init : function(ed) {
-			var t = this, showMenu, contextmenuNeverUseNative, realCtrlKey;
+			var t = this, showMenu, contextmenuNeverUseNative, realCtrlKey, hideMenu;
 
 			t.editor = ed;
 
@@ -41,6 +41,10 @@
 			 * @param {tinymce.ui.DropMenu} menu Drop down menu to fill with more items if needed.
 			 */
 			t.onContextMenu = new tinymce.util.Dispatcher(this);
+                        
+                        hideMenu = function(e) {
+				hide(ed, e);
+			};
 
 			showMenu = ed.onContextMenu.add(function(ed, e) {
 				// Block TinyMCE menu on ctrlKey and work around Safari issue
@@ -55,9 +59,7 @@
 
 				t._getMenu(ed).showMenu(e.clientX || e.pageX, e.clientY || e.pageY);
 				
-				Event.add(ed.getDoc(), 'click', function(e) {
-					hide(ed, e);
-				});
+				Event.add(ed.getDoc(), 'click', hideMenu);
 
 				ed.nodeChanged();
 			});
@@ -80,7 +82,7 @@
 				if (t._menu) {
 					t._menu.removeAll();
 					t._menu.destroy();
-					Event.remove(ed.getDoc(), 'click', hide);
+					Event.remove(ed.getDoc(), 'click', hideMenu);
 					t._menu = null;
 				}
 			};
