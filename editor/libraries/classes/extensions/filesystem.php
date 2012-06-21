@@ -96,51 +96,54 @@ class WFFileSystem extends WFExtension {
             $profile = $wf->getProfile();
 
             // Get base directory as shared parameter
-            $root = $this->get('dir', 'images');
+            $root = $this->get('dir', '');
             // Remove whitespace
             $root = trim($root);
-            // Convert slashes / Strip double slashes
-            $root = preg_replace('/[\\\\]+/', '/', $root);
-            // Remove first leading slash
-            $root = ltrim($root, '/');
-            // Force default directory if base param starts with a variable or a . eg $id
-            if (preg_match('/[\.\$]/', $root{0})) {
-                $root = 'images';
-            }
-
-            jimport('joomla.user.helper');
-            // Joomla! 1.6+
-            if (method_exists('JUserHelper', 'getUserGroups')) {
-                $groups = JUserHelper::getUserGroups($user->id);
-                // get the first group
-                $group_id = array_shift(array_keys($groups));
-                // Joomla! 2.5?
-                if (is_int($group_id)) {
-                    // usergroup table				
-                    $group = JTable::getInstance('Usergroup', 'JTable');
-                    $group->load($group_id);
-                    // usertype	
-                    $usertype = $group->title;
-                } else {
-                    $usertype = $group_id;
+            
+            if (!empty($root)) {
+                // Convert slashes / Strip double slashes
+                $root = preg_replace('/[\\\\]+/', '/', $root);
+                // Remove first leading slash
+                $root = ltrim($root, '/');
+                // Force default directory if base param starts with a variable or a . eg $id
+                if (preg_match('/[\.\$]/', $root{0})) {
+                    $root = 'images';
                 }
-            } else {
-                $usertype = $user->usertype;
+
+                jimport('joomla.user.helper');
+                // Joomla! 1.6+
+                if (method_exists('JUserHelper', 'getUserGroups')) {
+                    $groups = JUserHelper::getUserGroups($user->id);
+                    // get the first group
+                    $group_id = array_shift(array_keys($groups));
+                    // Joomla! 2.5?
+                    if (is_int($group_id)) {
+                        // usergroup table				
+                        $group = JTable::getInstance('Usergroup', 'JTable');
+                        $group->load($group_id);
+                        // usertype	
+                        $usertype = $group->title;
+                    } else {
+                        $usertype = $group_id;
+                    }
+                } else {
+                    $usertype = $user->usertype;
+                }
+
+                // Replace any path variables
+                $pattern = array('/\$id/', '/\$username/', '/\$usertype/', '/\$(group|profile)/', '/\$day/', '/\$month/', '/\$year/');
+                $replace = array($user->id, $user->username, $usertype, $profile->name, date('d'), date('m'), date('Y'));
+                $root = preg_replace($pattern, $replace, $root);
+
+                // split into path parts to preserve /
+                $parts = explode('/', $root);
+
+                // clean path parts
+                $parts = WFUtility::makeSafe($parts, $wf->getParam('editor.websafe_mode', 'utf-8'));
+
+                //join path parts
+                $root = implode('/', $parts);
             }
-
-            // Replace any path variables
-            $pattern = array('/\$id/', '/\$username/', '/\$usertype/', '/\$(group|profile)/', '/\$day/', '/\$month/', '/\$year/');
-            $replace = array($user->id, $user->username, $usertype, $profile->name, date('d'), date('m'), date('Y'));
-            $root = preg_replace($pattern, $replace, $root);
-
-            // split into path parts to preserve /
-            $parts = explode('/', $root);
-
-            // clean path parts
-            $parts = WFUtility::makeSafe($parts, $wf->getParam('editor.websafe_mode', 'utf-8'));
-
-            //join path parts
-            $root = implode('/', $parts);
         }
 
         return $root;

@@ -39,7 +39,7 @@ class WFFileBrowser extends WFBrowserExtension {
     public function __construct($config = array()) {
 
         $default = array(
-            'dir' => 'images',
+            'dir' => '',
             'filesystem' => 'joomla',
             'filetypes' => 'images=jpg,jpeg,png,gif',
             'upload' => array(

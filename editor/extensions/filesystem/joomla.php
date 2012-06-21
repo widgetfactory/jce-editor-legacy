@@ -84,10 +84,10 @@ class WFJoomlaFileSystem extends WFFileSystem {
 
             // Restricted Joomla! folders
             $restricted = explode(',', $wf->getParam('editor.filesystem.joomla.restrict_dir', 'administrator,cache,components,includes,language,libraries,logs,media,modules,plugins,templates,xmlrpc'));
-            $allowroot = $wf->getParam('editor.filesystem.joomla.allow_root', 0);
+            $allowroot  = $wf->getParam('editor.filesystem.joomla.allow_root', 0);
 
             // Revert to default if empty
-            if (!$root && !$allowroot) {
+            if (empty($root) && !$allowroot) {
                 $root = 'images';
             }
             // Force default if directory is a joomla directory
@@ -96,16 +96,18 @@ class WFJoomlaFileSystem extends WFFileSystem {
             if (in_array(strtolower($parts[0]), $restricted) && !$allowroot) {
                 $root = 'images';
             }
+            
+            if (!empty($root)) {
+                // Create the folder
+                $full = WFUtility::makePath(JPATH_SITE, $root);
 
-            // Create the folder
-            $full = WFUtility::makePath(JPATH_SITE, $root);
+                if (!JFolder::exists($full)) {
+                    $this->folderCreate($full);
+                }
 
-            if (!JFolder::exists($full)) {
-                $this->folderCreate($full);
+                // Fallback
+                $root = JFolder::exists($full) ? $root : 'images';
             }
-
-            // Fallback
-            $root = JFolder::exists($full) ? $root : 'images';
         }
 
         return $root;
