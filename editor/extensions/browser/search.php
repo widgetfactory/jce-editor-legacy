@@ -25,6 +25,21 @@ class WFSearchBrowser extends WFBrowserExtension {
 
         $request = WFRequest::getInstance();
         $request->setRequest(array($this, 'doSearch'));
+        
+        $wf = WFEditorPlugin::getInstance();
+        
+        $plugins = $wf->getParam('search', '');
+
+        if (!empty($plugins)) {
+            if (is_string($plugins)) {
+                $plugins = explode(',', $plugins);
+            }
+            
+            foreach ($plugins as $plugin) {
+                // get saerch plugins
+                JPluginHelper::importPlugin('search', $plugin);
+            }
+        }
     }
 
     public function display() {
@@ -39,15 +54,13 @@ class WFSearchBrowser extends WFBrowserExtension {
      * Method to get the search areas
      */
     private static function getAreas() {
-        $app = JFactory::getApplication('site');
-        
-        $areas = array();
+        $app   = JFactory::getApplication('site');
 
-        JPluginHelper::importPlugin('search');
-        $searchareas = $app->triggerEvent('onContentSearchAreas');
+        $areas = array();
         
-        // Joomla! 1.5
-        $searchareas = array_merge($searchareas, $app->triggerEvent('onSearchAreas'));
+        $event = method_exists($app, 'getHash') ? 'onContentSearchAreas' : 'onSearchAreas';
+
+        $searchareas = $app->triggerEvent($event);
 
         foreach ($searchareas as $area) {
             if (is_array($area)) {
@@ -63,6 +76,7 @@ class WFSearchBrowser extends WFBrowserExtension {
      * This method uses portions of SearchViewSearch::display from components/com_search/views/search/view.html.php
      * @copyright Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
      */
+
     public function render() {
         // built select lists
         $orders = array();
@@ -98,10 +112,12 @@ class WFSearchBrowser extends WFBrowserExtension {
      * @copyright Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
      */
     public function doSearch($query) {
+        $wf = WFEditorPlugin::getInstance();
+
         $app = JFactory::getApplication('site');
         // get SearchHelper
         require_once(JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_search' . DS . 'helpers' . DS . 'search.php');
-        
+
         // set router mode to RAW
         $router = $app->getRouter();
         $router->setMode(0);
@@ -109,10 +125,10 @@ class WFSearchBrowser extends WFBrowserExtension {
         // slashes cause errors, <> get stripped anyway later on. # causes problems.
         $badchars = array('#', '>', '<', '\\');
         $searchword = trim(str_replace($badchars, '', $query));
-        
-        $ordering       = JRequest::getWord('ordering', null, 'post');
-	$searchphrase   = JRequest::getWord('searchphrase', 'all', 'post');
-	$areas          = JRequest::getVar('areas', null, 'post', 'array');
+
+        $ordering = JRequest::getWord('ordering', null, 'post');
+        $searchphrase = JRequest::getWord('searchphrase', 'all', 'post');
+        $areas = JRequest::getVar('areas', null, 'post', 'array');
 
         // if searchword enclosed in double quotes, strip quotes and do exact match
         if (substr($searchword, 0, 1) == '"' && substr($searchword, -1) == '"') {
@@ -125,16 +141,16 @@ class WFSearchBrowser extends WFBrowserExtension {
                 $areas[] = JFilterInput::getInstance()->clean($area, 'cmd');
             }
         }
-        
+
         if (!class_exists('JSite')) {
             // Load JSite class
-            JLoader::register('JSite',  JPATH_SITE . DS . 'includes' . DS . 'application.php');
+            JLoader::register('JSite', JPATH_SITE . DS . 'includes' . DS . 'application.php');
         }
+        
+        $event = method_exists($app, 'getHash') ? 'onContentSearch' : 'onSearch';
 
-        // get saerch plugins
-        JPluginHelper::importPlugin('search');
-
-        $searches = $app->triggerEvent('onContentSearch', array(
+        // trigger search on loaded plugins
+        $searches = $app->triggerEvent($event, array(
             $searchword,
             $searchphrase,
             $ordering,
@@ -142,15 +158,15 @@ class WFSearchBrowser extends WFBrowserExtension {
         ));
 
         $results = array();
-        $rows 	 = array();
-        
+        $rows = array();
+
         foreach ($searches as $search) {
             $rows = array_merge((array) $rows, (array) $search);
         }
 
         for ($i = 0, $count = count($rows); $i < $count; $i++) {
             $row = &$rows[$i];
-            
+
             $result = new StdClass();
 
             if ($searchphrase == 'exact') {
@@ -161,20 +177,20 @@ class WFSearchBrowser extends WFBrowserExtension {
                 $searchwords = preg_split("/\s+/u", $searchworda);
                 $needle = $searchwords[0];
             }
-            
+
             // get anchors
             $anchors = self::getAnchors($row->text);
-            
+
             if (!empty($anchors)) {
                 $row->anchors = $anchors;
             }
 
             if (method_exists('SearchHelper', 'getActions')) {
-            	$row->text = SearchHelper::prepareSearchContent($row->text, $needle);
+                $row->text = SearchHelper::prepareSearchContent($row->text, $needle);
             } else {
-            	$row->text = SearchHelper::prepareSearchContent($row->text, 200, $needle);
+                $row->text = SearchHelper::prepareSearchContent($row->text, 200, $needle);
             }
-            
+
             $searchwords = array_unique($searchwords);
             $searchRegex = '#(';
             $x = 0;
@@ -186,23 +202,23 @@ class WFSearchBrowser extends WFBrowserExtension {
             }
             $searchRegex .= ')#iu';
 
-            $row->text = preg_replace($searchRegex, '<span class="highlight">\0</span>', $row->text); 
-            
+            $row->text = preg_replace($searchRegex, '<span class="highlight">\0</span>', $row->text);
+
             // remove base url
             if (strpos($row->href, JURI::base(true)) !== false) {
                 $row->href = substr_replace($row->href, '', 0, strlen(JURI::base(true)) + 1);
             }
-            
-            $result->title 	= $row->title;
-            $result->text 	= $row->text;
-            $result->link 	= $row->href;
-            
+
+            $result->title = $row->title;
+            $result->text = $row->text;
+            $result->link = $row->href;
+
             $results[] = $result;
         }
 
         return $results;
     }
-    
+
     private static function getAnchors($content) {
         preg_match_all('#<a([^>]+)(name|id)="([a-z]+[\w\-\:\.]*)"([^>]*)>#i', $content, $matches, PREG_SET_ORDER);
 
@@ -210,7 +226,7 @@ class WFSearchBrowser extends WFBrowserExtension {
 
         if (!empty($matches)) {
             foreach ($matches as $match) {
-                if (strpos($match[0], 'href') === false) {                    
+                if (strpos($match[0], 'href') === false) {
                     $anchors[] = $match[3];
                 }
             }
