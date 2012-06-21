@@ -50,9 +50,9 @@ div#search-browser span#searchbox span.search-icon.clear {
     /*background: url("../../../libraries/img/icons.png") no-repeat 0 -920px;*/
     
     visibility: visible;
-    opacity: 0.3;
-    filter: alpha(opacity=30);
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
     cursor: pointer;
 }
 div#search-browser span#searchbox span.search-icon.loading {
