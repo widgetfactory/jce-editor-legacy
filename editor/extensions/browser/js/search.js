@@ -31,7 +31,7 @@ var WFLinkSearch = WFExtensions.add('LinkSearch', {
             }
         });
 
-        $(this.options.clear).click(function(e) {
+        $(this.options.clear).addClass('ui-icon ui-icon-circle-close').click(function(e) {
             if($(this).hasClass('clear')) {
                 $(this).removeClass('clear');
 

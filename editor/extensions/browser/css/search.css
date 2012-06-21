@@ -30,20 +30,35 @@ div#search-browser span#searchbox input#search-input {
     width : 346px;
 }
 div#search-browser span#searchbox span.search-icon {
-    position: absolute;
+    /*position: absolute;
     right: 1px;
     top: -2px;
     width: 20px;
     height: 20px;
-    dispaly : none;
+    dispaly : none;*/
+    
+    height: 16px;
+    position: absolute;
+    right: 4px;
+    top: 0;
+    width: 16px;
+    
+    visibility: hidden;
 }
 
 div#search-browser span#searchbox span.search-icon.clear {
-    background: url("../../../libraries/img/icons.png") no-repeat 0 -920px;
+    /*background: url("../../../libraries/img/icons.png") no-repeat 0 -920px;*/
+    
+    visibility: visible;
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
     cursor: pointer;
 }
 div#search-browser span#searchbox span.search-icon.loading {
     background: url("../../../libraries/img/load.gif") no-repeat center;
+    
+    visibility: visible;
 }
 div#search-browser div#search-result {
     width : 100%;
