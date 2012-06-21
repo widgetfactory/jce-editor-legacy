@@ -33,7 +33,7 @@ WFPopups.addPopup('window', {
      */
     check : function(n) {
         var ed = tinyMCEPopup.editor;
-        var oc = ed.dom.getAttrib(n, 'onclick');
+        var oc = ed.dom.getAttrib(n, 'onclick') || ed.dom.getAttrib(n, 'data-mce-onclick');
 
         return oc && /window\.open/.test(oc);
     },
@@ -41,6 +41,7 @@ WFPopups.addPopup('window', {
     remove : function(n) {
         if (this.check(n)) {
             n.removeAttribute('onclick');
+            n.removeAttribute('data-mce-onclick');
         }
     },
 
@@ -50,7 +51,7 @@ WFPopups.addPopup('window', {
      */
     getAttributes: function(n) {
         var ed 		= tinyMCEPopup.editor, data = {};
-        var click 	= ed.dom.getAttrib(n, 'onclick');
+        var click 	= ed.dom.getAttrib(n, 'onclick') || ed.dom.getAttrib(n, 'data-mce-onclick');
 
         var data = click.replace(/window\.open\((.*?)\);(return false;)?/, function(a, b) {
             return b;
@@ -210,7 +211,7 @@ WFPopups.addPopup('window', {
         }
 
         ed.dom.setAttrib(n, 'href', href);
-        ed.dom.setAttrib(n, 'onclick', "window.open(" + query + ",'" + encodeURIComponent(title) + "','" + decodeURIComponent($.param(features)).replace(/&/g, ',') + "');return false;");
+        ed.dom.setAttrib(n, 'data-mce-onclick', "window.open(" + query + ",'" + encodeURIComponent(title) + "','" + decodeURIComponent($.param(features)).replace(/&/g, ',') + "');return false;");
     }
 
 });

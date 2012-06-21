@@ -81,6 +81,29 @@
                         });
                     }
                 }
+                
+                // disable onclick etc.
+                ed.parser.addAttributeFilter('onclick,ondblclick', function(nodes, name) {
+                    var i = nodes.length, node;
+	
+                    while(i--) {
+                        node = nodes[i];
+	
+                        node.attr('data-mce-' + name, node.attr(name));
+                        node.attr(name, null);
+                    }
+                });
+                
+                ed.serializer.addAttributeFilter('data-mce-onclick,data-mce-ondblclick', function(nodes, name) {
+                    var i = nodes.length, node, k;
+	
+                    while(i--) {
+                        node = nodes[i], k = name.replace('data-mce-', '');
+	
+                        node.attr(k, node.attr(name));
+                        node.attr(name, null);
+                    }
+                });
 		
             });
             // run cleanup with default settings
