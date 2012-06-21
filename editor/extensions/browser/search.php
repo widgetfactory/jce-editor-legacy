@@ -58,7 +58,7 @@ class WFSearchBrowser extends WFBrowserExtension {
 
         $areas = array();
         
-        $event = method_exists($app, 'getHash') ? 'onContentSearchAreas' : 'onSearchAreas';
+        $event = WF_JOOMLA15 ? 'onSearchAreas' : 'onContentSearchAreas';
 
         $searchareas = $app->triggerEvent($event);
 
@@ -147,7 +147,7 @@ class WFSearchBrowser extends WFBrowserExtension {
             JLoader::register('JSite', JPATH_SITE . DS . 'includes' . DS . 'application.php');
         }
         
-        $event = method_exists($app, 'getHash') ? 'onContentSearch' : 'onSearch';
+        $event = WF_JOOMLA15 ? 'onSearch' : 'onContentSearch';
 
         // trigger search on loaded plugins
         $searches = $app->triggerEvent($event, array(
