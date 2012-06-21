@@ -163,8 +163,8 @@
                 if (o.theme == 'codemirror') {
                     o.theme = 'default';
                 }
-                                
-                cm = CodeMirror(this.container, {
+                
+                var settings = {
                     mode    : "text/html",
                     theme   : o.theme,
                     onChange : function() {
@@ -179,17 +179,23 @@
                         cm.setLineClass(hlLine, null, null);
                         hlLine = cm.setLineClass(cm.getCursor().line, null, "activeline");
                     },
-                    closeTagIndent: false, // Pass false or an array of tag names to override the default indentation behavior.
-			
-                    extraKeys: {
-                        "'>'": function(cm) {
-                            cm.closeTag(cm, '>');
-                        },
-                        "'/'": function(cm) {
-                            cm.closeTag(cm, '/');
+                    closeTagIndent: false // Pass false or an array of tag names to override the default indentation behavior.
+                };
+                
+                if (o.tag_closing) {
+                    tinymce.extend(settings, {
+                        extraKeys: {
+                            "'>'": function(cm) {
+                                cm.closeTag(cm, '>');
+                            },
+                            "'/'": function(cm) {
+                                cm.closeTag(cm, '/');
+                            }
                         }
-                    }
-                });
+                    });
+                }
+                                
+                cm = CodeMirror(this.container, settings);
                 
                 var hlLine = cm.setLineClass(0, "activeline");              
 
