@@ -165,7 +165,7 @@ var LinkDialog = {
 
     getAnchorListHTML : function(id, target) {
         var ed = tinyMCEPopup.editor, name;
-        var nodes = ed.dom.select('a.mceItemAnchor, img.mceItemAnchor');
+        var nodes = ed.dom.select('.mceItemAnchor');
 
         var html = "";
 
@@ -174,7 +174,7 @@ var LinkDialog = {
         html += '<option value="">---</option>';
 
         tinymce.each(nodes, function(n) {
-            if (n.nodeName == 'IMG') {
+            if (n.nodeName == 'SPAN') {
                 name = ed.dom.getAttrib('data-mce-name') || ed.dom.getAttrib(n, 'id');
             } else {                
                 if (!n.href) {
