@@ -191,6 +191,9 @@
                 if (ed.settings.schema != 'html5') {
                     ed.schema.addValidElements('video[src|autobuffer|autoplay|loop|controls|width|height|poster|*],audio[src|autobuffer|autoplay|loop|controls|*],source[src|type|media|*]');
                 }
+                
+                // iframes
+                ed.schema.addValidElements('iframe[longdesc|name|src|frameborder|marginwidth|marginheight|scrolling|align|width|height|allowtransparency|*]');
 
                 // Add custom 'comment' element
                 ed.schema.addCustomElements('comment');
