@@ -66,12 +66,7 @@ class WFBrowserExtension extends WFExtension {
     }
 
     protected function getView($layout) {
-        $view = new WFView(array(
-                    'name' => 'browser',
-                    'layout' => $layout
-                ));
-
-        return $view;
+        return parent::getView('browser', $layout);
     }
 
 }

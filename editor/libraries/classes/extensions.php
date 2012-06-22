@@ -189,5 +189,14 @@ class WFExtension extends JObject
 
 		return $wf->getParam($param, $default);
 	}
+        
+        protected function getView($name, $layout) {
+            $view = new WFView(array(
+                'name'      => $name,
+                'layout'    => $layout
+            ));
+
+            return $view;
+        }
 }
 ?>
