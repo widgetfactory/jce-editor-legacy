@@ -66,11 +66,18 @@
                 // Convert anchor elements to image placeholder
                 ed.parser.addNodeFilter('a', function(nodes) {
                     for (var i = 0, len = nodes.length; i < len; i++) {
-                        var node = nodes[i];
-    						
-                        if (!node.firstChild &&!node.attr('href') && (node.attr('name') || node.attr('id'))) {
-                            self._createAnchorSpan(node);
+                        var node = nodes[i], fc = node.firstChild;
+                        
+                        if (!fc || (fc && fc.type == 8 && fc.value == 'mce-anchor')) {
+                            if (fc) {
+                                fc.remove();
+                            }
+                            if (!node.attr('href') && (node.attr('name') || node.attr('id'))) {
+                                self._createAnchorSpan(node);
+                            }
                         }
+    						
+                        
                     }
                 });
 
@@ -96,6 +103,10 @@
                     };
                 });
             };
+            
+            ed.onBeforeSetContent.add(function(ed, o) {
+                o.content = o.content.replace(/<a id="([^"]+)"><\/a>/gi, '<a id="$1"><!--mce-anchor--></a>');
+            });
             
             ed.onSetContent.add(function() {                              
                 if (tinymce.isIE) {
@@ -202,7 +213,7 @@
                         //at.src = tinyMCEPopup.getWindowArg('plugin_url') + '/img/trans.gif';
                         
                         //ed.execCommand('mceInsertContent', 0, ed.dom.createHTML('a', at, '\uFEFF'));
-                        ed.execCommand('mceInsertContent', 0, ed.dom.createHTML('span', at, '<!--anchor-->'));
+                        ed.execCommand('mceInsertContent', 0, ed.dom.createHTML('span', at, '<!--mce-anchor-->'));
                     } else {
                         at[attrib] = v;
                     
@@ -240,6 +251,7 @@
             node = new Node('a', 1);
 
             node.attr(at);
+            
             n.replace(node);
         },
         
@@ -273,7 +285,7 @@
             }));
             
             var text    = new Node('#comment', 8);
-            text.value  = 'anchor';
+            text.value  = 'mce-anchor';
             
             span.append(text);
 
