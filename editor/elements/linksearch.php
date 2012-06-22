@@ -14,7 +14,7 @@ defined('JPATH_BASE') or die('RESTRICTED');
 /**
  * Renders a select element
  */
-class JElementSearch extends JElement {
+class JElementLinkSearch extends JElement {
 
     /**
      * Element type
@@ -22,7 +22,7 @@ class JElementSearch extends JElement {
      * @access	protected
      * @var		string
      */
-    var $_name = 'Search';
+    var $_name = 'LinkSearch';
 
     public function fetchElement($name, $value, &$node, $control_name) {
         jimport('joomla.plugin.helper');

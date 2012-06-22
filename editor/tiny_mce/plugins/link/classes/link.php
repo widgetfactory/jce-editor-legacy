@@ -15,6 +15,7 @@ DEFINE('_WF_EXT', 1);
 
 // Load class dependencies
 wfimport('editor.libraries.classes.plugin');
+wfimport('editor.libraries.classes.extensions.search');
 wfimport('editor.libraries.classes.extensions.browser');
 wfimport('editor.libraries.classes.extensions.popups');
 
@@ -36,8 +37,8 @@ class WFLinkPlugin extends WFEditorPlugin {
     function __construct() {
         parent::__construct();
 
-        $browser = $this->getBrowser('link');
-        $search = $this->getBrowser('search');
+        $this->getBrowser('link');
+        $this->getSearch('link');
     }
 
     /**
@@ -78,8 +79,11 @@ class WFLinkPlugin extends WFEditorPlugin {
         $browser = $this->getBrowser('link');
         $browser->display();
 
-        $search = $this->getBrowser('search');
-        $search->display();
+        $search = $this->getSearch('link');
+        
+        if ($this->getParam('search.link.enable', 1)) {
+            $search->display();
+        }
 
         // Load Popups instance
         $popups = WFPopupsExtension::getInstance(array(
@@ -108,9 +112,19 @@ class WFLinkPlugin extends WFEditorPlugin {
 
         return $browsers[$type];
     }
+    
+    function getSearch($type = 'link') {
+        static $search;
 
-    function renderBrowser($type = 'link') {
-        return $this->getBrowser($type)->render();
+        if (!isset($search)) {
+            $search = array();
+        }
+
+        if (empty($search[$type])) {
+            $search[$type] = WFSearchExtension::getInstance($type);
+        }
+
+        return $search[$type];
     }
 
     function getSettings() {

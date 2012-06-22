@@ -11,9 +11,9 @@
  */
 defined('_JEXEC') or die('RESTRICTED');
 
-wfimport('editor.libraries.classes.extensions.browser');
+wfimport('editor.libraries.classes.extensions');
 
-class WFSearchBrowser extends WFBrowserExtension {
+class WFLinkSearchExtension extends WFSearchExtension {
 
     /**
      * Constructor activating the default information of the class
@@ -41,13 +41,23 @@ class WFSearchBrowser extends WFBrowserExtension {
             }
         }
     }
+    
+    public function getInstance() {
+        static $instance;
+
+        if (!isset($instance)) {
+            $instance = new WFSearchExtension();
+        }
+
+        return $instance;
+    }
 
     public function display() {
         parent::display();
 
         $document = WFDocument::getInstance();
-        $document->addScript(array('search'), 'extensions.browser.js');
-        $document->addStylesheet(array('search'), 'extensions.browser.css');
+        $document->addScript(array('link'), 'extensions.search.js');
+        $document->addStylesheet(array('link'), 'extensions.search.css');
     }
 
     /**
@@ -96,7 +106,7 @@ class WFSearchBrowser extends WFBrowserExtension {
         $lists['searchphrase'] = JHtml::_('select.radiolist', $searchphrases, 'searchphrase', '', 'value', 'text', 'all');
 
 
-        $view = $this->getView('search');
+        $view = $this->getView('search', 'search');
 
         $view->assign('searchareas', self::getAreas());
         $view->assignRef('lists', $lists);

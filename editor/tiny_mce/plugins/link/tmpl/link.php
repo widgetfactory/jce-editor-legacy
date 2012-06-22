@@ -26,9 +26,13 @@ $plugin = WFLinkPlugin::getInstance();
 <fieldset>
     <legend><?php echo WFText::_('WF_LABEL_LINKS'); ?></legend>
     <div id="link-options">
-        <?php echo $plugin->renderBrowser('search'); ?>
+        <?php 
+            if ($plugin->getParam('search.link.enable', 1)) :
+                echo $plugin->getSearch('link')->render();
+            endif;
+        ?>
         <h3><?php echo WFText::_('WF_LABEL_BROWSE'); ?></h3>
-        <?php echo $plugin->renderBrowser('link'); ?>
+        <?php echo $plugin->getBrowser('link')->render(); ?>
     </div>
 </fieldset>
 <h4><?php echo WFText::_('WF_LABEL_ATTRIBUTES'); ?></h4>
