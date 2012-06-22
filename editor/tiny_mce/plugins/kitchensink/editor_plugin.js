@@ -68,11 +68,11 @@
 
         getInfo : function() {
             return {
-                longname : 'Visual blocks',
-                author : 'Moxiecode Systems AB',
-                authorurl : 'http://tinymce.moxiecode.com',
-                infourl : 'http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/visualblocks',
-                version : tinymce.majorVersion + "." + tinymce.minorVersion
+                longname : 'Kitchen Sink',
+                author : 'Ryan Demmer',
+                authorurl : 'http://www.joomlacontenteditor.net/',
+                infourl : 'http://www.joomlacontenteditor.net/',
+                version : '@@version@@'
             };
         }
     });
