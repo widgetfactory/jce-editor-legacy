@@ -125,7 +125,7 @@
 .defaultSkin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px;}
 .defaultSkin .mceButtonDialog .mceButtonDialogContent {background-color : #fff;}
 .defaultSkin .mceButtonDialog label {margin : 5px; min-width : 30px; display : inline-block;}
-.defaultSkin .mceButtonDialog input {margin : 5px;}
+.defaultSkin .mceButtonDialog input {margin : 3px;}
 .defaultSkin .mceButtonDialog input[type="text"] {border:1px solid #ccc; padding: 2px;}
 .defaultSkin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton {display:inline-block; background-color : #fff; cursor : pointer; min-width:50px; height:auto; text-align:center; margin : 5px 5px 5px 0; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px; border:1px solid #ccc}
 .defaultSkin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton:hover {border:1px solid #0A246A; background-color:#B6BDD2}

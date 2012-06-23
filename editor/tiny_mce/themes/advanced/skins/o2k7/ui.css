@@ -119,7 +119,7 @@
 .o2k7Skin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px;}
 .o2k7Skin .mceButtonDialog .mceButtonDialogContent {background-color : #fff;}
 .o2k7Skin .mceButtonDialog label {margin : 5px; min-width : 30px; display : inline-block;}
-.o2k7Skin .mceButtonDialog input {margin : 5px;}
+.o2k7Skin .mceButtonDialog input {margin : 3px;}
 .o2k7Skin .mceButtonDialog input[type="text"] {border:1px solid #ABC6DD; padding: 2px;}
 .o2k7Skin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton {display:inline-block; background-color : #fff; cursor : pointer; min-width:50px; height:auto; text-align:center; margin : 5px 5px 5px 0; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px; border:1px solid #ABC6DD}
 .o2k7Skin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton:hover {border:1px solid #ABC6DD; background-color:#B2BBD0}
