@@ -10,7 +10,7 @@
 	<license>@@licence@@</license>
 	<description>WF_VISUALBLOCKS_DESC</description>
 	<icon>visualblocks</icon>
-	<params>
+	<params group="defaults">
             <param name="state" type="list" default="1" label="WF_LABEL_STATE" description="WF_STATE_DESC">
 	      <option value="1">WF_OPTION_ON</option>
 	      <option value="0">WF_OPTION_OFF</option>
