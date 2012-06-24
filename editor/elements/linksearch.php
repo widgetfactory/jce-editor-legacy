@@ -38,18 +38,22 @@ class JElementLinkSearch extends JElement {
         
         $checked = count($plugins) == count($value) ? ' checked="checked"' : '';
 
-        $html  = '<div style="margin:2px 5px;"><input class="checkbox-list-toggle-all" type="checkbox"'. $checked .' /><label>'. WFText::_('WF_PROFILES_TOGGLE_ALL') . '</label></div>'; 
+        $html  = '<span style="display:inline-block;"><input class="checkbox-list-toggle-all" type="checkbox"'. $checked .' /><label>'. WFText::_('WF_PROFILES_TOGGLE_ALL') . '</label>'; 
         $html .= '<ul class="checkbox-list">';
 
-        foreach ($plugins as $plugin) {
-            $plugin = WFExtensionHelper::getPlugin(null, $plugin->name, 'search');
-            $language->load('plg_' . $plugin->element);
+        foreach ($plugins as $item) {
+            $plugin = WFExtensionHelper::getPlugin(null, $item->name, 'search');
+            
+            $extension = 'plg_' . $plugin->folder . '_' . $plugin->element;
+            
+            $language->load($extension) || $language->load($extension, JPATH_ADMINISTRATOR);
+            $language->load($extension . '.sys') || $language->load($extension . '.sys', JPATH_ADMINISTRATOR);
 
             $checked = (in_array($plugin->element, $value) || empty($value)) ? ' checked="checked"' : '';
             $html .= '<li><input type="checkbox" name="' . $control_name . '[' . $name . '][]" value="' . $plugin->element . '"' . $checked . ' /><label>' . JText::_($plugin->name) . '</label></li>';
         }
 
-        $html .= '</ul>';
+        $html .= '</ul></span>';
 
         return $html;
     }
