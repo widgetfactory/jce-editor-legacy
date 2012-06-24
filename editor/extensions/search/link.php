@@ -28,7 +28,7 @@ class WFLinkSearchExtension extends WFSearchExtension {
         
         $wf = WFEditorPlugin::getInstance();
         
-        $plugins = $wf->getParam('search', '');
+        $plugins = $wf->getParam('search.link.plugins', '');
 
         if (!empty($plugins)) {
             if (is_string($plugins)) {
@@ -106,7 +106,7 @@ class WFLinkSearchExtension extends WFSearchExtension {
         $lists['searchphrase'] = JHtml::_('select.radiolist', $searchphrases, 'searchphrase', '', 'value', 'text', 'all');
 
 
-        $view = $this->getView('search', 'search');
+        $view = $this->getView('search');
 
         $view->assign('searchareas', self::getAreas());
         $view->assignRef('lists', $lists);
