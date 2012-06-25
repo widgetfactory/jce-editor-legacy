@@ -80,10 +80,7 @@ class WFLinkPlugin extends WFEditorPlugin {
         $browser->display();
 
         $search = $this->getSearch('link');
-        
-        if ($search->isEnabled()) {
-            $search->display();
-        }
+        $search->display();
 
         // Load Popups instance
         $popups = WFPopupsExtension::getInstance(array(
