@@ -168,11 +168,10 @@
                 return false;
             }
         
-            var aRule = ed.schema.getElementRule('a');
-        
-            if (!aRule || aRule.attributes.name) {
-                attrib = 'name';
-            } else {
+            attrib = 'name';
+            
+            // set as id for html5
+            if (ed.settings.schema == 'html5') {
                 attrib = 'id';
             }
 
