@@ -81,7 +81,7 @@ class WFLinkPlugin extends WFEditorPlugin {
 
         $search = $this->getSearch('link');
         
-        if ($this->getParam('search.link.enable', 1)) {
+        if ($search->isEnabled()) {
             $search->display();
         }
 

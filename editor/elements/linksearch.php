@@ -28,18 +28,17 @@ class JElementLinkSearch extends JElement {
         jimport('joomla.plugin.helper');
         wfimport('admin.helpers.extension');
 
-        $language = JFactory::getLanguage();
+        $language   = JFactory::getLanguage();
+        $plugins    = JPluginHelper::getPlugin('search');
 
-        $plugins = JPluginHelper::getPlugin('search');
-        
-        if (is_string($value)) {
-            $value = explode(',', $value);
+        if (!$value) {
+            $value = array();
+        } else {
+            $value = (array) $value;
         }
-        
-        $checked = count($plugins) == count($value) ? ' checked="checked"' : '';
 
-        $html  = '<span style="display:inline-block;"><input class="checkbox-list-toggle-all" type="checkbox"'. $checked .' /><label>'. WFText::_('WF_PROFILES_TOGGLE_ALL') . '</label>'; 
-        $html .= '<ul class="checkbox-list">';
+        //$html  = '<span style="display:inline-block;"><input class="checkbox-list-toggle-all" type="checkbox"'. $checked .' /><label>'. WFText::_('WF_PROFILES_TOGGLE_ALL') . '</label>'; 
+        $html = '<span><ul class="checkbox-list">';
 
         foreach ($plugins as $item) {
             $plugin = WFExtensionHelper::getPlugin(null, $item->name, 'search');
@@ -50,7 +49,7 @@ class JElementLinkSearch extends JElement {
             $language->load($extension . '.sys') || $language->load($extension . '.sys', JPATH_ADMINISTRATOR);
 
             $checked = (in_array($plugin->element, $value) || empty($value)) ? ' checked="checked"' : '';
-            $html .= '<li><input type="checkbox" name="' . $control_name . '[' . $name . '][]" value="' . $plugin->element . '"' . $checked . ' /><label>' . JText::_($plugin->name) . '</label></li>';
+            $html   .= '<li><input type="checkbox" name="' . $control_name . '[' . $name . '][]" value="' . $plugin->element . '"' . $checked . ' /><label>' . JText::_($plugin->name) . '</label></li>';
         }
 
         $html .= '</ul></span>';

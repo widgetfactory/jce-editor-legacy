@@ -25,23 +25,20 @@ class WFLinkSearchExtension extends WFSearchExtension {
 
         $request = WFRequest::getInstance();
         $request->setRequest(array($this, 'doSearch'));
-        
-        $wf = WFEditorPlugin::getInstance();
-        
-        $plugins = $wf->getParam('search.link.plugins', '');
 
-        if (!empty($plugins)) {
-            if (is_string($plugins)) {
-                $plugins = explode(',', $plugins);
-            }
-            
+        $wf = WFEditorPlugin::getInstance();
+        $plugins = $wf->getParam('search.link.plugins');
+
+        if ($plugins) {            
             foreach ($plugins as $plugin) {
                 // get saerch plugins
                 JPluginHelper::importPlugin('search', $plugin);
             }
+        } else {
+            JPluginHelper::importPlugin('search');
         }
     }
-    
+
     public function getInstance() {
         static $instance;
 
@@ -60,14 +57,19 @@ class WFLinkSearchExtension extends WFSearchExtension {
         $document->addStylesheet(array('link'), 'extensions.search.css');
     }
 
+    public function isEnabled() {
+        $wf = WFEditorPlugin::getInstance();
+        return (bool)$wf->getParam('search.link.enable', 1);
+    }
+
     /**
      * Method to get the search areas
      */
     private static function getAreas() {
-        $app   = JFactory::getApplication('site');
+        $app = JFactory::getApplication('site');
 
         $areas = array();
-        
+
         $event = WF_JOOMLA15 ? 'onSearchAreas' : 'onContentSearchAreas';
 
         $searchareas = $app->triggerEvent($event);
@@ -156,7 +158,7 @@ class WFLinkSearchExtension extends WFSearchExtension {
             // Load JSite class
             JLoader::register('JSite', JPATH_SITE . DS . 'includes' . DS . 'application.php');
         }
-        
+
         $event = WF_JOOMLA15 ? 'onSearch' : 'onContentSearch';
 
         // trigger search on loaded plugins
@@ -165,7 +167,7 @@ class WFLinkSearchExtension extends WFSearchExtension {
             $searchphrase,
             $ordering,
             $areas
-        ));
+                ));
 
         $results = array();
         $rows = array();

@@ -27,7 +27,7 @@ $plugin = WFLinkPlugin::getInstance();
     <legend><?php echo WFText::_('WF_LABEL_LINKS'); ?></legend>
     <div id="link-options">
         <?php 
-            if ($plugin->getParam('search.link.enable', 1)) :
+            if ($plugin->getSearch('link')->isEnabled()) :
                 echo $plugin->getSearch('link')->render();
             endif;
         ?>
