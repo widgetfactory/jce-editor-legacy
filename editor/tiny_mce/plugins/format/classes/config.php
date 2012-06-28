@@ -23,12 +23,18 @@ class WFFormatPluginConfig {
         }
 
         // Encoding
-        $settings['entity_encoding'] = $wf->getParam('editor.entity_encoding', 'raw', 'named');
-        $settings['inline_styles'] = $wf->getParam('editor.inline_styles', 1, 1, 'boolean');
+        $settings['entity_encoding']        = $wf->getParam('editor.entity_encoding', 'raw', 'named');
+        $settings['inline_styles']          = $wf->getParam('editor.inline_styles', 1, 1, 'boolean');
 
         // Paragraph handling
-        $settings['forced_root_block'] = $wf->getParam('editor.forced_root_block', 'p', 'p');
-        $settings['removeformat_selector'] = $wf->getParam('editor.removeformat_selector', 'span,b,strong,em,i,font,u,strike', 'span,b,strong,em,i,font,u,strike');
+        $settings['forced_root_block']      = $wf->getParam('editor.forced_root_block', 'p');
+        
+        // set as boolean if disabled
+        if (is_numeric($settings['forced_root_block'])) {
+            $settings['forced_root_block'] = (bool)$settings['forced_root_block'];
+        }
+        
+        $settings['removeformat_selector']  = $wf->getParam('editor.removeformat_selector', 'span,b,strong,em,i,font,u,strike', 'span,b,strong,em,i,font,u,strike');
 
         $formats = array(
             'p' => 'advanced.paragraph',
@@ -119,7 +125,6 @@ class WFFormatPluginConfig {
             $settings['theme_advanced_styles'] = implode(';', explode(',', $styles));
         }
     }
-
 }
 
 ?>
