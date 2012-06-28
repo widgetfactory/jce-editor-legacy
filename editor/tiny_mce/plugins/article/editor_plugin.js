@@ -148,7 +148,7 @@
                             node.attr('class', cls);
                             if (node.attr('alt')) {
                                 node.attr('data-mce-alt', node.attr('alt'));
-                                node.attr('alt', '');
+                                node.attr('alt', null);
                             }
                         }
                     }
@@ -169,7 +169,7 @@
                             if (node.attr('data-mce-alt')) {
                                 node.attr('alt', node.attr('data-mce-alt'));
                                 
-                                node.attr('data-mce-alt', '');
+                                node.attr('data-mce-alt', null);
                             }
                         }
                     }
