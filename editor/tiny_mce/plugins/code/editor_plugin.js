@@ -50,6 +50,10 @@
                         if (node.name == 'span' && /mceItemStyle/.test(node.attr('class'))) {
                             self._buildStyle(node);
                         }
+                        
+                        /*if (node.name == 'span' && /mceItemCurlyCode/.test(node.attr('class'))) {
+                            node.unwrap();
+                        }*/
 						
                         if (node.name == 'div' && node.attr('data-mce-type') == 'noscript') {
                             self._buildNoScript(node);
@@ -81,7 +85,9 @@
                     ed.dom.loadCSS(url + "/css/content.css");
             });
 
-            ed.onBeforeSetContent.add( function(ed, o) {
+            ed.onBeforeSetContent.add( function(ed, o) {                
+                //self._convertCurlyCode(o.content);
+                
                 // test for PHP, Script or Style
                 if (/<(\?|script|style)/.test(o.content)) {
                     
@@ -177,6 +183,14 @@
                 }
             });
 
+        },
+        
+        _convertCurlyCode : function(content) {
+            // open / close type code eg: {youtube}url{/youtube}
+            content = content.replace(/\{([^\}]+)\}([\s\S]+?)\{\/\1\}/, '<span class="mceItemCurlyCode" data-mce-type="code-item">{$1}$2{/$1}</span>');
+                
+            // single tag code type eg: {code}
+            content = content.replace(/\{([^\}]+)\}/, '<span class="mceItemCurlyCode" data-mce-type="code-item">{$1}</span>');
         },
 
         _buildScript: function(n) {
@@ -289,7 +303,7 @@
 			
             return true;
         },
-
+        
         _serializeSpan: function(n) {
             var self = this, ed = this.editor, dom = ed.dom, v, k, p = {};
 
