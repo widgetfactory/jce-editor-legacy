@@ -175,7 +175,7 @@ var LinkDialog = {
 
         tinymce.each(nodes, function(n) {
             if (n.nodeName == 'SPAN') {
-                name = ed.dom.getAttrib('data-mce-name') || ed.dom.getAttrib(n, 'id');
+                name = ed.dom.getAttrib(n, 'data-mce-name') || ed.dom.getAttrib(n, 'id');
             } else {                
                 if (!n.href) {
                     name = ed.dom.getAttrib(n, 'name') || ed.dom.getAttrib(n, 'id');
