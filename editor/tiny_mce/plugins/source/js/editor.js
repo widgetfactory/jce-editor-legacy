@@ -225,13 +225,24 @@
                     cm.focus();
                 };
 
-                cm.resize = function(w, h) {
-                    DOM.setStyles(cm.getScrollerElement(), {
-                        width : w,
-                        height : h
+                cm.resize = function(w, h, init) {
+                    var gutter = cm.getGutterElement(), scroller = cm.getScrollerElement(), scrollbar = scroller.previousSibling;
+                    
+                    // only if drag resize
+                    if (!init) {
+                        h = h - self.toolbar.offsetHeight;
+                    }
+
+                    DOM.setStyles(scroller, {
+                        width   : w - scrollbar.offsetWidth,
+                        height  : h
+                    });
+                    
+                    DOM.setStyles(scrollbar, {
+                       height : h 
                     });
 
-                    DOM.setStyles(cm.getGutterElement(), {
+                    DOM.setStyles(gutter, {
                         height : h
                     });
                 };
@@ -391,7 +402,9 @@
                 cm.refresh();
                 
                 window.setTimeout(function() {
-                    DOM.setStyle(cm.getScrollerElement(), 'height', cm.getScrollerElement().offsetHeight - self.toolbar.offsetHeight);
+                    var scroller = cm.getScrollerElement(), h = cm.getScrollerElement().offsetHeight - self.toolbar.offsetHeight;
+                    DOM.setStyle(scroller, 'height', h);
+                    DOM.setStyle(scroller.previoussibling, 'height', h);
                 }, 10);
             }
         },
@@ -448,8 +461,8 @@
         showInvisibles : function(s) {
             return this.editor.showInvisibles(s);
         },
-        resize : function(w, h) {
-            return this.editor.resize(w, h);
+        resize : function(w, h, init) {
+            return this.editor.resize(w, h, init);
         },
         focus : function() {
             return this.editor.focus();

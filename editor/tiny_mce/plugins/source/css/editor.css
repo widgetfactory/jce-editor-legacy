@@ -16,10 +16,9 @@ body {
 }
 div#source-container {
     position: relative;
-background: #fefefe none;
+    background: #fefefe none;
 }
 div#source-toolbar {
-    height : 26px;
     width : 100%;
     background: #F7F7F7 none;
     border-bottom : 1px solid #eee;
@@ -28,14 +27,21 @@ div#source-toolbar {
     font-size : 11px;
     font-family: 'Arial';
     position: relative;
+    
+    float : left;
+}
+
+div#source-toolbar + div {
+    clear : both;
 }
 
 div#source-toolbar span.source_search_container {
-    display: inline-block;
-    float: right;
     margin: 0 2px;
     position: relative;
     right : 2px;
+    text-align:right;
+    display: inline-block;
+    float: right;
 }
 
 div#source-toolbar span.button {
@@ -51,6 +57,10 @@ div#source-toolbar span.button {
     border-radius: 2px;
     
     cursor: pointer;
+}
+
+div#source-toolbar span.button:first-child {
+    margin-left : 5px;
 }
 
 div#source-toolbar input[type="text"] {

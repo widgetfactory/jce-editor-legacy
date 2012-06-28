@@ -452,7 +452,7 @@
                     }
                 }, v);
             	
-                editor.resize('100%', h);
+                editor.resize('100%', h, true);
             });
             
             DOM.add(container, iframe);
