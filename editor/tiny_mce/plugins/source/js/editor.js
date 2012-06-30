@@ -174,13 +174,18 @@
                     indentWithTabs : true,
                     smartIndent : true,
                     tabMode: "indent",
-                    onCursorActivity: function() {
-                        cm.matchHighlight("CodeMirror-matchhighlight");
-                        cm.setLineClass(hlLine, null, null);
-                        hlLine = cm.setLineClass(cm.getCursor().line, null, "activeline");
-                    },
                     closeTagIndent: false // Pass false or an array of tag names to override the default indentation behavior.
                 };
+                
+                if (o.selection_match) {
+                    tinymce.extend(settings, {
+                        onCursorActivity: function() {
+                            cm.matchHighlight("CodeMirror-matchhighlight");
+                            cm.setLineClass(hlLine, null, null);
+                            hlLine = cm.setLineClass(cm.getCursor().line, null, "activeline");
+                        }
+                    });
+                }
                 
                 if (o.tag_closing) {
                     tinymce.extend(settings, {
@@ -239,7 +244,7 @@
                     });
                     
                     DOM.setStyles(scrollbar, {
-                       height : h 
+                        height : h 
                     });
 
                     DOM.setStyles(gutter, {

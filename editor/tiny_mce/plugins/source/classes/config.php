@@ -21,6 +21,7 @@ class WFSourcePluginConfig
 		$settings['source_wrap'] 	= $wf->getParam('source.wrap', 1, 1, 'boolean');
                 $settings['source_format'] 	= $wf->getParam('source.foramt', 1, 1, 'boolean');
                 $settings['source_tag_closing'] = $wf->getParam('source.tag_closing', 1, 1, 'boolean');
+                $settings['source_selection_match'] = $wf->getParam('source.selection_match', 1, 1, 'boolean');
 		
 		$theme = $wf->getParam('source.theme', 'textmate', 'textmate');
 		

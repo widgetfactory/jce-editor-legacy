@@ -31,6 +31,10 @@
 	      <option value="1">WF_OPTION_YES</option>
 	      <option value="0">WF_OPTION_NO</option>
 	    </param>
+            <param name="selection_match" type="list" default="1" label="WF_SOURCE_SELECTION_MATCH" description="WF_SOURCE_SELECTION_MATCH_DESC">
+	      <option value="1">WF_OPTION_YES</option>
+	      <option value="0">WF_OPTION_NO</option>
+	    </param>
 	    <param name="theme" type="filelist" directory="components/com_jce/editor/tiny_mce/plugins/source/css/codemirror/theme" hide_none="true" hide_default="true" stripext="true" filter="\.css$" default="textmate" label="WF_SOURCE_THEME" description="WF_SOURCE_THEME_DESC" />
 	</params>
 	<help>

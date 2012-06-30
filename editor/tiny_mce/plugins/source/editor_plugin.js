@@ -439,6 +439,7 @@
                     'theme' 	: ed.getParam('source_theme', 'textmate'),
                     'format'    : ed.getParam('source_format', true),
                     'tag_closing' : ed.getParam('source_tag_closing', true),
+                    'selection_match' : ed.getParam('source_tag_selection_match', true),
                     'load'		: function() {
                         ed.setProgressState(false);
             			
