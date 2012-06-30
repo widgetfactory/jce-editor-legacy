@@ -31,8 +31,9 @@ class JElementLinkSearch extends JElement {
         $language   = JFactory::getLanguage();
         $plugins    = JPluginHelper::getPlugin('search');
 
+        // use tested defaults
         if (!$value) {
-            $value = array();
+            $value = array('categories', 'contacts', 'content', 'newsfeeds', 'weblinks', 'zoosearch', 'k2');
         } else {
             $value = (array) $value;
         }
@@ -48,7 +49,7 @@ class JElementLinkSearch extends JElement {
             $language->load($extension) || $language->load($extension, JPATH_ADMINISTRATOR);
             $language->load($extension . '.sys') || $language->load($extension . '.sys', JPATH_ADMINISTRATOR);
 
-            $checked = (in_array($plugin->element, $value) || empty($value)) ? ' checked="checked"' : '';
+            $checked = (in_array($plugin->element, $value)) ? ' checked="checked"' : '';
             $html   .= '<li><input type="checkbox" name="' . $control_name . '[' . $name . '][]" value="' . $plugin->element . '"' . $checked . ' /><label>' . JText::_($plugin->name) . '</label></li>';
         }
 

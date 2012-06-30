@@ -26,16 +26,19 @@ class WFLinkSearchExtension extends WFSearchExtension {
         $request = WFRequest::getInstance();
         $request->setRequest(array($this, 'doSearch'));
 
+        $request->setRequest(array($this, 'getAreas'));
+
         $wf = WFEditorPlugin::getInstance();
         $plugins = $wf->getParam('search.link.plugins');
 
-        if ($plugins) {            
-            foreach ($plugins as $plugin) {
-                // get saerch plugins
-                JPluginHelper::importPlugin('search', $plugin);
-            }
-        } else {
-            JPluginHelper::importPlugin('search');
+        // use tested defaults
+        if (empty($plugins)) {
+            $plugins = array('categories', 'contacts', 'content', 'newsfeeds', 'weblinks', 'zoosearch', 'k2');
+        }
+
+        foreach ($plugins as $plugin) {
+            // get saerch plugins
+            JPluginHelper::importPlugin('search', $plugin);
         }
     }
 
@@ -59,16 +62,17 @@ class WFLinkSearchExtension extends WFSearchExtension {
 
     public function isEnabled() {
         $wf = WFEditorPlugin::getInstance();
-        return (bool)$wf->getParam('search.link.enable', 1);
+        return (bool) $wf->getParam('search.link.enable', 1);
     }
 
     /**
      * Method to get the search areas
      */
-    private static function getAreas() {
+    public function getAreas() {
         $app = JFactory::getApplication('site');
 
         $areas = array();
+        $results = array();
 
         $event = WF_JOOMLA15 ? 'onSearchAreas' : 'onContentSearchAreas';
 
@@ -80,7 +84,11 @@ class WFLinkSearchExtension extends WFSearchExtension {
             }
         }
 
-        return $areas;
+        foreach ($areas as $k => $v) {
+            $results[$k] = JText::_($v);
+        }
+
+        return $results;
     }
 
     /*
