@@ -44,7 +44,7 @@
 	<help>
 		<topic key="link.about" title="WF_LINK_HELP_ABOUT" />
 		<topic key="link.interface" title="WF_LINK_HELP_INTERFACE" />
-		<topic key="link.content" title="WF_LINK_HELP_LINKS" />
+		<!--topic key="link.content" title="WF_LINK_HELP_LINKS" /-->
 		<topic key="link.advanced" title="WF_LINK_HELP_ADVANCED" />
 		<topic key="link.insert" title="WF_LINK_HELP_INSERT" />
 		<topic key="link.email" title="WF_LINK_HELP_EMAIL" />
