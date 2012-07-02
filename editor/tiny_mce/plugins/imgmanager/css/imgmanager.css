@@ -30,6 +30,12 @@ div.preview {
 #width, #height {
 	width: 50px;
 	text-align: center;
+        
+        color : #aaa;
+}
+
+#width.edited, #height.edited {
+        color : inherit;
 }
 
 #constrain {

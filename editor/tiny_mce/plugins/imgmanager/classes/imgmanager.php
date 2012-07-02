@@ -79,7 +79,7 @@ final class WFImageManagerPlugin extends WFMediaManager {
                 'margin' => $params->get('imgmanager.attributes_margin', 1),
                 'border' => $params->get('imgmanager.attributes_border', 1)
             ),
-            'disable_dimensions' => $params->get('imgmanager.disable_dimensions', 0)
+            'always_include_dimensions' => $params->get('imgmanager.always_include_dimensions', 0)
         );
 
         return parent::getSettings($settings);

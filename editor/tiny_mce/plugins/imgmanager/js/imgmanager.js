@@ -40,11 +40,6 @@
                 }
             });
             
-            // Disable attributes
-            if (this.settings.disable_dimensions) {
-                $('#width, #height').prop('disabled', true);
-            }
-
             // add focus behaviour to onmoueover / onmouseout
             $('#onmouseover, #onmouseout').focus( function() {
                 $('#onmouseover, #onmouseout').removeClass('focus');
@@ -75,8 +70,17 @@
 
                 // Width & Height
                 var w = this.getAttrib(n, 'width'), h = this.getAttrib(n, 'height');
+
+                if (w || h) {
+                    $('#width, #height').addClass('edited');
+                } else {
+                    w = n.width, h = n.height;
+                }
+                
                 $('#width, #tmp_width').val(w);
                 $('#height, #tmp_height').val(h);
+                
+                $('#constrain').prop('checked', w && h);
 
                 $('#alt').val(ed.dom.getAttrib(n, 'alt'));
                 $('#title').val(ed.dom.getAttrib(n, 'title'));
@@ -193,7 +197,7 @@
         },
 
         insertAndClose : function() {
-            var ed = tinyMCEPopup.editor, t = this, v, args = {}, el, br = '';
+            var ed = tinyMCEPopup.editor, self = this, v, args = {}, el, br = '';
 
             this.updateStyles();
 
@@ -239,6 +243,14 @@
                 if (k == 'src') {
                     // prepare URL
                     v = $.String.buildURI(v);
+                }
+                
+                if (k == 'width' || k == 'height') {
+                    if (self.settings.always_include_dimensions) {
+                        v = $('#' + k).val();
+                    } else {
+                        v = $('#' + k + '.edited').val() || '';
+                    }
                 }
 
                 if (k == 'classes')
@@ -429,6 +441,8 @@
         },
 
         setDimensions : function(a, b) {
+            $('#' + a + ', #' + b).addClass('edited');
+
             return $.Plugin.setDimensions(a, b);
         },
 
@@ -635,8 +649,8 @@
                     var img = new Image();
 
                     img.onload = function() {
-                        $.each(['width', 'height'], function(i, k) {
-                            $('#' + k + ', #tmp_' + k).val(img[k]);
+                        $.each(['width', 'height'], function(i, k) {                          
+                            $('#' + k + ', #tmp_' + k).val(img[k]).removeClass('edited');
                         });
 
                     };
@@ -644,7 +658,7 @@
                     img.src = src;
                 } else {
                     $.each(['width', 'height'], function(i, k) {
-                        $('#' + k + ', #tmp_' + k).val($(file).data(k));
+                        $('#' + k + ', #tmp_' + k).val($(file).data(k)).removeClass('edited');
                     });
 
                 }
