@@ -60,7 +60,7 @@ class WFSearchReplacePlugin extends WFEditorPlugin
     	'base_path' => WF_EDITOR_PLUGIN
     ));
     // Add tabs
-    $tabs->addTab('search');
+    $tabs->addTab('find');
     $tabs->addTab('replace');
   }
 	
