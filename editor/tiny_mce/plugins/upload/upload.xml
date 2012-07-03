@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<install version="1.5.0" type="plugin" plugin="upload" core="1" editable="1">
+	<name>WF_UPLOAD_TITLE</name>
+	<version>@@version@@</version>
+	<creationDate>@@date@@</creationDate>
+	<author>Ryan Demmer</author>
+	<authorEmail>info@joomlacontenteditor.net</authorEmail>
+	<authorUrl>http://www.joomlacontenteditor.net</authorUrl>
+	<copyright>@@copyright@@</copyright>
+	<license>@@licence@@</license>
+	<description>WF_UPLOAD_DESC</description>
+	<icon></icon>
+	<params></params>
+	<languages></languages>
+</install>
