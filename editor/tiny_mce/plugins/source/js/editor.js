@@ -328,6 +328,10 @@
                             cm.setSelection(cursor.from(), cursor.to());
                             state.posFrom = cursor.from();
                             state.posTo = cursor.to();
+                            
+                            var pos = cm.charCoords(state.posFrom, 'local');
+                            
+                            cm.scrollTo(pos.x, pos.y);
                         })
                     }
 
@@ -372,8 +376,12 @@
                             cm.setSelection(cursor.from(), cursor.to());
 
                             doReplace(match);
-                            
                             cm.setCursor(cursor.to());
+                            
+                            var pos = cm.charCoords(cursor.to(), 'local');
+                            
+                            cm.scrollTo(pos.x, pos.y);
+                            
                             cm.focus();
                         }
                         
