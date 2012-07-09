@@ -23,6 +23,9 @@ final class WFImageManagerPlugin extends WFMediaManager {
      */
     public function __construct() {
         parent::__construct();
+        
+        $browser = $this->getBrowser();
+        $browser->addEvent('onUpload', array($this, 'onUpload'));
     }
 
     /**
@@ -67,6 +70,31 @@ final class WFImageManagerPlugin extends WFMediaManager {
         $document->addStyleSheet(array('imgmanager'), 'plugins');
 
         $document->addScriptDeclaration('ImageManagerDialog.settings=' . json_encode($this->getSettings()) . ';');
+    }
+    
+    function onUpload($file) {
+        $browser    = $this->getBrowser();
+        $filesystem = $browser->getFileSystem();
+        
+        if (JRequest::getWord('method') === 'dragdrop') {
+            $result = array(
+                'file' => str_replace(JPATH_SITE . '/', '', $file), 
+                'name' => basename($file)
+            );
+            
+            if ($params->get('always_include_dimensions', 1)) {
+                $dim = @getimagesize($file);
+                
+                if ($dim) {
+                    $result['width']    = $dim[0];
+                    $result['height']   = $dim[1];
+                }
+            }
+            
+            return $result;
+        }
+        
+        return $browser->getResult();
     }
 
     function getSettings() {
