@@ -813,7 +813,7 @@ class WFFileBrowser extends WFBrowserExtension {
 
         // validate image
         if (preg_match('#\.(jpeg|jpg|jpe|png|gif|wbmp|bmp|tiff|tif)$#i', $file['name'])) {
-            if (@getimagesize($file['tmp_name']) === false) {
+            if (@getimagesize($file['tmp_name']) === false) {                
                 $result->state = false;
                 $result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_IMAGE_ERROR');
                 return false;
@@ -833,7 +833,7 @@ class WFFileBrowser extends WFBrowserExtension {
         }
 
         // skip html and text files
-        if (preg_match('#\.(html|htm|txt)$#i', $file['name'])) {
+        if (preg_match('#\.(html|htm|txt|xml|kml)$#i', $file['name'])) {
             return true;
         }
 
