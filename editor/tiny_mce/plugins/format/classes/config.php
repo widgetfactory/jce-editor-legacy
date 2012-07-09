@@ -62,7 +62,7 @@ class WFFormatPluginConfig {
         
         $html5  = array('section', 'article', 'hgroup', 'aside', 'figure');
         $schema = $wf->getParam('editor.schema', 'html4'); 
-        $verify = $wf->getParam('editor.verify_html', 0, 1, 'boolean');
+        $verify = (bool) $wf->getParam('editor.verify_html', 0);
 
         $tmpblocks  = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,hgroup,aside,figure,dt,dd', 'p,address,pre,h1,h2,h3,h4,h5,h6');
         $list       = array();
