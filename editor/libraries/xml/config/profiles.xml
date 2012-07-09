@@ -30,7 +30,7 @@
             <option value="1">WF_PARAM_CSS_OVERWRITE</option>
             <option value="2">WF_PARAM_CSS_INHERIT</option>
         </param>
-        <param name="profile_content_css_custom" placeholder="eg: templates/$template/css/content.css" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_CSS_CUSTOM" description="WF_PARAM_CSS_CUSTOM_DESC" parent="editor.profile_content_css[0,1]" />		
+        <param name="profile_content_css_custom" placeholder="eg: templates/$template/css/content.css" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_CSS_CUSTOM" description="WF_PARAM_CSS_CUSTOM_DESC" parent="profile_content_css[0,1]" />		
         <param name="theme_advanced_styles" type="text" size="100" default="" label="WF_PARAM_STYLES" description="WF_PARAM_STYLES_DESC" placeholder="eg: Style1=style1,Style2=style2,Style3=style3" />
         <!-- Formatting parameters -->
         <param name="theme_advanced_blockformats" class="checklist sortable" type="list" multiple="multiple" default="p,div,h1,h2,h3,h4,h5,h6,address,code,pre,samp,span,section,article,hgroup,aside,figure,dt,dd" label="WF_PARAM_BLOCK_FORMAT" description="WF_PARAM_BLOCK_FORMAT_DESC">
