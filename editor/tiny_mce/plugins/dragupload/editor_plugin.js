@@ -7,8 +7,6 @@
 (function() {    
     var each = tinymce.each, extend = tinymce.extend, JSON = tinymce.util.JSON;
     var isWin = navigator.platform.indexOf('Win') !== -1, isSafari = tinymce.isWebKit && navigator.vendor.indexOf('Apple') !== -1;
-    
-    var xhrSupport = !!window.XMLHttpRequestUpload;
 
     var state = {
         /**
@@ -100,9 +98,9 @@
         
         plugins : [],
         
-        init : function(ed, url) {            
+        init : function(ed, url) {                        
             // check for support - Opera is disabled because of various bugs, support is basically IE 10+, Firefox 4+, Chrome 7+, Safari 5+
-            if (!xhrSupport || !window.FormData) {                
+            if (!window.FormData || tinymce.isOpera) {                
                 ed.onInit.add(function() {
                     // Block browser default drag over
                     ed.dom.bind(ed.getBody(), 'dragover', function(e) {
@@ -133,7 +131,7 @@
                     }
                 });
                 // fake drag & drop in Windows Safari
-                if ((isWin && isSafari) || tinymce.isOpera) {
+                if (isSafari && isWin) {
                     ed.dom.bind(ed.getBody(), 'dragenter', function(e) {
                         var dropInputElm;
 
@@ -193,7 +191,7 @@
                     var dataTransfer = e.dataTransfer;
 
                     // Add dropped files
-                    if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {
+                    if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {                        
                         each(dataTransfer.files, function(file) {
                             self.addFile(file);
                         });
@@ -205,9 +203,8 @@
 
                     e.preventDefault();
                 });
-                
-                //if (tinymce.isWebKit) {
-                ed.onPaste.add(function(ed, e) {
+
+                /*ed.onPaste.add(function(ed, e) {
                     if(e.clipboardData) {
                         var items = e.clipboardData.items;
                         
@@ -228,8 +225,7 @@
                             });
                         }
                     }
-                });
-            //}
+                });*/
 
             });
 
@@ -245,17 +241,12 @@
                 file_data_name : 'file',
                 filters : []
             };
-
-            /*self.FilesAdded.add(function(file) {                
-                
-            });*/
             
             self.FileUploaded.add(function(file, o) {
                 var n = file.marker, s;
                 
-                if (n && o) {                                                                     
-                    
-                    if (o.response) {
+                if (n) {                                                                                         
+                    if (o && o.response) {
                         var r = JSON.parse(o.response);
                             
                         if (r.error) {
@@ -280,10 +271,24 @@
                             // remove from list
                             self.files.splice(tinymce.inArray(self.files, file), 1);
                         }
+                    } else {
+                        ed.windowManager.alert(ed.getLang('upload.response_error', 'Invalid Upload Response'));
+                        ed.dom.remove(n);
+                                
+                        return false;
                     }
                     
                     ed.dom.remove(n);
                 }
+            });
+            
+            self.UploadError.add(function(o) {
+                ed.windowManager.alert(o.code + ' : ' + o.message);
+                
+                if (o.file && o.file.marker) {
+                    ed.dom.remove(o.file.marker);
+                }
+                
             });
             
             self.UploadProgress.add(function(file) {
@@ -328,7 +333,7 @@
                 
                 var w = 300, h = 300;
                 
-                ed.execCommand('mceInsertContent', false, '<span id="__mce_tmp" class="mceItemUpload"></span>', {
+                ed.execCommand('mceInsertContent', false, '<span id="__mce_tmp" data-mce-type="marker" class="mceItemUpload"></span>', {
                     skip_undo : 1
                 });
                 
@@ -373,7 +378,7 @@
                 if (xhr.upload) {
                     xhr.upload.onprogress = function(e) {
                         if (e.lengthComputable) {
-                            file.loaded = Math.min(file.size, e.loaded); // Loaded can be larger than file size due to multipart encoding
+                            file.loaded = Math.min(file.size, e.loaded);
                             self.UploadProgress.dispatch(file);
                         }
                     };
