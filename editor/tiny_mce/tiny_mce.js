@@ -1686,6 +1686,8 @@ tinymce.util.Quirks = function(editor) {
 				startH = mouseDownImg.clientHeight;
 				dom.bind(editor.getDoc(), 'mousemove', resizeImage);
 				e.preventDefault();
+                                // fix for image delete bug #5397 ??
+                                editor.focus();
 			}
 		});
 
