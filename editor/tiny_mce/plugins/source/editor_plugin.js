@@ -235,11 +235,8 @@
         insertContent : function(v) {
             var DOM = tinymce.DOM, se = this.getEditor();
         	
-            if (se) {                
-                // decode and indent
-                v = this.indent(DOM.decode(v));
-                
-                se.insertContent(v);
+            if (se) {                                
+                se.insertContent(DOM.decode(v));
             }
         },
 
