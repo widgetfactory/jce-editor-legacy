@@ -307,6 +307,10 @@ tinyMCE.addI18n({
             name    : "Name",
             invalid : "Please specify a valid anchor Name or ID. The value must start with a letter.",
             exists  : "An anchor with that name or id already exists"
+        },
+        upload : {
+            'response_error' : "Invalid Upload Response",
+            'http_error' : "HTTP Error"
         }
     }
 });
