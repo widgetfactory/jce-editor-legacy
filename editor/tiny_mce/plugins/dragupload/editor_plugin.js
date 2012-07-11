@@ -285,7 +285,7 @@
                                         ed.dom.remove(n);
                                     }
                                 } catch(e) {
-                                    return showError(e);
+                                    //return showError(e);
                                 }
                             });
                             
