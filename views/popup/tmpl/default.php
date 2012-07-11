@@ -25,7 +25,7 @@ defined('_JEXEC') or die('RESTRICTED');
     <div class="contentheading"><?php echo $this->features['title'];?></div>
     <?php }?>
     <?php if( $this->features['mode'] && $this->features['print'] ){?>
-    <div class="buttonheading"><a href="javascript:;" onClick="window.print(); return false"><img src="<?php echo JURI::root(); ?>images/M_images/printButton.png" width="16" height="16" alt="<?php echo WFText::_('Print');?>" title="<?php echo WFText::_('Print');?>" /></a></div>
+    <div class="buttonheading"><a href="javascript:;" onClick="window.print(); return false"><img src="<?php echo JURI::root(); ?>components/com_jce/media/img/print.png" width="16" height="16" alt="<?php echo WFText::_('Print');?>" title="<?php echo WFText::_('Print');?>" /></a></div>
     <?php }?>
     <div><img src="<?php echo $this->features['img'];?>" width="<?php echo $this->features['width'];?>" height="<?php echo $this->features['height'];?>" alt="<?php echo $this->features['alt'];?>" onclick="window.close();" /></div>
 </div>
