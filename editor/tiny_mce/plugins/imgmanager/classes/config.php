@@ -16,7 +16,7 @@ class WFImgmanagerPluginConfig
 	{
 		$wf = WFEditor::getInstance();
 
-		$settings['imgmanager_dragdrop_upload'] = $wf->getParam('imgmanager.dragdrop_upload', 1, 0, 'boolean');
+		$settings['imgmanager_dragdrop_upload'] = $wf->getParam('imgmanager.dragdrop_upload', 0, 0, 'boolean');
 	}
 }
 ?>
