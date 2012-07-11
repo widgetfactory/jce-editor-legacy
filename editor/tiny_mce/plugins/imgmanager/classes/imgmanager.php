@@ -121,9 +121,16 @@ final class WFImageManagerPlugin extends WFMediaManager {
                         if ($v && $k == 'border_width' && is_numeric($v)) {
                             $v .= 'px';
                         }
-                        
                         break;
                 }
+                
+                if (strpos($k, 'margin_') !== false) {
+                    // add px unit to border-width
+                    if ($v && is_numeric($v)) {
+                        $v .= 'px';
+                    }
+                }
+                
                 // check for value and exclude border state parameter
                 if ($v != '') {
                     $k = str_replace('_', '-', $k);
