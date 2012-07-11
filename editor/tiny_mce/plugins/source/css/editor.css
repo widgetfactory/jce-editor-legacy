@@ -23,9 +23,7 @@ div#source-toolbar {
     background: #F7F7F7 none;
     border-bottom : 1px solid #eee;
     padding : 0 2px;
-    
-    font-size : 11px;
-    font-family: 'Arial, Helvetica, sans-serif';
+    font: 10px Verdana, Arial, Helvetica, sans-serif;
     position: relative;
     
     float : left;
