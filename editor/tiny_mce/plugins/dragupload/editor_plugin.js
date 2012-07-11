@@ -126,7 +126,7 @@
             
             ed.onInit.add(function() {
                 each(ed.plugins, function(o, k) {
-                    if (ed.getParam(k + '_dragdrop_upload') && tinymce.is(o.getUploadURL, 'function') && tinymce.is(o.insertUploadedFile, 'function')) {                        
+                    if (ed.getParam(k + '_dragdrop_upload') && tinymce.is(o.getUploadURL, 'function') && tinymce.is(o.insertUploadedFile, 'function')) {                                                
                         self.plugins.push(o);
                     }
                 });
@@ -245,9 +245,20 @@
             self.FileUploaded.add(function(file, o) {
                 var n = file.marker, s;
                 
+                function showError(error) {
+                    ed.windowManager.alert(error || ed.getLang('upload.response_error', 'Invalid Upload Response'));
+                    ed.dom.remove(n);
+                                
+                    return false;
+                }
+                
                 if (n) {                                                                                         
                     if (o && o.response) {
                         var r = JSON.parse(o.response);
+                        
+                        if (!r) {
+                            return showError();
+                        }
                             
                         if (r.error) {
                             
@@ -263,8 +274,12 @@
                             r.type = file.type;
 
                             each(self.plugins, function(o, k) {                                                                
-                                if (s = o.insertUploadedFile(r)) {
-                                    return ed.dom.replace(s, n);
+                                try {
+                                    if (s = o.insertUploadedFile(r)) {
+                                        return ed.dom.replace(s, n);
+                                    }
+                                } catch(e) {
+                                    return showError(e);
                                 }
                             });
                             
@@ -272,10 +287,7 @@
                             self.files.splice(tinymce.inArray(self.files, file), 1);
                         }
                     } else {
-                        ed.windowManager.alert(ed.getLang('upload.response_error', 'Invalid Upload Response'));
-                        ed.dom.remove(n);
-                                
-                        return false;
+                        return showError();
                     }
                     
                     ed.dom.remove(n);
