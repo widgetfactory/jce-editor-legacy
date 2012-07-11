@@ -76,6 +76,8 @@ final class WFImageManagerPlugin extends WFMediaManager {
         $browser    = $this->getBrowser();
         $filesystem = $browser->getFileSystem();
         
+        $params     = $this->getParams();
+        
         if (JRequest::getWord('method') === 'dragdrop') {
             $result = array(
                 'file' => str_replace(JPATH_SITE . '/', '', $file), 
@@ -89,6 +91,49 @@ final class WFImageManagerPlugin extends WFMediaManager {
                     $result['width']    = $dim[0];
                     $result['height']   = $dim[1];
                 }
+            }
+            
+            $defaults = $this->getDefaults();
+            
+            unset($defaults['always_include_dimensions']);
+            
+            if (!empty($defaults)) {
+                $styles = array();
+            }
+            
+            foreach($defaults as $k => $v) {
+                switch($k) {
+                    case 'align':
+                        // convert to float
+                        if ($v == 'left' || $v == 'right') {
+                            $k = 'float';
+                        } else {
+                            $k = 'vertical-align';
+                        }
+                        break;
+                    case 'border_width':
+                    case 'border_style':
+                    case 'border_color':
+                        // only if border state set
+                        $v = $defaults['border'] ? $v : '';
+                        
+                        // add px unit to border-width
+                        if ($v && $k == 'border_width' && is_numeric($v)) {
+                            $v .= 'px';
+                        }
+                        
+                        break;
+                }
+                // check for value and exclude border state parameter
+                if ($v != '') {
+                    $k = str_replace('_', '-', $k);
+                    
+                    $styles[$k] = $v;
+                }
+            }
+            
+            if (!empty($styles)) {
+                $result['style'] = $styles;
             }
             
             return $result;

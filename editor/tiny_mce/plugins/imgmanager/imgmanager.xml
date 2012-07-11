@@ -181,6 +181,11 @@
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
+        
+        <param name="dragdrop_upload" type="list" default="0" label="WF_PARAM_DRAPDROP_UPLOAD" description="WF_PARAM_DRAPDROP_UPLOAD_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>
+        </param>
     </params>
     <languages>
         <language tag="en-GB">en-GB.com_jce_imgmanager.ini</language>
