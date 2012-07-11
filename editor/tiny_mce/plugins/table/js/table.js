@@ -362,6 +362,11 @@ var TableDialog = {
             tinyMCEPopup.alert(ed.getLang('table_dlg.cell_limit').replace(/\{\$cells\}/g, cellLimit));
             return false;
         }
+        
+        // reset border if checkbox (html5)
+        if ($('#border').is(':checkbox')) {
+            border = $('#border').is(':checked') ? '1' : '';
+        }
 
         // Update table
         if(action == "update") {
@@ -371,10 +376,6 @@ var TableDialog = {
                 dom.setAttrib(elm, 'cellPadding', cellpadding, true);
                 dom.setAttrib(elm, 'cellSpacing', cellspacing, true);
             }  
-            
-            if ($('#border').is(':checkbox')) {
-                border = $('#border').is(':checked') ? '1' : '';
-            }
 
             if (!this.isCssSize(border)) {
                 dom.setAttrib(elm, 'border', border);

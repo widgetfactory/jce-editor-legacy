@@ -258,11 +258,16 @@
                         styles.push('height:' + height);
                     }
 
-                    var html = '<table border="' + t.settings.border + '"';
+                    var html = '<table';
+                    
+                    if (t.settings.border != '') {
+                         html += ' border="' + t.settings.border + '"';
+                    }
+
                     if (styles.length) {
                         html += ' style="' + styles.join(';') + ';"';	
                     }
-                    html	+= '>';
+                    html += '>';
 					
                     var rows = tinymce.grep(DOM.select('tr', table), function(row) {
                         return DOM.select('td.selected', row).length;
@@ -1211,7 +1216,7 @@
 			
             ed.onPreInit.add(function(ed, o) {
                 // add support for border attribute
-                if (ed.settings.schema == 'html5') {
+                if (ed.settings.schema == 'html5' && ed.settings.validate) {
                     // force border to 1 or remove
                     ed.parser.addNodeFilter('table', function(nodes) {
                         for (var i = 0, len = nodes.length; i < len; i++) {
@@ -1925,6 +1930,15 @@
 
             switch (n) {
                 case 'table_insert':
+                    var border = ed.getParam('table_default_border', '');
+                    
+                    // any value border will always be 1 in html5
+                    if (ed.settings.schema == 'html5' && ed.settings.validate) {
+                        if (border) {
+                            border = 1;
+                        }
+                    }
+                    
                     var c = new tinymce.ui.TableSplitButton(cm.prefix + 'table_insert', {
                         title 	: ed.getLang('table.desc', 'Inserts a new table'),
                         'class' : 'mce_table_insert',
@@ -1938,7 +1952,7 @@
                         scope	: ed,
                         width 	: ed.getParam('table_default_width'),
                         height 	: ed.getParam('table_default_height'),
-                        border 	: ed.getParam('table_default_border', 0)
+                        border 	: border
                     }, ed);
 					
                     ed.onMouseDown.add(c.hideMenu, c);
