@@ -33,7 +33,7 @@ class WFLinkSearchExtension extends WFSearchExtension {
 
         // use tested defaults
         if (empty($plugins)) {
-            $plugins = array('categories', 'contacts', 'content', 'newsfeeds', 'weblinks', 'zoosearch', 'k2');
+            $plugins = array('categories', 'contacts', 'content', 'newsfeeds', 'weblinks');
         }
 
         foreach ($plugins as $plugin) {

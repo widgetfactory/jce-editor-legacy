@@ -33,7 +33,7 @@ class JElementLinkSearch extends JElement {
 
         // use tested defaults
         if (!$value) {
-            $value = array('categories', 'contacts', 'content', 'newsfeeds', 'weblinks', 'zoosearch', 'k2');
+            $value = array('categories', 'contacts', 'content', 'newsfeeds', 'weblinks');
         } else {
             $value = (array) $value;
         }
