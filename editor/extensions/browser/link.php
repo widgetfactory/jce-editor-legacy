@@ -126,7 +126,7 @@ class WFLinkBrowser extends WFBrowserExtension {
         if ($wf->getParam('category_alias', 1) == 1) {
             $dbquery = $db->getQuery(true);
 
-            if (is_object($dbquery)) {
+            if (is_object($dbquery) && method_exists('charLength', $dbquery)) {
                 //sqlsrv changes
                 $case_when = ' CASE WHEN ';
                 $case_when .= $dbquery->charLength('alias');

@@ -158,7 +158,7 @@ class JoomlalinksWeblinks extends JObject {
         $query = 'SELECT a.id AS slug, b.id AS catslug, a.title AS title, a.description AS text, a.url, a.alias';
 
         if ($wf->getParam('links.joomlalinks.weblinks_alias', 1) == 1) {
-            if (is_object($dbquery)) {
+            if (is_object($dbquery) && method_exists('charLength', $dbquery)) {
                 //sqlsrv changes
                 $case_when1 = ' CASE WHEN ';
                 $case_when1 .= $dbquery->charLength('a.alias');
