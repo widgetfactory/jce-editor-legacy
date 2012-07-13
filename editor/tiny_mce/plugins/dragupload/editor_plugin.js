@@ -102,14 +102,19 @@
             function cancel() {
                 // Block browser default drag over
                 ed.dom.bind(ed.getBody(), 'dragover', function(e) {
-                    e.preventDefault();
+                    var dataTransfer = e.dataTransfer;
+                    
+                    // cancel dropped files
+                    if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {                        
+                        e.preventDefault();
+                    }
                 }); 
                     
                 ed.dom.bind(ed.getBody(), 'drop', function(e) {
                     var dataTransfer = e.dataTransfer;
 
                     // cancel dropped files
-                    if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {
+                    if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {                        
                         e.preventDefault();
                     }
                 });
