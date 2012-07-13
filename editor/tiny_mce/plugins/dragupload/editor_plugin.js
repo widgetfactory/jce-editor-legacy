@@ -99,19 +99,22 @@
         plugins : [],
         
         init : function(ed, url) {                        
+            function cancel() {
+                // Block browser default drag over
+                ed.dom.bind(ed.getBody(), 'dragover', function(e) {
+                    e.preventDefault();
+                }); 
+                    
+                ed.dom.bind(ed.getBody(), 'drop', function(e) {
+                    e.preventDefault();
+                });
+            }
+            
             // check for support - Opera is disabled because of various bugs, support is basically IE 10+, Firefox 4+, Chrome 7+, Safari 5+
             if (!window.FormData || tinymce.isOpera) {                
                 ed.onInit.add(function() {
-                    // Block browser default drag over
-                    ed.dom.bind(ed.getBody(), 'dragover', function(e) {
-                        e.preventDefault();
-                    }); 
-                    
-                    ed.dom.bind(ed.getBody(), 'drop', function(e) {
-                        e.preventDefault();
-                    });
+                    cancel();
                 });
-                
                 return;
             }
             
@@ -130,6 +133,13 @@
                         self.plugins.push(o);
                     }
                 });
+                
+                // no supported plugins
+                if (self.plugins.length == 0) {
+                    cancel();
+                    return;
+                }
+                
                 // fake drag & drop in Windows Safari
                 if (isSafari && isWin) {
                     ed.dom.bind(ed.getBody(), 'dragenter', function(e) {
@@ -204,7 +214,7 @@
                     e.preventDefault();
                 });
 
-                /*ed.onPaste.add(function(ed, e) {
+            /*ed.onPaste.add(function(ed, e) {
                     if(e.clipboardData) {
                         var items = e.clipboardData.items;
                         
@@ -285,7 +295,7 @@
                                         ed.dom.remove(n);
                                     }
                                 } catch(e) {
-                                    //return showError(e);
+                                //return showError(e);
                                 }
                             });
                             
