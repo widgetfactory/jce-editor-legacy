@@ -102,5 +102,5 @@
         }
     });
     // Register plugin
-    tinymce.PluginManager.add('imgmanager', tinymce.plugins.ImageManager, ['dragupload']);
+    tinymce.PluginManager.add('imgmanager', tinymce.plugins.ImageManager);
 })();
