@@ -106,7 +106,12 @@
                 }); 
                     
                 ed.dom.bind(ed.getBody(), 'drop', function(e) {
-                    e.preventDefault();
+                    var dataTransfer = e.dataTransfer;
+
+                    // cancel dropped files
+                    if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {
+                        e.preventDefault();
+                    }
                 });
             }
             
@@ -142,50 +147,61 @@
                 
                 // fake drag & drop in Windows Safari
                 if (isSafari && isWin) {
-                    ed.dom.bind(ed.getBody(), 'dragenter', function(e) {
-                        var dropInputElm;
+                    ed.dom.bind(ed.getBody(), 'dragenter', function(e) {                        
+                        var dataTransfer = e.dataTransfer;
 
-                        // Get or create drop zone
-                        dropInputElm = ed.dom.get(ed.getBody().id + "_dragdropupload");
+                        // cancel dropped files
+                        if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {
                         
-                        if (!dropInputElm) {
-                            dropInputElm = ed.dom.add(ed.getBody(), "input", {
-                                'type' : 'file',
-                                'id' : ed.getBody().id + "_dragdropupload",
-                                'multiple' : 'multiple',
-                                'style' : {
-                                    position : 'absolute',
-                                    display : 'block',
-                                    top : 0,
-                                    left : 0,
-                                    width : '100%',
-                                    height : '100%',
-                                    opacity : '0'
-                                }
+                            var dropInputElm;
+
+                            // Get or create drop zone
+                            dropInputElm = ed.dom.get(ed.getBody().id + "_dragdropupload");
+
+                            if (!dropInputElm) {
+                                dropInputElm = ed.dom.add(ed.getBody(), "input", {
+                                    'type' : 'file',
+                                    'id' : ed.getBody().id + "_dragdropupload",
+                                    'multiple' : 'multiple',
+                                    'style' : {
+                                        position : 'absolute',
+                                        display : 'block',
+                                        top : 0,
+                                        left : 0,
+                                        width : '100%',
+                                        height : '100%',
+                                        opacity : '0'
+                                    }
+                                });
+                            }
+
+                            ed.dom.bind(dropInputElm, 'change', function(e) {                                                            
+                                // Add the selected files from file input
+                                each(dropInputElm.files, function(file) {                                    
+                                    if (tinymce.inArray(self.files, file) == -1) {
+                                        self.addFile(file);
+                                    }
+                                });
+
+                                // Remove input element
+                                ed.dom.unbind(dropInputElm, 'change');
+                                ed.dom.remove(dropInputElm);
+
+                                // upload...
+                                each(self.files, function(file) {                        
+                                    self.upload(file);
+                                });
                             });
                         }
-                        
-                        ed.dom.bind(dropInputElm, 'change', function(e) {                                                            
-                            // Add the selected files from file input
-                            each(dropInputElm.files, function(file) {                                    
-                                if (tinymce.inArray(self.files, file) == -1) {
-                                    self.addFile(file);
-                                }
-                            });
-										
-                            // Remove input element
-                            ed.dom.unbind(dropInputElm, 'change');
-                            ed.dom.remove(dropInputElm);
-                            
-                            // upload...
-                            each(self.files, function(file) {                        
-                                self.upload(file);
-                            });
-                        });
                     });
                     
                     ed.dom.bind(ed.getBody(), 'drop', function(e) {
-                        e.preventDefault();
+                        var dataTransfer = e.dataTransfer;
+
+                        // cancel dropped files
+                        if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {
+                            e.preventDefault();
+                        }
                     });
 
                     return;
@@ -205,13 +221,13 @@
                         each(dataTransfer.files, function(file) {
                             self.addFile(file);
                         });
+                        
+                        e.preventDefault();
                     }
                     // upload...
                     each(self.files, function(file) {                        
                         self.upload(file);
                     });
-
-                    e.preventDefault();
                 });
 
             /*ed.onPaste.add(function(ed, e) {
