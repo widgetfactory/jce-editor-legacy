@@ -22,7 +22,7 @@
 	init : function(ed, url) {
 		var t = this;
                 
-                if (!ed.getParam('autolink_url', true) && !ed.getParam('autolink_email', true)) {
+                if (!ed.getParam('autolink_url', true) && !ed.getParam('autolink_email', true)) {                    
                     return;
                 }
 
@@ -137,8 +137,8 @@
 			text = r.toString();
 			matches = text.match(/^(https?:\/\/|ssh:\/\/|ftp:\/\/|file:\/|www\.|(?:mailto:)?[A-Z0-9._%+-]+@)(.+)$/i);
 
-			if (matches) {
-				if (matches[1] == 'www.') {
+			if (matches) {                                
+                                if (matches[1] == 'www.') {
 					matches[1] = 'http://www.';
                                         
                                         if (!ed.getParam('autolink_url', true)) {
@@ -151,7 +151,11 @@
                                         if (!ed.getParam('autolink_email', true)) {
                                             return;
                                         }
-				}
+				} else {
+                                    if (!ed.getParam('autolink_url', true)) {
+                                        return;
+                                    }
+                                }
 
 				bookmark = ed.selection.getBookmark();
 
