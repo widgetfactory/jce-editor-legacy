@@ -193,7 +193,12 @@ class WFEditorPlugin extends WFEditor {
         $document->addStyleSheet(array(
             'jquery/' . $theme . '/' . basename($ui[0], '.css'),
             'plugin'
-                ), 'libraries');
+        ), 'libraries');
+
+        // add custom plugin.css if exists
+        if (is_file(JPATH_SITE . DS . 'media' . DS . 'jce' . DS . 'css' . DS . 'plugin.css')) {
+            $document->addStyleSheet(array('media/jce/css/plugin.css'), 'joomla');
+        }
     }
 
     /**
