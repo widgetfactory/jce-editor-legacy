@@ -316,7 +316,7 @@ class JoomlalinksContent extends JObject {
         }
 
         if ($wf->getParam('links.joomlalinks.article_alias', 1) == 1) {
-            if (is_object($dbquery) && method_exists('charLength', $dbquery)) {
+            if (is_object($dbquery) && method_exists($dbquery, 'charLength')) {
                 //sqlsrv changes
                 $case_when1 = ' CASE WHEN ';
                 $case_when1 .= $dbquery->charLength('a.alias');
