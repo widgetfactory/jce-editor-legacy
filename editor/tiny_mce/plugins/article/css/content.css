@@ -8,3 +8,13 @@ font-size : 0;line-height : 0;letter-spacing: normal;word-spacing: normal; curso
 .mceItemReadMore.mceItemSelected, .mceItemPageBreak.mceItemSelected {
     background-color: #b4d4ff;
 }
+
+.mceItemPageBreak:after {
+    color: #000000;
+    content: attr(title);
+    font-size: 10px;
+    line-height: 14px;
+    padding: 0 5px;
+    display: block;
+    float: left;
+}
