@@ -13,7 +13,7 @@
 
     // Generates a preview for a format
     function getPreviewCss(ed, fmt) {
-        var previewElm, dom = ed.dom, previewCss = '', parentFontSize, previewStylesName;
+        var name, previewElm, dom = ed.dom, previewCss = '', parentFontSize, previewStylesName;
 
         var previewStyles = ed.settings.preview_styles;
 
@@ -1011,6 +1011,8 @@
                         var f = Event.add(ed.id + '_external_close', 'click', function() {
                             DOM.hide(ed.id + '_external');
                             Event.remove(ed.id + '_external_close', 'click', f);
+                            
+                            return false;
                         });
 
                         DOM.show(e);
@@ -1245,6 +1247,8 @@
                                 width = startWidth + (e.screenX - startX);
                                 height = startHeight + (e.screenY - startY);
                                 t.resizeTo(width, height, true);
+                                
+                                ed.nodeChanged();
                             };
 
                             e.preventDefault();
