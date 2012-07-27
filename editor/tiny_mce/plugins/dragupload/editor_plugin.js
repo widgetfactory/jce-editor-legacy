@@ -223,12 +223,13 @@
 
                     // Add dropped files
                     if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {                        
-                        each(dataTransfer.files, function(file) {
+                        each(dataTransfer.files, function(file) {                            
                             self.addFile(file);
                         });
                         
                         e.preventDefault();
                     }
+                    
                     // upload...
                     each(self.files, function(file) {                        
                         self.upload(file);
@@ -303,22 +304,39 @@
                         
                         if (file.status == state.DONE) {
                             r.type = file.type;
-
-                            each(self.plugins, function(o, k) {                                                                
-                                try {
-                                    if (s = o.insertUploadedFile(r)) {
-                                        if (ed.dom.replace(s, n)) {
-                                            ed.nodeChanged();
+                            
+                            if (file.uploader) {
+                                o = file.uploader;
+                                
+                                if (s = o.insertUploadedFile(r)) {                                    
+                                    if (ed.dom.replace(s, n)) {
+                                        ed.nodeChanged();
                                             
-                                            return true;
-                                        }
-                                        
-                                        ed.dom.remove(n);
+                                        return true;
                                     }
+                                }
+                            }
+                            
+                            //ed.dom.remove(n);
+                            
+                            /*each(self.plugins, function(o, k) {                                                                
+                                try {
+                                    if (!s) {
+                                        if (s = o.insertUploadedFile(r)) {
+                                            if (ed.dom.replace(s, n)) {
+                                                ed.nodeChanged();
+                                            
+                                                return true;
+                                            }
+                                        
+                                            ed.dom.remove(n);
+                                        }
+                                    } 
+ 
                                 } catch(e) {
                                 //return showError(e);
                                 }
-                            });
+                            });*/
                             
                             // remove from list
                             self.files.splice(tinymce.inArray(self.files, file), 1);
@@ -367,16 +385,19 @@
         },
         
         addFile : function(file) {
-            var url, ed = this.editor, self = this, fileNames = {};
+            var ed = this.editor, self = this, fileNames = {}, url;
             
-            // get url for the file type
+            // get first url for the file type
             each(self.plugins, function(o, k) {                                
-                url = o.getUploadURL(file);
+                if (!file.upload_url) {
+                    if (url = o.getUploadURL(file)) {
+                        file.upload_url = url;
+                        file.uploader   = o;
+                    }
+                }
             });
                 
-            if (url) {                           
-                file.upload_url = url;
-                
+            if (file.upload_url) {                                           
                 // dispatch event
                 self.FilesAdded.dispatch(file);
                 
