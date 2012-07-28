@@ -394,7 +394,7 @@ WFPopups.addPopup('jcemediabox', {
         var rel = ed.dom.getAttrib(n, 'rel', '');
         // remove any existing properties
         if (rel) {
-        	rel = rel.replace(/([a-z0-9]+)(\[[^\]]+\])(;?)/, '');
+        	rel = rel.replace(/([a-z0-9]+)(\[([^\]]+)\]);?/gi, '');
         }
 
         // set data to rel attribute
