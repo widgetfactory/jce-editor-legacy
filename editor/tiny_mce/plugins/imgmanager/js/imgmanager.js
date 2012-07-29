@@ -26,10 +26,11 @@
             tinyMCEPopup.resizeToInnerSize();
             tinyMCEPopup.restoreSelection();
 
-            // Get src an convert to relative
-            var src = ed.convertURL(ed.dom.getAttrib(n, 'src'));
-            // decode
-            src = decodeURIComponent(src);
+            // Get src and decode
+            var src = decodeURIComponent(ed.dom.getAttrib(n, 'src'));
+            
+            // convert to relative
+            src = ed.convertURL(src);
 
             TinyMCE_Utils.fillClassList('classlist');
 
