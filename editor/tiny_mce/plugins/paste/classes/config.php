@@ -16,19 +16,19 @@ class WFPastePluginConfig
 	{
 		$wf = WFEditor::getInstance();
 		
-		$settings['paste_dialog_width']				= $wf->getParam('paste.dialog_width', 450, 450);
-		$settings['paste_dialog_height']			= $wf->getParam('paste.dialog_height', 400, 400);
-		$settings['paste_use_dialog']				= $wf->getParam('paste.use_dialog', 0, 0);
-		$settings['paste_force_cleanup']			= $wf->getParam('paste.force_cleanup', 0, 0);
+		$settings['paste_dialog_width']			= $wf->getParam('paste.dialog_width', 450, 450);
+		$settings['paste_dialog_height']		= $wf->getParam('paste.dialog_height', 400, 400);
+		$settings['paste_use_dialog']			= $wf->getParam('paste.use_dialog', 0, 0, 'boolean');
+		$settings['paste_force_cleanup']		= $wf->getParam('paste.force_cleanup', 0, 0, 'boolean');
 		$settings['paste_strip_class_attributes']	= $wf->getParam('paste.strip_class_attributes', 'all', 'all');
-		$settings['paste_remove_styles']			= $wf->getParam('paste.remove_styles', 0, 0);
+		$settings['paste_remove_styles']		= $wf->getParam('paste.remove_styles', 0, 0, 'boolean');
 		$settings['paste_retain_style_properties']	= $wf->getParam('paste.retain_style_properties', '', '');
-		$settings['paste_remove_spans']				= $wf->getParam('paste.remove_spans', 0, 0);
+		$settings['paste_remove_spans']			= $wf->getParam('paste.remove_spans', 0, 0, 'boolean');
 		$settings['paste_remove_attributes']		= $wf->getParam('paste.remove_attributes', '', '');
-		$settings['paste_remove_styles_if_webkit']	= $wf->getParam('paste.remove_styles_if_webkit', 0, 0);
-		$settings['paste_remove_empty_paragraphs']	= $wf->getParam('paste.remove_empty_paragraphs', 1, 1);
-		$settings['paste_text']						= $wf->getParam('paste.text', 1, 1);
-		$settings['paste_html']						= $wf->getParam('paste.html', 1, 1);
+		$settings['paste_remove_styles_if_webkit']	= $wf->getParam('paste.remove_styles_if_webkit', 0, 0, 'boolean');
+		$settings['paste_remove_empty_paragraphs']	= $wf->getParam('paste.remove_empty_paragraphs', 1, 1, 'boolean');
+		$settings['paste_text']				= $wf->getParam('paste.text', 1, 1, 'boolean');
+		$settings['paste_html']				= $wf->getParam('paste.html', 1, 1, 'boolean');
 	}
 }
 ?>
