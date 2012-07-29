@@ -31,6 +31,26 @@ class WFFormatPluginConfig {
         // set as boolean if disabled
         if (is_numeric($settings['forced_root_block'])) {
             $settings['forced_root_block'] = (bool)$settings['forced_root_block'];
+            
+            if ($wf->getParam('editor.force_br_newlines', 0, 0, 'boolean') === false) {
+                // legacy
+                $settings['force_p_newlines'] = $wf->getParam('editor.force_p_newlines', 1, 0, 'boolean');
+            }
+        }
+        
+        if (strpos($settings['forced_root_block'], '|') !== false) {
+            // multiple values
+            $values = explode('|', $settings['forced_root_block']);
+            
+            foreach($values as $value) {
+                $kv = explode(':', $value);
+                
+                if (count($kv) == 2) {
+                    $settings[$kv[0]] = (bool) $kv[1];
+                } else {
+                    $settings['forced_root_block'] = (bool) $kv[0];
+                }
+            }
         }
         
         $settings['removeformat_selector']  = $wf->getParam('editor.removeformat_selector', 'span,b,strong,em,i,font,u,strike', 'span,b,strong,em,i,font,u,strike');
