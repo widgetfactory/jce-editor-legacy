@@ -20,7 +20,7 @@
     	</param>
 	</params>
 	<media></media>
-	<plugins>link,imgmanager_ext,mediamanager</plugins>
+	<plugins>link,imgmanager_ext,mediamanager,filemanager</plugins>
 	<languages></languages>
 </install>
  
