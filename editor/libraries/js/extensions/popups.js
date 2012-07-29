@@ -45,7 +45,7 @@ var WFPopups = WFExtensions.add('Popups', {
     },
 
     setup : function() {
-        var self = this, ed = tinyMCEPopup.editor, s = ed.selection;
+        var self = this, ed = tinyMCEPopup.editor, s = ed.selection, n;
 
         if(!s.isCollapsed()) {
             n = s.getNode();
