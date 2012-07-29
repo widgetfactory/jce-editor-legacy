@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright © 2009-2011 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (C) 2009-2011 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -96,10 +96,11 @@ class WFFileSystem extends WFExtension {
             $profile = $wf->getProfile();
 
             // Get base directory as shared parameter
-            $root = $this->get('dir', '');
+            $root = $this->get('dir', '');    
+            
             // Remove whitespace
             $root = trim($root);
-            
+
             if (!empty($root)) {
                 // Convert slashes / Strip double slashes
                 $root = preg_replace('/[\\\\]+/', '/', $root);
