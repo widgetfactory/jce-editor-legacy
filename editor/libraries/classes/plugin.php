@@ -379,12 +379,12 @@ class WFEditorPlugin extends WFEditor {
                 $param = self::cleanParam($param);
             }
 
-            if (is_numeric($default)) {
+            if (is_numeric($default) && $type === 'integer') {
                 $default = floatval($default);
                 settype($default, 'float');
             }
 
-            if (is_numeric($param)) {
+            if (is_numeric($param) && $type === 'integer') {
                 $param = floatval($param);
                 settype($param, 'float');
             }
