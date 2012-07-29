@@ -87,11 +87,10 @@ var LinkDialog = {
                         });
                     }
                 } else {
-                    if (ed.dom.isBlock(n) || n.nodeName === 'BODY') {
-                        state = true;
-                        v = se.getContent({
-                            format: 'text'
-                        });
+                    if (ed.dom.isBlock(n) || n.nodeName === 'BODY') {                                                                       
+                        v = se.getContent();
+                        
+                        state = /<([^>]+)>/.test(v) === false;
                     }
                 }
             } else {
@@ -264,7 +263,9 @@ var LinkDialog = {
 
         // no selection
         if (se.isCollapsed()) {
-            ed.execCommand('mceInsertContent', false, '<a href="#mce_temp_url#">' + $('#text').val() + '</a>', {skip_undo : 1});
+            ed.execCommand('mceInsertContent', false, '<a href="#mce_temp_url#">' + $('#text').val() + '</a>', {
+                skip_undo : 1
+            });
 
             tinymce.each(ed.dom.select(selector), function(link) {
                 ed.dom.setAttribs(link, args);
@@ -273,7 +274,9 @@ var LinkDialog = {
             });
         // create link on selection or update existing link
         } else {            
-            ed.execCommand('mceInsertLink', false, '#mce_temp_url#', {skip_undo : 1});
+            ed.execCommand('mceInsertLink', false, '#mce_temp_url#', {
+                skip_undo : 1
+            });
             
             tinymce.each(ed.dom.select(selector), function(link) {
                 ed.dom.setAttribs(link, args);
