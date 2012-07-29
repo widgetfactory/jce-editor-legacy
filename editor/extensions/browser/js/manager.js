@@ -518,11 +518,16 @@
 
             // store directory
             this._dir = $.String.encodeURI(dir);
+            
+            // make sure its relative
+            if (src && /:\/\//.test(src)) {
+                src = $.URL.toRelative(src);
+            }
 
             if (this._treeLoaded()) {
                 // Initialize tree view
                 this._createTree(src);
-            } else {
+            } else {                
                 // Load folder / file list
                 this._getList(src);
             }
