@@ -7,7 +7,70 @@
 (function() {    
     var each = tinymce.each, extend = tinymce.extend, JSON = tinymce.util.JSON;
     var isWin = navigator.platform.indexOf('Win') !== -1, isSafari = tinymce.isWebKit && navigator.vendor.indexOf('Apple') !== -1;
+    
+    var mimes = {};
 
+    function toArray(list) {
+        return Array.prototype.slice.call(list || [], 0);
+    }
+    
+    // Parses the default mime types string into a mimes lookup map (from plupload.js)
+    (function(mime_data) {
+        var items = mime_data.split(/,/), i, y, ext;
+
+        for (i = 0; i < items.length; i += 2) {
+            ext = items[i + 1].split(/ /);
+
+            for (y = 0; y < ext.length; y++) {
+                mimes[ext[y]] = items[i];
+            }
+        }
+    })(
+        "application/msword,doc dot," +
+        "application/pdf,pdf," +
+        "application/pgp-signature,pgp," +
+        "application/postscript,ps ai eps," +
+        "application/rtf,rtf," +
+        "application/vnd.ms-excel,xls xlb," +
+        "application/vnd.ms-powerpoint,ppt pps pot," +
+        "application/zip,zip," +
+        "application/x-shockwave-flash,swf swfl," +
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document,docx," +
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.template,dotx," +
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,xlsx," +
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation,pptx," + 
+        "application/vnd.openxmlformats-officedocument.presentationml.template,potx," +
+        "application/vnd.openxmlformats-officedocument.presentationml.slideshow,ppsx," +
+        "application/x-javascript,js," +
+        "application/json,json," +
+        "audio/mpeg,mpga mpega mp2 mp3," +
+        "audio/x-wav,wav," +
+        "audio/mp4,m4a," +
+        "image/bmp,bmp," +
+        "image/gif,gif," +
+        "image/jpeg,jpeg jpg jpe," +
+        "image/photoshop,psd," +
+        "image/png,png," +
+        "image/svg+xml,svg svgz," +
+        "image/tiff,tiff tif," +
+        "text/plain,asc txt text diff log," +
+        "text/html,htm html xhtml," +
+        "text/css,css," +
+        "text/csv,csv," +
+        "text/rtf,rtf," +
+        "video/mpeg,mpeg mpg mpe," +
+        "video/quicktime,qt mov," +
+        "video/mp4,mp4," +
+        "video/x-m4v,m4v," +
+        "video/x-flv,flv," +
+        "video/x-ms-wmv,wmv," +
+        "video/avi,avi," +
+        "video/webm,webm," +
+        "video/vnd.rn-realvideo,rv," +
+        "application/vnd.oasis.opendocument.formula-template,otf," +
+        "application/octet-stream,exe"
+        );
+    
     var state = {
         /**
          * Inital state of the queue and also the state ones it's finished all it's uploads.
@@ -91,7 +154,7 @@
          */
         SECURITY_ERROR : -400
     }
-    
+
     tinymce.create('tinymce.plugins.DragUpload', {
         
         files   : [],
@@ -223,7 +286,34 @@
 
                     // Add dropped files
                     if (dataTransfer && dataTransfer.files && dataTransfer.files.length) {                        
-                        each(dataTransfer.files, function(file) {                            
+                        /*each(dataTransfer.items, function(item) {
+                            if (item.webkitGetAsEntry) {
+                                var entry = item.webkitGetAsEntry();
+                                
+                                if (entry.isDirectory) {                                    
+                                    var reader = entry.createReader(), entries = [];
+                                    
+                                    var readEntries = function() {
+                                        reader.readEntries (function(results) {
+                                            if (!results.length) {
+                                                each(entries, function(entry) {
+                                                    if (entry.isFile) {
+
+                                                    }
+                                                });
+                                            } else {
+                                                entries = entries.concat(toArray(results));
+                                                readEntries();
+                                            }
+                                        }, function(){});
+                                    };
+
+                                    readEntries(); // Start reading dirs.
+                                }
+                            }
+                        });*/
+                        
+                        each(dataTransfer.files, function(file) {                                                        
                             self.addFile(file);
                         });
                         
