@@ -1,31 +1,31 @@
 <?xml version="1.0" ?>
-<install version="1.5.0" type="plugin" plugin="article" core="1" editable="0">
-	<name>WF_ARTICLE_TITLE</name>
-	<version>@@version@@</version>
-	<creationDate>@@date@@</creationDate>
-	<author>Ryan Demmer</author>
-	<authorEmail>@@e-mail@@</authorEmail>
-	<authorUrl>http://www.joomlacontenteditor.net/</authorUrl>
-	<copyright>Ryan Demmer</copyright>
-	<license>@@licence@@</license>
-	<description>WF_ARTICLE_DESC</description>
-	<icon>readmore,pagebreak</icon>
-	<params group="standard">
-		<param name="show_readmore" type="list" default="1" label="WF_ARTICLE_PARAM_SHOW_READMORE" description="WF_ARTICLE_PARAM_SHOW_READMORE_DESC">
-			<option value="0">WF_OPTION_NO</option>
-			<option value="1">WF_OPTION_YES</option>
-		</param>
-		<param name="show_pagebreak" type="list" default="1" label="WF_ARTICLE_PARAM_SHOW_PAGEBREAK" description="WF_ARTICLE_PARAM_SHOW_PAGEBREAK_DESC">
-			<option value="0">WF_OPTION_NO</option>
-			<option value="1">WF_OPTION_YES</option>
-		</param>
-		<param name="hide_xtd_btns" type="list" default="0" label="WF_ARTICLE_PARAM_HIDE_BUTTONS" description="WF_ARTICLE_PARAM_HIDE_BUTTONS_DESC">
-			<option value="0">WF_OPTION_NO</option>
-			<option value="1">WF_OPTION_YES</option>
-		</param>
-	</params>
-	<help>
-		<topic key="article.about" title="WF_ARTICLE_HELP_ABOUT" />
-	</help>
-	<languages></languages>
+<install version="1.5.0" type="plugin" plugin="article" core="1" editable="1">
+    <name>WF_ARTICLE_TITLE</name>
+    <version>@@version@@</version>
+    <creationDate>@@date@@</creationDate>
+    <author>Ryan Demmer</author>
+    <authorEmail>@@e-mail@@</authorEmail>
+    <authorUrl>http://www.joomlacontenteditor.net/</authorUrl>
+    <copyright>Ryan Demmer</copyright>
+    <license>@@licence@@</license>
+    <description>WF_ARTICLE_DESC</description>
+    <icon>readmore,pagebreak</icon>
+    <params group="standard">
+        <param name="show_readmore" type="list" default="1" label="WF_ARTICLE_PARAM_SHOW_READMORE" description="WF_ARTICLE_PARAM_SHOW_READMORE_DESC">
+            <option value="0">WF_OPTION_NO</option>
+            <option value="1">WF_OPTION_YES</option>
+        </param>
+        <param name="show_pagebreak" type="list" default="1" label="WF_ARTICLE_PARAM_SHOW_PAGEBREAK" description="WF_ARTICLE_PARAM_SHOW_PAGEBREAK_DESC">
+            <option value="0">WF_OPTION_NO</option>
+            <option value="1">WF_OPTION_YES</option>
+        </param>
+        <param name="hide_xtd_btns" type="list" default="0" label="WF_ARTICLE_PARAM_HIDE_BUTTONS" description="WF_ARTICLE_PARAM_HIDE_BUTTONS_DESC">
+            <option value="0">WF_OPTION_NO</option>
+            <option value="1">WF_OPTION_YES</option>
+        </param>
+    </params>
+    <help>
+        <topic key="article.about" title="WF_ARTICLE_HELP_ABOUT" />
+    </help>
+    <languages></languages>
 </install>
