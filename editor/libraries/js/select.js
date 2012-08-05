@@ -2,7 +2,7 @@
  * @version $Id: select.js 222 2011-06-11 17:32:06Z happy_noodle_boy $
  * @package JCE
  * @copyright 	2009, Moxiecode Systems AB
- * @copyright 	Copyright © 2009-2011 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2012 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later
  * This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or

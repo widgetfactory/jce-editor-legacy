@@ -1,8 +1,8 @@
 /**
  * $Id: colorpicker.js 203 2011-06-01 19:02:19Z happy_noodle_boy $
  * @package   	JCE
- * @copyright 	Copyright © 2009-2011 Ryan Demmer. All rights reserved.
- * @copyright 	Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
+ * @copyright 	Copyright (c) 2009-2012 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2004-2008, Moxiecode Systems AB, All rights reserved.
  * @license   	GNU/GPL 2 or later
  * This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -715,7 +715,7 @@
 
 /**
  * Farbtastic Color Picker 1.2
- * © 2008 Steven Wittens
+ * (c) 2008 Steven Wittens
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

@@ -1,8 +1,8 @@
 /**
  * @author Moxiecode - based on work by Andrew Tetlaw
  * @author Ryan Demmer 
- * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
- * @copyright Copyright © 2011, Ryan Demmer, All rights reserved.
+ * @copyright Copyright (c) 2004-2008, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright (c) 2011, Ryan Demmer, All rights reserved.
  */
 var XHTMLXtrasDialog = {
     settings : {},

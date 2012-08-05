@@ -1,7 +1,7 @@
 /**
  * @version		$Id: tips.js 201 2011-05-08 16:27:15Z happy_noodle_boy $
  * @package   	JCE
- * @copyright 	Copyright © 2009-2011 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2012 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later
  * This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
