@@ -1024,8 +1024,8 @@ class WFFileBrowser extends WFBrowserExtension {
         // check file name
         WFUtility::checkPath($name);
         
-        // check for invalid extension
-        if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|shtml|sh|cgi)#i', $name)) {
+        // check for invalid extensions
+        if (preg_match('#\.(php|phtml|pl|py|jsp|asp|shtml|sh|cgi)$#i', $name)) {
             JError::raiseError(403, 'INVALID FILE NAME');
         }
 
@@ -1040,9 +1040,9 @@ class WFFileBrowser extends WFBrowserExtension {
         if ($name == '') {
             JError::raiseError(403, 'INVALID FILE NAME');
         }
-
-        // check for extension in file name or blank file name
-        if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|shtml|sh|cgi)#i', $name)) {
+        
+        // check for extension in file name
+        if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b#i', $name)) {
             JError::raiseError(403, 'INVALID FILE NAME');
         }
 

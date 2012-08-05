@@ -479,7 +479,7 @@
                 var title 	= $.String.basename(file.name);                
                 
                 // check for extension in file name, eg. image.php.jpg
-                if (/\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\./i.test(title)) {
+                if (/\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b/i.test(title)) {
                     self.uploader.trigger('Error', {
                         code 	: self.FILE_INVALID_ERROR,
                         message : 'File invalid error',
