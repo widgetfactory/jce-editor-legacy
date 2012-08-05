@@ -1021,6 +1021,14 @@ class WFFileBrowser extends WFBrowserExtension {
         WFUtility::checkPath($dir);
         // decode name
         $name = rawurldecode($name);
+        // check file name
+        WFUtility::checkPath($name);
+        
+        // check for invalid extension
+        if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|shtml|sh|cgi)#i', $name)) {
+            JError::raiseError(403, 'INVALID FILE NAME');
+        }
+
         // get extension
         $ext = WFUtility::getExtension($name);
         // strip extension
