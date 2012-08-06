@@ -46,7 +46,8 @@ class WFFileBrowser extends WFBrowserExtension {
                 'runtimes' => 'html5,flash,silverlight',
                 'chunk_size' => null,
                 'max_size' => 1024,
-                'validate_mimetype' => 0
+                'validate_mimetype' => 0,
+                'add_random' => 0
             ),
             'folder_tree' => 1,
             'list_limit' => 'all',
@@ -1056,7 +1057,14 @@ class WFFileBrowser extends WFBrowserExtension {
         $filesystem = $this->getFileSystem();
         $complete = false;
         $contentType = JRequest::getVar('CONTENT_TYPE', '', 'SERVER');
+        
+        $upload = $this->get('upload');
 
+        // add random string
+        if ($upload['add_random']) {
+            $name = $name . '_' . substr(JUtility::getHash(), 0, 10);
+        }
+        
         // rebuild file name - name + extension
         $name = $name . '.' . $ext;
 

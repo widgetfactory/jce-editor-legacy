@@ -97,7 +97,11 @@
         <param name="websafe_mode" type="list" default="utf-8" label="WF_PARAM_WEBSAFE_MODE" description="WF_PARAM_WEBSAFE_MODE_DESC">
             <option value="utf-8">UTF-8</option>
             <option value="ascii">ASCII</option>
-        </param>  
+        </param> 
+        <param name="upload_add_random" type="list" default="0" label="WF_PARAM_UPLOAD_ADD_RANDOM" description="WF_PARAM_UPLOAD_ADD_RANDOM_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>
+        </param> 
     </params>
     <params group="advanced">
 	<!-- Elements -->
