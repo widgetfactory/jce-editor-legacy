@@ -1009,6 +1009,10 @@ class WFFileBrowser extends WFBrowserExtension {
 
         // get uploaded file
         $file = JRequest::getVar('file', '', 'files', 'array');
+        
+        if (empty($file)) {
+            JError::raiseError(403, 'INVALID UPLOAD DATA');
+        }
 
         // get file name
         $name = JRequest::getVar('name', $file['name']);
