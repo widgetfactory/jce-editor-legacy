@@ -110,6 +110,13 @@ final class WFRequest extends JObject {
     public function process($array = false) {
         // Check for request forgeries
         WFToken::checkToken() or die('RESTRICTED ACCESS');
+        
+        // check referrer
+        $referrer = substr($_SERVER['HTTP_REFERER'], 0, strrpos($_SERVER['HTTP_REFERER'], '/') + 1);
+        
+        if (!$referrer || $referrer !== JURI::base()) {
+            JError::raiseError(500, 'Invalid Origin');
+        }
 
         $json = JRequest::getVar('json', '', 'POST', 'STRING', 2);
         $action = JRequest::getWord('action');
