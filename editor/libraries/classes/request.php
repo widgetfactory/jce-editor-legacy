@@ -112,8 +112,8 @@ final class WFRequest extends JObject {
         WFToken::checkToken() or die('RESTRICTED ACCESS');
         
         // check referrer       
-        if (!$_SERVER['HTTP_REFERER'] || preg_match(JURI::base(), $_SERVER['HTTP_REFERER']) === false) {
-            JError::raiseError(500, 'Invalid Referrer');
+        if (!$_SERVER['HTTP_REFERER'] || strpos($_SERVER['HTTP_REFERER'], JURI::base()) === false) {
+            throw new InvalidArgumentException('Invalid Referrer');
         }
 
         $json = JRequest::getVar('json', '', 'POST', 'STRING', 2);
@@ -154,17 +154,17 @@ final class WFRequest extends JObject {
                 if (!isset($method->ref)) {
                     $call = $method->fn;
                     if (!function_exists($call)) {
-                        JError::raiseError(500, 'Invalid Function -  "' . $call . '"');
+                        throw new InvalidArgumentException('Invalid Function -  "' . $call . '"');
                     }
                 } else {
                     if (!method_exists($method->ref, $method->fn)) {
-                        JError::raiseError(500, 'Invalid Method "' . $method->ref . '::' . $method->fn . '"');
+                        throw new InvalidArgumentException('Invalid Method "' . $method->ref . '::' . $method->fn . '"');
                     }
                     $call = array($method->ref, $method->fn);
                 }
 
                 if (!$call) {
-                    JError::raiseError(500, 'Invalid Function Call');
+                    throw new InvalidArgumentException('Invalid Function Call');
                 }
 
                 if (!is_array($args)) {
@@ -174,9 +174,9 @@ final class WFRequest extends JObject {
                 }
             } else {
                 if ($fn) {
-                    JError::raiseError(500, 'Unregistered Function - "' . addslashes($fn) . '"');
+                    throw new InvalidArgumentException('Unregistered Function - "' . addslashes($fn) . '"');
                 } else {
-                    JError::raiseError(500, 'Invalid Function Call');
+                    throw new InvalidArgumentException('Invalid Function Call');
                 }
             }
 
