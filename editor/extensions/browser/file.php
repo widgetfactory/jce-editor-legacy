@@ -1050,13 +1050,6 @@ class WFFileBrowser extends WFBrowserExtension {
         if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b#i', $name)) {
             JError::raiseError(403, 'INVALID FILE NAME');
         }
-
-        // create a filesystem result object
-        $result = new WFFileSystemResult();
-
-        $filesystem = $this->getFileSystem();
-        $complete = false;
-        $contentType = JRequest::getVar('CONTENT_TYPE', '', 'SERVER');
         
         $upload = $this->get('upload');
 
@@ -1067,6 +1060,13 @@ class WFFileBrowser extends WFBrowserExtension {
         
         // rebuild file name - name + extension
         $name = $name . '.' . $ext;
+
+        // create a filesystem result object
+        $result = new WFFileSystemResult();
+
+        $filesystem = $this->getFileSystem();
+        $complete = false;
+        $contentType = JRequest::getVar('CONTENT_TYPE', '', 'SERVER');
 
         // Only multipart uploading is supported for now
         if ($contentType && strpos($contentType, "multipart") !== false) {
