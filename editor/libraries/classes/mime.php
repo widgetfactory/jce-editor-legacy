@@ -687,17 +687,20 @@ abstract class WFMimeType {
         // check file mime type if possible
         if (function_exists('mime_content_type')) {
             if ($mimetype = @mime_content_type($path)) {
+                
                 if ($mime = self::getMime($mimetype)) {
                     return in_array($extension, $mime);
                 }
             }
         } else if (function_exists('finfo_open')) {
-            $finfo = finfo_open(FILEINFO_MIME);
-            $mimetype = finfo_file($finfo, $path);
-            finfo_close($finfo);
+            if ($finfo = @finfo_open(FILEINFO_MIME)) {
+                if ($mimetype = @finfo_file($finfo, $path)) {
+                    @finfo_close($finfo);
 
-            if ($mime = self::getMime($mimetype)) {
-                return in_array($extension, $mime);
+                    if ($mime = self::getMime($mimetype)) {
+                        return in_array($extension, $mime);
+                    }
+                }
             }
         }
         // server doesn't support mime type check, let it through...

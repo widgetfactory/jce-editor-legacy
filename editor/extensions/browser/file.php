@@ -508,9 +508,9 @@ class WFFileBrowser extends WFBrowserExtension {
      */
     public function getTreeItems($dir, $root = true, $init = true) {
         $result = '';
-        
+
         static $treedir = null;
-        
+
         if ($init) {
             $treedir = $dir;
             if ($root) {
@@ -522,16 +522,16 @@ class WFFileBrowser extends WFBrowserExtension {
 
         if ($folders) {
             $result .= '<ul class="tree-node">';
-            foreach ($folders as $folder) {                
-                $open    = strpos($treedir, ltrim($folder['id'], '/')) === 0 ? ' open' : '';
+            foreach ($folders as $folder) {
+                $open = strpos($treedir, ltrim($folder['id'], '/')) === 0 ? ' open' : '';
                 $result .= '<li id="' . $this->escape($folder['id']) . '" class="' . $open . '"><div class="tree-row"><div class="tree-image"></div><span class="folder"><a href="javascript:;">' . $folder['name'] . '</a></span></div>';
-                
+
                 if ($open) {
                     if ($h = $this->getTreeItems($folder['id'], false, false)) {
                         $result .= $h;
                     }
                 }
-                
+
                 $result .= '</li>';
             }
             $result .= '</ul>';
@@ -810,176 +810,74 @@ class WFFileBrowser extends WFBrowserExtension {
         return str_replace('WF_MANAGER_FILE_SUFFIX', '_copy', $suffix);
     }
 
-    private function validateUploadedFile($file, &$result) {
+    private function validateUploadedFile($file) {
+        // Null byte check
+        if (strstr($file['name'], "\u0000")) {
+            @unlink($file['tmp_name']);
+
+            JError::raiseError(403, 'INVALID UPLOAD DATA');
+        }
+
+        // check for invalid extension in file name
+        if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b#i', $file['name'])) {
+            JError::raiseError(403, 'INVALID FILE NAME');
+        }
 
         // validate image
         if (preg_match('#\.(jpeg|jpg|jpe|png|gif|wbmp|bmp|tiff|tif)$#i', $file['name'])) {
-            if (@getimagesize($file['tmp_name']) === false) {                
-                $result->state = false;
-                $result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_IMAGE_ERROR');
-                return false;
+            if (@getimagesize($file['tmp_name']) === false) {
+                @unlink($file['tmp_name']);
+
+                JError::raiseError(403, 'INVALID IMAGE FILE');
             }
         }
+
         $upload = $this->get('upload');
 
         // validate mimetype
         if ($upload['validate_mimetype']) {
             wfimport('editor.libraries.classes.mime');
 
-            if (!WFMimeType::check($file['name'], $file['tmp_name'], $file['type'])) {
-                $result->state = false;
-                $result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_EXT_ERROR');
-                return false;
+            if (WFMimeType::check($file['name'], $file['tmp_name'], $file['type']) === false) {
+                @unlink($file['tmp_name']);
+
+                JError::raiseError(403, 'INVALID MIME TYPE');
             }
         }
 
-        // skip html and text files
-        if (preg_match('#\.(html|htm|txt|xml|kml)$#i', $file['name'])) {
-            return true;
-        }
-
-        /** check for XSS
-         * From MediaHelper::canUpload
-         * @copyright Copyright (C) 2005 - 2010 Open Source Matters. All rights reserved.
-         * */
-        $xss_check = JFile::read($file['tmp_name'], false, 256);
+        // xss check
+        $xss_check = JFile::read($file['tmp_name'], false, 1024);
 
         // check for hidden php tags
-        if (stristr($xss_check, '<?php')) {
-            $result->state = false;
-            $result->message = WFText::_('WF_MANAGER_UPLOAD_RESTRICTED_ERROR');
-            return false;
+        if (strstr($xss_check, '<?php')) {
+            @unlink($file['tmp_name']);
+
+            JError::raiseError(403, 'INVALID CODE IN FILE');
         }
 
-        $html_tags = array(
-            'abbr',
-            'acronym',
-            'address',
-            'applet',
-            'area',
-            'audioscope',
-            'base',
-            'basefont',
-            'bdo',
-            'bgsound',
-            'big',
-            'blackface',
-            'blink',
-            'blockquote',
-            'body',
-            'bq',
-            'br',
-            'button',
-            'caption',
-            'center',
-            'cite',
-            'code',
-            'col',
-            'colgroup',
-            'comment',
-            'custom',
-            'dd',
-            'del',
-            'dfn',
-            'dir',
-            'div',
-            'dl',
-            'dt',
-            'em',
-            'embed',
-            'fieldset',
-            'fn',
-            'font',
-            'form',
-            'frame',
-            'frameset',
-            'h1',
-            'h2',
-            'h3',
-            'h4',
-            'h5',
-            'h6',
-            'head',
-            'hr',
-            'html',
-            'iframe',
-            'ilayer',
-            'img',
-            'input',
-            'ins',
-            'isindex',
-            'keygen',
-            'kbd',
-            'label',
-            'layer',
-            'legend',
-            'li',
-            'limittext',
-            'link',
-            'listing',
-            'map',
-            'marquee',
-            'menu',
-            'meta',
-            'multicol',
-            'nobr',
-            'noembed',
-            'noframes',
-            'noscript',
-            'nosmartquotes',
-            'object',
-            'ol',
-            'optgroup',
-            'option',
-            'param',
-            'plaintext',
-            'pre',
-            'rt',
-            'ruby',
-            's',
-            'samp',
-            'script',
-            'select',
-            'server',
-            'shadow',
-            'sidebar',
-            'small',
-            'spacer',
-            'span',
-            'strike',
-            'strong',
-            'style',
-            'sub',
-            'sup',
-            'table',
-            'tbody',
-            'td',
-            'textarea',
-            'tfoot',
-            'th',
-            'thead',
-            'title',
-            'tr',
-            'tt',
-            'ul',
-            'var',
-            'wbr',
-            'xml',
-            'xmp',
-            '!DOCTYPE',
-            '!--'
-        );
+        // check for hidden short php tags
+        if (preg_match('#\.(inc|phps|class|php|php(3|4)|txt|dat|tpl|tmpl)$#i', $file['name'])) {
 
-        foreach ($html_tags as $tag) {
-            // A tag is '<tagname ', so we need to add < and a space or '<tagname>'
-            if (stristr($xss_check, '<' . $tag . ' ') || stristr($xss_check, '<' . $tag . '>')) {
-                $result->state = false;
-                $result->message = WFText::_('WF_MANAGER_UPLOAD_RESTRICTED_ERROR');
-                return false;
+            if (strstr($xss_check, '<?')) {
+                @unlink($file['tmp_name']);
+
+                JError::raiseError(403, 'INVALID CODE IN FILE');
             }
         }
 
-        return true;
+        // check for html tags (skip some files)
+        if (!preg_match('#\.(txt|htm|html|xml|kml)$#i', $file['name'])) {
+
+            $tags = array('abbr', 'acronym', 'address', 'applet', 'area', 'audioscope', 'base', 'basefont', 'bdo', 'bgsound', 'big', 'blackface', 'blink', 'blockquote', 'body', 'bq', 'br', 'button', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'comment', 'custom', 'dd', 'del', 'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'fn', 'font', 'form', 'frame', 'frameset', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'hr', 'html', 'iframe', 'ilayer', 'img', 'input', 'ins', 'isindex', 'keygen', 'kbd', 'label', 'layer', 'legend', 'li', 'limittext', 'link', 'listing', 'map', 'marquee', 'menu', 'meta', 'multicol', 'nobr', 'noembed', 'noframes', 'noscript', 'nosmartquotes', 'object', 'ol', 'optgroup', 'option', 'param', 'plaintext', 'pre', 'rt', 'ruby', 's', 'samp', 'script', 'select', 'server', 'shadow', 'sidebar', 'small', 'spacer', 'span', 'strike', 'strong', 'style', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'title', 'tr', 'tt', 'ul', 'var', 'wbr', 'xml', 'xmp', '!DOCTYPE', '!--');
+
+            // check for tags
+            //if (preg_match('#<(' . implode('|', $tags) . ')(\s|>)#i', $xss_check)) {
+            if (preg_match('#<([a-z0-9]+)(\s|>)#i', $xss_check)) {
+                @unlink($file['tmp_name']);  
+                
+                JError::raiseError(403, 'INVALID TAG IN FILE');
+            }
+        }
     }
 
     /**
@@ -996,9 +894,19 @@ class WFFileBrowser extends WFBrowserExtension {
             JError::raiseError(403, 'RESTRICTED ACCESS');
         }
 
-        $wf = WFEditor::getInstance();
-
         jimport('joomla.filesystem.file');
+
+        // get uploaded file
+        $file = JRequest::getVar('file', '', 'files', 'array');
+
+        if (empty($file)) {
+            JError::raiseError(403, 'INVALID UPLOAD DATA');
+        }
+
+        // validate file data
+        $this->validateUploadedFile($file);
+
+        $wf = WFEditor::getInstance();
 
         // HTTP headers for no cache etc
         //header('Content-type: text/plain; charset=UTF-8');
@@ -1007,13 +915,6 @@ class WFFileBrowser extends WFBrowserExtension {
         header("Cache-Control: no-store, no-cache, must-revalidate");
         header("Cache-Control: post-check=0, pre-check=0", false);
         header("Pragma: no-cache");
-
-        // get uploaded file
-        $file = JRequest::getVar('file', '', 'files', 'array');
-        
-        if (empty($file)) {
-            JError::raiseError(403, 'INVALID UPLOAD DATA');
-        }
 
         // get file name
         $name = JRequest::getVar('name', $file['name']);
@@ -1028,7 +929,7 @@ class WFFileBrowser extends WFBrowserExtension {
         $name = rawurldecode($name);
         // check file name
         WFUtility::checkPath($name);
-        
+
         // check for invalid extensions
         if (preg_match('#\.(php|phtml|pl|py|jsp|asp|shtml|sh|cgi)$#i', $name)) {
             JError::raiseError(403, 'INVALID FILE NAME');
@@ -1036,6 +937,15 @@ class WFFileBrowser extends WFBrowserExtension {
 
         // get extension
         $ext = WFUtility::getExtension($name);
+
+        // check extension is allowed
+        $allowed = $this->getFileTypes('array');
+
+        if (is_array($allowed) && !empty($allowed) && in_array(strtolower($ext), $allowed) === false) {
+            JError::raiseError(403, WFText::_('WF_MANAGER_UPLOAD_INVALID_EXT_ERROR'));
+            @unlink($file['tmp_name']);
+        }
+
         // strip extension
         $name = WFUtility::stripExtension($name);
         // make file name 'web safe'
@@ -1045,19 +955,19 @@ class WFFileBrowser extends WFBrowserExtension {
         if ($name == '') {
             JError::raiseError(403, 'INVALID FILE NAME');
         }
-        
+
         // check for extension in file name
         if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b#i', $name)) {
             JError::raiseError(403, 'INVALID FILE NAME');
         }
-        
+
         $upload = $this->get('upload');
 
         // add random string
         if ($upload['add_random']) {
-            $name = $name . '_' . substr(JUtility::getHash(), 0, 10);
+            $name = $name . '_' . substr(md5(uniqid(rand(), 1)), 0, 5);
         }
-        
+
         // rebuild file name - name + extension
         $name = $name . '.' . $ext;
 
@@ -1071,28 +981,16 @@ class WFFileBrowser extends WFBrowserExtension {
         // Only multipart uploading is supported for now
         if ($contentType && strpos($contentType, "multipart") !== false) {
             if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name'])) {
-                // check for valid extension
-                if (in_array(strtolower($ext), $this->getFileTypes('array')) === false) {
-                    $result->state = false;
-                    $result->message = WFText::_('WF_MANAGER_UPLOAD_INVALID_EXT_ERROR');
-                    $complete = true;
+                $result = $filesystem->upload('multipart', trim($file['tmp_name']), $dir, $name);
 
-                    @unlink($file['tmp_name']);
-                } else if ($this->validateUploadedFile($file, $result) === false) {
-                    $complete = true;
-                    @unlink($file['tmp_name']);
-                } else {
-                    $result = $filesystem->upload('multipart', trim($file['tmp_name']), $dir, $name);
-
-                    if (!$result->state) {
-                        $result->message = WFText::_('WF_MANAGER_UPLOAD_ERROR');
-                        $result->code = 103;
-                    }
-
-                    @unlink($file['tmp_name']);
-
-                    $complete = true;
+                if (!$result->state) {
+                    $result->message = WFText::_('WF_MANAGER_UPLOAD_ERROR');
+                    $result->code = 103;
                 }
+
+                @unlink($file['tmp_name']);
+
+                $complete = true;
             }
         } else {
             $result->state = false;
@@ -1381,7 +1279,7 @@ class WFFileBrowser extends WFBrowserExtension {
 
         if (is_string($upload['runtimes'])) {
             $runtimes = explode(',', $upload['runtimes']);
-        } else {            
+        } else {
             foreach ($upload['runtimes'] as $k => $v) {
                 $runtimes[] = $v;
             }
