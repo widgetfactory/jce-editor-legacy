@@ -19,14 +19,68 @@
     $.support.canvas = !!document.createElement('canvas').getContext;
     // check for background size
     $.support.backgroundSize = (function() {
-    	var s = false;
-    	$.each(['backgroundSize', 'MozBackgroundSize', 'WebkitBackgroundSize', 'OBackgroundSize'], function() {
-    		if (typeof $tmp.style[this] !== 'undefined') {
-    			s = true;
-    		}
-    	});
+        var s = false;
+        $.each(['backgroundSize', 'MozBackgroundSize', 'WebkitBackgroundSize', 'OBackgroundSize'], function() {
+            if (typeof $tmp.style[this] !== 'undefined') {
+                s = true;
+            }
+        });
     	
-    	return s;
+        return s;
+    })();
+    
+    $.support.pdfjs = $.support.canvas && window.ArrayBuffer;
+    
+    /* http://downloads.beninzambia.com/blog/acrobat_detection.js.txt
+     * Modified for our purposes
+     */    
+    $.support.pdf = (function() {
+        try {
+            // IE
+            if(!$.support.cssFloat) {          
+                var control = null;
+   
+                //
+                // load the activeX control
+                //                
+                try {
+                    // AcroPDF.PDF is used by version 7 and later
+                    control = new ActiveXObject('AcroPDF.PDF');
+                }
+                catch (e){}
+   
+                if (!control) {
+                    try {
+                        // PDF.PdfCtrl is used by version 6 and earlier
+                        control = new ActiveXObject('PDF.PdfCtrl');
+                    }
+                    catch (e) {}
+                }
+   
+                return control ? true : false;
+                
+            } else if(navigator.plugins) {      
+                for(var n in navigator.plugins) {                    
+                    if (n == 'Adobe Acrobat') {
+                        return true;
+                    }
+                    
+                    if (navigator.plugins[n].name && (navigator.plugins[n].name == 'Adobe Acrobat' || navigator.plugins[n].name == 'Chrome PDF Viewer')) {
+                        return true;
+                    }
+                } 
+            } else if (navigator.mimeTypes) {
+                // from PDFObject - https://github.com/pipwerks/PDFObject
+                var mime = navigator.mimeTypes["application/pdf"];
+                
+                if (mime && mime.enabledPlugin) {
+                    return true;
+                }
+            }
+        }
+        catch(e){}
+   
+        return false;
     })();
 
     $.Plugin = {
@@ -156,11 +210,11 @@
 
             $('input[placeholder], textarea[placeholder]').placeholder();
 
-			$(':input[pattern]').pattern();
+            $(':input[pattern]').pattern();
 
-			$(':input[max]').max();
+            $(':input[max]').max();
 			
-			$(':input[min]').min();
+            $(':input[min]').min();
         },
 
         getName : function() {
@@ -239,19 +293,19 @@
                 }
                 
                 if ($('#' + n).is(':checkbox')) {
-                	$('#' + n).prop('checked', parseFloat(v));
+                    $('#' + n).prop('checked', parseFloat(v));
                 } else {
-                	$('#' + n).val(v);
+                    $('#' + n).val(v);
                 }
             }
         },
 
         setClasses: function (v, n) {
-			n = n || 'classes';
+            n = n || 'classes';
 			
-			var $tmp = $('<span/>').addClass($('#' + n).val()).addClass(v);
+            var $tmp = $('<span/>').addClass($('#' + n).val()).addClass(v);
         
-        	$('#' + n).val($tmp.attr('class'));           
+            $('#' + n).val($tmp.attr('class'));           
         },
 
         createColourPickers: function () {
@@ -272,12 +326,12 @@
                 });
                 
                 $(this).bind('pick', function() {
-                	$(this).next('span.pickcolor_icon').css('background-color', $(this).val());
+                    $(this).next('span.pickcolor_icon').css('background-color', $(this).val());
                 });
 
                 // need to use direct call to onchange event for tinyMCEPopup.pickColor callback
                 $(this).get(0).onchange = function() {                	                	
-                	$(this).trigger('pick');                   
+                    $(this).trigger('pick');                   
                     
                     if ($.isFunction(ev)) {
                         ev.call(this);
@@ -314,7 +368,7 @@
                 var s = $('body').attr('lang') || 'en';
                 
                 if (s.length > 2) {
-                	s = s.substr(0, 2);
+                    s = s.substr(0, 2);
                 }
                 
                 this.language = s;
@@ -329,33 +383,33 @@
          * @param {Object} c Width / Height Object pair
          */
         sizeToFit : function(o, c) {
-        	var x = c.width;
-			var y = c.height;
-			var w = o.width;
-			var h = o.height;
+            var x = c.width;
+            var y = c.height;
+            var w = o.width;
+            var h = o.height;
 
-			var ratio = x / w;
+            var ratio = x / w;
 
-			if (w / h > ratio) {
-				h = h * (x / w);
-				w = x;
-				if (h > y) {
-					w = w * (y / h);
-					h = y;
-				}
-			} else {
-				w = w * (y / h);
-				h = y;
-				if (w > x) {
-					h = h * (x / w);
-					w = x;
-				}
-			}
+            if (w / h > ratio) {
+                h = h * (x / w);
+                w = x;
+                if (h > y) {
+                    w = w * (y / h);
+                    h = y;
+                }
+            } else {
+                w = w * (y / h);
+                h = y;
+                if (w > x) {
+                    h = h * (x / w);
+                    w = x;
+                }
+            }
 
-			return {
-				width	: Math.round(w),
-				height	: Math.round(h)
-			};
+            return {
+                width	: Math.round(w),
+                height	: Math.round(h)
+            };
         },
 
         /**
@@ -435,22 +489,22 @@
                 b = c.indexOf(p);
 
                 if (b != 0) {
-                	return s;
+                    return s;
                 }
             } else {
                 b += 2;
-			}
+            }
             e = c.indexOf(";", b);
 
             if (e == -1) {
                 e = c.length;
-			}
+            }
 			
-			v = unescape(c.substring(b + p.length, e));
+            v = unescape(c.substring(b + p.length, e));
 			
-			if (typeof v == 'undefined') {
-				return s;
-			}
+            if (typeof v == 'undefined') {
+                return s;
+            }
 			
             return v;
         },
@@ -522,7 +576,9 @@
             callback = callback || $.noop;
 
             // additional POST data to add (will not be parsed by PHP json parser)
-            var args = {'format' : 'raw'};
+            var args = {
+                'format' : 'raw'
+            };
 
             // get form input data (including token)
             var fields = $(':input', 'form').serializeArray();
@@ -571,19 +627,19 @@
                 url: url,
                 data: 'json=' + $.JSON.serialize(json) + '&' + $.param(args),
                 success: function (o) {
-                	// check result - should be object, parse as JSON if string
-                	if ($.type(o) == 'string') {
-                		// parse string as JSON object
-                		var s = $.parseJSON(o);
-                		// pass if successful
-                		if (s) {
-                			o = s;
-                		}
-                	}
+                    // check result - should be object, parse as JSON if string
+                    if ($.type(o) == 'string') {
+                        // parse string as JSON object
+                        var s = $.parseJSON(o);
+                        // pass if successful
+                        if (s) {
+                            o = s;
+                        }
+                    }
 
                     // process object result
                     if ($.isPlainObject(o)) {
-                    	if (o.error) {
+                        if (o.error) {
                             showError(o.text || o.error || '');
                         }
 
@@ -594,10 +650,10 @@
                         }
                     // show error
                     } else {
-                    	if (o) {
+                        if (o) {
                             showError(o);
                         }
-                       	return false;
+                        return false;
                     }
 
                     if ($.isFunction(callback)) {
@@ -608,7 +664,7 @@
                 },
 
                 error: function (e, txt, status) {
-					$.Dialog.alert(status || ('SERVER ERROR - ' + txt.toUpperCase()));
+                    $.Dialog.alert(status || ('SERVER ERROR - ' + txt.toUpperCase()));
                 }
 
             });
@@ -711,15 +767,15 @@
                 open: function () {
                     // adjust modal
                     $(div).dialog('widget').next('div.ui-widget-overlay').css({
-                    	width : '100%',
-                    	height: '100%'
+                        width : '100%',
+                        height: '100%'
                     });
                     
                     // fix buttons
                     $('div.ui-dialog-buttonset button[icons]', $(div).dialog('widget')).each(function() {
-						var icon = $(this).attr('icons');
+                        var icon = $(this).attr('icons');
 						
-						$(this).prepend('<span class="ui-button-icon-primary ui-icon ' + icon + '"/>');
+                        $(this).prepend('<span class="ui-button-icon-primary ui-icon ' + icon + '"/>');
                     }).addClass('ui-button-text-icon-primary').removeClass('ui-button-text-only');
 
                     if ($.isFunction(options.onOpen)) {
@@ -733,7 +789,10 @@
 
             });
 
-            $(div).attr({'title' : title, id : options.id || 'dialog' + this._uid()}).append(data).dialog(options);
+            $(div).attr({
+                'title' : title, 
+                id : options.id || 'dialog' + this._uid()
+            }).append(data).dialog(options);
 
             return div;
         },
@@ -826,7 +885,7 @@
                         if ($.isFunction(options.confirm)) {
                             options.confirm.call(this, $('#' + id).val());
                         } else {
-                        	$(this).dialog("close");
+                            $(this).dialog("close");
                         }
                     }
 
@@ -847,13 +906,13 @@
             var div = document.createElement('div');
 
             $(div).attr('id', 'upload-body').append(
-            '<div id="upload-queue-block">' +
-            '		<ul id="upload-queue"><li style="display:none;"></li></ul>' +
-            '	<input type="hidden" id="upload-dir" name="upload-dir" />' +
-            '	<input type="file" name="file" size="40" style="position:relative;" />'+
-            '</div>'+
-            '<div id="upload-options"></div>'
-            );
+                '<div id="upload-queue-block">' +
+                '		<ul id="upload-queue"><li style="display:none;"></li></ul>' +
+                '	<input type="hidden" id="upload-dir" name="upload-dir" />' +
+                '	<input type="file" name="file" size="40" style="position:relative;" />'+
+                '</div>'+
+                '<div id="upload-options"></div>'
+                );
 
             $(div).find('#upload-options').append(options.elements);
             
@@ -973,7 +1032,10 @@
 
                             } else {
                                 if (img.width > dw || img.height > dh) {
-                                    var dim = $.Plugin.sizeToFit(img, {width : Math.round($(window).width()) - 160, height : Math.round($(window).height()) - 190});
+                                    var dim = $.Plugin.sizeToFit(img, {
+                                        width : Math.round($(window).width()) - 160, 
+                                        height : Math.round($(window).height()) - 190
+                                    });
 
                                     $('div.image-preview').removeClass('loader').append('<img src="' + url + '" width="' + dim.width + '" height="' + dim.height + '" alt="' + $.Plugin.translate('preview', 'Preview') + '" />');
                                     $('div.image-preview').css('margin-top', ($(parent).height() - dim.height) / 2);
@@ -996,7 +1058,62 @@
                         };
 
                         img.src = url + (/\?/.test(url) ? '&' : '?') + new Date().getTime();
-                        // media element
+                    // pdf (only for Firefox really)
+                    } else if (/\.pdf$/i.test(url)) {                                                
+                        $(div).addClass('media-preview big-loader').height($(parent).height() - 20);
+                        
+                        // use pdfjs
+                        if ($.support.pdfjs && !$.support.pdf) {
+                            $.getScript($.Plugin.getURI(true) + 'components/com_jce/editor/libraries/js/pdf.js', function() {
+                                var $canvas = $('<canvas/>').attr({
+                                    'id' : 'pdf'
+                                }).appendTo(div);
+                            
+                                //
+                                // Disable workers to avoid yet another cross-origin issue (workers need the URL of
+                                // the script to be loaded, and currently do not allow cross-origin scripts)
+                                //
+                                PDFJS.disableWorker = true;
+
+                                var pdfDoc = null,
+                                pageNum = 1,
+                                scale = 0.8,
+                                canvas = $canvas.get(0),
+                                ctx = canvas.getContext('2d');
+
+                                //
+                                // Get page info from document, resize canvas accordingly, and render page
+                                //
+                                function renderPage(num) {
+                                    // Using promise to fetch the page
+                                    pdfDoc.getPage(num).then(function(page) {
+                                        var viewport = page.getViewport(scale);
+                                        canvas.height = viewport.height;
+                                        canvas.width = viewport.width;
+
+                                        // Render PDF page into canvas context
+                                        var renderContext = {
+                                            canvasContext: ctx,
+                                            viewport: viewport
+                                        };
+                                        page.render(renderContext);
+                                    
+                                        $(div).removeClass('big-loader');
+                                    
+                                    });
+                                }
+                            
+                                //
+                                // Asynchronously download PDF as an ArrayBuffer
+                                //
+                                PDFJS.getDocument(url).then(function getPdf(_pdfDoc) {
+                                    pdfDoc = _pdfDoc;
+                                    renderPage(pageNum);
+                                });
+                            });
+                        } else {
+                            $(div).html('<object data="' + url + '" type="application/pdf" width="' + $(div).innerWidth() + '" height="' + $(div).innerHeight() + '"></object>').removeClass('big-loader');
+                        }
                     } else {
                         $(div).addClass('media-preview big-loader').height($(parent).height() - 20);
 
@@ -1069,19 +1186,19 @@
                                 for (y = 0; y < ext.length; y++)
                                     mimes[ext[y]] = items[i];
                             }
-                        })("application/x-director,dcr," + "application/x-mplayer2,wmv wma avi," + "video/divx,divx," + "application/pdf,pdf," + "application/x-shockwave-flash,swf swfl," + "audio/mpeg,mpga mpega mp2 mp3," + "audio/ogg,ogg spx oga," + "audio/x-wav,wav," + "video/mpeg,mpeg mpg mpe," + "video/mp4,mp4 m4v," + "video/ogg,ogg ogv," + "video/webm,webm," + "video/quicktime,qt mov," + "video/x-flv,flv," + "video/vnd.rn-realvideo,rv," + "video/3gpp,3gp," + "video/x-matroska,mkv");
+                        })("application/x-director,dcr," + "application/x-mplayer2,wmv wma avi," + "video/divx,divx," + "application/x-shockwave-flash,swf swfl," + "audio/mpeg,mpga mpega mp2 mp3," + "audio/ogg,ogg spx oga," + "audio/x-wav,wav," + "video/mpeg,mpeg mpg mpe," + "video/mp4,mp4 m4v," + "video/ogg,ogg ogv," + "video/webm,webm," + "video/quicktime,qt mov," + "video/x-flv,flv," + "video/vnd.rn-realvideo,rv," + "video/3gpp,3gp," + "video/x-matroska,mkv");
 
                         var ext = $.String.getExt(url);
                         var mt = mimes[ext];
                         var type, props;
 
                         $.each(
-                        mediaTypes, function (k, v) {
-                            if (v.type && v.type == mt) {
-                                type = k;
-                                props = v;
-                            }
-                        });
+                            mediaTypes, function (k, v) {
+                                if (v.type && v.type == mt) {
+                                    type = k;
+                                    props = v;
+                                }
+                            });
 
                         // video types
                         if (/^(mp4|m4v|og(g|v)|webm)$/i.test(ext)) {
@@ -1168,26 +1285,26 @@
     };
 
     /**
-     * String functions
-     */
+         * String functions
+         */
     $.String = {
-    	utf8_chars 	: ['À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į', 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō', 'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ', 'ƒ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ǎ', 'ǎ', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ', 'Ǔ', 'ǔ', 'Ǖ', 'ǖ', 'Ǘ', 'ǘ', 'Ǚ', 'ǚ', 'Ǜ', 'ǜ', 'Ǻ', 'ǻ', 'Ǽ', 'ǽ', 'Ǿ', 'ǿ'],	
-    	ascii_chars : ['A', 'A', 'A', 'A', 'A', 'A', 'AE', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'D', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 's', 'a', 'a', 'a', 'a', 'a', 'a', 'ae', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'a', 'A', 'a', 'A', 'a', 'C', 'c', 'C', 'c', 'C', 'c', 'C', 'c', 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'G', 'g', 'G', 'g', 'G', 'g', 'G', 'g', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'IJ', 'ij', 'J', 'j', 'K', 'k', 'L', 'l', 'L', 'l', 'L', 'l', 'L', 'l', 'l', 'l', 'N', 'n', 'N', 'n', 'N', 'n', 'n', 'O', 'o', 'O', 'o', 'O', 'o', 'OE', 'oe', 'R', 'r', 'R', 'r', 'R', 'r', 'S', 's', 'S', 's', 'S', 's', 'S', 's', 'T', 't', 'T', 't', 'T', 't', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'W', 'w', 'Y', 'y', 'Y', 'Z', 'z', 'Z', 'z', 'Z', 'z', 's', 'f', 'O', 'o', 'U', 'u', 'A', 'a', 'I', 'i', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'A', 'a', 'AE', 'ae', 'O', 'o'], 	
+        utf8_chars 	: ['À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į', 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō', 'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ', 'ƒ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ǎ', 'ǎ', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ', 'Ǔ', 'ǔ', 'Ǖ', 'ǖ', 'Ǘ', 'ǘ', 'Ǚ', 'ǚ', 'Ǜ', 'ǜ', 'Ǻ', 'ǻ', 'Ǽ', 'ǽ', 'Ǿ', 'ǿ'],	
+        ascii_chars : ['A', 'A', 'A', 'A', 'A', 'A', 'AE', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'D', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 's', 'a', 'a', 'a', 'a', 'a', 'a', 'ae', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'a', 'A', 'a', 'A', 'a', 'C', 'c', 'C', 'c', 'C', 'c', 'C', 'c', 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'G', 'g', 'G', 'g', 'G', 'g', 'G', 'g', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'IJ', 'ij', 'J', 'j', 'K', 'k', 'L', 'l', 'L', 'l', 'L', 'l', 'L', 'l', 'l', 'l', 'N', 'n', 'N', 'n', 'N', 'n', 'n', 'O', 'o', 'O', 'o', 'O', 'o', 'OE', 'oe', 'R', 'r', 'R', 'r', 'R', 'r', 'S', 's', 'S', 's', 'S', 's', 'S', 's', 'T', 't', 'T', 't', 'T', 't', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'W', 'w', 'Y', 'y', 'Y', 'Z', 'z', 'Z', 'z', 'Z', 'z', 's', 'f', 'O', 'o', 'U', 'u', 'A', 'a', 'I', 'i', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'A', 'a', 'AE', 'ae', 'O', 'o'], 	
         
         /**
-         * From php.js
-         * More info at: http://phpjs.org
-         * php.js is copyright 2011 Kevin van Zonneveld.
-         */
-    	basename: function (s) {
+             * From php.js
+             * More info at: http://phpjs.org
+             * php.js is copyright 2011 Kevin van Zonneveld.
+             */
+        basename: function (s) {
             return s.replace(/^.*[\/\\]/g, '');
         },
 
         /**
-         * From php.js
-         * More info at: http://phpjs.org
-         * php.js is copyright 2011 Kevin van Zonneveld.
-         */ 
+             * From php.js
+             * More info at: http://phpjs.org
+             * php.js is copyright 2011 Kevin van Zonneveld.
+             */ 
         dirname: function (s) {            
             return s.replace(/\\/g, '/').replace(/\/[^\/]*\/?$/, '');
         },
@@ -1235,60 +1352,60 @@
         },
         
         utf8_to_ascii : function(s) {
-        	var utf8 	= this.utf8_chars;
-        	var ascii 	= this.ascii_chars;
+            var utf8 	= this.utf8_chars;
+            var ascii 	= this.ascii_chars;
         	
-        	for(var i = 0, ln = utf8.length; i < ln; i++) {
-				s = s.replace(utf8[i], ascii[i], 'g');
-			}
+            for(var i = 0, ln = utf8.length; i < ln; i++) {
+                s = s.replace(utf8[i], ascii[i], 'g');
+            }
         	
-        	return s;
+            return s;
         },
         
         _toUnicode : function(s) {
-        	var c = s.toString(16).toUpperCase();
+            var c = s.toString(16).toUpperCase();
     		
-    		while (c.length < 4) {
-    			c = '0' + c;
-    		}
+            while (c.length < 4) {
+                c = '0' + c;
+            }
     		
-    		return'\\u' + c;
+            return'\\u' + c;
         },
 
         safe: function (s, mode) {     
-        	mode = mode || 'utf-8';
+            mode = mode || 'utf-8';
         	
-        	// remove multiple period characters and some special characters
-        	s = s.replace(/(\.){2,}/g, '');
+            // remove multiple period characters and some special characters
+            s = s.replace(/(\.){2,}/g, '');
         	
-        	// replace spaces with underscore
-        	s = s.replace(/[\s ]/g, '_');
+            // replace spaces with underscore
+            s = s.replace(/[\s ]/g, '_');
         	
-        	if (mode == 'ascii') {
-        		s = this.utf8_to_ascii(s);
-        		s = s.replace(/[^\w\.\-~]/gi, '');
-        	} else {
-        		s = s.replace(/[+\\\/\?\#%&<>"\'=\[\]\{\},;@^\(\)]/g, '');
-            	var r = '';
+            if (mode == 'ascii') {
+                s = this.utf8_to_ascii(s);
+                s = s.replace(/[^\w\.\-~]/gi, '');
+            } else {
+                s = s.replace(/[+\\\/\?\#%&<>"\'=\[\]\{\},;@^\(\)]/g, '');
+                var r = '';
             	
-            	for(var i = 0, ln = s.length; i < ln; i++) {
-            		var ch = s[i];
-            		// only process on possible restricted characters or utf-8 letters/numbers
-            		if (/[^\w\.\-~]/.test(ch)) {
-            			// skip any character less than 127, eg: &?@* etc.
-                		if (this._toUnicode(ch.charCodeAt(0)) < '\\u007F') {
-                			continue;
-                		}
-            		}
+                for(var i = 0, ln = s.length; i < ln; i++) {
+                    var ch = s[i];
+                    // only process on possible restricted characters or utf-8 letters/numbers
+                    if (/[^\w\.\-~]/.test(ch)) {
+                        // skip any character less than 127, eg: &?@* etc.
+                        if (this._toUnicode(ch.charCodeAt(0)) < '\\u007F') {
+                            continue;
+                        }
+                    }
             		
-            		r += ch;
-            	}
+                    r += ch;
+                }
             	
-            	s = r;
-        	}        	
+                s = r;
+            }        	
         	
-        	// remove leading period
-        	s = s.replace(/^\./, '');
+            // remove leading period
+            s = s.replace(/^\./, '');
         	
             return this.basename(s);
         },
@@ -1304,22 +1421,22 @@
             
             // only process if there are any queries
             if (/([^=]+)=(.+)/.test(s)) {
-            	var pairs = s.replace(/&amp;/g, '&').split(/&/g) || [s];
+                var pairs = s.replace(/&amp;/g, '&').split(/&/g) || [s];
             	
-            	$.each(pairs, function() {
-	                var pair = this.split('=');
-	                p[pair[0]] = pair[1];
-	            });
+                $.each(pairs, function() {
+                    var pair = this.split('=');
+                    p[pair[0]] = pair[1];
+                });
             }
 
             return p;
         },
 
         /**
-         * Encode basic entities
-         *
-         * Copyright 2010, Moxiecode Systems AB
-         */
+             * Encode basic entities
+             *
+             * Copyright 2010, Moxiecode Systems AB
+             */
         encode: function (s) {
             var baseEntities = {
                 '"' : '&quot;',
@@ -1335,10 +1452,10 @@
         },
 
         /**
-         * Decode basic entities
-         *
-         * Copyright 2010, Moxiecode Systems AB
-         */
+             * Decode basic entities
+             *
+             * Copyright 2010, Moxiecode Systems AB
+             */
         decode: function (s) {
             var reverseEntities = {
                 '&lt;' : '<',
@@ -1365,10 +1482,10 @@
         },
 
         encodeURI : function(s, preserve_urls) {
-        	// don't encode local file links
-        	if (/^(file:\/\/)?[A-Z]+:/.test(s)) {
-        		return s;
-        	}
+            // don't encode local file links
+            if (/^(file:\/\/)?[A-Z]+:/.test(s)) {
+                return s;
+            }
 
             s = encodeURIComponent(decodeURIComponent(s)).replace(/%2F/g, '/');
 
@@ -1382,19 +1499,19 @@
         },
         
         buildURI : function(s) {
-        	// add http if necessary
-        	if (/^\s*www\./.test(s)) {
-        		s = 'http://' + s;
-        	}
-        	return s.replace(/ /g, '%20');
-        	//return  $.String.encodeURI(s, true);
+            // add http if necessary
+            if (/^\s*www\./.test(s)) {
+                s = 'http://' + s;
+            }
+            return s.replace(/ /g, '%20');
+        //return  $.String.encodeURI(s, true);
         },
 
         /**
-         * From TinyMCE form_utils.js function, slightly modified.
-         * @author Moxiecode
-         * @copyright Copyright 2004-2008, Moxiecode Systems AB, All rights reserved.
-         */
+             * From TinyMCE form_utils.js function, slightly modified.
+             * @author Moxiecode
+             * @copyright Copyright 2004-2008, Moxiecode Systems AB, All rights reserved.
+             */
         toHex: function (color) {
             var re = new RegExp("rgb\\s*\\(\\s*([0-9]+).*,\\s*([0-9]+).*,\\s*([0-9]+).*\\)", "gi");
 
@@ -1414,10 +1531,10 @@
         },
 
         /**
-         * From TinyMCE form_utils.js function, slightly modified.
-         * @author Moxiecode
-         * @copyright Copyright  2004-2008, Moxiecode Systems AB, All rights reserved.
-         */
+             * From TinyMCE form_utils.js function, slightly modified.
+             * @author Moxiecode
+             * @copyright Copyright  2004-2008, Moxiecode Systems AB, All rights reserved.
+             */
         toRGB: function (color) {
             if (color.indexOf('#') != -1) {
                 color = color.replace(new RegExp('[^0-9A-F]', 'gi'), '');
@@ -1452,12 +1569,12 @@
         },
 
         /**
-         * Format a UNIX date string
-         * @param time UNIX Time in seconds
-         * @param fmt Date / Time Format eg: '%d/%m/%Y, %H:%M'
-         * @return Formatted Date / Time
-         * @copyright Copyright 2009, Moxiecode Systems AB
-         */
+             * Format a UNIX date string
+             * @param time UNIX Time in seconds
+             * @param fmt Date / Time Format eg: '%d/%m/%Y, %H:%M'
+             * @return Formatted Date / Time
+             * @copyright Copyright 2009, Moxiecode Systems AB
+             */
         formatDate : function(time, fmt) {
             var date = new Date(time * 1000);
 

@@ -1131,7 +1131,7 @@
                     var name 		= $.String.basename($item.attr('title'));
 
                     if (this._isViewable(name)) {
-                        if(/\.(jpeg|jpg|gif|png|avi|wmv|wm|asf|asx|wmx|wvx|mov|qt|mpg|mp3|mp4|m4v|mpeg|ogg|ogv|webm|swf|flv|f4v|xml|dcr|rm|ra|ram|divx)/i.test(name)) {
+                        if(/\.(jpeg|jpg|gif|png|avi|wmv|wm|asf|asx|wmx|wvx|mov|qt|mpg|mp3|mp4|m4v|mpeg|ogg|ogv|webm|swf|flv|f4v|xml|dcr|rm|ra|ram|divx|pdf)/i.test(name)) {
                             $.Dialog.media(name, url);
                         } else {
                             $.Dialog.iframe(name, url, {
