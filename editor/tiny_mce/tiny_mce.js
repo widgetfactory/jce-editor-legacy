@@ -4188,8 +4188,8 @@ tinymce.html.Styles = function(settings, schema) {
 							prev = prev.prev;
 						}
 
-						if (node) {
-							node.remove();
+						if (node && (node.attributes.length == 0 || node.attr('data-mce-bogus'))) {                                                        
+                                                        node.remove();
 
 							// Is the parent to be considered empty after we removed the BR
 							if (parent.isEmpty(nonEmptyElements)) {
