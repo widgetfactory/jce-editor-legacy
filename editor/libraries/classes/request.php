@@ -112,9 +112,9 @@ final class WFRequest extends JObject {
         WFToken::checkToken() or die('RESTRICTED ACCESS');
         
         // check referrer       
-        if (!$_SERVER['HTTP_REFERER'] || strpos($_SERVER['HTTP_REFERER'], JURI::base()) === false) {
+        /*if (!$_SERVER['HTTP_REFERER'] || strpos($_SERVER['HTTP_REFERER'], JURI::base()) === false) {
             throw new InvalidArgumentException('Invalid Referrer');
-        }
+        }*/
 
         $json = JRequest::getVar('json', '', 'POST', 'STRING', 2);
         $action = JRequest::getWord('action');
