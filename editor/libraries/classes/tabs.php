@@ -32,7 +32,7 @@ final class WFTabs extends JObject
 		if (array_key_exists('template_path', $config)) {
 			$this->addTemplatePath($config['template_path']);
 		} else {
-			$this->addTemplatePath($this->get('base_path') . DS . 'tmpl');
+			$this->addTemplatePath($this->get('base_path') . '/tmpl');
 		}
 	}
 	

@@ -33,7 +33,7 @@ class WFViewPopup extends JView
         $dim 	= array('', '');
         
         if (strpos('http', $img) === false) {
-        	$path	= JPATH_SITE . DS . trim(str_replace(JURI::root(), '', $img), '/');
+        	$path	= JPATH_SITE . '/' . trim(str_replace(JURI::root(), '', $img), '/');
         	if (is_file($path)) {
         		$dim = @getimagesize($path);
         	}

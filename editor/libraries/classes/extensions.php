@@ -76,7 +76,7 @@ class WFExtension extends JObject
 			$config['base_path'] = WF_EDITOR;
 		}
 
-		$path = $config['base_path'] . DS . 'extensions';
+		$path = $config['base_path'] . '/extensions';
 
 		$extensions = array();
 
@@ -87,7 +87,7 @@ class WFExtension extends JObject
 
 			foreach ($types as $type) {
 				if ($extension) {
-					if (JFile::exists($path . DS . $type . DS . $extension . '.xml') && JFile::exists($path . DS . $type . DS . $extension . '.php')) {
+					if (JFile::exists($path . '/' . $type . '/' . $extension . '.xml') && JFile::exists($path . '/' . $type . '/' . $extension . '.php')) {
 						$object            = new stdClass();
 						$object->folder    = $type;
 						$object->extension = $extension;
@@ -95,14 +95,14 @@ class WFExtension extends JObject
 						$extensions[] = $object;
 					}
 				} else {
-					$files = JFolder::files($path . DS . $type, '\.xml$', false, true);
+					$files = JFolder::files($path . '/' . $type, '\.xml$', false, true);
 
 					foreach ($files as $file) {
 						$object         = new stdClass();
 						$object->folder = $type;
 
 						$name = JFile::stripExt(basename($file));
-						if (JFile::exists(dirname($file) . DS . $name . '.php')) {
+						if (JFile::exists(dirname($file) . '/' . $name . '.php')) {
 							$object->extension = $name;
 						}
 						$extensions[] = $object;
@@ -138,7 +138,7 @@ class WFExtension extends JObject
 		}
 
 		// Create extensions path
-		$base = $config['base_path'] . DS . 'extensions';
+		$base = $config['base_path'] . '/extensions';
 
 		// Get installed extensions
 		$extensions = self::getExtensions($config);
@@ -150,8 +150,8 @@ class WFExtension extends JObject
 				$name   = $extension->extension;
 				$folder = $extension->folder;
 
-				$path = $base . DS . $folder;
-				$root = $path . DS . $name . '.php';
+				$path = $base . '/' . $folder;
+				$root = $path . '/' . $name . '.php';
 
 				if (file_exists($root)) {
 					// Load root extension file

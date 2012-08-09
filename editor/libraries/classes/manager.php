@@ -27,8 +27,8 @@ class WFMediaManager extends WFEditorPlugin {
         // set private properties
         $this->set('_type', 'manager');
         $this->set('_layout', 'manager');
-        $this->set('_base_path', WF_EDITOR_LIBRARIES . DS . 'views' . DS . 'plugin');
-        $this->set('_template_path', WF_EDITOR_LIBRARIES . DS . 'views' . DS . 'plugin' . DS . 'tmpl');
+        $this->set('_base_path', WF_EDITOR_LIBRARIES . '/views/plugin');
+        $this->set('_template_path', WF_EDITOR_LIBRARIES . '/views/plugin/tmpl');
 
         $this->setProperties(array_merge($this->getConfig(), $this->getProperties()));
 

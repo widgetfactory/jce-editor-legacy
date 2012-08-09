@@ -42,7 +42,7 @@ class JElementFilesystem extends JElement
 		}
 
 		// path to directory
-		$path		= WF_EDITOR_EXTENSIONS.DS.'filesystem';
+		$path		= WF_EDITOR_EXTENSIONS.'/filesystem';
 		
 		$filter		= '\.xml$';
 		$files		= JFolder::files($path, $filter, false, true);

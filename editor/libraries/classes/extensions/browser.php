@@ -47,7 +47,7 @@ class WFBrowserExtension extends WFExtension {
         }
 
         if (empty($instances[$type])) {
-            require_once(WF_EDITOR . DS . 'extensions' . DS . 'browser' . DS . $type . '.php');
+            require_once(WF_EDITOR . '/extensions/browser/' . $type . '.php');
 
             $classname = 'WF' . ucfirst($type) . 'Browser';
 

@@ -11,7 +11,7 @@
 
 defined( '_JEXEC' ) or die('RESTRICTED');
 
-require_once(dirname( __FILE__ ).DS.'classes'.DS.'style.php' );
+require_once(dirname( __FILE__ ).'/classes/style.php' );
 
 $plugin = WFStylePlugin::getInstance();
 $plugin->execute();

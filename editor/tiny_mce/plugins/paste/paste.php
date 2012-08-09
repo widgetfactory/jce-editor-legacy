@@ -11,7 +11,7 @@
 
 defined( '_JEXEC' ) or die('RESTRICTED');
 
-require_once(dirname( __FILE__ ).DS.'classes'.DS.'paste.php' );
+require_once(dirname( __FILE__ ).'/classes/paste.php' );
 
 $plugin = WFPastePlugin::getInstance();
 $plugin->execute();

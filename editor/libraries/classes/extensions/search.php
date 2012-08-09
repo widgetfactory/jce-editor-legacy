@@ -47,7 +47,7 @@ class WFSearchExtension extends WFExtension {
         }
 
         if (empty($instances[$type])) {
-            require_once(WF_EDITOR . DS . 'extensions' . DS . 'search' . DS . $type . '.php');
+            require_once(WF_EDITOR . '/extensions/search/' . $type . '.php');
 
             $classname = 'WF' . ucfirst($type) . 'SearchExtension';
 

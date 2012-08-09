@@ -42,13 +42,13 @@ class WFEditorPlugin extends WFEditor {
             $this->set('_type', JRequest::getWord('type', 'standard'));
 
             if (!defined('WF_EDITOR_PLUGIN')) {
-                define('WF_EDITOR_PLUGIN', WF_EDITOR_PLUGINS . DS . $plugin);
+                define('WF_EDITOR_PLUGIN', WF_EDITOR_PLUGINS . '/' . $plugin);
             }
 
             // set variables for view
             $this->set('_layout', 'default');
             $this->set('_base_path', WF_EDITOR_PLUGIN);
-            $this->set('_template_path', WF_EDITOR_PLUGIN . DS . 'tmpl');
+            $this->set('_template_path', WF_EDITOR_PLUGIN . '/tmpl');
         } else {
             die(JError::raiseError(403, 'RESTRICTED ACCESS'));
         }
@@ -116,7 +116,7 @@ class WFEditorPlugin extends WFEditor {
 
             $version = $this->getVersion();
             $name = $this->getName();
-            $xml = JApplicationHelper::parseXMLInstallFile(WF_EDITOR_PLUGINS . DS . $name . DS . $name . '.xml');
+            $xml = JApplicationHelper::parseXMLInstallFile(WF_EDITOR_PLUGINS . '/' . $name . '/' . $name . '.xml');
 
             if (isset($xml['version'])) {
                 $version = $xml['version'];
@@ -188,7 +188,7 @@ class WFEditorPlugin extends WFEditor {
         // get UI Theme
         $theme = $this->getParam('editor.dialog_theme', 'jce');
 
-        $ui = JFolder::files(WF_EDITOR_LIBRARIES . DS . 'css' . DS . 'jquery' . DS . $theme, '\.css$');
+        $ui = JFolder::files(WF_EDITOR_LIBRARIES . '/css/jquery/' . $theme, '\.css$');
 
         $document->addStyleSheet(array(
             'jquery/' . $theme . '/' . basename($ui[0], '.css'),
@@ -196,7 +196,7 @@ class WFEditorPlugin extends WFEditor {
         ), 'libraries');
 
         // add custom plugin.css if exists
-        if (is_file(JPATH_SITE . DS . 'media' . DS . 'jce' . DS . 'css' . DS . 'plugin.css')) {
+        if (is_file(JPATH_SITE . '/media/jce/css/plugin.css')) {
             $document->addStyleSheet(array('media/jce/css/plugin.css'), 'joomla');
         }
     }
@@ -222,7 +222,7 @@ class WFEditorPlugin extends WFEditor {
 
         $params = $this->getParams(array(
             'key' => $name,
-            'path' => WF_EDITOR_PLUGIN . DS . $name . '.xml'
+            'path' => WF_EDITOR_PLUGIN . '/' . $name . '.xml'
                 ));
 
         return array_merge($defaults, (array) $params->getAll('defaults'));
@@ -238,7 +238,7 @@ class WFEditorPlugin extends WFEditor {
     public function checkPlugin($plugin = null) {
         if ($plugin) {
             // check existence of plugin directory
-            if (is_dir(WF_EDITOR_PLUGINS . DS . $plugin)) {
+            if (is_dir(WF_EDITOR_PLUGINS . '/' . $plugin)) {
                 // check profile	
                 $profile = $this->getProfile();
                 return is_object($profile) && isset($profile->id) && $profile->published = 1 && in_array($plugin, explode(',', $profile->plugins));

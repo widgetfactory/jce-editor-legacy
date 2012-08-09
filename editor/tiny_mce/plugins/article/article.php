@@ -11,7 +11,7 @@
 
 defined( '_JEXEC' ) or die('RESTRICTED');
 
-require_once(dirname( __FILE__ ).DS.'classes'.DS.'article.php');
+require_once(dirname( __FILE__ ).'/classes/article.php');
 
 $plugin = WFArticlePlugin::getInstance();
 $plugin->execute();

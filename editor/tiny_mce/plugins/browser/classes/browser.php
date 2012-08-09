@@ -74,7 +74,7 @@ final class WFFileBrowserPlugin extends WFMediaManager
 			$document->addScript(array('browser'), 'component');
 			
 			// load the language file
-			if (is_file(WF_EDITOR . DS . 'tiny_mce' . DS . 'langs' . DS . $this->getLanguage() . '_dlg.js')) {
+			if (is_file(WF_EDITOR . '/tiny_mce/langs/' . $this->getLanguage() . '_dlg.js')) {
 				$document->addScript(array('langs/' . $this->getLanguage() . '_dlg.js'), 'tiny_mce');
 			} else {
 				$document->addScript(array('langs/en_dlg.js'), 'tiny_mce');

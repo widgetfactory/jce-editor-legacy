@@ -58,7 +58,7 @@ class JoomlalinksContent extends JObject {
     public function getLinks($args) {
         $wf = WFEditorPlugin::getInstance();
 
-        require_once(JPATH_SITE . DS . 'components' . DS . 'com_content' . DS . 'helpers' . DS . 'route.php');
+        require_once(JPATH_SITE . '/components/com_content/helpers/route.php');
 
         $items = array();
         $view = isset($args->view) ? $args->view : '';

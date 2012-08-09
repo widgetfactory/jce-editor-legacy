@@ -334,7 +334,7 @@ class WFEditor extends JObject {
     }
 
     protected function checkLanguage($tag) {
-        $file = JPATH_SITE . DS . 'language' . DS . $tag . DS . $tag . '.com_jce.xml';
+        $file = JPATH_SITE . '/language/' . $tag . '/' . $tag . '.com_jce.xml';
 
         if (file_exists($file)) {
             wfimport('admin.helpers.xml');

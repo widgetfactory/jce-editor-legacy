@@ -176,7 +176,7 @@ class WFLinkBrowser extends WFBrowserExtension {
     public function getItemId($component, $needles = array()) {
         $match = null;
 
-        require_once(JPATH_SITE . DS . 'includes' . DS . 'application.php');
+        require_once(JPATH_SITE . '/includes/application.php');
 
         $tag = WF_JOOMLA15 ? 'componentid' : 'component_id';
 

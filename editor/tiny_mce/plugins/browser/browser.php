@@ -10,7 +10,7 @@
 * is derivative of works licensed under the GNU General Public License or
 * other free or open source software licenses.
 */
-require_once(dirname( __FILE__ ).DS.'classes'.DS.'browser.php');
+require_once(dirname( __FILE__ ).'/classes/browser.php');
 
 $plugin = WFFileBrowserPlugin::getInstance();
 $plugin->execute();

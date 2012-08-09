@@ -60,8 +60,8 @@ class JoomlalinksWeblinks extends JObject {
 
         $items = array();
 
-        require_once(JPATH_SITE . DS . 'includes' . DS . 'application.php');
-        require_once(JPATH_SITE . DS . 'components' . DS . 'com_weblinks' . DS . 'helpers' . DS . 'route.php');
+        require_once(JPATH_SITE . '/includes/application.php');
+        require_once(JPATH_SITE . '/components/com_weblinks/helpers/route.php');
 
         switch ($args->view) {
             // Get all WebLink categories

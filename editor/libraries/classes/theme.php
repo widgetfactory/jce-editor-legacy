@@ -118,7 +118,7 @@ final class WFEditorTheme extends WFEditor
 
 		$document->addScript($jquery, 'libraries');
 
-		$ui = JFolder::files(WF_EDITOR_LIBRARIES.DS.'css'.DS.'jquery'.DS.$uitheme, '\.css$');
+		$ui = JFolder::files(WF_EDITOR_LIBRARIES.'/css/jquery/'.$uitheme, '\.css$');
 
 		$document->addStyleSheet(array(
 			'jquery/' . $uitheme . '/' . basename($ui[0], '.css'),
@@ -132,7 +132,7 @@ final class WFEditorTheme extends WFEditor
       	if ($this->get('dialog') == 'colorpicker') {
       		$document->addScript(array('colorpicker'), 'libraries');
       		
-      		require_once(JPATH_COMPONENT_ADMINISTRATOR.DS.'helpers'.DS.'tools.php');
+      		require_once(JPATH_COMPONENT_ADMINISTRATOR.'/helpers/tools.php');
       		
       		$settings = array(
       			'template_colors' 	=> WFToolsHelper::getTemplateColors(),

@@ -33,7 +33,7 @@ class WFPopupsExtension_Jcemediabox extends JObject
 			jimport('joomla.filesystem.folder');
 			jimport('joomla.filesystem.file');
 			
-			$path = JPATH_PLUGINS.DS.'system'.DS.'jcemediabox'.DS.'addons';
+			$path = JPATH_PLUGINS.'/system/jcemediabox/addons';
 	
 			$files = JFolder::files($path, '.js');
 				
@@ -66,10 +66,10 @@ class WFPopupsExtension_Jcemediabox extends JObject
 	
 	function checkVersion()
 	{
-		$file = JPATH_PLUGINS . DS . 'system' . DS . 'jcemediabox.xml';
+		$file = JPATH_PLUGINS . '/system/jcemediabox.xml';
 		
 		if (!is_file($file)) {
-			$file = JPATH_PLUGINS . DS . 'system' . 'jcemediabox' . DS . 'jcemediabox.xml';
+			$file = JPATH_PLUGINS . '/system' . 'jcemediabox/jcemediabox.xml';
 		}
 		
 		$required = $this->get('_requires');

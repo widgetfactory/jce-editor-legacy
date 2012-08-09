@@ -422,7 +422,7 @@ class WFDocument extends JObject
                 $file = $file . '_ie.css';
                 $path = $this->urlToPath($url);
 
-                if (file_exists(dirname($path) . DS . $file)) {
+                if (file_exists(dirname($path) . '/' . $file)) {
                 	$this->_styles[dirname($url) . '/' . $file] = $type;
                 }
         	}

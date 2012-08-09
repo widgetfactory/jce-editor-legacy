@@ -18,14 +18,14 @@ class WFInlinepopupsPluginConfig {
 			jimport('joomla.filesystem.folder');
 			// get UI Theme
 			$theme  = $wf->getParam('editor.dialog_theme', 'jce');
-			$ui 	= JFolder::files(WF_EDITOR_LIBRARIES . DS . 'css' . DS . 'jquery' . DS . $theme, '\.css$');
+			$ui 	= JFolder::files(WF_EDITOR_LIBRARIES . '/css/jquery/' . $theme, '\.css$');
 
 			$file 	= count($ui) ? basename($ui[0]) : '';
 	                    
 	 		// add ui theme css file
 			return array(
-				WF_EDITOR_LIBRARIES . DS . 'css' . DS . 'jquery' . DS . $theme . DS . $file,
-				dirname(dirname(__FILE__)) . DS . 'css' . DS . 'dialog.css'
+				WF_EDITOR_LIBRARIES . '/css/jquery/' . $theme . '/' . $file,
+				dirname(dirname(__FILE__)) . '/css/dialog.css'
 			);
 		}
 	}

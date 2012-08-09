@@ -30,7 +30,7 @@ class JElementMediaplayer extends JElement
         jimport('joomla.filesystem.folder');
         
         // path to images directory
-        $path  = WF_EDITOR . DS . 'extensions' . DS . 'mediaplayer';
+        $path  = WF_EDITOR . '/extensions/mediaplayer';
         $files = JFolder::files($path, '\.xml', false, true);
         
         $language = JFactory::getLanguage();

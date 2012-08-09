@@ -11,7 +11,7 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-require_once (WF_EDITOR_LIBRARIES . DS . 'classes' . DS . 'plugin.php');
+require_once (WF_EDITOR_LIBRARIES . '/classes/plugin.php');
 
 final class WFSourcePlugin extends WFEditorPlugin {
 
@@ -48,7 +48,7 @@ final class WFSourcePlugin extends WFEditorPlugin {
 
         $view = $this->getView();
 
-        $view->addTemplatePath(WF_EDITOR_PLUGIN . DS . 'tmpl');
+        $view->addTemplatePath(WF_EDITOR_PLUGIN . '/tmpl');
 
         $document->setTitle(WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')));
 

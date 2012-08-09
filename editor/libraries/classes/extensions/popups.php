@@ -153,7 +153,7 @@ class WFPopupsExtension extends WFExtension
     {
         $output = '';
         
-        $path = WF_EDITOR_EXTENSIONS . DS . 'popups';
+        $path = WF_EDITOR_EXTENSIONS . '/popups';
         
         $file = 'default.php';
         
@@ -167,14 +167,14 @@ class WFPopupsExtension extends WFExtension
         foreach ($this->getPopups() as $popup) {
             $view = new WFView(array(
 				'name' 			=> $popup,
-				'base_path'		=> WF_EDITOR_EXTENSIONS . DS . 'popups' .DS. $popup,				
-				'template_path' => WF_EDITOR_EXTENSIONS . DS . 'popups' .DS. $popup . DS . 'tmpl'
+				'base_path'		=> WF_EDITOR_EXTENSIONS . '/popups' .DS. $popup,				
+				'template_path' => WF_EDITOR_EXTENSIONS . '/popups' .DS. $popup . '/tmpl'
 			));	
 			
 			$instance = $this->getPopupExtension($popup);
 			$view->assign('popup', $instance);
 					
-            if (file_exists($path . DS . $popup . DS . 'tmpl' . DS . $file)) {
+            if (file_exists($path . '/' . $popup . '/tmpl/' . $file)) {
                 ob_start();
                 
                 $output .= '<div id="popup_extension_' . $popup . '" style="display:none;">';

@@ -34,7 +34,7 @@ class WFSourcePluginConfig
 		if (JRequest::getWord('layout') === 'plugin') {
 			// return file(s) array
 			if ($wf->getParam('editor.compress_css', 0)) {			
-				return array(dirname(dirname(__FILE__)) . DS . 'css' . DS . 'editor.css');
+				return array(dirname(dirname(__FILE__)) . '/css/editor.css');
 			}
 			
 			// use document instance	

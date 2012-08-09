@@ -98,7 +98,7 @@ class WFAggregatorExtension extends WFExtension {
 
 			$aggregators[$format] = array();
 
-			$path = WF_EDITOR_EXTENSIONS . DS . 'aggregator';
+			$path = WF_EDITOR_EXTENSIONS . '/aggregator';
 			$files = JFolder::files($path, '\.php$', false, true);
 
 			foreach($files as $file) {
@@ -133,7 +133,7 @@ class WFAggregatorExtension extends WFExtension {
 	 */
 	public function loadTemplate($name, $tpl ='')
 	{
-		$path = WF_EDITOR_EXTENSIONS . DS . 'aggregator' . DS . $name;
+		$path = WF_EDITOR_EXTENSIONS . '/aggregator/' . $name;
 
 		$output = '';
 
@@ -143,10 +143,10 @@ class WFAggregatorExtension extends WFExtension {
 			$file = 'default_' . $tpl . '.php';
 		}
 
-		if(file_exists($path . DS . 'tmpl' . DS . $file)) {
+		if(file_exists($path . '/tmpl/' . $file)) {
 			ob_start();
 
-			include $path . DS . 'tmpl' . DS . $file;
+			include $path . '/tmpl/' . $file;
 
 			$output .= ob_get_contents();
 			ob_end_clean();

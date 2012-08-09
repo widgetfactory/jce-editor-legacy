@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die('RESTRICTED');
 
-require_once (WF_EDITOR_LIBRARIES . DS . 'classes' . DS . 'plugin.php');
+require_once (WF_EDITOR_LIBRARIES . '/classes/plugin.php');
 
 class WFTablesPlugin extends WFEditorPlugin {
 

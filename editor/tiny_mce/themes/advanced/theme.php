@@ -11,7 +11,7 @@
 
 defined( '_JEXEC' ) or die('RESTRICTED');
 
-require_once(WF_EDITOR_CLASSES.DS.'theme.php');
+require_once(WF_EDITOR_CLASSES.'/theme.php');
 
 $theme = WFEditorTheme::getInstance();
 ?>

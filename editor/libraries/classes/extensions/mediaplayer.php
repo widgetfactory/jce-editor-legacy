@@ -130,7 +130,7 @@ class WFMediaPlayerExtension extends WFExtension
         $output = '';
 		
 		if ($this->isEnabled()) {
-			$path = WF_EDITOR_EXTENSIONS . DS . 'mediaplayer' . DS . $this->get('name');
+			$path = WF_EDITOR_EXTENSIONS . '/mediaplayer/' . $this->get('name');
         
 	        $file = 'default.php';
 	        
@@ -138,10 +138,10 @@ class WFMediaPlayerExtension extends WFExtension
 	            $file = 'default_' . $tpl . '.php';
 	        }
 	        
-	        if (file_exists($path . DS . 'tmpl' . DS . $file)) {
+	        if (file_exists($path . '/tmpl/' . $file)) {
 	            ob_start();
 	            
-	            include $path . DS . 'tmpl' . DS . $file;
+	            include $path . '/tmpl/' . $file;
 	            
 	            $output .= ob_get_contents();
 	            ob_end_clean();

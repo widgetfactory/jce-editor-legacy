@@ -481,7 +481,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
     function folderCreate($folder) {
         if (@JFolder::create($folder)) {
             $buffer = '<html><body bgcolor="#FFFFFF"></body></html>';
-            JFile::write($folder . DS . 'index.html', $buffer);
+            JFile::write($folder . '/index.html', $buffer);
         } else {
             return false;
         }

@@ -11,7 +11,7 @@
 
 defined( '_JEXEC' ) or die('RESTRICTED');
 
-require_once(dirname( __FILE__ ).DS.'classes'.DS.'table.php' );
+require_once(dirname( __FILE__ ).'/classes/table.php' );
 
 $plugin = WFTablesPlugin::getInstance();
 $plugin->execute();

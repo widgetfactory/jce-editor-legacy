@@ -11,5 +11,5 @@
 
 defined('_JEXEC') or die('RESTRICTED');
 
-require_once(JPATH_COMPONENT_ADMINISTRATOR.DS.'jce.php');
+require_once(JPATH_COMPONENT_ADMINISTRATOR.'/jce.php');
 ?>
