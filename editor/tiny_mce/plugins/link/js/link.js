@@ -57,6 +57,13 @@ var LinkDialog = {
         
         // setup popups
         WFPopups.setup();
+        
+        var bh = $('#link-browser').innerHeight(), wh = $(window).innerHeight(); 
+        
+        // resize browser on window resize
+        $(window).bind('resize', function() {
+            $('#link-browser').height(bh + $(this).innerHeight() - wh);
+        });
 
         // if there is a selection
         if (!se.isCollapsed()) {
