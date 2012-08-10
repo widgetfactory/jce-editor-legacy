@@ -14,7 +14,7 @@ defined('JPATH_BASE') or die('RESTRICTED');
 /**
  * Renders a select element
  */
-class JElementLinkSearch extends JElement {
+class WFElementLinkSearch extends WFElement {
 
     /**
      * Element type

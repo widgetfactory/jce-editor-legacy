@@ -15,7 +15,7 @@ defined('JPATH_BASE') or die('RESTRICTED');
  * Renders a select element
  */
 
-class JElementFilesystem extends JElement
+class WFElementFilesystem extends WFElement
 {
     /**
      * Element type
@@ -36,7 +36,7 @@ class JElementFilesystem extends JElement
 		$id = preg_replace('#([^a-z0-9_-]+)#i', '', $control_name . 'filesystem' . $name);
 		
 		// add javascript if element has parameters
-		if ($node->attributes('parameters')) {		
+		if ($node->attributes()->parameters) {		
 			$document = JFactory::getDocument();
 			$document->addScriptDeclaration('$jce.Parameter.add("#' . $id . '", "filesystem");');
 		}

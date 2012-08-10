@@ -15,7 +15,7 @@ defined('JPATH_BASE') or die('RESTRICTED');
  * Renders a select element
  */
 
-class JElementMediaplayer extends JElement
+class WFElementMediaplayer extends WFElement
 {
     /**
      * Element type
