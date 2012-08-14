@@ -262,32 +262,29 @@
         },
 
         setDimensions: function (wo, ho, prefix) {
-            // add prefix
-            if (prefix) {
-                wo = prefix + wo;
-                ho = prefix + ho;
-            }
+            prefix = prefix || '';
             
-            var w = $('#' + wo).val();
-            var h = $('#' + ho).val();
+            var w = $('#' + prefix + wo).val();
+            var h = $('#' + prefix + ho).val();
 
             if (!w || !h)
                 return;
 
             // Get tmp values
-            var th = $('#tmp_' + ho).val();
-            var tw = $('#tmp_' + wo).val();
+            var th = $('#' + prefix + 'tmp_' + ho).val();
+            var tw = $('#' + prefix + 'tmp_' + wo).val();
+            
             // tmp values must be set
             if (th && tw) {
-                if (document.getElementById('constrain').checked) {
-                    var temp = (w / $('#tmp_' + wo).val()) * $('#tmp_' + ho).val();
+                if ($('#' + prefix + 'constrain').is(':checked')) {
+                    var temp = (w / $('#' + prefix + 'tmp_' + wo).val()) * $('#' + prefix + 'tmp_' + ho).val();
                     h = temp.toFixed(0);
-                    $('#' + ho).val(h);
+                    $('#' + prefix + ho).val(h);
                 }
             }
             // set tmp values
-            $('#tmp_' + ho).val(h);
-            $('#tmp_' + wo).val(w);
+            $('#' + prefix + 'tmp_' + ho).val(h);
+            $('#' + prefix + 'tmp_' + wo).val(w);
         },
 
         setDefaults: function (s) {
