@@ -55,7 +55,7 @@ class WFElementFilesystem extends WFElement {
             foreach ($files as $file) {
                 // load language file
                 $language->load('com_jce_filesystem_' . basename($file, '.xml'), JPATH_SITE);
-                $xml = JApplicationHelper::parseXMLInstallFile($file);
+                $xml = WFXMLHelper::parseInstallManifest($file);
                 $options[] = JHTML::_('select.option', basename($file, '.xml'), WFText::_($xml['name']));
             }
         }
