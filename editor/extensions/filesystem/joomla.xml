@@ -17,7 +17,6 @@
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
 		</param>
-		<param name="restrict_dir" type="textarea" rows="2" cols="55" default="administrator,cache,components,includes,language,libraries,logs,media,modules,plugins,templates,xmlrpc" size="150" label="WF_PARAM_DIRECTORY_RESTRICTED" description="WF_PARAM_DIRECTORY_RESTRICTED_DESC"/>
+		<param name="restrict_dir" type="textarea" rows="2" cols="55" default="administrator,cache,components,includes,language,libraries,logs,media,modules,plugins,templates,xmlrpc" size="150" label="WF_PARAM_DIRECTORY_RESTRICTED" description="WF_PARAM_DIRECTORY_RESTRICTED_DESC" parent="allow_root[0]" />
 	</params>
 </install>
- 
