@@ -39,7 +39,7 @@ class WFElementLinkSearch extends WFElement {
         }
 
         //$html  = '<span style="display:inline-block;"><input class="checkbox-list-toggle-all" type="checkbox"'. $checked .' /><label>'. WFText::_('WF_PROFILES_TOGGLE_ALL') . '</label>'; 
-        $html = '<span style="display:inline-block;" data-parent="' . preg_replace(array('#^params#', '#([^\w]+)#'), '', $control_name) . $node->attributes('parent') . '"><ul class="checkbox-list">';
+        $html = '<span style="display:inline-block;" data-parent="' . preg_replace(array('#^params#', '#([^\w]+)#'), '', $control_name) . $node->attributes()->parent . '"><ul class="checkbox-list">';
 
         foreach ($plugins as $item) {
             $plugin = WFExtensionHelper::getPlugin(null, $item->name, 'search');
