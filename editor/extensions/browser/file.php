@@ -871,8 +871,8 @@ class WFFileBrowser extends WFBrowserExtension {
             $tags = array('abbr', 'acronym', 'address', 'applet', 'area', 'audioscope', 'base', 'basefont', 'bdo', 'bgsound', 'big', 'blackface', 'blink', 'blockquote', 'body', 'bq', 'br', 'button', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'comment', 'custom', 'dd', 'del', 'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'fn', 'font', 'form', 'frame', 'frameset', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'hr', 'html', 'iframe', 'ilayer', 'img', 'input', 'ins', 'isindex', 'keygen', 'kbd', 'label', 'layer', 'legend', 'li', 'limittext', 'link', 'listing', 'map', 'marquee', 'menu', 'meta', 'multicol', 'nobr', 'noembed', 'noframes', 'noscript', 'nosmartquotes', 'object', 'ol', 'optgroup', 'option', 'param', 'plaintext', 'pre', 'rt', 'ruby', 's', 'samp', 'script', 'select', 'server', 'shadow', 'sidebar', 'small', 'spacer', 'span', 'strike', 'strong', 'style', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'title', 'tr', 'tt', 'ul', 'var', 'wbr', 'xml', 'xmp', '!DOCTYPE', '!--');
 
             // check for tags
-            //if (preg_match('#<(' . implode('|', $tags) . ')(\s|>)#i', $xss_check)) {
-            if (preg_match('#<([a-z0-9]+)(\s|>)#i', $xss_check)) {
+            if (preg_match('#<(' . implode('|', $tags) . ')(\s|>)#i', $xss_check)) {
+            //if (preg_match('#<(\w+)(\s|>)#i', $xss_check)) {
                 @unlink($file['tmp_name']);  
                 
                 JError::raiseError(403, 'INVALID TAG IN FILE');
