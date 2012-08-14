@@ -261,7 +261,13 @@
             }
         },
 
-        setDimensions: function (wo, ho) {
+        setDimensions: function (wo, ho, prefix) {
+            // add prefix
+            if (prefix) {
+                wo = prefix + wo;
+                ho = prefix + ho;
+            }
+            
             var w = $('#' + wo).val();
             var h = $('#' + ho).val();
 
