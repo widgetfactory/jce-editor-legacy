@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package   	JCE
  * @copyright 	Copyright (c) 2009-2012 Ryan Demmer. All rights reserved.
@@ -8,15 +9,13 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-
 defined('JPATH_BASE') or die('RESTRICTED');
 
 /**
  * Renders a select element
  */
+class WFElementFilesystem extends WFElement {
 
-class WFElementFilesystem extends WFElement
-{
     /**
      * Element type
      *
@@ -24,47 +23,46 @@ class WFElementFilesystem extends WFElement
      * @var		string
      */
     var $_name = 'Filesystem';
-    
-	public function fetchElement($name, $value, &$node, $control_name)
-	{
-		jimport( 'joomla.filesystem.folder' );
-		jimport( 'joomla.filesystem.file' );
-		
-		$language = JFactory::getLanguage();
-		
-		// create a unique id
-		$id = preg_replace('#([^a-z0-9_-]+)#i', '', $control_name . 'filesystem' . $name);
-		
-		// add javascript if element has parameters
-		if ($node->attributes()->parameters) {		
-			$document = JFactory::getDocument();
-			$document->addScriptDeclaration('$jce.Parameter.add("#' . $id . '", "filesystem");');
-		}
 
-		// path to directory
-		$path		= WF_EDITOR_EXTENSIONS.'/filesystem';
-		
-		$filter		= '\.xml$';
-		$files		= JFolder::files($path, $filter, false, true);
+    public function fetchElement($name, $value, &$node, $control_name) {
+        jimport('joomla.filesystem.folder');
+        jimport('joomla.filesystem.file');
 
-		$options = array ();
-		
-		if (!$node->attributes('exclude_default')) {
-			$options[] = JHTML::_('select.option', '', WFText::_('WF_OPTION_NOT_SET'));
-		}
-		
-		if ( is_array($files) )
-		{
-			foreach ($files as $file)
-			{
-				// load language file
-				$language->load('com_jce_filesystem_' . basename($file, '.xml'), JPATH_SITE);
-				$xml 		= JApplicationHelper::parseXMLInstallFile($file);
-				$options[] 	= JHTML::_('select.option', basename($file, '.xml'), WFText::_($xml['name']));
-			}
-		}
+        $language = JFactory::getLanguage();
 
-		return JHTML::_('select.genericlist',  $options, ''.$control_name.'[filesystem][' . $name . ']', 'class="inputbox"', 'value', 'text', $value, $id);
-	}
+        // create a unique id
+        $id = preg_replace('#([^a-z0-9_-]+)#i', '', $control_name . 'filesystem' . $name);
+
+        // add javascript if element has parameters
+        if ((string) $node->attributes()->parameters) {
+            $document = JFactory::getDocument();
+            $document->addScriptDeclaration('$jce.Parameter.add("#' . $id . '", "filesystem");');
+        }
+
+        // path to directory
+        $path = WF_EDITOR_EXTENSIONS . '/filesystem';
+
+        $filter = '\.xml$';
+        $files = JFolder::files($path, $filter, false, true);
+
+        $options = array();
+
+        if (!$node->attributes('exclude_default')) {
+            $options[] = JHTML::_('select.option', '', WFText::_('WF_OPTION_NOT_SET'));
+        }
+
+        if (is_array($files)) {
+            foreach ($files as $file) {
+                // load language file
+                $language->load('com_jce_filesystem_' . basename($file, '.xml'), JPATH_SITE);
+                $xml = JApplicationHelper::parseXMLInstallFile($file);
+                $options[] = JHTML::_('select.option', basename($file, '.xml'), WFText::_($xml['name']));
+            }
+        }
+
+        return JHTML::_('select.genericlist', $options, '' . $control_name . '[filesystem][' . $name . ']', 'class="inputbox"', 'value', 'text', $value, $id);
+    }
+
 }
+
 ?>
