@@ -116,7 +116,7 @@ class WFEditorPlugin extends WFEditor {
 
             $version = $this->getVersion();
             $name = $this->getName();
-            $xml = JApplicationHelper::parseXMLInstallFile(WF_EDITOR_PLUGINS . '/' . $name . '/' . $name . '.xml');
+            $xml = WFXMLHelper::parseInstallManifest(WF_EDITOR_PLUGINS . '/' . $name . '/' . $name . '.xml');
 
             if (isset($xml['version'])) {
                 $version = $xml['version'];

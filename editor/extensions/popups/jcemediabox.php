@@ -74,7 +74,7 @@ class WFPopupsExtension_Jcemediabox extends JObject
 		
 		$required = $this->get('_requires');
 		
-		if ($xml = JApplicationHelper::parseXMLInstallFile($file)) {
+		if ($xml = WFXMLHelper::parseInstallManifest($file)) {
 			if (version_compare($xml['version'], (int)$required, '<')) {
 				echo '<p class="required">' . WFText::sprintf('WF_POPUPS_JCEMEDIABOX_VERSION_ERROR', $required) . '</p>';
 			}
