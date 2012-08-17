@@ -282,6 +282,33 @@ function jInsertEditorText(text, editor) {
                 ed.onSaveContent.add(function(ed, o) {
                     o.content = self.indent(o.content);
                 });
+                
+                // fix link quirk in WebKit
+                ed.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
+                    var se = ed.selection, n = se.getNode();
+                    
+                    // remove img styles
+                    if (cmd == 'mceInsertLink') {
+                        // store class and style
+                        if (tinymce.isWebKit && n && n.nodeName == 'IMG') {
+                            ed.dom.setAttrib(n, 'data-mce-style', n.style.cssText);
+                            n.style.cssText = null;
+                        }
+                    }
+                });
+                
+                ed.onExecCommand.add(function(ed, cmd, ui, v, o) {
+                    var se = ed.selection, n = se.getNode();
+                    
+                    // restore img styles
+                    if (cmd == 'mceInsertLink') {
+                        tinymce.each(ed.dom.select('img[data-mce-style]', n), function(el) {
+                            if (el.parentNode.nodeName == 'A' && !el.style.cssText) {
+                                el.style.cssText = ed.dom.getAttrib(el, 'data-mce-style');
+                            }
+                        });
+                    }
+                });
             });
                        
             function _load() {
