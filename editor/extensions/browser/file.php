@@ -46,7 +46,7 @@ class WFFileBrowser extends WFBrowserExtension {
                 'runtimes' => 'html5,flash,silverlight',
                 'chunk_size' => null,
                 'max_size' => 1024,
-                'validate_mimetype' => 0,
+                'validate_mimetype' => 1,
                 'add_random' => 0
             ),
             'folder_tree' => 1,
