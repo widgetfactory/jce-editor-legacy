@@ -67,6 +67,8 @@ class WFPreviewPlugin extends WFEditorPlugin
 		$document->setType('html');
 		// required by module loadposition
 		jimport('joomla.application.module.helper');
+                // load paramter class
+                jimport('joomla.html.parameter');
 		
 		wfimport('admin.helpers.extension');
 
