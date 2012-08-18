@@ -380,13 +380,11 @@ class WFEditorPlugin extends WFEditor {
             }
 
             if (is_numeric($default) && $type === 'integer') {
-                $default = floatval($default);
-                settype($default, 'float');
+                $default = (float) $default;
             }
 
             if (is_numeric($param) && $type === 'integer') {
-                $param = floatval($param);
-                settype($param, 'float');
+                $param = (float) $param;
             }
 
             if ($param === $default) {
@@ -394,7 +392,7 @@ class WFEditorPlugin extends WFEditor {
             }
 
             if ($type == 'boolean') {
-                settype($param, $type);
+               $param = (bool) $param;
             }
 
             return $param;
