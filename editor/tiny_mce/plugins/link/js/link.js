@@ -62,9 +62,9 @@ var LinkDialog = {
         
         // resize browser on window resize
         $(window).bind('resize', function() {
-            $('#link-browser').height(bh + $(this).innerHeight() - wh);
+            $('#link-browser').height(bh + $(this).height() - wh);
             
-            $('#search-input').width(iw + $(this).innerWidth() - ww);
+            $('#search-input').width(iw + $(this).width() - ww);
         });
 
         // if there is a selection
