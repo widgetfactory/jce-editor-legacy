@@ -35,7 +35,7 @@ final class WFView extends JObject
 		if (array_key_exists('template_path', $config)) {
 			$this->addTemplatePath($config['template_path']);
 		} else {
-			$this->addTemplatePath($this->get('base_path') . '/views' .DS. $this->getName() .DS. 'tmpl');
+			$this->addTemplatePath($this->get('base_path') . '/views/' . $this->getName() . '/tmpl');
 		}
 	}
 	
