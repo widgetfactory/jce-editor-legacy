@@ -11,7 +11,7 @@
 
 defined( '_JEXEC' ) or die('RESTRICTED');
 
-require_once( dirname( __FILE__ ) .DS. 'classes' .DS. 'link.php' );
+require_once( dirname( __FILE__ ) . '/classes/link.php' );
 
 $plugin = WFLinkPlugin::getInstance();
 $plugin->execute();
