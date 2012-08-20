@@ -18,12 +18,12 @@
 			<option value="enchantspell">WF_SPELLCHECKER_PARAM_ENCHANT</option>
   		</param>
 		<param name="languages" type="text" size="100" default="English=en" label="WF_SPELLCHECKER_PARAM_LANGUAGES" description="WF_SPELLCHECKER_PARAM_LANGUAGES_DESC"/>      
-		<param name="pspell_mode" type="text" default="PSPELL_FAST" label="WF_SPELLCHECKER_PARAM_PSPELL_MODE" description="WF_SPELLCHECKER_PARAM_PSPELL_MODE_DESC"/>	
-		<param name="pspell_spelling" type="text" default="" label="WF_SPELLCHECKER_PARAM_PSPELL_SPELLING" description="WF_SPELLCHECKER_PARAM_PSPELL_SPELLING_DESC"/>
-		<param name="pspell_jargon" type="text" default="" label="WF_SPELLCHECKER_PARAM_PSPELL_JARGON" description="WF_SPELLCHECKER_PARAM_PSPELL_JARGON_DESC"/>
-		<param name="pspell_encoding" type="text" default="" label="WF_SPELLCHECKER_PARAM_PSPELL_ENCODING" description="WF_SPELLCHECKER_PARAM_PSPELL_ENCODING_DESC"/>	
-		<param name="pspell_dictionary" type="text" size="100" default="components/com_jce/editor/tiny_mce/plugins/spellchecker/dictionary.pws" label="WF_SPELLCHECKER_PARAM_PSPELL_DICTIONARY" description="WF_SPELLCHECKER_PARAM_PSPELL_DICTIONARY_DESC"/>	
-		<param name="pspellshell_aspell" type="text" default="/usr/bin/aspell" label="WF_SPELLCHECKER_PARAM_PSPELLSHELL" description="WF_SPELLCHECKER_PARAM_PSPELLSHELL_DESC"/>
-		<param name="pspellshell_tmp" type="text" default="/tmp" label="WF_SPELLCHECKER_PARAM_PSPELLSHELL_TMP" description="WF_SPELLCHECKER_PARAM_PSPELLSHELL_TMP_DESC"/>
+		<param name="pspell_mode" type="text" default="PSPELL_FAST" label="WF_SPELLCHECKER_PARAM_PSPELL_MODE" description="WF_SPELLCHECKER_PARAM_PSPELL_MODE_DESC" parent="engine[pspell,pspellshell]" />	
+		<param name="pspell_spelling" type="text" default="" label="WF_SPELLCHECKER_PARAM_PSPELL_SPELLING" description="WF_SPELLCHECKER_PARAM_PSPELL_SPELLING_DESC" parent="engine[pspell,pspellshell]" />
+		<param name="pspell_jargon" type="text" default="" label="WF_SPELLCHECKER_PARAM_PSPELL_JARGON" description="WF_SPELLCHECKER_PARAM_PSPELL_JARGON_DESC" parent="engine[pspell,pspellshell]" />
+		<param name="pspell_encoding" type="text" default="" label="WF_SPELLCHECKER_PARAM_PSPELL_ENCODING" description="WF_SPELLCHECKER_PARAM_PSPELL_ENCODING_DESC" parent="engine[pspell,pspellshell]" />	
+		<param name="pspell_dictionary" type="text" size="100" default="components/com_jce/editor/tiny_mce/plugins/spellchecker/dictionary.pws" label="WF_SPELLCHECKER_PARAM_PSPELL_DICTIONARY" description="WF_SPELLCHECKER_PARAM_PSPELL_DICTIONARY_DESC" parent="engine[pspell,pspellshell]" />	
+		<param name="pspellshell_aspell" type="text" default="/usr/bin/aspell" label="WF_SPELLCHECKER_PARAM_PSPELLSHELL" description="WF_SPELLCHECKER_PARAM_PSPELLSHELL_DESC" parent="engine[pspell,pspellshell]" />
+		<param name="pspellshell_tmp" type="text" default="/tmp" label="WF_SPELLCHECKER_PARAM_PSPELLSHELL_TMP" description="WF_SPELLCHECKER_PARAM_PSPELLSHELL_TMP_DESC" parent="engine[pspell,pspellshell]" />
     </params>
 </install>
