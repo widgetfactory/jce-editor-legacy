@@ -15,6 +15,6 @@ jimport('joomla.application.component.model');
 
 wfimport('admin.models.editor');
 
-$model = JModel::getInstance('editor', 'WFModel');
+$model = WFModelBase::getInstance('editor', 'WFModel');
 echo $model->getToken('source');
 ?>
