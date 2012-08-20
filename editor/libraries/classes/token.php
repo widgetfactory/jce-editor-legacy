@@ -46,10 +46,12 @@ abstract class WFToken
 			$token = self::_createToken(12);
 			$session->set('session.token', $token, 'wf');
 		}
-
-		$hash = 'wf' . JUtility::getHash($user->get( 'id', 0 ) . $token);
-
-		return $hash;
+                
+                if (method_exists('JApplication', 'getHash')) {
+                    return 'wf' . JApplication::getHash($user->get( 'id', 0 ) . $token);
+                } else {
+                    return 'wf' . JUtility::getHash($user->get( 'id', 0 ) . $token);
+                }
 	}
 
 	/**
