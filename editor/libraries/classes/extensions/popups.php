@@ -167,8 +167,8 @@ class WFPopupsExtension extends WFExtension
         foreach ($this->getPopups() as $popup) {
             $view = new WFView(array(
 				'name' 			=> $popup,
-				'base_path'		=> WF_EDITOR_EXTENSIONS . '/popups' .DS. $popup,				
-				'template_path' => WF_EDITOR_EXTENSIONS . '/popups' .DS. $popup . '/tmpl'
+				'base_path'		=> WF_EDITOR_EXTENSIONS . '/popups/' . $popup,				
+				'template_path' => WF_EDITOR_EXTENSIONS . '/popups/' . $popup . '/tmpl'
 			));	
 			
 			$instance = $this->getPopupExtension($popup);

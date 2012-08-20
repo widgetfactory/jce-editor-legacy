@@ -26,14 +26,14 @@ class WFLinkBrowser_Joomlalinks extends JObject {
 		jimport('joomla.filesystem.folder');
 		jimport('joomla.filesystem.file');
 				
-		$path = dirname( __FILE__ ) .DS. 'joomlalinks';
+		$path = dirname( __FILE__ ) . '/joomlalinks';
 		
 		// Get all files
 		$files = JFolder::files( $path, '\.(php)$' );
 		
 		if ( !empty( $files ) ) {
 			foreach( $files as $file ) {
-				require_once( $path .DS. $file );
+				require_once( $path . '/' . $file );
 				$classname = 'Joomlalinks' . ucfirst(basename($file, '.php'));
 				$this->_adapters[] = new $classname;
 			}
