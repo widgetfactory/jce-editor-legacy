@@ -565,7 +565,7 @@ class WFDocument extends JObject
 	{
 		//get the file content
 		ob_start();
-		require_once(WF_EDITOR_LIBRARIES .DS. 'views' .DS. 'plugin' .DS. 'index.php');
+		require_once(WF_EDITOR_LIBRARIES . '/views/plugin/index.php');
 		$data = ob_get_contents();
 		ob_end_clean();
 		

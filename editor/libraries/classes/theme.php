@@ -59,8 +59,8 @@ final class WFEditorTheme extends WFEditor
 		if (!is_object($view)) {
 			// create plugin view
 			$view = new WFView(array(
-				'base_path'		=> WF_EDITOR_THEMES .DS. $this->get('theme'),
-				'template_path'	=> WF_EDITOR_THEMES .DS. $this->get('theme') .DS. 'tmpl',
+				'base_path'		=> WF_EDITOR_THEMES . '/' . $this->get('theme'),
+				'template_path'	=> WF_EDITOR_THEMES . '/' . $this->get('theme') . '/' . 'tmpl',
 				'name' 			=> $this->get('dialog'),
 				'layout'		=> $this->get('dialog')
 			));
@@ -142,11 +142,11 @@ final class WFEditorTheme extends WFEditor
       		$document->addScriptDeclaration('ColorPicker.settings=' . json_encode($settings));
       	}
       	$document->addScript(array(
-      		'themes/'.$this->get('theme').'/js/'.$this->get('dialog')
+      		'themes/'.$this->get('theme') . '/js/' . $this->get('dialog')
       	), 'tiny_mce');
       	
       	$tabs = WFTabs::getInstance(array(
-      		'base_path' => WF_EDITOR_THEMES.DS.$this->get('theme')
+      		'base_path' => WF_EDITOR_THEMES . '/' . $this->get('theme')
       	));
 
       	$tabs->addPanel($this->get('dialog'), 1);
