@@ -16,7 +16,7 @@ class WFCleanupPluginConfig
 	public static function getConfig(&$settings)
 	{
 		$wf 	= WFEditor::getInstance();
-		$model 	= WFModelBase::getInstance('editor', 'WFModel');
+		$model 	= JModel::getInstance('editor', 'WFModel');
 
 		$settings['cleanup_pluginmode'] = $wf->getParam('cleanup.pluginmode', 0, 0, 'boolean');		
 		$settings['verify_html']        = $wf->getParam('editor.verify_html', 0, 1, 'boolean');

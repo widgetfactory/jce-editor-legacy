@@ -15,7 +15,7 @@ class WFMediaPluginConfig
 	public static function getConfig(&$settings)
 	{
 		$wf 	= WFEditor::getInstance();
-		$model 	= WFModelBase::getInstance('editor', 'WFModel');
+		$model 	= JModel::getInstance('editor', 'WFModel');
 		
 		$tags 	= array();
 		

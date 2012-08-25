@@ -11,7 +11,7 @@
 
 defined( '_JEXEC') or die('RESTRICTED');
  
-require_once(WF_EDITOR_LIBRARIES . '/classes/manager.php');
+require_once(WF_EDITOR_LIBRARIES .DS. 'classes' .DS. 'manager.php');
 
 final class WFFileBrowserPlugin extends WFMediaManager
 {

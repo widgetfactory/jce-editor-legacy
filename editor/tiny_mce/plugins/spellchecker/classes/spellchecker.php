@@ -10,7 +10,7 @@
 * is derivative of works licensed under the GNU General Public License or
 * other free or open source software licenses.
 */
-require_once(WF_EDITOR_LIBRARIES . '/classes/plugin.php');
+require_once(WF_EDITOR_LIBRARIES .DS. 'classes' .DS. 'plugin.php');
 
 class WFSpellCheckerPlugin extends WFEditorPlugin 
 {
@@ -75,7 +75,7 @@ class WFSpellCheckerPlugin extends WFEditorPlugin
 				'PSpell.spelling'		=> $params->get( 'spellchecker.pspell_spelling', '' ),
 				'PSpell.jargon'			=> $params->get( 'spellchecker.pspell_jargon', '' ),
 				'PSpell.encoding'		=> $params->get( 'spellchecker.pspell_encoding', '' ),
-				'PSpell.dictionary'		=> JPATH_BASE . '/' . $params->get( 'spellchecker.pspell_dictionary', '' ),	
+				'PSpell.dictionary'		=> JPATH_BASE .DS. $params->get( 'spellchecker.pspell_dictionary', '' ),	
 				// PSpellShell settings
 				'PSpellShell.mode' 		=> $params->get( 'spellchecker.pspellshell_mode', 'PSPELL_FAST' ),
 				'PSpellShell.aspell' 	=> $params->get( 'spellchecker.pspellshell_aspell', '/usr/bin/aspell' ),
@@ -94,7 +94,7 @@ class WFSpellCheckerPlugin extends WFEditorPlugin
 
 		if (!is_object($engine)) {
 			$classname = $config['general.engine'];
-			require_once( dirname(__FILE__) . '/' . $classname . ".php");
+			require_once( dirname(__FILE__) .DS. $classname . ".php");
 			$engine = new $classname($config);
 		}
 

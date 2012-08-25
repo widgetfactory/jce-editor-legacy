@@ -15,7 +15,7 @@ class WFCodePluginConfig
 	public static function getConfig(&$settings)
 	{
 		// Get JContentEditor instance
-		$model 	= WFModelBase::getInstance('editor', 'WFModel');
+		$model 	= JModel::getInstance('editor', 'WFModel');
 		$wf 	= WFEditor::getInstance();
 
 		if(!in_array('code', $settings['plugins'])) {

@@ -13,7 +13,7 @@
 class WFFormatPluginConfig {
 
     public static function getConfig(&$settings) {
-        $model = WFModelBase::getInstance('editor', 'WFModel');
+        $model = JModel::getInstance('editor', 'WFModel');
         $wf = WFEditor::getInstance();
 
         // Add format plugin to plugins list
