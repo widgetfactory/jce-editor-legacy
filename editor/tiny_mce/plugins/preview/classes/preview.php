@@ -12,7 +12,7 @@
 defined('_JEXEC') or die('RESTRICTED');
 
 // Load class dependencies
-require_once(WF_EDITOR_LIBRARIES .DS. 'classes' .DS. 'plugin.php');
+require_once(WF_EDITOR_LIBRARIES . '/classes/plugin.php');
 
 class WFPreviewPlugin extends WFEditorPlugin 
 {
@@ -93,7 +93,7 @@ class WFPreviewPlugin extends WFEditorPlugin
 		$limitstart = 0;
 		JPluginHelper::importPlugin('content');
 		
-		require_once(JPATH_SITE .DS. 'components' .DS. 'com_content' .DS. 'helpers' .DS. 'route.php');
+		require_once(JPATH_SITE . '/components/com_content/helpers/route.php');
 		
 		// set error reporting to error only
 		error_reporting(E_ERROR);

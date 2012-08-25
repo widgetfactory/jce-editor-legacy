@@ -11,7 +11,7 @@
 
 defined( '_JEXEC' ) or die('RESTRICTED');
 
-require_once( dirname( __FILE__ ) .DS. 'classes' .DS. 'preview.php' );
+require_once( dirname( __FILE__ ) . '/classes/preview.php' );
 
 $preview = WFPreviewPlugin::getInstance();
 ?>
