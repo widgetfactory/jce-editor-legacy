@@ -65,7 +65,8 @@ class WFFileBrowser extends WFBrowserExtension {
                     'move' => 1
                 )
             ),
-            'websafe_mode' => 'utf-8'
+            'websafe_mode' => 'utf-8',
+            'websafe_spaces' => 0
         );
 
         $config = array_merge($default, $config);
@@ -949,7 +950,7 @@ class WFFileBrowser extends WFBrowserExtension {
         // strip extension
         $name = WFUtility::stripExtension($name);
         // make file name 'web safe'
-        $name = WFUtility::makeSafe($name, $this->get('websafe_mode', 'utf-8'));
+        $name = WFUtility::makeSafe($name, $this->get('websafe_mode', 'utf-8'), $this->get('websafe_spaces'));
 
         // empty name
         if ($name == '') {
@@ -1087,7 +1088,7 @@ class WFFileBrowser extends WFBrowserExtension {
         }
 
         $filesystem = $this->getFileSystem();
-        $result = $filesystem->rename($source, WFUtility::makeSafe($destination, $this->get('websafe_mode')), $args);
+        $result = $filesystem->rename($source, WFUtility::makeSafe($destination, $this->get('websafe_mode'), $this->get('websafe_spaces')), $args);
 
         if ($result instanceof WFFileSystemResult) {
             if (!$result->state) {
@@ -1219,7 +1220,7 @@ class WFFileBrowser extends WFBrowserExtension {
 
         $filesystem = $this->getFileSystem();
 
-        $result = $filesystem->createFolder($dir, WFUtility::makeSafe($new, $this->get('websafe_mode')), $args);
+        $result = $filesystem->createFolder($dir, WFUtility::makeSafe($new, $this->get('websafe_mode'), $this->get('websafe_spaces')), $args);
 
         if ($result instanceof WFFileSystemResult) {
             if (!$result->state) {
@@ -1327,7 +1328,8 @@ class WFFileBrowser extends WFBrowserExtension {
             'upload' => $this->getUploadDefaults(),
             'tree' => $this->get('folder_tree'),
             'listlimit' => $this->get('list_limit'),
-            'websafe_mode' => $this->get('websafe_mode')
+            'websafe_mode' => $this->get('websafe_mode'),
+            'websafe_spaces' => $this->get('websafe_spaces')
         );
 
         $properties = array('base', 'delete', 'rename', 'folder_new', 'copy', 'move');

@@ -72,7 +72,8 @@
             use_cookies : true,
             listlimit	: 'all',
             expandable 	: true,
-            websafe_mode: 'utf-8'
+            websafe_mode: 'utf-8',
+            websafe_spaces : false
         },
 
         _init : function() {
@@ -549,7 +550,7 @@
 		 */
         _isWebSafe : function(name) {
             //return !/[^a-zA-Z0-9:\.\_\-]/.test(name);
-            return name === $.String.safe(name, this.options.websafe_mode);
+            return name === $.String.safe(name, this.options.websafe_mode, this.options.websafe_spaces);
         },
 
         _isViewable : function(name) {
@@ -1248,7 +1249,8 @@
                                 fileSelect 	: function(e, file) {
                                     return _checkName(file);
                                 },
-                                websafe_mode: self.options.websafe_mode,
+                                websafe_mode    : self.options.websafe_mode,
+                                websafe_spaces  : self.options.websafe_spaces,
 
                                 fileRename : function(e, file) {
                                     return _checkName(file);
@@ -1330,7 +1332,7 @@
                         confirm	: function(v) {
                             if (v) {
                                 self._setLoader();
-                                var args = [dir, $.String.safe(v, self.options.websafe_mode)];
+                                var args = [dir, $.String.safe(v, self.options.websafe_mode, self.options.websafe_spaces)];
 
                                 $(':input:not(input[name="prompt"])', $(self._dialog['folder_new']).dialog('widget')).each( function() {
                                     args.push($(this).val());
@@ -1436,7 +1438,7 @@
                         value 		: v,
                         elements 	: this._getDialogOptions('rename'),
                         confirm 	: function(name) {						
-                            name = $.String.safe(name, self.options.websafe_mode);
+                            name = $.String.safe(name, self.options.websafe_mode, self.options.websafe_spaces);
 							
                             if (v == name) {
                                 $.Dialog.alert(self._translate('rename_item_name_new', 'Please specify a new name for the item'));
