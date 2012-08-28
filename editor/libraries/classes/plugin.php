@@ -171,6 +171,9 @@ class WFEditorPlugin extends WFEditor {
         $document = WFDocument::getInstance();
 
         $document->addScript(array('tiny_mce_popup'), 'tiny_mce');
+        
+        // language
+        //$document->addScript(array('index.php?option=com_jce&view=editor&layout=editor&task=loadlanguage&component_id=' . $component_id . '&' . $token . '=1&version=' . $version));
 
         // jquery versions
         $jquery = array('jquery/jquery-' . WF_JQUERY . '.min.js', 'jquery/jquery-ui-' . WF_JQUERYUI . '.custom.min.js');
@@ -183,7 +186,7 @@ class WFEditorPlugin extends WFEditor {
             'tips',
             'tiny_mce_utils',
             'plugin'
-                ), 'libraries');
+        ), 'libraries');
 
         // get UI Theme
         $theme = $this->getParam('editor.dialog_theme', 'jce');

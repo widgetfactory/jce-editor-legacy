@@ -104,30 +104,33 @@ abstract class WFUtility {
      * @param mixed The name of the file (not full path)
      * @return mixed The sanitised string or array
      */
-    public static function makeSafe($subject, $mode = 'utf-8') {
+    public static function makeSafe($subject, $mode = 'utf-8', $allowspaces = false) {
         // remove multiple . characters
         $search = array('#(\.){2,}#');
 
         // replace spaces with underscore
-        $subject = preg_replace('#[\s ]#', '_', $subject);
+        if (!$allowspaces) {
+            $subject = preg_replace('#[\s ]#', '_', $subject);
+        }
 
         switch ($mode) {
             default:
             case 'utf-8':
-                $search[] = '#[^a-zA-Z0-9_\.\-~\p{L}\p{N}]#u';
+                $search[] = '#[^a-zA-Z0-9_\.\-~\p{L}\p{N}\s ]#u';
                 $mode = 'utf-8';
                 break;
             case 'ascii':
                 $subject = self::utf8_latin_to_ascii($subject);
-                $search[] = '#[^a-zA-Z0-9_\.\-~]#';
+                $search[] = '#[^a-zA-Z0-9_\.\-~\s ]#';
                 break;
         }
 
         // strip leading .
         $search[] = '#^\.*#';
+        
         // strip whitespace
         $search[] = '#^\s*|\s*$#';
-
+        
         // only for utf-8 to avoid PCRE errors - PCRE must be at least version 5
         if ($mode == 'utf-8') {
             try {

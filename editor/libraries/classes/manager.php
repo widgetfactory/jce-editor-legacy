@@ -111,7 +111,8 @@ class WFMediaManager extends WFEditorPlugin {
                     'move' => $this->getParam('file_move', 1)
                 )
             ),
-            'websafe_mode' => $this->getParam('editor.websafe_mode', 'utf-8')
+            'websafe_mode' => $this->getParam('editor.websafe_mode', 'utf-8'),
+            'websafe_spaces' => $this->getParam('editor.websafe_allow_spaces', 0)
         );
 
         return $config;

@@ -140,7 +140,7 @@ class WFFileSystem extends WFExtension {
                 $parts = explode('/', $root);
 
                 // clean path parts
-                $parts = WFUtility::makeSafe($parts, $wf->getParam('editor.websafe_mode', 'utf-8'));
+                $parts = WFUtility::makeSafe($parts, $wf->getParam('editor.websafe_mode', 'utf-8'), $wf->getParam('editor.websafe_allow_spaces', 0));
 
                 //join path parts
                 $root = implode('/', $parts);
