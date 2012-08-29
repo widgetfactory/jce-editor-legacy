@@ -203,7 +203,7 @@ var LinkDialog = {
     checkPrefix : function(n) {
         var v = $(n).val();
         if (Validator.isEmail(v) && !/^\s*mailto:/i.test(v)) {
-            $.Dialog.confirm(tinyMCEPopup.getLang('advlink_dlg.is_email', 'The URL you entered seems to be an email address, do you want to add the required mailto: prefix?'), function(state) {
+            $.Dialog.confirm(tinyMCEPopup.getLang('link_dlg.is_email', 'The URL you entered seems to be an email address, do you want to add the required mailto: prefix?'), function(state) {
                 if (state) {
                     $(n).val('mailto:' + v);
                 }
@@ -211,7 +211,7 @@ var LinkDialog = {
             });
 
         } else if(/^\s*www./i.test(v)) {
-            $.Dialog.confirm(tinyMCEPopup.getLang('advlink_dlg.is_external', 'The URL you entered seems to be an external link, do you want to add the required http:// prefix?'), function(state) {
+            $.Dialog.confirm(tinyMCEPopup.getLang('link_dlg.is_external', 'The URL you entered seems to be an external link, do you want to add the required http:// prefix?'), function(state) {
                 if (state) {
                     $(n).val('http://' + v);
                 }
@@ -228,7 +228,7 @@ var LinkDialog = {
         AutoValidator.validate(document);
 
         if ($('#href').val() == '') {
-            $.Dialog.alert(tinyMCEPopup.getLang('advlink_dlg.no_href', 'A URL is required. Please select a link or enter a URL'));
+            $.Dialog.alert(tinyMCEPopup.getLang('link_dlg.no_href', 'A URL is required. Please select a link or enter a URL'));
 
             $('#href').focus();
 
@@ -236,7 +236,7 @@ var LinkDialog = {
         }
 
         if (se.isCollapsed() && $('#text').val() == '') {
-            $.Dialog.alert(tinyMCEPopup.getLang('advlink_dlg.no_text', 'Please enter some text for the link'));
+            $.Dialog.alert(tinyMCEPopup.getLang('link_dlg.no_text', 'Please enter some text for the link'));
 
             $('#text').focus();
 
@@ -324,20 +324,20 @@ var LinkDialog = {
     createEmail : function() {
         var ed = tinyMCEPopup;
 
-        var fields = '<div class="formElm"><label for="email_to">' + ed.getLang('advlink_dlg.to', 'To') + '</label>' +
+        var fields = '<div class="formElm"><label for="email_to">' + ed.getLang('link_dlg.to', 'To') + '</label>' +
         '<textarea id="email_mailto" class="email"></textarea>' +
         '</div>' +
-        '<div class="formElm"><label for="email_cc">' + ed.getLang('advlink_dlg.cc', 'CC') + '</label>' +
+        '<div class="formElm"><label for="email_cc">' + ed.getLang('link_dlg.cc', 'CC') + '</label>' +
         '<textarea id="email_cc" class="email"></textarea>' +
         '</div>' +
-        '<div class="formElm"><label for="email_bcc">' + ed.getLang('advlink_dlg.bcc', 'BCC') + '</label>' +
+        '<div class="formElm"><label for="email_bcc">' + ed.getLang('link_dlg.bcc', 'BCC') + '</label>' +
         '<textarea id="email_bcc" class="email"></textarea>' +
         '</div>' +
-        '<div class="formElm"><label for="email_subject">' + ed.getLang('advlink_dlg.subject', 'Subject') + '</label>' +
+        '<div class="formElm"><label for="email_subject">' + ed.getLang('link_dlg.subject', 'Subject') + '</label>' +
         '<textarea id="email_subject" class="email"></textarea>' +
         '</div>';
 
-        $.Dialog.dialog(ed.getLang('advlink_dlg.email', 'Create E-Mail Address'), fields, {
+        $.Dialog.dialog(ed.getLang('link_dlg.email', 'Create E-Mail Address'), fields, {
             width	: 300,
             height	: 250,
             buttons : [
@@ -353,7 +353,7 @@ var LinkDialog = {
                             $.each(v.split(','), function(i, o) {
                                 if (s !== 'subject') {
                                     if (!Validator.isEmail(o)) {
-                                        $.Dialog.alert(s + tinyMCEPopup.getLang('advlink_dlg.invalid_email', ' is not a valid e-mail address!'));
+                                        $.Dialog.alert(s + tinyMCEPopup.getLang('link_dlg.invalid_email', ' is not a valid e-mail address!'));
                                         errors++;
                                     }
                                 }
