@@ -220,6 +220,10 @@ tinyMCE.addI18n({
             words: 'Words: '
         },
         //JCE Common Plugins
+        browser : {
+            delta_width: 0,
+            delta_height: 0
+        },
         imgmanager: {
             desc: "Insert/Edit image",
             delta_width: 0,
