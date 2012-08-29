@@ -18,8 +18,8 @@
             var ed = this.ed;
             ed.windowManager.open({
                 file: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=browser&type=' + type,
-                width: 760,
-                height: 480,
+                width   : 760 + ed.getLang('browser.delta_width', 0),
+                height  : 480 + ed.getLang('browser.delta_height', 0),
                 resizable: "yes",
                 inline: "yes",
                 close_previous: "no",
