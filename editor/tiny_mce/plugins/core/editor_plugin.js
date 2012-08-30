@@ -51,8 +51,6 @@
 
             if (t.isDialogVisible)
                 return t.hideDialog();
-
-            e = DOM.get(t.id);
             
             DOM.show(t.id + '_dialog');
             
@@ -79,9 +77,19 @@
 
             Event.add(ed.getDoc(), 'mousedown', t.hideDialog, t);
             
-            Event.add(DOM.doc, 'mousedown', function(e) {
-                if (DOM.getParent(e.target, '#' + t.id + '_dialog')) {
-                    return;
+            Event.add(DOM.doc, 'mousedown', function(e) {                
+                var n = e.target;
+                
+                while(n) {
+                    if (n == DOM.getRoot() || !n.nodeType || n.nodeType === 9) {
+                        break;
+                    }
+                    
+                    if (n == DOM.get(t.id + '_dialog')) {
+                        return;
+                    }
+                    
+                    n = n.parentNode;
                 }
                 
                 t.hideDialog();
