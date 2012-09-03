@@ -183,6 +183,8 @@ final class WFRequest extends JObject {
             $output = array(
                 "result" => $result
             );
+            
+            ob_start();
 
             // set output headers
             header('Content-Type: text/json;charset=UTF-8');
@@ -193,7 +195,9 @@ final class WFRequest extends JObject {
             header("Cache-Control: post-check=0, pre-check=0", false);
             header("Pragma: no-cache");
 
-            exit(json_encode($output));
+            echo json_encode($output);
+            
+            exit(ob_get_clean());
         }
     }
 
