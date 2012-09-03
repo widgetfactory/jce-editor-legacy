@@ -7,25 +7,25 @@
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
- */
+*/
 html {
-	overflow: hidden;
-	height: 100%;
+    overflow: hidden;
+    height: 100%;
 }
 body#jce {
     padding: 5px !important;
-	font: 10px Verdana, Arial, Helvetica, sans-serif;
-	background-color: #FFF;
-	margin: 0;
-	position: relative;
-	height: 100%;
-	overflow: hidden;
+    font: 10px Verdana, Arial, Helvetica, sans-serif;
+    background-color: #FFF;
+    margin: 0;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
 }
 #jce {
-	border: 0 none;
+    border: 0 none;
 }
 #jce select, #jce input #jce textarea {
-	font: 10px Verdana, Arial, Helvetica, sans-serif;
+    font: 10px Verdana, Arial, Helvetica, sans-serif;
 }
 
 #jce .ui-widget {}
@@ -49,12 +49,12 @@ fieldset {
 }
 legend {
     color:#2B6FB6;
-	font-weight: bold;
-	padding: 0 5px;
+    font-weight: bold;
+    padding: 0 5px;
 }
 label {
-	display: inline-block;
-	min-width: 80px;
+    display: inline-block;
+    min-width: 80px;
 }
 label.invalid {
     color:#E00;
@@ -141,8 +141,8 @@ input[type="text"] {
     height:16px;
 }
 input[type="checkbox"] {
-	margin: 2px;
-	vertical-align: middle;
+    margin: 2px;
+    vertical-align: middle;
 }
 .show {
     display:block;
@@ -160,8 +160,8 @@ input[type="checkbox"] {
     display:block;
 }
 span.loader {
-	display: inline-block;
-	vertical-align: middle;
+    display: inline-block;
+    vertical-align: middle;
 }
 .ui-addselect, .mceAddSelectValue {
     background-color:#DDD;
@@ -206,11 +206,11 @@ span.hastip, span.tooltip {
 }
 
 .hastip:first-line, .tooltip:first-line {
-	background: url('../img/dash.gif') repeat-x bottom center;
+    background: url('../img/dash.gif') repeat-x bottom center;
 }
 
 div.ui-preview div.ui-dialog-content.ui-widget-content {
-	padding: 10px;
+    padding: 10px;
 }
 
 div.image-preview img {
@@ -220,15 +220,15 @@ div.image-preview img {
 }
 
 div.image-preview.background {
-	background-position: center;
-	background-repeat: no-repeat;
-	background-image: none;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: none;
 }
 
 div.image-preview.background.resize {
-	background-size: contain;
-	-webkit-background-size: contain;
-	-moz-background-size: contain;
+    background-size: contain;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
 }
 
 div.iframe-preview {
@@ -285,7 +285,7 @@ input.radio, input.checkbox {
     border:0;
 }
 a.browse {
-	display: inline-block;
+    display: inline-block;
     vertical-align: middle;
 }
 a.browse span.image, span.browser_icon.image {
@@ -315,10 +315,10 @@ a.pickcolor:hover span, span.pickcolor_icon:hover {
 }
 label, input, select {
     vertical-align:middle;
-	line-height: 16px;
+    line-height: 16px;
 }
 .disabled {
-	cursor:default;
+    cursor:default;
 }
 span[role="button"].disabled {
     opacity:0.3;
@@ -326,95 +326,105 @@ span[role="button"].disabled {
     filter: alpha(opacity=30);
 }
 input[disabled], select[disabled] {
-	color: #ccc;
-	background-color: #efefef;
+    color: #ccc;
+    background-color: #efefef;
 }
 select.editable option.ui-state-highlight {
-	border: 0 none;
-	color: #000;
+    border: 0 none;
+    color: #000;
 }
 select.editable option.ui-state-highlight:hover {
-	color: #000;
+    color: #000;
 }
 span.ui-slider-block {
-	display: inline-block;
+    display: inline-block;
     height: 1em;
     margin: 0 5px;
     position: relative;
     vertical-align: middle;
 }
 span.ui-slider {
-	position: absolute;
-	display: block;
-	width: 100px;
-	left: 5px;
+    position: absolute;
+    display: block;
+    width: 100px;
+    left: 5px;
 }
 
-#jce div.ui-dialog div.ui-dialog-content div.confirm, #jce div.ui-dialog div.ui-dialog-content div.alert {
-	display: inline-block;
+#jce div.ui-dialog div.ui-dialog-content div.confirm, 
+#jce div.ui-dialog div.ui-dialog-content div.alert {
+    display: inline-block;
     font-size: 1.1em;
     padding: 0 0 0 32px;
-	margin: 3px 0px;
-	min-height: 24px;
-	background: url('../img/icons-24.png') no-repeat 0 -48px;
-	width: 240px;
-	word-wrap: break-word;
+    margin: 3px 0px;
+    min-height: 24px;
+    width: 240px;
+    word-wrap: break-word;
 }
 
-#jce div.ui-dialog div.ui-dialog-content div.alert {
-	background-position: 0 -144px;
+#jce div.ui-dialog div.ui-dialog-content div.confirm span.icon, 
+#jce div.ui-dialog div.ui-dialog-content div.alert span.icon {
+    display: inline-block;
+    float: left;
+    padding: 0 0 0 32px;
+    margin: 3px 0px 0 -32px;
+    min-height: 24px;
+    background: url('../img/icons-24.png') no-repeat 0 -48px;
+}
+
+#jce div.ui-dialog div.ui-dialog-content div.alert span.icon {
+    background-position: 0 -144px;
 }
 
 #jce div.ui-dialog div.ui-dialog-content div.alert ul {
-	list-style : none;
-	padding: 0;
-	margin: 0;
+    list-style : none;
+    padding: 0;
+    margin: 0;
 }
 
 #jce div.ui-dialog div.ui-dialog-content div.confirm p, #jce div.ui-dialog div.ui-dialog-content div.alert p {
-	margin: 0 0 1em 0;
+    margin: 0 0 1em 0;
 }
 span#dim_loader {
-	display: inline-block;
+    display: inline-block;
 }
 
 /** Tables **/
 #jce table {}
 #jce table td {
-	padding: 2px;
-	vertical-align: middle;
+    padding: 2px;
+    vertical-align: middle;
 }
 
 /** Manager specific styles **/
 label[for^="margin_"], label[for^="border_"], label[for="clear"] {
-	min-width: 40px;
+    min-width: 40px;
 }
 
 label[for="margin_check"] {
-	margin: 0 0 0 5px;
+    margin: 0 0 0 5px;
 }
 
 /** Popups **/
 label[for="popup_check"] {
-	margin: 0 0 0 5px;
+    margin: 0 0 0 5px;
 }
 
 div#popups_tab {
-	overflow-x : auto;
+    overflow-x : auto;
 }
 
 /** Dialogs **/
 .ui-dialog-content p {
-	margin: 1em 0;
+    margin: 1em 0;
 }
 
 /** Aggregator **/
 #jce div.aggregator_option {
-	line-height: 20px;
+    line-height: 20px;
 }
 #jce span.aggregator_option_add {
-	background: url("../img/icons.png") no-repeat 0 -540px;
-	color: #CCCCCC;
+    background: url("../img/icons.png") no-repeat 0 -540px;
+    color: #CCCCCC;
     cursor: pointer;
     display: inline-block;
     height: 20px;
@@ -427,9 +437,9 @@ div#popups_tab {
 }
 
 #jce span.aggregator_option_remove {
-	background: url("../img/icons.png") no-repeat 0 -560px;
-	height: 20px;
-	width: 20px;
+    background: url("../img/icons.png") no-repeat 0 -560px;
+    height: 20px;
+    width: 20px;
     line-height: 20px;
     vertical-align: middle;
     cursor:pointer;
@@ -439,11 +449,11 @@ div#popups_tab {
 
 /** IE7 **/
 body#jce.ie7 {
-	 margin: 5px !important;
+    margin: 5px !important;
 }
 body#jce.ie7 input ~ label, body#jce.ie7 select ~ label, body#jce.ie7 table td + td label {
-	min-width: 40px;
+    min-width: 40px;
 }
 body#jce.ie7 input.checkbox {
-	vertical-align: middle;
+    vertical-align: middle;
 }

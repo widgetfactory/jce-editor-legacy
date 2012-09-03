@@ -626,12 +626,13 @@
 
             $.JSON.queue({
                 context: scope || this,
-                type: 'POST',
-                url: url,
-                data: 'json=' + $.JSON.serialize(json) + '&' + $.param(args),
-                success: function (o) {
+                type    : 'POST',
+                url     : url,
+                data    : 'json=' + $.JSON.serialize(json) + '&' + $.param(args),
+                dataType: 'text',
+                success: function (o) {                    
                     // check result - should be object, parse as JSON if string
-                    if ($.type(o) == 'string') {
+                    if ($.type(o) == 'string') {                        
                         // parse string as JSON object
                         var s = $.parseJSON(o);
                         // pass if successful
@@ -804,7 +805,7 @@
          * Confirm Dialog
          */
         confirm: function (s, cb, options) {
-            var html = '<div class="confirm">' + s + '</div>';
+            var html = '<div class="confirm"><span class="icon"></span>' + s + '</div>';
 
             options = $.extend({
                 resizable: false,
@@ -838,7 +839,7 @@
          * Alert Dialog
          */
         alert: function (s) {
-            var html = '<div class="alert">' + s + '</div>';
+            var html = '<div class="alert"><span class="icon"></span>' + s + '</div>';
 
             var options = {
                 resizable: false,
