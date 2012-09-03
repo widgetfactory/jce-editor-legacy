@@ -25,7 +25,7 @@ function jInsertEditorText(text, editor) {
  * Widget Factory Editor
  */
 ( function() {
-    var winLoaded = false, each = tinymce.each;
+    var winLoaded = false, each = tinymce.each, explode = tinymce.explode;
 
     var WFEditor = {
 
@@ -145,10 +145,21 @@ function jInsertEditorText(text, editor) {
                     if(this.settings.compress.javascript) {
                         this._markLoaded();
                     }
-                    // load editor
+                    
+                    var s = this.settings;
+                    
+                    // load external plugins
+                    each(explode(s.plugins), function(p) {
+                        if (p.charAt(0) == '-') {                            
+                            p = p.substr(1, p.length);                            
+                            
+                            tinymce.PluginManager.load(p, s.base_url + 'plugins/jce/' + p + '/editor_plugin.js');
+                        }
+                    });
+                    
                     WFEditor.load();
                 } catch (e) {
-                //alert('Unable to initialize TinyMCE : ' + e);
+                //console.log(e);
                 }
             }
         },
@@ -221,13 +232,12 @@ function jInsertEditorText(text, editor) {
             });
         },
         load : function() {
-            var self = this, Event = tinymce.dom.Event, loaded;
+            var self = this, Event = tinymce.dom.Event, each = tinymce.each, explode = tinymce.explode, loaded;            
 
             var s = this.settings;
 
             // setup editor before init
-            tinyMCE.onAddEditor.add(function(mgr, ed) {               
-                
+            tinyMCE.onAddEditor.add(function(mgr, ed) {
                 // load packer css
                 if(s.compress.css) {
                     ed.onPreInit.add(function() {                    
@@ -238,6 +248,8 @@ function jInsertEditorText(text, editor) {
                 WFEditor.hideLoader(ed.getElement());
 
                 self.setBookmark(ed);
+                
+                //ed.onPreInit.add(function() {});
 
                 // form submit trigger
                 ed.onInit.add(function() {
