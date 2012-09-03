@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package   	JCE
  * @copyright 	Copyright (c) 2009-2012 Ryan Demmer. All rights reserved.
@@ -8,413 +9,397 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-
 defined('_JEXEC') or die('RESTRICTED');
 
-class WFDocument extends JObject
-{
-	/**
-	 * Array of linked scripts
-	 *
-	 * @var		array
-	 * @access   private
-	 */	
-	private $_scripts 	= array();
-	
-	/**
-	 * Array of scripts placed in the header
-	 *
-	 * @var  array
-	 * @access   private
-	 */
-	private $_script 	= array();
+class WFDocument extends JObject {
 
-	/**
-	 * Array of linked style sheets
-	 *
-	 * @var	 array
-	 * @access  private
-	 */
-	private $_styles 	= array();
+    /**
+     * Array of linked scripts
+     *
+     * @var		array
+     * @access   private
+     */
+    private $_scripts = array();
 
-	/**
-	 * Array of head items
-	 *
-	 * @var	 array
-	 * @access  private
-	 */
-	private $_head 		= array();
-	
-	/**
-	 * Body content
-	 *
-	 * @var	 array
-	 * @access  private
-	 */
-	private $_body		= '';
-	
-	/**
-	 * Document title
-	 *
-	 * @var	 string
-	 * @access  public
-	 */
-	public $title = '';
-	
-	/**
-	 * Document version
-	 *
-	 * @var	 string
-	 * @access  public
-	 */
-	public $version = '000000';
-	
-	/**
-	 * Contains the document language setting
-	 *
-	 * @var	 string
-	 * @access  public
-	 */
-	public $language = 'en-gb';
+    /**
+     * Array of scripts placed in the header
+     *
+     * @var  array
+     * @access   private
+     */
+    private $_script = array();
 
-	/**
-	 * Contains the document direction setting
-	 *
-	 * @var	 string
-	 * @access  public
-	 */
-	public $direction = 'ltr';
+    /**
+     * Array of linked style sheets
+     *
+     * @var	 array
+     * @access  private
+     */
+    private $_styles = array();
 
-	/**
-	 * Constructor activating the default information of the class
-	 *
-	 * @access  protected
-	 */
-	public function __construct($config = array())
-	{
-		parent::__construct();
-		
-		// set document title
-		if (isset($config['title'])) {
-			$this->setTitle($config['title']);
-		}
+    /**
+     * Array of head items
+     *
+     * @var	 array
+     * @access  private
+     */
+    private $_head = array();
 
-		$this->setProperties($config);
-	}
-	
-	/**
-	 * Returns a reference to a WFDocument object
-	 *
-	 * This method must be invoked as:
-	 *    <pre>  $document = WFDocument::getInstance();</pre>
-	 *
-	 * @access  public
-	 * @return  object WFDocument
-	 */
-	public static function getInstance($config = array())
-	{
-		static $instance;
+    /**
+     * Body content
+     *
+     * @var	 array
+     * @access  private
+     */
+    private $_body = '';
 
-		if (!is_object($instance)) {
-			$instance = new WFDocument($config);
-		}
+    /**
+     * Document title
+     *
+     * @var	 string
+     * @access  public
+     */
+    public $title = '';
 
-		return $instance;
-	}
-	
-	/**
-	 * Set the document title
-	 * @access 	public
-	 * @param 	string $title
-	 */
-	public function setTitle($title)
-	{
-		$this->title = $title;
-	}
-	
-	/**
-	 * Get the document title
-	 * @access	public
-	 * @return	string
-	 */
-	public function getTitle()
-	{
-		return $this->title;
-	}
-	
-	/**
-	 * Set the document name
-	 * @access	public
-	 * @param 	string $name
-	 */
-	public function setName($name)
-	{
-		$this->name = $name;
-	}
-	
-	/**
-	* Get the document name
-	* @access	public
-	* @return 	string
-	*/
-	public function getName()
-	{
-		return $this->name;
-	}
+    /**
+     * Document version
+     *
+     * @var	 string
+     * @access  public
+     */
+    public $version = '000000';
 
-	/**
-	 * Get the editor URL
-	 * @access	private
-	 * @param 	bool $relative
-	 * @return 	string
-	 */
-	private function getURL($relative = false)
-	{
-		if ($relative) {
-			return JURI::root(true) . '/components/com_jce/editor';
-		}
+    /**
+     * Contains the document language setting
+     *
+     * @var	 string
+     * @access  public
+     */
+    public $language = 'en-gb';
 
-		return JURI::root() . 'components/com_jce/editor';
-	}
-	
-	/**
-	 * Sets the global document language declaration. Default is English (en-gb).
-	 * @access 	public
-	 * @param   string   $lang
-	 */
-	public function setLanguage($lang = "en-gb") {
-		$this->language = strtolower($lang);
-	}
+    /**
+     * Contains the document direction setting
+     *
+     * @var	 string
+     * @access  public
+     */
+    public $direction = 'ltr';
 
-	/**
-	 * Returns the document language.
-	 *
-	 * @return string
-	 * @access public
-	 */
-	public function getLanguage() {
-		return $this->language;
-	}
+    /**
+     * Constructor activating the default information of the class
+     *
+     * @access  protected
+     */
+    public function __construct($config = array()) {
+        parent::__construct();
 
-	/**
-	 * Sets the global document direction declaration. Default is left-to-right (ltr).
-	 *
-	 * @access public
-	 * @param   string   $lang
-	 */
-	public function setDirection($dir = "ltr") {
-		$this->direction = strtolower($dir);
-	}
+        // set document title
+        if (isset($config['title'])) {
+            $this->setTitle($config['title']);
+        }
 
-	/**
-	 * Returns the document language.
-	 *
-	 * @return string
-	 * @access public
-	 */
-	public function getDirection() {
-		return $this->direction;
-	}
+        $this->setProperties($config);
+    }
 
-	/**
-	 * Returns a JCE resource url
-	 *
-	 * @access  private
-	 * @param 	string  The path to resolve eg: libaries
-	 * @param 	boolean Create a relative url
-	 * @return  full url
-	 */
-	private function getBaseURL($path, $type = '')
-	{
-		static $url;
+    /**
+     * Returns a reference to a WFDocument object
+     *
+     * This method must be invoked as:
+     *    <pre>  $document = WFDocument::getInstance();</pre>
+     *
+     * @access  public
+     * @return  object WFDocument
+     */
+    public static function getInstance($config = array()) {
+        static $instance;
 
-		if (!isset($url)) {
-			$url = array();
-		}
-		
-		$signature = serialize(array($type, $path));
+        if (!is_object($instance)) {
+            $instance = new WFDocument($config);
+        }
 
-		// Check if value is already stored
-		if (!isset($url[$signature])) {
-			// get the plugin name using this document instance
-			$plugin = $this->get('name');
+        return $instance;
+    }
 
-			$base = $this->getURL(true) . '/';
-			
-			$parts 	= explode('.', $path);
-			$path 	= array_shift($parts);
+    /**
+     * Set the document title
+     * @access 	public
+     * @param 	string $title
+     */
+    public function setTitle($title) {
+        $this->title = $title;
+    }
 
-			switch ($path) {
-				// JCE root folder
-				case 'jce':
-					$pre = $base . '';
-					break;
-					// JCE libraries resource folder
-				default:
-				case 'libraries':
-					$pre = $base . 'libraries/' . $type;
-					break;
-					// TinyMCE folder
-				case 'tiny_mce':
-					$pre = $base . 'tiny_mce';
-					break;
-					// JCE current plugin folder
-				case 'plugins':
-					$pre = $base . 'tiny_mce/plugins/' . $plugin . '/' . $type;
-					break;
-					// Extensions folder
-				case 'extensions':
-					$pre = $base . 'extensions';
-					break;
-				case 'joomla':
-					return JURI::root(true);
-					break;
-				case 'media':
-					return JURI::root(true) . '/media/system';
-					break;
-				case 'component':
-					$pre = JURI::root(true) . '/administrator/components/com_jce/media/' . $type;
-					break;
-				default:
-					$pre = $base . $path;
-					break;
-			}
-			
-			if (count($parts)) {
-				$pre = rtrim($pre, '/') . '/' . implode('/', $parts);
-			}
+    /**
+     * Get the document title
+     * @access	public
+     * @return	string
+     */
+    public function getTitle() {
+        return $this->title;
+    }
 
-			// Store url
-			$url[$signature] = $pre;
-		}
-		
-		return $url[$signature];
-	}
+    /**
+     * Set the document name
+     * @access	public
+     * @param 	string $name
+     */
+    public function setName($name) {
+        $this->name = $name;
+    }
 
-	/**
-	 * Convert a url to path
-	 *
-	 * @param 	string $url
-	 * @return  string 
-	 */
-	private function urlToPath($url)
-	{
-		jimport('joomla.filesystem.path');
-		$bool = strpos($url, JURI::root()) === false;
-		return WFUtility::makePath(JPATH_SITE, JPath::clean(ltrim($url, JURI::root($bool))));
-	}
+    /**
+     * Get the document name
+     * @access	public
+     * @return 	string
+     */
+    public function getName() {
+        return $this->name;
+    }
 
-	/**
-	 * Returns an image url
-	 *
-	 * @access  public
-	 * @param string  The file to load including path and extension eg: libaries.image.gif
-	 * @return  Image url
-	 * @since 1.5
-	 */
-	public function image($image, $root = 'libraries')
-	{
-		$parts = explode('.', $image);
-		$parts = preg_replace('#[^A-Z0-9-_]#i', '', $parts);
+    /**
+     * Get the editor URL
+     * @access	private
+     * @param 	bool $relative
+     * @return 	string
+     */
+    private function getURL($relative = false) {
+        if ($relative) {
+            return JURI::root(true) . '/components/com_jce/editor';
+        }
 
-		$ext  = array_pop($parts);
-		$name = trim(array_pop($parts), '/');
+        return JURI::root() . 'components/com_jce/editor';
+    }
 
-		$parts[] = 'img';
-		$parts[] = $name . "." . $ext;
+    /**
+     * Sets the global document language declaration. Default is English (en-gb).
+     * @access 	public
+     * @param   string   $lang
+     */
+    public function setLanguage($lang = "en-gb") {
+        $this->language = strtolower($lang);
+    }
 
-		return $this->getBaseURL($root) . implode('/', $parts);
-	}
+    /**
+     * Returns the document language.
+     *
+     * @return string
+     * @access public
+     */
+    public function getLanguage() {
+        return $this->language;
+    }
 
-	public function removeScript($file, $root = 'libraries')
-	{
-		$file = $this->buildScriptPath($file, $root);		
-		unset($this->_scripts[$file]);
-	}
-	
-	public function removeCss($file, $root = 'libraries')
-	{
-		$file = $this->buildStylePath($file, $root);		
-		unset($this->_styles[$file]);
-	}
-	
-	public function buildScriptPath($file, $root)
-	{
-		$file = preg_replace('#[^A-Z0-9-_\/\.]#i', '', $file);
-		// get base dir
+    /**
+     * Sets the global document direction declaration. Default is left-to-right (ltr).
+     *
+     * @access public
+     * @param   string   $lang
+     */
+    public function setDirection($dir = "ltr") {
+        $this->direction = strtolower($dir);
+    }
+
+    /**
+     * Returns the document language.
+     *
+     * @return string
+     * @access public
+     */
+    public function getDirection() {
+        return $this->direction;
+    }
+
+    /**
+     * Returns a JCE resource url
+     *
+     * @access  private
+     * @param 	string  The path to resolve eg: libaries
+     * @param 	boolean Create a relative url
+     * @return  full url
+     */
+    private function getBaseURL($path, $type = '') {
+        static $url;
+
+        if (!isset($url)) {
+            $url = array();
+        }
+
+        $signature = serialize(array($type, $path));
+
+        // Check if value is already stored
+        if (!isset($url[$signature])) {
+            // get the plugin name using this document instance
+            $plugin = $this->get('name');
+
+            $base = $this->getURL(true) . '/';
+
+            $parts = explode('.', $path);
+            $path = array_shift($parts);
+
+            switch ($path) {
+                // JCE root folder
+                case 'jce':
+                    $pre = $base . '';
+                    break;
+                // JCE libraries resource folder
+                default:
+                case 'libraries':
+                    $pre = $base . 'libraries/' . $type;
+                    break;
+                // TinyMCE folder
+                case 'tiny_mce':
+                    $pre = $base . 'tiny_mce';
+                    break;
+                // JCE current plugin folder
+                case 'plugins':
+                    $pre = $base . 'tiny_mce/plugins/' . $plugin . '/' . $type;
+                    break;
+                // Extensions folder
+                case 'extensions':
+                    $pre = $base . 'extensions';
+                    break;
+                case 'joomla':
+                    return JURI::root(true);
+                    break;
+                case 'media':
+                    return JURI::root(true) . '/media/system';
+                    break;
+                case 'component':
+                    $pre = JURI::root(true) . '/administrator/components/com_jce/media/' . $type;
+                    break;
+                default:
+                    $pre = $base . $path;
+                    break;
+            }
+
+            if (count($parts)) {
+                $pre = rtrim($pre, '/') . '/' . implode('/', $parts);
+            }
+
+            // Store url
+            $url[$signature] = $pre;
+        }
+
+        return $url[$signature];
+    }
+
+    /**
+     * Convert a url to path
+     *
+     * @param 	string $url
+     * @return  string 
+     */
+    private function urlToPath($url) {
+        jimport('joomla.filesystem.path');
+        $bool = strpos($url, JURI::root()) === false;
+        return WFUtility::makePath(JPATH_SITE, JPath::clean(ltrim($url, JURI::root($bool))));
+    }
+
+    /**
+     * Returns an image url
+     *
+     * @access  public
+     * @param string  The file to load including path and extension eg: libaries.image.gif
+     * @return  Image url
+     * @since 1.5
+     */
+    public function image($image, $root = 'libraries') {
+        $parts = explode('.', $image);
+        $parts = preg_replace('#[^A-Z0-9-_]#i', '', $parts);
+
+        $ext = array_pop($parts);
+        $name = trim(array_pop($parts), '/');
+
+        $parts[] = 'img';
+        $parts[] = $name . "." . $ext;
+
+        return $this->getBaseURL($root) . implode('/', $parts);
+    }
+
+    public function removeScript($file, $root = 'libraries') {
+        $file = $this->buildScriptPath($file, $root);
+        unset($this->_scripts[$file]);
+    }
+
+    public function removeCss($file, $root = 'libraries') {
+        $file = $this->buildStylePath($file, $root);
+        unset($this->_styles[$file]);
+    }
+
+    public function buildScriptPath($file, $root) {
+        $file = preg_replace('#[^A-Z0-9-_\/\.]#i', '', $file);
+        // get base dir
         $base = dirname($file);
         // remove extension if present
         $file = basename($file, '.js');
-		// strip . and trailing /
-		$file = trim(trim($base, '.'), '/') . '/' . $file . '.js';
-		// remove leading and trailing slashes
-		$file = trim($file, '/');
-		// create path
-		$file = $this->getBaseURL($root, 'js') . '/' . $file;
-		
-		return $file;
-	}
-	
-	public function buildStylePath($file, $root)
-	{
-		$file = preg_replace('#[^A-Z0-9-_\/\.]#i', '', $file);
-		// get base dir
+        // strip . and trailing /
+        $file = trim(trim($base, '.'), '/') . '/' . $file . '.js';
+        // remove leading and trailing slashes
+        $file = trim($file, '/');
+        // create path
+        $file = $this->getBaseURL($root, 'js') . '/' . $file;
+
+        return $file;
+    }
+
+    public function buildStylePath($file, $root) {
+        $file = preg_replace('#[^A-Z0-9-_\/\.]#i', '', $file);
+        // get base dir
         $base = dirname($file);
         // remove extension if present
         $file = basename($file, '.css');
-		// strip . and trailing /
-		$file = trim(trim($base, '.'), '/') . '/' . $file . '.css';
-		// remove leading and trailing slashes
-		$file = trim($file, '/');
-		// create path
-		$file = $this->getBaseURL($root, 'css') . '/' . $file;
-		
-		return $file;
-	}
-	
-	/**
-	 * Loads a javascript file
-	 *
-	 * @access  public
-	 * @param string  The file to load including path eg: libaries.manager
-	 * @param boolean Debug mode load src file
-	 * @return  echo script html
-	 * @since 1.5
-	 */
-	public function addScript($files, $root = 'libraries', $type = 'text/javascript')
-	{
-		$files = (array) $files;
+        // strip . and trailing /
+        $file = trim(trim($base, '.'), '/') . '/' . $file . '.css';
+        // remove leading and trailing slashes
+        $file = trim($file, '/');
+        // create path
+        $file = $this->getBaseURL($root, 'css') . '/' . $file;
 
-		foreach ($files as $file) {
-			// external link
-			if (preg_match('#^(http:)?\/\/#i', $file)) {
-				$this->_scripts[$file] = $type;
-			} else {
-				$file = $this->buildScriptPath($file, $root);
-				// store path
-				$this->_scripts[$file] = $type;
-			}
-		}
-	}
-	/**
-	 * Loads a css file
-	 *
-	 * @access  public
-	 * @param string The file to load including path eg: libaries.manager
-	 * @param string Root folder
-	 * @return  echo css html
-	 * @since 1.5
-	 */
-	public function addStyleSheet($files, $root = 'libraries', $type = 'text/css')
-	{
-		$files = (array) $files;
+        return $file;
+    }
 
-		jimport('joomla.environment.browser');
-		$browser = JBrowser::getInstance();
+    /**
+     * Loads a javascript file
+     *
+     * @access  public
+     * @param string  The file to load including path eg: libaries.manager
+     * @param boolean Debug mode load src file
+     * @return  echo script html
+     * @since 1.5
+     */
+    public function addScript($files, $root = 'libraries', $type = 'text/javascript') {
+        $files = (array) $files;
 
-		foreach ($files as $file) {
-			$url = $this->buildStylePath($file, $root);
-			// store path
+        foreach ($files as $file) {
+            // external link
+            if (preg_match('#^(http:)?\/\/#i', $file) || strpos($file, 'index.php?option=com_jce') !== false) {
+                $this->_scripts[$file] = $type;
+            } else {
+                $file = $this->buildScriptPath($file, $root);
+                // store path
+                $this->_scripts[$file] = $type;
+            }
+        }
+    }
+
+    /**
+     * Loads a css file
+     *
+     * @access  public
+     * @param string The file to load including path eg: libaries.manager
+     * @param string Root folder
+     * @return  echo css html
+     * @since 1.5
+     */
+    public function addStyleSheet($files, $root = 'libraries', $type = 'text/css') {
+        $files = (array) $files;
+
+        jimport('joomla.environment.browser');
+        $browser = JBrowser::getInstance();
+
+        foreach ($files as $file) {
+            $url = $this->buildStylePath($file, $root);
+            // store path
             $this->_styles[$url] = $type;
 
             if ($browser->getBrowser() == 'msie') {
@@ -423,224 +408,214 @@ class WFDocument extends JObject
                 $path = $this->urlToPath($url);
 
                 if (file_exists(dirname($path) . '/' . $file)) {
-                	$this->_styles[dirname($url) . '/' . $file] = $type;
+                    $this->_styles[dirname($url) . '/' . $file] = $type;
                 }
-        	}
-		}
-	}
+            }
+        }
+    }
 
-	public function addScriptDeclaration($content, $type = 'text/javascript')
-	{
-		if (!isset($this->_script[strtolower($type)])) {
-			$this->_script[strtolower($type)] = $content;
-		} else {
-			$this->_script[strtolower($type)] .= chr(13) . $content;
-		}
-	}
+    public function addScriptDeclaration($content, $type = 'text/javascript') {
+        if (!isset($this->_script[strtolower($type)])) {
+            $this->_script[strtolower($type)] = $content;
+        } else {
+            $this->_script[strtolower($type)] .= chr(13) . $content;
+        }
+    }
 
-	private function getScripts()
-	{
-		return $this->_scripts;
-	}
+    private function getScripts() {
+        return $this->_scripts;
+    }
 
-	private function getStyleSheets()
-	{
-		return $this->_styles;
-	}
+    private function getStyleSheets() {
+        return $this->_styles;
+    }
 
-	/**
-	 * Setup head data
-	 */
-	private function setHead($data)
-	{
-		if (is_array($data)) {
-			$this->_head = array_merge($this->_head, $data);
-		} else {
-			$this->_head[] = $data;
-		}
-	}
+    /**
+     * Setup head data
+     */
+    private function setHead($data) {
+        if (is_array($data)) {
+            $this->_head = array_merge($this->_head, $data);
+        } else {
+            $this->_head[] = $data;
+        }
+    }
 
-	private function getQueryString($query = array())
-	{
-		// get version
-		$version 	= $this->get('version', '000000');		
-		// get layout
-		$layout 	= JRequest::getWord('layout');
-		
-		// set layout and item, eg: &layout=plugin&plugin=link
-		$query['layout'] 	= $layout;
-		$query[$layout]		= JRequest::getWord($layout);
-		
-		// set dialog
-		if (JRequest::getWord('dialog')) {
-			$query['dialog'] = JRequest::getWord('dialog');
-		}
-		
-		// set standalone mode (for File Browser etc)
-		if ($this->get('standalone') == 1) {
-			$query['standalone'] = 1;
-		}
-		
-		// get component id
-		$component_id = JRequest::getInt('component_id');
-		// set component id
-		if ($component_id) {
-			$query['component_id'] = $component_id;
-		}
-		
-		// get token
-		$token	= WFToken::getToken();
-		// set token
-		$query[$token] = 1;
-		
-		if (preg_match('/\d+/', $version)) {
-			// set version
-			$query['version'] = preg_replace('/[^a-z0-9]/i', '', $version);
-		}
+    public function getQueryString($query = array()) {
+        // get version
+        $version = $this->get('version', '000000');
+        // get layout
+        $layout = JRequest::getWord('layout');
 
-		$output = array();
-		
-		foreach($query as $key => $value) {
-			$output[] = $key . '=' . $value;
-		}
-		
-		return implode('&', $output);
-	}
+        // set layout and item, eg: &layout=plugin&plugin=link
+        $query['layout'] = $layout;
+        $query[$layout] = JRequest::getWord($layout);
 
-	/**
-	 * Render document head data
-	 */
-	private function getHead()
-	{		
-		$version = $this->get('version', '000000');
-		// set title		
-		$output = '<title>' . $this->getTitle() . ' : ' . $version . '</title>' . "\n";
-		// create timestamp
-		$stamp 	= preg_match('/\d+/', $version) ? '?version=' . $version : '';	
+        // set dialog
+        if (JRequest::getWord('dialog')) {
+            $query['dialog'] = JRequest::getWord('dialog');
+        }
 
-		// Render scripts
-		if ($this->get('compress_javascript', 0)) {			
-			$script = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . self::getQueryString(array('task' => 'pack'));
-			$output .= "\t\t<script type=\"text/javascript\" src=\"" . $script . "\"></script>\n";
-		} else {
-			foreach ($this->_scripts as $src => $type) {
-				$output .= "\t\t<script type=\"" . $type . "\" src=\"" . $src . $stamp . "\"></script>\n";
-			}
-		}
-		// render stylesheets
-		if ($this->get('compress_css', 0)) {			
-			$file = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . self::getQueryString(array('task' => 'pack', 'type' => 'css'));
+        // set standalone mode (for File Browser etc)
+        if ($this->get('standalone') == 1) {
+            $query['standalone'] = 1;
+        }
 
-			$output .= "\t\t<link href=\"" . $file . "\" rel=\"stylesheet\" type=\"text/css\" />\n";
-		} else {			
-			foreach ($this->_styles as $k => $v) {
-				$output .= "\t\t<link href=\"" . $k . $stamp . "\" rel=\"stylesheet\" type=\"" . $v . "\" />\n";
-			}
-		}
-		
-		// Script declarations
-		foreach ($this->_script as $type => $content) {
-			$output .= "\t\t<script type=\"" . $type . "\">" . $content . "</script>";
-		}
+        // get component id
+        $component_id = JRequest::getInt('component_id');
+        // set component id
+        if ($component_id) {
+            $query['component_id'] = $component_id;
+        }
 
-		// Other head data
-		foreach ($this->_head as $head) {
-			$output .= "\t" . $head . "\n";
-		}
-		
-		return $output;
-	}
-	
-	public function setBody($data = '')
-	{
-		$this->_body = $data;
-	}
-	
-	private function getBody()
-	{
-		return $this->_body;
-	}
-	
-	private function loadData()
-	{
-		//get the file content
-		ob_start();
-		require_once(WF_EDITOR_LIBRARIES . '/views/plugin/index.php');
-		$data = ob_get_contents();
-		ob_end_clean();
-		
-		return $data;
-	}
+        // get token
+        $token = WFToken::getToken();
+        // set token
+        $query[$token] = 1;
 
-	/**
-	 * Render the document
-	 */
-	public function render()
-	{		
-		// assign language
-		$this->language 	= $this->getLanguage();
-		$this->direction 	= $this->getDirection();
-		
-		// load template data
-		$output = $this->loadData();			
-		$output = $this->parseData($output);
-		
-		exit($output);
-	}
-	
-	private function parseData($data)
-	{
-		$data = preg_replace_callback('#<!-- \[head\] -->#', array($this, 'getHead'), $data);
-		$data = preg_replace_callback('#<!-- \[body\] -->#', array($this, 'getBody'), $data);
-		
-		return $data;
-	}
+        if (preg_match('/\d+/', $version)) {
+            // set version
+            $query['version'] = preg_replace('/[^a-z0-9]/i', '', $version);
+        }
 
-	/**
-	 * pack function for plugins
-	 */
-	public function pack($minify = true, $gzip = false)
-	{				
-		if (JRequest::getCmd('task') == 'pack') {
-			
-			// check token
-			WFToken::checkToken('GET') or die('RESTRICTED');
+        $output = array();
 
-			wfimport('admin.classes.packer');
-			
-			$component 	= WFExtensionHelper::getComponent();			
-			$params 	= new WFParameter($component->params);
+        foreach ($query as $key => $value) {
+            $output[] = $key . '=' . $value;
+        }
 
-			$type = JRequest::getWord('type', 'javascript');
+        return implode('&', $output);
+    }
 
-			// javascript
-			$packer = new WFPacker(array(
-                'type' => $type
-			));
+    /**
+     * Render document head data
+     */
+    private function getHead() {
+        $version = $this->get('version', '000000');
+        // set title		
+        $output = '<title>' . $this->getTitle() . ' : ' . $version . '</title>' . "\n";
+        // create timestamp
+        $stamp = preg_match('/\d+/', $version) ? '?version=' . $version : '';
 
-			$files = array();
+        // Render scripts
+        if ($this->get('compress_javascript', 0)) {
+            $script = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . $this->getQueryString(array('task' => 'pack'));
+            $output .= "\t\t<script type=\"text/javascript\" src=\"" . $script . "\"></script>\n";
+        } else {
+            foreach ($this->_scripts as $src => $type) {
+                $output .= "\t\t<script type=\"" . $type . "\" src=\"" . $src . $stamp . "\"></script>\n";
+            }
+        }
+        // render stylesheets
+        if ($this->get('compress_css', 0)) {
+            $file = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . $this->getQueryString(array('task' => 'pack', 'type' => 'css'));
 
-			switch ($type) {
-				case 'javascript':
-					foreach ($this->getScripts() as $script => $type) {
-						$script .= preg_match('/\.js$/', $script) ? '' : '.js';
+            $output .= "\t\t<link href=\"" . $file . "\" rel=\"stylesheet\" type=\"text/css\" />\n";
+        } else {
+            foreach ($this->_styles as $k => $v) {
+                $output .= "\t\t<link href=\"" . $k . $stamp . "\" rel=\"stylesheet\" type=\"" . $v . "\" />\n";
+            }
+        }
 
-						$files[] = $this->urlToPath($script);
-					}
-					break;
-				case 'css':
-					foreach ($this->getStyleSheets() as $style => $type) {
-						$style .= preg_match('/\.css$/', $style) ? '' : '.css';
+        // Script declarations
+        foreach ($this->_script as $type => $content) {
+            $output .= "\t\t<script type=\"" . $type . "\">" . $content . "</script>";
+        }
 
-						$files[] = $this->urlToPath($style);
-					}
-					
-					break;
-			}
+        // Other head data
+        foreach ($this->_head as $head) {
+            $output .= "\t" . $head . "\n";
+        }
 
-			$packer->setFiles($files);
-			$packer->pack($minify, $gzip);
-		}
-	}
+        return $output;
+    }
+
+    public function setBody($data = '') {
+        $this->_body = $data;
+    }
+
+    private function getBody() {
+        return $this->_body;
+    }
+
+    private function loadData() {
+        //get the file content
+        ob_start();
+        require_once(WF_EDITOR_LIBRARIES . '/views/plugin/index.php');
+        $data = ob_get_contents();
+        ob_end_clean();
+
+        return $data;
+    }
+
+    /**
+     * Render the document
+     */
+    public function render() {
+        // assign language
+        $this->language = $this->getLanguage();
+        $this->direction = $this->getDirection();
+
+        // load template data
+        $output = $this->loadData();
+        $output = $this->parseData($output);
+
+        exit($output);
+    }
+
+    private function parseData($data) {
+        $data = preg_replace_callback('#<!-- \[head\] -->#', array($this, 'getHead'), $data);
+        $data = preg_replace_callback('#<!-- \[body\] -->#', array($this, 'getBody'), $data);
+
+        return $data;
+    }
+
+    /**
+     * pack function for plugins
+     */
+    public function pack($minify = true, $gzip = false) {
+        if (JRequest::getCmd('task') == 'pack') {
+
+            // check token
+            WFToken::checkToken('GET') or die('RESTRICTED');
+
+            wfimport('admin.classes.packer');
+
+            $component = WFExtensionHelper::getComponent();
+            $params = new WFParameter($component->params);
+
+            $type = JRequest::getWord('type', 'javascript');
+
+            // javascript
+            $packer = new WFPacker(array(
+                        'type' => $type
+                    ));
+
+            $files = array();
+
+            switch ($type) {
+                case 'javascript':
+                    foreach ($this->getScripts() as $script => $type) {
+                        $script .= preg_match('/\.js$/', $script) ? '' : '.js';
+
+                        $files[] = $this->urlToPath($script);
+                    }
+                    break;
+                case 'css':
+                    foreach ($this->getStyleSheets() as $style => $type) {
+                        $style .= preg_match('/\.css$/', $style) ? '' : '.css';
+
+                        $files[] = $this->urlToPath($style);
+                    }
+
+                    break;
+            }
+
+            $packer->setFiles($files);
+            $packer->pack($minify, $gzip);
+        }
+    }
+
 }
+
 ?>
