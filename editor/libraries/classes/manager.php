@@ -21,16 +21,27 @@ class WFMediaManager extends WFEditorPlugin {
      * @access  public
      */
     public function __construct($config = array()) {
+        
+        if (!array_key_exists('type', $config)) {
+            $config['type'] = 'manager';
+        }
+        
+        if (!array_key_exists('layout', $config)) {
+            $config['layout'] = 'manager';
+        }
+        
+        if (!array_key_exists('view_path', $config)) {
+            $config['view_path'] = WF_EDITOR_LIBRARIES . '/views/plugin';
+        }
+        
+        if (!array_key_exists('template_path', $config)) {
+            $config['template_path'] = WF_EDITOR_LIBRARIES . '/views/plugin/tmpl';
+        }
+        
+        $config = array_merge($this->getConfig(), $config);
+
         // Call parent
-        parent::__construct();
-
-        // set private properties
-        $this->set('_type', 'manager');
-        $this->set('_layout', 'manager');
-        $this->set('_base_path', WF_EDITOR_LIBRARIES . '/views/plugin');
-        $this->set('_template_path', WF_EDITOR_LIBRARIES . '/views/plugin/tmpl');
-
-        $this->setProperties(array_merge($this->getConfig(), $this->getProperties()));
+        parent::__construct($config);
 
         // initialize the browser
         $browser = $this->getBrowser();
