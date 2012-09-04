@@ -1,7 +1,6 @@
 /**
- * @version		$Id: plugin.js 225 2011-06-12 17:15:49Z happy_noodle_boy $
  * @copyright   @@copyright@@
- * @author		Ryan Demmer
+ * @author	Ryan Demmer
  * @license     @@licence@@
  * JCE is free software. This version may have been modified
  * pursuant to the GNU General Public License, and as distributed it
@@ -632,7 +631,7 @@
                 dataType: 'text',
                 success: function (o) {                    
                     // check result - should be object, parse as JSON if string
-                    if ($.type(o) == 'string') {                        
+                    if ($.type(o) == 'string') {                                                
                         // parse string as JSON object
                         var s = $.parseJSON(o);
                         // pass if successful
