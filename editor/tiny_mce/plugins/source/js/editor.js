@@ -13,7 +13,7 @@
             change  : function(){}
         },
 
-        init : function(options, content) {
+        init : function(options, content, selection) {
             var self = this;
 
             if(Event.domLoaded) {                
@@ -35,11 +35,11 @@
                 }
 
                 // load editor
-                this._load(content);                
+                this._load(content, selection);                
             // keep trying...
             } else {
                 Event.add(document, 'init', function() {
-                    self.init(options, content);
+                    self.init(options, content, selection);
                 });
             }
         },
@@ -57,6 +57,7 @@
                     'title' : ed.getLang('source.' + s, s)
                 });
                 
+                // create function
                 var func = self[s];
                 
                 if (o[s]) {
@@ -108,13 +109,15 @@
                 });
 
                 Event.add(btn, 'click', function() {                                        
-                    var v = [doc.getElementById('source_search_value').value];
+                    var f = doc.getElementById('source_search_value').value, r;
                 
+                    // replace
                     if (s == 'replace') {
-                        v.push(doc.getElementById('source_replace_value').value)
+                        r = doc.getElementById('source_replace_value').value;
+                        return func.call(self, f, r, true, doc.getElementById('source_search_regex').checked);
                     }
-                    
-                    var r = func.call(self, v, false, doc.getElementById('source_search_regex').checked);
+                    // search
+                    func.call(self, f, true, doc.getElementById('source_search_regex').checked);
                 });
                 
                 var k = (s == 'search') ? 'prev' : 'all';
@@ -125,21 +128,26 @@
                 });
                 
                 Event.add(btn2, 'click', function() {
-                    var v = [doc.getElementById('source_search_value').value];
+                    var f = doc.getElementById('source_search_value').value, r;
                 
+                    // replace
                     if (s == 'replace') {
-                        v.push(doc.getElementById('source_replace_value').value)
+                        r = doc.getElementById('source_replace_value').value;
+                        
+                        return func.call(self, f, r, true, doc.getElementById('source_search_regex').checked);
                     }
-                    
-                    var r = func.call(self, v, true, doc.getElementById('source_search_regex').checked);
+                    // search
+                    return func.call(self, f, true, doc.getElementById('source_search_regex').checked);
                 });
             });
             
+            // regex checkbox
             DOM.add(search, 'input', {
                 'id'    : 'source_search_regex',
                 'type'  : 'checkbox'
             });
             
+            // regex label
             DOM.add(search, 'label', {
                 'for' : 'source_search_regex'
             }, ed.getLang('source.regex', 'Regular Expression'));
@@ -155,7 +163,7 @@
             return this.formatHTML(html);
         },
         
-        _load : function(content) {
+        _load : function(content, selection) {
             var self = this, cm, o = this.options;
 
             if(window.CodeMirror) {
@@ -303,10 +311,13 @@
                         cm.operation(function() {
                             if (!query || state.query) return;
                             state.query = query;
+                            
                             if (cm.lineCount() < 2000) { // This is too expensive on big documents.
-                                for (var cursor = cm.getSearchCursor(query); cursor.findNext();)
+                                for (var cursor = cm.getSearchCursor(query); cursor.findNext();) {
                                     state.marked.push(cm.markText(cursor.from(), cursor.to(), "CodeMirror-searching"));
+                                }     
                             }
+
                             state.posFrom = state.posTo = cm.getCursor();
                             findNext(cm, rev);
                         });
@@ -412,6 +423,10 @@
                 this.editor = cm;
                 this._loaded(content);
                 
+                if (selection) {
+                    cm.search(selection);
+                }
+                
                 cm.refresh();
                 
                 window.setTimeout(function() {
@@ -437,16 +452,20 @@
             o.load.call();
         },
         
-        search : function(s, rev, re) {
-            return this.editor.search(s[0], rev, re);
+        search : function(find, rev, re) {
+            return this.editor.search(find, rev, re);
         },
         
-        replace : function(s, all, re) {
-            return this.editor.replace(s[0], s[1], all, re);
+        replace : function(find, replace, all, re) {
+            return this.editor.replace(find, replace, all, re);
         },
         
         clearSearch : function() {
             return this.editor.clearSearch();
+        },
+        
+        getSelection : function() {
+            return this.editor.getSelection();
         },
         
         wrap : function(s) {

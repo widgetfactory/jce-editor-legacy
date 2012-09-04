@@ -343,19 +343,34 @@
                 
                 window.setTimeout(function() {
                     self.setHighlight(ed.getParam('source_highlight', true));
-                    if (se) {
-                        se.focus();
-                    }
                 }, 10);
             } else {
                 if (se) {
+                    //var selection = se.getSelection();
+                    
                     // pass content
                     ed.setContent(self.getContent());
-                    
+
                     DOM.hide('wf_' + ed.id + '_source_container');
                     DOM.setAttrib('wf_' + ed.id + '_source_container', 'aria-hidden', true);
                     
                     se.focus();
+                    
+                    /*if (selection) {
+                        if (tinymce.isIE) {
+                            ed.focus();
+                            var r = ed.getDoc().selection.createRange();
+
+                            if (r.findText(selection, 1, false)) {
+                                r.scrollIntoView();
+                                r.select();
+                            }
+
+                            tinyMCEPopup.storeSelection();
+                        } else {
+                            ed.getWin().find(selection, false, false, false, false, false, false);
+                        }
+                    }*/
                 }
 
                 // show iframe
@@ -425,7 +440,11 @@
             tinymce.dom.Event.add(iframe, 'load', function() {
                 var editor = self.getEditor();
             	
-                var v = ed.getContent(), highlight = ed.getParam('source_highlight', true), wrap = ed.getParam('source_wrap', true), numbers = ed.getParam('source_numbers', true);
+                var content = ed.getContent(), highlight = ed.getParam('source_highlight', true), wrap = ed.getParam('source_wrap', true), numbers = ed.getParam('source_numbers', true);
+                
+                /*var selection = ed.selection.getContent({
+                    format : 'text'
+                });*/
 
                 editor.init({
                     'wrap'          : wrap,
@@ -448,7 +467,7 @@
                     change : function() {
                         ed.controlManager.setDisabled('undo', false);
                     }
-                }, v);
+                }, content);
             	
                 editor.resize('100%', h, true);
             });
@@ -462,6 +481,11 @@
          */
         setHighlight : function(s) {
             var ed = this.editor, DOM = tinymce.DOM, se = this.getEditor();
+            
+            // get editor selection
+            /*var selection = ed.selection.getContent({
+                format : 'text'
+            });*/
 
             if (se) {            	
                 se.highlight(s);
@@ -479,6 +503,11 @@
 
                 this.setNumbers(ed.getParam('source_numbers', true));
                 this.setWrap(ed.getParam('source_wrap', true));
+
+                /*if (selection) {
+                    se.clearSearch();
+                    se.search(selection);
+                }*/
 
                 ed.focus();
 
