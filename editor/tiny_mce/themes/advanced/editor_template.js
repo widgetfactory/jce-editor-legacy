@@ -1655,7 +1655,7 @@
             _mceShortcuts : function() {
                 var ed = this.editor;
                 ed.windowManager.open({
-                    url: this.url + '/shortcuts.htm',
+                    url	: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=theme&theme=' + ed.getParam('theme') + '&dialog=shortcuts',
                     width: 480,
                     height: 380,
                     inline: true,
