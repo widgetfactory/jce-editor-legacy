@@ -137,5 +137,5 @@ var XHTMLXtrasDialog = {
 
 };
 
-tinyMCEPopup.requireLangPack();
+//tinyMCEPopup.requireLangPack();
 tinyMCEPopup.onInit.add(XHTMLXtrasDialog.init, XHTMLXtrasDialog);

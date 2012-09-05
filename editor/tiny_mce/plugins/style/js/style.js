@@ -1,6 +1,6 @@
 
 
-tinyMCEPopup.requireLangPack();
+//tinyMCEPopup.requireLangPack();
 
 var StyleDialog = {
     settings : {},

@@ -11,7 +11,7 @@
  * is derivative of works licensed under the GNU Lesser General Public License or
  * other free or open source software licenses.
  */
-tinyMCEPopup.requireLangPack();
+//tinyMCEPopup.requireLangPack();
 
 var SearchReplaceDialog = {
 

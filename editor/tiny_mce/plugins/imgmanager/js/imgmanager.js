@@ -8,7 +8,7 @@
  * other free or open source software licenses.
  */
 (function() {
-    tinyMCEPopup.requireLangPack();
+    //tinyMCEPopup.requireLangPack();
 
     var ImageManagerDialog = {
 

@@ -12,7 +12,7 @@ var LinkDialog = {
     settings : {},
 
     preInit : function() {
-        tinyMCEPopup.requireLangPack();
+        //tinyMCEPopup.requireLangPack();
     },
 
     init : function() {
