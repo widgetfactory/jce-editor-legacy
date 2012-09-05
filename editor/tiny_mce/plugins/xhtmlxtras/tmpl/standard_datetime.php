@@ -11,25 +11,25 @@
 
 defined('_JEXEC') or die('RESTRICTED');
 ?>
-<h4>{#xhtmlxtras_dlg.fieldset_general_tab}</h4>
+<h4><?php echo WFText::_('WF_XHTMLXTRAS_FIELDSET_GENERAL_TAB');?></h4>
 <table>
     <tr>
         <td class="label">
         <label for="datetime">
-            {#xhtmlxtras_dlg.attribute_label_datetime}
+            <?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_DATETIME');?>
         </label>
         </td>
         <td>
         <input id="datetime" type="text" value="" maxlength="19" class="field mceFocus" />
         <a href="javascript:;" onclick="XHTMLXtrasDialog.insertDateTime('datetime');" class="browse">
-        <span class="datetime" title="{#xhtmlxtras_dlg.insert_date}"></span>
+        <span class="datetime" title="<?php echo WFText::_('WF_XHTMLXTRAS_INSERT_DATE');?>"></span>
         </a>
         </td>
     </tr>
     <tr>
         <td class="label">
         <label for="cite">
-            {#xhtmlxtras_dlg.attribute_label_cite}
+            <?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_CITE');?>
         </label>
         </td>
         <td>

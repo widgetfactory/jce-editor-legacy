@@ -69,3 +69,32 @@ close:'Close',
 '-601' : 'File: %s',
 '-800' : 'File: %s'
 });
+
+// Core JCE Plugins
+
+// Aritcle - Pagebreak and Readmore
+tinyMCE.addI18n('en.pagebreak_dlg',{
+desc:"Insert / Edit Pagebreak",
+title:"Page Title",
+alias:"Table of Contents Alias"
+});
+
+// Image Manager
+tinyMCE.addI18n('en.imgmanager_dlg',{
+missing_alt: "Are you sure you want to continue without including Alternate Text for the image? Without it the image may not be accessible to some users with disabilities, or to those using a text browser, or browsing the Web with images turned off.",
+no_src: 'A URL is required. Please select an image or enter a URL'
+});
+
+// Link
+tinyMCE.addI18n('en.link_dlg',{
+is_email:"The URL you entered seems to be an email address, do you want to add the required mailto: prefix?",
+is_external:"The URL you entered seems to be an external link, do you want to add the required http:// prefix?",
+no_href:"A URL is required. Please select a link or enter a URL",
+no_text:"Please enter some text for the link",
+email:"Create E-mail Address",
+to:"To",
+cc:"CC",
+bcc:"BCC",
+subject:"Subject",
+invalid_email:" is not a valid e-mail address!"
+});

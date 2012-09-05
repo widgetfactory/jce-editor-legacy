@@ -10,17 +10,17 @@
  */
 defined('_JEXEC') or die('RESTRICTED');
 ?>
-<h4>{#table_dlg.general_props}</h4>
+<h4><?php echo WFText::_('WF_TABLE_GENERAL_PROPS');?></h4>
 <table border="0" cellpadding="4" cellspacing="0" width="100%">
     <tr>
         <td><label id="colslabel" for="cols">
-                {#table_dlg.cols}</label></td>
+                <?php echo WFText::_('WF_TABLE_COLS');?></label></td>
         <td>
             <input id="cols" type="text" value="" size="3"
                    maxlength="3" class="required number min1 mceFocus" />
         </td>
         <td><label id="rowslabel" for="rows">
-                {#table_dlg.rows}</label></td>
+                <?php echo WFText::_('WF_TABLE_ROWS');?></label></td>
         <td>
             <input id="rows" type="text" value="" size="3"
                    maxlength="3" class="required number min1" />
@@ -28,13 +28,13 @@ defined('_JEXEC') or die('RESTRICTED');
     </tr>
     <tr>
         <td><label id="cellpaddinglabel" for="cellpadding">
-                {#table_dlg.cellpadding}</label></td>
+                <?php echo WFText::_('WF_TABLE_CELLPADDING');?></label></td>
         <td>
             <input id="cellpadding" type="text" value=""
                    size="3" maxlength="3" class="number" />
         </td>
         <td><label id="cellspacinglabel" for="cellspacing">
-                {#table_dlg.cellspacing}</label></td>
+                <?php echo WFText::_('WF_TABLE_CELLSPACING');?></label></td>
         <td>
             <input id="cellspacing" type="text" value=""
                    size="3" maxlength="3" class="number" />
@@ -42,16 +42,16 @@ defined('_JEXEC') or die('RESTRICTED');
     </tr>
     <tr>
         <td><label id="alignlabel" for="align">
-                {#table_dlg.align}</label></td>
+                <?php echo WFText::_('WF_TABLE_ALIGN');?></label></td>
         <td>
             <select id="align" >
                 <option value="">{#not_set}</option>
-                <option value="center">{#table_dlg.align_middle}</option>
-                <option value="left">{#table_dlg.align_left}</option>
-                <option value="right">{#table_dlg.align_right}</option>
+                <option value="center"><?php echo WFText::_('WF_TABLE_ALIGN_MIDDLE');?></option>
+                <option value="left"><?php echo WFText::_('WF_TABLE_ALIGN_LEFT');?></option>
+                <option value="right"><?php echo WFText::_('WF_TABLE_ALIGN_RIGHT');?></option>
             </select></td>
         <td><label id="borderlabel" for="border">
-                {#table_dlg.border}</label></td>
+                <?php echo WFText::_('WF_TABLE_BORDER');?></label></td>
         <td>
             <input id="border" type="text" value="" size="3"
                    maxlength="3" onchange="TableDialog.changedBorder();" class="number" />
@@ -59,13 +59,13 @@ defined('_JEXEC') or die('RESTRICTED');
     </tr>
     <tr id="width_row">
         <td><label id="widthlabel" for="width">
-                {#table_dlg.width}</label></td>
+                <?php echo WFText::_('WF_TABLE_WIDTH');?></label></td>
         <td>
             <input type="text" id="width" value="" size="5"
                    onchange="TableDialog.changedSize();" class="size" />
         </td>
         <td><label id="heightlabel" for="height">
-                {#table_dlg.height}</label></td>
+                <?php echo WFText::_('WF_TABLE_HEIGHT');?></label></td>
         <td>
             <input type="text" id="height" value="" size="5"
                    onchange="TableDialog.changedSize();" class="size" />
@@ -82,7 +82,7 @@ defined('_JEXEC') or die('RESTRICTED');
     </tr>
     <tr>
         <td class="column1"><label for="caption">
-                {#table_dlg.caption}</label></td>
+                <?php echo WFText::_('WF_TABLE_CAPTION');?></label></td>
         <td>
             <input id="caption" type="checkbox"
                    class="checkbox" value="true" />

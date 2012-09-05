@@ -15,25 +15,25 @@ defined('_JEXEC') or die('RESTRICTED');
   <tr>
     <td class="tdelim">&nbsp;</td>
     <td class="tdelim delim">&nbsp;</td>
-    <td class="tdelim">{#style_dlg.style}</td>
+    <td class="tdelim"><?php echo WFText::_('WF_STYLE_STYLE');?></td>
     <td class="tdelim delim">&nbsp;</td>
-    <td class="tdelim">{#style_dlg.width}</td>
+    <td class="tdelim"><?php echo WFText::_('WF_STYLE_WIDTH');?></td>
     <td class="tdelim delim">&nbsp;</td>
-    <td class="tdelim">{#style_dlg.color}</td>
+    <td class="tdelim"><?php echo WFText::_('WF_STYLE_COLOR');?></td>
   </tr>
   
   <tr>
     <td>&nbsp;</td>
     <td class="delim">&nbsp;</td>
-    <td><input type="checkbox" id="border_style_same" name="border_style_same" class="checkbox" checked="checked" onClick="StyleDialog.toggleSame(this,'border_style');" /> <label for="border_style_same">{#style_dlg.same}</label></td>
+    <td><input type="checkbox" id="border_style_same" name="border_style_same" class="checkbox" checked="checked" onClick="StyleDialog.toggleSame(this,'border_style');" /> <label for="border_style_same"><?php echo WFText::_('WF_STYLE_SAME');?></label></td>
     <td class="delim">&nbsp;</td>
-    <td><input type="checkbox" id="border_width_same" name="border_width_same" class="checkbox" checked="checked" onClick="StyleDialog.toggleSame(this,'border_width');" /> <label for="border_width_same">{#style_dlg.same}</label></td>
+    <td><input type="checkbox" id="border_width_same" name="border_width_same" class="checkbox" checked="checked" onClick="StyleDialog.toggleSame(this,'border_width');" /> <label for="border_width_same"><?php echo WFText::_('WF_STYLE_SAME');?></label></td>
     <td class="delim">&nbsp;</td>
-    <td><input type="checkbox" id="border_color_same" name="border_color_same" class="checkbox" checked="checked" onClick="StyleDialog.toggleSame(this,'border_color');" /> <label for="border_color_same">{#style_dlg.same}</label></td>
+    <td><input type="checkbox" id="border_color_same" name="border_color_same" class="checkbox" checked="checked" onClick="StyleDialog.toggleSame(this,'border_color');" /> <label for="border_color_same"><?php echo WFText::_('WF_STYLE_SAME');?></label></td>
   </tr>
   
   <tr>
-    <td>{#style_dlg.top}</td>
+    <td><?php echo WFText::_('WF_STYLE_TOP');?></td>
     <td class="delim">&nbsp;</td>
     <td><select id="border_style_top" name="border_style_top" class="mceEditableSelect"></select></td>
     <td class="delim">&nbsp;</td>
@@ -57,7 +57,7 @@ defined('_JEXEC') or die('RESTRICTED');
   </tr>
   
   <tr>
-    <td>{#style_dlg.right}</td>
+    <td><?php echo WFText::_('WF_STYLE_RIGHT');?></td>
     <td class="delim">&nbsp;</td>
     <td><select id="border_style_right" name="border_style_right" class="mceEditableSelect" disabled="disabled"></select></td>
     <td class="delim">&nbsp;</td>
@@ -81,7 +81,7 @@ defined('_JEXEC') or die('RESTRICTED');
   </tr>
   
   <tr>
-    <td>{#style_dlg.bottom}</td>
+    <td><?php echo WFText::_('WF_STYLE_BOTTOM');?></td>
     <td class="delim">&nbsp;</td>
     <td><select id="border_style_bottom" name="border_style_bottom" class="mceEditableSelect" disabled="disabled"></select></td>
     <td class="delim">&nbsp;</td>
@@ -105,7 +105,7 @@ defined('_JEXEC') or die('RESTRICTED');
   </tr>
   
   <tr>
-    <td>{#style_dlg.left}</td>
+    <td><?php echo WFText::_('WF_STYLE_LEFT');?></td>
     <td class="delim">&nbsp;</td>
     <td><select id="border_style_left" name="border_style_left" class="mceEditableSelect" disabled="disabled"></select></td>
     <td class="delim">&nbsp;</td>

@@ -14,23 +14,23 @@ defined('WF_EDITOR') or die('RESTRICTED');
 <table border="0" cellspacing="0" cellpadding="2">
 	<tr>
 		<td>
-			<label for="search_panel_searchstring">{#searchreplace_dlg.findwhat}</label>
+			<label for="search_panel_searchstring"><?php echo WFText::_('WF_SEARCHREPLACE_FINDWHAT');?></label>
 			<input type="text" id="search_panel_searchstring" style="width: 200px" />
 		</td>
 	</tr>
 	<tr>
 		<td colspan="2">
-			<label>{#searchreplace_dlg.direction}</label>
+			<label><?php echo WFText::_('WF_SEARCHREPLACE_DIRECTION');?></label>
 			<input id="search_panel_backwardsu" name="search_panel_backwards" class="radio" type="radio" />
-			<label for="search_panel_backwardsu">{#searchreplace_dlg.up}</label>
+			<label for="search_panel_backwardsu"><?php echo WFText::_('WF_SEARCHREPLACE_UP');?></label>
 			<input id="search_panel_backwardsd" name="search_panel_backwards" class="radio" type="radio" checked="checked" />
-			<label for="search_panel_backwardsd">{#searchreplace_dlg.down}</label>
+			<label for="search_panel_backwardsd"><?php echo WFText::_('WF_SEARCHREPLACE_DOWN');?></label>
 		</td>
 	</tr>
 	<tr>
 		<td colspan="2">
 			<input id="search_panel_casesensitivebox" class="checkbox" type="checkbox" />
-			<label for="search_panel_casesensitivebox">{#searchreplace_dlg.mcase}</label>
+			<label for="search_panel_casesensitivebox"><?php echo WFText::_('WF_SEARCHREPLACE_MCASE');?></label>
 		</td>
 	</tr>
 </table>

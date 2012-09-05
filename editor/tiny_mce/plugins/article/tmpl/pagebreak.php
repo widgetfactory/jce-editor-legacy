@@ -14,11 +14,11 @@ defined( 'WF_EDITOR' ) or die('RESTRICTED');
 ?>
 <table border="0" cellspacing="0" cellpadding="2">
 	<tr>
-		<td><label for="title">{#pagebreak_dlg.title}:</label></td>
+		<td><label for="title"><?php echo WFText::_('WF_PAGEBREAK_TITLE');?>:</label></td>
 		<td><input type="text" id="title" style="width: 200px" value="" /></td>
 	</tr>
 	<tr>	
-		<td><label for="alt">{#pagebreak_dlg.alias}:</label></td>
+		<td><label for="alt"><?php echo WFText::_('WF_PAGEBREAK_ALIAS');?>:</label></td>
 		<td><input type="text" id="alt" style="width: 200px" value="" /></td>
 	<tr>
 	</tr>

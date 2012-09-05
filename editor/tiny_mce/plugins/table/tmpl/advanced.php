@@ -13,18 +13,18 @@ defined('_JEXEC') or die('RESTRICTED');
 
 $plugin = WFTablesPlugin::getInstance();
 ?>
-<h4>{#table_dlg.advanced_props}</h4>
+<h4><?php echo WFText::_('WF_TABLE_ADVANCED_PROPS');?></h4>
 <table border="0" cellpadding="0" cellspacing="4">
 	<tr>
 		<td class="column1"><label for="id">
-			{#table_dlg.id}</label></td>
+			<?php echo WFText::_('WF_TABLE_ID');?></label></td>
 		<td>
 		<input id="id" type="text" value="" class="advfield" />
 		</td>
 	</tr>
 	<tr>
 		<td class="column1"><label for="summary">
-			{#table_dlg.summary}</label></td>
+			<?php echo WFText::_('WF_TABLE_SUMMARY');?></label></td>
 		<td>
 		<input id="summary" type="text" value=""
 		class="advfield" />
@@ -32,7 +32,7 @@ $plugin = WFTablesPlugin::getInstance();
 	</tr>
 	<tr>
 		<td><label for="style">
-			{#table_dlg.style}</label></td>
+			<?php echo WFText::_('WF_TABLE_STYLE');?></label></td>
 		<td>
 		<input type="text" id="style" value=""
 		class="advfield" onchange="TableDialog.changedStyle();" />
@@ -40,14 +40,14 @@ $plugin = WFTablesPlugin::getInstance();
 	</tr>
 	<tr>
 		<td class="column1"><label id="langlabel" for="lang">
-			{#table_dlg.langcode}</label></td>
+			<?php echo WFText::_('WF_TABLE_LANGCODE');?></label></td>
 		<td>
 		<input id="lang" type="text" value="" class="advfield" />
 		</td>
 	</tr>
 	<tr>
 		<td class="column1"><label for="backgroundimage">
-			{#table_dlg.bgimage}</label></td>
+			<?php echo WFText::_('WF_TABLE_BGIMAGE');?></label></td>
 		<td>
 		<table border="0" cellpadding="0" cellspacing="0">
 			<tr>
@@ -63,48 +63,48 @@ $plugin = WFTablesPlugin::getInstance();
 	?>
 	<tr>
 		<td class="column1"><label for="tframe">
-			{#table_dlg.frame}</label></td>
+			<?php echo WFText::_('WF_TABLE_FRAME');?></label></td>
 		<td>
 		<select id="tframe" class="advfield">
 			<option value="">{#not_set}</option>
-			<option value="void">{#table_dlg.rules_void}</option>
-			<option value="above">{#table_dlg.rules_above}</option>
-			<option value="below">{#table_dlg.rules_below}</option>
-			<option value="hsides">{#table_dlg.rules_hsides}</option>
-			<option value="lhs">{#table_dlg.rules_lhs}</option>
-			<option value="rhs">{#table_dlg.rules_rhs}</option>
-			<option value="vsides">{#table_dlg.rules_vsides}</option>
-			<option value="box">{#table_dlg.rules_box}</option>
-			<option value="border">{#table_dlg.rules_border}</option>
+			<option value="void"><?php echo WFText::_('WF_TABLE_RULES_VOID');?></option>
+			<option value="above"><?php echo WFText::_('WF_TABLE_RULES_ABOVE');?></option>
+			<option value="below"><?php echo WFText::_('WF_TABLE_RULES_BELOW');?></option>
+			<option value="hsides"><?php echo WFText::_('WF_TABLE_RULES_HSIDES');?></option>
+			<option value="lhs"><?php echo WFText::_('WF_TABLE_RULES_LHS');?></option>
+			<option value="rhs"><?php echo WFText::_('WF_TABLE_RULES_RHS');?></option>
+			<option value="vsides"><?php echo WFText::_('WF_TABLE_RULES_VSIDES');?></option>
+			<option value="box"><?php echo WFText::_('WF_TABLE_RULES_BOX');?></option>
+			<option value="border"><?php echo WFText::_('WF_TABLE_RULES_BORDER');?></option>
 		</select></td>
 	</tr>
 	<tr>
 		<td class="column1"><label for="rules">
-			{#table_dlg.rules}</label></td>
+			<?php echo WFText::_('WF_TABLE_RULES');?></label></td>
 		<td>
 		<select id="rules" class="advfield">
 			<option value="">{#not_set}</option>
-			<option value="none">{#table_dlg.frame_none}</option>
-			<option value="groups">{#table_dlg.frame_groups}</option>
-			<option value="rows">{#table_dlg.frame_rows}</option>
-			<option value="cols">{#table_dlg.frame_cols}</option>
-			<option value="all">{#table_dlg.frame_all}</option>
+			<option value="none"><?php echo WFText::_('WF_TABLE_FRAME_NONE');?></option>
+			<option value="groups"><?php echo WFText::_('WF_TABLE_FRAME_GROUPS');?></option>
+			<option value="rows"><?php echo WFText::_('WF_TABLE_FRAME_ROWS');?></option>
+			<option value="cols"><?php echo WFText::_('WF_TABLE_FRAME_COLS');?></option>
+			<option value="all"><?php echo WFText::_('WF_TABLE_FRAME_ALL');?></option>
 		</select></td>
 	</tr>
 	<?php endif;?>
 	<tr>
 		<td class="column1"><label for="dir">
-			{#table_dlg.langdir}</label></td>
+			<?php echo WFText::_('WF_TABLE_LANGDIR');?></label></td>
 		<td>
 		<select id="dir" class="advfield">
 			<option value="">{#not_set}</option>
-			<option value="ltr">{#table_dlg.ltr}</option>
-			<option value="rtl">{#table_dlg.rtl}</option>
+			<option value="ltr"><?php echo WFText::_('WF_TABLE_LTR');?></option>
+			<option value="rtl"><?php echo WFText::_('WF_TABLE_RTL');?></option>
 		</select></td>
 	</tr>
 	<tr>
 		<td class="column1"><label for="bordercolor">
-			{#table_dlg.bordercolor}</label></td>
+			<?php echo WFText::_('WF_TABLE_BORDERCOLOR');?></label></td>
 		<td>
 		<table border="0" cellpadding="0" cellspacing="0">
 			<tr>
@@ -117,7 +117,7 @@ $plugin = WFTablesPlugin::getInstance();
 	</tr>
 	<tr>
 		<td class="column1"><label for="bgcolor">
-			{#table_dlg.bgcolor}</label></td>
+			<?php echo WFText::_('WF_TABLE_BGCOLOR');?></label></td>
 		<td>
 		<table border="0" cellpadding="0" cellspacing="0">
 			<tr>

@@ -13,17 +13,17 @@ defined('_JEXEC') or die('RESTRICTED');
 ?>
 <fieldset>
 	<legend>
-		{#table_dlg.merge_cells_title}
+		<?php echo WFText::_('WF_TABLE_MERGE_CELLS_TITLE');?>
 	</legend>
 	<table border="0" cellpadding="0" cellspacing="3" width="100%">
 		<tr>
-			<td>{#table_dlg.cols}:</td>
+			<td><?php echo WFText::_('WF_TABLE_COLS');?>:</td>
 			<td align="right">
 			<input type="text" id="numcols" value="" class="number min1 mceFocus" style="width: 30px" />
 			</td>
 		</tr>
 		<tr>
-			<td>{#table_dlg.rows}:</td>
+			<td><?php echo WFText::_('WF_TABLE_ROWS');?>:</td>
 			<td align="right">
 			<input type="text" id="numrows" value="" class="number min1" style="width: 30px" />
 			</td>

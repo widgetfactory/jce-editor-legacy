@@ -19,23 +19,23 @@ $tabs	= WFTabs::getInstance();
 	<?php if ($plugin->getContext() == 'cell') : ?>
 	<div>
 		<select id="action" name="action">
-			<option value="cell">{#table_dlg.cell_cell}</option>
-			<option value="row">{#table_dlg.cell_row}</option>
-			<option value="all">{#table_dlg.cell_all}</option>
+			<option value="cell"><?php echo WFText::_('WF_TABLE_CELL_CELL');?></option>
+			<option value="row"><?php echo WFText::_('WF_TABLE_CELL_ROW');?></option>
+			<option value="all"><?php echo WFText::_('WF_TABLE_CELL_ALL');?></option>
 		</select>
 	</div>
 	<?php endif;
 	if ($plugin->getContext() == 'row') : ?>
 	<div>
 		<select id="action" name="action">
-			<option value="row">{#table_dlg.row_row}</option>
-			<option value="odd">{#table_dlg.row_odd}</option>
-			<option value="even">{#table_dlg.row_even}</option>
-			<option value="all">{#table_dlg.row_all}</option>
+			<option value="row"><?php echo WFText::_('WF_TABLE_ROW_ROW');?></option>
+			<option value="odd"><?php echo WFText::_('WF_TABLE_ROW_ODD');?></option>
+			<option value="even"><?php echo WFText::_('WF_TABLE_ROW_EVEN');?></option>
+			<option value="all"><?php echo WFText::_('WF_TABLE_ROW_ALL');?></option>
 		</select>
 	</div>
 	<?php endif; ?>
-	<button type="submit" id="insert" onclick="TableDialog.insert();">{#insert}</button>
-	<button type="button" id="cancel">{#cancel}</button>
+	<button type="submit" id="insert" onclick="TableDialog.insert();"><?php echo WFText::_('WF_LABEL_INSERT');?></button>
+	<button type="button" id="cancel"><?php echo WFText::_('WF_LABEL_CANCEL');?></button>
 	</div>
 </form>

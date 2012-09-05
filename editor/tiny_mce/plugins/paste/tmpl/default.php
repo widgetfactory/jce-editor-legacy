@@ -12,11 +12,11 @@
 defined( 'WF_EDITOR' ) or die('RESTRICTED');
 ?>
 <form onsubmit="return false;" action="#">
-	<div id="title" class="title">{#paste_dlg.title}</div>		
+	<div id="title" class="title"><?php echo WFText::_('WF_PASTE_TITLE');?></div>		
 	<div id="container"></div>
 	
 	<div class="mceActionPanel">
-	<button id="insert" >{#insert}</button>
-	<button id="cancel">{#cancel}</button>
+	<button id="insert" ><?php echo WFText::_('WF_LABEL_INSERT');?></button>
+	<button id="cancel"><?php echo WFText::_('WF_LABEL_CANCEL');?></button>
 	</div>
 </form>

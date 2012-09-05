@@ -11,56 +11,56 @@
 
 defined('_JEXEC') or die('RESTRICTED');
 ?>
-<h4>{#table_dlg.general_props}</h4>
+<h4><?php echo WFText::_('WF_TABLE_GENERAL_PROPS');?></h4>
 <table border="0" cellpadding="4" cellspacing="0">
 	<tr>
 		<td><label for="align">
-			{#table_dlg.align}</label></td>
+			<?php echo WFText::_('WF_TABLE_ALIGN');?></label></td>
 		<td>
 		<select id="align" class="mceFocus">
 			<option value="">{#not_set}</option>
-			<option value="center">{#table_dlg.align_middle}</option>
-			<option value="left">{#table_dlg.align_left}</option>
-			<option value="right">{#table_dlg.align_right}</option>
+			<option value="center"><?php echo WFText::_('WF_TABLE_ALIGN_MIDDLE');?></option>
+			<option value="left"><?php echo WFText::_('WF_TABLE_ALIGN_LEFT');?></option>
+			<option value="right"><?php echo WFText::_('WF_TABLE_ALIGN_RIGHT');?></option>
 		</select></td>
 		<td><label for="celltype">
-			{#table_dlg.cell_type}</label></td>
+			<?php echo WFText::_('WF_TABLE_CELL_TYPE');?></label></td>
 		<td>
 		<select id="celltype" >
-			<option value="td">{#table_dlg.td}</option>
-			<option value="th">{#table_dlg.th}</option>
+			<option value="td"><?php echo WFText::_('WF_TABLE_TD');?></option>
+			<option value="th"><?php echo WFText::_('WF_TABLE_TH');?></option>
 		</select></td>
 	</tr>
 	<tr>
 		<td><label for="valign">
-			{#table_dlg.valign}</label></td>
+			<?php echo WFText::_('WF_TABLE_VALIGN');?></label></td>
 		<td>
 		<select id="valign" >
 			<option value="">{#not_set}</option>
-			<option value="top">{#table_dlg.align_top}</option>
-			<option value="middle">{#table_dlg.align_middle}</option>
-			<option value="bottom">{#table_dlg.align_bottom}</option>
+			<option value="top"><?php echo WFText::_('WF_TABLE_ALIGN_TOP');?></option>
+			<option value="middle"><?php echo WFText::_('WF_TABLE_ALIGN_MIDDLE');?></option>
+			<option value="bottom"><?php echo WFText::_('WF_TABLE_ALIGN_BOTTOM');?></option>
 		</select></td>
 		<td><label for="scope">
-			{#table_dlg.scope}</label></td>
+			<?php echo WFText::_('WF_TABLE_SCOPE');?></label></td>
 		<td>
 		<select id="scope" >
 			<option value="">{#not_set}</option>
 			<option value="col">{#table.col}</option>
 			<option value="row">{#table.row}</option>
-			<option value="rowgroup">{#table_dlg.rowgroup}</option>
-			<option value="colgroup">{#table_dlg.colgroup}</option>
+			<option value="rowgroup"><?php echo WFText::_('WF_TABLE_ROWGROUP');?></option>
+			<option value="colgroup"><?php echo WFText::_('WF_TABLE_COLGROUP');?></option>
 		</select></td>
 	</tr>
 	<tr>
 		<td><label for="width">
-			{#table_dlg.width}</label></td>
+			<?php echo WFText::_('WF_TABLE_WIDTH');?></label></td>
 		<td>
 		<input id="width" type="text" value="" size="4"
 		maxlength="4" onchange="TableDialog.changedSize();" />
 		</td>
 		<td><label for="height">
-			{#table_dlg.height}</label></td>
+			<?php echo WFText::_('WF_TABLE_HEIGHT');?></label></td>
 		<td>
 		<input id="height" type="text" value="" size="4"
 		maxlength="4" onchange="TableDialog.changedSize();" />

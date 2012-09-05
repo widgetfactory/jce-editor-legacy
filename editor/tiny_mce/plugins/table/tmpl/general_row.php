@@ -11,38 +11,38 @@
 
 defined('_JEXEC') or die('RESTRICTED');
 ?>
-<h4>{#table_dlg.general_props}</h4>
+<h4><?php echo WFText::_('WF_TABLE_GENERAL_PROPS');?></h4>
 <table border="0" cellpadding="4" cellspacing="0">
 	<tr>
 		<td><label for="rowtype">
-			{#table_dlg.rowtype}</label></td>
+			<?php echo WFText::_('WF_TABLE_ROWTYPE');?></label></td>
 		<td class="col2">
 		<select id="rowtype" class="mceFocus">
-			<option value="thead">{#table_dlg.thead}</option>
-			<option value="tbody">{#table_dlg.tbody}</option>
-			<option value="tfoot">{#table_dlg.tfoot}</option>
+			<option value="thead"><?php echo WFText::_('WF_TABLE_THEAD');?></option>
+			<option value="tbody"><?php echo WFText::_('WF_TABLE_TBODY');?></option>
+			<option value="tfoot"><?php echo WFText::_('WF_TABLE_TFOOT');?></option>
 		</select></td>
 	</tr>
 	<tr>
 		<td><label for="align">
-			{#table_dlg.align}</label></td>
+			<?php echo WFText::_('WF_TABLE_ALIGN');?></label></td>
 		<td class="col2">
 		<select id="align" >
 			<option value="">{#not_set}</option>
-			<option value="center">{#table_dlg.align_middle}</option>
-			<option value="left">{#table_dlg.align_left}</option>
-			<option value="right">{#table_dlg.align_right}</option>
+			<option value="center"><?php echo WFText::_('WF_TABLE_ALIGN_MIDDLE');?></option>
+			<option value="left"><?php echo WFText::_('WF_TABLE_ALIGN_LEFT');?></option>
+			<option value="right"><?php echo WFText::_('WF_TABLE_ALIGN_RIGHT');?></option>
 		</select></td>
 	</tr>
 	<tr>
 		<td><label for="valign">
-			{#table_dlg.valign}</label></td>
+			<?php echo WFText::_('WF_TABLE_VALIGN');?></label></td>
 		<td class="col2">
 		<select id="valign" >
 			<option value="">{#not_set}</option>
-			<option value="top">{#table_dlg.align_top}</option>
-			<option value="middle">{#table_dlg.align_middle}</option>
-			<option value="bottom">{#table_dlg.align_bottom}</option>
+			<option value="top"><?php echo WFText::_('WF_TABLE_ALIGN_TOP');?></option>
+			<option value="middle"><?php echo WFText::_('WF_TABLE_ALIGN_MIDDLE');?></option>
+			<option value="bottom"><?php echo WFText::_('WF_TABLE_ALIGN_BOTTOM');?></option>
 		</select></td>
 	</tr>
 	<tr id="styleSelectRow">
@@ -56,7 +56,7 @@ defined('_JEXEC') or die('RESTRICTED');
 	</tr>
 	<tr>
 		<td><label for="height">
-			{#table_dlg.height}</label></td>
+			<?php echo WFText::_('WF_TABLE_HEIGHT');?></label></td>
 		<td class="col2">
 		<input type="text" id="height" value=""
 		size="4" maxlength="4" onchange="TableDialog.changedSize();" />
