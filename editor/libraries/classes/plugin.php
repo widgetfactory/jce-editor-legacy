@@ -13,6 +13,10 @@ defined('_JEXEC') or die('RESTRICTED');
 
 wfimport('editor.libraries.classes.editor');
 
+if (!defined('WF_INI_LANG')) {
+    define('WF_INI_LANG', 0);
+}
+
 /**
  * JCE class
  *
@@ -222,8 +226,10 @@ class WFEditorPlugin extends WFEditor {
 
         $document->addScript(array('tiny_mce_popup'), 'tiny_mce');
 
-        // language
-        $document->addScript(array('index.php?option=com_jce&view=editor&' . $document->getQueryString(array('task' => 'loadlanguages'))), 'joomla');
+        if (WF_INI_LANG) {
+            // ini language
+            $document->addScript(array('index.php?option=com_jce&view=editor&' . $document->getQueryString(array('task' => 'loadlanguages'))), 'joomla');
+        }
 
         // jquery versions
         $jquery = array('jquery/jquery-' . WF_JQUERY . '.min.js', 'jquery/jquery-ui-' . WF_JQUERYUI . '.custom.min.js');
