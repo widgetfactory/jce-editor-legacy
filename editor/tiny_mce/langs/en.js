@@ -315,6 +315,9 @@ tinyMCE.addI18n({
         upload : {
             'response_error' : "Invalid Upload Response",
             'http_error' : "HTTP Error"
+        },
+        iframe : {
+            desc : 'Insert/Edit IFrame'
         }
     }
 });
