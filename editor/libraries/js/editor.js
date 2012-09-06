@@ -148,6 +148,17 @@ function jInsertEditorText(text, editor) {
                     
                     var s = this.settings;
                     
+                    // skip loading plugin languages that don't exist
+                    if (s.skip_plugin_languages) {
+                        var sl = tinymce.ScriptLoader, URI = tinyMCE.baseURI;
+                        each(s.skip_plugin_languages.split(','), function(n) {
+                            if(n) {
+                                sl.markDone(URI.toAbsolute('plugins/' + n + '/langs/' + s.language + '.js'));
+                                sl.add(URI.toAbsolute('plugins/' + n + '/langs/en.js'));
+                            }
+                        });
+                    }
+                    
                     // load external plugins
                     each(explode(s.plugins), function(p) {
                         if (p.charAt(0) == '-') {                            
@@ -156,7 +167,7 @@ function jInsertEditorText(text, editor) {
                             tinymce.PluginManager.load(p, s.base_url + 'plugins/jce/' + p + '/editor_plugin.js');
                         }
                     });
-                    
+
                     WFEditor.load();
                 } catch (e) {
                 //console.log(e);
