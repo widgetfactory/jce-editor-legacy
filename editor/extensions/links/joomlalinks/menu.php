@@ -212,7 +212,7 @@ class JoomlalinksMenu extends JObject
 		
 		// Joomla! 1.6+
 		if (method_exists('JUser', 'getAuthorisedViewLevels')) {
-			$groups	= implode(',', $user->authorisedLevels());
+			$groups	= implode(',', $user->getAuthorisedViewLevels());
 			$where .= ' AND menutype != '.$db->Quote('_adminmenu');
 			$where .= ' AND access IN ('.$groups.')';
 			if ($id) {

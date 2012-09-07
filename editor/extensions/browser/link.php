@@ -145,7 +145,7 @@ class WFLinkBrowser extends WFBrowserExtension {
         if (method_exists('JUser', 'getAuthorisedViewLevels')) {
             $where = ' WHERE parent_id = ' . (int) $parent;
             $where .= ' AND extension = ' . $db->Quote($section);
-            $where .= ' AND access IN (' . implode(',', $user->authorisedLevels()) . ')';
+            $where .= ' AND access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')';
 
             if (!$wf->checkAccess('static', 1)) {
                 $where .= ' AND path != ' . $db->Quote('uncategorised');
