@@ -22,6 +22,10 @@
             }
 
             ed.onPreInit.add(function() {				
+                /*if (ed.settings.schema === "html5") {
+                    ed.schema.addValidChildren('a[#|abbr|area|address|article|aside|audio|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var|video]');
+                }*/
+                
                 // only if "Cleanup HTML" enabled
                 if (ed.settings.validate) {
                     // Invalid Attribute Values cleanup
