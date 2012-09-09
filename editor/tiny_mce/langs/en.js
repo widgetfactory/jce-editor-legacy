@@ -252,7 +252,8 @@ tinyMCE.addI18n({
         caption: {
             desc: "Insert/Edit Caption",
             delta_width: 0,
-            delta_height: 0
+            delta_height: 0,
+            'delete' : 'Delete Caption'
         },
         templatemanager: {
             desc: "Insert predefined template content",
