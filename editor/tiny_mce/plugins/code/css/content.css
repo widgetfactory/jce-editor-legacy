@@ -1,4 +1,28 @@
-span.mceItemPhp, span.mcePhp, span.mceItemScript, span.mceItemStyle {display:inline-block;width:20px;height:20px;background-image:url(../../../../libraries/img/ext.png);background-repeat:no-repeat;}
-span.mceItemPhp, span.mcePhp {background-position: 0 -100px;}
-span.mceItemScript {background-position: 0 -220px;}
-span.mceItemStyle {background-position: 0 -420px;}
+span.mceItemPhp, span.mcePhp, span.mceItemScript, span.mceItemStyle {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url(../../../../libraries/img/ext.png);
+    background-repeat: no-repeat;
+    -webkit-user-select:all; -webkit-user-modify:read-only; -moz-user-select:all; -moz-user-modify:read-only; 
+    cursor: pointer;
+    font-size : 0;
+    line-height : 0;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-indent : -9999px;
+}
+span.mceItemPhp, span.mcePhp {
+    background-position: 0 -100px;
+}
+span.mceItemScript {
+    background-position: 0 -220px;
+}
+span.mceItemStyle {
+    background-position: 0 -420px;
+}
+
+span.mceItemScript.mceItemSelected, span.mceItemStyle.mceItemSelected, span.mceItemPhp.mceItemSelected {
+    background-color: #b4d4ff;
+    border : 0 none;
+}

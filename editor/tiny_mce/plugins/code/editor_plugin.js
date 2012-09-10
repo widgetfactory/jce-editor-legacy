@@ -18,6 +18,24 @@
 
             this.editor = ed;
             this.url 	= url;
+            
+            function isCode(n) {
+                return ed.dom.is(n, 'span.mceItemScript, span.mceItemStyle, span.mceItemPhp');
+            }
+            
+            ed.onNodeChange.add( function(ed, cm, n, co) {                                
+                ed.dom.removeClass(ed.dom.select('span.mceItemSelected'), 'mceItemSelected');
+                
+                if (isCode(n) && n.nodeName == 'SPAN') {                 
+                    ed.dom.addClass(n, 'mceItemSelected');
+                }
+            });
+            
+            ed.onKeyDown.add(function(ed, e) {				
+                if (e.keyCode == BACKSPACE || e.keyCode == DELETE) {                                        
+                    self._removeCode(e);
+                }
+            });
 
             ed.onPreInit.add( function() {
                 if (ed.getParam('code_style')) {
@@ -183,6 +201,20 @@
                 }
             });
 
+        },
+        
+        _removeCode : function(e) {
+            var ed = this.editor, s = ed.selection, n = s.getNode();
+                    
+            if (ed.dom.is(n, 'span.mceItemScript, span.mceItemStyle, span.mceItemPhp')) {
+                ed.undoManager.add();
+                
+                ed.dom.remove(n);
+
+                if (e) {
+                    e.preventDefault();
+                }
+            }
         },
         
         _convertCurlyCode : function(content) {
