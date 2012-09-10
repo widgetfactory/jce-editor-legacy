@@ -22,7 +22,7 @@ span.mceItemStyle {
     background-position: 0 -420px;
 }
 
-span.mceItemScript.mceItemSelected, span.mceItemStyle.mceItemSelected, span.mceItemPhp.mceItemSelected {
+span.mceItemScript.mceItemSelected, span.mceItemStyle.mceItemSelected, span.mceItemPhp.mceItemSelected, span.mcePhp.mceItemSelected {
     background-color: #b4d4ff;
     border : 0 none;
 }

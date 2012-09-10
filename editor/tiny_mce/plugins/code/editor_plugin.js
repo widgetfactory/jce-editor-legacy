@@ -11,6 +11,7 @@
  */
 (function() {
     var each = tinymce.each, JSON = tinymce.util.JSON, Node = tinymce.html.Node, Entities = tinymce.html.Entities;
+    var VK = tinymce.VK, BACKSPACE = VK.BACKSPACE, DELETE = VK.DELETE;
 
     tinymce.create('tinymce.plugins.CodePlugin', {
         init: function(ed, url) {
@@ -20,7 +21,7 @@
             this.url 	= url;
             
             function isCode(n) {
-                return ed.dom.is(n, 'span.mceItemScript, span.mceItemStyle, span.mceItemPhp');
+                return ed.dom.is(n, 'span.mceItemScript, span.mceItemStyle, span.mceItemPhp, span.mcePhp');
             }
             
             ed.onNodeChange.add( function(ed, cm, n, co) {                                
@@ -206,7 +207,7 @@
         _removeCode : function(e) {
             var ed = this.editor, s = ed.selection, n = s.getNode();
                     
-            if (ed.dom.is(n, 'span.mceItemScript, span.mceItemStyle, span.mceItemPhp')) {
+            if (ed.dom.is(n, 'span.mceItemScript, span.mceItemStyle, span.mceItemPhp, span.mcePhp')) {
                 ed.undoManager.add();
                 
                 ed.dom.remove(n);
