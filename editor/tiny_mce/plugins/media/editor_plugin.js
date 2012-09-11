@@ -189,7 +189,7 @@
                 var invalid = ed.settings.invalid_elements;
                 
                 if (ed.settings.schema != 'html5') {
-                    ed.schema.addValidElements('video[src|autobuffer|autoplay|loop|controls|width|height|poster|*],audio[src|autobuffer|autoplay|loop|controls|*],source[src|type|media|*]');
+                    ed.schema.addValidElements('video[src|autobuffer|autoplay|loop|controls|width|height|poster|*],audio[src|autobuffer|autoplay|loop|controls|*],source[src|type|media|*],embed[src|type|width|height|*]');
                 }
                 
                 // iframes
@@ -576,15 +576,12 @@
 			
             // make name lowercase
             name = name.toLowerCase();
-            // make type lowercase
-            if (type) {
-                type = type.toLowerCase();
-            }
 
             // add identifier class
             classes.push('mceItem' + ucfirst(name));
+            
             // add type class
-            if (type && name !== type ) {
+            if (type && name !== type.toLowerCase() ) {
                 classes.push('mceItem' + ucfirst(type));
             }
 
