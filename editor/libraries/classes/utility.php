@@ -127,18 +127,22 @@ abstract class WFUtility {
 
         // strip leading .
         $search[] = '#^\.*#';
-        
+
         // strip whitespace
         $search[] = '#^\s*|\s*$#';
-        
+
         // only for utf-8 to avoid PCRE errors - PCRE must be at least version 5
         if ($mode == 'utf-8') {
             try {
-                return preg_replace($search, '', $subject);
-            } catch (Exception $e) {
-                // try ascii
+                $result = preg_replace($search, '', $subject);
+            } catch (Exception $e) {}
+            
+            // try ascii
+            if (!$result) {
                 return self::makeSafe($subject, 'ascii');
             }
+
+            return $result;
         }
 
         return preg_replace($search, '', $subject);
