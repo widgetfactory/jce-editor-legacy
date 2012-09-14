@@ -117,7 +117,7 @@
                         return func.call(self, f, r, true, doc.getElementById('source_search_regex').checked);
                     }
                     // search
-                    func.call(self, f, true, doc.getElementById('source_search_regex').checked);
+                    func.call(self, f, false, doc.getElementById('source_search_regex').checked);
                 });
                 
                 var k = (s == 'search') ? 'prev' : 'all';
