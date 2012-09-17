@@ -90,7 +90,7 @@ class WFFileSystem extends WFExtension {
     function getRootDir() {
         static $root;
 
-        if (!$root) {
+        if (!isset($root)) {
             $user = JFactory::getUser();
             $wf = WFEditorPlugin::getInstance();
             $profile = $wf->getProfile();

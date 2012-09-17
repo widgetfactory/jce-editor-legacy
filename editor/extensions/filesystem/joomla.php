@@ -77,7 +77,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
     function getRootDir() {
         static $root;
 
-        if (!$root) {
+        if (!isset($root)) {
 
             $root = parent::getRootDir();
             $wf = WFEditorPlugin::getInstance();
