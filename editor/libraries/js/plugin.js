@@ -628,7 +628,7 @@
                 type    : 'POST',
                 url     : url,
                 data    : 'json=' + $.JSON.serialize(json) + '&' + $.param(args),
-                dataType: 'text',
+                //dataType: 'text',
                 success: function (o) {                    
                     // check result - should be object, parse as JSON if string
                     if ($.type(o) == 'string') {                                                
