@@ -94,6 +94,11 @@ tinyMCE.addI18n({
             bcc:"BCC",
             subject:"Subject",
             invalid_email:" is not a valid e-mail address!"
+        },
+        
+        'searchreplace_dlg' : {
+            notfound : "The search has been completed. The search string could not be found.",
+            allreplaced : "All occurrences of the search string were replaced."
         }
     }
 });
