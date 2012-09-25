@@ -123,9 +123,9 @@
             numlist : ['numlist_desc', 'InsertOrderedList'],
             outdent : ['outdent_desc', 'Outdent'],
             indent : ['indent_desc', 'Indent'],
-            cut : ['cut_desc', 'Cut'],
-            copy : ['copy_desc', 'Copy'],
-            paste : ['paste_desc', 'Paste'],
+            //cut : ['cut_desc', 'Cut'],
+            //copy : ['copy_desc', 'Copy'],
+            //paste : ['paste_desc', 'Paste'],
             undo : ['undo_desc', 'Undo'],
             redo : ['redo_desc', 'Redo'],
             //link : ['link_desc', 'mceLink'],
@@ -1130,10 +1130,10 @@
                 a = 'mce' + t._ufirst(a);
 
                 n = DOM.add(DOM.add(c, 'tr', {
-                    role: 'presentation'
+                    role: 'toolbar'
                 }), 'td', {
                     'class' : 'mceToolbar ' + a, 
-                    "role":"presentation"
+                    "role":"toolbar"
                 });
 
                 // Create toolbar and add the controls
