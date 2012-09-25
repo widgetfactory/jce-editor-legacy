@@ -92,23 +92,23 @@ JCEMediaBox = {
 WFPopups.addPopup('jcemediabox', {
 
     setup : function() {
-    	var self = this;
-    	$('#jcemediabox_popup_icon').change(function() {
-    		self.setIcon();
-    	});
+        var self = this;
+        $('#jcemediabox_popup_icon').change(function() {
+            self.setIcon();
+        });
     	
-    	$('span.add', '#jcemediabox_popup_params').click(function() {
-    		// clone item
-    		var $item = $('li:first', '#jcemediabox_popup_params').clone().appendTo('#jcemediabox_popup_params');
-    		// empty input values
-    		$('input', $item).val('');
-    		// add remove button action
-    		$('span.add', $item).hide();
+        $('span.add', '#jcemediabox_popup_params').click(function() {
+            // clone item
+            var $item = $('li:first', '#jcemediabox_popup_params').clone().appendTo('#jcemediabox_popup_params');
+            // empty input values
+            $('input', $item).val('');
+            // add remove button action
+            $('span.add', $item).hide();
     		
-    		$('span.remove', $item).css('display', 'inline-block').click(function() {
-    			$item.remove();
-    		});
-    	});
+            $('span.remove', $item).css('display', 'inline-block').click(function() {
+                $item.remove();
+            });
+        });
     },
 
     /**
@@ -116,7 +116,7 @@ WFPopups.addPopup('jcemediabox', {
      * @param {Object} n Element
      */
     check: function(n) {
-    	return /jce(popup|_popup|lightbox)/.test(n.className);
+        return /jce(popup|_popup|lightbox)/.test(n.className);
     },
 
     /**
@@ -178,7 +178,7 @@ WFPopups.addPopup('jcemediabox', {
             }
         }
 
-        return mt || '';
+        return mt || n.type || '';
     },
 
     /**
@@ -203,29 +203,29 @@ WFPopups.addPopup('jcemediabox', {
         
         // if json string return object
         if (/^{[\w\W]+}$/.test(s)) {
-        	return $.parseJSON(s);
+            return $.parseJSON(s);
         }
         
-		// split parameters
+        // split parameters
         $.each(s.split(';'), function(i, n) {
             if (n) {
-            	// get the parameter parts, eg: key[value]
-            	var parts = /\s?([^\[]+)(\[|=|:)([^\]]*)(\]?)\s?/.exec(n);
-            	// map to array as json pairs eg: "key":"value"
-            	if (parts && parts.length > 3) {
-            		var k = parts[1];
-            		var v = parts[3];
+                // get the parameter parts, eg: key[value]
+                var parts = /\s?([^\[]+)(\[|=|:)([^\]]*)(\]?)\s?/.exec(n);
+                // map to array as json pairs eg: "key":"value"
+                if (parts && parts.length > 3) {
+                    var k = parts[1];
+                    var v = parts[3];
             		
-            		if (!/[^0-9]/.test(v)) {
-                    	a.push('"' + k + '":' + parseInt(v));
-                   } else {
-                   		a.push('"' + k + '":"' + v + '"');
-                   }
-            	}
+                    if (!/[^0-9]/.test(v)) {
+                        a.push('"' + k + '":' + parseInt(v));
+                    } else {
+                        a.push('"' + k + '":"' + v + '"');
+                    }
+                }
             }
         });
         
-		// return object from json string
+        // return object from json string
         return $.parseJSON('{' + a.join(',') + '}');
     },
 
@@ -245,15 +245,15 @@ WFPopups.addPopup('jcemediabox', {
         
         // Auto popup        
         if (/(autopopup(.?|-single|-multiple))/.test(n.className)) {
-        	v = /autopopup-multiple/.test(n.className) ? 'autopopup-multiple' : 'autopopup-single';
+            v = /autopopup-multiple/.test(n.className) ? 'autopopup-multiple' : 'autopopup-single';
         	
-        	$('#jcemediabox_popup_autopopup').val(v);
+            $('#jcemediabox_popup_autopopup').val(v);
         }  
 
         $('#jcemediabox_popup_icon').val(icon ? 0 : 1);
         $('#jcemediabox_popup_icon_position').prop('disabled', icon);
 
-		$('#jcemediabox_popup_hide').val(hide ? 1 : 0);
+        $('#jcemediabox_popup_hide').val(hide ? 1 : 0);
 		
         // Get position
         if (s = /icon-(top-right|top-left|bottom-right|bottom-left|left|right)/.exec(n.className)) {
@@ -268,17 +268,17 @@ WFPopups.addPopup('jcemediabox', {
         }
 
         if (rel && /\w+\[.*\]/.test(rel)) {
-        	if (rv = new RegExp(relRX, 'g').exec(rel)) {
-        		// set rel value
-        		$('#rel').val(rv[1]);
+            if (rv = new RegExp(relRX, 'g').exec(rel)) {
+                // set rel value
+                $('#rel').val(rv[1]);
         		
-        		rel = rel.replace(new RegExp(relRX, 'g'), '');
-        	}
+                rel = rel.replace(new RegExp(relRX, 'g'), '');
+            }
             // convert to object
             data = this.convertData($.trim(rel));
         } else {
             // remove standard rel values
-            group = $.trim(rel.replace(new RegExp(relRX, 'g'), ''));
+            var group = $.trim(rel.replace(new RegExp(relRX, 'g'), ''));
 
             $('#jcemediabox_popup_group').val(group);
         }
@@ -286,15 +286,15 @@ WFPopups.addPopup('jcemediabox', {
         var params = [];
         
         if (/::/.test(data.title)) {
-        	var parts = data.title.split('::');
-        	if (parts.length > 1) {
-        		data.caption = parts[1];
-        	}
-        	data.title = parts[0];
+            var parts = data.title.split('::');
+            if (parts.length > 1) {
+                data.caption = parts[1];
+            }
+            data.title = parts[0];
         }
 
         $.each(data, function(k, v) {
-        	if ($('#jcemediabox_popup_' + k).get(0)) {        		
+            if ($('#jcemediabox_popup_' + k).get(0)) {        		
                 $('#jcemediabox_popup_' + k).val(v);
                 // remove from object
                 delete data[k];
@@ -303,23 +303,23 @@ WFPopups.addPopup('jcemediabox', {
         var x = 0;
         // process remaining data values as params
         $.each(data, function(k, v) {
-        	if (v !== '') {
-        		if (x == 0) {
-            		$('li:first input.name', '#jcemediabox_popup_params').val(k);
-            		$('li:first input.value', '#jcemediabox_popup_params').val(v);
-            	} else {
-            		// clone item
-            		var $item = $('li:first', '#jcemediabox_popup_params').clone().appendTo('#jcemediabox_popup_params');
-            		// set name value
-            		$('input.name', $item).val(k);
-            		// set value value
-            		$('input.value', $item).val(decodeURIComponent(v));
-            		// add remove button action
-            		$('span.add', $item).hide();            		
-            		$('span.remove').css('display', 'inline-block');
-            	}
-        	}
-        	x++;
+            if (v !== '') {
+                if (x == 0) {
+                    $('li:first input.name', '#jcemediabox_popup_params').val(k);
+                    $('li:first input.value', '#jcemediabox_popup_params').val(v);
+                } else {
+                    // clone item
+                    var $item = $('li:first', '#jcemediabox_popup_params').clone().appendTo('#jcemediabox_popup_params');
+                    // set name value
+                    $('input.name', $item).val(k);
+                    // set value value
+                    $('input.value', $item).val(decodeURIComponent(v));
+                    // add remove button action
+                    $('span.add', $item).hide();            		
+                    $('span.remove').css('display', 'inline-block');
+                }
+            }
+            x++;
         });
 
         // Set type
@@ -349,7 +349,7 @@ WFPopups.addPopup('jcemediabox', {
         var auto = $('#jcemediabox_popup_autopopup').val();
         
         if (auto) {
-        	ed.dom.addClass(n, auto);  
+            ed.dom.addClass(n, auto);  
         }
 
         var data = {};
@@ -357,24 +357,24 @@ WFPopups.addPopup('jcemediabox', {
         tinymce.each(['title', 'caption', 'group', 'width', 'height'], function(k) {
             var v = $('#jcemediabox_popup_' + k).val();
 
-            	if (v == '' || v == null) {
-                    if (args[k]) {
-                        v = args[k];
-                    } else {
-                        return;
-                    }
+            if (v == '' || v == null) {
+                if (args[k]) {
+                    v = args[k];
+                } else {
+                    return;
                 }
+            }
                 
-                data[k] = v;          
+            data[k] = v;          
         });
         
         $('li', '#jcemediabox_popup_params').each(function() {
-        	var k = $('input.name', this).val();
-        	var v = $('input.value', this).val();
+            var k = $('input.name', this).val();
+            var v = $('input.value', this).val();
         	
-        	if (k !== '' && v !== '') {
-        		data[k] = v;
-        	}
+            if (k !== '' && v !== '') {
+                data[k] = v;
+            }
         });
         
         // combine args
@@ -382,19 +382,19 @@ WFPopups.addPopup('jcemediabox', {
         
         // combine title and caption values
         if (data.title && data.caption) {
-        	data.title = data.title + '::' + data.caption;
-        	delete data.caption;
+            data.title = data.title + '::' + data.caption;
+            delete data.caption;
         }
         
         // map object properties to options array
         var props = $.map(data, function(v, k) {
-        	return k + '[' + v + ']';
+            return k + '[' + v + ']';
         });
         
         var rel = ed.dom.getAttrib(n, 'rel', '');
         // remove any existing properties
         if (rel) {
-        	rel = rel.replace(/([a-z0-9]+)(\[([^\]]+)\]);?/gi, '');
+            rel = rel.replace(/([a-z0-9]+)(\[([^\]]+)\]);?/gi, '');
         }
 
         // set data to rel attribute
@@ -411,7 +411,7 @@ WFPopups.addPopup('jcemediabox', {
         }
         
         if ($('#jcemediabox_popup_hide').val() == 1) {
-        	ed.dom.addClass(n, 'noshow');
+            ed.dom.addClass(n, 'noshow');
         }
 
         // Set target
@@ -430,9 +430,9 @@ WFPopups.addPopup('jcemediabox', {
         var v = $('#jcemediabox_popup_icon').val();
         
         if (parseInt(v)) {
-        	$('#jcemediabox_popup_icon_position').removeAttr('disabled');
+            $('#jcemediabox_popup_icon_position').removeAttr('disabled');
         } else {
-        	$('#jcemediabox_popup_icon_position').attr('disabled', 'disabled');
+            $('#jcemediabox_popup_icon_position').attr('disabled', 'disabled');
         }
     },
 
