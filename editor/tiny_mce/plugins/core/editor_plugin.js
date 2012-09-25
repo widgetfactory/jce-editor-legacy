@@ -112,8 +112,7 @@
         },
         
         restoreSelection : function() {
-            if (tinymce.isIE)
-                this.editor.selection.moveToBookmark(this.editor.bookmark);
+            this.editor.selection.moveToBookmark(this.editor.bookmark);
         },
 
         /**
@@ -240,6 +239,8 @@
             }
 
             t.isDialogVisible = 0;
+            
+            t.onHideDialog.dispatch(t);
         },
 
         /**

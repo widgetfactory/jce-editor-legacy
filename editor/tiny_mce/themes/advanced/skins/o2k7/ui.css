@@ -129,6 +129,9 @@
 .o2k7Skin .mceButtonDialog:before {content : ""; display: block; position : absolute; width : 20px; background-color:#E5EFFD; height : 8px; left : -1px; top : -8px; border-left : 1px solid #ABC6DD; border-right : 1px solid #ABC6DD;}
 .o2k7Skin .mceButtonDialog div, .o2k7Skin .mceButtonDialog input {font-family:Verdana, Arial, Helvetica, sans-serif; font-size:11px;}
 
+.o2k7Skin .mceButtonDialog input, .defaultSkin .mceButtonDialog label {float : none; clear : none;}
+.o2k7Skin .mceButtonDialog {opacity : 0.9; -ms-filter:'alpha(opacity=90)'; filter:alpha(opacity=90);}
+
 /* Rtl */
 .mceRtl .mceListBox .mceText {text-align: right; padding: 0 4px 0 0}
 .mceRtl .mceMenuItem .mceText {text-align: right}
@@ -262,3 +265,11 @@
 
 .o2k7Skin span.mce_visualblocks {background-position:-160px -40px;}
 .o2k7Skin span.mce_kitchensink {background-position:-180px -40px;}
+
+.o2k7Skin.mce_search .mceButtonDialog label, .o2k7Skin.mce_search .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton {
+    min-width : 70px;
+}
+
+.o2k7Skin.mce_search .mceButtonDialog input.search_error {
+    border-color : red;
+}
