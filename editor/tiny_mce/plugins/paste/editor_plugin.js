@@ -7,6 +7,7 @@
 
 (function() {
     var each = tinymce.each;
+    var VK = tinymce.VK;
 
     var styleProps = new Array(
         'background', 'background-attachment', 'background-color', 'background-image', 'background-position', 'background-repeat',
@@ -56,12 +57,24 @@
 
             ed.onKeyDown.addToTop( function(ed, e) {
                 // Block ctrl+v from adding an undo level since the default logic in tinymce.Editor will add that
-                if (((tinymce.isMac ? e.metaKey : e.ctrlKey) && e.keyCode == 86) || (e.shiftKey && e.keyCode == 45))
+                if ((VK.metaKeyPressed && e.keyCode == 86) || (e.shiftKey && e.keyCode == 45)) {
                     return false; // Stop other listeners
+                }
+                                
+                // block events
+                if (!ed.getParam('paste_allow_cut', 1) && (VK.metaKeyPressed && e.keyCode == 88)) {
+                    e.preventDefault();
+                    return false;
+                }
+                
+                if (!ed.getParam('paste_allow_copy', 1) && (VK.metaKeyPressed && e.keyCode == 67)) {
+                    e.preventDefault();
+                    return false;
+                }
             });
 
             self.pasteText 	= ed.getParam('paste_text', 1);
-            self.pasteHtml		= ed.getParam('paste_html', 1);
+            self.pasteHtml	= ed.getParam('paste_html', 1);
 
             // This function executes the process handlers and inserts the contents
             function process(o) {
@@ -155,17 +168,23 @@
                 if (ed.plugins.contextmenu) {
                     ed.plugins.contextmenu.onContextMenu.add( function(th, m, e) {
                         var c = ed.selection.isCollapsed();
-                        m.add({
-                            title : 'advanced.cut_desc',
-                            icon : 'cut',
-                            cmd : 'Cut'
-                        }).setDisabled(c);
-                        m.add({
-                            title : 'advanced.copy_desc',
-                            icon : 'copy',
-                            cmd : 'Copy'
-                        }).setDisabled(c);
-
+                        
+                        if (ed.getParam('clipboard_cut', 1)) {
+                            m.add({
+                                title : 'advanced.cut_desc',
+                                icon : 'cut',
+                                cmd : 'Cut'
+                            }).setDisabled(c);
+                        }
+                        
+                        if (ed.getParam('clipboard_copy', 1)) {
+                            m.add({
+                                title : 'advanced.copy_desc',
+                                icon : 'copy',
+                                cmd : 'Copy'
+                            }).setDisabled(c);
+                        }
+                        
                         if (self.pasteHtml) {
                             m.add({
                                 title : 'paste.paste_desc',
@@ -370,7 +389,7 @@
             // Block all drag/drop events
             if (ed.getParam('paste_block_drop')) {
                 ed.onInit.add( function() {
-                    ed.dom.bind(body, ['dragend', 'dragover', 'draggesture', 'dragdrop', 'drop', 'drag'], function(e) {
+                    ed.dom.bind(ed.getBody(), ['dragend', 'dragover', 'draggesture', 'dragdrop', 'drop', 'drag'], function(e) {
                         e.preventDefault();
                         e.stopPropagation();
 
@@ -433,7 +452,8 @@
                 });
 
             });
-
+            
+            // Add buttons
             if (self.pasteHtml && !self.pasteText) {
                 ed.addButton('paste', {
                     title : 'paste.paste_desc',
@@ -446,6 +466,22 @@
                     title : 'paste.paste_text_desc',
                     cmd : 'mcePasteText',
                     ui : true
+                });
+            }
+            
+            if (ed.getParam('clipboard_cut', 1)) {
+                ed.addButton('cut', {
+                    title   : 'advanced.cut_desc',
+                    cmd     : 'Cut',
+                    icon    : 'cut'
+                });
+            }
+                        
+            if (ed.getParam('clipboard_copy', 1)) {
+                ed.addButton('copy', {
+                    title   : 'advanced.copy_desc',
+                    cmd     : 'Copy',
+                    icon    : 'copy'
                 });
             }
         },
@@ -960,7 +996,7 @@
                 // only if not already a link
                 if (!b) {                    
                     return '<a href="' + c + '">' + c +'</a>';	
-                    }
+                }
                     
                 return a;	
             });
