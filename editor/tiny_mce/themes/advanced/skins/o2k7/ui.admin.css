@@ -443,3 +443,7 @@
 #jce .o2k7Skin.o2k7SkinBlack span.mceIcon.mce_textcase:hover {
     background-position: -27px -23px, -60px -40px;
 }
+
+#jce span.mceButton[style="display: none;"] + span.mceSeparator {
+    display: none;
+}

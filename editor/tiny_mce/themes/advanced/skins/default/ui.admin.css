@@ -152,3 +152,7 @@
 #jce .defaultSkin .mceIframeContainer {
     border: 1px solid #CCC;
 }
+
+#jce span.mceButton[style="display: none;"] + span.mceSeparator {
+    display: none;
+}
