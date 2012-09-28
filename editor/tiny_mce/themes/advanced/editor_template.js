@@ -711,8 +711,8 @@
                 if (v = s.theme_advanced_text_colors)
                     o.colors = v;
 
-                if (s.theme_advanced_default_foreground_color)
-                    o.default_color = s.theme_advanced_default_foreground_color;
+                //if (s.theme_advanced_default_foreground_color)
+                o.default_color = s.theme_advanced_default_foreground_color || '#000000';
 
                 o.title = 'advanced.forecolor_desc';
                 o.cmd = 'ForeColor';
@@ -740,8 +740,8 @@
                 if (v = s.theme_advanced_background_colors)
                     o.colors = v;
 
-                if (s.theme_advanced_default_background_color)
-                    o.default_color = s.theme_advanced_default_background_color;
+                //if (s.theme_advanced_default_background_color)
+                o.default_color = s.theme_advanced_default_background_color || '#FFFF00';
 
                 o.title = 'advanced.backcolor_desc';
                 o.cmd = 'HiliteColor';
