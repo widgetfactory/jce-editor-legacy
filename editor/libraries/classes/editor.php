@@ -103,7 +103,7 @@ class WFEditor extends JObject {
             $query = $db->getQuery(true);
 
             if (is_object($query)) {
-                $query->select('8')->from('#__wf_profiles')->where('published = 1')->order('ordering ASC');
+                $query->select('*')->from('#__wf_profiles')->where('published = 1')->order('ordering ASC');
             } else {
                 $query = 'SELECT * FROM #__wf_profiles'
                 . ' WHERE published = 1'
