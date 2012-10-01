@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @version		$Id: config.php 221 2011-06-11 17:30:33Z happy_noodle_boy $
  * @package      JCE
@@ -10,31 +11,33 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-class WFCodePluginConfig
-{
-	public static function getConfig(&$settings)
-	{
-		// Get JContentEditor instance
-		$model 	= JModel::getInstance('editor', 'WFModel');
-		$wf 	= WFEditor::getInstance();
+class WFCodePluginConfig {
 
-		if(!in_array('code', $settings['plugins'])) {
-			$settings['plugins'][] = 'code';
-		}
+    public static function getConfig(&$settings) {
+        // Get JContentEditor instance
+        wfimport('admin.models.editor');
+        $model = new WFModelEditor();
+        $wf = WFEditor::getInstance();
 
-		$settings['code_php'] 		= $wf->getParam('editor.allow_php', 0, 0, 'boolean');
-		$settings['code_script'] 	= $wf->getParam('editor.allow_javascript', 0, 0, 'boolean');
-		$settings['code_style'] 	= $wf->getParam('editor.allow_css', 0, 0, 'boolean');
+        if (!in_array('code', $settings['plugins'])) {
+            $settings['plugins'][] = 'code';
+        }
 
-		$settings['code_cdata'] 	= $wf->getParam('editor.cdata', 1, 1, 'boolean');
+        $settings['code_php'] = $wf->getParam('editor.allow_php', 0, 0, 'boolean');
+        $settings['code_script'] = $wf->getParam('editor.allow_javascript', 0, 0, 'boolean');
+        $settings['code_style'] = $wf->getParam('editor.allow_css', 0, 0, 'boolean');
 
-		// Invalid Elements
-		if ($settings['code_script']) {
-			$model->removeKeys($settings['invalid_elements'], 'script');
-		}
-		if ($settings['code_style']) {
-			$model->removeKeys($settings['invalid_elements'], 'style');
-		}
-	}
+        $settings['code_cdata'] = $wf->getParam('editor.cdata', 1, 1, 'boolean');
+
+        // Invalid Elements
+        if ($settings['code_script']) {
+            $model->removeKeys($settings['invalid_elements'], 'script');
+        }
+        if ($settings['code_style']) {
+            $model->removeKeys($settings['invalid_elements'], 'style');
+        }
+    }
+
 }
+
 ?>

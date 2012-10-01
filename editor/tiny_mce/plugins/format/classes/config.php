@@ -13,7 +13,8 @@
 class WFFormatPluginConfig {
 
     public static function getConfig(&$settings) {
-        $model = JModel::getInstance('editor', 'WFModel');
+        wfimport('admin.models.editor');
+        $model = new WFModelEditor();
         $wf = WFEditor::getInstance();
 
         // Add format plugin to plugins list
@@ -22,29 +23,29 @@ class WFFormatPluginConfig {
         }
 
         // Encoding
-        $settings['entity_encoding']        = $wf->getParam('editor.entity_encoding', 'raw', 'named');
-        $settings['inline_styles']          = $wf->getParam('editor.inline_styles', 1, 1, 'boolean');
+        $settings['entity_encoding'] = $wf->getParam('editor.entity_encoding', 'raw', 'named');
+        $settings['inline_styles'] = $wf->getParam('editor.inline_styles', 1, 1, 'boolean');
 
         // Paragraph handling
-        $settings['forced_root_block']      = $wf->getParam('editor.forced_root_block', 'p');
-        
+        $settings['forced_root_block'] = $wf->getParam('editor.forced_root_block', 'p');
+
         // set as boolean if disabled
         if (is_numeric($settings['forced_root_block'])) {
-            $settings['forced_root_block'] = (bool)$settings['forced_root_block'];
-            
+            $settings['forced_root_block'] = (bool) $settings['forced_root_block'];
+
             if ($wf->getParam('editor.force_br_newlines', 0, 0, 'boolean') === false) {
                 // legacy
                 $settings['force_p_newlines'] = $wf->getParam('editor.force_p_newlines', 1, 0, 'boolean');
             }
         }
-        
+
         if (strpos($settings['forced_root_block'], '|') !== false) {
             // multiple values
             $values = explode('|', $settings['forced_root_block']);
-            
-            foreach($values as $value) {
+
+            foreach ($values as $value) {
                 $kv = explode(':', $value);
-                
+
                 if (count($kv) == 2) {
                     $settings[$kv[0]] = (bool) $kv[1];
                 } else {
@@ -52,8 +53,8 @@ class WFFormatPluginConfig {
                 }
             }
         }
-        
-        $settings['removeformat_selector']  = $wf->getParam('editor.removeformat_selector', 'span,b,strong,em,i,font,u,strike', 'span,b,strong,em,i,font,u,strike');
+
+        $settings['removeformat_selector'] = $wf->getParam('editor.removeformat_selector', 'span,b,strong,em,i,font,u,strike', 'span,b,strong,em,i,font,u,strike');
 
         $formats = array(
             'p' => 'advanced.paragraph',
@@ -78,15 +79,15 @@ class WFFormatPluginConfig {
             'dt' => 'advanced.dt',
             'dd' => 'advanced.dd'
         );
-        
-        $html5  = array('section', 'article', 'hgroup', 'aside', 'figure');
-        $schema = $wf->getParam('editor.schema', 'html4'); 
+
+        $html5 = array('section', 'article', 'hgroup', 'aside', 'figure');
+        $schema = $wf->getParam('editor.schema', 'html4');
         $verify = (bool) $wf->getParam('editor.verify_html', 0);
 
-        $tmpblocks  = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,hgroup,aside,figure,dt,dd', 'p,address,pre,h1,h2,h3,h4,h5,h6');
-        $list       = array();
-        $blocks     = array();
-        
+        $tmpblocks = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,hgroup,aside,figure,dt,dd', 'p,address,pre,h1,h2,h3,h4,h5,h6');
+        $list = array();
+        $blocks = array();
+
         // make an array
         if (is_string($tmpblocks)) {
             $tmpblocks = explode(',', $tmpblocks);
@@ -94,7 +95,7 @@ class WFFormatPluginConfig {
 
         foreach ($tmpblocks as $v) {
             $key = $formats[$v];
-            
+
             // skip html5 blocks for html4 schema
             if ($verify && $schema == 'html4' && in_array($v, $html5)) {
                 continue;
@@ -134,7 +135,6 @@ class WFFormatPluginConfig {
         $settings['theme_advanced_font_sizes'] = $wf->getParam('editor.theme_advanced_font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');
         //$settings['theme_advanced_default_foreground_color'] = $wf->getParam('editor.theme_advanced_default_foreground_color', '#000000');
         //$settings['theme_advanced_default_background_color'] = $wf->getParam('editor.theme_advanced_default_background_color', '#FFFF00');
-
         // colour picker custom colours
         $settings['custom_colors'] = $wf->getParam('editor.custom_colors', '', '');
 
@@ -144,6 +144,7 @@ class WFFormatPluginConfig {
             $settings['theme_advanced_styles'] = implode(';', explode(',', $styles));
         }
     }
+
 }
 
 ?>
