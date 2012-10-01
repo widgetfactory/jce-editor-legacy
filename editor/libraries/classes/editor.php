@@ -99,15 +99,15 @@ class WFEditor extends JObject {
             $db = JFactory::getDBO();
             $user = JFactory::getUser();
             $option = $this->getComponentOption();
-            
+
             $query = $db->getQuery(true);
 
             if (is_object($query)) {
                 $query->select('*')->from('#__wf_profiles')->where('published = 1')->order('ordering ASC');
             } else {
                 $query = 'SELECT * FROM #__wf_profiles'
-                . ' WHERE published = 1'
-                . ' ORDER BY ordering ASC';
+                        . ' WHERE published = 1'
+                        . ' ORDER BY ordering ASC';
             }
 
             $db->setQuery($query);
@@ -140,6 +140,17 @@ class WFEditor extends JObject {
 
             $area = $mainframe->isAdmin() ? 2 : 1;
 
+            include(dirname(__FILE__) . '/mobile.php');
+            $mobile = new Mobile_Detect();
+
+            if ($mobile->isTablet()) {
+                $device = 'tablet';
+            } else if ($mobile->isMobile()) {
+                $device = 'mobile';
+            } else {
+                $device = 'desktop';
+            }
+
             foreach ($profiles as $item) {
                 // check if option is in list
                 $isComponent = in_array($option, explode(',', $item->components));
@@ -150,31 +161,9 @@ class WFEditor extends JObject {
                 }
 
                 if ($item->area == $area || $item->area == 0) {
-                    // Check user
-                    if ($user->id && in_array($user->id, explode(',', $item->users))) {
-                        if ($item->components) {
-                            if ($isComponent) {
-                                $profile = $item;
-                                return $profile;
-                            }
-                        } else {
-                            $profile = $item;
-                            return $profile;
-                        }
-                    }
-
-                    // Joomla! 1.6+
-                    if (method_exists('JUser', 'getAuthorisedGroups')) {
-                        $keys = $user->getAuthorisedGroups();
-                    } else {
-                        $keys = array($user->gid);
-                    }
-
-                    if ($item->types) {
-                        $groups = array_intersect($keys, explode(',', $item->types));
-
-                        if (!empty($groups)) {
-                            // Check components
+                    if ($item->device == $device || $item->device == '') {
+                        // Check user
+                        if ($user->id && in_array($user->id, explode(',', $item->users))) {
                             if ($item->components) {
                                 if ($isComponent) {
                                     $profile = $item;
@@ -185,12 +174,36 @@ class WFEditor extends JObject {
                                 return $profile;
                             }
                         }
-                    }
 
-                    // Check components only
-                    if ($item->components && $isComponent) {
-                        $profile = $item;
-                        return $profile;
+                        // Joomla! 1.6+
+                        if (method_exists('JUser', 'getAuthorisedGroups')) {
+                            $keys = $user->getAuthorisedGroups();
+                        } else {
+                            $keys = array($user->gid);
+                        }
+
+                        if ($item->types) {
+                            $groups = array_intersect($keys, explode(',', $item->types));
+
+                            if (!empty($groups)) {
+                                // Check components
+                                if ($item->components) {
+                                    if ($isComponent) {
+                                        $profile = $item;
+                                        return $profile;
+                                    }
+                                } else {
+                                    $profile = $item;
+                                    return $profile;
+                                }
+                            }
+                        }
+
+                        // Check components only
+                        if ($item->components && $isComponent) {
+                            $profile = $item;
+                            return $profile;
+                        }
                     }
                 }
             }
