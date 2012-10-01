@@ -122,31 +122,15 @@ class WFEditor extends JObject {
                 }
             }
 
-            /* $items  = array();
-              $name   = JRequest::getWord('profile');
-
-              if ($name) {
-              for ($i = 0; $i < count($profiles); $i++) {
-              if ($profiles[$i]->name == $name) {
-              $items[] = $profiles[$i];
-              }
-              }
-              }
-
-              // revert if no name or valid items
-              if (!$name || empty($items)) {
-              $items = $profiles;
-              } */
-
             $area = $mainframe->isAdmin() ? 2 : 1;
 
             include(dirname(__FILE__) . '/mobile.php');
             $mobile = new Mobile_Detect();
 
-            if ($mobile->isTablet()) {
-                $device = 'tablet';
-            } else if ($mobile->isMobile()) {
+            if ($mobile->isMobile()) {
                 $device = 'mobile';
+            } else if ($mobile->isTablet()) {
+                $device = 'tablet';
             } else {
                 $device = 'desktop';
             }
