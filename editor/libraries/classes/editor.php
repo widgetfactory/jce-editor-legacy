@@ -100,9 +100,16 @@ class WFEditor extends JObject {
             $user = JFactory::getUser();
             $option = $this->getComponentOption();
             
-            $query = 'SELECT * FROM #__wf_profiles' 
-            . ' WHERE published = 1'         
-            . ' ORDER BY ordering ASC';
+            $query = $db->getQuery(true);
+
+            if (is_object($query)) {
+                $query->select('8')->from('#__wf_profiles')->where('published = 1')->order('ordering ASC');
+            } else {
+                $query = 'SELECT * FROM #__wf_profiles'
+                . ' WHERE published = 1'
+                . ' ORDER BY ordering ASC';
+            }
+
             $db->setQuery($query);
             $profiles = $db->loadObjectList();
 
@@ -114,24 +121,24 @@ class WFEditor extends JObject {
                     $option = isset($component->element) ? $component->element : $component->option;
                 }
             }
-            
-            /*$items  = array();
-            $name   = JRequest::getWord('profile');
-            
-            if ($name) {
-               for ($i = 0; $i < count($profiles); $i++) {
-                   if ($profiles[$i]->name == $name) {
-                       $items[] = $profiles[$i];
-                   }
-               } 
-            }
-            
-            // revert if no name or valid items
-            if (!$name || empty($items)) {
-                $items = $profiles;
-            }*/
 
-            $area   = $mainframe->isAdmin() ? 2 : 1;
+            /* $items  = array();
+              $name   = JRequest::getWord('profile');
+
+              if ($name) {
+              for ($i = 0; $i < count($profiles); $i++) {
+              if ($profiles[$i]->name == $name) {
+              $items[] = $profiles[$i];
+              }
+              }
+              }
+
+              // revert if no name or valid items
+              if (!$name || empty($items)) {
+              $items = $profiles;
+              } */
+
+            $area = $mainframe->isAdmin() ? 2 : 1;
 
             foreach ($profiles as $item) {
                 // check if option is in list
