@@ -22,7 +22,7 @@ class WFMediaManager extends WFEditorPlugin {
      */
     public function __construct($config = array()) {
         // Call parent
-        parent::__construct();
+        //parent::__construct();
         
         if (!array_key_exists('type', $config)) {
             $config['type'] = 'manager';
@@ -40,7 +40,12 @@ class WFMediaManager extends WFEditorPlugin {
             $config['template_path'] = WF_EDITOR_LIBRARIES . '/views/plugin/tmpl';
         }
 
-        $this->setProperties(array_merge($this->getConfig(), $config));
+        //$this->setProperties(array_merge($this->getConfig(), $config));
+        
+        $config = array_merge($this->getConfig(), $config);
+
+        // Call parent
+        parent::__construct($config);
 
         // initialize the browser
         $browser = $this->getBrowser();
