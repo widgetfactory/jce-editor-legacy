@@ -53,9 +53,9 @@ var WFFileBrowser = WFExtensions.add('FileBrowser', {
     /**
 	 * Set a list of selected items
 	 */
-    /*setSelectedItems : function(items) {
+    setSelectedItems : function(items) {
         return this._call('setSelectedItems', items);
-    },*/
+    },
 	
     /**
 	 * Refresh the browser
