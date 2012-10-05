@@ -14,10 +14,10 @@
 		<folder>jcemediabox</folder>
 	</files>
 	<params group="jcemediabox">
-		<param name="enable" type="list" default="1" label="WF_LABEL_EXTENSION_ENABLE" description="WF_LABEL_EXTENSION_ENABLE_DESC">
+		<!--param name="enable" type="list" default="1" label="WF_LABEL_EXTENSION_ENABLE" description="WF_LABEL_EXTENSION_ENABLE_DESC">
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
-    	</param>
+    	</param-->
 	</params>
 	<media></media>
 	<plugins>link,imgmanager_ext,mediamanager,filemanager</plugins>

@@ -14,10 +14,10 @@
         <folder>link</folder>
     </files>
     <params group="link">
-        <param name="enable" type="list" default="1" label="WF_LABEL_EXTENSION_ENABLE" description="WF_LABEL_EXTENSION_ENABLE_DESC">
+        <!--param name="enable" type="list" default="1" label="WF_LABEL_EXTENSION_ENABLE" description="WF_LABEL_EXTENSION_ENABLE_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
-        </param>
+        </param-->
         <param name="plugins" type="linksearch" default="" label="WF_PARAM_LINK_SEARCH_PLUGINS" description="WF_PARAM_LINK_SEARCH_PLUGINS_DESC" parent="enable[1]" />
     </params>
     <plugins>link</plugins>
