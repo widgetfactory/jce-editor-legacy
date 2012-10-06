@@ -149,7 +149,12 @@
                 });
 
                 // on Uploader init
-                this.uploader.bind('PostInit', function(up) {});
+                this.uploader.bind('PostInit', function(up) {
+                    // this has some issues in Chrome
+                    if (up.runtime == 'html5') {
+                        $('#' + up.id + '_html5').attr('accept', '');
+                    }
+                });
 
                 // on Uploader refresh
                 this.uploader.bind('Refresh', function(up) {});
