@@ -1915,6 +1915,14 @@
 
             return $items.get(key) || $items;
         },
+        
+        /**
+		 * Return selected items by key or all selected items
+		 * @param {Array} items Array of items to select
+		 */
+        setSelectedItems : function(items) {            
+            this._findItem(items);
+        },
 
         /**
 		 * Process a selection click

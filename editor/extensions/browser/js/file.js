@@ -9,93 +9,106 @@
  */
 var WFFileBrowser = WFExtensions.add('FileBrowser', {
 	
-	settings 	: {},
+    settings 	: {},
 	
-	element 	: '',
+    element 	: '',
 	
-	/**
+    /**
 	 * Initialize FileBrowser
 	 * @param element Mixed Element or Element Selector
 	 * @params options Object
 	 */
-	init : function(element, options) {
-		$.extend(true, this.settings, options);	
+    init : function(element, options) {
+        $.extend(true, this.settings, options);	
 		
-		this.element = element;		
-		this._createBrowser();
-	},
+        this.element = element;		
+        this._createBrowser();
+    },
 	
-	_createBrowser : function() {
-		$(this.element).MediaManager(this.settings);
-	},
+    _createBrowser : function() {
+        $(this.element).MediaManager(this.settings);
+    },
 	
-	/**
+    /**
 	 * Get the base directory
 	 */
-	getBaseDir : function() {
-		return this._call('getBaseDir');
-	},
+    getBaseDir : function() {
+        return this._call('getBaseDir');
+    },
 	
-	/**
+    /**
 	 * Get current directory
 	 */
-	getCurrentDir : function() {
-		return this._call('getCurrentDir');
-	},
+    getCurrentDir : function() {
+        return this._call('getCurrentDir');
+    },
 	
-	/**
+    /**
 	 * Get a list of selected items optionally fitlered by key
 	 */
-	getSelectedItems : function(key) {
-		return this._call('getSelectedItems', key);
-	},
+    getSelectedItems : function(key) {
+        return this._call('getSelectedItems', key);
+    },
+        
+    /**
+	 * Set a list of selected items
+	 */
+    setSelectedItems : function(items) {
+        return this._call('setSelectedItems', items);
+    },
 	
-	/**
+    /**
 	 * Refresh the browser
 	 */
-	refresh : function() {
-		return this._call('refresh');
-	},
+    refresh : function() {
+        return this._call('refresh');
+    },
 	
-	error : function(error) {
-		return this._call('error', error);
-	},
+    error : function(error) {
+        return this._call('error', error);
+    },
 	
-	status : function(message, state) {
-		return this._call('setStatus', {message : message, state : state});
-	},
+    status : function(message, state) {
+        return this._call('setStatus', {
+            message : message, 
+            state : state
+        });
+    },
 	
-	/**
+    /**
 	 * Load the browser and set optional return items to select
 	 */
-	load : function(items) {
-		return this._call('load', items);
-	},
+    load : function(items) {
+        return this._call('load', items);
+    },
 	
-	resize : function(fh) {
-		return this._call('resize', [null, fh]);
-	},
+    resize : function(fh) {
+        return this._call('resize', [null, fh]);
+    },
 	
-	startUpload : function() {
-		return this._call('startUpload');
-	},
+    startUpload : function() {
+        return this._call('startUpload');
+    },
 	
-	stopUpload : function() {
-		return this._call('stopUpload');
-	},
+    stopUpload : function() {
+        return this._call('stopUpload');
+    },
 	
-	setUploadStatus : function(message, state) {
-		return this._call('setUploadStatus', {message : message, state : state});
-	},
+    setUploadStatus : function(message, state) {
+        return this._call('setUploadStatus', {
+            message : message, 
+            state : state
+        });
+    },
 	
-	/**
+    /**
 	 * Compatability function
 	 */
-	get : function(fn, args) {
-		return this._call(fn, args);
-	},
+    get : function(fn, args) {
+        return this._call(fn, args);
+    },
 	
-	_call : function(fn, args) {
-		return $(this.element).MediaManager(fn, args);
-	}
+    _call : function(fn, args) {
+        return $(this.element).MediaManager(fn, args);
+    }
 });

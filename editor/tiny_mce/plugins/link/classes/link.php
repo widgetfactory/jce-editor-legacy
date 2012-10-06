@@ -84,7 +84,8 @@ class WFLinkPlugin extends WFEditorPlugin {
 
         // Load Popups instance
         $popups = WFPopupsExtension::getInstance(array(
-            'text' => false
+            'text'      => false,
+            'default'   => $this->getParam('link.popups.default', '')
         ));
 
         $popups->display();
