@@ -409,6 +409,10 @@ label[for="popup_check"] {
     margin: 0 0 0 5px;
 }
 
+label[for="popup_list"] {
+    min-width : 100px;
+}
+
 div#popups_tab {
     overflow-x : auto;
 }
