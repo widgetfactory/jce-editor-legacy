@@ -287,6 +287,8 @@
         },
 
         setDefaults: function (s) {
+            var n, v;
+            
             for (n in s) {
                 v = s[n];
 
@@ -295,9 +297,9 @@
                 }
                 
                 if ($('#' + n).is(':checkbox')) {
-                    $('#' + n).prop('checked', parseFloat(v));
+                    $('#' + n).prop('checked', parseFloat(v)).click();
                 } else {
-                    $('#' + n).val(v);
+                    $('#' + n).val(v).change();
                 }
             }
         },
