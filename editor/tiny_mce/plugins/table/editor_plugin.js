@@ -263,6 +263,10 @@
                     if (t.settings.border != '') {
                         html += ' border="' + t.settings.border + '"';
                     }
+                    
+                    if (t.settings.classes) {
+                        html += ' class="' + t.settings.classes + '"';
+                    }
 
                     if (styles.length) {
                         html += ' style="' + styles.join(';') + ';"';	
@@ -1887,8 +1891,8 @@
                 mceInsertTable : function(val) {
                     winMan.open({
                         url : ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=table',
-                        width : 400 + parseInt(ed.getLang('table.table_delta_width', 0)),
-                        height : 380 + parseInt(ed.getLang('table.table_delta_height', 0)),
+                        width : 420 + parseInt(ed.getLang('table.table_delta_width', 0)),
+                        height : 440 + parseInt(ed.getLang('table.table_delta_height', 0)),
                         inline : 1,
                         popup_css : false
                     }, {
@@ -1900,8 +1904,8 @@
                 mceTableRowProps : function() {
                     winMan.open({
                         url : ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=table&context=row',
-                        width : 400 + parseInt(ed.getLang('table.rowprops_delta_width', 0)),
-                        height : 350 + parseInt(ed.getLang('table.rowprops_delta_height', 0)),
+                        width : 440 + parseInt(ed.getLang('table.rowprops_delta_width', 0)),
+                        height : 440 + parseInt(ed.getLang('table.rowprops_delta_height', 0)),
                         inline : 1,
                         popup_css : false
                     }, {
@@ -1912,8 +1916,8 @@
                 mceTableCellProps : function() {
                     winMan.open({
                         url : ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=table&context=cell',
-                        width : 400 + parseInt(ed.getLang('table.cellprops_delta_width', 0)),
-                        height : 350 + parseInt(ed.getLang('table.cellprops_delta_height', 0)),
+                        width : 420 + parseInt(ed.getLang('table.cellprops_delta_width', 0)),
+                        height : 440 + parseInt(ed.getLang('table.cellprops_delta_height', 0)),
                         inline : 1,
                         popup_css : false
                     }, {
@@ -1956,7 +1960,8 @@
                         scope	: ed,
                         width 	: ed.getParam('table_default_width'),
                         height 	: ed.getParam('table_default_height'),
-                        border 	: border
+                        border 	: border,
+                        classes : ed.getParam('table_classes', '')
                     }, ed);
 					
                     ed.onMouseDown.add(c.hideMenu, c);

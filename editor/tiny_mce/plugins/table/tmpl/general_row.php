@@ -28,7 +28,7 @@ defined('_JEXEC') or die('RESTRICTED');
 			<?php echo WFText::_('WF_TABLE_ALIGN');?></label></td>
 		<td class="col2">
 		<select id="align" >
-			<option value="">{#not_set}</option>
+			<option value=""><?php echo WFText::_('WF_OPTION_NOT_SET'); ?></option>
 			<option value="center"><?php echo WFText::_('WF_TABLE_ALIGN_MIDDLE');?></option>
 			<option value="left"><?php echo WFText::_('WF_TABLE_ALIGN_LEFT');?></option>
 			<option value="right"><?php echo WFText::_('WF_TABLE_ALIGN_RIGHT');?></option>
@@ -39,19 +39,10 @@ defined('_JEXEC') or die('RESTRICTED');
 			<?php echo WFText::_('WF_TABLE_VALIGN');?></label></td>
 		<td class="col2">
 		<select id="valign" >
-			<option value="">{#not_set}</option>
+			<option value=""><?php echo WFText::_('WF_OPTION_NOT_SET'); ?></option>
 			<option value="top"><?php echo WFText::_('WF_TABLE_ALIGN_TOP');?></option>
 			<option value="middle"><?php echo WFText::_('WF_TABLE_ALIGN_MIDDLE');?></option>
 			<option value="bottom"><?php echo WFText::_('WF_TABLE_ALIGN_BOTTOM');?></option>
-		</select></td>
-	</tr>
-	<tr id="styleSelectRow">
-		<td><label for="class">
-			{#class_name}</label></td>
-		<td class="col2">
-		<select id="class"
-		class="mceEditableSelect">
-			<option value="" selected="selected">{#not_set}</option>
 		</select></td>
 	</tr>
 	<tr>

@@ -71,15 +71,6 @@ defined('_JEXEC') or die('RESTRICTED');
                    onchange="TableDialog.changedSize();" class="size" />
         </td>
     </tr>
-    <tr id="styleSelectRow">
-        <td><label id="classlabel" for="class">
-                {#class_name}</label></td>
-        <td colspan="3">
-            <select id="class" 
-                    class="mceEditableSelect">
-                <option value="" selected="selected">{#not_set}</option>
-            </select></td>
-    </tr>
     <tr>
         <td class="column1"><label for="caption">
                 <?php echo WFText::_('WF_TABLE_CAPTION');?></label></td>
