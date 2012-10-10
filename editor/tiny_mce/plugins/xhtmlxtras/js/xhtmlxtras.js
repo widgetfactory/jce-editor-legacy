@@ -10,24 +10,31 @@ var XHTMLXtrasDialog = {
     init : function() {
         tinyMCEPopup.resizeToInnerSize();
 
-        var ed = tinyMCEPopup.editor, se = ed.selection, n = se.getNode(), el;
-        var element = tinyMCEPopup.getWindowArg('element');
-        el = !element ? n : ed.dom.getParent(n, element);
+        var ed = tinyMCEPopup.editor, se = ed.selection, n = se.getNode(), element = tinyMCEPopup.getWindowArg('element');
+        
+        // get an element selection
+        if (element) {
+            n = ed.dom.getParent(n, element);
+        }
 
         TinyMCE_Utils.fillClassList('class');
 
-        if(el) {
-            $(':input').each(function() {
-                var k = $(this).attr('id');
+        if(n) {            
+            var text = n.textContent || n.innerText || '';
+            
+            if (se.isCollapsed() || text == se.getContent({format : 'text'})) {
+                $(':input').each(function() {
+                    var k = $(this).attr('id');
                                 
-                if (/on(click|dblclick)/.test(k)) {
-                    k = 'data-mce-' + k;
-                }
+                    if (/on(click|dblclick)/.test(k)) {
+                        k = 'data-mce-' + k;
+                    }
 
-                $(this).val(ed.dom.getAttrib(el, k));
-            });
+                    $(this).val(ed.dom.getAttrib(n, k));
+                });
 			
-            $('#insert').button('option', 'label', ed.getLang('update', 'Insert'));
+                $('#insert').button('option', 'label', ed.getLang('update', 'Insert'));
+            }
         }
 
         $('#remove').button({
@@ -43,11 +50,11 @@ var XHTMLXtrasDialog = {
             $('input.html5').parent('td').parent('tr').hide();
         }
         // hide for non-form nodes
-        if (!tinymce.is(el, ':input, form')) {
+        if (!tinymce.is(n, ':input, form')) {
             $('input.form').parent('td').parent('tr').hide();
         }
         // hide for non-media nodes
-        if (!tinymce.is(el, 'img')) {
+        if (!tinymce.is(n, 'img')) {
             $('input.media').parent('td').parent('tr').hide();
         }
     },
@@ -57,6 +64,7 @@ var XHTMLXtrasDialog = {
 
         tinyMCEPopup.restoreSelection();
 
+        // get the element type (opener)
         var element = tinyMCEPopup.getWindowArg('element');
 		
         var args = {};
@@ -70,8 +78,8 @@ var XHTMLXtrasDialog = {
 
             args[k] = v;
         });
-
-        if(element) {			
+        // opened by an element button
+        if (element) {			
             if(n.nodeName.toLowerCase() == element) {
                 elm = n;
             } else {
@@ -79,9 +87,19 @@ var XHTMLXtrasDialog = {
             }
 			
             ed.formatter.apply(element.toLowerCase(), args, elm);
-			
-        } else {
-            ed.dom.setAttribs(n, args);
+        // probably Attributes		
+        } else {            
+            var isTextSelection = se.getContent() == se.getContent({
+                format: 'text'
+            });
+            
+            // is a body or text selection
+            if (n == ed.getBody() || isTextSelection) {
+                ed.formatter.apply('attributes', args);
+            // attribute selection
+            } else {
+                ed.dom.setAttribs(n, args);
+            }
         }
 
         ed.undoManager.add();
