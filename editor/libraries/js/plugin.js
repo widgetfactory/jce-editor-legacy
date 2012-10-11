@@ -297,7 +297,7 @@
                 }
                 
                 if ($('#' + n).is(':checkbox')) {
-                    $('#' + n).prop('checked', parseFloat(v)).click();
+                    $('#' + n).prop('checked', parseFloat(v));
                 } else {
                     $('#' + n).val(v).change();
                 }
