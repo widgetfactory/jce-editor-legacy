@@ -431,7 +431,11 @@
         addI18n : function(p, o) {
             var i18n = this.i18n;
 
-            if (!$.type(p) == 'string') {
+            if ($.type(p) == 'string') {
+                $.each(o, function(k, o) {
+                    i18n[p + '.' + k] = o;
+                });
+            } else {
                 $.each(p, function(lc, o) {
                     $.each(o, function(g, o) {
                         $.each(o, function(k, o) {
@@ -444,12 +448,6 @@
                     });
 
                 });
-
-            } else {
-                $.each(o, function(k, o) {
-                    i18n[p + '.' + k] = o;
-                });
-
             }
         },
 
