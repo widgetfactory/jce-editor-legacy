@@ -43,7 +43,7 @@ class WFEditorPlugin extends WFEditor {
         // check plugin
         if ($this->checkPlugin($plugin)) {
             $this->set('name', $plugin);
-            
+
             if (!array_key_exists('type', $config)) {
                 $config['type'] = 'standard';
             }
@@ -55,21 +55,20 @@ class WFEditorPlugin extends WFEditor {
             if (!defined('WF_EDITOR_PLUGIN')) {
                 define('WF_EDITOR_PLUGIN', $config['base_path']);
             }
-            
+
             if (!array_key_exists('view_path', $config)) {
                 $config['view_path'] = WF_EDITOR_PLUGINS . '/' . $plugin;
             }
-            
+
             if (!array_key_exists('layout', $config)) {
                 $config['layout'] = 'default';
             }
-            
+
             if (!array_key_exists('template_path', $config)) {
                 $config['template_path'] = WF_EDITOR_PLUGIN . '/tmpl';
             }
-            
+
             $this->setProperties($config);
-            
         } else {
             die(JError::raiseError(403, 'RESTRICTED ACCESS'));
         }
@@ -106,11 +105,11 @@ class WFEditorPlugin extends WFEditor {
         if (!is_object($view)) {
             // create plugin view
             $view = new WFView(array(
-                'view_path'     => $this->get('base_path'),
-                'template_path' => $this->get('template_path'),
-                'name'          => $this->get('name'),
-                'layout'        => $this->get('layout')
-            ));
+                        'view_path' => $this->get('base_path'),
+                        'template_path' => $this->get('template_path'),
+                        'name' => $this->get('name'),
+                        'layout' => $this->get('layout')
+                    ));
 
             $view->assign('plugin', $this);
         }
@@ -131,8 +130,8 @@ class WFEditorPlugin extends WFEditor {
             $request = WFRequest::getInstance();
             $request->process();
         } else {
-            $version    = $this->getVersion();
-            $name       = $this->getName();
+            $version = $this->getVersion();
+            $name = $this->getName();
 
             // process javascript languages
             if (JRequest::getWord('task') == 'loadlanguages') {
@@ -140,17 +139,17 @@ class WFEditorPlugin extends WFEditor {
 
                 JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . '/models');
                 $model = JModel::getInstance('editor', 'WFModel');
-                
-                $files      = array();
-                $section    = array('dlg', $name . '_dlg');
-                $ini        = JPATH_SITE . '/language/en-GB/en-GB.com_jce_' . $name . '.ini';
-                
+
+                $files = array();
+                $section = array('dlg', $name . '_dlg');
+                $ini = JPATH_SITE . '/language/en-GB/en-GB.com_jce_' . $name . '.ini';
+
                 if (is_file($ini)) {
                     $files[] = $ini;
 
-                    $language   = JFactory::getLanguage();
-                    $tag        = $language->getTag();
-                    
+                    $language = JFactory::getLanguage();
+                    $tag = $language->getTag();
+
                     // non-english language
                     if ($tag != 'en-GB') {
                         $ini = JPATH_SITE . '/language/' . $tag . '/' . $tag . '.com_jce_' . $name . '.ini';
@@ -178,14 +177,14 @@ class WFEditorPlugin extends WFEditor {
 
             // create the document
             $document = WFDocument::getInstance(array(
-                'version'               => $version,
-                'title'                 => WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')),
-                'name'                  => $name,
-                'language'              => $this->getLanguageTag(),
-                'direction'             => $this->getLanguageDir(),
-                'compress_javascript'   => $this->getParam('editor.compress_javascript', 0),
-                'compress_css'          => $this->getParam('editor.compress_css', 0)
-            ));
+                        'version' => $version,
+                        'title' => WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')),
+                        'name' => $name,
+                        'language' => $this->getLanguageTag(),
+                        'direction' => $this->getLanguageDir(),
+                        'compress_javascript' => $this->getParam('editor.compress_javascript', 0),
+                        'compress_css' => $this->getParam('editor.compress_css', 0)
+                    ));
 
             // set standalone mode
             $document->set('standalone', JRequest::getInt('standalone', 0));
@@ -200,6 +199,19 @@ class WFEditorPlugin extends WFEditor {
                 // remove some scripts
                 $document->removeScript('tiny_mce_popup', 'tiny_mce');
                 $document->removeScript('tiny_mce_utils', 'libraries');
+            }
+            
+            // load plugin dialog language file if necessary
+            if ($this->getParam('editor.compress_javascript', 0)) {
+                $file = "/langs/" . $this->getLanguage() . "_dlg.js";
+
+                if (!JFile::exists(WF_EDITOR_PLUGIN . $file)) {
+                    $file = "/langs/en_dlg.js";
+                }
+
+                if (JFile::exists(WF_EDITOR_PLUGIN . $file)) {
+                    $document->addScript(array('plugins/' . $this->getName() . $file), 'tiny_mce');
+                }
             }
 
             // pack assets if required
@@ -225,19 +237,6 @@ class WFEditorPlugin extends WFEditor {
         $document = WFDocument::getInstance();
 
         $document->addScript(array('tiny_mce_popup'), 'tiny_mce');
-        
-        // load plugin dialog language file if necessary
-        if ($this->getParam('editor.compress_javascript', 0)) {
-            $file = "/langs/" . $this->getLanguage() . "_dlg.js";
-            
-            if (!JFile::exists(WF_EDITOR_PLUGIN . $file)) {
-                $file = "/langs/en_dlg.js";
-            }
-
-            if (JFile::exists(WF_EDITOR_PLUGIN . $file)) {                
-                $document->addScript(array('plugins/' . $this->getName() . $file), 'tiny_mce');
-            }
-        }
 
         if (WF_INI_LANG) {
             // ini language
@@ -255,7 +254,7 @@ class WFEditorPlugin extends WFEditor {
             'tips',
             'tiny_mce_utils',
             'plugin'
-        ), 'libraries');
+                ), 'libraries');
 
         // get UI Theme
         $theme = $this->getParam('editor.dialog_theme', 'jce');
@@ -265,7 +264,7 @@ class WFEditorPlugin extends WFEditor {
         $document->addStyleSheet(array(
             'jquery/' . $theme . '/' . basename($ui[0], '.css'),
             'plugin'
-        ), 'libraries');
+                ), 'libraries');
 
         // add custom plugin.css if exists
         if (is_file(JPATH_SITE . '/media/jce/css/plugin.css')) {
