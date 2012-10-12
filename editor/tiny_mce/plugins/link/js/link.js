@@ -228,7 +228,7 @@ var LinkDialog = {
         AutoValidator.validate(document);
 
         if ($('#href').val() == '') {
-            $.Dialog.alert(tinyMCEPopup.getLang('link_dlg.no_href', 'A URL is required. Please select a link or enter a URL'));
+            $.Dialog.alert(ed.getLang('link_dlg.no_href', 'A URL is required. Please select a link or enter a URL'));
 
             $('#href').focus();
 
@@ -236,7 +236,7 @@ var LinkDialog = {
         }
 
         if (se.isCollapsed() && $('#text').val() == '') {
-            $.Dialog.alert(tinyMCEPopup.getLang('link_dlg.no_text', 'Please enter some text for the link'));
+            $.Dialog.alert(ed.getLang('link_dlg.no_text', 'Please enter some text for the link'));
 
             $('#text').focus();
 
@@ -322,8 +322,8 @@ var LinkDialog = {
     },
 
     createEmail : function() {
-        var ed = tinyMCEPopup;
-
+        var ed = tinyMCEPopup.editor;
+        
         var fields = '<div class="formElm"><label for="email_to">' + ed.getLang('link_dlg.to', 'To') + '</label>' +
         '<textarea id="email_mailto" class="email"></textarea>' +
         '</div>' +
@@ -346,14 +346,14 @@ var LinkDialog = {
                 click: function() {
                     var args = [], errors = 0;
                     $.each(['mailto', 'cc', 'bcc', 'subject'], function(i, s) {
-                        var v = document.getElementById('email_' + s).value;
+                        var v = $('#email_' + s).val();
                         if (v) {
                             v = v.replace(/\n\r/g, '');
 
                             $.each(v.split(','), function(i, o) {
                                 if (s !== 'subject') {
                                     if (!Validator.isEmail(o)) {
-                                        $.Dialog.alert(s + tinyMCEPopup.getLang('link_dlg.invalid_email', ' is not a valid e-mail address!'));
+                                        $.Dialog.alert(s + ed.getLang('link_dlg.invalid_email', ' is not a valid e-mail address!'));
                                         errors++;
                                     }
                                 }
@@ -365,7 +365,7 @@ var LinkDialog = {
 
                     if (errors == 0) {
                         if (args.length) {
-                            document.getElementById('href').value = 'mailto:' + args.join('&').replace(/&/, '?');
+                            $('#href').val('mailto:' + args.join('&').replace(/&/, '?'));
                         }
                     }
                     $(this).dialog('close');
