@@ -47,8 +47,10 @@ var WFPopups = WFExtensions.add('Popups', {
     setup : function() {
         var self = this, ed = tinyMCEPopup.editor, s = ed.selection, n;
         
-        // trigger change
-        $('#popup_list').change();
+        // setup and trigger change
+        $('#popup_list').change(function() {
+            self.selectPopup(this.value);
+        }).change();
 
         if(!s.isCollapsed()) {
             n = s.getNode();
