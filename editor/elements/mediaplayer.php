@@ -39,7 +39,7 @@ class WFElementMediaplayer extends WFElement {
         // add javascript if element has parameters
         if ((string) $node->attributes()->parameters) {
             $document = JFactory::getDocument();
-            $document->addScriptDeclaration('$jce.Parameter.add("#' . $id . '", "mediaplayer");');
+            $document->addCustomTag('<script type="text/javascript">$jce.Parameter.add("#' . $id . '", "mediaplayer");</script>');
         }
 
         $options = array();

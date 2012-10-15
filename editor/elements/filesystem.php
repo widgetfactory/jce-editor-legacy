@@ -36,7 +36,7 @@ class WFElementFilesystem extends WFElement {
         // add javascript if element has parameters
         if ((string) $node->attributes()->parameters) {
             $document = JFactory::getDocument();
-            $document->addScriptDeclaration('$jce.Parameter.add("#' . $id . '", "filesystem");');
+            $document->addCustomTag('<script type="text/javascript">$jce.Parameter.add("#' . $id . '", "filesystem");</script>');
         }
 
         // path to directory
