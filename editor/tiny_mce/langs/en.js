@@ -198,9 +198,6 @@ tinyMCE.addI18n({
             no_mpell:"No misspellings found.",
             learn_word:"Learn word"
         },
-        pagebreak:{
-            desc:"Insert page break."
-        },
         advlist:{
             types:"Types",
             def:"Default",
@@ -266,23 +263,6 @@ tinyMCE.addI18n({
             readmore_title: "Read More",
             readmore_alert: "There is already a Read More break inserted in this article. Only one such break is permitted. Use a Pagebreak to split the page up further."
         },
-        advlist : {
-            types : 'Types',
-            def : 'Default',
-            lower_alpha : "Lower alpha",
-            lower_greek : "Lower greek",
-            lower_roman : "Lower roman",
-            upper_alpha : "Upper alpha",
-            upper_roman : "Upper roman",
-            circle : "Circle",
-            disc : "Disc",
-            square : "Square"
-        },
-        autosave:{
-            unload_msg:"The changes you made will be lost if you navigate away from this page.",
-            restore_content:"Restore auto-saved content.",
-            warning_message:"If you restore the saved content, you will lose all the content that is currently in the editor.\n\nAre you sure you want to restore the saved content?."
-        },
         source:{
             source_desc:"Toggle Source Code",
             wrap:"Toggle Word Wrap",
@@ -311,7 +291,8 @@ tinyMCE.addI18n({
             desc    : "Insert/edit anchor",
             name    : "Name",
             invalid : "Please specify a valid anchor Name or ID. The value must start with a letter.",
-            exists  : "An anchor with that name or id already exists"
+            exists  : "An anchor with that name or id already exists",
+            remove  : "Remove"
         },
         upload : {
             'response_error' : "Invalid Upload Response",
