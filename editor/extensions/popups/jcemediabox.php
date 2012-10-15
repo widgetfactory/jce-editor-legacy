@@ -49,8 +49,8 @@ class WFPopupsExtension_Jcemediabox extends JObject
 	function getParams()
 	{
 		return array(
-                    'width'         => 600,
-                    'album-field'   => '#jcemediabox_popup_group'
+                    'width'   => 600,
+                    'album'   => '#jcemediabox_popup_group'
 		);
 	}
 	
