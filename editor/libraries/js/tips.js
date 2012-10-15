@@ -243,7 +243,7 @@
             };
 			
             var pos = {
-                x: p.left - tip.x / 2 + $(this.element).outerWidth() / 2,
+                x: p.left - tip.x / 2 + $(this.element).width() / 2,
                 y: p.top  - (tip.y + o.y)
             };
 			
