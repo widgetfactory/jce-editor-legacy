@@ -86,7 +86,7 @@
 .o2k7Skin .mce_forecolor span.mceAction, .o2k7Skin .mce_backcolor span.mceAction {height:15px;overflow:hidden}
 
 /* Table Grid SplitButton */
-.o2k7Skin table.mceTableSplitMenu {width : 120px; height: 80px; background:#FFF; border:1px solid #ccc;}
+.o2k7Skin table.mceTableSplitMenu {width : 120px; height: 80px; background:#FFF; border:1px solid #ccc; border-spacing: 1px;}
 .o2k7Skin table.mceTableSplitMenu td {border: 1px solid #ccc;background-color: #FFF;}
 .o2k7Skin table.mceTableSplitMenu td.selected {background-color: #C2CBE0;}
 .o2k7Skin table.mceTableSplitMenu tfoot td.mceTableGridCount {background-color: #FFF;text-align: center;font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px;}

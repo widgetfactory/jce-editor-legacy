@@ -90,7 +90,7 @@
 .defaultSkin .mce_forecolor span.mceAction, .defaultSkin .mce_backcolor span.mceAction {overflow:hidden; height:15px}
 
 /* Table Grid SplitButton */
-.defaultSkin table.mceTableSplitMenu {width : 120px; height: 80px; background:#FFF; border:1px solid #ccc;}
+.defaultSkin table.mceTableSplitMenu {width : 120px; height: 80px; background:#FFF; border:1px solid #ccc; border-spacing: 1px;}
 .defaultSkin table.mceTableSplitMenu td {border: 1px solid #ccc;background-color: #FFF;}
 .defaultSkin table.mceTableSplitMenu td.selected {background-color: #C2CBE0;}
 .defaultSkin table.mceTableSplitMenu tfoot td.mceTableGridCount {background-color: #FFF;text-align: center;font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px;}
