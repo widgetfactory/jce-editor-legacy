@@ -32,7 +32,8 @@
             },
             width: 200,
             fixed: true,
-            sticky: false
+            sticky: false,
+            parent : 'body'
         },
 		
         /**
@@ -93,7 +94,7 @@
                 $tips = $('<div id="jce-tooltip" class="jce-tooltip ui-widget ui-widget-content ui-corner-all" role="tooltip" aria-hidden="true">' +
                     '<span class="ui-icon ui-icon-close" title="Close"></span>' +	
                     '<div class="jce-tooltip-content"></div>' +
-                    '</div>').appendTo('body');
+                    '</div>').appendTo(this.options.parent);
 				
                 if ($.support.canvas) {
                     var canvas = document.createElement('canvas');
@@ -233,17 +234,17 @@
 		
         _position: function() {
             var $tips 	= $('#jce-tooltip');
-            var p 		= $(this.element).offset();
-            var o 		= this.options.offsets;	
+            var p 	= $(this.element).offset();
+            var o 	= this.options.offsets;	
 			
             var tip = {
-                'x': $tips.outerWidth(),
-                'y': $tips.outerHeight()
+                'x': $tips.width(),
+                'y': $tips.height()
             };
 			
             var pos = {
-                x: p.left 	- tip.x / 2 + $(this.element).outerWidth() / 2,
-                y: p.top 	- (tip.y + o.y)
+                x: p.left - tip.x / 2 + $(this.element).outerWidth() / 2,
+                y: p.top  - (tip.y + o.y)
             };
 			
             var position 	  = this.options.position;
