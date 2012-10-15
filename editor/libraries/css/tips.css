@@ -79,7 +79,7 @@
     top:	auto;
     bottom: -14px;
 }
-label.hasTip, span.hasTip, label.hastip, span.hastip, label.tooltip, span.tooltip {
+label.hasTip, span.hasTip, label.hastip, span.hastip, label.tooltip, span.tooltip, label.wf-tooltip, span.wf-tooltip {
     cursor: help;
 }
 #jce-tooltip span.ui-icon-close {
