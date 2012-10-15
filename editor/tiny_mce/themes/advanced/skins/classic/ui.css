@@ -121,7 +121,7 @@
 .classicSkin.mceButtonDialogActive .mceButtonDialog {border-color:#0A246A; background-color : #C2CBE0;}
 .classicSkin.mceButtonDialogActive .mceButtonDialog:before {background-color:#C2CBE0; border-color : #0A246A;}
 .classicSkin .mceButtonDialog fieldset {margin:0; padding:4px; border: 0 none; font-family:Verdana, Arial; font-size:10px;}
-.classicSkin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px;}
+.classicSkin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px; margin: 0;}
 .classicSkin .mceButtonDialog .mceButtonDialogContent {background-color : #fff;}
 .classicSkin .mceButtonDialog label {margin : 5px; min-width : 30px; display : inline-block;}
 .classicSkin .mceButtonDialog input {margin : 3px;}

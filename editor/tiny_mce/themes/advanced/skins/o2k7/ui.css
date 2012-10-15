@@ -116,7 +116,7 @@
 /* Dialog */
 .o2k7Skin .mceButtonDialog {position:absolute; left:0; top:1px; z-index:1000; border:1px solid #ABC6DD; direction:ltr; background : #E5EFFD; padding : 3px;}
 .o2k7Skin .mceButtonDialog fieldset {margin:0; padding:4px; border: 0 none; font-family:Verdana, Arial; font-size:10px;}
-.o2k7Skin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px;}
+.o2k7Skin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px; margin: 0;}
 .o2k7Skin .mceButtonDialog .mceButtonDialogContent {background-color : #fff;}
 .o2k7Skin .mceButtonDialog label {margin : 5px; min-width : 30px; display : inline-block;}
 .o2k7Skin .mceButtonDialog input {margin : 3px;}
