@@ -320,7 +320,7 @@
                         'content'       : content,
                         'width'         : 210,
                         'buttons'       : [{
-                            title : ed.getLang('common.insert', 'Insert'),
+                            title : ed.getLang('insert', 'Insert'),
                             id    : 'insert',
                             click : function(e) {
                                 c.restoreSelection();
@@ -347,13 +347,13 @@
                     c.onShowDialog.add(function() {
                         input.value = '';
 
-                        var label = ed.getLang('common.insert', 'Insert');
+                        var label = ed.getLang('insert', 'Insert');
                        
                         var v = self._getAnchor();
                         
                         if (v) {
                             input.value = v;  
-                            label = ed.getLang('common.update', 'Update');
+                            label = ed.getLang('update', 'Update');
                         }
                         
                         c.setActive(!!v);
