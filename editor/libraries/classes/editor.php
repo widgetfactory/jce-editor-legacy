@@ -124,7 +124,7 @@ class WFEditor extends JObject {
 
             $area = $mainframe->isAdmin() ? 2 : 1;
 
-            include(dirname(__FILE__) . '/mobile.php');
+            include_once(dirname(__FILE__) . '/mobile.php');
             $mobile = new Mobile_Detect();
 
             if ($mobile->isMobile()) {
