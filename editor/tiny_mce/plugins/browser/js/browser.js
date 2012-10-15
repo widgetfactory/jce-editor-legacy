@@ -11,73 +11,67 @@
 */
 var BrowserDialog = {
 	
-	settings : {},
+    settings : {},
 	
-	preInit : function() {
-		tinyMCEPopup.requireLangPack();
-	},
-	
-	init : function(ed) {
-		var action = "insert";
+    init : function(ed) {
+        var action = "insert";
 		
-		$('button#insert').click(function(e) {
-			BrowserDialog.insert();
-			e.preventDefault();
-		});
+        $('button#insert').click(function(e) {
+            BrowserDialog.insert();
+            e.preventDefault();
+        });
 		
-		tinyMCEPopup.resizeToInnerSize();
+        tinyMCEPopup.resizeToInnerSize();
 
-		var win = tinyMCEPopup.getWindowArg("window");        
-		var src = tinyMCEPopup.getWindowArg("url");
+        var win = tinyMCEPopup.getWindowArg("window");        
+        var src = tinyMCEPopup.getWindowArg("url");
 		
-		if (src) {
-			src = tinyMCEPopup.editor.convertURL(src);
-			action = "update";
-		}
+        if (src) {
+            src = tinyMCEPopup.editor.convertURL(src);
+            action = "update";
+        }
 
-		$('#insert').button('option', 'label', tinyMCEPopup.getLang('lang_' + action, 'Insert', true));
+        $('#insert').button('option', 'label', tinyMCEPopup.getLang('lang_' + action, 'Insert', true));
 		
-		if (/(:\/\/|www|index.php(.*)\?option)/gi.test(src)) {
-			src = '';	
-		}
+        if (/(:\/\/|www|index.php(.*)\?option)/gi.test(src)) {
+            src = '';	
+        }
 		
-		$('<input type="hidden" id="src" value="'+ src +'" />').appendTo(document.body);
+        $('<input type="hidden" id="src" value="'+ src +'" />').appendTo(document.body);
 		
-		$.Plugin.init();
+        $.Plugin.init();
 		
-		// Create File Browser
+        // Create File Browser
         WFFileBrowser.init('#src', {        	
-        	onFileClick : function(e, file) {
-        		BrowserDialog.selectFile(file);
+            onFileClick : function(e, file) {
+                BrowserDialog.selectFile(file);
             },
 
             onFileInsert : function(e, file) {
-            	BrowserDialog.selectFile(file);
+                BrowserDialog.selectFile(file);
             },
             
             expandable : false
         });
-	},
+    },
 	
-	insert : function() {
-		var win = tinyMCEPopup.getWindowArg("window");
+    insert : function() {
+        var win = tinyMCEPopup.getWindowArg("window");
 
         // insert information now
         win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = $('#src').val();
 
         // close popup window
         tinyMCEPopup.close();
-	},
+    },
 	
-	selectFile : function(file) {
-		var self 	= this;
+    selectFile : function(file) {
+        var self 	= this;
         var name 	= file.title;
         var src		= $.String.path(WFFileBrowser.get('getBaseDir'), file.id);
 
         src	= src.charAt(0) == '/' ? src.substring(1) : src;			
-		$('#src').val(src);
-	}
+        $('#src').val(src);
+    }
 };
-
-BrowserDialog.preInit();
 tinyMCEPopup.onInit.add(BrowserDialog.init, BrowserDialog);

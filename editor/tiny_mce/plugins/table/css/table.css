@@ -1,7 +1,7 @@
 /* CSS file for table dialog in the table plugin */
 
 .ui-tabs-panel {
-	height: 290px;
+	height: 350px;
 }
 
 .advfield {
@@ -12,11 +12,12 @@
 	margin-bottom: 3px;
 }
 
-#class {
-	width: 150px;
+#advanced_tab input[type="text"], #advanced_tab select {
+	width: 250px;
 }
+
 body.row .ui-tabs-panel, body.cell .ui-tabs-panel {
-	height: 240px;
+	height: 330px;
 }
 #merge_tab.ui-tabs-panel {
 	height: 80px;

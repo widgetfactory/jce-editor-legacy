@@ -146,7 +146,7 @@ class WFPopupsExtension extends WFExtension
             $options[] = JHTML::_('select.option', $popup, WFText::_('WF_POPUPS_' . strtoupper($popup) . '_TITLE'));
         }
         
-        return JHTML::_('select.genericlist', $options, 'popup_list', 'class="inputbox levels" size="1" onchange="WFExtensions.Popups.selectPopup(this.value);"', 'value', 'text', $this->get('default'));
+        return JHTML::_('select.genericlist', $options, 'popup_list', 'class="inputbox levels" size="1"', 'value', 'text', $this->get('default'));
     }
     
     public function getPopupTemplates()

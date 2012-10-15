@@ -200,6 +200,19 @@ class WFEditorPlugin extends WFEditor {
                 $document->removeScript('tiny_mce_popup', 'tiny_mce');
                 $document->removeScript('tiny_mce_utils', 'libraries');
             }
+            
+            // load plugin dialog language file if necessary
+            if ($this->getParam('editor.compress_javascript', 0)) {
+                $file = "/langs/" . $this->getLanguage() . "_dlg.js";
+
+                if (!JFile::exists(WF_EDITOR_PLUGIN . $file)) {
+                    $file = "/langs/en_dlg.js";
+                }
+
+                if (JFile::exists(WF_EDITOR_PLUGIN . $file)) {
+                    $document->addScript(array('plugins/' . $this->getName() . $file), 'tiny_mce');
+                }
+            }
 
             // pack assets if required
             $document->pack(true, $this->getParam('editor.compress_gzip', 0));
@@ -225,18 +238,6 @@ class WFEditorPlugin extends WFEditor {
 
         $document->addScript(array('tiny_mce_popup'), 'tiny_mce');
 
-        // load plugin dialog language file if necessary
-        if ($this->getParam('editor.compress_javascript', 0)) {
-            $file = "/langs/" . $this->getLanguage() . "_dlg.js";
-
-            if (!JFile::exists(WF_EDITOR_PLUGIN . $file)) {
-                $file = "/langs/en_dlg.js";
-            }
-
-            if (JFile::exists(WF_EDITOR_PLUGIN . $file)) {
-                $document->addScript(array('plugins/' . $this->getName() . $file), 'tiny_mce');
-            }
-        }
 
         if (WF_INI_LANG) {
             // ini language

@@ -67,7 +67,8 @@ tinyMCE.addI18n({
             // Upload Error Codes
             '-600' : '%f (%s) exceeds the maximum allowed size of %m',
             '-601' : 'File: %s',
-            '-800' : 'File: %s'
+            '-800' : 'File: %s',
+            root : 'Root'
         },
         
         // Aritcle - Pagebreak and Readmore

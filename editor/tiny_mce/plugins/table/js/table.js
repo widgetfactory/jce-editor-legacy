@@ -19,7 +19,7 @@ var TableDialog = {
             return this.initMerge();
         }
 
-        addClassesToList('class', "table_styles");
+        addClassesToList('classlist', "table_styles");
         
         if (this.html5) {
             // hide HTML4 only attributes (tframe = frame)
@@ -88,14 +88,10 @@ var TableDialog = {
     },
 
     initTable : function() {
-        var ed = tinyMCEPopup.editor, dom = tinyMCEPopup.dom;
+        var ed = tinyMCEPopup.editor;
 
-        var cols = tinyMCEPopup.getParam('table_default_cols', 2), rows = tinyMCEPopup.getParam('table_default_rows', 2);
-        var border = tinyMCEPopup.getParam('table_default_border', '0'), cellpadding = tinyMCEPopup.getParam('table_default_cellpadding', ''), cellspacing = tinyMCEPopup.getParam('table_default_cellspacing', '');
-        var align = "", width = tinyMCEPopup.getParam('table_default_width'), height = tinyMCEPopup.getParam('table_default_height'), bordercolor = "", bgcolor = "", className = "";
-        var id = "", summary = "", style = "", dir = "", lang = "", background = "", bgcolor = "", bordercolor = "", rules = "", frame = "";
-        var elm = dom.getParent(ed.selection.getNode(), "table");
-        action = tinyMCEPopup.getWindowArg('action');
+        var elm     = ed.dom.getParent(ed.selection.getNode(), "table");
+        var action  = tinyMCEPopup.getWindowArg('action');
 
         if(!action) {
             action = elm ? "update" : "insert";
@@ -110,70 +106,49 @@ var TableDialog = {
                     cols = rowsAr[i].cells.length;
                 }
             }
-            cols = cols;
-            rows = rowsAr.length;
-            st = dom.parseStyle(dom.getAttrib(elm, "style"));
-            border = trimSize(getStyle(elm, 'border', 'borderWidth'));
-            cellpadding = dom.getAttrib(elm, 'cellpadding', "");
-            cellspacing = dom.getAttrib(elm, 'cellspacing', "");
-            width = trimSize(getStyle(elm, 'width', 'width'));
-            height = trimSize(getStyle(elm, 'height', 'height'));
-            bordercolor = convertRGBToHex(getStyle(elm, 'bordercolor', 'borderLeftColor'));
-            bgcolor = convertRGBToHex(getStyle(elm, 'bgcolor', 'backgroundColor'));
-            align = dom.getAttrib(elm, 'align', align);
-            frame = dom.getAttrib(elm, 'frame');
-            rules = dom.getAttrib(elm, 'rules');
-            className = tinymce.trim(dom.getAttrib(elm, 'class').replace(/mceItem.+/g, ''));
-            id = dom.getAttrib(elm, 'id');
-            summary = dom.getAttrib(elm, 'summary');
-            style = dom.serializeStyle(st);
-            dir = dom.getAttrib(elm, 'dir');
-            lang = dom.getAttrib(elm, 'lang');
-            background = getStyle(elm, 'background', 'backgroundImage').replace(new RegExp("url\\(['\"]?([^'\"]*)['\"]?\\)", 'gi'), "$1");
+            
+            // Update form
+            $('#align').val(ed.dom.getAttrib(elm, 'align'));
+            $('#tframe').val(ed.dom.getAttrib(elm, 'frame'));
+            $('#rules').val(ed.dom.getAttrib(elm, 'rules'));
+            
+            $('#classes').val(ed.dom.getAttrib(elm, 'class'));
+            $('#classlist').val(ed.dom.getAttrib(elm, 'class'));
+
+            $('#cols').val(cols);
+            $('#rows').val(rowsAr.length);
+            
+            var border = trimSize(getStyle(elm, 'border', 'borderWidth'));
+        
+            // set border
+            if ($('#border').is(':checkbox')) {
+                $('#border').prop('checked', border == 1);
+            } else {
+                $('#border').val(border);
+            }
+
+            $('#cellpadding').val(ed.dom.getAttrib(elm, 'cellpadding', ""));
+            $('#cellspacing').val(ed.dom.getAttrib(elm, 'cellspacing', ""));
+            $('#width').val(trimSize(getStyle(elm, 'width', 'width')));
+            $('#height').val(trimSize(getStyle(elm, 'height', 'height')));
+            $('#bordercolor').val(convertRGBToHex(getStyle(elm, 'bordercolor', 'borderLeftColor'))).change();
+            $('#bgcolor').val(convertRGBToHex(getStyle(elm, 'bgcolor', 'backgroundColor'))).change();
+            $('#id').val(ed.dom.getAttrib(elm, 'id'));
+            $('#summary').val(ed.dom.getAttrib(elm, 'summary'));
+            $('#style').val(ed.dom.serializeStyle(ed.dom.parseStyle(ed.dom.getAttrib(elm, "style"))));
+            $('#dir').val(ed.dom.getAttrib(elm, 'dir'));
+            $('#lang').val(ed.dom.getAttrib(elm, 'lang'));
+            $('#backgroundimage').val(getStyle(elm, 'background', 'backgroundImage').replace(new RegExp("url\\(['\"]?([^'\"]*)['\"]?\\)", 'gi'), "$1"));
 
             $('#caption').prop('checked', elm.getElementsByTagName('caption').length > 0);
 
-            this.orgTableWidth = width;
-            this.orgTableHeight = height;
+            this.orgTableWidth  = $('#width').val();
+            this.orgTableHeight = $('#height').val();
 
             $('#insert').button('option', 'label', tinyMCEPopup.getLang('update', 'Update', true));
+        } else {            
+            $.Plugin.setDefaults(this.settings.defaults);
         }
-
-        // Update form
-        $('#align').val(align);
-        $('#tframe').val(frame);
-        $('#rules').val(rules);
-
-        $('#class').val(function() {
-            if($('option[value="' + className + '"]', this).length == 0) {
-                $(this).append(new Option(className, className));
-            }
-
-            return className;
-        });
-
-        $('#cols').val(cols);
-        $('#rows').val(rows);
-        
-        // set border
-        if ($('#border').is(':checkbox')) {
-            $('#border').prop('checked', border == 1);
-        } else {
-            $('#border').val(border);
-        }
-
-        $('#cellpadding').val(cellpadding);
-        $('#cellspacing').val(cellspacing);
-        $('#width').val(width);
-        $('#height').val(height);
-        $('#bordercolor').val(bordercolor).change();
-        $('#bgcolor').val(bgcolor).change();
-        $('#id').val(id);
-        $('#summary').val(summary);
-        $('#style').val(style);
-        $('#dir').val(dir);
-        $('#lang').val(lang);
-        $('#backgroundimage').val(background);
 
         // Resize some elements
         if($('#backgroundimagebrowser').is(':visible')) {
@@ -313,6 +288,13 @@ var TableDialog = {
 
     insertTable : function() {
         var ed = tinyMCEPopup.editor, dom = ed.dom;
+        
+        var elm     = ed.dom.getParent(ed.selection.getNode(), "table");
+        var action  = tinyMCEPopup.getWindowArg('action');
+
+        if(!action) {
+            action = elm ? "update" : "insert";
+        }
 
         var cols = 2, rows = 2, border = 0, cellpadding = -1, cellspacing = -1, align, width, height, className, caption, frame, rules;
         var html = '', capEl, elm;
@@ -339,7 +321,7 @@ var TableDialog = {
         height = $('#height').val();
         bordercolor = $('#bordercolor').val();
         bgcolor = $('#bgcolor').val();
-        className = $("#class").val();
+        className = $("#classes").val();
         id = $('#id').val();
         summary = $('#summary').val();
         style = $('#style').val();
@@ -585,7 +567,7 @@ var TableDialog = {
 
             try {
                 // IE9 might fail to do this selection 
-                inst.selection.setCursorLocation(tdorth[0], 0);
+                ed.selection.setCursorLocation(tdorth[0], 0);
             } catch (ex) {
             // Ignore
             }
@@ -695,12 +677,12 @@ var TableDialog = {
     },
 
     updateRow : function(tr_elm, skip_id, skip_parent) {
-        var ed = tinyMCEPopup.editor, dom = ed.dom, doc = ed.getDoc();
+        var ed = tinyMCEPopup.editor, dom = ed.dom, doc = ed.getDoc(), v;
 
         var curRowType = tr_elm.parentNode.nodeName.toLowerCase();
         var rowtype = $('#rowtype').val();
 
-        $.each(['id', 'align', 'valign', 'lang', 'dir', 'class', 'style'], function(i, k) {
+        $.each(['id', 'align', 'valign', 'lang', 'dir', 'classes', 'style'], function(i, k) {
             v = $('#' + k).val();
 
             if(k == 'id' && skip_id) {
@@ -858,7 +840,7 @@ var TableDialog = {
         var curCellType = td.nodeName.toLowerCase();
         var celltype = $('#celltype').val();
 
-        $.each(['id', 'align', 'valign', 'lang', 'dir', 'class', 'scope', 'style'], function(i, k) {
+        $.each(['id', 'align', 'valign', 'lang', 'dir', 'classes', 'scope', 'style'], function(i, k) {
             v = $('#' + k).val();
 
             if(k == 'id' && skip_id) {
@@ -1033,6 +1015,10 @@ var TableDialog = {
         if (st['border-collapse'] && st['border-collapse'] == 'collapse') {
             $('#cellspacing').val(0);
         }
+    },
+    
+    setClasses : function(v) {
+        $.Plugin.setClasses(v);
     }
 
 };

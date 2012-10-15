@@ -25,29 +25,42 @@
             ed.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
                 var se = ed.selection, n = se.getNode(), p;
                 switch (cmd) {
-                    case 'FormatBlock':
-                        // must be a selection
-                        if (se.isCollapsed()) {
-                            return;
-                        }
+                    case 'FormatBlock':                        
                         // remove format
-                        if (!v) {
+                        if (!v) {                            
+                            o.terminate = true;
+                            
+                            if (n == ed.getBody()) {
+                                return;
+                            }
+                            
                             ed.undoManager.add();
-                            p = ed.dom.getParent(n, blocks);
+                            p = ed.dom.getParent(n, blocks) || '';                            
                             if (p) {
                                 ed.formatter.toggle(p.nodeName.toLowerCase());
                             }
-                            o.terminate = true;
+                            
+                            var cm = ed.controlManager.get('formatselect');
+                            if (cm) {
+                                cm.select(p);
+                            } 
                         }
 
                         break;
                     case 'RemoveFormat':
                         if (!v && isBlock(n)) {
                             ed.undoManager.add();
-                            p = ed.dom.getParent(n, blocks);
+                            p = ed.dom.getParent(n, blocks) || '';                            
                             if (p) {
                                 ed.formatter.toggle(p.nodeName.toLowerCase());
-                            }	
+                            }
+                            
+                            var cm = ed.controlManager.get('formatselect');
+                            
+                            if (cm) {
+                                cm.select(p);
+                            }
+                            
                             o.terminate = true;
                         }
                         break;

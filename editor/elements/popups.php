@@ -40,7 +40,7 @@ class WFElementPopups extends WFElement {
             
             $options = array();
 
-            $options[] = JHTML::_('select.option', 'none', WFText::_('WF_OPTION_NOT_SET'));
+            $options[] = JHTML::_('select.option', '', WFText::_('WF_OPTION_NOT_SET'));
             
             foreach($files as $file) {
                 $extension = basename($file, '.xml');
@@ -49,7 +49,7 @@ class WFElementPopups extends WFElement {
                 $options[] = JHTML::_('select.option', $extension, WFText::_('WF_POPUPS_' . strtoupper($extension) . '_TITLE'));
             }
             
-            return JHTML::_('select.genericlist', $options, '' . $control_name . '[popups][' . $name . ']', 'class="inputbox plugins-default-select"', 'value', 'text', $value);
+            return JHTML::_('select.genericlist', $options, '' . $control_name . '[' . $name . ']', 'class="inputbox plugins-default-select"', 'value', 'text', $value);
         }
     }
 
