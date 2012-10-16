@@ -38,6 +38,12 @@
     visibility: hidden;
     margin: 0;
     font-size: 11px;
+    
+    border : 1px solid #ccc;
+    background: #fff;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius : 3px;
 }
 #jce-tooltip.jce-tooltip div.jce-tooltip-pointer, #jce-tooltip.jce-tooltip div.jce-tooltip-pointer-inner {
     position: absolute;
@@ -87,6 +93,14 @@ label.hasTip, span.hasTip, label.hastip, span.hastip, label.tooltip, span.toolti
     right: 0px;
     top: 0px;
     cursor: pointer;
+}
+#jce-tooltip span.ui-icon-close:after {
+    content: "x";
+    display: block;
+    font-family: arial;
+    font-size: 12px;
+    font-weight: bold;
+    width: 12px;
 }
 #jce-tooltip canvas {
     position: absolute;
