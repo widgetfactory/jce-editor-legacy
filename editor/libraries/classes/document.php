@@ -246,6 +246,12 @@ class WFDocument extends JObject {
                 case 'libraries':
                     $pre = $base . 'libraries/' . $type;
                     break;
+                case 'jquery':
+                    $pre = $base . 'libraries/jquery/' . $type;
+                    break;
+                case 'bootstrap':
+                    $pre = $base . 'libraries/bootstrap/' . $type;
+                    break;
                 // TinyMCE folder
                 case 'tiny_mce':
                     $pre = $base . 'tiny_mce';

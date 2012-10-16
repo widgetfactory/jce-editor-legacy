@@ -245,9 +245,10 @@ class WFEditorPlugin extends WFEditor {
         }
 
         // jquery versions
-        $jquery = array('jquery/jquery-' . WF_JQUERY . '.min.js', 'jquery/jquery-ui-' . WF_JQUERYUI . '.custom.min.js');
+        //$jquery = array('jquery-' . WF_JQUERY . '.min.js', 'jquery-ui-' . WF_JQUERYUI . '.custom.min.js');
 
-        $document->addScript($jquery, 'libraries');
+        $document->addScript('jquery-' . WF_JQUERY . '.min.js', 'jquery');
+        $document->addScript('bootstrap.min', 'bootstrap');
 
         $document->addScript(array(
             'html5',
@@ -255,17 +256,18 @@ class WFEditorPlugin extends WFEditor {
             'tips',
             'tiny_mce_utils',
             'plugin'
-                ), 'libraries');
+        ), 'libraries');
 
         // get UI Theme
-        $theme = $this->getParam('editor.dialog_theme', 'jce');
+        //$theme = $this->getParam('editor.dialog_theme', 'jce');
 
-        $ui = JFolder::files(WF_EDITOR_LIBRARIES . '/css/jquery/' . $theme, '\.css$');
+        //$ui = JFolder::files(WF_EDITOR_LIBRARIES . '/css/jquery/' . $theme, '\.css$');
+        
+        $document->addStyleSheet('bootstrap', 'bootstrap');
 
         $document->addStyleSheet(array(
-            'jquery/' . $theme . '/' . basename($ui[0], '.css'),
             'plugin'
-                ), 'libraries');
+        ), 'libraries');
 
         // add custom plugin.css if exists
         if (is_file(JPATH_SITE . '/media/jce/css/plugin.css')) {
