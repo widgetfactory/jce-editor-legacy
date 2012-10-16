@@ -238,12 +238,12 @@
             var o 	= this.options.offsets;	
 			
             var tip = {
-                'x': $tips.width(),
-                'y': $tips.height()
+                'x': $tips.outerWidth(),
+                'y': $tips.outerHeight()
             };
 			
             var pos = {
-                x: p.left - tip.x / 2 + $(this.element).width() / 2,
+                x: p.left - tip.x / 2 + $(this.element).outerWidth() / 2,
                 y: p.top  - (tip.y + o.y)
             };
 			
