@@ -143,6 +143,10 @@ class WFEditor extends JObject {
                 if (!isset($item->area) || $item->area == '') {
                     $item->area = 0;
                 }
+                
+                if (!isset($item->device)) {
+                    $item->device = '';
+                }
 
                 if ($item->area == $area || $item->area == 0) {
                     if ($item->device == $device || $item->device == '') {
