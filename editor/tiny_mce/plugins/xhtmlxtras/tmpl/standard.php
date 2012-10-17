@@ -19,39 +19,55 @@ if ($element == 'del' || $element == 'ins') :
 endif;
 ?>
 <h4><?php echo WFText::_('WF_XHTMLXTRAS_FIELDSET_ATTRIB_TAB');?></h4>
-<table>
-    <tr>
-        <td class="label"><label for="title"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_TITLE');?></label></td>
-        <td><input id="title" type="text" value=""
-                   class="field mceFocus" /></td>
-    </tr>
-    <tr>
-        <td class="label"><label for="id"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_ID');?></label></td>
-        <td><input id="id" type="text" value="" class="field" /></td>
-    </tr>
-    <tr>
-        <td class="label"><label for="class"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_CLASS');?></label></td>
-        <td><select id="class" class="field mceEditableSelect">
-                <option value="">{#not_set}</option>
-            </select></td>
-    </tr>
-    <tr>
-        <td class="label"><label for="class"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_STYLE');?></label></td>
-        <td><input id="style" type="text" value="" class="field" /></td>
-    </tr>
-    <tr>
-        <td class="label"><label for="dir"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_LANGDIR');?></label></td>
-        <td><select id="dir" class="field">
-                <option value="">{#not_set}</option>
+
+<div class="control-group">
+    <label class="control-label" for="title"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_TITLE');?></label>
+    <div class="controls">
+        <input type="text" id="title" placeholder="">
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label" for="id"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_ID');?></label>
+    <div class="controls">
+        <input type="text" id="id" placeholder="">
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label" for="class"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_CLASS');?></label>
+    <div class="controls">
+        <select id="class" class="editable">
+            <option value=""><?php echo WFText::_('WF_OPTION_NOT_SET');?></option>
+        </select>
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label" for="style"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_STYLE');?></label>
+    <div class="controls">
+        <input type="text" id="style" placeholder="">
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label" for="class"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_CLASS');?></label>
+    <div class="controls">
+        <select id="dir" class="field">
+                <option value=""><?php echo WFText::_('WF_OPTION_NOT_SET');?></option>
                 <option value="ltr"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_OPTION_LTR');?></option>
                 <option value="rtl"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_OPTION_RTL');?></option>
-            </select></td>
-    </tr>
-    <tr>
-        <td class="label"><label for="lang"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_LANGCODE');?></label></td>
-        <td><input id="lang" type="text" value="" class="field" />
-        </td>
-    </tr>
+            </select>
+    </div>
+</div>
+
+<div class="control-group">
+    <label class="control-label" for="lang"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_LANGCODE');?></label>
+    <div class="controls">
+        <input type="text" id="lang" placeholder="">
+    </div>
+</div>
+
 <?php
 if ($plugin->isHTML5()) :
     echo $this->loadTemplate('html5');
