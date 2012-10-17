@@ -95,12 +95,13 @@ label.hasTip, span.hasTip, label.hastip, span.hastip, label.tooltip, span.toolti
     cursor: pointer;
 }
 #jce-tooltip span.ui-icon-close:after {
-    content: "x";
+    content: "\00d7";
     display: block;
     font-family: arial;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
-    width: 12px;
+    line-height: 10px;
+    padding: 4px;
 }
 #jce-tooltip canvas {
     position: absolute;
