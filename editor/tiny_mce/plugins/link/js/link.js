@@ -368,14 +368,14 @@ var LinkDialog = {
                             $('#href').val('mailto:' + args.join('&').replace(/&/, '?'));
                         }
                     }
-                    $(this).dialog('close');
+                    $(this).modal('hide');
                 }
 
             },
             {
                 text : ed.getLang('dlg.cancel', 'Cancel'),
                 click : function() {
-                    $(this).dialog('close');
+                    $(this).modal('hide');
                 }
 
             }
