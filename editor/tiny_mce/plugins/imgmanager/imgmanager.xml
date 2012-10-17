@@ -130,7 +130,7 @@
         <param name="classes" type="text" default="" size="50" label="WF_LABEL_CLASSES" description="WF_LABEL_CLASSES_DESC" />
         <param name="title" type="text" default="" size="50" label="WF_LABEL_TITLE" description="WF_LABEL_TITLE_DESC" />
         <param name="id" type="text" default="" size="50" label="WF_LABEL_ID" description="WF_LABEL_ID_DESC" />
-        <param name="dir" type="list" default="" size="50" label="WF_LABEL_DIR" description="WF_LABEL_DIR_DESC">
+        <param name="direction" type="list" default="" size="50" label="WF_LABEL_DIR" description="WF_LABEL_DIR_DESC">
             <option value="">WF_OPTION_NOT_SET</option>
             <option value="ltr">WF_OPTION_LTR</option>
             <option value="rtl">WF_OPTION_RTL</option>

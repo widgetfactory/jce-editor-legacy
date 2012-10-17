@@ -294,9 +294,17 @@ class WFEditorPlugin extends WFEditor {
         $params = $this->getParams(array(
             'key' => $name,
             'path' => WF_EDITOR_PLUGIN . '/' . $name . '.xml'
-                ));
+        ));
 
-        return array_merge($defaults, (array) $params->getAll('defaults'));
+        $defaults = array_merge($defaults, (array) $params->getAll('defaults'));
+        
+        // map direction to dir
+        if (array_key_exists('direction', $defaults)) {
+            $defaults['dir'] = $defaults['direction'];
+            unset($defaults['direction']);
+        }
+
+        return $defaults;
     }
 
     /**
