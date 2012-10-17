@@ -247,7 +247,7 @@ class WFEditorPlugin extends WFEditor {
         // jquery versions
         //$jquery = array('jquery-' . WF_JQUERY . '.min.js', 'jquery-ui-' . WF_JQUERYUI . '.custom.min.js');
 
-        $document->addScript('jquery-' . WF_JQUERY . '.min.js', 'jquery');
+        $document->addScript(array('jquery-' . WF_JQUERY . '.min.js', 'jquery-ui-' . WF_JQUERYUI . '.custom.min.js'), 'jquery');
         $document->addScript('bootstrap.min', 'bootstrap');
 
         $document->addScript(array(
@@ -263,7 +263,7 @@ class WFEditorPlugin extends WFEditor {
 
         //$ui = JFolder::files(WF_EDITOR_LIBRARIES . '/css/jquery/' . $theme, '\.css$');
         
-        $document->addStyleSheet('bootstrap', 'bootstrap');
+        //$document->addStyleSheet('bootstrap', 'bootstrap');
 
         $document->addStyleSheet(array(
             'plugin'
