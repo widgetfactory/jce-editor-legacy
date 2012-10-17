@@ -499,7 +499,7 @@ class WFDocument extends JObject {
     private function getHead() {
         $version = $this->get('version', '000000');
         // set title		
-        $output = '<title>' . $this->getTitle() . ' : ' . $version . '</title>' . "\n";
+        $output = '<title>' . $this->getTitle() . '</title>' . "\n";
         // create timestamp
         $stamp = preg_match('/\d+/', $version) ? '?version=' . $version : '';
 
