@@ -15,10 +15,10 @@ select {
 }
 
 #href {
-	width: 330px;
+	width: 90%;
 }
 #text, #title {
-	width: 98%;
+	width: 95%;
 }
 
 #advanced_tab input[type="text"], #advanced_tab select {
