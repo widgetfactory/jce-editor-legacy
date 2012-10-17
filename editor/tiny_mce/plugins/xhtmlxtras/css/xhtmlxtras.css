@@ -1,19 +1,5 @@
-#jce .ui-tabs-panel {
-	height: 285px;
-}
-
-#jce div#attributes .ui-tabs-panel {
-	height: 335px;
-}
-
-#jce div#del .ui-tabs-panel,
-#jce div#ins .ui-tabs-panel {
-	height: 350px;
-}
-
-#jce label {
-    display: inline-block;
-    min-width: 70px;
+#jce .tab-pane.active {
+	height: 410px;
 }
 
 #standard_tab input[type="text"], #events_tab input[type="text"] {
