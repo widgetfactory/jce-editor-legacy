@@ -8,7 +8,7 @@ var XHTMLXtrasDialog = {
     settings : {},
 
     init : function() {
-        tinyMCEPopup.resizeToInnerSize();
+        //tinyMCEPopup.resizeToInnerSize();
 
         var ed = tinyMCEPopup.editor, se = ed.selection, n = se.getNode(), element = tinyMCEPopup.getWindowArg('element');
         
