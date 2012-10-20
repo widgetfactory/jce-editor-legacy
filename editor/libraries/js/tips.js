@@ -18,6 +18,28 @@
 (function($){
 	
     $.support.canvas = !!document.createElement('canvas').getContext;
+    
+    // http://www.abeautifulsite.net/blog/2011/11/detecting-mobile-devices-with-javascript/
+    var isMobile = {
+        Android: function() {
+            return navigator.userAgent.match(/Android/i);
+        },
+        BlackBerry: function() {
+            return navigator.userAgent.match(/BlackBerry/i);
+        },
+        iOS: function() {
+            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+        },
+        Opera: function() {
+            return navigator.userAgent.match(/Opera Mini/i);
+        },
+        Windows: function() {
+            return navigator.userAgent.match(/IEMobile/i);
+        },
+        any: function() {
+            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+        }
+    };
 	
     $.widget("ui.tips", {
 		
@@ -50,13 +72,13 @@
                 self._pin();
             } else {				
                 // cancel on drag/drop/sortable		
-                if ($(this.element).hasClass('tooltip-cancel-ondrag')) {
+                if ($(this.element).hasClass('wf-tooltip-cancel-ondrag')) {
                     this._cancelOnDrag();
                 }
                            
                 $(this.element).click(function(e) {					
                     // don't pin tip if a link or parent of a link
-                    if (this.nodeName == 'A' || $('a', this).length || $(this).hasClass('tooltip-cancel-ondrag')) {
+                    if (this.nodeName == 'A' || $('a', this).length || $(this).hasClass('wf-tooltip-cancel-ondrag')) {
                         return;
                     }
 					
@@ -67,7 +89,7 @@
                     }
                 });
             }
-
+            
             $(this.element).hover(
                 function (e) {
                     if ($('#jce-tooltip').hasClass('sticky') || $(this).hasClass('nohover')) {
@@ -91,7 +113,7 @@
             var self = this, $tips = $('#jce-tooltip');
 			
             if (!$tips.get(0)) {				
-                $tips = $('<div id="jce-tooltip" class="jce-tooltip ui-widget ui-widget-content ui-corner-all" role="tooltip" aria-hidden="true">' +
+                $tips = $('<div id="jce-tooltip" class="jce-tooltip" role="tooltip" aria-hidden="true">' +
                     '<span class="ui-icon ui-icon-close" title="Close"></span>' +	
                     '<div class="jce-tooltip-content"></div>' +
                     '</div>').appendTo(this.options.parent);
@@ -104,7 +126,7 @@
                     }).addClass('jce-tooltip-pointer');
                     $('#jce-tooltip').append(canvas);					
                 } else {
-                    $('#jce-tooltip').append('<div class="jce-tooltip-pointer ui-widget-content"><div class="jce-tooltip-pointer-inner"></div></div>');
+                    $('#jce-tooltip').append('<div class="jce-tooltip-pointer"><div class="jce-tooltip-pointer-inner"></div></div>');
                 }
 								
                 $('span.ui-icon-close', $tips).click(function() {
