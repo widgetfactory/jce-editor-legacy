@@ -14,7 +14,7 @@ defined('_JEXEC') or die('RESTRICTED');
 wfimport('editor.libraries.classes.editor');
 
 if (!defined('WF_INI_LANG')) {
-    define('WF_INI_LANG', 0);
+    define('WF_INI_LANG', 1);
 }
 
 /**
@@ -247,7 +247,7 @@ class WFEditorPlugin extends WFEditor {
         // jquery versions
         //$jquery = array('jquery-' . WF_JQUERY . '.min.js', 'jquery-ui-' . WF_JQUERYUI . '.custom.min.js');
 
-        $document->addScript(array('jquery-' . WF_JQUERY . '.min.js', 'jquery-ui-' . WF_JQUERYUI . '.custom.min.js'), 'jquery');
+        $document->addScript(array('jquery-' . WF_JQUERY . '.min.js', 'jquery-ui-' . WF_JQUERYUI . '.custom.min.js', 'jquery.ui.touch-punch.min.js'), 'jquery');
         $document->addScript('bootstrap.min', 'bootstrap');
 
         $document->addScript(array(
@@ -385,23 +385,14 @@ class WFEditorPlugin extends WFEditor {
     }
 
     /**
-     * Load a plugin extension
-     *
-     * @access	protected
-     */
-    protected function getExtensions($arguments) {
-        return array();
-    }
-
-    /**
      * Load & Call an extension
      *
      * @access	protected
      * @param 	array $config
      * @return 	array
      */
-    protected function loadExtensions($config = array()) {
-        return array();
+    protected function loadExtensions($type, $extension = null, $config = array()) {
+        return WFExtension::loadExtensions($type, $extension, $config);
     }
 
     /**
