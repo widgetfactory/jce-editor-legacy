@@ -121,12 +121,14 @@ class WFEditor extends JObject {
                     $option = isset($component->element) ? $component->element : $component->option;
                 }
             }
+            // get the Joomla! area (admin or site)
+            $area = $mainframe->isAdmin() ? 'admin' : 'site';
 
-            $area = $mainframe->isAdmin() ? 2 : 1;
-
+            // load mobile detect class
             include_once(dirname(__FILE__) . '/mobile.php');
             $mobile = new Mobile_Detect();
 
+            // set device values
             if ($mobile->isMobile()) {
                 $device = 'mobile';
             } else if ($mobile->isTablet()) {
@@ -139,17 +141,17 @@ class WFEditor extends JObject {
                 // check if option is in list
                 $isComponent = in_array($option, explode(',', $item->components));
 
-                // Set area default as Front-end / Back-end
-                if (!isset($item->area) || $item->area == '') {
-                    $item->area = 0;
+                // Set area default as 'site,admin'
+                if (!isset($item->area) || empty($item->area)) {
+                    $item->area = 'site,admin';
                 }
-                
-                if (!isset($item->device)) {
-                    $item->device = '';
+                // set device default as 'desktop,tablet,mobile'
+                if (!isset($item->device) || empty($item->device)) {
+                    $item->device = 'desktop,tablet,mobile';
                 }
 
-                if ($item->area == $area || $item->area == 0) {
-                    if ($item->device == $device || $item->device == '') {
+                if (in_array($area, explode(',', $item->area))) {
+                    if (in_array($device, explode(',', $item->device))) {
                         // Check user
                         if ($user->id && in_array($user->id, explode(',', $item->users))) {
                             if ($item->components) {
