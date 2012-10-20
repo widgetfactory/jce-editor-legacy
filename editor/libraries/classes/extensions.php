@@ -62,32 +62,35 @@ class WFExtension extends JObject {
      * @access  public
      * @return 	array
      */
-    public static function getExtensions($config) {
+    private static function _load($types = array(), $extension = null, $config = array()) {
         jimport('joomla.filesystem.folder');
         jimport('joomla.filesystem.file');
 
-        $extension = $config['extension'];
-        $types = $config['types'];
+        $extensions = array();
 
         if (!isset($config['base_path'])) {
             $config['base_path'] = WF_EDITOR;
         }
 
-        $path = $config['base_path'] . '/extensions';
+        // core extensions path
+        $path = $config['base_path'] . '/extensions/';
 
-        $extensions = array();
+        // cast as array
+        $types = (array) $types;
+
+        // get all types from core
+        if (empty($types)) {
+            $types = JFolder::folders(WF_EDITOR . '/extensions');
+        }
 
         if (JFolder::exists($path)) {
-            if (empty($types)) {
-                $types = JFolder::folders($path);
-            }
-
             foreach ($types as $type) {
                 if ($extension) {
                     if (JFile::exists($path . '/' . $type . '/' . $extension . '.xml') && JFile::exists($path . '/' . $type . '/' . $extension . '.php')) {
-                        $object = new stdClass();
-                        $object->folder = $type;
-                        $object->extension = $extension;
+                        $object             = new stdClass();
+                        $object->folder     = $type;
+                        $object->path       = $path . '/' . $type;
+                        $object->extension  = $extension;
 
                         $extensions[] = $object;
                     }
@@ -95,10 +98,12 @@ class WFExtension extends JObject {
                     $files = JFolder::files($path . '/' . $type, '\.xml$', false, true);
 
                     foreach ($files as $file) {
-                        $object = new stdClass();
+                        $object         = new stdClass();
                         $object->folder = $type;
+                        $object->path   = $path . '/' . $type;
 
                         $name = JFile::stripExt(basename($file));
+                        
                         if (JFile::exists(dirname($file) . '/' . $name . '.php')) {
                             $object->extension = $name;
                         }
@@ -108,21 +113,30 @@ class WFExtension extends JObject {
             }
         }
 
+        // set default prefix
+        if (!array_key_exists('prefix', $config)) {
+            $config['prefix'] = 'jce-';
+        }
+
         // get external extensions
         jimport('joomla.plugin.helper');
-        $external = JPluginHelper::getPlugin('jce', $extension);
 
-        foreach ($external as $item) {
-            $object = new stdClass();
-            $object->folder = $item->type;
+        foreach ($types as $type) {
+            $installed = JPluginHelper::getPlugin($config['prefix'] . $type, $extension);
 
-            $name = $item->element;
-            
-            if (JFile::exists(JPATH_PLUGINS . '/' . $item->type . '/' . $item->element . '.php')) {
-                $object->extension = $name;
+            foreach ($installed as $item) {
+                $object         = new stdClass();
+                $object->folder = $item->type; 
+                $object->path   = JPATH_PLUGINS . '/' . $item->type;
+
+                $name = $item->element;
+
+                if (JFile::exists(JPATH_PLUGINS . '/' . $item->type . '/' . $item->element . '.php')) {
+                    $object->extension = $name;
+                }
+
+                $extensions[] = $object;
             }
-            
-            $extensions[] = $object;
         }
 
         return $extensions;
@@ -135,57 +149,61 @@ class WFExtension extends JObject {
      * @param	array $config
      * @return 	mixed
      */
-    public static function loadExtensions($config = array()) {
+    public static function loadExtensions($type, $extension = null, $config = array()) {
         jimport('joomla.filesystem.folder');
         jimport('joomla.filesystem.file');
 
         $language = JFactory::getLanguage();
 
-        if (!isset($config['extension'])) {
-            $config['extension'] = '';
-        }
-        if (!isset($config['types']) || empty($config['types'])) {
-            $config['types'] = array();
-        }
         if (!isset($config['base_path'])) {
             $config['base_path'] = WF_EDITOR;
+        }
+        
+        // set default prefix
+        if (!array_key_exists('prefix', $config)) {
+            $config['prefix'] = 'jce-';
+        }
+
+        // sanitize $type
+        $type = preg_replace('#[^A-Z0-9\._-]#i', '', $type);
+
+        // sanitize $extension
+        if ($extension) {
+            $extension = preg_replace('#[^A-Z0-9\._-]#i', '', $extension);
         }
 
         // Create extensions path
         $base = $config['base_path'] . '/extensions';
 
-        // Get installed extensions
-        $extensions = self::getExtensions($config);
+        // Get all extensions
+        $extensions = self::_load((array)$type, $extension, $config);
 
         $result = array();
 
         if (!empty($extensions)) {
-            foreach ($extensions as $extension) {
-                $name   = $extension->extension;
-                $folder = $extension->folder;
-                
-                if ($folder == 'jce') {
-                    $base = JPATH_PLUGINS;
-                }
+            foreach ($extensions as $item) {
+                $name   = $item->extension;
+                $folder = $item->folder;
+                $path   = $item->path;
 
-                $path = $base . '/' . $folder;
-                $root = $path . '/' . $name . '.php';
+                $root   = $path . '/' . $name . '.php';
 
                 if (file_exists($root)) {
                     // Load root extension file
                     require_once($root);
 
                     // Load Extension language file
-                    $language->load('com_jce_' . $folder . '_' . $name, JPATH_SITE);
-
+                    $language->load('plg_' . $folder . '_' . $name, JPATH_SITE);
+                    
+                    // remove prefix
+                    $folder = str_replace($config['prefix'], '', $folder);
+                    
                     // Return array of extension names
-                    $result[$folder][] = $name;
+                    $result[$folder] = $name;
 
-                    if ($config['extension']) {
-                        $k = array_search($config['extension'], $result[$folder]);
-                        if ($k !== false) {
-                            return $result[$folder][$k];
-                        }
+                    // if we only want a named extension
+                    if ($extension && $extension == $name) {
+                        return $name;
                     }
                 }
             }
