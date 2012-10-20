@@ -135,7 +135,7 @@ final class WFTabs extends JObject {
             //$output .= '<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">';
             $output .= '<div id="tabs" class="">';
             //$output .= '<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">' . "\n";
-            $output .= '<ul class="nav nav-pills">' . "\n";
+            $output .= '<ul class="nav nav-tabs">' . "\n";
 
             $x = 0;
 
