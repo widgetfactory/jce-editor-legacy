@@ -28,12 +28,10 @@ class WFLinkBrowser extends WFBrowserExtension {
     public function __construct() {
         parent::__construct();
 
-        $extensions = self::loadExtensions(array(
-                    'types' => array('links')
-                ));
+        $extensions = self::loadExtensions('links');
 
         // Load all link extensions		
-        foreach ($extensions['links'] as $link) {
+        foreach ($extensions as $link) {
             $this->extensions[] = $this->getLinkExtension($link);
         }
 
@@ -55,7 +53,7 @@ class WFLinkBrowser extends WFBrowserExtension {
         }
     }
 
-    private function &getLinkExtension($name) {
+    private function getLinkExtension($name) {
         static $links;
 
         if (!isset($links)) {
