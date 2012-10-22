@@ -84,6 +84,26 @@
                             }
                         });
                     }
+                } else {
+                    ed.serializer.addNodeFilter(ed.settings.invalid_elements, function(nodes, name) {
+                        var i = nodes.length, node;
+	
+                        while(i--) {
+                            node = nodes[i];
+	
+                            node.remove();
+                        }
+                    });
+                    
+                    ed.parser.addNodeFilter(ed.settings.invalid_elements, function(nodes, name) {
+                        var i = nodes.length, node;
+	
+                        while(i--) {
+                            node = nodes[i];
+	
+                            node.remove();
+                        }
+                    });
                 }
                 
                 // disable onclick etc.
