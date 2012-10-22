@@ -8,18 +8,19 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
 */
+
 html {
     overflow: hidden;
     height: 100%;
 }
 body#jce {
-    /*padding: 5px !important;
+    padding: 5px !important;
     font: 10px Verdana, Arial, Helvetica, sans-serif;
     background-color: #FFF;
     margin: 0;
     position: relative;
     height: 100%;
-    overflow: hidden;*/
+    overflow: hidden;
     
     -webkit-overflow-scrolling : 'touch';
 }
@@ -30,11 +31,11 @@ body#jce {
     font: 10px Verdana, Arial, Helvetica, sans-serif;
 }
 
-/*#jce .ui-widget {}
+#jce .ui-widget {}
 #tabs.ui-tabs .ui-tabs-panel {
     margin:0;
     padding:4px;
-}*/
+}
 textarea {
     resize:none;
     outline:none;
@@ -101,11 +102,11 @@ a.pickcolor span {
     background:transparent;
 }
 
-/*h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5 {
     color:#2B6FB6;
     margin:0;
     padding: 2px 0;
-}*/
+}
 .title {
     font-size:12px;
     font-weight:700;

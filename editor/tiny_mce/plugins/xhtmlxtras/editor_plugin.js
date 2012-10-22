@@ -20,8 +20,7 @@
                     width : 440 + parseInt(ed.getLang('xhtmlxtras.cite_delta_width', 0)),
                     height : 380 + parseInt(ed.getLang('xhtmlxtras.cite_delta_height', 0)),
                     inline : 1,
-                    popup_css : false,
-                    size : 'medium-portrait'
+                    popup_css : false
                 }, {
                     plugin_url : url,
                     element : 'cite'
@@ -35,8 +34,7 @@
                     width : 440 + parseInt(ed.getLang('xhtmlxtras.acronym_delta_width', 0)),
                     height : 380 + parseInt(ed.getLang('xhtmlxtras.acronym_delta_height', 0)),
                     inline : 1,
-                    popup_css : false,
-                    size : 'medium-portrait'
+                    popup_css : false
                 }, {
                     plugin_url : url,
                     element : 'acronym'
@@ -50,8 +48,7 @@
                     width : 440 + parseInt(ed.getLang('xhtmlxtras.abbr_delta_width', 0)),
                     height : 380 + parseInt(ed.getLang('xhtmlxtras.abbr_delta_height', 0)),
                     inline : 1,
-                    popup_css : false,
-                    size : 'medium-portrait'
+                    popup_css : false
                 }, {
                     plugin_url : url,
                     element : 'abbr'
@@ -65,8 +62,7 @@
                     width : 440 + parseInt(ed.getLang('xhtmlxtras.del_delta_width', 0)),
                     height : 440 + parseInt(ed.getLang('xhtmlxtras.del_delta_height', 0)),
                     inline : 1,
-                    popup_css : false,
-                    size : 'medium-portrait'
+                    popup_css : false
                 }, {
                     plugin_url : url,
                     element : 'del'
@@ -80,8 +76,7 @@
                     width : 440 + parseInt(ed.getLang('xhtmlxtras.ins_delta_width', 0)),
                     height : 440 + parseInt(ed.getLang('xhtmlxtras.ins_delta_height', 0)),
                     inline : 1,
-                    popup_css : false,
-                    size : 'medium-portrait'
+                    popup_css : false
                 }, {
                     plugin_url : url,
                     element : 'ins'
@@ -95,8 +90,7 @@
                     width : 440,
                     height : 420,
                     inline : 1,
-                    popup_css : false,
-                    size : 'medium-portrait'
+                    popup_css : false
                 }, {
                     plugin_url : url
                 });

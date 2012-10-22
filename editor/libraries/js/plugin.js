@@ -148,27 +148,17 @@
             });
 
             // show body
-            //$('#jce').addClass('ui-widget-content');
+            $('#jce').addClass('ui-widget-content');
 
-            // activate tabs
-            //$('#tabs').tabs();
-            
-            $('#tabs a').click(function (e) {
-                e.preventDefault();
-                $(this).tab('show');
+            // activate tabs - add activate function to fix bc issue with new JQuery UI
+            $('#tabs').tabs({
+                activate : function(e, ui) {
+                    $(ui.newPanel).removeClass('ui-tabs-hide').siblings('.ui-tabs-panel').addClass('ui-tabs-hide');
+                }
             });
-            
-            $('button, input#insert, input#update').addClass('btn');
-            
-            $('#insert, #update').prepend('<i class="icon-ok-circle"/>');
-            $('#apply').prepend('<i class="icon-plus"/>');
-            $('#cancel').prepend('<i class="icon-remove"/>');
-            $('#refresh').prepend('<i class="icon-refresh"/>');
-            $('#help').prepend('<i class="icon-question"/>');
-            
 
             // create buttons
-            /*$('button#insert, input#insert, button#update, input#update').button({
+            $('button#insert, input#insert, button#update, input#update').button({
                 icons: {
                     primary: 'ui-icon-check'
                 }
@@ -196,7 +186,7 @@
                 icons: {
                     primary: 'ui-icon-help'
                 }
-            });*/
+            });
             
             // create colout picker widgets
             this.createColourPickers();
@@ -778,46 +768,38 @@
             var div = document.createElement('div');
 
             options = $.extend(options, {
-                width	: options.minWidth  || options.width 	|| 300,
-                height	: options.minHeight || options.height 	|| 150,
-                backdrop: (typeof options.modal === 'undefined') ? true : options.modal,
-                show: function () {
+                minWidth	: options.minWidth 	|| options.width 	|| 300,
+                minHeight	: options.minHeight || options.height 	|| 150,
+                modal		: (typeof options.modal === 'undefined') ? true : options.modal,
+                open: function () {
                     // adjust modal
-                    /*$(div).dialog('widget').next('div.ui-widget-overlay').css({
+                    $(div).dialog('widget').next('div.ui-widget-overlay').css({
                         width : '100%',
                         height: '100%'
-                    });*/
-                    
-                    $.each(options.buttons, function(i, o) {
-                        $('<button class="btn"><i class="' + o.icon || '' + '"></i>' + o.text + '</button>').click(function() {
-                           o.click.call(); 
-                        });
-                    })
+                    });
                     
                     // fix buttons
-                    /*$('div.ui-dialog-buttonset button[icons]', $(div).dialog('widget')).each(function() {
+                    $('div.ui-dialog-buttonset button[icons]', $(div).dialog('widget')).each(function() {
                         var icon = $(this).attr('icons');
 						
                         $(this).prepend('<span class="ui-button-icon-primary ui-icon ' + icon + '"/>');
-                    }).addClass('ui-button-text-icon-primary').removeClass('ui-button-text-only');*/
+                    }).addClass('ui-button-text-icon-primary').removeClass('ui-button-text-only');
 
                     if ($.isFunction(options.onOpen)) {
                         options.onOpen.call();
                     }
                 },
 
-                hidden : function () {
-                    $(this).remove();
+                close: function () {
+                    $(this).dialog('destroy').remove();
                 }
 
             });
 
-            $(div).addClass('modal').attr({
+            $(div).attr({
                 'title' : title, 
-                id      : options.id || 'dialog' + this._uid()
-            }).modal(options);
-            
-            $(data).wrap('<div class="modal-body" />').appendTo(div);
+                id : options.id || 'dialog' + this._uid()
+            }).append(data).dialog(options);
 
             return div;
         },

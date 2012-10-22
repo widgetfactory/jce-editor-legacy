@@ -13,10 +13,6 @@ defined('_JEXEC') or die('RESTRICTED');
 
 wfimport('editor.libraries.classes.editor');
 
-if (!defined('WF_INI_LANG')) {
-    define('WF_INI_LANG', 1);
-}
-
 /**
  * JCE class
  *
@@ -247,8 +243,8 @@ class WFEditorPlugin extends WFEditor {
         // jquery versions
         //$jquery = array('jquery-' . WF_JQUERY . '.min.js', 'jquery-ui-' . WF_JQUERYUI . '.custom.min.js');
 
-        $document->addScript(array('jquery-' . WF_JQUERY . '.min.js', 'jquery-ui-' . WF_JQUERYUI . '.custom.min.js', 'jquery.ui.touch-punch.min.js'), 'jquery');
-        $document->addScript('bootstrap.min', 'bootstrap');
+        $document->addScript(array('jquery-' . WF_JQUERY . '.min', 'jquery-ui-' . WF_JQUERYUI . '.custom.min', 'jquery.ui.touch-punch.min'), 'jquery');
+        //$document->addScript('bootstrap.min', 'bootstrap');
 
         $document->addScript(array(
             'html5',

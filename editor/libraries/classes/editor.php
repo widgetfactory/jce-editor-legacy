@@ -19,6 +19,9 @@ wfimport('editor.libraries.classes.view');
 wfimport('editor.libraries.classes.tabs');
 wfimport('editor.libraries.classes.request');
 
+// define use of INI lang
+define('WF_INI_LANG', 1);
+
 /**
  * JCE class
  *

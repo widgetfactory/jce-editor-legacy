@@ -18,8 +18,7 @@
                 ed.windowManager = new tinymce.InlineWindowManager(ed);
 
                 if (!ed.settings.compress.css) {
-                //DOM.loadCSS(ed.settings.bootstrap);
-                //DOM.loadCSS(url + '/css/dialog.css');
+                    DOM.loadCSS(url + '/css/dialog.css');
                 }
             });
 
@@ -68,20 +67,25 @@
 
             id = DOM.uniqueId();
             vp = DOM.getViewPort();
-            f.width         = parseInt(f.width || 320);
-            f.height        = parseInt(f.height || 240) + (tinymce.isIE ? 8 : 0);
-            f.min_width     = parseInt(f.min_width || 150);
-            f.min_height    = parseInt(f.min_height || 100);
-            f.max_width     = parseInt(f.max_width || 2000);
-            f.max_height    = parseInt(f.max_height || 2000);
-            f.left          = f.left || Math.round(Math.max(vp.x, vp.x + (vp.w / 2.0) - (f.width / 2.0)));
-            f.top           = f.top || Math.round(Math.max(vp.y, vp.y + (vp.h / 2.0) - (f.height / 2.0)));
-            f.movable       = f.resizable = true;
-            p.mce_width     = f.width;
-            p.mce_height    = f.height;
-            p.mce_inline    = true;
+            f.width = parseInt(f.width || 320);
+            f.height = parseInt(f.height || 240) + (tinymce.isIE ? 8 : 0);
+            f.min_width = parseInt(f.min_width || 150);
+            f.min_height = parseInt(f.min_height || 100);
+            f.max_width = parseInt(f.max_width || 2000);
+            f.max_height = parseInt(f.max_height || 2000);
+            f.left = f.left || Math.round(Math.max(vp.x, vp.x + (vp.w / 2.0) - (f.width / 2.0)));
+            f.top = f.top || Math.round(Math.max(vp.y, vp.y + (vp.h / 2.0) - (f.height / 2.0)));
+            f.movable = f.resizable = true;
+            p.mce_width = f.width;
+            p.mce_height = f.height;
+            p.mce_inline = true;
             p.mce_window_id = id;
             p.mce_auto_focus = f.auto_focus;
+
+            // Transpose
+            //			po = DOM.getPos(ed.getContainer());
+            //			f.left -= po.x;
+            //			f.top -= po.y;
 
             t.features = f;
             t.params = p;
@@ -89,7 +93,7 @@
 
             if (f.type) {
                 if (f.type)
-                    opt += ' modal-' + f.type.substring(0, 1) + f.type.substring(1);
+                    opt += ' ui-dialog-' + f.type.substring(0, 1) + f.type.substring(1);
 
                 f.resizable = false;
             }
@@ -103,47 +107,98 @@
                 this.count = 0;
                 // create ui container
                 wrapper = DOM.add(DOM.doc.body, 'div', {
-                    'id'    : 'ui-jce-wrapper',
+                    'id'	: 'ui-jce-wrapper',
                     'class' : 'ui-jce'
                 });
             }
             
-            var html = '<div class="modal" id="' + id + '" tabindex="-1" role="dialog" aria-labelledby="' + id + '_title" aria-hidden="true">'
-            + ' <div class="modal-header" id="' + id + '_header">'
-            + '     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'
-            + '     <h3 id="' + id + '_title">' + (f.title || '') + '</h3>'
-            + ' </div>'
-            + ' <div class="modal-body" id="' + id + '_content"></div>'
-            + '</div>';
-            
-            wrapper.innerHTML = html;
+            // Create DOM objects
+            t._addAll(wrapper, 
+                ['div', {
+                    id : id, 
+                    role : 'dialog', 
+                    'aria-labelledby': f.type ? id + '_content' : id + '_title', 
+                    tabindex : -1, 
+                    'class' : 'ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable ui-resizable' + opt
+                    },
+                // title bar
+                ['div', {
+                    'class' : 'ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix'
+                }, 
+                // title
+                ['span', {
+                    id : id + '_title', 
+                    'class' : 'ui-dialog-title'
+                }, f.title || ''],
+                // close button
+                ['a', {
+                    href : '#', 
+                    'class' : 'ui-dialog-titlebar-close ui-corner-all', 
+                    role : 'button'
+                },
+                ['span', {
+                    'class' : 'ui-icon ui-icon-closethick'
+                }, 'close']
+                ]
+                ],
+					
+                // content block
+                ['div', {
+                    id : id + '_content', 
+                    'class' : 'ui-dialog-content ui-widget-content', 
+                    style : 'overflow:hidden;'
+                }],
 
-            // Hide while loading
+                // resize handles
+                ['div', {
+                    'class' : 'ui-resizable-handle ui-resizable-n'
+                }],
+                ['div', {
+                    'class' : 'ui-resizable-handle ui-resizable-s'
+                }],
+                ['div', {
+                    'class' : 'ui-resizable-handle ui-resizable-w'
+                }],
+                ['div', {
+                    'class' : 'ui-resizable-handle ui-resizable-e'
+                }],
+                ['div', {
+                    'class' : 'ui-resizable-handle ui-resizable-nw'
+                }],
+                ['div', {
+                    'class' : 'ui-resizable-handle ui-resizable-ne'
+                }],
+                ['div', {
+                    'class' : 'ui-resizable-handle ui-resizable-sw'
+                }],
+                ['div', {
+                    'class' : 'ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se ui-icon-grip-diagonal-se'
+                }]
+                ]
+                );
+
             DOM.setStyles(id, {
-                left  : -10000
+                top : -10000, 
+                left : -10000
             });
-            
             DOM.addClass(id, 'loading');
-            
-            // add size class
-            DOM.addClass(id, f.size || 'medium-landscape');
 
             // Measure borders
             if (!f.type) {
-                var w = DOM.get(id).clientWidth;
-                var h = DOM.get(id).clientHeight;
+                dh += DOM.get(id).clientHeight;
+
+                f.min_height = f.height + dh;
             }
 
-            // position window
-            DOM.setStyles(id, { 
-                //top         : Math.round((vp.h - h) / 2),
-                marginLeft  : -(w / 2) + 'px',
-                left        : '50%'
-            });
+            // Resize window
+            DOM.setStyles(id, {
+                top : f.top, 
+                left : f.left, 
+                width : f.width + dw, 
+                height : f.height + dh
+                });
 
-            // create URL
             u = f.url || f.file;
-            
             if (u) {
                 if (tinymce.relaxedDomain)
                     u += (u.indexOf('?') == -1 ? '?' : '&') + 'mce_rdomain=' + tinymce.relaxedDomain;
@@ -159,11 +214,10 @@
                     frameBorder : 0, 
                     style : 'border:0;width:10px;height:10px'
                 });
-                
                 DOM.setStyles(iframe, {
-                    width   : '100%', 
-                    height  : h - (DOM.get(id + '_header').clientHeight + DOM.get(id + '_content').clientHeight + 30)
-                });
+                    width : f.width, 
+                    height : f.height
+                    });
                 DOM.setAttrib(iframe, 'src', u);
 				
                 Event.add(iframe, 'load', function() {
@@ -181,10 +235,10 @@
                 });
 
                 DOM.add(set, 'button', {
-                    type 		: 'button', 
-                    id 			: id + '_ok', 
+                    type 			: 'button', 
+                    id 				: id + '_ok', 
                     'class' 		: 'ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-button-ok',
-                    'role'		: 'button',
+                    'role'			: 'button',
                     'aria-disabled' : false,
                     'aria-labelledby' : id + '_ok_text'
                 }, '<span class="ui-button-text" id="' + id + '_ok_text">' + ed.getLang('ok', 'OK') + '</span>');
@@ -222,8 +276,9 @@
                     }
                 });
             }
-            /*
+
             // Register events
+            //mdf = Event.add(DOM.select('.ui-dialog-titlebar, .ui-resizable-handle', id), 'mousedown', function(e) {
             mdf = Event.add(id, 'mousedown', function(e) {
                 var n = e.target, ac;
 
@@ -267,14 +322,14 @@
                 
                 if (DOM.is(n, '.ui-button-cancel, .ui-button-cancel span, .ui-button-ok, .ui-button-ok span')) {
                     f.button_func(DOM.is(n, '.ui-button-ok, .ui-button-ok span'));
-                } else if (DOM.is(n, 'button.close')) {
+                } else if (DOM.is(n, '.ui-dialog-titlebar-close, .ui-dialog-titlebar-close span')) {
                     t.close(null, id);
                 }
 
                 return Event.cancel(e);
             });
 
-            /*Event.add(DOM.select('button.close', id), 'mouseover', function(e) {
+            Event.add(DOM.select('.ui-dialog-titlebar-close', id), 'mouseover', function(e) {
                 var n = e.target;
 
                 if (n.nodeName != 'A') {
@@ -312,51 +367,37 @@
                 }
 
                 DOM.removeClass(n, 'ui-state-focus');
-            });*/
-            
-            clf = Event.add(id, 'click', function(e) {	
-                var n = e.target;
-
-                t.focus(id);
-                
-                if (DOM.is(n, '.ui-button-cancel, .ui-button-cancel span, .ui-button-ok, .ui-button-ok span')) {
-                    f.button_func(DOM.is(n, '.ui-button-ok, .ui-button-ok span'));
-                } else if (DOM.is(n, 'button.close')) {
-                    t.close(null, id);
-                }
-
-                return Event.cancel(e);
             });
 
             // Add window
             w = t.windows[id] = {
-                id 		: id,
+                id 				: id,
                 mousedown_func 	: mdf,
-                click_func 	: clf,
-                element 	: new Element(id, {
-                    blocker     : 1, 
-                    container   : ed.getContainer()
-                }),
+                click_func 		: clf,
+                element 		: new Element(id, {
+                    blocker : 1, 
+                    container : ed.getContainer()
+                    }),
                 iframeElement 	: new Element(id + '_ifr'),
-                features 	: f,
-                deltaWidth 	: dw,
+                features 		: f,
+                deltaWidth 		: dw,
                 deltaHeight 	: dh
             };
 
-            /*w.iframeElement.on('focus', function() {
+            w.iframeElement.on('focus', function() {
                 t.focus(id);
             });
             
-            var overlay = DOM.get('modal-backdrop');
+            var overlay = DOM.get('ui-widget-overlay');
             
             if (!overlay) {
                 overlay = DOM.add(wrapper, 'div', {
-                    id : 'modal-backdrop',
-                    'class' : 'modal-backdrop',
+                    id : 'ui-widget-overlay',
+                    'class' : 'ui-widget-overlay',
                     style : {
                         position 	: 'fixed',
                         left		:0,
-                        top		:0,
+                        top			:0,
                         width		:'100%',
                         height		:'100%',
                         zIndex 		: t.zIndex - 1
@@ -369,19 +410,19 @@
             
             DOM.setAttrib(id, 'aria-hidden', 'false');
             
-            /*if (tinymce.isIE6 || (tinymce.isIE && !DOM.boxModel)) {
+            if (tinymce.isIE6 || (tinymce.isIE && !DOM.boxModel)) {
                 DOM.setStyles(overlay, {
                     position : 'absolute', 
                     left : vp.x, 
                     top : vp.y, 
                     width : vp.w - 2, 
                     height : vp.h - 2
-                });
-            }*/
+                    });
+            }
             
-            //t.focus(id);
+            t.focus(id);
             
-            //this.count++;
+            this.count++;
 
             return w;
         },
@@ -405,6 +446,19 @@
                 } else if (DOM.get(w.id + '_ifr')) {
                     DOM.get(w.id + '_ifr').focus();
                 }
+            }
+        },
+        
+        _addAll : function(te, ne) {
+            var i, n, t = this, dom = tinymce.DOM;
+
+            if (is(ne, 'string'))
+                te.appendChild(dom.doc.createTextNode(ne));
+            else if (ne.length) {
+                te = te.appendChild(dom.create(ne[0], ne[1]));
+
+                for (i=2; i<ne.length; i++)
+                    t._addAll(te, ne[i]);
             }
         },
 
@@ -443,7 +497,7 @@
                 DOM.setStyles(id + '_ifr', {
                     width : sz.w - w.deltaWidth, 
                     height : sz.h - w.deltaHeight
-                });
+                    });
 
                 return Event.cancel(e);
             });
@@ -463,7 +517,7 @@
                     'class' : 'ui-widget ui-dialog-blocker',
                     style 	: {
                         zIndex : t.zIndex + 1
-                    }
+                        }
                 });
 
                 if (tinymce.isIE6 || (tinymce.isIE && !DOM.boxModel))
@@ -473,7 +527,7 @@
                         top : vp.y, 
                         width : vp.w - 2, 
                         height : vp.h - 2
-                    });
+                        });
 
                 eb = new Element(blocker);
                 eb.update();
@@ -495,236 +549,234 @@
                         top : sy, 
                         width : sz.w, 
                         height : sz.h
-                    }
-                });
-                ph = new Element('ui-dialog-placeholder');
-            };
+                        }
+                    });
+            ph = new Element('ui-dialog-placeholder');
+        };
 
-            // Handle mouse move/drag
-            mm = Event.add(d, 'mousemove', function(e) {
-                var x, y, v;
+        // Handle mouse move/drag
+        mm = Event.add(d, 'mousemove', function(e) {
+            var x, y, v;
 
-                startMove();
+            startMove();
 
-                x = e.screenX - sex;
-                y = e.screenY - sey;
+            x = e.screenX - sex;
+            y = e.screenY - sey;
 
-                switch (ac) {
-                    case 'w':
+            switch (ac) {
+                case 'w':
+                    dx = x;
+                    dw = 0 - x;
+                    break;
+
+                case 'e':
+                    dw = x;
+                    break;
+
+                case 'n':
+                case 'nw':
+                case 'ne':
+                    if (ac == "nw") {
                         dx = x;
                         dw = 0 - x;
-                        break;
-
-                    case 'e':
+                    } else if (ac == "ne")
                         dw = x;
-                        break;
 
-                    case 'n':
-                    case 'nw':
-                    case 'ne':
-                        if (ac == "nw") {
-                            dx = x;
-                            dw = 0 - x;
-                        } else if (ac == "ne")
-                            dw = x;
+                    dy = y;
+                    dh = 0 - y;
+                    break;
 
-                        dy = y;
-                        dh = 0 - y;
-                        break;
-
-                    case 's':
-                    case 'sw':
-                    case 'se':
-                        if (ac == "sw") {
-                            dx = x;
-                            dw = 0 - x;
-                        } else if (ac == "se")
-                            dw = x;
-
-                        dh = y;
-                        break;
-
-                    case 'move':
+                case 's':
+                case 'sw':
+                case 'se':
+                    if (ac == "sw") {
                         dx = x;
-                        dy = y;
-                        break;
-                }
+                        dw = 0 - x;
+                    } else if (ac == "se")
+                        dw = x;
 
-                // Boundary check
-                if (dw < (v = w.features.min_width - sz.w)) {
-                    if (dx !== 0)
-                        dx += dw - v;
+                    dh = y;
+                    break;
 
-                    dw = v;
-                }
-
-                if (dh < (v = w.features.min_height - sz.h)) {
-                    if (dy !== 0)
-                        dy += dh - v;
-
-                    dh = v;
-                }
-
-                dw = Math.min(dw, w.features.max_width - sz.w);
-                dh = Math.min(dh, w.features.max_height - sz.h);
-                dx = Math.max(dx, vp.x - (sx + vp.x));
-                dy = Math.max(dy, vp.y - (sy + vp.y));
-                dx = Math.min(dx, (vp.w + vp.x) - (sx + sz.w + vp.x));
-                dy = Math.min(dy, (vp.h + vp.y) - (sy + sz.h + vp.y));
-
-                // Move if needed
-                if (dx + dy !== 0) {
-                    if (sx + dx < 0)
-                        dx = 0;
-
-                    if (sy + dy < 0)
-                        dy = 0;
-
-                    ph.moveTo(sx + dx, sy + dy);
-                }
-
-                // Resize if needed
-                if (dw + dh !== 0)
-                    ph.resizeTo(sz.w + dw, sz.h + dh);
-
-                return Event.cancel(e);
-            });
-
-            return Event.cancel(se);
-        },
-
-        resizeBy : function(dw, dh, id) {
-            /*var w = this.windows[id];
-
-            if (w) {
-                w.element.resizeBy(dw, dh);
-                w.iframeElement.resizeBy(dw, dh);
-            }*/
-            
-            return true;
-        },
-
-        close : function(win, id) {
-            var t = this, w, d = DOM.doc, ix = 0, fw, id;
-
-            id = t._findId(id || win);
-
-            // Probably not inline
-            if (!t.windows[id]) {
-                t.parent(win);
-                return;
+                case 'move':
+                    dx = x;
+                    dy = y;
+                    break;
             }
 
-            if (w = t.windows[id]) {            	
-                t.onClose.dispatch(t);
-                Event.remove(d, 'mousedown', w.mousedownFunc);
-                Event.remove(d, 'click', w.clickFunc);
-                Event.clear(id);
-                Event.clear(id + '_ifr');
-                
-                DOM.setAttrib(id + '_ifr', 'src', 'javascript:""'); // Prevent leak
-                w.element.remove();
-                delete t.windows[id];
+            // Boundary check
+            if (dw < (v = w.features.min_width - sz.w)) {
+                if (dx !== 0)
+                    dx += dw - v;
 
-                fw = t._frontWindow();
-
-                if (fw)
-                    t.focus(fw.id);
-
-                this.count--;
-
-                if (fw)
-                    t.focus(fw.id);
+                dw = v;
             }
-            
-            // no windows open, remove wrapper and overlay
-            if (this.count == 0) {
-                DOM.remove('ui-jce-wrapper');
-                DOM.setAttrib(DOM.doc.body, 'aria-hidden', 'false');
+
+            if (dh < (v = w.features.min_height - sz.h)) {
+                if (dy !== 0)
+                    dy += dh - v;
+
+                dh = v;
             }
-        },
 
-        alert : function(txt, cb, s) {
-            var t = this, w;
+            dw = Math.min(dw, w.features.max_width - sz.w);
+            dh = Math.min(dh, w.features.max_height - sz.h);
+            dx = Math.max(dx, vp.x - (sx + vp.x));
+            dy = Math.max(dy, vp.y - (sy + vp.y));
+            dx = Math.min(dx, (vp.w + vp.x) - (sx + sz.w + vp.x));
+            dy = Math.min(dy, (vp.h + vp.y) - (sy + sz.h + vp.y));
 
-            w = t.open({
-                title : t,
-                type : 'alert',
-                button_func : function(s) {
-                    if (cb)
-                        cb.call(t, s);
+            // Move if needed
+            if (dx + dy !== 0) {
+                if (sx + dx < 0)
+                    dx = 0;
 
-                    t.close(null, w.id);
-                },
-                content : DOM.encode(t.editor.getLang(txt, txt)),
-                inline : 1,
-                width : 400,
-                height : 150
-            });
-        },
+                if (sy + dy < 0)
+                    dy = 0;
 
-        confirm : function(txt, cb, s) {
-            var t = this, w;
+                ph.moveTo(sx + dx, sy + dy);
+            }
 
-            w = t.open({
-                title : t,
-                type : 'confirm',
-                button_func : function(s) {					
-                    if (cb)
-                        cb.call(t, s);
+            // Resize if needed
+            if (dw + dh !== 0)
+                ph.resizeTo(sz.w + dw, sz.h + dh);
 
-                    t.close(null, w.id);
-                },
-                content : DOM.encode(t.editor.getLang(txt, txt)),
-                inline : 1,
-                width : 400,
-                height : 150
-            });
-        },
+            return Event.cancel(e);
+        });
 
-        setTitle : function(w, ti) {
-            var e;
+        return Event.cancel(se);
+    },
 
-            w = this._findId(w);
+    resizeBy : function(dw, dh, id) {
+        var w = this.windows[id];
 
-            if (e = DOM.get(w + '_title'))
-                e.innerHTML = DOM.encode(ti);
-        },
-		
-        // Find front most window
-        _frontWindow : function() {
-            var fw, ix = 0;
-            // Find front most window and focus that
-            each (this.windows, function(w) {
-                if (w.zIndex > ix) {
-                    fw = w;
-                    ix = w.zIndex;
-                }
-            });
-            return fw;
-        },
-
-        // Internal functions
-
-        _findId : function(w) {
-            var t = this;
-
-            if (typeof(w) == 'string')
-                return w;
-
-            each(t.windows, function(wo) {
-                var ifr = DOM.get(wo.id + '_ifr');
-
-                if (ifr && w == ifr.contentWindow) {
-                    w = wo.id;
-                    return false;
-                }
-            });
-
-            return w;
+        if (w) {
+            w.element.resizeBy(dw, dh);
+            w.iframeElement.resizeBy(dw, dh);
         }
+    },
+
+    close : function(win, id) {
+        var t = this, w, d = DOM.doc, ix = 0, fw, id;
+
+        id = t._findId(id || win);
+
+        // Probably not inline
+        if (!t.windows[id]) {
+            t.parent(win);
+            return;
+        }
+
+        if (w = t.windows[id]) {            	
+            t.onClose.dispatch(t);
+            Event.remove(d, 'mousedown', w.mousedownFunc);
+            Event.remove(d, 'click', w.clickFunc);
+            Event.clear(id);
+            Event.clear(id + '_ifr');
+                
+            DOM.setAttrib(id + '_ifr', 'src', 'javascript:""'); // Prevent leak
+            w.element.remove();
+            delete t.windows[id];
+
+            fw = t._frontWindow();
+
+            if (fw)
+                t.focus(fw.id);
+
+            this.count--;
+
+            if (fw)
+                t.focus(fw.id);
+        }
+            
+        // no windows open, remove wrapper and overlay
+        if (this.count == 0) {
+            DOM.remove('ui-jce-wrapper');
+            DOM.setAttrib(DOM.doc.body, 'aria-hidden', 'false');
+        }
+    },
+
+    alert : function(txt, cb, s) {
+        var t = this, w;
+
+        w = t.open({
+            title : t,
+            type : 'alert',
+            button_func : function(s) {
+                if (cb)
+                    cb.call(t, s);
+
+                t.close(null, w.id);
+            },
+            content : DOM.encode(t.editor.getLang(txt, txt)),
+            inline : 1,
+            width : 400,
+            height : 150
+        });
+    },
+
+    confirm : function(txt, cb, s) {
+        var t = this, w;
+
+        w = t.open({
+            title : t,
+            type : 'confirm',
+            button_func : function(s) {					
+                if (cb)
+                    cb.call(t, s);
+
+                t.close(null, w.id);
+            },
+            content : DOM.encode(t.editor.getLang(txt, txt)),
+            inline : 1,
+            width : 400,
+            height : 150
+        });
+    },
+
+    setTitle : function(w, ti) {
+        var e;
+
+        w = this._findId(w);
+
+        if (e = DOM.get(w + '_title'))
+            e.innerHTML = DOM.encode(ti);
+    },
+		
+    // Find front most window
+    _frontWindow : function() {
+        var fw, ix = 0;
+        // Find front most window and focus that
+        each (this.windows, function(w) {
+            if (w.zIndex > ix) {
+                fw = w;
+                ix = w.zIndex;
+            }
+        });
+        return fw;
+    },
+
+    // Internal functions
+
+    _findId : function(w) {
+        var t = this;
+
+        if (typeof(w) == 'string')
+            return w;
+
+        each(t.windows, function(wo) {
+            var ifr = DOM.get(wo.id + '_ifr');
+
+            if (ifr && w == ifr.contentWindow) {
+                w = wo.id;
+                return false;
+            }
+        });
+
+        return w;
+    }
     });
 
-    // Register plugin
-    tinymce.PluginManager.add('inlinepopups', tinymce.plugins.InlinePopups);
-})();
+// Register plugin
+tinymce.PluginManager.add('inlinepopups', tinymce.plugins.InlinePopups);
+    })();

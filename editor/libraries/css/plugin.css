@@ -8,43 +8,9 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-/*@import url("reset.css");*/
-@import url("../bootstrap/css/bootstrap.css");
-/*@import url("dialog.css");*/
+@import url("../jquery/css/jquery-ui.custom.css");
+ 
+@import url("reset.css");
+@import url("dialog.css");
 @import url("tips.css");
 @import url("select.css");
-
-body#jce {
-    padding: 5px !important;
-    font: 9pt "Helvetica Neue",Helvetica,Arial,sans-serif;
-    background-color: #FFF;
-    margin: 0;
-    position: relative;
-    height: 100%;
-    overflow: hidden;
-    -webkit-overflow-scrolling : 'touch';
-}
-
-.ui-jce label, .ui-jce input, .ui-jce button, .ui-jce select, .ui-jce textarea {
-    font-size : 9pt;
-}
-
-.ui-jce .form-horizontal .control-label {
-    text-align: left;
-    width : auto;
-    min-width : 100px;
-}
-
-.ui-jce .form-horizontal .controls {
-    margin-left : auto;
-}
-
-#jce.ui-jce .modal-footer {
-    width : 95%;
-    
-    margin-top : 10px;
-}
-
-#jce .control-group label input[type="radio"], #jce .control-group label input[type="checkbox"] {
-    margin-top : 1px;
-}

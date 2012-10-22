@@ -13605,7 +13605,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 						height : h
 					});
 
-					h = (o.iframeHeight || h) + (typeof(h) == 'number' ? (o.deltaHeight || 0) : '');
+					h = (o.iframeHeight || h) + (typeof(h) == 'number' ? (o.deltaHeight || 0) : '');                                        
 					if (h < mh)
 						h = mh;
 				} else {
@@ -13700,7 +13700,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 				// We need to write the contents here in IE since multiple writes messes up refresh button and back button
 				u = 'javascript:(function(){document.open();document.domain="' + document.domain + '";var ed = window.parent.tinyMCE.get("' + t.id + '");document.write(ed.iframeHTML);document.close();ed.initContentBody();})()';
 			}
-
+                        
 			// Create iframe
 			// TODO: ACC add the appropriate description on this.
 			n = DOM.add(o.iframeContainer, 'iframe', { 

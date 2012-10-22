@@ -8,7 +8,14 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-/*.ui-jce .ui-dialog .ui-dialog-content {
+ @import url('../../../../libraries/jquery/css/jquery-ui.custom.css');
+ 
+ .ui-jce {
+     font-family: Verdana,Arial,Helvetica,sans-serif;
+     font-size : 11px;
+ }
+ 
+.ui-jce .ui-dialog .ui-dialog-content {
     padding: 0 !important;
 }
 
@@ -46,7 +53,4 @@
     background: url(../../../themes/advanced/img/spacer.gif) no-repeat 0 -75px;
     width: 100%;
     height: 100%
-}*/
-.ui-jce div.modal-body {
-    max-height: 1024px;
 }

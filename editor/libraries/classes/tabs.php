@@ -132,22 +132,19 @@ final class WFTabs extends JObject {
 
         // add tabs
         if (!empty($this->_tabs)) {
-            //$output .= '<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">';
-            $output .= '<div id="tabs" class="">';
-            //$output .= '<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">' . "\n";
-            $output .= '<ul class="nav nav-tabs">' . "\n";
+            $output .= '<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">';
+            $output .= '<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">' . "\n";
 
             $x = 0;
 
-            foreach ($this->_tabs as $tab) {
-                $class = '';
+            foreach ($this->_tabs as $tab) {                
+                $class = "ui-state-default ui-corner-top";
+                
                 if ($x == 0) {
-                    //$class .= " ui-tabs-selected ui-state-active";
-                    $class = "active";
+                    $class .= " ui-tabs-active ui-state-active";
                 }
 
-                $output .= "\t" . '<li class="' . $class . '"><a data-toggle="tab" href="#' . $tab . '_tab">' . WFText::_('WF_TAB_' . strtoupper($tab)) . '</a></li>' . "\n";
-                
+                $output .= "\t" . '<li class="' . $class . '"><a href="#' . $tab . '_tab">' . WFText::_('WF_TAB_' . strtoupper($tab)) . '</a></li>' . "\n";
                 $x++;
             }
 
@@ -156,18 +153,17 @@ final class WFTabs extends JObject {
         // add panels
         if (!empty($this->_panels)) {
             $x = 0;
-            $output .= '<div class="tab-content">';
+
             foreach ($this->_panels as $key => $panel) {
                 $state = $panel->state ? '' : ' style="display:none;"';
                 if (!empty($this->_tabs)) {
-                    //$class = "ui-tabs-panel ui-widget-content ui-corner-bottom"; 
-                    $class = array("tab-pane");
+                    $class = "ui-tabs-panel ui-widget-content ui-corner-bottom";
 
-                    if ($x == 0) {
-                        $class[] = "active";
+                    if ($x) {
+                        $class .= " ui-tabs-hide";
                     }
 
-                    $output .= '<div id="' . $key . '_tab"' . $state . ' class="' . implode(' ', $class) . '">';
+                    $output .= '<div id="' . $key . '_tab"' . $state . ' class="' . $class . '">';
                     $output .= $panel->loadTemplate();
                     $output .= '</div>';
                 } else {
@@ -177,7 +173,6 @@ final class WFTabs extends JObject {
                 }
                 $x++;
             }
-            $output .= '</div>';
         }
         // add closing div
         if (!empty($this->_tabs)) {

@@ -368,8 +368,8 @@
         _createTabs : function() {
             var self = this;
             $('#colorpicker_tabs', '#colorpicker').tabs({
-                show: function(event, ui) {
-                    self['_create' + $(ui.panel).data('type')].call(self, $(ui.panel));
+                activate: function(event, ui) {
+                    self['_create' + $(ui.newPanel).data('type')].call(self, $(ui.newPanel));
                 }
 
             });

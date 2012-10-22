@@ -8,21 +8,18 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-defined('_JEXEC') or die('RESTRICTED');
+
+defined( '_JEXEC' ) or die('RESTRICTED');
 
 $tabs = WFTabs::getInstance();
 ?>
-<form onsubmit="return false;" action="#" class="form-horizontal">
-    <div class="row-fluid">
-        <div class="span12">
-            <div id="<?php echo $this->plugin->getElementName(); ?>">
-                <?php $tabs->render(); ?>
-            </div>
-        </div>
-        <div class="span12 well modal-footer">
-            <button type="submit" id="insert" onclick="XHTMLXtrasDialog.insert();"><?php echo WFText::_('WF_LABEL_UPDATE'); ?></button>
-            <button type="button" id="remove" onclick="XHTMLXtrasDialog.remove();"><?php echo WFText::_('WF_XHTMLXTRAS_REMOVE'); ?></button>
-            <button type="button" id="cancel"><?php echo WFText::_('WF_LABEL_CANCEL'); ?></button>
-        </div>
-    </div>
+<form onsubmit="return false;" action="#">
+	<div id="<?php echo $this->plugin->getElementName();?>">
+  	<?php $tabs->render(); ?>
+  	</div>
+	<div class="mceActionPanel">
+		<button type="submit" id="insert" onclick="XHTMLXtrasDialog.insert();"><?php echo WFText::_('WF_LABEL_UPDATE');?></button>
+		<button type="button" id="remove" onclick="XHTMLXtrasDialog.remove();"><?php echo WFText::_('WF_XHTMLXTRAS_REMOVE');?></button>
+		<button type="button" id="cancel"><?php echo WFText::_('WF_LABEL_CANCEL');?></button>
+	</div>
 </form>

@@ -52,7 +52,8 @@
 #jce span.mceIcon.mce_styleselect:after,
 #jce span.mceIcon.mce_formatselect:after,
 #jce span.mceIcon.mce_fontsizeselect:after {
-    font-size: 10px !important;
+    font-family: Tahoma,Verdana,Arial,Helvetica;
+    font-size: 11px !important;
     line-height: 20px;
     padding: 0 3px;
 }
@@ -155,4 +156,9 @@
 
 #jce span.mceButton[style="display: none;"] + span.mceSeparator {
     display: none;
+}
+
+#jce li.defaultSkin span.mceButton + span.tabs-label {
+    display: block;
+    font-size : 0.9em;
 }
