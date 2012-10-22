@@ -93,7 +93,7 @@ class JoomlalinksContent extends JObject {
                     );
                 }
                 // Check Static/Uncategorized permissions
-                if (WF_JOOMLA15 && $wf->checkAccess('static', 1)) {
+                if (!defined('JPATH_PLATFORM') && $wf->checkAccess('static', 1)) {
                     $items[] = array(
                         'id' => 'option=com_content&amp;view=uncategorized',
                         'name' => WFText::_('WF_LINKS_JOOMLALINKS_UNCATEGORIZED'),
@@ -166,7 +166,7 @@ class JoomlalinksContent extends JObject {
                 // get any articles in this category (in Joomla! 1.6+ a category can contain sub-categories and articles)
                 $articles = self::_getArticles($args->id);
 
-                if (!WF_JOOMLA15) {
+                if (defined('JPATH_PLATFORM')) {
                     // get sub-categories
                     $categories = WFLinkBrowser::getCategory('com_content', $args->id);
 
