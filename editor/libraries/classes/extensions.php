@@ -87,10 +87,10 @@ class WFExtension extends JObject {
             foreach ($types as $type) {
                 if ($extension) {
                     if (JFile::exists($path . '/' . $type . '/' . $extension . '.xml') && JFile::exists($path . '/' . $type . '/' . $extension . '.php')) {
-                        $object             = new stdClass();
-                        $object->folder     = $type;
-                        $object->path       = $path . '/' . $type;
-                        $object->extension  = $extension;
+                        $object = new stdClass();
+                        $object->folder = $type;
+                        $object->path = $path . '/' . $type;
+                        $object->extension = $extension;
 
                         $extensions[] = $object;
                     }
@@ -98,12 +98,12 @@ class WFExtension extends JObject {
                     $files = JFolder::files($path . '/' . $type, '\.xml$', false, true);
 
                     foreach ($files as $file) {
-                        $object         = new stdClass();
+                        $object = new stdClass();
                         $object->folder = $type;
-                        $object->path   = $path . '/' . $type;
+                        $object->path = $path . '/' . $type;
 
                         $name = JFile::stripExt(basename($file));
-                        
+
                         if (JFile::exists(dirname($file) . '/' . $name . '.php')) {
                             $object->extension = $name;
                         }
@@ -125,9 +125,9 @@ class WFExtension extends JObject {
             $installed = JPluginHelper::getPlugin($config['prefix'] . $type, $extension);
 
             foreach ($installed as $item) {
-                $object         = new stdClass();
-                $object->folder = $item->type; 
-                $object->path   = JPATH_PLUGINS . '/' . $item->type;
+                $object = new stdClass();
+                $object->folder = $item->type;
+                $object->path = JPATH_PLUGINS . '/' . $item->type;
 
                 $name = $item->element;
 
@@ -158,7 +158,7 @@ class WFExtension extends JObject {
         if (!isset($config['base_path'])) {
             $config['base_path'] = WF_EDITOR;
         }
-        
+
         // set default prefix
         if (!array_key_exists('prefix', $config)) {
             $config['prefix'] = 'jce-';
@@ -176,17 +176,17 @@ class WFExtension extends JObject {
         $base = $config['base_path'] . '/extensions';
 
         // Get all extensions
-        $extensions = self::_load((array)$type, $extension, $config);
+        $extensions = self::_load((array) $type, $extension, $config);
 
         $result = array();
 
         if (!empty($extensions)) {
             foreach ($extensions as $item) {
-                $name   = $item->extension;
+                $name = $item->extension;
                 $folder = $item->folder;
-                $path   = $item->path;
+                $path = $item->path;
 
-                $root   = $path . '/' . $name . '.php';
+                $root = $path . '/' . $name . '.php';
 
                 if (file_exists($root)) {
                     // Load root extension file
@@ -194,10 +194,10 @@ class WFExtension extends JObject {
 
                     // Load Extension language file
                     $language->load('plg_' . $folder . '_' . $name, JPATH_SITE);
-                    
+
                     // remove prefix
                     $folder = str_replace($config['prefix'], '', $folder);
-                    
+
                     // Return array of extension names
                     $result[$folder] = $name;
 

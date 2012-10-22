@@ -13,7 +13,7 @@ defined('_JEXEC') or die('RESTRICTED');
 
 // Load class dependencies
 wfimport('editor.libraries.classes.plugin');
-wfimport('editor.libraries.classes.extensions.browser');
+wfimport('editor.libraries.classes.browser');
 
 class WFMediaManager extends WFEditorPlugin {
 
@@ -60,7 +60,7 @@ class WFMediaManager extends WFEditorPlugin {
         static $browser;
 
         if (!is_object($browser)) {
-            $browser = WFBrowserExtension::getInstance('file', $this->getProperties());
+            $browser = WFFileBrowser::getInstance($this->getProperties());
         }
 
         return $browser;
