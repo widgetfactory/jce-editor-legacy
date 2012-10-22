@@ -16,7 +16,7 @@ DEFINE('_WF_EXT', 1);
 // Load class dependencies
 wfimport('editor.libraries.classes.plugin');
 wfimport('editor.libraries.classes.extensions.search');
-wfimport('editor.libraries.classes.extensions.browser');
+wfimport('editor.libraries.classes.extensions.link');
 wfimport('editor.libraries.classes.extensions.popups');
 
 // Link Plugin Controller
@@ -37,7 +37,7 @@ class WFLinkPlugin extends WFEditorPlugin {
     function __construct() {
         parent::__construct();
 
-        $this->getBrowser('link');
+        $this->getLinks();
         $this->getSearch('link');
     }
 
@@ -51,7 +51,7 @@ class WFLinkPlugin extends WFEditorPlugin {
      * @return	JCE  The editor object.
      * @since	1.5
      */
-    function &getInstance() {
+    function getInstance() {
         static $instance;
 
         if (!is_object($instance)) {
@@ -76,8 +76,8 @@ class WFLinkPlugin extends WFEditorPlugin {
         $tabs->addTab('link', 1);
         $tabs->addTab('advanced', $this->getParam('tabs_advanced', 1));
 
-        $browser = $this->getBrowser('link');
-        $browser->display();
+        $links = $this->getLinks();
+        $links->display();
 
         $search = $this->getSearch('link');
         $search->display();
@@ -95,20 +95,16 @@ class WFLinkPlugin extends WFEditorPlugin {
         // add link scripts last
         $document->addScript(array('link'), 'plugins');
     }
+    
+    function getLinks() {
 
-    function getBrowser($type = 'link') {
+        static $links;
 
-        static $browsers;
-
-        if (!isset($browsers)) {
-            $browsers = array();
+        if (!isset($links)) {
+            $links = WFLinkExtension::getInstance();
         }
 
-        if (empty($browsers[$type])) {
-            $browsers[$type] = WFBrowserExtension::getInstance($type);
-        }
-
-        return $browsers[$type];
+        return $links;
     }
     
     function getSearch($type = 'link') {
