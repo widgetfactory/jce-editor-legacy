@@ -159,14 +159,14 @@ function jInsertEditorText(text, editor) {
                         });
                     }
                     
-                    // load external plugins
-                    each(explode(s.plugins), function(p) {
+                    // load external plugins - re-visit in 3.0
+                    /*each(explode(s.plugins), function(p) {
                         if (p.charAt(0) == '-') {                            
                             p = p.substr(1, p.length);                            
                             
                             tinymce.PluginManager.load(p, s.base_url + 'plugins/jce/' + p + '/editor_plugin.js');
                         }
-                    });
+                    });*/
 
                     WFEditor.load();
                 } catch (e) {
