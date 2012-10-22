@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
 	<params group="cleanup">
-		<param name="verify_html" type="list" default="0" label="WF_PARAM_CLEANUP" description="WF_PARAM_CLEANUP_DESC">
+		<param name="verify_html" type="radio" default="0" label="WF_PARAM_CLEANUP" description="WF_PARAM_CLEANUP_DESC">
 			<option value="0">WF_OPTION_NO</option>
 			<option value="1">WF_OPTION_YES</option>
 		</param>
@@ -18,7 +18,7 @@
 			<option value="0">WF_OPTION_NO</option>
 			<option value="1">WF_OPTION_YES</option>
 		</param-->
-		<param name="cleanup_pluginmode" type="list" default="0" label="WF_PARAM_PLUGIN_MODE" description="WF_PARAM_PLUGIN_MODE_DESC">
+		<param name="cleanup_pluginmode" type="radio" default="0" label="WF_PARAM_PLUGIN_MODE" description="WF_PARAM_PLUGIN_MODE_DESC">
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
 		</param>
@@ -34,7 +34,7 @@
 			<option value="1">WF_PARAM_LINEBREAKS</option>
 			<option value="0">WF_PARAM_PARAGRAPHS</option>
 		</param-->
-		<param name="content_style_reset" type="list" default="0" label="WF_PARAM_EDITOR_STYLE_RESET" description="WF_PARAM_EDITOR_STYLE_RESET_DESC">
+		<param name="content_style_reset" type="radio" default="0" label="WF_PARAM_EDITOR_STYLE_RESET" description="WF_PARAM_EDITOR_STYLE_RESET_DESC">
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
 		</param>
@@ -43,28 +43,28 @@
 			<option value="1">WF_PARAM_CSS_TEMPLATE</option>
 			<option value="2">WF_OPTION_DEFAULT</option>
 		</param>
-		<param name="content_css_custom" type="textarea" rows="2" cols="55" default="" placeholder="eg: templates/$template/css/content.css" label="WF_PARAM_CSS_CUSTOM" description="WF_PARAM_CSS_CUSTOM_DESC" parent="content_css[0]" />		
+		<param name="content_css_custom" type="textarea" rows="2" cols="50" default="" placeholder="eg: templates/$template/css/content.css" label="WF_PARAM_CSS_CUSTOM" description="WF_PARAM_CSS_CUSTOM_DESC" parent="content_css[0]" />		
 	</params>
 	<params group="compression">
-		<param name="compress_javascript" type="list" default="0" label="WF_PARAM_COMPRESS_JAVASCRIPT" description="WF_PARAM_COMPRESS_JAVASCRIPT_DESC">
+		<param name="compress_javascript" type="radio" default="0" label="WF_PARAM_COMPRESS_JAVASCRIPT" description="WF_PARAM_COMPRESS_JAVASCRIPT_DESC">
 			<option value="0">WF_OPTION_NO</option>
 			<option value="1">WF_OPTION_YES</option>
 		</param>
-		<param name="compress_css" type="list" default="0" label="WF_PARAM_COMPRESS_CSS" description="WF_PARAM_COMPRESS_CSS_DESC">
+		<param name="compress_css" type="radio" default="0" label="WF_PARAM_COMPRESS_CSS" description="WF_PARAM_COMPRESS_CSS_DESC">
 			<option value="0">WF_OPTION_NO</option>
 			<option value="1">WF_OPTION_YES</option>
 		</param>
-		<param name="compress_gzip" type="list" default="0" label="WF_PARAM_COMPRESS_GZIP" description="WF_PARAM_COMPRESS_GZIP_DESC">
+		<param name="compress_gzip" type="radio" default="0" label="WF_PARAM_COMPRESS_GZIP" description="WF_PARAM_COMPRESS_GZIP_DESC">
 			<option value="0">WF_OPTION_NO</option>
 			<option value="1">WF_OPTION_YES</option>
 		</param>
 	</params>
 	<params group="advanced">
-		<param name="use_cookies" type="list" default="1" label="WF_PARAM_USE_COOKIES" description="WF_PARAM_USE_COOKIES_DESC">
+		<param name="use_cookies" type="radio" default="1" label="WF_PARAM_USE_COOKIES" description="WF_PARAM_USE_COOKIES_DESC">
 			<option value="0">WF_OPTION_NO</option>
 			<option value="1">WF_OPTION_YES</option>
 		</param>
-		<param name="custom_config" type="textarea" rows="5" cols="55" default="" label="WF_PARAM_CUSTOM_CONFIG" description="WF_PARAM_CUSTOM_CONFIG_DESC" />
+		<param name="custom_config" type="textarea" rows="5" cols="50" default="" label="WF_PARAM_CUSTOM_CONFIG" description="WF_PARAM_CUSTOM_CONFIG_DESC" />
 		<param name="callback_file" type="text" default="" size="50" label="WF_PARAM_CALLBACK" description="WF_PARAM_CALLBACK_DESC" />
 	</params>
 	<!--params group="other">
