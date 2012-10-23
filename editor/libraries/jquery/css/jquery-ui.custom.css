@@ -801,7 +801,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-jce .ui-tabs-vertical .ui-tabs-nav li a span.defaultSkin span {
     display:inline-block;
 }
-.ui-jce .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-selected {
+.ui-jce .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
     padding-bottom: 0;
     padding-right: .1em;
     border-right-width: 0;
