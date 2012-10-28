@@ -13,13 +13,13 @@ defined('_JEXEC') or die('RESTRICTED');
 ?>
 <table border="0" width="100%">
       <tr>
-        <td><label for="text_font"><?php echo WFText::_('WF_STYLE_TEXT_FONT');?></label></td>
+        <td><label for="text_font"><?php echo WFText::_('WF_STYLES_TEXT_FONT');?></label></td>
         <td colspan="3">
           <select id="text_font" name="text_font" class="mceEditableSelect mceFocus"></select>
         </td>
       </tr>
       <tr>
-        <td><label for="text_size"><?php echo WFText::_('WF_STYLE_TEXT_SIZE');?></label></td>
+        <td><label for="text_size"><?php echo WFText::_('WF_STYLES_TEXT_SIZE');?></label></td>
         <td>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -29,23 +29,23 @@ defined('_JEXEC') or die('RESTRICTED');
             </tr>
           </table>
         </td>
-        <td><label for="text_weight"><?php echo WFText::_('WF_STYLE_TEXT_WEIGHT');?></label></td>
+        <td><label for="text_weight"><?php echo WFText::_('WF_STYLES_TEXT_WEIGHT');?></label></td>
         <td>
           <select id="text_weight" name="text_weight"></select>
         </td>
       </tr>
       <tr>
-        <td><label for="text_style"><?php echo WFText::_('WF_STYLE_TEXT_STYLE');?></label></td>
+        <td><label for="text_style"><?php echo WFText::_('WF_STYLES_TEXT_STYLE');?></label></td>
         <td>
           <select id="text_style" name="text_style" class="mceEditableSelect"></select>
         </td>
-        <td><label for="text_variant"><?php echo WFText::_('WF_STYLE_TEXT_VARIANT');?></label></td>
+        <td><label for="text_variant"><?php echo WFText::_('WF_STYLES_TEXT_VARIANT');?></label></td>
         <td>
           <select id="text_variant" name="text_variant"></select>
         </td>
       </tr>
       <tr>
-        <td><label for="text_lineheight"><?php echo WFText::_('WF_STYLE_TEXT_LINEHEIGHT');?></label></td>
+        <td><label for="text_lineheight"><?php echo WFText::_('WF_STYLES_TEXT_LINEHEIGHT');?></label></td>
         <td>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -57,13 +57,13 @@ defined('_JEXEC') or die('RESTRICTED');
             </tr>
           </table>
         </td>
-        <td><label for="text_case"><?php echo WFText::_('WF_STYLE_TEXT_CASE');?></label></td>
+        <td><label for="text_case"><?php echo WFText::_('WF_STYLES_TEXT_CASE');?></label></td>
         <td>
           <select id="text_case" name="text_case"></select>
         </td>
       </tr>
       <tr>
-        <td><label for="text_color"><?php echo WFText::_('WF_STYLE_TEXT_COLOR');?></label></td>
+        <td><label for="text_color"><?php echo WFText::_('WF_STYLES_TEXT_COLOR');?></label></td>
         <td colspan="2">
           <table border="0" cellpadding="0" cellspacing="0">
             <tr>
@@ -73,28 +73,28 @@ defined('_JEXEC') or die('RESTRICTED');
         </td>
       </tr>
       <tr>
-        <td valign="top" style="vertical-align: top; padding-top: 3px;"><?php echo WFText::_('WF_STYLE_TEXT_DECORATION');?></td>
+        <td valign="top" style="vertical-align: top; padding-top: 3px;"><?php echo WFText::_('WF_STYLES_TEXT_DECORATION');?></td>
         <td colspan="2">
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
               <td><input id="text_underline" name="text_underline" class="checkbox" type="checkbox" /></td>
-              <td><label for="text_underline"><?php echo WFText::_('WF_STYLE_TEXT_UNDERLINE');?></label></td>
+              <td><label for="text_underline"><?php echo WFText::_('WF_STYLES_TEXT_UNDERLINE');?></label></td>
             </tr>
             <tr>
               <td><input id="text_overline" name="text_overline" class="checkbox" type="checkbox" /></td>
-              <td><label for="text_overline"><?php echo WFText::_('WF_STYLE_TEXT_OVERLINE');?></label></td>
+              <td><label for="text_overline"><?php echo WFText::_('WF_STYLES_TEXT_OVERLINE');?></label></td>
             </tr>
             <tr>
               <td><input id="text_linethrough" name="text_linethrough" class="checkbox" type="checkbox" /></td>
-              <td><label for="text_linethrough"><?php echo WFText::_('WF_STYLE_TEXT_STRIKETROUGH');?></label></td>
+              <td><label for="text_linethrough"><?php echo WFText::_('WF_STYLES_TEXT_STRIKETROUGH');?></label></td>
             </tr>
             <tr>
               <td><input id="text_blink" name="text_blink" class="checkbox" type="checkbox" /></td>
-              <td><label for="text_blink"><?php echo WFText::_('WF_STYLE_TEXT_BLINK');?></label></td>
+              <td><label for="text_blink"><?php echo WFText::_('WF_STYLES_TEXT_BLINK');?></label></td>
             </tr>
             <tr>
               <td><input id="text_none" name="text_none" class="checkbox" type="checkbox" onclick="StyleDialog.updateTextDecorations();" /></td>
-              <td><label for="text_none"><?php echo WFText::_('WF_STYLE_TEXT_NONE');?></label></td>
+              <td><label for="text_none"><?php echo WFText::_('WF_STYLES_TEXT_NONE');?></label></td>
             </tr>
           </table>
         </td>

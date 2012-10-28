@@ -13,14 +13,14 @@ defined('_JEXEC') or die('RESTRICTED');
 ?>
 <table border="0">
   <tr>
-    <td><label for="positioning_type"><?php echo WFText::_('WF_STYLE_POSITIONING_TYPE');?></label></td>
+    <td><label for="positioning_type"><?php echo WFText::_('WF_STYLES_POSITIONING_TYPE');?></label></td>
     <td><select id="positioning_type" name="positioning_type" class="mceEditableSelect"></select></td>
-    <td>&nbsp;&nbsp;&nbsp;<label for="positioning_visibility"><?php echo WFText::_('WF_STYLE_VISIBILITY');?></label></td>
+    <td>&nbsp;&nbsp;&nbsp;<label for="positioning_visibility"><?php echo WFText::_('WF_STYLES_VISIBILITY');?></label></td>
     <td><select id="positioning_visibility" name="positioning_visibility" class="mceEditableSelect"></select></td>
   </tr>
 
   <tr>
-    <td><label for="positioning_width"><?php echo WFText::_('WF_STYLE_WIDTH');?></label></td>
+    <td><label for="positioning_width"><?php echo WFText::_('WF_STYLES_WIDTH');?></label></td>
     <td>
       <table border="0" cellspacing="0" cellpadding="0">
         <tr>
@@ -30,12 +30,12 @@ defined('_JEXEC') or die('RESTRICTED');
         </tr>
       </table>
     </td>
-    <td>&nbsp;&nbsp;&nbsp;<label for="positioning_zindex"><?php echo WFText::_('WF_STYLE_ZINDEX');?></label></td>
+    <td>&nbsp;&nbsp;&nbsp;<label for="positioning_zindex"><?php echo WFText::_('WF_STYLES_ZINDEX');?></label></td>
     <td><input type="text" id="positioning_zindex" name="positioning_zindex" /></td>
   </tr>
 
   <tr>
-    <td><label for="positioning_height"><?php echo WFText::_('WF_STYLE_HEIGHT');?></label></td>
+    <td><label for="positioning_height"><?php echo WFText::_('WF_STYLES_HEIGHT');?></label></td>
     <td>
       <table border="0" cellspacing="0" cellpadding="0">
         <tr>
@@ -45,22 +45,22 @@ defined('_JEXEC') or die('RESTRICTED');
         </tr>
       </table>
     </td>
-    <td>&nbsp;&nbsp;&nbsp;<label for="positioning_overflow"><?php echo WFText::_('WF_STYLE_OVERFLOW');?></label></td>
+    <td>&nbsp;&nbsp;&nbsp;<label for="positioning_overflow"><?php echo WFText::_('WF_STYLES_OVERFLOW');?></label></td>
     <td><select id="positioning_overflow" name="positioning_overflow" class="mceEditableSelect"></select></td>
   </tr>
 </table>
 
 <div style="float: left; width: 49%">
   <fieldset>
-    <legend><?php echo WFText::_('WF_STYLE_PLACEMENT');?></legend>
+    <legend><?php echo WFText::_('WF_STYLES_PLACEMENT');?></legend>
 
     <table border="0">
       <tr>
         <td>&nbsp;</td>
-        <td><input type="checkbox" id="positioning_placement_same" name="positioning_placement_same" class="checkbox" checked="checked" onclick="StyleDialog.toggleSame(this,'positioning_placement');" /> <label for="positioning_placement_same"><?php echo WFText::_('WF_STYLE_SAME');?></label></td>
+        <td><input type="checkbox" id="positioning_placement_same" name="positioning_placement_same" class="checkbox" checked="checked" onclick="StyleDialog.toggleSame(this,'positioning_placement');" /> <label for="positioning_placement_same"><?php echo WFText::_('WF_STYLES_SAME');?></label></td>
       </tr>
       <tr>
-        <td><?php echo WFText::_('WF_STYLE_TOP');?></td>
+        <td><?php echo WFText::_('WF_STYLES_TOP');?></td>
         <td>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -72,7 +72,7 @@ defined('_JEXEC') or die('RESTRICTED');
         </td>
       </tr>
       <tr>
-        <td><?php echo WFText::_('WF_STYLE_RIGHT');?></td>
+        <td><?php echo WFText::_('WF_STYLES_RIGHT');?></td>
         <td>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -84,7 +84,7 @@ defined('_JEXEC') or die('RESTRICTED');
         </td>
       </tr>
       <tr>
-        <td><?php echo WFText::_('WF_STYLE_BOTTOM');?></td>
+        <td><?php echo WFText::_('WF_STYLES_BOTTOM');?></td>
         <td>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -96,7 +96,7 @@ defined('_JEXEC') or die('RESTRICTED');
         </td>
       </tr>
       <tr>
-        <td><?php echo WFText::_('WF_STYLE_LEFT');?></td>
+        <td><?php echo WFText::_('WF_STYLES_LEFT');?></td>
         <td>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -113,15 +113,15 @@ defined('_JEXEC') or die('RESTRICTED');
 
 <div style="float: right; width: 49%">
   <fieldset>
-    <legend><?php echo WFText::_('WF_STYLE_CLIP');?></legend>
+    <legend><?php echo WFText::_('WF_STYLES_CLIP');?></legend>
 
     <table border="0">
       <tr>
         <td>&nbsp;</td>
-        <td><input type="checkbox" id="positioning_clip_same" name="positioning_clip_same" class="checkbox" checked="checked" onclick="StyleDialog.toggleSame(this,'positioning_clip');" /> <label for="positioning_clip_same"><?php echo WFText::_('WF_STYLE_SAME');?></label></td>
+        <td><input type="checkbox" id="positioning_clip_same" name="positioning_clip_same" class="checkbox" checked="checked" onclick="StyleDialog.toggleSame(this,'positioning_clip');" /> <label for="positioning_clip_same"><?php echo WFText::_('WF_STYLES_SAME');?></label></td>
       </tr>
       <tr>
-        <td><?php echo WFText::_('WF_STYLE_TOP');?></td>
+        <td><?php echo WFText::_('WF_STYLES_TOP');?></td>
         <td>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -133,7 +133,7 @@ defined('_JEXEC') or die('RESTRICTED');
         </td>
       </tr>
       <tr>
-        <td><?php echo WFText::_('WF_STYLE_RIGHT');?></td>
+        <td><?php echo WFText::_('WF_STYLES_RIGHT');?></td>
         <td>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -145,7 +145,7 @@ defined('_JEXEC') or die('RESTRICTED');
         </td>
       </tr>
       <tr>
-        <td><?php echo WFText::_('WF_STYLE_BOTTOM');?></td>
+        <td><?php echo WFText::_('WF_STYLES_BOTTOM');?></td>
         <td>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -157,7 +157,7 @@ defined('_JEXEC') or die('RESTRICTED');
         </td>
       </tr>
       <tr>
-        <td><?php echo WFText::_('WF_STYLE_LEFT');?></td>
+        <td><?php echo WFText::_('WF_STYLES_LEFT');?></td>
         <td>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>

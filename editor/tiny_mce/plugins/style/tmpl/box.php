@@ -13,7 +13,7 @@ defined('_JEXEC') or die('RESTRICTED');
 ?>
 <table border="0">
     <tr>
-      <td><label for="box_width"><?php echo WFText::_('WF_STYLE_BOX_WIDTH');?></label></td>
+      <td><label for="box_width"><?php echo WFText::_('WF_STYLES_BOX_WIDTH');?></label></td>
       <td>
         <table border="0" cellspacing="0" cellpadding="0">
           <tr>
@@ -23,12 +23,12 @@ defined('_JEXEC') or die('RESTRICTED');
           </tr>
         </table>
       </td>
-      <td>&nbsp;&nbsp;&nbsp;<label for="box_float"><?php echo WFText::_('WF_STYLE_BOX_FLOAT');?></label></td>
+      <td>&nbsp;&nbsp;&nbsp;<label for="box_float"><?php echo WFText::_('WF_STYLES_BOX_FLOAT');?></label></td>
       <td><select id="box_float" name="box_float" class="mceEditableSelect"></select></td>
     </tr>
   
     <tr>
-      <td><label for="box_height"><?php echo WFText::_('WF_STYLE_BOX_HEIGHT');?></label></td>
+      <td><label for="box_height"><?php echo WFText::_('WF_STYLES_BOX_HEIGHT');?></label></td>
       <td>
         <table border="0" cellspacing="0" cellpadding="0">
           <tr>
@@ -38,21 +38,21 @@ defined('_JEXEC') or die('RESTRICTED');
           </tr>
         </table>
       </td>
-      <td>&nbsp;&nbsp;&nbsp;<label for="box_clear"><?php echo WFText::_('WF_STYLE_BOX_CLEAR');?></label></td>
+      <td>&nbsp;&nbsp;&nbsp;<label for="box_clear"><?php echo WFText::_('WF_STYLES_BOX_CLEAR');?></label></td>
       <td><select id="box_clear" name="box_clear" class="mceEditableSelect"></select></td>
     </tr>
   </table>
   <div style="float: left; width: 49%">
     <fieldset>
-      <legend><?php echo WFText::_('WF_STYLE_PADDING');?></legend>
+      <legend><?php echo WFText::_('WF_STYLES_PADDING');?></legend>
   
       <table border="0">
         <tr>
           <td>&nbsp;</td>
-          <td><input type="checkbox" id="box_padding_same" name="box_padding_same" class="checkbox" checked="checked" onclick="StyleDialog.toggleSame(this,'box_padding');" /> <label for="box_padding_same"><?php echo WFText::_('WF_STYLE_SAME');?></label></td>
+          <td><input type="checkbox" id="box_padding_same" name="box_padding_same" class="checkbox" checked="checked" onclick="StyleDialog.toggleSame(this,'box_padding');" /> <label for="box_padding_same"><?php echo WFText::_('WF_STYLES_SAME');?></label></td>
         </tr>
         <tr>
-          <td><label for="box_padding_top"><?php echo WFText::_('WF_STYLE_TOP');?></label></td>
+          <td><label for="box_padding_top"><?php echo WFText::_('WF_STYLES_TOP');?></label></td>
           <td>
             <table border="0" cellspacing="0" cellpadding="0">
               <tr>
@@ -64,7 +64,7 @@ defined('_JEXEC') or die('RESTRICTED');
           </td>
         </tr>
         <tr>
-          <td><label for="box_padding_right"><?php echo WFText::_('WF_STYLE_RIGHT');?></label></td>
+          <td><label for="box_padding_right"><?php echo WFText::_('WF_STYLES_RIGHT');?></label></td>
           <td>
             <table border="0" cellspacing="0" cellpadding="0">
               <tr>
@@ -76,7 +76,7 @@ defined('_JEXEC') or die('RESTRICTED');
           </td>
         </tr>
         <tr>
-          <td><label for="box_padding_bottom"><?php echo WFText::_('WF_STYLE_BOTTOM');?></label></td>
+          <td><label for="box_padding_bottom"><?php echo WFText::_('WF_STYLES_BOTTOM');?></label></td>
           <td>
             <table border="0" cellspacing="0" cellpadding="0">
               <tr>
@@ -88,7 +88,7 @@ defined('_JEXEC') or die('RESTRICTED');
           </td>
         </tr>
         <tr>
-          <td><label for="box_padding_left"><?php echo WFText::_('WF_STYLE_LEFT');?></label></td>
+          <td><label for="box_padding_left"><?php echo WFText::_('WF_STYLES_LEFT');?></label></td>
           <td>
             <table border="0" cellspacing="0" cellpadding="0">
               <tr>
@@ -104,15 +104,15 @@ defined('_JEXEC') or die('RESTRICTED');
    </div>
    <div style="float: right; width: 49%">
     <fieldset>
-      <legend><?php echo WFText::_('WF_STYLE_MARGIN');?></legend>
+      <legend><?php echo WFText::_('WF_STYLES_MARGIN');?></legend>
   
       <table border="0">
         <tr>
           <td>&nbsp;</td>
-          <td><input type="checkbox" id="box_margin_same" name="box_margin_same" class="checkbox" checked="checked" onclick="StyleDialog.toggleSame(this,'box_margin');" /> <label for="box_margin_same"><?php echo WFText::_('WF_STYLE_SAME');?></label></td>
+          <td><input type="checkbox" id="box_margin_same" name="box_margin_same" class="checkbox" checked="checked" onclick="StyleDialog.toggleSame(this,'box_margin');" /> <label for="box_margin_same"><?php echo WFText::_('WF_STYLES_SAME');?></label></td>
         </tr>
         <tr>
-          <td><label for="box_margin_top"><?php echo WFText::_('WF_STYLE_TOP');?></label></td>
+          <td><label for="box_margin_top"><?php echo WFText::_('WF_STYLES_TOP');?></label></td>
           <td>
             <table border="0" cellspacing="0" cellpadding="0">
               <tr>
@@ -124,7 +124,7 @@ defined('_JEXEC') or die('RESTRICTED');
           </td>
         </tr>
         <tr>
-          <td><label for="box_margin_right"><?php echo WFText::_('WF_STYLE_RIGHT');?></label></td>
+          <td><label for="box_margin_right"><?php echo WFText::_('WF_STYLES_RIGHT');?></label></td>
           <td>
             <table border="0" cellspacing="0" cellpadding="0">
               <tr>
@@ -136,7 +136,7 @@ defined('_JEXEC') or die('RESTRICTED');
           </td>
         </tr>
         <tr>
-          <td><label for="box_margin_bottom"><?php echo WFText::_('WF_STYLE_BOTTOM');?></label></td>
+          <td><label for="box_margin_bottom"><?php echo WFText::_('WF_STYLES_BOTTOM');?></label></td>
           <td>
             <table border="0" cellspacing="0" cellpadding="0">
               <tr>
@@ -148,7 +148,7 @@ defined('_JEXEC') or die('RESTRICTED');
           </td>
         </tr>
         <tr>
-          <td><label for="box_margin_left"><?php echo WFText::_('WF_STYLE_LEFT');?></label></td>
+          <td><label for="box_margin_left"><?php echo WFText::_('WF_STYLES_LEFT');?></label></td>
           <td>
             <table border="0" cellspacing="0" cellpadding="0">
               <tr>
