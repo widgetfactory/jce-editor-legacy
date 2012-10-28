@@ -13,7 +13,7 @@ defined('_JEXEC') or die('RESTRICTED');
 ?>
 <table border="0">
       <tr>
-        <td><label for="background_color"><?php echo WFText::_('WF_STYLE_BACKGROUND_COLOR');?></label></td>
+        <td><label for="background_color"><?php echo WFText::_('WF_STYLES_BACKGROUND_COLOR');?></label></td>
         <td>
           <table border="0" cellpadding="0" cellspacing="0">
             <tr>
@@ -24,7 +24,7 @@ defined('_JEXEC') or die('RESTRICTED');
       </tr>
   
       <tr>
-        <td><label for="background_image"><?php echo WFText::_('WF_STYLE_BACKGROUND_IMAGE');?></label></td>
+        <td><label for="background_image"><?php echo WFText::_('WF_STYLES_BACKGROUND_IMAGE');?></label></td>
         <td><table border="0" cellspacing="0" cellpadding="0">
           <tr> 
             <td><input id="background_image" name="background_image" class="browser image" type="text" /></td> 
@@ -34,17 +34,17 @@ defined('_JEXEC') or die('RESTRICTED');
       </tr>
   
       <tr>
-        <td><label for="background_repeat"><?php echo WFText::_('WF_STYLE_BACKGROUND_REPEAT');?></label></td>
+        <td><label for="background_repeat"><?php echo WFText::_('WF_STYLES_BACKGROUND_REPEAT');?></label></td>
         <td><select id="background_repeat" name="background_repeat" class="mceEditableSelect"></select></td>
       </tr>
   
       <tr>
-        <td><label for="background_attachment"><?php echo WFText::_('WF_STYLE_BACKGROUND_ATTACHMENT');?></label></td>
+        <td><label for="background_attachment"><?php echo WFText::_('WF_STYLES_BACKGROUND_ATTACHMENT');?></label></td>
         <td><select id="background_attachment" name="background_attachment" class="mceEditableSelect"></select></td>
       </tr>
   
       <tr>
-        <td><label for="background_hpos"><?php echo WFText::_('WF_STYLE_BACKGROUND_HPOS');?></label></td>
+        <td><label for="background_hpos"><?php echo WFText::_('WF_STYLES_BACKGROUND_HPOS');?></label></td>
         <td>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -57,7 +57,7 @@ defined('_JEXEC') or die('RESTRICTED');
       </tr>
   
       <tr>
-        <td><label for="background_vpos"><?php echo WFText::_('WF_STYLE_BACKGROUND_VPOS');?></label></td>
+        <td><label for="background_vpos"><?php echo WFText::_('WF_STYLES_BACKGROUND_VPOS');?></label></td>
         <td>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>

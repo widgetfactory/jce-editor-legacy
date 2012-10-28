@@ -16,11 +16,11 @@ $tabs = WFTabs::getInstance();
     <?php $tabs->render(); ?>
     <div class="panel_toggle_insert_span">
         <input type="checkbox" class="checkbox" id="toggle_insert_span" name="toggle_insert_span" onclick="StyleDialog.toggleApplyAction();" />
-        <label for="toggle_insert_span"><?php echo WFText::_('WF_STYLE_TOGGLE_INSERT_SPAN');?></label>
+        <label for="toggle_insert_span"><?php echo WFText::_('WF_STYLES_TOGGLE_INSERT_SPAN');?></label>
     </div>
     <div class="mceActionPanel">
         <button type="submit" id="insert" name="insert" onclick="StyleDialog.updateAction();"><?php echo WFText::_('WF_LABEL_UPDATE');?></button>
-        <button type="button" class="button" id="apply" name="apply" onclick="StyleDialog.applyAction();"><?php echo WFText::_('WF_STYLE_APPLY');?></button>
+        <button type="button" class="button" id="apply" name="apply" onclick="StyleDialog.applyAction();"><?php echo WFText::_('WF_STYLES_APPLY');?></button>
         <button type="button" id="cancel"><?php echo WFText::_('WF_LABEL_CANCEL');?></button>
     </div>
 </form>
