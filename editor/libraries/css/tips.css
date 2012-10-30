@@ -85,6 +85,7 @@
     top:	auto;
     bottom: -14px;
 }
+
 label.hasTip, span.hasTip, label.hastip, span.hastip, label.tooltip, span.tooltip, label.wf-tooltip, span.wf-tooltip {
     cursor: help;
 }
@@ -98,19 +99,37 @@ label.hasTip, span.hasTip, label.hastip, span.hastip, label.tooltip, span.toolti
     content: "\00d7";
     display: block;
     font-family: arial;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
     line-height: 10px;
-    padding: 4px;
+    padding: 6px;
 }
 #jce-tooltip canvas {
     position: absolute;
-    right:50%;
-    margin-left: -7px;
 }
-#jce-tooltip canvas {
-    bottom: -14px;
+#jce-tooltip canvas.top.center {
+    top : 100%;
 }
-#jce-tooltip.jce-tooltip.jce-tooltip-bottom canvas {
-    top: -14px;
+#jce-tooltip canvas.bottom.center {
+    top : 0;
+    margin-top: -14px;
+}
+
+#jce-tooltip canvas.bottom.center, #jce-tooltip canvas.top.center {
+    left : 50%;
+    margin-left : -7px;
+}
+
+#jce-tooltip canvas.right {
+    left : 0;
+    margin-left: -14px;
+}
+
+#jce-tooltip canvas.left {
+    left : 100%;
+}
+
+#jce-tooltip canvas.center.right, #jce-tooltip canvas.center.left {
+    top : 50%;
+    margin-top : -7px;
 }
