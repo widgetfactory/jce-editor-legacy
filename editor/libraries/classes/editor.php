@@ -133,7 +133,7 @@ class WFEditor extends JObject {
 
             // set device values
             if ($mobile->isMobile()) {
-                $device = 'mobile';
+                $device = 'phone';
             } else if ($mobile->isTablet()) {
                 $device = 'tablet';
             } else {
@@ -150,7 +150,7 @@ class WFEditor extends JObject {
                 }
                 // set device default as 'desktop,tablet,mobile'
                 if (!isset($item->device) || empty($item->device)) {
-                    $item->device = 'desktop,tablet,mobile';
+                    $item->device = 'desktop,tablet,phone';
                 }
 
                 if (in_array($area, explode(',', $item->area))) {
