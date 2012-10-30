@@ -323,13 +323,7 @@
                 var id = $(this).attr('id');
                 var ev = $(this).get(0).onchange;
 
-                $('<span role="button" class="pickcolor_icon" title="' + self.translate('browse') + '" id="' + id + '_pick"></span>').click( function (e) {
-                    if ($(this).hasClass('disabled')) {
-                        return;
-                    }
-
-                    return tinyMCEPopup.pickColor(e, id);
-                }).insertAfter(this).css('background-color', $(this).val()).toggleClass('disabled', $(this).is(':disabled')).attr('aria-disabled', function() {
+                var $picker = $('<span role="button" class="pickcolor_icon" title="' + self.translate('browse') + '" id="' + id + '_pick"></span>').insertAfter(this).toggleClass('disabled', $(this).is(':disabled')).attr('aria-disabled', function() {
                     return $(this).hasClass('disabled');
                 });
                 
@@ -345,8 +339,25 @@
                         ev.call(this);
                     }
                 };
+                
+                $(this).colorpicker({
+                    widget : $picker,
+                    labels : {
+                        picker_tab 	: 'Picker',
+                        title	: 'Color Picker',
+                        palette_tab : 'Palette',
+                        palette	: 'Web Colors',
+                        named_tab 	: 'Named',
+                        named	: 'Named Colors',
+                        template_tab : 'Template',
+                        template	: 'Template Colors',
+                        custom 	: 'Custom Colors',
+                        color 	: 'Color',
+                        apply 	: 'Apply',
+                        name 	: 'Name'
+                    }
+                });
             });
-
         },
 
         createBrowsers: function () {
@@ -360,7 +371,6 @@
                     return TinyMCE_Utils.openBrowser(this, $(input).attr('id'), type, 'file_browser_callback');
                 }).insertAfter(this);
 
-                // need to use direct call to onchange event for tinyMCEPopup.pickColor callback
                 $(this).get(0).onchange = function() {
                     if ($.isFunction(ev)) {
                         ev.call(this);
