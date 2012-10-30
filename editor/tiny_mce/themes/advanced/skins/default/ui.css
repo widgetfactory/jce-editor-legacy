@@ -90,7 +90,7 @@
 .defaultSkin .mce_forecolor span.mceAction, .defaultSkin .mce_backcolor span.mceAction {overflow:hidden; height:15px}
 
 /* Table Grid SplitButton */
-.defaultSkin table.mceTableSplitMenu {width : 120px; height: 80px; background:#FFF; border:1px solid #ccc;}
+.defaultSkin table.mceTableSplitMenu {width : 120px; height: 80px; background:#FFF; border:1px solid #ccc; border-spacing: 1px;}
 .defaultSkin table.mceTableSplitMenu td {border: 1px solid #ccc;background-color: #FFF;}
 .defaultSkin table.mceTableSplitMenu td.selected {background-color: #C2CBE0;}
 .defaultSkin table.mceTableSplitMenu tfoot td.mceTableGridCount {background-color: #FFF;text-align: center;font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px;}
@@ -122,11 +122,11 @@
 .defaultSkin.mceButtonDialogActive .mceButtonDialog {border-color:#0A246A; background-color : #C2CBE0;}
 .defaultSkin.mceButtonDialogActive .mceButtonDialog:before {background-color:#C2CBE0; border-color : #0A246A;}
 .defaultSkin .mceButtonDialog fieldset {margin:0; padding:4px; border: 0 none; font-family:Verdana, Arial; font-size:10px;}
-.defaultSkin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px;}
+.defaultSkin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px; margin:0;}
 .defaultSkin .mceButtonDialog .mceButtonDialogContent {background-color : #fff;}
-.defaultSkin .mceButtonDialog label {margin : 5px; min-width : 30px; display : inline-block;}
+.defaultSkin .mceButtonDialog label {margin : 5px; min-width : 30px; display : inline-block; font-size: inherit;}
 .defaultSkin .mceButtonDialog input {margin : 3px;}
-.defaultSkin .mceButtonDialog input[type="text"] {border:1px solid #ccc; padding: 2px;}
+.defaultSkin .mceButtonDialog input[type="text"] {border:1px solid #ccc; padding: 2px; width:auto; height:auto; min-width:160px;}
 .defaultSkin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton {display:inline-block; background-color : #fff; cursor : pointer; min-width:50px; height:auto; text-align:center; margin : 5px 5px 5px 0; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px; border:1px solid #ccc}
 .defaultSkin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton:hover {border:1px solid #0A246A; background-color:#B6BDD2}
 .defaultSkin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton.disabled {opacity:0.5; -ms-filter:'alpha(opacity=50)'; filter:alpha(opacity=50);}
