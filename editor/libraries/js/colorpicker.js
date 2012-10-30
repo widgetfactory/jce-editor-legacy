@@ -16,28 +16,28 @@
 
         options : {
             color : '#FFFFFF',
-            dialog: true,
             detail 	: 50,
             speed 	: 200,
             template_colors : '',
             custom_colors 	: '',
             forcedHighContrastMode : false,
             labels : {
-                picker_tab 		: 'Picker',
-                title			: 'Color Picker',
-                palette_tab 	: 'Palette',
-                palette			: 'Web Colors',
-                named_tab 		: 'Named',
-                named			: 'Named Colors',
-                template_tab 	: 'Template',
-                template		: 'Template Colors',
-                custom 			: 'Custom Colors',
-                color 			: 'Color',
-                apply 			: 'Apply',
-                name 			: 'Name'
+                picker          : 'Picker',
+                title		: 'Color Picker',
+                //palette_tab 	: 'Palette',
+                palette		: 'Web Colors',
+                // named_tab 	: 'Named',
+                named		: 'Named Colors',
+                //template_tab 	: 'Template',
+                template	: 'Template Colors',
+                custom 		: 'Custom Colors',
+                color 		: 'Color',
+                apply 		: 'Apply',
+                name 		: 'Name'
             },
             insert 	: $.noop,
-            close	: $.noop
+            close	: $.noop,
+            dialog      : false
         },
         _strhex : "0123456789abcdef",
         /**
@@ -229,52 +229,122 @@
          * @param {Object} options Options object
          */
         _init : function() {
-            var self = this;
+            var self = this, o = this.options;
 
+            // as a dialog, eg: from the editor font color etc.
             if (this.options.dialog) {
-                $('<span class="colorpicker_widget"></span>').insertAfter(this.element).css('background-color', $(this.element).val()).click( function(event) {
-                    // is it open?
-                    if ($('#colorpicker').get(0)) {
-                        if ($('#colorpicker').dialog('isOpen')) {
-                            return self._close();
-                        } else {
-                            $('#colorpicker').dialog('open', event);
-                        }
-                    } else {
-                        self._open(event, true);
+                // tabs already created
+                if ($('#tab-content .colorpicker_generated').length) {
+                    return;
+                }
+                
+                var color = $(this.element).val() || '#000000';
+            
+                // convert color
+                if (/rgb/.test(color)) {
+                    color = this._rgbToHex(color);
+                }
+            
+                // remove colour value if placeholder
+                if ($(self.element).hasClass('placeholder')) {
+                    color = '';
+                }
+                
+                this._createTabs();
+                
+                $('#colorpicker_insert').button({
+                    icons: {
+                        primary: 'ui-icon-check'
                     }
+                }).click(function(e) {
+                    e.preventDefault();
+                            
+                    self._insert();
                 });
-
-                // update widget
-                $(this.element).change( function() {
-                    $(this).next('span.colorpicker_widget').css('background-color', $(this).val());
-                });
-
-            } else {
-                var color = $(this.element).val();
-
-                self._createTabs();
-                // update color picker preview
-                $('#colorpicker_preview_color').css('background-color', color);
-                $('#colorpicker_color').val(color);
-
+                    
                 // set wheel colour
                 if (self._wheel) {
                     self._wheel.setColor(color);
                 }
+                
+            } else {
+                if (this.options.widget) {
+                    this.widget = $(this.options.widget);
+                } else {
+                    this.widget = $('<span class="colorpicker_widget"></span>').insertAfter(this.element);
+                }
+                
+                $(this.widget).css('background-color', $(this.element).val() || '#000000').tips({
+                    trigger  : 'click',
+                    position : 'right center',
+                    content  : '<div id="colorpicker" title="Color Picker">' + self._getContent() + '</div>',
+                    className: 'wf-colorpicker',
+                    opacity  : 1,
+                    show : function() {
+                        var color = $(self.element).val() || '#000000';
+            
+                        // convert color
+                        if (/rgb/.test(color)) {
+                            color = this._rgbToHex(color);
+                        }
+            
+                        // remove colour value if placeholder
+                        if ($(self.element).hasClass('placeholder')) {
+                            color = '';
+                        }
+                        
+                        // set wheel colour
+                        if (self._wheel) {
+                            self._wheel.setColor(color);
+                        }
+                        
+                        // tabs already created
+                        if ($('#tab-content .colorpicker_generated').length) {
+                            return;
+                        }
+
+                        // translate labels
+                        $('#colorpicker_tabs').html( function(i, h) {
+                            return h.replace(/\{#(\w+)\}/gi, function(a, b) { 
+                                return o.labels[b];
+                            });
+                        });
+
+                        $('#colorpicker').append(
+                            '<div id="colorpicker_preview">' +
+                            '	<div id="colorpicker_preview_text">' +
+                            '		<input type="text" id="colorpicker_color" size="8" maxlength="8" value="' + color + '" class="ui-corner-all" aria-required="true" />' +
+                            '	</div>' +
+                            '	<div id="colorpicker_preview_color" class="ui-widget-content ui-corner-all"></div>' +
+                            '	<div id="colorpicker_insert" class="btn btn-small"><i class="icon-save"></i>&nbsp;' + o.labels.apply + '</div>' +
+                            '</div>'
+                            );
+
+                        $('#colorpicker_preview_color').css('background-color', color);
+                        
+                        $('#colorpicker_insert').button({
+                            icons: {
+                                primary: 'ui-icon-check'
+                            }
+                        }).click(function(e) {
+                            e.preventDefault();
+                            
+                            self._insert();
+                        });
+                        
+                        // create tabs
+                        self._createTabs();
+                    }
+                });
             }
         },
-
-        /**
-         * Open the colorpicker
-         * @param {Object} el Trigger element
-         */
-        _open : function(event, init) {
-            var self = this, h = '', o = this.options, widget = event.target;
-
+        
+        _getContent : function() {
+            var self = this, h = '', o = this.options;
+            
             h += '<div id="colorpicker_tabs">';
-            h += '<ul>';
-            h += '<li><a href="#colorpicker_picker" aria-controls="colorpicker_picker">{#picker}</a></li>';
+            h += '<ul class="nav nav-tabs">';
+            h += '<li class="active"><a href="#colorpicker_picker" aria-controls="colorpicker_picker" class="active">{#picker}</a></li>';
             h += '<li><a href="#colorpicker_web" aria-controls="colorpicker_web">{#palette}</a></li>';
             h += '<li><a href="#colorpicker_named" aria-controls="colorpicker_named">{#named}</a></li>';
 
@@ -284,95 +354,46 @@
             }
 
             h += '</ul>';
-            h += '<div id="colorpicker_picker" data-type="picker"></div>';
-            h += '<div id="colorpicker_web" data-type="web"></div>';
-            h += '<div id="colorpicker_named" data-type="named"></div>';
+            h += '<div class="tab-content">';
+            h += '<div id="colorpicker_picker" data-type="picker" class="tab-pane active"></div>';
+            h += '<div id="colorpicker_web" data-type="web" class="tab-pane"></div>';
+            h += '<div id="colorpicker_named" data-type="named" class="tab-pane"></div>';
 
             // add template / custom colours
             if (o.template_colors || o.custom_colors) {
-                h += '<div id="colorpicker_template" data-type="template"></div>';
+                h += '<div id="colorpicker_template" data-type="template" class="tab-pane"></div>';
             }
-
             h += '</div>';
-
-            var pos = $(widget).offset();
-
-            $('<div id="colorpicker"></div>').html(h).dialog({
-                width : 320,
-                height: 385,
-                title: o.labels.title,
-                buttons : [{
-                    text : o.labels.apply,
-                    click : function() {
-                        self._insert();
-                    }
-
-                }
-                ],
-                autoOpen : false,
-                open : function(event, ui) {
-                    var color = $(self.element).val() || '#FFFFFF';
-
-                    // remove colour value if placeholder
-                    if ($(self.element).hasClass('placeholder')) {
-                        color = '';
-                    }
-
-                    if (/rgb/.test(color)) {
-                        color = self._rgbToHex(color);
-                    }
-
-                    $(this).dialog('widget').css({
-                        left : pos.left + $(widget).outerWidth() + 2 + 'px',
-                        top : pos.top + 'px'
-                    });
-
-                    // set wheel colour
-                    if (self._wheel) {
-                        self._wheel.setColor(color);
-                    }
-
-                    // tabs already created
-                    if ($('#colorpicker_tabs').is('.ui-tabs')) {
-                        return;
-                    }
-
-                    // translate labels
-                    $(this).html( function(i, h) {
-                        return h.replace(/\{#([a-z]+)\}/gi, function(a, b) {
-                            return o.labels[b];
-                        });
-
-                    });
-
-                    // create tabs
-                    self._createTabs();
-
-                    $('#colorpicker').append(
-                    '<div id="colorpicker_preview">' +
-                    '	<div id="colorpicker_preview_text">' +
-                    '		<input type="text" id="colorpicker_color" size="8" maxlength="8" value="' + color + '" class="ui-corner-all" aria-required="true" />' +
-                    '	</div>' +
-                    '	<div id="colorpicker_preview_color" class="ui-widget-content ui-corner-all"></div>' +
-                    '</div>'
-                    );
-
-                    $('#colorpicker_preview_color').css('background-color', color);
-
-                    $(this).dialog('widget').find('button:ui-button').addClass('ui-button-text-icon-primary').prepend('<span class="i-button-icon-primary ui-icon ui-icon-check"></span>');
-                }
-
-            }).dialog('open');
+            h += '</div>';
+            
+            return h;
         },
 
         _createTabs : function() {
             var self = this;
-            $('#colorpicker_tabs', '#colorpicker').tabs({
-                activate: function(event, ui) {
-                    self['_create' + $(ui.newPanel).data('type')].call(self, $(ui.newPanel));
-                }
-
-            });
+            
+            if ($.isFunction($.fn.tab)) {
+                $('#colorpicker_tabs a').on('show', function(e) {
+                    var id = $(e.target).attr('href'), type = $(id).data('type');                   
+                    self['_create' + type].call(self, $(id));
+                    
+                    $('#colorpicker_insert, #insert').toggle(type == 'picker');
+                    
+                }).click(function(e) {
+                    e.preventDefault();
+                    $(this).tab('show');
+                });
+            } else {
+                $('#colorpicker_tabs', '#colorpicker').tabs({
+                    activate: function(event, ui) {
+                        var type = $(ui.newPanel).data('type');
+                        
+                        self['_create' + type].call(self, $(ui.newPanel));
+                        
+                        $('#colorpicker_insert, #insert').toggle(type == 'picker');
+                    }
+                });
+            }
 
             // create initial picker
             self._createpicker($('#colorpicker_picker', '#colorpicker_tabs'));
@@ -409,7 +430,7 @@
         _close : function() {
             this._trigger('close', null);
 
-            $('#colorpicker').dialog('close');
+            $(this.widget).tips('close');
         },
 
         /**
@@ -421,7 +442,9 @@
             this._trigger('insert', null, color);
 
             if (color) {
-                $(this.element).val(color).removeClass('placeholder').next('span.colorpicker_widget').css('background-color', color);
+                $(this.element).val(color).removeClass('placeholder').change();
+                
+                $(this.widget).css('background-color', color);
             }
 
             this._close();
@@ -434,7 +457,7 @@
          * @param {String} c RGB Color
          */
         _rgbToHex : function(c) {
-            var re = new RegExp("rgb\\s*\\(\\s*([0-9]+).*,\\s*([0-9]+).*,\\s*([0-9]+).*\\)", "gi");
+            var r, g, b, re = new RegExp("rgb\\s*\\(\\s*([0-9]+).*,\\s*([0-9]+).*,\\s*([0-9]+).*\\)", "gi");
 
             if (!c) {
                 return c;
@@ -463,6 +486,8 @@
          * @param {String} c Hex Color
          */
         _hexToRGB : function(c) {
+            var r, g, b;
+            
             if (c.indexOf('#') != -1) {
                 c = c.replace(new RegExp('[^0-9A-F]', 'gi'), '');
 
@@ -520,11 +545,11 @@
                 h += '<span class="mceVoiceLabel" id="web_colors_' + i + '">' + v.toUpperCase() + '</span>';
 
                 if ((i + 1) % 18 == 0) {
-                    h += '</ul><ul>';
+                // h += '</ul><ul>';
                 }
             });
 
-            h += '</div>';
+            h += '</ul></div>';
 
             $(parent).append(h).append('<br style="clear:both;" />').addClass('colorpicker_generated');
 
@@ -559,12 +584,12 @@
                 h += '<span class="mceVoiceLabel" id="named_colors_' + k + '">' + v.toUpperCase() + '</span>';
 
                 if ((i + 1) % 18 == 0) {
-                    h += '</ul><ul>';
+                //h += '</ul><ul>';
                 }
                 i++;
             });
 
-            h += '</div>';
+            h += '</ul></div>';
 
             $(parent).append(h).append('<br style="clear:both;" />').addClass('colorpicker_generated').append('<div id="colorpicker_colorname">' + this.options.labels.name + '</div>');
 
@@ -589,8 +614,6 @@
             }
 
             if (this.options.template_colors) {
-                $(parent).append('<p id="colorpicker_template_label">'+this.options.labels.template + '</p>');
-
                 var templateColors = this.options.template_colors;
 
                 if ($.type(this.options.template_colors) == 'string') {
@@ -610,11 +633,11 @@
                     }
                     h += '<span class="mceVoiceLabel" id="template_colors_' + i + '">' + v.toUpperCase() + '</span>';
                     if ((i + 1) % 18 == 0) {
-                        h += '</ul><ul>';
+                    //h += '</ul><ul>';
                     }
                 });
 
-                h += '</div>';
+                h += '</ul></div>';
 
                 $(parent).append(h);
             }
