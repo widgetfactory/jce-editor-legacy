@@ -1,32 +1,31 @@
-@font-face {
-	font-family: 'WFMobile';
-	src:url('fonts/WFMobile.eot');
-	src:url('fonts/WFMobile.eot?#iefix') format('embedded-opentype'),
-		url('fonts/WFMobile.svg#WFMobile') format('svg'),
-		url('fonts/WFMobile.woff') format('woff'),
-		url('fonts/WFMobile.ttf') format('truetype');
-	font-weight: normal;
-	font-style: normal;
+/*@font-face {
+    font-family: 'WFMobile';
+    src:url('fonts/WFMobile.eot');
+    src:url('fonts/WFMobile.eot?#iefix') format('embedded-opentype'),
+        url('fonts/WFMobile.svg#WFMobile') format('svg'),
+        url('fonts/WFMobile.woff') format('woff'),
+        url('fonts/WFMobile.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
-/* Use the following CSS code if you want to have a class per icon */
 .mobileSkin span.mceIcon:before {
-	font-family: 'WFMobile';
-	font-style: normal;
-	speak: none;
-	font-weight: normal;
-	-webkit-font-smoothing: antialiased;
-}
+    font-family: 'WFMobile';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+}*/
 
 /* Reset */
-/*.mobileSkin div, .mobileSkin a, .mobileSkin img, .mobileSkin span, .mobileSkin iframe, .mobileSkin .mceText {border:0; margin:0; padding:0; background:transparent; white-space:nowrap; text-decoration:none; font-weight:normal; cursor:default; color:#000; vertical-align:baseline; width:auto; border-collapse:separate; text-align:left}
+.mobileSkin table, .mobileSkin tbody, .mobileSkin a, .mobileSkin img, .mobileSkin tr, .mobileSkin td, .mobileSkin iframe, .mobileSkin .mceText {border:0; margin:0; padding:0; background:transparent; white-space:nowrap; text-decoration:none; font-weight:normal; cursor:default; color:#000; vertical-align:baseline; width:auto; border-collapse:separate; text-align:left}
 .mobileSkin a:hover, .mobileSkin a:link, .mobileSkin a:visited, .mobileSkin a:active {text-decoration:none; font-weight:normal; cursor:default; color:#000}
-.mobileSkin div {vertical-align:middle;width:auto;}*/
+.mobileSkin table td {vertical-align:middle;width:auto;}
 
 /* Containers */
-.mobileSkin div {direction:ltr; background:#F0F0EE}
+.mobileSkin table {direction:ltr; background:#F0F0EE}
 .mobileSkin iframe {display:block;}
-.mobileSkin .mceToolbar {white-space: pre-wrap;min-height:36px;}
+.mobileSkin .mceToolbar {height:34px}
 .mobileSkin .mceLeft {text-align:left}
 .mobileSkin .mceRight {text-align:right}
 
@@ -36,79 +35,73 @@
 .mobileSkin .mceExternalClose {position:absolute; top:3px; right:3px; width:7px; height:7px; background:url(../../img/icons.png) -820px 0}
 
 /* Layout */
-.mobileSkin .mceLayout {border:1px solid #CCC; display: inline-block;}
-/*.mobileSkin .mceLayout .mceFirst div {border-top:1px solid #CCC}
-.mobileSkin .mceLayout .mceLast div {border-bottom:1px solid #CCC}*/
-.mobileSkin .mceToolbar, .mobileSkin .mceFirst .mceToolbar div, .mobileSkin .mceLast .mceToolbar div {border:0; margin:0; padding:0;}
-.mobileSkin .mceToolbar {padding-top:1px; vertical-align:top}
+.mobileSkin table.mceLayout {border:0; border-left:1px solid #CCC; border-right:1px solid #CCC}
+.mobileSkin table.mceLayout tr.mceFirst td {border-top:1px solid #CCC}
+.mobileSkin table.mceLayout tr.mceLast td {border-bottom:1px solid #CCC}
+.mobileSkin table.mceToolbar, .mobileSkin tr.mceFirst .mceToolbar tr td, .mobileSkin tr.mceLast .mceToolbar tr td {border:0; margin:0; padding:0;}
+.mobileSkin td.mceToolbar {padding-top:1px; vertical-align:top}
 .mobileSkin .mceIframeContainer {border-top:1px solid #CCC; border-bottom:1px solid #CCC}
 .mobileSkin .mceStatusbar {font-family:'MS Sans Serif',sans-serif,Verdana,Arial; font-size:9pt; line-height:16px; overflow:visible; color:#000; display:block; height:20px}
 .mobileSkin .mceStatusbar div {float:left; margin:2px}
 .mobileSkin .mceStatusbar a.mceResize {display:block; float:right; background:url(../../img/icons.png) -800px 0; width:20px; height:20px; cursor:se-resize}
 .mobileSkin .mceStatusbar a:hover {text-decoration:underline}
-.mobileSkin .mceToolbar {margin-left:3px;width:auto !important;}
-.mobileSkin img.mceIcon {display:block; width:20px; height:20px;}
+.mobileSkin table.mceToolbar {margin-left:3px;width:auto !important;}
+.mobileSkin span.mceIcon, .mobileSkin img.mceIcon {display:block; width:20px; height:20px;}
 .mobileSkin .mceIcon {background:url(../../img/icons.png) no-repeat 20px 20px}
-/*.mobileSkin .mceButton .mceIcon {background-color:#F0F0EE;}*/
-.mobileSkin .mceCenter {text-align:center;}
-.mobileSkin .mceCenter > div {margin:0 auto; text-align:left;}
-.mobileSkin .mceRight > div {margin:0 0 0 auto;}
-.mobileSkin .mceCenter .mceToolbar {text-align: center;}
-.mobileSkin .mceRight .mceToolbar {text-align: right;}
-
-.mobileSkin span.mceIcon {
-    color: #666;
-    display: inline-block;
-    font-size: 16px;
-    height: 20px;
-    line-height: 20px;
-    text-align: center;
-    width: 20px;
-    cursor: pointer;
-}
-
-.mobileSkin .mceToolbar > span.mceToolbarButton {
-    cursor: move;
-    display: inline-block;
-    font-size: 0;
-    height: 20px;
-    margin: 2px 1px 0 0;
-    min-width: 20px;
-    position: relative;
-    vertical-align: top;
-}
+.mobileSkin .mceButton .mceIcon {}
+.mobileSkin td.mceCenter {text-align:center;}
+.mobileSkin td.mceCenter table {margin:0 auto; text-align:left;}
+.mobileSkin td.mceRight table {margin:0 0 0 auto;}
 
 /* Button */
-.mobileSkin .mceButton {display:block; border:1px solid #CCCCCC; width:20px; height:20px; -moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px; padding : 5px;}
+.mobileSkin .mceButton {display:block; border:1px solid #CCCCCC; margin-right:2px;-moz-border-radius:2px; -webkit-border-radius:2px; border-radius:2px; padding:5px;}
 
-.mobileSkin .mceButton {
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    background-color: #F5F5F5;
-    background-image: linear-gradient(to bottom, #FFFFFF, #E6E6E6);
-    background-repeat: repeat-x;
-    border-color: #BBBBBB #BBBBBB #A2A2A2;
-    border-image: none;
-    border-radius: 4px 4px 4px 4px;
-    border-style: solid;
-    border-width: 1px;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
-    color: #333333;
+.mobileSkin .mceButton, .mobileSkin .mceSplitButton a, .mobileSkin .mceListBox a {
     cursor: pointer;
-    display: inline-block;
     font-size: 13px;
     line-height: 18px;
-    margin-bottom: 0;
     padding: 5px;
+
+    display: inline-block;
+    *display: inline;
+    /* IE7 inline-block hack */
+
+    *zoom: 1;
+    margin-bottom: 0;
+    font-size: 14px;
+    line-height: 20px;
+    *line-height: 20px;
     text-align: center;
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
     vertical-align: middle;
+    cursor: pointer;
+    color: #333333;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    background-color: #f5f5f5;
+    background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
+    border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    *background-color: #e6e6e6;
+    /* Darken IE7 buttons by default so they stand out more given they won't have borders */
+
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    border: 1px solid #bbbbbb;
+    *border: 0;
+    border-bottom-color: #a2a2a2;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/*.mobileSkin a.mceButtonEnabled:hover {border:1px solid #0A246A; }
-.mobileSkin a.mceButtonEnabled:hover .mceIcon {background-color:#B2BBD0}*/
+.mobileSkin a.mceButtonEnabled:hover {border:1px solid #A2ABC0;}
 
 .mobileSkin a.mceButtonActive, .mobileSkin a.mceButtonSelected {border:1px solid #0A246A}
 .mobileSkin a.mceButtonActive .mceIcon, .mobileSkin a.mceButtonSelected .mceIcon {background-color:#C2CBE0}
@@ -123,9 +116,19 @@
 .mobileSkin .mceSeparator {width:0px; height:20px; margin:0 4px;padding:4px 0;border-left: 1px solid #CCCCCC;}
 
 /* ListBox */
-.mobileSkin .mceListBox, .mobileSkin .mceListBox a {display:block}
-.mobileSkin .mceListBox .mceText {padding:5px; width:80px; text-align:left; border:1px solid #CCC; border-right:0; background:#FFF; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; height:20px; line-height:20px; overflow:hidden;-webkit-border-top-left-radius: 2px;-webkit-border-bottom-left-radius: 2px;-moz-border-radius-topleft: 2px;-moz-border-radius-bottomleft: 2px;border-top-left-radius: 2px;border-bottom-left-radius: 2px;}
-.mobileSkin .mceListBox .mceOpen {width:9px; height:20px; padding: 5px; margin-right:2px; border:1px solid #CCC;-webkit-border-top-right-radius: 2px;-webkit-border-bottom-right-radius: 2px;-moz-border-radius-topright: 2px;-moz-border-radius-bottomright: 2px;border-top-right-radius: 2px;border-bottom-right-radius: 2px;}
+.mobileSkin .mceListBox, .mobileSkin .mceListBox a {
+    display: block;
+}
+.mobileSkin .mceListBox a, .mobileSkin .mceSplitButton a {
+    background-color: #F5F5F5;
+    background-image: linear-gradient(to bottom, #FFFFFF, #E6E6E6);
+    background-repeat: repeat-x;
+    border-color: #BBBBBB #BBBBBB #A2A2A2;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #333333;
+}
+.mobileSkin .mceListBox .mceText {padding:5px; width:80px; text-align:left; border-right:0; background:#FFF; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; height:20px; line-height:20px; overflow:hidden;-webkit-border-top-right-radius: 0;-webkit-border-bottom-right-radius: 0;-moz-border-radius-topright: 0;-moz-border-radius-bottomright: 0;border-top-right-radius: 0;border-bottom-right-radius: 0;}
+.mobileSkin .mceListBox .mceOpen {width:9px; height:20px; padding: 5px; margin-right:2px; -webkit-border-top-left-radius: 0;-webkit-border-bottom-left-radius: 0;-moz-border-radius-topleft: 0;-moz-border-radius-bottomleft: 0;border-top-left-radius: 0;border-bottom-left-radius: 0;}
 
 .mobileSkin .mceListBox .mceOpen:after {
     display: inline-block;
@@ -150,12 +153,12 @@
 /* SplitButton */
 .mobileSkin .mceSplitButton {width:32px; height:20px; direction:ltr;margin:0 1px 0 0;}
 .mobileSkin .mceSplitButton a, .mobileSkin .mceSplitButton span {height:20px; display:block}
-.mobileSkin .mceSplitButton a.mceAction {width:20px; border:1px solid #CCCCCC; border-right:0;-webkit-border-top-left-radius: 2px;-webkit-border-bottom-left-radius: 2px;-moz-border-radius-topleft: 2px;-moz-border-radius-bottomleft: 2px;border-top-left-radius: 2px;border-bottom-left-radius: 2px; padding:5px;}
+.mobileSkin .mceSplitButton a.mceAction {width:20px; border-right:0;-webkit-border-top-right-radius: 0;-webkit-border-bottom-right-radius: 0;-moz-border-radius-topright: 0;-moz-border-radius-bottomright: 0;border-top-right-radius: 0;border-bottom-right-radius: 0; padding:5px;}
 .mobileSkin .mceSplitButton span.mceAction {width:20px; background-image:url(../../img/icons.png);}
-.mobileSkin .mceSplitButton a.mceOpen {width:9px; padding : 5px; border:1px solid #CCCCCC;-webkit-border-top-right-radius: 2px;-webkit-border-bottom-right-radius: 2px;-moz-border-radius-topright: 2px;-moz-border-radius-bottomright: 2px;border-top-right-radius: 2px;border-bottom-right-radius: 2px;}
+.mobileSkin .mceSplitButton a.mceOpen {width:9px; padding : 5px; -webkit-border-top-left-radius: 0;-webkit-border-bottom-left-radius: 0;-moz-border-radius-topleft: 0;-moz-border-radius-bottomleft: 0;border-top-left-radius: 0;border-bottom-left-radius: 0;}
 .mobileSkin .mceSplitButton span.mceOpen {display:none}
-.mobileSkin table.mceSplitButtonEnabled:hover a.mceAction, .mobileSkin .mceSplitButtonHover a.mceAction, .mobileSkin .mceSplitButtonSelected a.mceAction {border:1px solid #0A246A; border-right:0; background-color:#B2BBD0}
-.mobileSkin table.mceSplitButtonEnabled:hover a.mceOpen, .mobileSkin .mceSplitButtonHover a.mceOpen, .mobileSkin .mceSplitButtonSelected a.mceOpen {background-color:#B2BBD0; border:1px solid #0A246A;}
+.mobileSkin table.mceSplitButtonEnabled:hover a.mceAction, .mobileSkin .mceSplitButtonHover a.mceAction, .mobileSkin .mceSplitButtonSelected a.mceAction {border:1px solid #A2ABC0; border-right:0;}
+.mobileSkin table.mceSplitButtonEnabled:hover a.mceOpen, .mobileSkin .mceSplitButtonHover a.mceOpen, .mobileSkin .mceSplitButtonSelected a.mceOpen {border:1px solid #A2ABC0;}
 .mobileSkin .mceSplitButtonDisabled .mceAction, .mobileSkin .mceSplitButtonDisabled a.mceOpen {opacity:0.3; -ms-filter:'alpha(opacity=30)'; filter:alpha(opacity=30)}
 .mobileSkin .mceSplitButtonActive a.mceAction {border:1px solid #0A246A; background-color:#C2CBE0}
 .mobileSkin .mceSplitButtonActive a.mceOpen {border-left:0;}
@@ -169,21 +172,21 @@
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     content: "";
-} 
+}
 
 /* ColorSplitButton */
 .mobileSkin div.mceColorSplitMenu table {background:#FFF; border:1px solid gray}
 .mobileSkin .mceColorSplitMenu td {padding:2px}
-.mobileSkin .mceColorSplitMenu a {display:block; width:9px; height:9px; overflow:hidden; border:1px solid #808080; padding : 5px;}
+.mobileSkin .mceColorSplitMenu a {display:block; width:9px; height:9px; overflow:hidden; border:1px solid #808080}
 .mobileSkin .mceColorSplitMenu td.mceMoreColors {padding:1px 3px 1px 1px}
-.mobileSkin .mceColorSplitMenu a.mceMoreColors {width:100%; height:auto; text-align:center; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px; border:1px solid #FFF; padding : 5px 0;}
+.mobileSkin .mceColorSplitMenu a.mceMoreColors {width:100%; height:auto; text-align:center; font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px; border:1px solid #FFF}
 .mobileSkin .mceColorSplitMenu a.mceMoreColors:hover {border:1px solid #0A246A; background-color:#B6BDD2}
 .mobileSkin a.mceMoreColors:hover {border:1px solid #0A246A}
 .mobileSkin .mceColorPreview {margin-left:2px; width:16px; height:4px; overflow:hidden; background:#9a9b9a}
 .mobileSkin .mce_forecolor span.mceAction, .mobileSkin .mce_backcolor span.mceAction {overflow:hidden; height:15px}
 
 /* Table Grid SplitButton */
-.mobileSkin table.mceTableSplitMenu {width : 120px; height: 80px; background:#FFF; border:1px solid #ccc; border-spacing: 1px; border-collapse: inherit;}
+.mobileSkin table.mceTableSplitMenu {width : 120px; height: 80px; background:#FFF; border:1px solid #ccc;}
 .mobileSkin table.mceTableSplitMenu td {border: 1px solid #ccc;background-color: #FFF;}
 .mobileSkin table.mceTableSplitMenu td.selected {background-color: #C2CBE0;}
 .mobileSkin table.mceTableSplitMenu tfoot td.mceTableGridCount {background-color: #FFF;text-align: center;font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px;}
@@ -205,17 +208,17 @@
 .mobileSkin .mceMenuItemTitle a {border:0; background:#EEE; border-bottom:1px solid #DDD}
 .mobileSkin .mceMenuItemTitle span.mceText {color:#000; font-weight:bold; padding-left:4px}
 .mobileSkin .mceMenuItemDisabled .mceText {color:#888}
-.mobileSkin .mceMenuItemSelected .mceIcon {background:url(img/menu_check.gif)}
-.mobileSkin .mceNoIcons .mceMenuItemSelected a {background:url(img/menu_arrow.gif) no-repeat -6px center}
+.mobileSkin .mceMenuItemSelected .mceIcon {background:url(../default/img/menu_check.gif)}
+.mobileSkin .mceNoIcons .mceMenuItemSelected a {background:url(../default/img/menu_arrow.gif) no-repeat -6px center}
 .mobileSkin .mceMenu span.mceMenuLine {display:none}
-.mobileSkin .mceMenuItemSub a {background:url(img/menu_arrow.gif) no-repeat top right;}
+.mobileSkin .mceMenuItemSub a {background:url(../default/img/menu_arrow.gif) no-repeat top right;}
 
 /* Dialog */
 .mobileSkin .mceButtonDialog {position:absolute; left:0; top:1px; z-index:1000; border:1px solid #ccc; direction:ltr; background : #F0F0EE; padding : 3px;}
 .mobileSkin.mceButtonDialogActive .mceButtonDialog {border-color:#0A246A; background-color : #C2CBE0;}
 .mobileSkin.mceButtonDialogActive .mceButtonDialog:before {background-color:#C2CBE0; border-color : #0A246A;}
 .mobileSkin .mceButtonDialog fieldset {margin:0; padding:4px; border: 0 none; font-family:Verdana, Arial; font-size:10px;}
-.mobileSkin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px; margin: 0;}
+.mobileSkin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px;}
 .mobileSkin .mceButtonDialog .mceButtonDialogContent {background-color : #fff;}
 .mobileSkin .mceButtonDialog label {margin : 5px; min-width : 30px; display : inline-block;}
 .mobileSkin .mceButtonDialog input {margin : 3px;}
@@ -236,7 +239,7 @@
 
 /* Progress,Resize */
 .mobileSkin .mceBlocker {position:absolute; left:0; top:0; z-index:1000; opacity:0.5; -ms-filter:'alpha(opacity=50)'; filter:alpha(opacity=50); background:#FFF}
-.mobileSkin .mceProgress {position:absolute; left:0; top:0; z-index:1001; background:url(img/progress.gif) no-repeat; width:32px; height:32px; margin:-16px 0 0 -16px}
+.mobileSkin .mceProgress {position:absolute; left:0; top:0; z-index:1001; background:url(../default/img/progress.gif) no-repeat; width:32px; height:32px; margin:-16px 0 0 -16px}
 .mobileSkin .mcePlaceHolder {border:1px dotted gray}
 
 /* Formats */
@@ -252,19 +255,19 @@
 .mobileSkin .mce_h6 span.mceText {font-weight:bolder; font-size: .75em}
 
 /* Theme */
-/*.mobileSkin span.mce_bold {background-position:0 0}
+.mobileSkin span.mce_bold {background-position:0 0}
 .mobileSkin span.mce_italic {background-position:-60px 0}
 .mobileSkin span.mce_underline {background-position:-140px 0}
-.mobileSkin span.mce_strikethrough {background-position:-120px 0}*/
-/*.mobileSkin span.mce_undo {background-position:-160px 0}
-.mobileSkin span.mce_redo {background-position:-100px 0}*/
+.mobileSkin span.mce_strikethrough {background-position:-120px 0}
+.mobileSkin span.mce_undo {background-position:-160px 0}
+.mobileSkin span.mce_redo {background-position:-100px 0}
 .mobileSkin span.mce_cleanup {background-position:-40px 0}
 .mobileSkin span.mce_bullist {background-position:-20px 0}
 .mobileSkin span.mce_numlist {background-position:-80px 0}
-/*.mobileSkin span.mce_justifyleft {background-position:-460px 0}
+.mobileSkin span.mce_justifyleft {background-position:-460px 0}
 .mobileSkin span.mce_justifyright {background-position:-480px 0}
 .mobileSkin span.mce_justifycenter {background-position:-420px 0}
-.mobileSkin span.mce_justifyfull {background-position:-440px 0}*/
+.mobileSkin span.mce_justifyfull {background-position:-440px 0}
 .mobileSkin span.mce_anchor {background-position:-200px 0}
 .mobileSkin span.mce_indent {background-position:-400px 0}
 .mobileSkin span.mce_outdent {background-position:-540px 0}
@@ -273,9 +276,9 @@
 .mobileSkin span.mce_sub {background-position:-600px 0}
 .mobileSkin span.mce_sup {background-position:-620px 0}
 .mobileSkin span.mce_removeformat {background-position:-580px 0}
-/*.mobileSkin span.mce_newdocument {background-position:-520px 0}*/
+.mobileSkin span.mce_newdocument {background-position:-520px 0}
 .mobileSkin span.mce_image {background-position:-380px 0}
-/*.mobileSkin span.mce_help {background-position:-340px 0}*/
+.mobileSkin span.mce_help {background-position:-340px 0}
 .mobileSkin span.mce_code {background-position:-260px 0}
 .mobileSkin span.mce_source {background-position:-260px 0}
 .mobileSkin span.mce_hr {background-position:-360px 0}
@@ -294,22 +297,6 @@
 
 .mobileSkin span.mce_readmore {background-position:-920px 0}
 .mobileSkin span.mce_pagebreak {background-position:-940px 0}
-
-.mobileSkin span.mce_help:before {content:"\e032";}
-.mobileSkin span.mce_redo:before {content:"\58";}
-.mobileSkin span.mce_undo:before {content:"\57";}
-.mobileSkin span.mce_newdocument:before {content: "\34";}
-
-.mobileSkin span.mce_bold, .mobileSkin span.mce_italic, .mobileSkin span.mce_underline, .mobileSkin span.mce_strikethrough {font-family : "Helvetica Neue",Helvetica,Arial,sans-serif; font-size:18px;}
-.mobileSkin span.mce_bold:before {content:"B";font-weight : bold;}
-.mobileSkin span.mce_italic:before {content:"I";font-style: italic;}
-.mobileSkin span.mce_underline:before {content:"U";text-decoration: underline;}
-.mobileSkin span.mce_strikethrough:before {content:"S";text-decoration: line-through;}
-
-.mobileSkin span.mce_justifyleft:before {content: "\e06e";}
-.mobileSkin span.mce_justifycenter:before {content: "\e06f";}
-.mobileSkin span.mce_justifyright:before {content: "\e070";}
-.mobileSkin span.mce_justifyfull:before {content: "\e071";}
 
 /* Plugins */
 .mobileSkin span.mce_advhr {background-position:-0px -20px}
