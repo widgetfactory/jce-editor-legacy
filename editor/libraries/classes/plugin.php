@@ -251,6 +251,7 @@ class WFEditorPlugin extends WFEditor {
             'select',
             'tips',
             'tiny_mce_utils',
+            'colorpicker',
             'plugin'
         ), 'libraries');
 
