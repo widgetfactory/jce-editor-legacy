@@ -11,17 +11,19 @@
 html {
     /*height : 100%;*/
     background: #FFFFFF none;
+    overflow : auto;
 }
 body.contentpane {
     font-size: 8pt;
     line-height: 10pt;
-    height : 95%;
+    height : 560px;
     margin: 0;
     padding: 0;
 }
 div#jce {
     padding: 10px;
     margin: 0;
+    height : 530px;
 }
 
 div#jce div {

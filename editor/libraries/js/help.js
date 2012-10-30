@@ -24,7 +24,7 @@
                 $('body').addClass('ui-jce');
             	
                 // init layout
-                $('#jce').height($('body').height() - 20);
+                //$('#jce').height($('body').height() - 20);
             	
                 // add resize
                 $(window).bind('resize', function() {
