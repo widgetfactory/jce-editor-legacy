@@ -45,7 +45,7 @@
 .mobileSkin .mceStatusbar div {float:left; margin:2px}
 .mobileSkin .mceStatusbar a.mceResize {display:block; float:right; background:url(../../img/icons.png) -800px 0; width:20px; height:20px; cursor:se-resize}
 .mobileSkin .mceStatusbar a:hover {text-decoration:underline}
-.mobileSkin table.mceToolbar {margin-left:3px;width:auto !important;}
+.mobileSkin table.mceToolbar {margin: 3px 0 3px 3px;width:auto !important;}
 .mobileSkin span.mceIcon, .mobileSkin img.mceIcon {display:block; width:20px; height:20px;}
 .mobileSkin .mceIcon {background:url(../../img/icons.png) no-repeat 20px 20px}
 .mobileSkin .mceButton .mceIcon {}
@@ -145,7 +145,7 @@
 .mobileSkin table.mceListBoxEnabled:hover .mceOpen, .mobileSkin .mceListBoxHover .mceOpen, .mobileSkin .mceListBoxSelected .mceOpen {background-color:#FFF; border:1px solid #A2ABC0}
 .mobileSkin .mceListBoxDisabled .mceOpen {opacity:0.3;-moz-opacity:0.3;-webkit-opacity:0.3;-ms-filter:'alpha(opacity=30)'; filter:alpha(opacity=30)}
 .mobileSkin .mceListBoxDisabled a.mceText {color:gray; background-color:transparent;}
-.mobileSkin .mceListBoxMenu {overflow:auto; overflow-x:hidden}
+.mobileSkin .mceListBoxMenu {overflow:auto; overflow-x:hidden -webkit-overflow-scrolling:touch;}
 .mobileSkin .mceOldBoxModel .mceListBox .mceText {height:22px}
 .mobileSkin .mceOldBoxModel .mceListBox .mceOpen {width:11px; height:22px;}
 .mobileSkin select.mceNativeListBox {font-family:'MS Sans Serif',sans-serif,Verdana,Arial; font-size:7pt; background:#F0F0EE; border:1px solid gray; margin-right:2px;}
