@@ -62,6 +62,11 @@
                         this.loadItem(n);
                     }
                 }
+                
+                $('#help-menu-toggle div').click(function() {
+                    $('#help-menu').parent().toggle();
+                    $('#help-frame').parent().toggleClass('span8 span12');
+                });
             },
 			
             loadItem: function(el) {

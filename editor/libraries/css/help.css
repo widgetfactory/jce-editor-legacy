@@ -98,14 +98,28 @@ div#help-frame {
     width: 100%;
     height: 100%;
 }
-div#help-handle {
-    cursor: pointer;
-}
+
 div#help-frame iframe {
     width: 100%;
     height: 100%;
 }
-div#help-handle.collapsed {}
+
+#jce div#help-menu-toggle {
+    margin-left : -12.5px;
+    height : 100%;
+    background : #eee;
+    float : left;
+}
+
+#jce div#help-menu-toggle div {
+    cursor: pointer;
+    width   : 10px;
+    height  : 50px;
+    background : #ccc;
+    top : 50%;
+    position: relative;
+    margin-top : -25px;
+}
 
 /** Bootstrap stuff **/
 .container-fluid {
@@ -163,11 +177,33 @@ div#help-handle.collapsed {}
 .row-fluid [class*="span"]:first-child {
   margin-left: 0;
 }
+
+.row-fluid .span12 {
+  width: 99%;
+  *width: 99%;
+}
+
+.row-fluid .span11 {
+  width: 91.48936170212765%;
+  *width: 91.43617021276594%;
+}
+
 .row-fluid .span8 {
   width: 65.95744680851064%;
   *width: 65.90425531914893%;
 }
+
+.row-fluid .span7 {
+  width: 57.44680851063829%;
+  *width: 57.39361702127659%;
+}
+
 .row-fluid .span4 {
   width: 31.914893617021278%;
   *width: 31.861702127659576%;
+}
+
+.row-fluid .span1 {
+  width: 6.382978723404255%;
+  *width: 6.329787234042553%;
 }
