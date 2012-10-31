@@ -188,26 +188,9 @@ class WFEditorPlugin extends WFEditor {
             // create display
             $this->display();
 
-            $document = WFDocument::getInstance();
-
-            // set standalone mode (for File Browser etc)
-            if ($document->get('standalone') == 1) {
-                // remove some scripts
-                $document->removeScript('tiny_mce_popup', 'tiny_mce');
-                $document->removeScript('tiny_mce_utils', 'libraries');
-            }
-            
-            // load plugin dialog language file if necessary
-            if ($this->getParam('editor.compress_javascript', 0)) {
-                $file = "/langs/" . $this->getLanguage() . "_dlg.js";
-
-                if (!JFile::exists(WF_EDITOR_PLUGIN . $file)) {
-                    $file = "/langs/en_dlg.js";
-                }
-
-                if (JFile::exists(WF_EDITOR_PLUGIN . $file)) {
-                    $document->addScript(array('plugins/' . $this->getName() . $file), 'tiny_mce');
-                }
+            if (WF_INI_LANG) {
+                // ini language
+                $document->addScript(array('index.php?option=com_jce&view=editor&' . $document->getQueryString(array('task' => 'loadlanguages'))), 'joomla');
             }
 
             // pack assets if required
@@ -232,35 +215,33 @@ class WFEditorPlugin extends WFEditor {
         jimport('joomla.filesystem.folder');
         $document = WFDocument::getInstance();
 
-        $document->addScript(array('tiny_mce_popup'), 'tiny_mce');
-
-
-        if (WF_INI_LANG) {
-            // ini language
-            $document->addScript(array('index.php?option=com_jce&view=editor&' . $document->getQueryString(array('task' => 'loadlanguages'))), 'joomla');
+        if ($document->get('standalone') == 0) {
+            $document->addScript(array('tiny_mce_popup'), 'tiny_mce');
+            $document->addScript(array('tiny_mce_utils'), 'libraries');
         }
 
-        // jquery versions
-        //$jquery = array('jquery-' . WF_JQUERY . '.min.js', 'jquery-ui-' . WF_JQUERYUI . '.custom.min.js');
-
         $document->addScript(array('jquery-' . WF_JQUERY . '.min', 'jquery-ui-' . WF_JQUERYUI . '.custom.min', 'jquery.ui.touch-punch.min'), 'jquery');
-        //$document->addScript('bootstrap.min', 'bootstrap');
 
         $document->addScript(array(
             'html5',
             'select',
             'tips',
-            'tiny_mce_utils',
             'colorpicker',
             'plugin'
         ), 'libraries');
-
-        // get UI Theme
-        //$theme = $this->getParam('editor.dialog_theme', 'jce');
-
-        //$ui = JFolder::files(WF_EDITOR_LIBRARIES . '/css/jquery/' . $theme, '\.css$');
         
-        //$document->addStyleSheet('bootstrap', 'bootstrap');
+        // load plugin dialog language file if necessary
+        if ($this->getParam('editor.compress_javascript', 0)) {
+            $file = "/langs/" . $this->getLanguage() . "_dlg.js";
+
+            if (!JFile::exists(WF_EDITOR_PLUGIN . $file)) {
+                $file = "/langs/en_dlg.js";
+            }
+
+            if (JFile::exists(WF_EDITOR_PLUGIN . $file)) {
+                $document->addScript(array('plugins/' . $this->getName() . $file), 'tiny_mce');
+            }
+        }
 
         $document->addStyleSheet(array(
             'plugin'
