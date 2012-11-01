@@ -207,7 +207,7 @@
                     x = count + limit;
                 }
 
-                if ($(this).hasClass('limit-left-end')) {
+                if ($(this).hasClass('limit-right-end')) {
                     x = count = self._limitend;
                 }
 
