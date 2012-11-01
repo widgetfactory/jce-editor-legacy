@@ -125,7 +125,7 @@ class WFEditor extends JObject {
                 }
             }
             // get the Joomla! area (admin or site)
-            $area = $mainframe->isAdmin() ? 'admin' : 'site';
+            $area = $mainframe->isAdmin() ? 2 : 1;
 
             // load mobile detect class
             include_once(dirname(__FILE__) . '/mobile.php');
@@ -146,7 +146,7 @@ class WFEditor extends JObject {
 
                 // Set area default as 'site,admin'
                 if (!isset($item->area) || empty($item->area)) {
-                    $item->area = 'site,admin';
+                    $item->area = 0;
                 }
                 // set device default as 'desktop,tablet,mobile'
                 if (!isset($item->device) || empty($item->device)) {
