@@ -350,10 +350,10 @@ class WFEditor extends JObject {
         if (file_exists($file)) {
             wfimport('admin.helpers.xml');
 
-            $xml = WFXMLHelper::getXML($file);
+            $xml = WFXMLHelper::load($file);
 
             if ($xml) {
-                $version = WFXMLHelper::getAttribute($xml, 'version');
+                $version = (string) $xml->attributes()->version;
 
                 if ($version == '2.0') {
                     return true;
