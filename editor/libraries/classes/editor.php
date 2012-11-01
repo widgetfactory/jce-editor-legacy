@@ -144,16 +144,12 @@ class WFEditor extends JObject {
                 // check if option is in list
                 $isComponent = in_array($option, explode(',', $item->components));
 
-                // Set area default as 'site,admin'
-                if (!isset($item->area) || empty($item->area)) {
-                    $item->area = 0;
-                }
                 // set device default as 'desktop,tablet,mobile'
                 if (!isset($item->device) || empty($item->device)) {
                     $item->device = 'desktop,tablet,phone';
                 }
 
-                if (in_array($area, explode(',', $item->area))) {
+                if (!isset($item->area) || empty($item->area) || (int) $item->area === $area) {
                     if (in_array($device, explode(',', $item->device))) {
                         // Check user
                         if ($user->id && in_array($user->id, explode(',', $item->users))) {
