@@ -348,9 +348,9 @@ class WFEditor extends JObject {
         $file = JPATH_SITE . '/language/' . $tag . '/' . $tag . '.com_jce.xml';
 
         if (file_exists($file)) {
-            wfimport('admin.helpers.xml');
+            wfimport('admin.classes.xml');
 
-            $xml = WFXMLHelper::load($file);
+            $xml = WFXMLElement::load($file);
 
             if ($xml) {
                 $version = (string) $xml->attributes()->version;
