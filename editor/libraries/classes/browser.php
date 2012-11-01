@@ -70,8 +70,8 @@ class WFFileBrowser extends JObject {
 
         $config = array_merge($default, $config);
 
-        // Call parent
-        parent::__construct($config);
+        
+        $this->setProperties($config);
 
         // Setup XHR callback funtions
         $this->setRequest(array($this, 'getItems'));
