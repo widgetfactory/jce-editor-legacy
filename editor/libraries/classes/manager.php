@@ -40,12 +40,11 @@ class WFMediaManager extends WFEditorPlugin {
             $config['template_path'] = WF_EDITOR_LIBRARIES . '/views/plugin/tmpl';
         }
 
-        //$this->setProperties(array_merge($this->getConfig(), $config));
-        
-        $config = array_merge($this->getConfig(), $config);
-
         // Call parent
         parent::__construct($config);
+        
+        // update properties
+        $this->setProperties($this->getConfig());
 
         // initialize the browser
         $browser = $this->getBrowser();
@@ -95,8 +94,8 @@ class WFMediaManager extends WFEditorPlugin {
      * @return array
      */
     private function getConfig() {
-        $filesystem = $this->getParam('filesystem.name', 'joomla', '', 'string', false);
-        $filetypes = $this->getParam('extensions', $this->get('_filetypes', 'images=jpg,jpeg,png,gif'));
+        $filesystem = $this->getParam('filesystem.name', 'joomla', '', 'string', false);        
+        $filetypes  = $this->getParam('extensions', $this->get('_filetypes', 'images=jpg,jpeg,png,gif'));
 
         $config = array(
             'dir' => $this->getParam('dir', '', '', 'string', false),
