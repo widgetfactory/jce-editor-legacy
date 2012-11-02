@@ -62,7 +62,7 @@ body > #colorpicker {
 
 #colorpicker_tab table {margin: auto;}
 
-#colorpicker_preview_text {position:relative;float:left;height:2em;vertical-align:middle;margin:5px 0 0;}
+#colorpicker_preview_text {position:relative;float:left;height:2em;vertical-align:middle;}
 #colorpicker_preview_text label {margin-right: 5px;vertical-align:middle;}
 #colorpicker_preview_color {
     float: left;
