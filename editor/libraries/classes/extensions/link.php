@@ -105,9 +105,9 @@ class WFLinkExtension extends WFExtension {
         if (isset($items)) {
             foreach ($items as $item) {
                 $array[] = array(
-                    'id' => isset($item['id']) ? WFEditor::xmlEncode($item['id']) : '',
-                    'url' => isset($item['url']) ? WFEditor::xmlEncode($item['url']) : '',
-                    'name' => WFEditor::xmlEncode($item['name']), 'class' => $item['class']
+                    'id' => isset($item['id']) ? self::xmlEncode($item['id']) : '',
+                    'url' => isset($item['url']) ? self::xmlEncode($item['url']) : '',
+                    'name' => self::xmlEncode($item['name']), 'class' => $item['class']
                 );
             }
             $result = array('folders' => $array);
@@ -206,6 +206,16 @@ class WFLinkExtension extends WFExtension {
         return $match ? '&Itemid=' . $match : '';
     }
 
+    /**
+     * XML encode a string.
+     *
+     * @access	public
+     * @param 	string	String to encode
+     * @return 	string	Encoded string
+     */
+    private static function xmlEncode($string) {
+        return str_replace(array('&', '<', '>', "'", '"'), array('&amp;', '&lt;', '&gt;', '&apos;', '&quot;'), $string);
+    }
 }
 
 abstract class WFLinkBrowser extends WFLinkExtension {}
