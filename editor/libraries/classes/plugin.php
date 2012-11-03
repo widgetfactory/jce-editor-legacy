@@ -13,6 +13,13 @@ defined('_JEXEC') or die('RESTRICTED');
 
 wfimport('editor.libraries.classes.editor');
 
+wfimport('editor.libraries.classes.utility');
+wfimport('editor.libraries.classes.token');
+wfimport('editor.libraries.classes.document');
+wfimport('editor.libraries.classes.view');
+wfimport('editor.libraries.classes.tabs');
+wfimport('editor.libraries.classes.request');
+
 /**
  * JCE class
  *
@@ -292,8 +299,9 @@ class WFEditorPlugin extends WFEditor {
             // check existence of plugin directory
             if (is_dir(WF_EDITOR_PLUGINS . '/' . $plugin) || is_dir(JPATH_PLUGINS . '/jce/' . $plugin)) {
                 // check profile	
-                $profile = $this->getProfile();
-                return is_object($profile) && isset($profile->id) && $profile->published = 1 && in_array($plugin, explode(',', $profile->plugins));
+                $profile = $this->getProfile($plugin);
+                //return is_object($profile) && isset($profile->id) && $profile->published = 1 && in_array($plugin, explode(',', $profile->plugins));
+                return is_object($profile) && $profile->id;
             }
         }
 
@@ -415,6 +423,7 @@ class WFEditorPlugin extends WFEditor {
         } else {
             // get all params
             $params = parent::getParams();
+            
             // check plugin param and fallback to editor param
             $param = $params->get($name . '.' . $key, $params->get('editor.' . $key, $fallback, $allowempty), $allowempty);
 
