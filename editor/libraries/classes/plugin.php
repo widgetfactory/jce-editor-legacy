@@ -20,11 +20,6 @@ wfimport('editor.libraries.classes.view');
 wfimport('editor.libraries.classes.tabs');
 wfimport('editor.libraries.classes.request');
 
-// required for some plugins
-if (!defined('DS')) {
-    define('DS', DIRECTORY_SEPARATOR);
-}
-
 /**
  * JCE class
  *
