@@ -13,6 +13,7 @@ defined('_JEXEC') or die('RESTRICTED');
 
 wfimport('editor.libraries.classes.editor');
 wfimport('editor.libraries.classes.utility');
+wfimport('editor.libraries.classes.token');
 wfimport('editor.libraries.classes.document');
 wfimport('editor.libraries.classes.view');
 wfimport('editor.libraries.classes.tabs');
