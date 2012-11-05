@@ -133,8 +133,18 @@ final class WFRequest extends JObject {
             );
 
             if ($json) {
+                if (get_magic_quotes_gpc()) {
+                    $json = stripslashes($json);
+                }
+                
                 $json = json_decode($json);
-                $fn = isset($json->fn) ? $json->fn : JError::raiseError(500, 'Invalid Function Call');
+
+                if (isset($json->fn) === false) {
+                    throw new InvalidArgumentException('Invalid Function Call');
+                }
+
+                $fn = $json->fn;
+
                 $args = isset($json->args) ? $json->args : array();
             } else {
                 $fn = $action;
