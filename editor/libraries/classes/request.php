@@ -110,11 +110,11 @@ final class WFRequest extends JObject {
     public function process($array = false) {
         // Check for request forgeries
         WFToken::checkToken() or die('RESTRICTED ACCESS');
-        
+
         // check referrer       
-        /*if (!$_SERVER['HTTP_REFERER'] || strpos($_SERVER['HTTP_REFERER'], JURI::base()) === false) {
-            throw new InvalidArgumentException('Invalid Referrer');
-        }*/
+        /* if (!$_SERVER['HTTP_REFERER'] || strpos($_SERVER['HTTP_REFERER'], JURI::base()) === false) {
+          throw new InvalidArgumentException('Invalid Referrer');
+          } */
 
         $json = JRequest::getVar('json', '', 'POST', 'STRING', 2);
         $action = JRequest::getWord('action');
@@ -132,9 +132,19 @@ final class WFRequest extends JObject {
                 "error" => null
             );
 
-            if ($json) {
+            if ($json) {                
+                if (get_magic_quotes_gpc()) {
+                    $json = stripslashes($json);
+                }
+                
                 $json = json_decode($json);
-                $fn = isset($json->fn) ? $json->fn : JError::raiseError(500, 'Invalid Function Call');
+
+                if (isset($json->fn) === false) {
+                    throw new InvalidArgumentException('Invalid Function Call');
+                }
+
+                $fn = $json->fn;
+
                 $args = isset($json->args) ? $json->args : array();
             } else {
                 $fn = $action;
@@ -183,7 +193,7 @@ final class WFRequest extends JObject {
             $output = array(
                 "result" => $result
             );
-            
+
             ob_start();
 
             // set output headers
@@ -196,7 +206,7 @@ final class WFRequest extends JObject {
             header("Pragma: no-cache");
 
             echo json_encode($output);
-            
+
             exit(ob_get_clean());
         }
     }
