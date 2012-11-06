@@ -119,8 +119,8 @@
             justifycenter : ['justifycenter_desc', 'JustifyCenter'],
             justifyright : ['justifyright_desc', 'JustifyRight'],
             justifyfull : ['justifyfull_desc', 'JustifyFull'],
-            bullist : ['bullist_desc', 'InsertUnorderedList'],
-            numlist : ['numlist_desc', 'InsertOrderedList'],
+            //bullist : ['bullist_desc', 'InsertUnorderedList'],
+            //numlist : ['numlist_desc', 'InsertOrderedList'],
             outdent : ['outdent_desc', 'Outdent'],
             indent : ['indent_desc', 'Indent'],
             //cut : ['cut_desc', 'Cut'],
@@ -149,7 +149,7 @@
             blockquote : ['blockquote_desc', 'mceBlockQuote']
         },
 
-        stateControls : ['bold', 'italic', 'underline', 'strikethrough', 'bullist', 'numlist', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'sub', 'sup', 'blockquote'],
+        stateControls : ['bold', 'italic', 'underline', 'strikethrough', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'sub', 'sup', 'blockquote'],
 
         init : function(ed, url) {
             var t = this, s, v, o;
