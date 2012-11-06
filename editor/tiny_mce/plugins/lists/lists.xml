@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<install version="2.0" type="plugin" plugin="lists" core="1" editable="1">
+    <name>WF_LISTS_TITLE</name>
+    <version>@@version@@</version>
+    <creationDate>@@date@@</creationDate>
+    <author>Ryan Demmer</author>
+    <authorEmail>@@e-mail@@</authorEmail>
+    <authorUrl>http://www.joomlacontenteditor.net/</authorUrl>
+    <copyright>Ryan Demmer</copyright>
+    <license>@@licence@@</license>
+    <description>WF_LISTS_DESC</description>
+    <icon>numlist,bullist</icon>
+    <params>
+        <param name="number_styles" class="checklist sortable" type="list" multiple="multiple" default="default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman" label="WF_NUMLIST_STYLES" description="WF_NUMLIST_STYLES_DESC">
+            <option value="default">default</option>
+            <option value="lower-alpha">lower-alpha</option>
+            <option value="lower-greek">lower-greek</option>
+            <option value="lower-roman">lower-roman</option>
+            <option value="upper-alpha">upper-alpha</option>
+            <option value="upper-roman">upper-roman</option>
+        </param>
+        <param name="bullet_styles" class="checklist sortable" type="list" multiple="multiple" default="default,circle,disc,square" label="WF_BULLIST_STYLES" description="WF_BULLIST_STYLES_DESC">
+            <option value="default">default</option>
+            <option value="circle">circle</option>
+            <option value="disc">disc</option>
+            <option value="square">square</option>
+        </param>
+    </params>
+    <params group="buttons">
+        <param name="buttons" class="checklist buttonlist" type="list" multiple="multiple" default="numlist,bullist" label="WF_PARAM_BUTTONS" description="WF_PARAM_BUTTONS_DESC">
+            <option value="numlist">WF_NUMLIST_TITLE</option>
+            <option value="bullist">WF_BULLIST_TITLE</option>
+        </param>
+    </params>
+    <help></help>
+    <languages></languages>
+</install>
