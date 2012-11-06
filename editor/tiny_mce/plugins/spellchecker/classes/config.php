@@ -1,9 +1,8 @@
 <?php
 /**
-* $Id: config.php 221 2011-06-11 17:30:33Z happy_noodle_boy $
 * @package      JCE
 * @copyright    Copyright (C) 2005 - 2009 Ryan Demmer. All rights reserved.
-* @author		Ryan Demmer
+* @author	Ryan Demmer
 * @license      GNU/GPL
 * JCE is free software. This version may have been modified pursuant
 * to the GNU General Public License, and as distributed it includes or
@@ -14,9 +13,38 @@ class WFSpellcheckerPluginConfig {
 	public static function getConfig( &$settings ){
 
 		$wf = WFEditor::getInstance();
-		
-		$settings['spellchecker_languages'] = '+' . $wf->getParam('spellchecker.languages', 'English=en', '' );
-		$settings['spellchecker_engine'] 	= $wf->getParam('spellchecker.engine', 'googlespell', 'googlespell' );
+                
+                $engine = $wf->getParam('spellchecker.engine', 'browser', 'browser' );
+                
+                switch($engine) {
+                    case 'browser':
+                        $languages = '';
+                        
+                        break;
+                    case 'googlespell':
+                        $languages = $wf->getParam('spellchecker.googlespell_languages', '');
+                        
+                        // use a default
+                        if (!$languages) {
+                            $languages = $wf->getParam('spellchecker.languages', 'English=en', '' );
+                        }
+                        
+                        break;
+                    default:
+                        $languages = $wf->getParam('spellchecker.languages', 'English=en', '' );
+                        break;
+                }
+                
+                // cast as array
+                if ($languages) {
+                    $languages = (array) $languages;
+                }
+
+                if (!empty($languages)) {
+                    $settings['spellchecker_languages'] = '+' . implode(',', $languages);
+                }
+
+		$settings['spellchecker_engine'] 	= $engine;
 		$settings['spellchecker_rpc_url'] 	= JURI::base(true).'/index.php?option=com_jce&view=editor&layout=plugin&plugin=spellchecker&component_id=' . $settings['component_id'];
 	}
 }

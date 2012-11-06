@@ -27,12 +27,19 @@
 
             t.url = url;
             t.editor = ed;
-            t.rpcUrl = ed.getParam("spellchecker_rpc_url", "{backend}");
+            t.rpcUrl = ed.getParam("spellchecker_rpc_url", "");
+            
+            t.native_spellchecker = (t.rpcUrl == '' || ed.getParam("spellchecker_engine", "browser") == 'browser'); 
 
-            if (t.rpcUrl == '{backend}') {
-                // Sniff if the browser supports native spellchecking (Don't know of a better way)
-                if (tinymce.isIE)
-                    return;
+            if (t.native_spellchecker) {
+                // < IE9 does not have a native spellchecker
+                if (tinymce.isIE && /Trident\/6\.0/.test(navigator.userAgent)) {
+                    if (t.rpcUrl == '') {
+                        return;
+                    }
+                    
+                    t.native_spellchecker = false;
+                }
 
                 t.hasSupport = true;
 
@@ -45,7 +52,7 @@
 
             // Register commands
             ed.addCommand('mceSpellCheck', function() {
-                if (t.rpcUrl == '{backend}') {
+                if (t.native_spellchecker) {
                     // Enable/disable native spellchecker
                     t.editor.getBody().spellcheck = t.active = !t.active;
                     return;
@@ -114,7 +121,7 @@
 
             if (n == 'spellchecker') {
                 // Use basic button if we use the native spellchecker
-                if (t.rpcUrl == '{backend}') {
+                if (t.native_spellchecker) {
                     // Create simple toggle button if we have native support
                     if (t.hasSupport)
                         c = cm.createButton(n, {
