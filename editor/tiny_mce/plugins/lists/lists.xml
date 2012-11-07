@@ -10,20 +10,20 @@
     <license>@@licence@@</license>
     <description>WF_LISTS_DESC</description>
     <icon>numlist,bullist</icon>
-    <params>
+    <params group="standard">
         <param name="number_styles" class="checklist sortable" type="list" multiple="multiple" default="default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman" label="WF_NUMLIST_STYLES" description="WF_NUMLIST_STYLES_DESC">
-            <option value="default">default</option>
-            <option value="lower-alpha">lower-alpha</option>
-            <option value="lower-greek">lower-greek</option>
-            <option value="lower-roman">lower-roman</option>
-            <option value="upper-alpha">upper-alpha</option>
-            <option value="upper-roman">upper-roman</option>
+            <option value="default">WF_OPTION_DEFAULT</option>
+            <option value="lower-alpha">WF_LISTS_LOWER_ALPHA</option>
+            <option value="lower-greek">WF_LISTS_LOWER_GREEK</option>
+            <option value="lower-roman">WF_LISTS_LOWER_ROMAN</option>
+            <option value="upper-alpha">WF_LISTS_UPPER_ALPHA</option>
+            <option value="upper-roman">WF_LISTS_UPPER_ROMAN</option>
         </param>
         <param name="bullet_styles" class="checklist sortable" type="list" multiple="multiple" default="default,circle,disc,square" label="WF_BULLIST_STYLES" description="WF_BULLIST_STYLES_DESC">
-            <option value="default">default</option>
-            <option value="circle">circle</option>
-            <option value="disc">disc</option>
-            <option value="square">square</option>
+            <option value="default">WF_OPTION_DEFAULT</option>
+            <option value="circle">WF_LISTS_CIRCLE</option>
+            <option value="disc">WF_LISTS_DISC</option>
+            <option value="square">WF_LISTS_SQUARE</option>
         </param>
     </params>
     <params group="buttons">
