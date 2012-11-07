@@ -55,7 +55,7 @@
 
             });
 
-            if (n.nodeName == 'IMG') {
+            if (n && n.nodeName == 'IMG') {
                 // set button
                 $('#insert').button('option', 'label', tinyMCEPopup.getLang('update', 'Update', true));
 
@@ -397,7 +397,7 @@
         setMargins : function(init) {
             var x = 0, s = false;
 
-            var v 		= $('#margin_top').val();
+            var v 	= $('#margin_top').val();
             var $elms 	= $('#margin_right, #margin_bottom, #margin_left');
 
             if (init) {
