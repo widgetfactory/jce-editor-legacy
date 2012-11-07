@@ -299,7 +299,7 @@
                 if ($('#' + n).is(':checkbox')) {
                     $('#' + n).prop('checked', parseFloat(v));
                 } else {
-                    $('#' + n).val(v).change();
+                    $('#' + n).val(v);
                 }
             }
         },
