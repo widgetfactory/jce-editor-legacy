@@ -115,6 +115,9 @@ final class WFRequest extends JObject {
         /*if (!$_SERVER['HTTP_REFERER'] || strpos($_SERVER['HTTP_REFERER'], JURI::base()) === false) {
             throw new InvalidArgumentException('Invalid Referrer');
         }*/
+        
+        // clean buffer
+        ob_end_clean();
 
         $json = JRequest::getVar('json', '', 'POST', 'STRING', 2);
         $action = JRequest::getWord('action');
