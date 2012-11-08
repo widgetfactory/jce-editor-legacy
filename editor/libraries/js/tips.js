@@ -17,7 +17,7 @@
  */
 (function($){
 	
-    $.support.canvas = !!document.createElement('canvas').getContext;
+    $.support.canvas = false;//!!document.createElement('canvas').getContext;
     
     // http://www.abeautifulsite.net/blog/2011/11/detecting-mobile-devices-with-javascript/
     var isMobile = {
@@ -131,7 +131,7 @@
                     '<div class="jce-tooltip-content"></div>' +
                     '</div>').appendTo(this.options.parent);
 				
-                if ($.support.canvas) {
+                /*if ($.support.canvas) {
                     var canvas = document.createElement('canvas');
                     $(canvas).attr({
                         'width' : 14, 
@@ -140,6 +140,12 @@
                     $('#jce-tooltip').append(canvas);					
                 } else {
                     $('#jce-tooltip').append('<div class="jce-tooltip-pointer"><div class="jce-tooltip-pointer-inner"></div></div>');
+                }*/
+                
+                $('#jce-tooltip').append('<div class="jce-tooltip-pointer"></div>');
+                
+                if ($.support.leadingWhitespace === false) {
+                    $('#jce-tooltip div.jce-tooltip-pointer').append('<div class="jce-tooltip-pointer-inner"></div>');
                 }
 								
                 $('span.ui-icon-close', $tips).click(function() {
@@ -199,9 +205,9 @@
             // Set tooltip html
             $('div.jce-tooltip-content', $tips).html(h);
 	
-            $('div.jce-tooltip-pointer-down-inner', $tips).css({
+            /*$('div.jce-tooltip-pointer-down-inner', $tips).css({
                 'border-top-color' : $tips.css('background-color')
-            });
+            });*/
 
             // Set visible
             $tips.show().attr('aria-hidden', 'false');
@@ -347,7 +353,7 @@
             });
             
             // get window dimensions
-            var pos = {}, ww = Math.round($(window).width()), wh = Math.round($(window).height()), pw = $pointer.width(), ph = $pointer.height();
+            var pos = {}, ww = Math.round($(window).width()), wh = Math.round($(window).height()), pw = 10, ph = 10;
 
             $tips.position({
                 my  : my,
@@ -400,9 +406,9 @@
             $pointer.removeClass('top right bottom left center').addClass(position);
             
             // create pointer    
-            if ($.support.canvas) {
+            /*if ($.support.canvas) {
                 this._createPointer(position);
-            }
+            }*/
         },
 		
         _createPointer : function(position) {
