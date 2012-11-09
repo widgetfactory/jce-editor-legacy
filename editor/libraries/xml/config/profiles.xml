@@ -79,7 +79,7 @@
             <option value="top">WF_LABEL_TOP</option>
             <option value="bottom">WF_LABEL_BOTTOM</option>
         </param>
-        <param name="folder_tree" type="list" default="bottom" label="WF_PARAM_FOLDER_TREE" description="WF_PARAM_FOLDER_TREE_DESC">
+        <param name="folder_tree" type="list" default="1" label="WF_PARAM_FOLDER_TREE" description="WF_PARAM_FOLDER_TREE_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
