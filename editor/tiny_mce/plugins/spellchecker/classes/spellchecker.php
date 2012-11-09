@@ -27,7 +27,7 @@ class WFSpellCheckerPlugin extends WFEditorPlugin {
         $engine = $this->getEngine();
         
         if (!$engine) {
-            $this->throwError('No Spellchecker Engine available');
+            self::error('No Spellchecker Engine available');
         }
 
         if (isset($config['general.remote_rpc_url'])) {
@@ -65,14 +65,14 @@ class WFSpellCheckerPlugin extends WFEditorPlugin {
         return $instance;
     }
 
-    function getConfig() {
+    private function getConfig() {
         static $config;
 
         if (!is_array($config)) {
             $params = $this->getParams();
 
             $config = array(
-                'general.engine' => $params->get('spellchecker.engine', 'browser'),
+                'general.engine' => $params->get('spellchecker.engine', 'googlespell'),
                 // PSpell settings
                 'PSpell.mode' => $params->get('spellchecker.pspell_mode', 'PSPELL_FAST'),
                 'PSpell.spelling' => $params->get('spellchecker.pspell_spelling', ''),
@@ -84,19 +84,24 @@ class WFSpellCheckerPlugin extends WFEditorPlugin {
                 'PSpellShell.aspell' => $params->get('spellchecker.pspellshell_aspell', '/usr/bin/aspell'),
                 'PSpellShell.tmp' => $params->get('spellchecker.pspellshell_tmp', '/tmp')
             );
+            
+            // default to googlespell if browser
+            if ($config['general.engine'] == 'browser') {
+                $config['general.engine'] = 'googlespell';
+            }
         }
 
         return $config;
     }
 
-    function &getEngine() {
+    private function &getEngine() {
         static $engine;
 
         $config = $this->getConfig();
 
         if (!is_object($engine)) {
             $classname = $config['general.engine'];
-            
+
             $file = dirname(__FILE__) . '/' . $classname . ".php";
             
             if (is_file($file)) {
@@ -144,6 +149,10 @@ class WFSpellCheckerPlugin extends WFEditorPlugin {
 
         die();
     }
+    
+    private static function error($str) {
+        die('{"result":null,"id":null,"error":{"errstr":"' . addslashes($str) . '","errfile":"","errline":null,"errcontext":"","level":"FATAL"}}');
+    }
 
 }
 
@@ -158,7 +167,7 @@ class SpellChecker {
      *
      * @param $config Configuration name/value array.
      */
-    function SpellChecker(&$config) {
+    public function SpellChecker(&$config) {
         $this->_config = $config;
     }
 
@@ -168,7 +177,7 @@ class SpellChecker {
      * @param $args.. Arguments.
      * @return {Array} Array of all input arguments. 
      */
-    function &loopback(/* args.. */) {
+    protected function &loopback(/* args.. */) {
         return func_get_args();
     }
 
@@ -179,7 +188,7 @@ class SpellChecker {
      * @param {Array} $words Array of words to spellcheck.
      * @return {Array} Array of misspelled words.
      */
-    function &checkWords($lang, $words) {
+    public function &checkWords($lang, $words) {
         return $words;
     }
 
@@ -190,7 +199,7 @@ class SpellChecker {
      * @param {String} $word Specific word to get suggestions for.
      * @return {Array} Array of suggestions for the specified word.
      */
-    function &getSuggestions($lang, $word) {
+    public function &getSuggestions($lang, $word) {
         return array();
     }
 
@@ -199,7 +208,7 @@ class SpellChecker {
      *
      * @param {String} $str Message to send back to user.
      */
-    function throwError($str) {
+    protected function throwError($str) {
         die('{"result":null,"id":null,"error":{"errstr":"' . addslashes($str) . '","errfile":"","errline":null,"errcontext":"","level":"FATAL"}}');
     }
 
