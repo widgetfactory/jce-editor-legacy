@@ -19,7 +19,7 @@
             <option value="enchantspell">WF_SPELLCHECKER_PARAM_ENCHANT</option>
         </param>
         
-        <param name="googlespell_languages" type="list" class="checklist sortable" multiple="multiple" default="English=en" label="WF_SPELLCHECKER_PARAM_LANGUAGES" description="WF_SPELLCHECKER_PARAM_LANGUAGES_DESC" parent="engine[googlespell]" >
+        <param name="googlespell_languages" type="list" class="checklist sortable" multiple="multiple" default="English=en" label="WF_SPELLCHECKER_PARAM_LANGUAGES" description="WF_SPELLCHECKER_PARAM_GOOGLESPELL_LANGUAGES_DESC" parent="engine[googlespell]" >
             <option value="English=en">English</option>
             <option value="Danish=da">Danish</option>
             <option value="Dutch=nl">Dutch</option>
