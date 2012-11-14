@@ -847,7 +847,7 @@ class WFFileBrowser extends WFBrowserExtension {
         }
 
         // xss check
-        $xss_check = JFile::read($file['tmp_name'], false, 1024);
+        $xss_check = JFile::read($file['tmp_name'], false, 256);
 
         // check for hidden php tags
         if (strstr($xss_check, '<?php')) {
