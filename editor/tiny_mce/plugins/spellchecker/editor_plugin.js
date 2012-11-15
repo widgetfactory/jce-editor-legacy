@@ -31,9 +31,10 @@
             
             t.native_spellchecker = (t.rpcUrl == '' || ed.getParam("spellchecker_engine", "browser") == 'browser'); 
 
-            if (t.native_spellchecker) {
+            if (t.native_spellchecker) {                
                 // < IE9 does not have a native spellchecker
-                if (tinymce.isIE && /Trident\/6\.0/.test(navigator.userAgent)) {
+                if (tinymce.isIE && /Trident\/6\.0/.test(navigator.userAgent) === false) {
+                    // no url set so no spellchecker
                     if (t.rpcUrl == '') {
                         return;
                     }
