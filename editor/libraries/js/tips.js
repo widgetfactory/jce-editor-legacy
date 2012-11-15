@@ -124,23 +124,12 @@
 	 	*/
         _createTips: function() {
             var self = this, $tips = $('#jce-tooltip');
-			
+	
             if (!$tips.get(0)) {				
-                $tips = $('<div id="jce-tooltip" class="jce-tooltip" role="tooltip" aria-hidden="true">' +
+                $tips = $('<div id="jce-tooltip" role="tooltip" aria-hidden="true">' +
                     '<span class="ui-icon ui-icon-close" title="Close"></span>' +	
                     '<div class="jce-tooltip-content"></div>' +
                     '</div>').appendTo(this.options.parent);
-				
-                /*if ($.support.canvas) {
-                    var canvas = document.createElement('canvas');
-                    $(canvas).attr({
-                        'width' : 14, 
-                        'height' : 14
-                    }).addClass('jce-tooltip-pointer');
-                    $('#jce-tooltip').append(canvas);					
-                } else {
-                    $('#jce-tooltip').append('<div class="jce-tooltip-pointer"><div class="jce-tooltip-pointer-inner"></div></div>');
-                }*/
                 
                 $('#jce-tooltip').append('<div class="jce-tooltip-pointer"></div>');
                 
@@ -157,7 +146,7 @@
                 }
             }
             
-            $tips.addClass(this.options.className);
+            $tips.removeAttr('class').addClass('jce-tooltip').addClass(this.options.className);
         },
 		
         /**
