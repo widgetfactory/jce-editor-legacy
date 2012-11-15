@@ -13,7 +13,8 @@ WFAggregator.add('youtube', {
 	 */
     params 	: {
         width : 425,
-        height: 350
+        height: 350,
+        embed : true
     },
 
     props : {
@@ -29,6 +30,8 @@ WFAggregator.add('youtube', {
     },
 
     setup 	: function() {
+        $('#youtube_embed').toggle(this.params.embed);
+        
         $('#youtube_privacy').click( function() {
             if ($(this).is(':checked')) {
                 $('#youtube_embed').attr('checked', true).attr('disabled', true);
@@ -36,6 +39,7 @@ WFAggregator.add('youtube', {
                 $('#youtube_embed').attr('disabled', false);
             }
         });
+        
         $('#youtube_embed').click( function() {
             if (!$(this).is(':checked')) {
                 $('#youtube_privacy').attr('checked', false);
@@ -49,7 +53,7 @@ WFAggregator.add('youtube', {
 	 * Get the Media type
 	 */
     getType : function() {
-        return $('#youtube_embed').is(':checked') ? 'flash' : 'iframe';
+        return $('#youtube_embed:visible').is(':checked') ? 'flash' : 'iframe';
     },
     /**
 	 * Check whether a media type is supported
