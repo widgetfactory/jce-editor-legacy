@@ -73,7 +73,7 @@ class WFExtension extends JObject {
         }
 
         // core extensions path
-        $path = $config['base_path'] . '/extensions/';
+        $path = $config['base_path'] . '/extensions';
 
         // cast as array
         $types = (array) $types;
@@ -114,7 +114,7 @@ class WFExtension extends JObject {
         }
 
         // set default prefix
-        if (!array_key_exists('prefix', $config)) {
+        /*if (!array_key_exists('prefix', $config)) {
             $config['prefix'] = 'jce-';
         }
 
@@ -137,7 +137,7 @@ class WFExtension extends JObject {
 
                 $extensions[] = $object;
             }
-        }
+        }*/
 
         return $extensions;
     }
@@ -160,9 +160,9 @@ class WFExtension extends JObject {
         }
 
         // set default prefix
-        if (!array_key_exists('prefix', $config)) {
+        /*if (!array_key_exists('prefix', $config)) {
             $config['prefix'] = 'jce-';
-        }
+        }*/
 
         // sanitize $type
         $type = preg_replace('#[^A-Z0-9\._-]#i', '', $type);
@@ -182,9 +182,9 @@ class WFExtension extends JObject {
 
         if (!empty($extensions)) {
             foreach ($extensions as $item) {
-                $name = $item->extension;
+                $name   = $item->extension;
                 $folder = $item->folder;
-                $path = $item->path;
+                $path   = $item->path;
 
                 $root = $path . '/' . $name . '.php';
 
@@ -193,13 +193,14 @@ class WFExtension extends JObject {
                     require_once($root);
 
                     // Load Extension language file
-                    $language->load('plg_' . $folder . '_' . $name, JPATH_SITE);
+                    $language->load('com_jce_' . $type . '_' . $name, JPATH_SITE);
 
                     // remove prefix
-                    $folder = str_replace($config['prefix'], '', $folder);
+                    //$folder = str_replace($config['prefix'], '', $folder);
 
                     // Return array of extension names
-                    $result[$folder] = $name;
+
+                    $result[$type][] = $name;
 
                     // if we only want a named extension
                     if ($extension && $extension == $name) {
@@ -207,6 +208,11 @@ class WFExtension extends JObject {
                     }
                 }
             }
+        }
+        
+        // only return extension types requested
+        if ($type) {
+            return $result[$type];
         }
 
         // Return array or extension name
