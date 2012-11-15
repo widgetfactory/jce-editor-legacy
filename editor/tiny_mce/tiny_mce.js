@@ -3146,7 +3146,7 @@ tinymce.html.Styles = function(settings, schema) {
 				value = name in fillAttrsMap ? name : decode(value || val2 || val3 || ''); // Handle boolean attribute than value attribute
 
 				// Validate name and value
-				if (validate && !isInternalElement && name.indexOf('data-mce-') !== 0) {
+				if (validate && !isInternalElement && name.indexOf('data-') !== 0) {
 					attrRule = validAttributesMap[name];
 
 					// Find rule by pattern matching
@@ -13605,7 +13605,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 						height : h
 					});
 
-					h = (o.iframeHeight || h) + (typeof(h) == 'number' ? (o.deltaHeight || 0) : '');                                        
+					h = (o.iframeHeight || h) + (typeof(h) == 'number' ? (o.deltaHeight || 0) : '');
 					if (h < mh)
 						h = mh;
 				} else {
@@ -13700,7 +13700,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 				// We need to write the contents here in IE since multiple writes messes up refresh button and back button
 				u = 'javascript:(function(){document.open();document.domain="' + document.domain + '";var ed = window.parent.tinyMCE.get("' + t.id + '");document.write(ed.iframeHTML);document.close();ed.initContentBody();})()';
 			}
-                        
+
 			// Create iframe
 			// TODO: ACC add the appropriate description on this.
 			n = DOM.add(o.iframeContainer, 'iframe', { 
@@ -14299,10 +14299,7 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 			// We must save before we hide so Safari doesn't crash
 			self.save();
 
-			// defer the call to hide to prevent an IE9 crash #4921
-			setTimeout(function() {
-				DOM.hide(self.getContainer());
-			}, 1);
+			DOM.hide(self.getContainer());
 			DOM.setStyle(self.id, 'display', self.orgDisplay);
 		},
 
@@ -14579,13 +14576,26 @@ tinymce.create('tinymce.ui.Toolbar:tinymce.ui.Container', {
 
 			self.onVisualAid.dispatch(self, elm, self.hasVisual);
 		},
-
+                
+                /**
+		 * Removes the editor from the dom and tinymce collection.
+		 *
+		 * @method remove
+		 */
 		remove : function() {
-			var self = this, elm = self.getContainer();
+			var self = this, elm = self.getContainer(), doc = self.getDoc();
 
 			if (!self.removed) {
 				self.removed = 1; // Cancels post remove event execution
-				self.hide();
+
+				// Fixed bug where IE has a blinking cursor left from the editor
+				if (isIE && doc)
+					doc.execCommand('SelectAll');
+
+				// We must save before we hide so Safari doesn't crash
+				self.save();
+
+				DOM.setStyle(self.id, 'display', self.orgDisplay);
 
 				// Don't clear the window or document if content editable
 				// is enabled since other instances might still be present
