@@ -174,3 +174,7 @@ label.hasTip, span.hasTip, label.hastip, span.hastip, label.tooltip, span.toolti
     bottom: -8px;
     right: -3px;
 }
+
+#jce-tooltip.wf-colorpicker {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
