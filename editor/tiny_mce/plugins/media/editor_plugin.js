@@ -10,6 +10,10 @@
     var Node = tinymce.html.Node;
 
     var Styles = new tinymce.html.Styles();
+    
+    var validChildren = '#|a|abbr|area|address|article|aside|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|' +
+    'figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|' +
+    'p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var';
 
     function toArray(obj) {
         var undef, out, i;
@@ -187,11 +191,16 @@
 
             ed.onPreInit.add( function() {
                 var invalid = ed.settings.invalid_elements;
-                
-                if (ed.settings.schema != 'html5') {
+
+                if (ed.settings.schema === 'html5') {
+                    // add valid children
+                    ed.schema.addValidChildren('+object[video|audio|' + validChildren + ']');
+                    ed.schema.addValidChildren('+audio[' + validChildren + ']');
+                    ed.schema.addValidChildren('+video[' + validChildren + ']'); 
+                } else {
                     ed.schema.addValidElements('video[src|autobuffer|autoplay|loop|controls|width|height|poster|*],audio[src|autobuffer|autoplay|loop|controls|*],source[src|type|media|*],embed[src|type|width|height|*]');
                 }
-                
+
                 // iframes
                 ed.schema.addValidElements('iframe[longdesc|name|src|frameborder|marginwidth|marginheight|scrolling|align|width|height|allowtransparency|*]');
 
@@ -202,21 +211,27 @@
 
                 // Convert video elements to image placeholder
                 ed.parser.addNodeFilter('object,embed,video,audio,script,iframe', function(nodes) {
-                    for (var i = 0, len = nodes.length; i < len; i++) {                        
+                    var i = nodes.length, node;
+
+                    while (i--) {
+                        node = nodes[i];
+                        
                         // if valid node (validate == false)
-                        if (tinymce.inArray(invalid, nodes[i].name) == -1) {
-                            self.toImage(nodes[i]);
+                        if (tinymce.inArray(invalid, node.name) == -1) {
+                            self.toImage(node);
                         // remove node
                         } else {
-                            nodes[i].remove();
+                            nodes.remove();
                         }
                     }
                 });
 
                 // Convert image placeholders to video elements
                 ed.serializer.addNodeFilter('img', function(nodes, name, args) {
-                    for (var i = 0, len = nodes.length; i < len; i++) {
-                        var node = nodes[i];
+                    var i = nodes.length, node;
+
+                    while (i--) {
+                        node = nodes[i];
                         if (/mceItem(Flash|ShockWave|WindowsMedia|QuickTime|RealMedia|DivX|Silverlight|Audio|Video|Generic|Embed|Iframe)/.test(node.attr('class') || '')) {
                             self.restoreElement(node, args);
                         }
@@ -488,10 +503,9 @@
 
                 // remove nested children
                 each(['audio', 'embed', 'object', 'video', 'iframe'], function(el) {
-                    each(n.getAll(el), function(node) {
+                    each(n.getAll(el), function(node) {                        
                         node.remove();
                     });
-
                 });
 
                 if (n.attr('classid')) {
