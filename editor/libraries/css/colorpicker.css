@@ -46,6 +46,12 @@ body > #colorpicker {
     margin : 3px 0 0 10px;
 }
 
+#colorpicker_color {
+    margin: 0;
+    padding: 2px;
+    width: 60px;
+}
+
 #colorpicker #colorpicker_tabs div > div.tab-pane {
     height : 200px;
 }
