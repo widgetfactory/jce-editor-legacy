@@ -50,6 +50,9 @@ body > #colorpicker {
     margin: 0;
     padding: 2px;
     width: 60px;
+    
+    margin: 5px 0;
+    min-height: 18px;
 }
 
 #colorpicker #colorpicker_tabs div > div.tab-pane {
