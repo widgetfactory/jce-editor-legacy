@@ -103,7 +103,7 @@ var WFPopups = WFExtensions.add('Popups', {
 	 * Get the assigned popup if any from the selected node
 	 * @param {Object} n Anchor Element / Node
 	 */
-    getPopup : function(n) {
+    getPopup : function(n, index) {
         var self = this, ed = tinyMCEPopup.editor, popup, popups = this.getPopups();
 
         if(n.nodeName != 'A') {
@@ -120,7 +120,7 @@ var WFPopups = WFExtensions.add('Popups', {
             // Select popup in list
             this.selectPopup(this.popup);
             // Process attributes
-            return this.getAttributes(n);
+            return this.getAttributes(n, index);
         }
 
         return '';
@@ -228,7 +228,7 @@ var WFPopups = WFExtensions.add('Popups', {
 	 * Apply currently selected popup attributes to link element
 	 * @param {Object} n Link element / node
 	 */
-    getAttributes : function(n) {
+    getAttributes : function(n, index) {
         var ed = tinyMCEPopup.editor, k, v, at, data;
 
         if(n.nodeName != 'A') {
@@ -236,7 +236,7 @@ var WFPopups = WFExtensions.add('Popups', {
         }
 
         if(this.isPopup(n)) {
-            data = this._call('getAttributes', n);
+            data = this._call('getAttributes', [n, index]);
         }
 
         return data;

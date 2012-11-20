@@ -50,7 +50,8 @@ class WFPopupsExtension_Jcemediabox extends JObject
 	{
 		return array(
                     'width'   => 600,
-                    'album'   => '#jcemediabox_popup_group'
+                    'album'   => '#jcemediabox_popup_group',
+                    'multiple'=> '#jcemediabox_popup_title,#jcemediabox_popup_caption'
 		);
 	}
 	
