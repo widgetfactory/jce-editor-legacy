@@ -864,7 +864,7 @@ class WFFileBrowser extends JObject {
         }
 
         // xss check
-        $xss_check = JFile::read($file['tmp_name'], false, 1024);
+        $xss_check = JFile::read($file['tmp_name'], false, 256);
 
         // check for hidden php tags
         if (strstr($xss_check, '<?php')) {
@@ -884,7 +884,7 @@ class WFFileBrowser extends JObject {
         }
 
         // check for html tags (skip some files)
-        if (!preg_match('#\.(txt|htm|html|xml|kml)$#i', $file['name'])) {
+        if (preg_match('#\.(txt|htm|html|xml|kml|svg)$#i', $file['name'])) {
 
             $tags = array('abbr', 'acronym', 'address', 'applet', 'area', 'audioscope', 'base', 'basefont', 'bdo', 'bgsound', 'big', 'blackface', 'blink', 'blockquote', 'body', 'bq', 'br', 'button', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'comment', 'custom', 'dd', 'del', 'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'fn', 'font', 'form', 'frame', 'frameset', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'hr', 'html', 'iframe', 'ilayer', 'img', 'input', 'ins', 'isindex', 'keygen', 'kbd', 'label', 'layer', 'legend', 'li', 'limittext', 'link', 'listing', 'map', 'marquee', 'menu', 'meta', 'multicol', 'nobr', 'noembed', 'noframes', 'noscript', 'nosmartquotes', 'object', 'ol', 'optgroup', 'option', 'param', 'plaintext', 'pre', 'rt', 'ruby', 's', 'samp', 'script', 'select', 'server', 'shadow', 'sidebar', 'small', 'spacer', 'span', 'strike', 'strong', 'style', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'title', 'tr', 'tt', 'ul', 'var', 'wbr', 'xml', 'xmp', '!DOCTYPE', '!--');
 
