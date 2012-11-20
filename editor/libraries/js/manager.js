@@ -162,7 +162,7 @@
                 e.preventDefault();
             });
 
-            // add to browser list
+            // update browser list on scroll
             $('#browser-list').append(list).bind('scroll.browser-list', function(e) {
                 self._updateList();
             });
@@ -2095,9 +2095,12 @@
             });
 
             if (items.length) {
-                var pos = $(items[0]).position();
+                //var pos = $(items[0]).position();
+                
+                var top = $(items).get(0).offsetTop - 2;
+                
                 $(this.options.dialog.list).animate({
-                    scrollTop : pos.top
+                    scrollTop : Math.round(top)
                 }, 1500);
             }
 
