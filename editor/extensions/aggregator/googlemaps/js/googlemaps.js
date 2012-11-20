@@ -37,7 +37,7 @@ WFAggregator.add('googlemaps', {
             v = v.src || v.data || '';
         }
 
-        if (/maps\.google\./.test(v)) {
+        if (/maps\.google\./i.test(v)) {
             return 'googlemaps';
         }
 
@@ -80,11 +80,6 @@ WFAggregator.add('googlemaps', {
             src : src
         }) || {};
 
-        $.each(data, function(k, v) {
-            if (k == 'src') {
-                return;
-            }
-        });
         $.extend(args, {
             'src'   : data.src || src,
             'width' : this.params.width,
