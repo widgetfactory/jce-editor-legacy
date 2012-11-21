@@ -121,45 +121,47 @@ class WFLinkBrowser extends WFBrowserExtension {
         $user = JFactory::getUser();
         $wf = WFEditorPlugin::getInstance();
 
-        $query = 'SELECT id AS slug, id AS id, title, alias, access';
-
-        if ($wf->getParam('category_alias', 1) == 1) {
-            $dbquery = $db->getQuery(true);
-
-            if (is_object($dbquery) && method_exists($dbquery, 'charLength')) {
-                //sqlsrv changes
-                $case_when = ' CASE WHEN ';
-                $case_when .= $dbquery->charLength('alias');
-                $case_when .= ' THEN ';
-                $a_id = $dbquery->castAsChar('id');
-                $case_when .= $dbquery->concatenate(array($a_id, 'alias'), ':');
-                $case_when .= ' ELSE ';
-                $case_when .= $a_id . ' END as slug';
-            } else {
-                $case_when = ' CASE WHEN CHAR_LENGTH(alias) THEN CONCAT_WS(":", id, alias) ELSE id END as slug';
-            }
-
-            $query .= ',' . $case_when;
-        }
+        $query = $db->getQuery(true);
+        
+        $where = array();
 
         if (method_exists('JUser', 'getAuthorisedViewLevels')) {
-            $where = ' WHERE parent_id = ' . (int) $parent;
-            $where .= ' AND extension = ' . $db->Quote($section);
-            $where .= ' AND access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')';
+            $where[] = 'parent_id = ' . (int) $parent;
+            $where[] = 'extension = ' . $db->Quote($section);
+            $where[] = 'access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')';
 
             if (!$wf->checkAccess('static', 1)) {
-                $where .= ' AND path != ' . $db->Quote('uncategorised');
+                $where[] = 'path != ' . $db->Quote('uncategorised');
             }
         } else {
-            $where = ' WHERE section = ' . $db->Quote($section);
-            $where .= ' AND access <= ' . (int) $user->get('aid');
+            $where[] = 'section = ' . $db->Quote($section);
+            $where[] = 'access <= ' . (int) $user->get('aid');
         }
-
-        $query .= ' FROM #__categories'
-                . $where
-                . ' AND published = 1'
-                . ' ORDER BY title'
-        ;
+        
+        if ($wf->getParam('category_alias', 1) == 1) {
+            if (is_object($query)) {
+                //sqlsrv changes
+                $case = ' CASE WHEN ';
+                $case .= $query->charLength('alias');
+                $case .= ' THEN ';
+                $a_id  = $query->castAsChar('id');
+                $case .= $query->concatenate(array($a_id, 'alias'), ':');
+                $case .= ' ELSE ';
+                $case .= $a_id . ' END as slug';
+            } else {
+                $case .= ', CASE WHEN CHAR_LENGTH(alias) THEN CONCAT_WS(":", id, alias) ELSE id END as slug';
+            }
+        }
+        
+        if (is_object($query)) {
+            $where[] = 'published = 1';
+            $query->select('id AS slug, id AS id, title, alias, access, ' . $case)->from('#__categories')->where($where)->order('title');
+        } else {
+            $query  = 'SELECT id AS slug, id AS id, title, alias, access' . $case;
+            $query .= ' FROM #__categories';
+            $query .= ' WHERE ' . implode(' AND ', $where);
+            $query .= ' ORDER BY title';
+        }
         $db->setQuery($query);
 
         return $db->loadObjectList();
@@ -178,7 +180,7 @@ class WFLinkBrowser extends WFBrowserExtension {
 
         require_once(JPATH_SITE . '/includes/application.php');
 
-        $tag = WF_JOOMLA15 ? 'componentid' : 'component_id';
+        $tag = JPATH_PLATFORM ? 'component_id' : 'componentid';
 
         $component = JComponentHelper::getComponent($component);
         $menu = JSite::getMenu();
