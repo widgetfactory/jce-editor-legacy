@@ -347,6 +347,9 @@ WFPopups.addPopup('jcemediabox', {
      */
     setAttributes: function(n, args, index) {
         var self = this, ed = tinyMCEPopup.editor;
+        
+        // set default index
+        index = index || 0;
 
         this.remove(n);
 

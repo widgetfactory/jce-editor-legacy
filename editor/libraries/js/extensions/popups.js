@@ -206,7 +206,7 @@ var WFPopups = WFExtensions.add('Popups', {
 	 * Set popup extension parameter values to current node
 	 * @param {Object} n Popup / Link node
 	 */
-    setAttributes : function(n, args) {
+    setAttributes : function(n, args, index) {
         var ed = tinyMCEPopup.editor;
 
         // map values
@@ -221,7 +221,7 @@ var WFPopups = WFExtensions.add('Popups', {
 
         }
 
-        return this._call('setAttributes', [n, args]);
+        return this._call('setAttributes', [n, args, index]);
     },
 
     /**
@@ -254,7 +254,7 @@ var WFPopups = WFExtensions.add('Popups', {
 	 * @param {Object} n
 	 * @param {Object} args
 	 */
-    createPopup : function(n, args) {
+    createPopup : function(n, args, index) {
         var self = this, ed = tinyMCEPopup.editor, o, el;
         args = args || {};
 
@@ -270,7 +270,7 @@ var WFPopups = WFExtensions.add('Popups', {
                 // remove all popups
                 this.removePopups(n);
                 // set popup attributes
-                this.setAttributes(n, args);
+                this.setAttributes(n, args, index);
             } else {				
                 var se = ed.selection, marker;
 				
@@ -287,7 +287,7 @@ var WFPopups = WFExtensions.add('Popups', {
                 }
 
                 tinymce.each(ed.dom.select('a[href="#mce_temp_url#"]'), function(link) {
-                    self.setAttributes(link, args);
+                    self.setAttributes(link, args, index);
                 });
             }
         } else {
