@@ -180,7 +180,7 @@ class WFLinkBrowser extends WFBrowserExtension {
 
         require_once(JPATH_SITE . '/includes/application.php');
 
-        $tag = JPATH_PLATFORM ? 'component_id' : 'componentid';
+        $tag = defined('JPATH_PLATFORM') ? 'component_id' : 'componentid';
 
         $component = JComponentHelper::getComponent($component);
         $menu = JSite::getMenu();

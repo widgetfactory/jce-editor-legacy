@@ -61,16 +61,16 @@ class JoomlalinksContact extends JObject {
         $view = isset($args->view) ? $args->view : '';
         switch ($view) {
             default:
-                if (!JPATH_PLATFORM) {
-                    $categories = WFLinkBrowser::getCategory('com_contact_details');
-                } else {
+                if (defined('JPATH_PLATFORM')) {
                     $categories = WFLinkBrowser::getCategory('com_contact');
+                } else {
+                    $categories = WFLinkBrowser::getCategory('com_contact_details');
                 }
 
                 foreach ($categories as $category) {
                     $itemid = WFLinkBrowser::getItemId('com_contact', array('category' => $category->id));
                     
-                    if (JPATH_PLATFORM) {
+                    if (defined('JPATH_PLATFORM')) {
                         $url = 'index.php?option=com_contact&view=category&id=';
                     } else {
                         $url = 'index.php?option=com_contact&view=category&catid=';
@@ -85,7 +85,7 @@ class JoomlalinksContact extends JObject {
                 }
                 break;
             case 'category':
-                if (JPATH_PLATFORM) {
+                if (defined('JPATH_PLATFORM')) {
                     $categories = WFLinkBrowser::getCategory('com_contact', $args->id);
 
                     foreach ($categories as $category) {
