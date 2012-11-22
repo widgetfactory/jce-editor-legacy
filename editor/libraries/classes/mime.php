@@ -265,7 +265,7 @@ abstract class WFMimeType {
         'application/vnd.mozilla.xul+xml' => 'xul',
         'application/vnd.ms-artgalry' => 'cil',
         'application/vnd.ms-cab-compressed' => 'cab',
-        'application/vnd.ms-excel' => 'xls xlm xla xlc xlt xlw',
+        'application/vnd.ms-excel' => 'xls xlm xla xlc xlt xlw xlsx',
         'application/vnd.ms-excel.addin.macroenabled.12' => 'xlam',
         'application/vnd.ms-excel.sheet.binary.macroenabled.12' => 'xlsb',
         'application/vnd.ms-excel.sheet.macroenabled.12' => 'xlsm',
@@ -681,8 +681,8 @@ abstract class WFMimeType {
      * @param 	string $type
      * @return 	bool
      */
-    public function check($name, $path, $type = null) {
-        $extension = strtolower(substr(strrchr($name, "."), 1));
+    public function check($name, $path) {
+        $extension = strtolower(substr($name, strrpos($name, '.') + 1));
 
         // check file mime type if possible
         if (function_exists('mime_content_type')) {
