@@ -691,24 +691,25 @@ abstract class WFMimeType {
                 if ($mimetype = @finfo_file($finfo, $path)) {
                     @finfo_close($finfo);
 
-                    if ($mime = self::getMime($mimetype)) {
-                        // we can't validate these files...
-                        if ($mimetype === 'application/zip' && in_array($extension, $ms_x)) {
-                            return true;
-                        }
+                    // we can't validate these files...
+                    if ($mimetype === 'application/zip' && in_array($extension, $ms_x)) {
+                        return true;
+                    }
 
+                    if ($mime = self::getMime($mimetype)) {
                         return in_array($extension, $mime);
                     }
                 }
             }
         } else if (function_exists('mime_content_type')) {
             if ($mimetype = @mime_content_type($path)) {
-                if ($mime = self::getMime($mimetype)) {
-                    // we can't validate these files...
-                    if ($mimetype === 'application/zip' && in_array($extension, $ms_x)) {
-                        return true;
-                    }
+                
+                // we can't validate these files...
+                if ($mimetype === 'application/zip' && in_array($extension, $ms_x)) {
+                    return true;
+                }
 
+                if ($mime = self::getMime($mimetype)) {
                     return in_array($extension, $mime);
                 }
             }
