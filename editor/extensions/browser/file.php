@@ -861,7 +861,7 @@ class WFFileBrowser extends WFBrowserExtension {
         $xss_check = JFile::read($file['tmp_name'], false, 256);
 
         // check for hidden php tags
-        if (stristr($xss_check, '<?php')) {
+        if (stripos($xss_check, '<?php') !== false) {
             @unlink($file['tmp_name']);
 
             throw new InvalidArgumentException('INVALID CODE IN FILE');
@@ -870,7 +870,7 @@ class WFFileBrowser extends WFBrowserExtension {
         // check for hidden short php tags
         if (preg_match('#\.(inc|phps|class|php|php(3|4)|txt|dat|tpl|tmpl)$#i', $file['name'])) {
 
-            if (stristr($xss_check, '<?')) {
+            if (stripos($xss_check, '<?') !== false) {
                 @unlink($file['tmp_name']);
 
                 throw new InvalidArgumentException('INVALID CODE IN FILE');
@@ -878,12 +878,12 @@ class WFFileBrowser extends WFBrowserExtension {
         }
 
         // check for html tags in some files (IE XSS bug)
-        if (preg_match('#\.(jpeg|jpg|jpe|png|gif|wbmp|bmp|tiff|tif|pdf)$#i', $file['name'])) {
+        if (!preg_match('#\.(html|htm|txt)$#i', $file['name'])) {
 
             $tags = array('html', 'head', 'meta', 'body', 'script', 'style', 'link');
             
             foreach($tags as $tag) {
-                if (stristr($xss_check, '<' . $tag)) {
+                if (stripos($xss_check, '<' . $tag) !== false) {
                     @unlink($file['tmp_name']);
                     
                     throw new InvalidArgumentException('INVALID TAG IN FILE');
