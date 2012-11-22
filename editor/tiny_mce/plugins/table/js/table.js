@@ -162,7 +162,7 @@ var TableDialog = {
     },
 
     initRow : function() {
-        var ed = tinyMCEPopup.editor, dom = tinyMCEPopup.dom;
+        var self = this, ed = tinyMCEPopup.editor, dom = tinyMCEPopup.dom;
 
         var trElm = dom.getParent(ed.selection.getStart(), "tr");
         var st = dom.parseStyle(dom.getAttrib(trElm, "style"));
@@ -179,7 +179,9 @@ var TableDialog = {
         var lang = dom.getAttrib(trElm, 'lang');
         var dir = dom.getAttrib(trElm, 'dir');
 
-        $('#rowtype').val(rowtype);
+        $('#rowtype').change(function() {
+            self.setActionforRowType();
+        }).val(rowtype).change();
 
         // Any cells selected
         if(dom.select('td.mceSelected,th.mceSelected', trElm).length == 0) {
@@ -1019,6 +1021,16 @@ var TableDialog = {
     
     setClasses : function(v) {
         $.Plugin.setClasses(v);
+    },
+
+    setActionforRowType : function() {
+        var rowtype = $('#rowtype').val();
+        
+        if (rowtype === "tbody") {
+            $('#action').prop('disabled', false);
+        } else {
+            $('#action').val('row').prop('disabled', true);
+        }
     }
 
 };
