@@ -9,7 +9,7 @@ h3 {font-size: 1.17em}
 h4 {font-size: 1em}
 h5 {font-size: .83em}
 h6 {font-size: .75em}
-.mceItemTable, .mceItemTable td, .mceItemTable th, .mceItemTable caption, .mceItemVisualAid {border: 1px dashed #BBB;}
+.mceItemTable, .mceItemTable td, .mceItemTable th, .mceItemTable caption, .mceItemVisualAid {border: 1px dashed #BBB;border-collapse: separate;border-spacing: 1px;}
 span.mceItemNbsp {background: #DDD}
 td.mceSelected, th.mceSelected {background-color:#3399ff !important}
 img {border:0;}
