@@ -481,7 +481,7 @@
             $(this.element).empty();
 
             $.each(files, function(x, file) {
-                var title 	= $.String.basename(file.name);                
+                var title = $.String.basename(file.name);                
                 
                 // check for extension in file name, eg. image.php.jpg
                 if (/\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b/i.test(title)) {
@@ -499,15 +499,20 @@
                     
                     return false;
                 }
+                
+                // sanitize name
+                title = $.String.safe(title, self.options.websafe_mode, self.options.websafe_spaces);
+                // rename file
+                self._renameFile(file, title);
 
                 // create file list element
                 file.element = doc.createElement('li');
 
-                var status 	 	= doc.createElement('span');
-                var size	   	= doc.createElement('span');
-                var name		= doc.createElement('span');
-                var rename		= doc.createElement('span');
-                var insert		= doc.createElement('span');
+                var status 	= doc.createElement('span');
+                var size	= doc.createElement('span');
+                var name        = doc.createElement('span');
+                var rename      = doc.createElement('span');
+                var insert	= doc.createElement('span');
                 var input   	= doc.createElement('input');
 
                 // status
@@ -599,16 +604,21 @@
                         return;
                     }
 
-                    var txt = this;
+                    var name, txt = this;
 
                     $(this).hide();
+                    
+                    // remove extension
+                    name    = $.String.stripExt(file.name);
+                    // make web safe
+                    name    = $.String.safe(name, self.options.websafe_mode, self.options.websafe_spaces);
 
-                    $(input).val($.String.stripExt(file.name)).show().attr('aria-hidden', false);
+                    $(input).val(name).show().attr('aria-hidden', false);
 
                     $(input).bind('blur', function() {
                         var v = $(input).val() + '.' + $.String.getExt($(txt).text());
                         // make web safe
-                        v = $.String.safe(v, self.options.websafe_mode);
+                        v = $.String.safe(v, self.options.websafe_mode, self.options.websafe_spaces);
 
                         self._renameFile(file, v);
 
