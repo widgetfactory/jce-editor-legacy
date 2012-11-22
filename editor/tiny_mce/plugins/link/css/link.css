@@ -57,9 +57,7 @@ span.email.disabled {border:1px solid white; -moz-opacity:0.3; opacity:0.3; filt
 span.email.disabled:hover {border:1px solid white; background-color:transparent;}
 
 div.tree ul {}
-div.tree ul li {
-    padding-bottom : 5px;
-}
+div.tree ul li {}
 div.tree ul li span {}
 div.tree ul li div {}
 div.tree ul li span.file {
