@@ -812,16 +812,27 @@ class WFFileBrowser extends WFBrowserExtension {
     }
 
     private function validateUploadedFile($file) {
+        // get extension
+        $ext = WFUtility::getExtension($file['name']);
+
+        // check extension is allowed
+        $allowed = $this->getFileTypes('array');
+
+        if (is_array($allowed) && !empty($allowed) && in_array(strtolower($ext), $allowed) === false) {
+            @unlink($file['tmp_name']);
+            throw new InvalidArgumentException(WFText::_('WF_MANAGER_UPLOAD_INVALID_EXT_ERROR'));
+        }
+
         // Null byte check
         if (strstr($file['name'], "\u0000")) {
             @unlink($file['tmp_name']);
 
-            JError::raiseError(403, 'INVALID UPLOAD DATA');
+            throw new InvalidArgumentException('INVALID UPLOAD DATA');
         }
 
         // check for invalid extension in file name
         if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b#i', $file['name'])) {
-            JError::raiseError(403, 'INVALID FILE NAME');
+            throw new InvalidArgumentException('INVALID FILE NAME');
         }
 
         // validate image
@@ -829,7 +840,7 @@ class WFFileBrowser extends WFBrowserExtension {
             if (@getimagesize($file['tmp_name']) === false) {
                 @unlink($file['tmp_name']);
 
-                JError::raiseError(403, 'INVALID IMAGE FILE');
+                throw new InvalidArgumentException('INVALID IMAGE FILE');
             }
         }
 
@@ -842,7 +853,7 @@ class WFFileBrowser extends WFBrowserExtension {
             if (WFMimeType::check($file['name'], $file['tmp_name'], $file['type']) === false) {
                 @unlink($file['tmp_name']);
 
-                JError::raiseError(403, 'INVALID MIME TYPE');
+                throw new InvalidArgumentException('INVALID MIME TYPE');
             }
         }
 
@@ -850,33 +861,33 @@ class WFFileBrowser extends WFBrowserExtension {
         $xss_check = JFile::read($file['tmp_name'], false, 256);
 
         // check for hidden php tags
-        if (strstr($xss_check, '<?php')) {
+        if (stristr($xss_check, '<?php')) {
             @unlink($file['tmp_name']);
 
-            JError::raiseError(403, 'INVALID CODE IN FILE');
+            throw new InvalidArgumentException('INVALID CODE IN FILE');
         }
 
         // check for hidden short php tags
         if (preg_match('#\.(inc|phps|class|php|php(3|4)|txt|dat|tpl|tmpl)$#i', $file['name'])) {
 
-            if (strstr($xss_check, '<?')) {
+            if (stristr($xss_check, '<?')) {
                 @unlink($file['tmp_name']);
 
-                JError::raiseError(403, 'INVALID CODE IN FILE');
+                throw new InvalidArgumentException('INVALID CODE IN FILE');
             }
         }
 
-        // check for html tags (skip some files)
-        if (!preg_match('#\.(txt|htm|html|xml|kml|svg)$#i', $file['name'])) {
+        // check for html tags in some files (IE XSS bug)
+        if (preg_match('#\.(jpeg|jpg|jpe|png|gif|wbmp|bmp|tiff|tif|pdf)$#i', $file['name'])) {
 
-            $tags = array('abbr', 'acronym', 'address', 'applet', 'area', 'audioscope', 'base', 'basefont', 'bdo', 'bgsound', 'big', 'blackface', 'blink', 'blockquote', 'body', 'bq', 'br', 'button', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'comment', 'custom', 'dd', 'del', 'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'fn', 'font', 'form', 'frame', 'frameset', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'hr', 'html', 'iframe', 'ilayer', 'img', 'input', 'ins', 'isindex', 'keygen', 'kbd', 'label', 'layer', 'legend', 'li', 'limittext', 'link', 'listing', 'map', 'marquee', 'menu', 'meta', 'multicol', 'nobr', 'noembed', 'noframes', 'noscript', 'nosmartquotes', 'object', 'ol', 'optgroup', 'option', 'param', 'plaintext', 'pre', 'rt', 'ruby', 's', 'samp', 'script', 'select', 'server', 'shadow', 'sidebar', 'small', 'spacer', 'span', 'strike', 'strong', 'style', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'title', 'tr', 'tt', 'ul', 'var', 'wbr', 'xml', 'xmp', '!DOCTYPE', '!--');
-
-            // check for tags
-            if (preg_match('#<(' . implode('|', $tags) . ')(\s|>)#i', $xss_check)) {
-            //if (preg_match('#<(\w+)(\s|>)#i', $xss_check)) {
-                @unlink($file['tmp_name']);  
-                
-                JError::raiseError(403, 'INVALID TAG IN FILE');
+            $tags = array('html', 'head', 'meta', 'body', 'script', 'style', 'link');
+            
+            foreach($tags as $tag) {
+                if (stristr($xss_check, '<' . $tag)) {
+                    @unlink($file['tmp_name']);
+                    
+                    throw new InvalidArgumentException('INVALID TAG IN FILE');
+                }
             }
         }
     }
@@ -938,14 +949,6 @@ class WFFileBrowser extends WFBrowserExtension {
 
         // get extension
         $ext = WFUtility::getExtension($name);
-
-        // check extension is allowed
-        $allowed = $this->getFileTypes('array');
-
-        if (is_array($allowed) && !empty($allowed) && in_array(strtolower($ext), $allowed) === false) {
-            JError::raiseError(403, WFText::_('WF_MANAGER_UPLOAD_INVALID_EXT_ERROR'));
-            @unlink($file['tmp_name']);
-        }
 
         // strip extension
         $name = WFUtility::stripExtension($name);
