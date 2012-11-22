@@ -14,7 +14,7 @@
     <params group="standard">
         <param name="dir" type="text" default="" size="50" label="WF_PARAM_DIRECTORY" description="WF_PARAM_DIRECTORY_DESC"/>
         <param name="max_size" class="upload_size" max="" type="text" default="" label="WF_PARAM_UPLOAD_SIZE" description="WF_PARAM_UPLOAD_SIZE_DESC" placeholder="" />
-        <param name="extensions" type="extension" class="extensions create" default="xml=xml;html=htm,html;office=doc,docx,ppt,xls;text=txt,rtf;image=gif,jpeg,jpg,png;acrobat=pdf;archive=zip,tar,gz,rar;flash=swf;quicktime=mov,mp4,qt;windowsmedia=wmv,asx,asf,avi;audio=wav,mp3,aiff;openoffice=odt,odg,odp,ods,odf" label="WF_PARAM_EXTENSIONS" description="WF_PARAM_EXTENSIONS_DESC" />
+        <param name="extensions" type="extension" class="extensions create" default="office=doc,docx,ppt,xls;image=gif,jpeg,jpg,png;acrobat=pdf;archive=zip,tar,gz,rar;flash=swf;quicktime=mov,mp4,qt;windowsmedia=wmv,asx,asf,avi;audio=wav,mp3,aiff;openoffice=odt,odg,odp,ods,odf" label="WF_PARAM_EXTENSIONS" description="WF_PARAM_EXTENSIONS_DESC" />
         <param name="name" type="filesystem" group="filesystem" default="" label="WF_PARAM_FILESYSTEM" description="WF_PARAM_FILESYSTEM_DESC" />
     </params>
     <params group="access">
