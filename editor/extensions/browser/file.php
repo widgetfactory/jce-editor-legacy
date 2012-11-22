@@ -222,10 +222,10 @@ class WFFileBrowser extends WFBrowserExtension {
 
         switch ($format) {
             case 'list':
-                return $this->listFileTypes($list);
+                return strtolower($this->listFileTypes($list));
                 break;
             case 'array':
-                return explode(',', $this->listFileTypes($list));
+                return explode(',', strtolower($this->listFileTypes($list)));
                 break;
             default:
             case 'map':
@@ -812,15 +812,18 @@ class WFFileBrowser extends WFBrowserExtension {
     }
 
     private function validateUploadedFile($file) {
-        // get extension
-        $ext = WFUtility::getExtension($file['name']);
-
-        // check extension is allowed
-        $allowed = $this->getFileTypes('array');
-
-        if (is_array($allowed) && !empty($allowed) && in_array(strtolower($ext), $allowed) === false) {
+        // check the POST data array
+        if (empty($file)) {
             @unlink($file['tmp_name']);
-            throw new InvalidArgumentException(WFText::_('WF_MANAGER_UPLOAD_INVALID_EXT_ERROR'));
+
+            throw new InvalidArgumentException('INVALID UPLOAD DATA');
+        }
+
+        // check for tmp_name and is valid uploaded file
+        if (!isset($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
+            @unlink($file['tmp_name']);
+
+            throw new InvalidArgumentException('INVALID UPLOAD DATA');
         }
 
         // Null byte check
@@ -832,7 +835,29 @@ class WFFileBrowser extends WFBrowserExtension {
 
         // check for invalid extension in file name
         if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b#i', $file['name'])) {
+            @unlink($file['tmp_name']);
+
             throw new InvalidArgumentException('INVALID FILE NAME');
+        }
+        
+        clearstatcache();
+
+        // check the file sizes match
+        if ((int) @filesize($file['tmp_name']) !== (int) $file['size']) {
+            @unlink($file['tmp_name']);
+
+            throw new InvalidArgumentException('INVALID FILE SIZE');
+        }
+
+        // get extension
+        $ext = WFUtility::getExtension($file['name']);
+
+        // check extension is allowed
+        $allowed = $this->getFileTypes('array');
+
+        if (is_array($allowed) && !empty($allowed) && in_array(strtolower($ext), $allowed) === false) {
+            @unlink($file['tmp_name']);
+            throw new InvalidArgumentException(WFText::_('WF_MANAGER_UPLOAD_INVALID_EXT_ERROR'));
         }
 
         // validate image
@@ -850,7 +875,7 @@ class WFFileBrowser extends WFBrowserExtension {
         if ($upload['validate_mimetype']) {
             wfimport('editor.libraries.classes.mime');
 
-            if (WFMimeType::check($file['name'], $file['tmp_name'], $file['type']) === false) {
+            if (WFMimeType::check($file['name'], $file['tmp_name']) === false) {
                 @unlink($file['tmp_name']);
 
                 throw new InvalidArgumentException('INVALID MIME TYPE');
@@ -878,14 +903,14 @@ class WFFileBrowser extends WFBrowserExtension {
         }
 
         // check for html tags in some files (IE XSS bug)
-        if (!preg_match('#\.(html|htm|txt)$#i', $file['name'])) {
+        if (!preg_match('#\.(txt|htm|html)$#i', $file['name'])) {
 
             $tags = array('html', 'head', 'meta', 'body', 'script', 'style', 'link');
-            
-            foreach($tags as $tag) {
+
+            foreach ($tags as $tag) {
                 if (stripos($xss_check, '<' . $tag) !== false) {
                     @unlink($file['tmp_name']);
-                    
+
                     throw new InvalidArgumentException('INVALID TAG IN FILE');
                 }
             }
@@ -910,10 +935,6 @@ class WFFileBrowser extends WFBrowserExtension {
 
         // get uploaded file
         $file = JRequest::getVar('file', '', 'files', 'array');
-
-        if (empty($file)) {
-            JError::raiseError(403, 'INVALID UPLOAD DATA');
-        }
 
         // validate file data
         $this->validateUploadedFile($file);
@@ -944,7 +965,7 @@ class WFFileBrowser extends WFBrowserExtension {
 
         // check for invalid extensions
         if (preg_match('#\.(php|phtml|pl|py|jsp|asp|shtml|sh|cgi)$#i', $name)) {
-            JError::raiseError(403, 'INVALID FILE NAME');
+            throw new InvalidArgumentException('INVALID FILE NAME');
         }
 
         // get extension
@@ -957,12 +978,12 @@ class WFFileBrowser extends WFBrowserExtension {
 
         // empty name
         if ($name == '') {
-            JError::raiseError(403, 'INVALID FILE NAME');
+            throw new InvalidArgumentException('INVALID FILE NAME');
         }
 
         // check for extension in file name
         if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b#i', $name)) {
-            JError::raiseError(403, 'INVALID FILE NAME');
+            throw new InvalidArgumentException('INVALID FILE NAME');
         }
 
         $upload = $this->get('upload');
@@ -984,18 +1005,16 @@ class WFFileBrowser extends WFBrowserExtension {
 
         // Only multipart uploading is supported for now
         if ($contentType && strpos($contentType, "multipart") !== false) {
-            if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name'])) {
-                $result = $filesystem->upload('multipart', trim($file['tmp_name']), $dir, $name);
+            $result = $filesystem->upload('multipart', trim($file['tmp_name']), $dir, $name);
 
-                if (!$result->state) {
-                    $result->message = WFText::_('WF_MANAGER_UPLOAD_ERROR');
-                    $result->code = 103;
-                }
-
-                @unlink($file['tmp_name']);
-
-                $complete = true;
+            if (!$result->state) {
+                $result->message = WFText::_('WF_MANAGER_UPLOAD_ERROR');
+                $result->code = 103;
             }
+
+            @unlink($file['tmp_name']);
+
+            $complete = true;
         } else {
             $result->state = false;
             $result->code = 103;
