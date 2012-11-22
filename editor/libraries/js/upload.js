@@ -499,8 +499,11 @@
                     
                     return false;
                 }
+                
                 // sanitize name
                 title = $.String.safe(title, self.options.websafe_mode, self.options.websafe_spaces);
+                // rename file
+                self._renameFile(file, title);
 
                 // create file list element
                 file.element = doc.createElement('li');
