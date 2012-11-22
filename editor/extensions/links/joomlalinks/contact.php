@@ -61,31 +61,38 @@ class JoomlalinksContact extends JObject {
         $view = isset($args->view) ? $args->view : '';
         switch ($view) {
             default:
-                if (WF_JOOMLA15) {
-                    $categories = WFLinkBrowser::getCategory('com_contact_details');
-                } else {
+                if (defined('JPATH_PLATFORM')) {
                     $categories = WFLinkBrowser::getCategory('com_contact');
+                } else {
+                    $categories = WFLinkBrowser::getCategory('com_contact_details');
                 }
 
                 foreach ($categories as $category) {
                     $itemid = WFLinkBrowser::getItemId('com_contact', array('category' => $category->id));
+                    
+                    if (defined('JPATH_PLATFORM')) {
+                        $url = 'index.php?option=com_contact&view=category&id=';
+                    } else {
+                        $url = 'index.php?option=com_contact&view=category&catid=';
+                    }
 
                     $items[] = array(
-                        'id' => 'index.php?option=com_contact&view=category&catid=' . $category->slug . $itemid,
-                        'name' => $category->title . ' / ' . $category->alias,
+                        'id'    => 'index.php?option=com_contact&view=category&id=' . $category->id,
+                        'url'   => $url . $category->slug . $itemid,
+                        'name'  => $category->title . ' / ' . $category->alias,
                         'class' => 'folder contact'
                     );
                 }
                 break;
             case 'category':
-                if (!WF_JOOMLA15) {
-                    $categories = WFLinkBrowser::getCategory('com_contact', $args->catid);
+                if (defined('JPATH_PLATFORM')) {
+                    $categories = WFLinkBrowser::getCategory('com_contact', $args->id);
 
                     foreach ($categories as $category) {
                         $children = WFLinkBrowser::getCategory('com_contact', $category->id);
 
                         if ($children) {
-                            $id = 'index.php?option=com_contact&view=category&catid=' . $category->id;
+                            $id = 'index.php?option=com_contact&view=category&id=' . $category->id;
                         } else {
                             $itemid = WFLinkBrowser::getItemId('com_contact', array('category' => $category->id));
 
@@ -94,21 +101,21 @@ class JoomlalinksContact extends JObject {
                                 $itemid = '&Itemid=' . $args->Itemid;
                             }
 
-                            $id = 'index.php?option=com_contact&view=category&catid=' . $category->slug . $itemid;
+                            $id = 'index.php?option=com_contact&view=category&id=' . $category->slug . $itemid;
                         }
 
                         $items[] = array(
-                            'id' => $id,
-                            'name' => $category->title . ' / ' . $category->alias,
+                            'id'    => $id,
+                            'name'  => $category->title . ' / ' . $category->alias,
                             'class' => 'folder content'
                         );
                     }
                 }
 
-                $contacts = self::_contacts($args->catid);
+                $contacts = self::_contacts($args->id);
 
                 foreach ($contacts as $contact) {
-                    $catid = $args->catid ? '&catid=' . $args->catid : '';
+                    $catid  = $args->id ? '&catid=' . $args->id : '';
                     $itemid = WFLinkBrowser::getItemId('com_contact', array('contact' => $contact->id));
 
                     if (!$itemid && isset($args->Itemid)) {
@@ -127,25 +134,26 @@ class JoomlalinksContact extends JObject {
         return $items;
     }
 
-    function _contacts($id) {
+    private static function _contacts($id) {
         $db = JFactory::getDBO();
         $user = JFactory::getUser();
 
         $where = '';
 
-        if (method_exists('JUser', 'getAuthorisedViewLevels')) {
-            $where .= ' AND access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')';
+        $query = $db->getQuery(true);
+
+        if (is_object($query)) {
+            $query->select(array('id', 'name', 'alias'))->from('#__contact_details')->where(array('catid='. (int) $id, 'published = 1', 'access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')'));
         } else {
-            $where .= ' AND access <= ' . (int) $user->get('aid');
+            $query = 'SELECT id, name, alias'
+            . ' FROM #__contact_details'
+            . ' WHERE catid = ' . (int) $id
+            . ' AND published = 1'
+            . ' AND access <= ' . (int) $user->get('aid')
+            . ' ORDER BY name'
+            ;
         }
 
-        $query = 'SELECT id, name, alias'
-                . ' FROM #__contact_details'
-                . ' WHERE catid = ' . (int) $id
-                . ' AND published = 1'
-                . $where
-                . ' ORDER BY name'
-        ;
         $db->setQuery($query);
         return $db->loadObjectList();
     }
