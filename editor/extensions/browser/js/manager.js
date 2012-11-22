@@ -1211,8 +1211,8 @@
 							 * @param {Object} name File name
 							 */
                             function _checkName(file) {
-                                var found = false, msg = self._translate('file_exists_alert', 'A file with the same name exists in the target folder.');
-                                var name = $.String.safe(file.name);
+                                var found   = false, msg = self._translate('file_exists_alert', 'A file with the same name exists in the target folder.');
+                                var name    = $.String.safe(file.name, self.options.websafe_mode, self.options.websafe_spaces);
 
                                 $('li', 'file-list').each( function() {
                                     if (name == $(this).attr('title')) {
