@@ -684,22 +684,32 @@ abstract class WFMimeType {
     public function check($name, $path) {
         $extension = strtolower(substr($name, strrpos($name, '.') + 1));
 
-        // check file mime type if possible
-        if (function_exists('mime_content_type')) {
-            if ($mimetype = @mime_content_type($path)) {
-                
-                if ($mime = self::getMime($mimetype)) {
-                    return in_array($extension, $mime);
-                }
-            }
-        } else if (function_exists('finfo_open')) {
-            if ($finfo = @finfo_open(FILEINFO_MIME)) {
+        $ms_x = array('docx', 'pptx', 'ppsx', 'xlsx', 'sldx', 'potx', 'xltx', 'dotx');
+
+        if (function_exists('finfo_open')) {
+            if ($finfo = @finfo_open(FILEINFO_MIME_TYPE)) {
                 if ($mimetype = @finfo_file($finfo, $path)) {
                     @finfo_close($finfo);
 
                     if ($mime = self::getMime($mimetype)) {
+                        // we can't validate these files...
+                        if ($mimetype === 'application/zip' && in_array($extension, $ms_x)) {
+                            return true;
+                        }
+
                         return in_array($extension, $mime);
                     }
+                }
+            }
+        } else if (function_exists('mime_content_type')) {
+            if ($mimetype = @mime_content_type($path)) {
+                if ($mime = self::getMime($mimetype)) {
+                    // we can't validate these files...
+                    if ($mimetype === 'application/zip' && in_array($extension, $ms_x)) {
+                        return true;
+                    }
+
+                    return in_array($extension, $mime);
                 }
             }
         }
