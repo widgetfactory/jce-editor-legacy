@@ -265,7 +265,7 @@ abstract class WFMimeType {
         'application/vnd.mozilla.xul+xml' => 'xul',
         'application/vnd.ms-artgalry' => 'cil',
         'application/vnd.ms-cab-compressed' => 'cab',
-        'application/vnd.ms-excel' => 'xls xlm xla xlc xlt xlw',
+        'application/vnd.ms-excel' => 'xls xlm xla xlc xlt xlw xlsx',
         'application/vnd.ms-excel.addin.macroenabled.12' => 'xlam',
         'application/vnd.ms-excel.sheet.binary.macroenabled.12' => 'xlsb',
         'application/vnd.ms-excel.sheet.macroenabled.12' => 'xlsm',
@@ -681,25 +681,36 @@ abstract class WFMimeType {
      * @param 	string $type
      * @return 	bool
      */
-    public function check($name, $path, $type = null) {
-        $extension = strtolower(substr(strrchr($name, "."), 1));
+    public function check($name, $path) {
+        $extension = strtolower(substr($name, strrpos($name, '.') + 1));
 
-        // check file mime type if possible
-        if (function_exists('mime_content_type')) {
-            if ($mimetype = @mime_content_type($path)) {
-                
-                if ($mime = self::getMime($mimetype)) {
-                    return in_array($extension, $mime);
-                }
-            }
-        } else if (function_exists('finfo_open')) {
-            if ($finfo = @finfo_open(FILEINFO_MIME)) {
+        $ms_x = array('docx', 'pptx', 'ppsx', 'xlsx', 'sldx', 'potx', 'xltx', 'dotx');
+
+        if (function_exists('finfo_open')) {
+            if ($finfo = @finfo_open(FILEINFO_MIME_TYPE)) {
                 if ($mimetype = @finfo_file($finfo, $path)) {
                     @finfo_close($finfo);
+
+                    // we can't validate these files...
+                    if ($mimetype === 'application/zip' && in_array($extension, $ms_x)) {
+                        return true;
+                    }
 
                     if ($mime = self::getMime($mimetype)) {
                         return in_array($extension, $mime);
                     }
+                }
+            }
+        } else if (function_exists('mime_content_type')) {
+            if ($mimetype = @mime_content_type($path)) {
+                
+                // we can't validate these files...
+                if ($mimetype === 'application/zip' && in_array($extension, $ms_x)) {
+                    return true;
+                }
+
+                if ($mime = self::getMime($mimetype)) {
+                    return in_array($extension, $mime);
                 }
             }
         }
