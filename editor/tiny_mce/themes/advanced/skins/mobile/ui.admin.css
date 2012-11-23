@@ -59,7 +59,7 @@
     height: 40px;
 }
 
-#jce .mobileSkin ul.sortableList li.sortableListItem div.sortableRow {
+#jce .mobileSkin ul.sortableList li.sortableListItem span.sortableRow {
     height : 36px;
 }
 
@@ -128,7 +128,7 @@
     height: 30px;
 }
 
-#jce .mobileSkin ul.sortableList li.sortableListItem div.sortableRow span.sortableRowItem {
+#jce .mobileSkin ul.sortableList li.sortableListItem span.sortableRow span.sortableRowItem {
     margin : 2px 0 0 0;
     height : 30px;
 }
