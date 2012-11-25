@@ -1046,3 +1046,19 @@ div.button span {
 div.actionPanel div {
     float: right;
 }
+
+/* Mobile stuff */
+@media (max-width: 767px) {
+    #browser div.layout-bottom div.layout-left {
+        display: none;
+        width : 0;
+    }
+    
+    #browser div.layout-bottom div.layout-center {
+        width : 70%;
+    }
+    
+    #browser div#browser-list-actions div#show-details {
+        display: none;
+    }
+}
