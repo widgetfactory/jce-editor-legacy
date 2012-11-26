@@ -112,7 +112,7 @@
     position: relative;
 }
 
-#jce span.mceSplitButton span.mceIcon:before {
+#jce span.mceSplitButton span.mceIcon:after {
     content : "";
     display: inline-block;
     position : absolute;
