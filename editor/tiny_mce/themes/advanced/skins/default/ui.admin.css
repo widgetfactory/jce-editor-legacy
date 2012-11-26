@@ -105,47 +105,50 @@
 }
 
 #jce.multiplebg span.mceSplitButton span.mceIcon {
-    background-image: url("img/button_bg.png"), url("../../img/icons.png");
+    background-image: url("../../img/icons.png");
 }
 
 #jce span.mceSplitButton {
     position: relative;
 }
 
-#jce span.mceSplitButton span.mceIcon + span {
+#jce span.mceSplitButton span.mceIcon:before {
+    content : "";
+    display: inline-block;
     position : absolute;
     top : 0px;
     right : -1px;
     background: url("img/button_bg.png") no-repeat 0 0;
     width : 10px;
+    height : 20px;
 }
 
 #jce span.mceIcon.mce_paste {
-    background-position: 21px 0, -560px 0;
+    background-position: -560px 0;
 }
 
 #jce span.mceIcon.mce_numlist {
-    background-position: 21px 0, -80px 0;
+    background-position: -80px 0;
 }
 
 #jce span.mceIcon.mce_bullist {
-    background-position: 21px 0, -20px 0;
+    background-position: -20px 0;
 }
 
 #jce span.mceIcon.mce_forecolor {
-    background-position: 21px 0, -720px 0;
+    background-position: -720px 0;
 }
 
 #jce span.mceIcon.mce_backcolor {
-    background-position: 21px 0, -760px 0;
+    background-position: -760px 0;
 }
 
 #jce span.mceIcon.mce_spellchecker {
-    background-position: 21px 0, -120px -20px;
+    background-position: -120px -20px;
 }
 
 #jce span.mceIcon.mce_textcase {
-    background-position: 21px 0, -60px -40px;
+    background-position: -60px -40px;
 }
 
 #jce .defaultSkin .mceStatusbar {
