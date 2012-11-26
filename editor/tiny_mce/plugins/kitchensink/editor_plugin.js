@@ -56,6 +56,8 @@
 
                 ed.execCommand('mceKitchenSink');
                 
+                ed.undoManager.clear();
+                
                 // adjust iframe
                 
                 DOM.setStyle(ed.id + '_ifr', 'height', ed.getContentAreaContainer().offsetHeight);
