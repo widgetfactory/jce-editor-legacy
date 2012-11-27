@@ -37,41 +37,6 @@
     height : 20px;
 }
 
-#jce .classicSkin span.mceIcon.mce_paste {
-    background-image: url("../../img/icons.png");
-    background-position: -560px 0;
-}
-
-#jce .classicSkin span.mceIcon.mce_numlist {
-    background-image: url("../../img/icons.png");
-    background-position: -80px 0;
-}
-
-#jce .classicSkin span.mceIcon.mce_bullist {
-    background-image: url("../../img/icons.png");
-    background-position: -20px 0;
-}
-
-#jce .classicSkin span.mceIcon.mce_forecolor {
-    background-image: url("../../img/icons.png");
-    background-position: -720px 0;
-}
-
-#jce .classicSkin span.mceIcon.mce_backcolor {
-    background-image: url("../../img/icons.png");
-    background-position: -760px 0;
-}
-
-#jce .classicSkin span.mceIcon.mce_spellchecker {
-    background-image: url("../../img/icons.png");
-    background-position: -120px -20px;
-}
-
-#jce .classicSkin span.mceIcon.mce_textcase {
-    background-image: url("../../img/icons.png");
-    background-position: -60px -40px;
-}
-
 #jce .classicSkin .mceToolbar {
     border :1px solid #CCC;
     background:#F0F0EE;

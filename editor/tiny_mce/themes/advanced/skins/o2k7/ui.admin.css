@@ -149,34 +149,6 @@
     border: 1px solid #ABC6DD;
 }
 
-#jce .o2k7Skin span.mceIcon.mce_paste {
-    background-position: -560px 0;
-}
-
-#jce .o2k7Skin span.mceIcon.mce_numlist {
-    background-position: -80px 0;
-}
-
-#jce .o2k7Skin span.mceIcon.mce_bullist {
-    background-position: -20px 0;
-}
-
-#jce .o2k7Skin span.mceIcon.mce_forecolor {
-    background-position: -720px 0;
-}
-
-#jce .o2k7Skin span.mceIcon.mce_backcolor {
-    background-position: -760px 0;
-}
-
-#jce .o2k7Skin span.mceIcon.mce_spellchecker {
-    background-position: -120px -20px;
-}
-
-#jce .o2k7Skin span.mceIcon.mce_textcase {
-    background-position: -60px -40px;
-}
-
 #jce .o2k7Skin span.mceListBox {
     background-color: #e5eefa;
     border: 1px solid #ABC6DD !important;
