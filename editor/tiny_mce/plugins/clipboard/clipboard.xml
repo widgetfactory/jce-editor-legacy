@@ -11,7 +11,7 @@
     <description>WF_CLIPBOARD_DESC</description>
     <icon>cut,copy,paste</icon>
     <params group="standard">
-        <param name="paste_use_dialog" type="list" default="0" label="WF_PASTE_PARAM_DIALOG" description="WF_PASTE_PARAM_DIALOG_DESC">
+        <param name="paste_use_dialog" type="radio" default="0" label="WF_PASTE_PARAM_DIALOG" description="WF_PASTE_PARAM_DIALOG_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
