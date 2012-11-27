@@ -147,6 +147,23 @@
             } else {
                 $.Plugin.setDefaults(this.settings.defaults);
             }
+            
+            // add margin events
+            $('#margin_top, #margin_right, #margin_bottom, #margin_left').change(function() {
+                self.setMargins(); 
+            });
+            // add margin equal values event
+            $('#margin_check').click(function() {
+                self.setMargins(); 
+            });
+            // set styles events
+            $('#align, #clear, #border_width, #border_styles, #border_color').change(function() {
+                self.setStyles(); 
+            });
+            // set border click event
+            $('#border').click(function() {
+                self.setBorder(); 
+            });
 
             // Create File Browser
             WFFileBrowser.init($('#src'), {
