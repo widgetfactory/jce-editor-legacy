@@ -44,8 +44,8 @@
             });
 
             ed.addButton('kitchensink', {
-                title : 'kitchensink.desc', 
-                cmd : 'mceKitchenSink'
+                title   : 'kitchensink.desc', 
+                cmd     : 'mceKitchenSink'
             });
 
             ed.onPostRender.add(function(ed, cm) {  
@@ -54,12 +54,11 @@
                     return;
                 }
 
-                ed.execCommand('mceKitchenSink');
-                
+                ed.execCommand('mceKitchenSink', false, {skip_undo : 1});
+                // clear undo
                 ed.undoManager.clear();
                 
-                // adjust iframe
-                
+                // adjust iframe 
                 DOM.setStyle(ed.id + '_ifr', 'height', ed.getContentAreaContainer().offsetHeight);
             });
             
