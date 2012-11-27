@@ -33,18 +33,16 @@ class WFSpellcheckerPluginConfig {
                         if (!$languages) {
                             $languages = $wf->getParam('spellchecker.languages', 'English=en', '' );
                         }
-                        
-                        $settings['spellchecker_rpc_url'] = $url;
-                        
+
                         break;
                     case 'pspell':
                     case 'pspellshell':
                     case 'enchantspell':
                         $languages = $wf->getParam('spellchecker.languages', 'English=en', '' );
-                        
-                        $settings['spellchecker_rpc_url'] = $url;
                         break;
                 }
+                
+                $settings['spellchecker_rpc_url'] = $url;
                 
                 // cast as array
                 if ($languages) {
