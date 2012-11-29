@@ -11,9 +11,6 @@
  */
 defined('_JEXEC') or die('RESTRICTED');
 
-// define use of INI lang
-define('WF_INI_LANG', 1);
-
 /**
  * JCE class
  *

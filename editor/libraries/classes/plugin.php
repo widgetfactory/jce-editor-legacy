@@ -133,39 +133,21 @@ class WFEditorPlugin extends WFEditor {
             $request = WFRequest::getInstance();
             $request->process();
         } else {
-            $version = $this->getVersion();
-            $name = $this->getName();
+            $version    = $this->getVersion();
+            $name       = $this->getName();
 
             // process javascript languages
             if (JRequest::getWord('task') == 'loadlanguages') {
-                jimport('joomla.application.component.model');
+                wfimport('admin.classes.language');
 
-                wfimport('admin.models.editor');
-                $model = new WFModelEditor();
+                $parser = new WFLanguageParser(array(
+                    'plugins'   => array($name),
+                    'sections'  => array('dlg', $name . '_dlg'),
+                    'mode'      => 'plugin'
+                ));
 
-                $files = array();
-                $section = array('dlg', $name . '_dlg');
-                $ini = JPATH_SITE . '/language/en-GB/en-GB.com_jce_' . $name . '.ini';
-
-                if (is_file($ini)) {
-                    $files[] = $ini;
-
-                    $language = JFactory::getLanguage();
-                    $tag = $language->getTag();
-
-                    // non-english language
-                    if ($tag != 'en-GB') {
-                        $ini = JPATH_SITE . '/language/' . $tag . '/' . $tag . '.com_jce_' . $name . '.ini';
-
-                        if (is_file($ini)) {
-                            $files[] = $ini;
-                        }
-                    }
-                }
-
-                if (method_exists($model, 'loadLanguages')) {
-                    $model->loadLanguages($files, $section);
-                }
+                $data = $parser->load();
+                $parser->output($data);
             }
 
             $this->loadLanguage('com_jce', JPATH_ADMINISTRATOR);
@@ -235,8 +217,8 @@ class WFEditorPlugin extends WFEditor {
             'tips',
             'colorpicker',
             'plugin'
-        ), 'libraries');
-        
+                ), 'libraries');
+
         // load plugin dialog language file if necessary
         if ($this->getParam('editor.compress_javascript', 0)) {
             $file = "/langs/" . $this->getLanguage() . "_dlg.js";
@@ -252,7 +234,7 @@ class WFEditorPlugin extends WFEditor {
 
         $document->addStyleSheet(array(
             'plugin'
-        ), 'libraries');
+                ), 'libraries');
 
         // add custom plugin.css if exists
         if (is_file(JPATH_SITE . '/media/jce/css/plugin.css')) {
@@ -423,7 +405,7 @@ class WFEditorPlugin extends WFEditor {
         } else {
             // get all params
             $params = parent::getParams();
-            
+
             // check plugin param and fallback to editor param
             $param = $params->get($name . '.' . $key, $params->get('editor.' . $key, $fallback, $allowempty), $allowempty);
 

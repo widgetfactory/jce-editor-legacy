@@ -502,7 +502,7 @@ class WFDocument extends JObject {
         $output = '<title>' . $this->getTitle() . '</title>' . "\n";
         // create timestamp
         $stamp = preg_match('/\d+/', $version) ? '?version=' . $version : '';
-        
+
         // render stylesheets
         if ($this->get('compress_css', 0)) {
             $file = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . $this->getQueryString(array('task' => 'pack', 'type' => 'css'));
@@ -604,9 +604,22 @@ class WFDocument extends JObject {
                 case 'javascript':
                     foreach ($this->getScripts() as $script => $type) {
                         $script .= preg_match('/\.js$/', $script) ? '' : '.js';
-
                         $files[] = $this->urlToPath($script);
                     }
+
+                    if (WF_INI_LANG) {
+                        wfimport('admin.classes.language');
+
+                        $parser = new WFLanguageParser(array(
+                            'plugins'   => array($this->getName()),
+                            'sections'  => array('dlg', $this->getName() . '_dlg'),
+                            'mode'      => 'plugin'
+                        ));
+
+                        $data = $parser->load();
+                        $packer->setContentEnd($data);
+                    }
+
                     break;
                 case 'css':
                     foreach ($this->getStyleSheets() as $style => $type) {
