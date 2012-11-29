@@ -134,6 +134,25 @@
 .classicSkin .mceButtonDialog:before {content : ""; display: block; position : absolute; width : 20px; background-color:#F0F0EE; height : 6px; left : -1px; top : -6px; border-left : 1px solid #ccc; border-right : 1px solid #ccc;}
 .classicSkin .mceButtonDialog div, .classicSkin .mceButtonDialog input {font-family:Verdana, Arial, Helvetica, sans-serif; font-size:11px;}
 
+.classicSkin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton {
+        background: #ccc;
+	-webkit-border-radius: 2px 2px;
+	border: solid 1px rgb(153, 153, 153);
+	-moz-border-radius: 2px 2px;
+	border-radius: 2px 2px;
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(255, 255, 255)), to(rgb(237, 237, 237)));
+	background: -moz-linear-gradient(center top, rgb(255,255,255), rgb(237,237,237));
+	color: #333;
+	text-decoration: none;
+	cursor: pointer;
+	display: inline-block;
+	text-align: center;
+	text-shadow: 0px 1px 1px rgba(255,255,255,1);
+	line-height: 1;
+        padding : 5px;
+        font-weight : bold;
+}
+
 /* Progress,Resize */
 .classicSkin .mceBlocker {position:absolute; left:0; top:0; z-index:1000; opacity:0.5; -ms-filter:'alpha(opacity=50)'; filter:alpha(opacity=50); background:#FFF}
 .classicSkin .mceProgress {position:absolute; left:0; top:0; z-index:1001; background:url(../default/img/progress.gif) no-repeat; width:32px; height:32px; margin:-16px 0 0 -16px}

@@ -137,6 +137,25 @@
 .defaultSkin .mceButtonDialog input, .defaultSkin .mceButtonDialog label {float : none; clear : none;}
 .defaultSkin .mceButtonDialog {opacity : 0.9; -ms-filter:'alpha(opacity=90)'; filter:alpha(opacity=90);}
 
+.defaultSkin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton {
+        background: #ccc;
+	-webkit-border-radius: 2px 2px;
+	border: solid 1px rgb(153, 153, 153);
+	-moz-border-radius: 2px 2px;
+	border-radius: 2px 2px;
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(255, 255, 255)), to(rgb(237, 237, 237)));
+	background: -moz-linear-gradient(center top, rgb(255,255,255), rgb(237,237,237));
+	color: #333;
+	text-decoration: none;
+	cursor: pointer;
+	display: inline-block;
+	text-align: center;
+	text-shadow: 0px 1px 1px rgba(255,255,255,1);
+	line-height: 1;
+        padding : 5px;
+        font-weight : bold;
+}
+
 /* Rtl */
 .mceRtl .mceListBox .mceText {text-align: right; padding: 0 4px 0 0}
 .mceRtl .mceMenuItem .mceText {text-align: right}
