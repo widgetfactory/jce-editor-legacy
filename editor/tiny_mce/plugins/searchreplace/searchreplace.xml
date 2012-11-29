@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<install version="1.5.0" type="plugin" plugin="searchreplace" core="1" editable="0">
+<install version="2.0" type="plugin" plugin="searchreplace" core="1" editable="0">
 	<name>WF_SEARCHREPLACE_TITLE</name>
 	<version>@@version@@</version>
 	<creationDate>@@date@@</creationDate>

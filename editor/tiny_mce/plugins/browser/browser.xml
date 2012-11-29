@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<install version="1.5.0" type="plugin" plugin="browser" core="1" editable="1">
+<install version="2.0" type="plugin" plugin="browser" core="1" editable="1">
     <name>WF_BROWSER_TITLE</name>
     <version>@@version@@</version>
     <creationDate>@@date@@</creationDate>

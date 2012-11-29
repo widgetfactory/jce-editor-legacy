@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<install version="1.5.0" type="plugin" plugin="article" core="1" editable="1">
+<install version="2.0" type="plugin" plugin="article" core="1" editable="1">
     <name>WF_ARTICLE_TITLE</name>
     <version>@@version@@</version>
     <creationDate>@@date@@</creationDate>
