@@ -371,7 +371,7 @@
 .ui-jce .ui-accordion .ui-accordion-header, .ui-jce .ui-accordion .ui-accordion-content { -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0; }
 .ui-jce .ui-accordion .ui-accordion-li-fix { display: inline; }
 .ui-jce .ui-accordion .ui-accordion-header-active { border-bottom: 0 !important; }
-.ui-jce .ui-accordion .ui-accordion-header a { display: block; font-size: 12px; font-weight: bold; padding: .4em .4em .4em .7em; }
+.ui-jce .ui-accordion .ui-accordion-header a { display: block; font-size: 12px; font-weight: bold; padding: .4em .4em .4em 2em; }
 .ui-jce .ui-accordion-icons .ui-accordion-header a { padding-left: 2.2em; }
 .ui-jce .ui-accordion .ui-accordion-header .ui-icon { position: absolute; left: .4em; top: 50%; margin-top: -8px; }
 .ui-jce .ui-accordion .ui-accordion-content { padding: 1em 2.2em; border-top: 0; margin-top: -2px; position: relative; top: 1px; margin-bottom: 2px; overflow: auto; display: none; zoom: 1; }
@@ -541,7 +541,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 	-webkit-box-shadow: 0 2px 12px rgba(0,0,0,0.6);
 	-moz-box-shadow: 0 2px 12px rgba(0,0,0,0.6);
 }
-.ui-jce .ui-dialog .ui-dialog-titlebar { padding: 0.7em 1em 0.6em 1em; position: relative; border: none; border-bottom: 1px solid #979797; -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0;  }
+.ui-jce .ui-dialog .ui-dialog-titlebar { padding: 0.7em 1em; position: relative; border: none; border-bottom: 1px solid #979797; -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0;  }
 .ui-jce .ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .2em 0; font-size: 12px; text-shadow: 0 1px 0 rgba(255,255,255,0.5); } 
 .ui-jce .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .8em; top: 55%; width: 16px; margin: -10px 0 0 0; padding: 0; height: 16px; }
 .ui-jce .ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; background: url(images/icon_sprite.png) 0 -16px no-repeat; }
@@ -599,9 +599,9 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 }
 .ui-jce .ui-tabs .ui-tabs-nav li { list-style: none; float: left; position: relative; top: 1px; margin: 0 .2em 1px 0; border-bottom: 0; padding: 0; white-space: nowrap; }
 .ui-jce .ui-tabs .ui-tabs-nav li a { float: left; padding: .4em 1em; text-decoration: none; font-size: 11px; font-weight: bold; text-shadow: 0 1px 0 rgba(255,255,255,0.5); }
-.ui-jce .ui-tabs .ui-tabs-nav li.ui-tabs-selected { margin-bottom: 0; padding-bottom: 1px; background: #fff; border-color: #B6B6B6; }
-.ui-jce .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-jce .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-jce .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; outline: none; }
-.ui-jce .ui-tabs .ui-tabs-nav li a, .ui-jce .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-jce .ui-tabs .ui-tabs-nav li.ui-tabs-active { margin-bottom: 0; padding-bottom: 1px; background: #fff; border-color: #B6B6B6; }
+.ui-jce .ui-tabs .ui-tabs-nav li.ui-tabs-active a, .ui-jce .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-jce .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; outline: none; }
+.ui-jce .ui-tabs .ui-tabs-nav li a, .ui-jce .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
 .ui-jce .ui-tabs .ui-tabs-panel { display: block; border-width: 0 1px 1px 1px; padding: 1em 1.3em; background: none; }
 .ui-jce .ui-tabs .ui-tabs-panel { 
 	-moz-border-radius: 0;
@@ -801,7 +801,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-jce .ui-tabs-vertical .ui-tabs-nav li a span.defaultSkin span {
     display:inline-block;
 }
-.ui-jce .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-selected {
+.ui-jce .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
     padding-bottom: 0;
     padding-right: .1em;
     border-right-width: 0;

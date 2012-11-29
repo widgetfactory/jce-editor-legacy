@@ -8,6 +8,7 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
 */
+
 html {
     overflow: hidden;
     height: 100%;
@@ -20,6 +21,8 @@ body#jce {
     position: relative;
     height: 100%;
     overflow: hidden;
+    
+    -webkit-overflow-scrolling : 'touch';
 }
 #jce {
     border: 0 none;

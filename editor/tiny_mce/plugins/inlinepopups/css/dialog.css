@@ -8,6 +8,13 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
+ @import url('../../../../libraries/jquery/css/jquery-ui.custom.css');
+ 
+ .ui-jce {
+     font-family: Verdana,Arial,Helvetica,sans-serif;
+     font-size : 11px;
+ }
+ 
 .ui-jce .ui-dialog .ui-dialog-content {
     padding: 0 !important;
 }

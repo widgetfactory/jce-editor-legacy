@@ -7,7 +7,7 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-var WFFileBrowser = WFExtensions.add('FileBrowser', {
+var WFFileBrowser = {
 	
     settings 	: {},
 	
@@ -111,4 +111,4 @@ var WFFileBrowser = WFExtensions.add('FileBrowser', {
     _call : function(fn, args) {
         return $(this.element).MediaManager(fn, args);
     }
-});
+};

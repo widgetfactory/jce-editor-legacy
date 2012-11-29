@@ -13,9 +13,12 @@ defined('_JEXEC') or die('RESTRICTED');
 
 wfimport('editor.libraries.classes.editor');
 
-if (!defined('WF_INI_LANG')) {
-    define('WF_INI_LANG', 0);
-}
+wfimport('editor.libraries.classes.utility');
+wfimport('editor.libraries.classes.token');
+wfimport('editor.libraries.classes.document');
+wfimport('editor.libraries.classes.view');
+wfimport('editor.libraries.classes.tabs');
+wfimport('editor.libraries.classes.request');
 
 /**
  * JCE class
@@ -130,39 +133,21 @@ class WFEditorPlugin extends WFEditor {
             $request = WFRequest::getInstance();
             $request->process();
         } else {
-            $version = $this->getVersion();
-            $name = $this->getName();
+            $version    = $this->getVersion();
+            $name       = $this->getName();
 
             // process javascript languages
             if (JRequest::getWord('task') == 'loadlanguages') {
-                jimport('joomla.application.component.model');
+                wfimport('admin.classes.language');
 
-                JModel::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . '/models');
-                $model = JModel::getInstance('editor', 'WFModel');
+                $parser = new WFLanguageParser(array(
+                    'plugins'   => array($name),
+                    'sections'  => array('dlg', $name . '_dlg'),
+                    'mode'      => 'plugin'
+                ));
 
-                $files = array();
-                $section = array('dlg', $name . '_dlg');
-                $ini = JPATH_SITE . '/language/en-GB/en-GB.com_jce_' . $name . '.ini';
-
-                if (is_file($ini)) {
-                    $files[] = $ini;
-
-                    $language = JFactory::getLanguage();
-                    $tag = $language->getTag();
-
-                    // non-english language
-                    if ($tag != 'en-GB') {
-                        $ini = JPATH_SITE . '/language/' . $tag . '/' . $tag . '.com_jce_' . $name . '.ini';
-
-                        if (is_file($ini)) {
-                            $files[] = $ini;
-                        }
-                    }
-                }
-
-                if (method_exists($model, 'loadLanguages')) {
-                    $model->loadLanguages($files, $section);
-                }
+                $data = $parser->load();
+                $parser->output($data);
             }
 
             $this->loadLanguage('com_jce', JPATH_ADMINISTRATOR);
@@ -192,26 +177,9 @@ class WFEditorPlugin extends WFEditor {
             // create display
             $this->display();
 
-            $document = WFDocument::getInstance();
-
-            // set standalone mode (for File Browser etc)
-            if ($document->get('standalone') == 1) {
-                // remove some scripts
-                $document->removeScript('tiny_mce_popup', 'tiny_mce');
-                $document->removeScript('tiny_mce_utils', 'libraries');
-            }
-            
-            // load plugin dialog language file if necessary
-            if ($this->getParam('editor.compress_javascript', 0)) {
-                $file = "/langs/" . $this->getLanguage() . "_dlg.js";
-
-                if (!JFile::exists(WF_EDITOR_PLUGIN . $file)) {
-                    $file = "/langs/en_dlg.js";
-                }
-
-                if (JFile::exists(WF_EDITOR_PLUGIN . $file)) {
-                    $document->addScript(array('plugins/' . $this->getName() . $file), 'tiny_mce');
-                }
+            if (WF_INI_LANG) {
+                // ini language
+                $document->addScript(array('index.php?option=com_jce&view=editor&' . $document->getQueryString(array('task' => 'loadlanguages'))), 'joomla');
             }
 
             // pack assets if required
@@ -236,33 +204,35 @@ class WFEditorPlugin extends WFEditor {
         jimport('joomla.filesystem.folder');
         $document = WFDocument::getInstance();
 
-        $document->addScript(array('tiny_mce_popup'), 'tiny_mce');
-
-        if (WF_INI_LANG) {
-            // ini language
-            $document->addScript(array('index.php?option=com_jce&view=editor&' . $document->getQueryString(array('task' => 'loadlanguages'))), 'joomla');
+        if ($document->get('standalone') == 0) {
+            $document->addScript(array('tiny_mce_popup'), 'tiny_mce');
+            $document->addScript(array('tiny_mce_utils'), 'libraries');
         }
 
-        // jquery versions
-        $jquery = array('jquery/jquery-' . WF_JQUERY . '.min.js', 'jquery/jquery-ui-' . WF_JQUERYUI . '.custom.min.js');
-
-        $document->addScript($jquery, 'libraries');
+        $document->addScript(array('jquery-' . WF_JQUERY . '.min', 'jquery-ui-' . WF_JQUERYUI . '.custom.min', 'jquery.ui.touch-punch.min'), 'jquery');
 
         $document->addScript(array(
             'html5',
             'select',
             'tips',
-            'tiny_mce_utils',
+            'colorpicker',
             'plugin'
                 ), 'libraries');
 
-        // get UI Theme
-        $theme = $this->getParam('editor.dialog_theme', 'jce');
+        // load plugin dialog language file if necessary
+        if ($this->getParam('editor.compress_javascript', 0)) {
+            $file = "/langs/" . $this->getLanguage() . "_dlg.js";
 
-        $ui = JFolder::files(WF_EDITOR_LIBRARIES . '/css/jquery/' . $theme, '\.css$');
+            if (!JFile::exists(WF_EDITOR_PLUGIN . $file)) {
+                $file = "/langs/en_dlg.js";
+            }
+
+            if (JFile::exists(WF_EDITOR_PLUGIN . $file)) {
+                $document->addScript(array('plugins/' . $this->getName() . $file), 'tiny_mce');
+            }
+        }
 
         $document->addStyleSheet(array(
-            'jquery/' . $theme . '/' . basename($ui[0], '.css'),
             'plugin'
                 ), 'libraries');
 
@@ -294,17 +264,9 @@ class WFEditorPlugin extends WFEditor {
         $params = $this->getParams(array(
             'key' => $name,
             'path' => WF_EDITOR_PLUGIN . '/' . $name . '.xml'
-        ));
+                ));
 
-        $defaults = array_merge($defaults, (array) $params->getAll('defaults'));
-        
-        // map direction to dir
-        if (array_key_exists('direction', $defaults)) {
-            $defaults['dir'] = $defaults['direction'];
-            unset($defaults['direction']);
-        }
-
-        return $defaults;
+        return array_merge($defaults, (array) $params->getAll('defaults'));
     }
 
     /**
@@ -319,8 +281,9 @@ class WFEditorPlugin extends WFEditor {
             // check existence of plugin directory
             if (is_dir(WF_EDITOR_PLUGINS . '/' . $plugin) || is_dir(JPATH_PLUGINS . '/jce/' . $plugin)) {
                 // check profile	
-                $profile = $this->getProfile();
-                return is_object($profile) && isset($profile->id) && $profile->published = 1 && in_array($plugin, explode(',', $profile->plugins));
+                $profile = $this->getProfile($plugin);
+                //return is_object($profile) && isset($profile->id) && $profile->published = 1 && in_array($plugin, explode(',', $profile->plugins));
+                return is_object($profile) && $profile->id;
             }
         }
 
@@ -390,23 +353,14 @@ class WFEditorPlugin extends WFEditor {
     }
 
     /**
-     * Load a plugin extension
-     *
-     * @access	protected
-     */
-    protected function getExtensions($arguments) {
-        return array();
-    }
-
-    /**
      * Load & Call an extension
      *
      * @access	protected
      * @param 	array $config
      * @return 	array
      */
-    protected function loadExtensions($config = array()) {
-        return array();
+    protected function loadExtensions($type, $extension = null, $config = array()) {
+        return WFExtension::loadExtensions($type, $extension, $config);
     }
 
     /**
@@ -451,6 +405,7 @@ class WFEditorPlugin extends WFEditor {
         } else {
             // get all params
             $params = parent::getParams();
+
             // check plugin param and fallback to editor param
             $param = $params->get($name . '.' . $key, $params->get('editor.' . $key, $fallback, $allowempty), $allowempty);
 

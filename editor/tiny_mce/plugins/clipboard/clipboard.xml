@@ -11,7 +11,7 @@
     <description>WF_CLIPBOARD_DESC</description>
     <icon>cut,copy,paste</icon>
     <params group="standard">
-        <param name="paste_use_dialog" type="list" default="0" label="WF_PASTE_PARAM_DIALOG" description="WF_PASTE_PARAM_DIALOG_DESC">
+        <param name="paste_use_dialog" type="radio" default="0" label="WF_PASTE_PARAM_DIALOG" description="WF_PASTE_PARAM_DIALOG_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
@@ -25,32 +25,33 @@
             <option value="all">WF_PASTE_PARAM_ALL</option>
             <option value="none">WF_PASTE_PARAM_NONE</option>
         </param>
-        <param name="paste_remove_spans" type="list" default="0" label="WF_PASTE_PARAM_SPANS" description="WF_PASTE_PARAM_SPANS_DESC">
+        <param name="paste_remove_spans" type="radio" default="0" label="WF_PASTE_PARAM_SPANS" description="WF_PASTE_PARAM_SPANS_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="paste_remove_styles" type="list" default="0" label="WF_PASTE_PARAM_STYLES" description="WF_PASTE_PARAM_STYLES_DESC">
+        <param name="paste_remove_styles" type="radio" default="0" label="WF_PASTE_PARAM_STYLES" description="WF_PASTE_PARAM_STYLES_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
         <param name="paste_remove_attributes" type="text" size="50" placeholder="eg: lang,align" default="" label="WF_PASTE_PARAM_ATTRIBUTES" description="WF_PASTE_PARAM_ATTRIBUTES_DESC" />
         <param name="paste_retain_style_properties" placeholder="eg: font-size,font-family,color" size="50" type="text" default="" label="WF_PASTE_PARAM_RETAIN_STYLES" description="WF_PASTE_PARAM_RETAIN_STYLES_DESC" />
-        <param name="paste_remove_empty_paragraphs" type="list" default="1" label="WF_PASTE_PARAM_REMOVE_PARAGRAPHS" description="WF_PASTE_PARAM_REMOVE_PARAGRAPHS_DESC">
+        <param name="paste_remove_empty_paragraphs" type="radio" default="1" label="WF_PASTE_PARAM_REMOVE_PARAGRAPHS" description="WF_PASTE_PARAM_REMOVE_PARAGRAPHS_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>           
         </param>
-        <param name="paste_remove_styles_if_webkit" type="list" default="0" label="WF_PASTE_PARAM_REMOVE_STYLES_WEBKIT" description="WF_PASTE_PARAM_REMOVE_STYLES_WEBKIT_DESC">
+        <param name="paste_remove_styles_if_webkit" type="radio" default="0" label="WF_PASTE_PARAM_REMOVE_STYLES_WEBKIT" description="WF_PASTE_PARAM_REMOVE_STYLES_WEBKIT_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>           
         </param>
     </params>
     <params group="access">
-        <param name="paste_html" type="list" default="1" label="WF_PASTE_PARAM_PASTE_HTML" description="WF_PASTE_PARAM_PASTE_HTML_DESC">
+        <param name="paste_html" type="radio" default="1" label="WF_PASTE_PARAM_PASTE_HTML" description="WF_PASTE_PARAM_PASTE_HTML_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="paste_text" type="list" default="1" label="WF_PASTE_PARAM_PASTE_TEXT" description="WF_PASTE_PARAM_PASTE_TEXT_DESC">
+        <param name="paste_text" type="radio" default="1" label="WF_PASTE_PARAM_PASTE_TEXT" description="WF_PASTE_PARAM_PASTE_TEXT_DESC">
             <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>
         </param>
     </params>
     <params group="buttons">

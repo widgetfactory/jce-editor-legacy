@@ -7,96 +7,203 @@
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
- */
+*/
 html {
-	height : 100%;
-	background: #FFFFFF none;
+    /*height : 100%;*/
+    background: #FFFFFF none;
+    overflow : auto;
 }
 body.contentpane {
-	font-size: 8pt;
-	line-height: 10pt;
-	height : 95%;
-	margin: 0;
-	padding: 0;
+    font-size: 8pt;
+    line-height: 10pt;
+    height : 560px;
+    margin: 0;
+    padding: 0;
 }
 div#jce {
-	padding: 10px;
-	margin: 0;
-	height: 100%;
+    padding: 10px;
+    margin: 0;
+    height : 530px;
 }
+
+div#jce div {
+    height : 100%;
+}
+
 div#help-menu {
-	height: 100%;
-	width: 100%;
-	overflow: auto;
-	white-space: pre;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    white-space: pre;
 }
 div#help-menu dl, div#help-menu dt, div#help-menu dd {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 div#help-menu dd.loading {
-	background : url("../img/load.gif") no-repeat 0 0;
+    background : url("../img/load.gif") no-repeat 0 0;
 }
 div#help-menu dl {
-	margin: 0px;
-	padding: 0px;
+    margin: 0px;
+    padding: 0px;
 }
 div#help-menu dt {
-	margin: 0px 0px 5px 0px;
-	background: url("../img/icons.png") no-repeat 0 -100px;
-	line-height: 20px;
+    margin: 0px 0px 5px 0px;
+    background: url("../img/icons.png") no-repeat 0 -100px;
+    line-height: 20px;
 }
 html[dir="rtl"] div#help-menu dt {
-	background-position: right -100px;
+    background-position: right -100px;
 }
 div#help-menu dt span {
-	margin: 0px 0px 0px 25px;
-	font-weight: bold;
+    margin: 0px 0px 0px 25px;
+    font-weight: bold;
 }
 html[dir="rtl"] div#help-menu dt span {
-	margin: 0px 25px 0px 0;
+    margin: 0px 25px 0px 0;
 }
 div#help-menu dd {
-	margin: 0;
-	padding: 0px 0px 0px 25px;
-	background: url("../img/icons.png") no-repeat 0 -400px;
-	line-height: 20px; 
-	overflow: hidden;
-	cursor:pointer;
+    margin: 0;
+    padding: 0px 0px 0px 25px;
+    background: url("../img/icons.png") no-repeat 0 -400px;
+    line-height: 20px; 
+    overflow: hidden;
+    cursor:pointer;
 }
 html[dir="rtl"] div#help-menu dd {
-	padding: 0px 25px 0px 0;
-	background-position: right -400px;
+    padding: 0px 25px 0px 0;
+    background-position: right -400px;
 }
 div#help-menu dd.subtopics {
-	background: url("../img/icons.png") no-repeat 0 -120px;
+    background: url("../img/icons.png") no-repeat 0 -120px;
 }
 html[dir="rtl"] div#help-menu dd.subtopics {
-	background-position: right -120px;
+    background-position: right -120px;
 }
 div#help-menu dl.hidden {
-	display:none;
+    display:none;
 }
 div#help-menu dl dl {
-	padding: 0 0 0 15px;
+    padding: 0 0 0 15px;
 }
 table#help-table {
-	background-color: #efefef;
-	height : 100%;
+    background-color: #efefef;
+    height : 100%;
 }
 table#help-table td {
-	background-color: #fff;
-	border: 1px solid #ccc;
+    background-color: #fff;
+    border: 1px solid #ccc;
 }
 div#help-frame {
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
-div#help-handle {
-	cursor: pointer;
-}
+
 div#help-frame iframe {
-	width: 100%;
-	height: 100%;
+    width: 100%;
+    height: 100%;
 }
-div#help-handle.collapsed {}
+
+#jce div#help-menu-toggle {
+    margin-left : -12.5px;
+    height : 100%;
+    background : #eee;
+    float : left;
+}
+
+#jce div#help-menu-toggle div {
+    cursor: pointer;
+    width   : 10px;
+    height  : 50px;
+    background : #ccc;
+    top : 50%;
+    position: relative;
+    margin-top : -25px;
+}
+
+/** Bootstrap stuff **/
+.container-fluid {
+  padding-right: 20px;
+  padding-left: 20px;
+  *zoom: 1;
+}
+.container-fluid:before,
+.container-fluid:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.container-fluid:after {
+  clear: both;
+}
+.well {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.row-fluid {
+  width: 100%;
+  *zoom: 1;
+}
+.row-fluid:before,
+.row-fluid:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.row-fluid:after {
+  clear: both;
+}
+.row-fluid [class*="span"] {
+  display: block;
+  width: 100%;
+  min-height: 30px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  margin-left: 2.127659574468085%;
+  *margin-left: 2.074468085106383%;
+}
+.row-fluid [class*="span"]:first-child {
+  margin-left: 0;
+}
+
+.row-fluid .span12 {
+  width: 99%;
+  *width: 99%;
+}
+
+.row-fluid .span11 {
+  width: 91.48936170212765%;
+  *width: 91.43617021276594%;
+}
+
+.row-fluid .span8 {
+  width: 65.95744680851064%;
+  *width: 65.90425531914893%;
+}
+
+.row-fluid .span7 {
+  width: 57.44680851063829%;
+  *width: 57.39361702127659%;
+}
+
+.row-fluid .span4 {
+  width: 31.914893617021278%;
+  *width: 31.861702127659576%;
+}
+
+.row-fluid .span1 {
+  width: 6.382978723404255%;
+  *width: 6.329787234042553%;
+}

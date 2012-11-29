@@ -32,7 +32,8 @@
                     width : 780 + ed.getLang('imgmanager.delta_width', 0),
                     height : 640 + ed.getLang('imgmanager.delta_height', 0),
                     inline : 1,
-                    popup_css : false
+                    popup_css : false,
+                    size : 'large-landscape'
                 }, {
                     plugin_url 	: url
                 });

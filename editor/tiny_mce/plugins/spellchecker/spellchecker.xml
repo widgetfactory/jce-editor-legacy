@@ -11,13 +11,18 @@
     <description>WF_SPELLCHECKER_DESC</description>
     <icon>spellchecker</icon>
     <params group="standard">
-        <param name="engine" type="list" default="googlespell" label="WF_SPELLCHECKER_PARAM_ENGINE" description="WF_SPELLCHECKER_PARAM_GOOGLESPELL_LANGUAGES_DESC">
+        <param name="engine" type="list" default="browser" label="WF_SPELLCHECKER_PARAM_ENGINE" description="WF_SPELLCHECKER_PARAM_GOOGLESPELL_LANGUAGES_DESC">
             <option value="browser">WF_SPELLCHECKER_PARAM_BROWSER</option>
             <option value="googlespell">WF_SPELLCHECKER_PARAM_GOOGLE</option> 
             <option value="pspell">WF_SPELLCHECKER_PARAM_PSPELL_PHP</option> 
             <option value="pspellshell">WF_SPELLCHECKER_PARAM_PSPELL_CLINE</option>
             <option value="enchantspell">WF_SPELLCHECKER_PARAM_ENCHANT</option>
         </param>
+        
+        <param name="browser_state" type="radio" default="0" label="WF_OPTION_STATE" description="WF_SPELLCHECKER_BROWSER_STATE_DESC" parent="engine[browser]">
+                <option value="0">WF_OPTION_OFF</option>
+                <option value="1">WF_OPTION_ON</option>
+        </param>    
         
         <param name="googlespell_languages" type="list" class="checklist sortable" multiple="multiple" default="English=en" label="WF_SPELLCHECKER_PARAM_LANGUAGES" description="WF_SPELLCHECKER_PARAM_GOOGLESPELL_LANGUAGES_DESC" parent="engine[googlespell]" >
             <option value="English=en">English</option>

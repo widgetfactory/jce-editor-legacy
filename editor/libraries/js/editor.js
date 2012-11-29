@@ -129,7 +129,11 @@ function jInsertEditorText(text, editor) {
                     }
                 },
                 indent_before   : indent,
-                indent_after    : indent
+                indent_after    : indent,
+                compress : {
+                    'css' : false,
+                    'javascript' : false
+                }
             }, settings);
 
             if(this.settings) {

@@ -80,6 +80,7 @@
 
             if (ed.settings.content_css !== false)
                 ed.contentCSS.push(url + '/css/content.css');
+            
 
             ed.onClick.add(t._showMenu, t);
             ed.onContextMenu.add(t._showMenu, t);
@@ -114,6 +115,13 @@
                 }
 
                 t.languages[k] = v;
+            });
+            
+            // Turn spellchecker on if required
+            ed.onInit.add(function() {
+                if (t.native_spellchecker && ed.getParam('spellchecker_browser_state', 0)) {
+                    ed.execCommand('mceSpellCheck', false);
+                } 
             });
         },
 
@@ -347,161 +355,161 @@
                             });
                         });
 
-                    m.addSeparator();
-                } else
-                    m.add({
-                        title : 'spellchecker.no_sug', 
-                        'class' : 'mceMenuItemTitle'
-                    }).setDisabled(1);
+                        m.addSeparator();
+                    } else
+                        m.add({
+                            title : 'spellchecker.no_sug', 
+                            'class' : 'mceMenuItemTitle'
+                        }).setDisabled(1);
 
-                if (ed.getParam('show_ignore_words', true)) {
-                    ignoreRpc = t.editor.getParam("spellchecker_enable_ignore_rpc", '');
-                    m.add({
-                        title : 'spellchecker.ignore_word',
-                        onclick : function() {
-                            var word = wordSpan.innerHTML;
+                    if (ed.getParam('show_ignore_words', true)) {
+                        ignoreRpc = t.editor.getParam("spellchecker_enable_ignore_rpc", '');
+                        m.add({
+                            title : 'spellchecker.ignore_word',
+                            onclick : function() {
+                                var word = wordSpan.innerHTML;
 
-                            dom.remove(wordSpan, 1);
-                            t._checkDone();
+                                dom.remove(wordSpan, 1);
+                                t._checkDone();
 
-                            // tell the server if we need to
-                            if (ignoreRpc) {
+                                // tell the server if we need to
+                                if (ignoreRpc) {
+                                    ed.setProgressState(1);
+                                    t._sendRPC('ignoreWord', [t.selectedLang, word], function(r) {
+                                        ed.setProgressState(0);
+                                    });
+                                }
+                            }
+                        });
+
+                        m.add({
+                            title : 'spellchecker.ignore_words',
+                            onclick : function() {
+                                var word = wordSpan.innerHTML;
+
+                                t._removeWords(dom.decode(word));
+                                t._checkDone();
+
+                                // tell the server if we need to
+                                if (ignoreRpc) {
+                                    ed.setProgressState(1);
+                                    t._sendRPC('ignoreWords', [t.selectedLang, word], function(r) {
+                                        ed.setProgressState(0);
+                                    });
+                                }
+                            }
+                        });
+                    }
+
+                    if (t.editor.getParam("spellchecker_enable_learn_rpc")) {
+                        m.add({
+                            title : 'spellchecker.learn_word',
+                            onclick : function() {
+                                var word = wordSpan.innerHTML;
+
+                                dom.remove(wordSpan, 1);
+                                t._checkDone();
+
                                 ed.setProgressState(1);
-                                t._sendRPC('ignoreWord', [t.selectedLang, word], function(r) {
+                                t._sendRPC('learnWord', [t.selectedLang, word], function(r) {
                                     ed.setProgressState(0);
                                 });
                             }
-                        }
-                    });
+                        });
+                    }
 
-                    m.add({
-                        title : 'spellchecker.ignore_words',
-                        onclick : function() {
-                            var word = wordSpan.innerHTML;
-
-                            t._removeWords(dom.decode(word));
-                            t._checkDone();
-
-                            // tell the server if we need to
-                            if (ignoreRpc) {
-                                ed.setProgressState(1);
-                                t._sendRPC('ignoreWords', [t.selectedLang, word], function(r) {
-                                    ed.setProgressState(0);
-                                });
-                            }
-                        }
-                    });
-                }
-
-                if (t.editor.getParam("spellchecker_enable_learn_rpc")) {
-                    m.add({
-                        title : 'spellchecker.learn_word',
-                        onclick : function() {
-                            var word = wordSpan.innerHTML;
-
-                            dom.remove(wordSpan, 1);
-                            t._checkDone();
-
-                            ed.setProgressState(1);
-                            t._sendRPC('learnWord', [t.selectedLang, word], function(r) {
-                                ed.setProgressState(0);
-                            });
-                        }
-                    });
-                }
-
-                m.update();
+                    m.update();
                 });
 
-            p1 = DOM.getPos(ed.getContentAreaContainer());
-            m.settings.offset_x = p1.x;
-            m.settings.offset_y = p1.y;
+                p1 = DOM.getPos(ed.getContentAreaContainer());
+                m.settings.offset_x = p1.x;
+                m.settings.offset_y = p1.y;
 
-            ed.selection.select(wordSpan);
-            p1 = dom.getPos(wordSpan);
-            m.showMenu(p1.x, p1.y + wordSpan.offsetHeight - vp.y);
+                ed.selection.select(wordSpan);
+                p1 = dom.getPos(wordSpan);
+                m.showMenu(p1.x, p1.y + wordSpan.offsetHeight - vp.y);
 
-            return tinymce.dom.Event.cancel(e);
-        } else
-            m.hideMenu();
-    },
+                return tinymce.dom.Event.cancel(e);
+            } else
+                m.hideMenu();
+        },
 
-    _checkDone : function() {
-        var t = this, ed = t.editor, dom = ed.dom, o;
+        _checkDone : function() {
+            var t = this, ed = t.editor, dom = ed.dom, o;
 
-        each(dom.select('span'), function(n) {
-            if (n && dom.hasClass(n, 'mceItemHiddenSpellWord')) {
-                o = true;
-                return false;
-            }
-        });
-
-        if (!o)
-            t._done();
-    },
-
-    _done : function() {
-        var t = this, la = t.active;
-
-        if (t.active) {
-            t.active = 0;
-            t._removeWords();
-
-            if (t._menu)
-                t._menu.hideMenu();
-
-            if (la)
-                t.editor.nodeChanged();
-        }
-    },
-
-    _sendRPC : function(m, p, cb) {
-        var t = this, ed = t.editor;
-			
-        var query = '', args = {
-            'format' : 'raw'
-        };
-
-        // set token
-        args[ed.settings.token] = 1;
-			
-        // create query
-        for (k in args) {
-            query += '&' + k + '=' + encodeURIComponent(args[k]);
-        }
-
-        tinymce.util.XHR.send({
-            url : t.rpcUrl,
-            content_type : 'application/x-www-form-urlencoded',
-            data : 'json=' + JSON.serialize({
-                'fn' : m, 
-                'args' : p
-            }) + query,
-            success : function(o) {
-                var c = JSON.parse(o);
-					
-                if (typeof(c) == 'undefined') {
-                    c = {
-                        error : 'JSON Parse error.'
-                    };
+            each(dom.select('span'), function(n) {
+                if (n && dom.hasClass(n, 'mceItemHiddenSpellWord')) {
+                    o = true;
+                    return false;
                 }
+            });
+
+            if (!o)
+                t._done();
+        },
+
+        _done : function() {
+            var t = this, la = t.active;
+
+            if (t.active) {
+                t.active = 0;
+                t._removeWords();
+
+                if (t._menu)
+                    t._menu.hideMenu();
+
+                if (la)
+                    t.editor.nodeChanged();
+            }
+        },
+
+        _sendRPC : function(m, p, cb) {
+            var t = this, ed = t.editor;
+			
+            var query = '', args = {
+                'format' : 'raw'
+            };
+
+            // set token
+            args[ed.settings.token] = 1;
+			
+            // create query
+            for (k in args) {
+                query += '&' + k + '=' + encodeURIComponent(args[k]);
+            }
+
+            tinymce.util.XHR.send({
+                url : t.rpcUrl,
+                content_type : 'application/x-www-form-urlencoded',
+                data : 'json=' + JSON.serialize({
+                    'fn' : m, 
+                    'args' : p
+                }) + query,
+                success : function(o) {
+                    var c = JSON.parse(o);
 					
-                if (c.error) {
+                    if (typeof(c) == 'undefined') {
+                        c = {
+                            error : 'JSON Parse error.'
+                        };
+                    }
+					
+                    if (c.error) {
+                        ed.setProgressState(0);
+                        var e = c.error;						
+                        ed.windowManager.alert(e.errstr || ('Error response: ' + e));
+                    } else {
+                        cb.call(t, c.result || '');
+                    }
+                },
+                error : function(x) {
                     ed.setProgressState(0);
-                    var e = c.error;						
-                    ed.windowManager.alert(e.errstr || ('Error response: ' + e));
-                } else {
-                    cb.call(t, c.result || '');
+                    ed.windowManager.alert('Error response: ' + x);
                 }
-            },
-            error : function(x) {
-                ed.setProgressState(0);
-                ed.windowManager.alert('Error response: ' + x);
-            }
-        });
-    }
+            });
+        }
     });
 
-// Register plugin
-tinymce.PluginManager.add('spellchecker', tinymce.plugins.SpellcheckerPlugin);
-    })();
+    // Register plugin
+    tinymce.PluginManager.add('spellchecker', tinymce.plugins.SpellcheckerPlugin);
+})();

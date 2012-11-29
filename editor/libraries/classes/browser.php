@@ -11,10 +11,9 @@
  */
 defined('_JEXEC') or die('RESTRICTED');
 
-wfimport('editor.libraries.classes.extensions.browser');
 wfimport('editor.libraries.classes.extensions.filesystem');
 
-class WFFileBrowser extends WFBrowserExtension {
+class WFFileBrowser extends JObject {
     /*
      *  @var array
      */
@@ -71,8 +70,8 @@ class WFFileBrowser extends WFBrowserExtension {
 
         $config = array_merge($default, $config);
 
-        // Call parent
-        parent::__construct($config);
+
+        $this->setProperties($config);
 
         // Setup XHR callback funtions
         $this->setRequest(array($this, 'getItems'));
@@ -88,33 +87,47 @@ class WFFileBrowser extends WFBrowserExtension {
     }
 
     /**
+     * Returns a reference to a editor object
+     *
+     * This method must be invoked as:
+     * 		<pre>  $browser =JContentEditor::getInstance();</pre>
+     *
+     * @access	public
+     * @return	JCE  The editor object.
+     */
+    public function getInstance($config = array()) {
+        static $instance;
+
+        if (!is_object($instance)) {
+            $instance = new WFFileBrowser($config);
+        }
+        return $instance;
+    }
+
+    /**
      * Display the browser
      * @access public
      */
     public function display() {
-        parent::display();
-
+        //parent::display();
         // Get the Document instance
         $document = WFDocument::getInstance();
 
         $document->addScript(array(
             'tree',
-            'upload'
+            'upload',
+            'browser',
+            'sort',
+            'filter',
+            'manager'
                 ), 'libraries');
 
         $document->addScript(array(
             'plupload.full',
                 ), 'jce.libraries.plupload');
 
-        $document->addScript(array(
-            'file',
-            'sort',
-            'filter',
-            'manager'
-                ), 'extensions.browser.js');
-
         //$document->addStyleSheet(array('files', 'tree', 'upload'), 'libraries');
-        $document->addStyleSheet(array('manager'), 'extensions.browser.css');
+        $document->addStyleSheet(array('manager'), 'libraries');
         // custom stylesheet
         //$document->addStyleSheet(array('custom'), 'libraries.css');
         // file browser options
@@ -127,8 +140,12 @@ class WFFileBrowser extends WFBrowserExtension {
      */
     public function render() {
         $session = JFactory::getSession();
-        // create file view
-        $view = $this->getView('file');
+
+        $view = new WFView(array(
+                    'name' => 'browser',
+                    'layout' => 'file'
+                ));
+
         // assign session data
         $view->assignRef('session', $session);
         // assign form action
@@ -839,7 +856,7 @@ class WFFileBrowser extends WFBrowserExtension {
 
             throw new InvalidArgumentException('INVALID FILE NAME');
         }
-        
+
         clearstatcache();
 
         // check the file sizes match

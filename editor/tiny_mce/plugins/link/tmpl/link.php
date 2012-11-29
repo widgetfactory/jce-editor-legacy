@@ -32,7 +32,7 @@ $plugin = WFLinkPlugin::getInstance();
             endif;
         ?>
         <h3><?php echo WFText::_('WF_LABEL_BROWSE'); ?></h3>
-        <?php echo $plugin->getBrowser('link')->render(); ?>
+        <?php echo $plugin->getLinks()->render(); ?>
     </div>
 </fieldset>
 <h4><?php echo WFText::_('WF_LABEL_ATTRIBUTES'); ?></h4>

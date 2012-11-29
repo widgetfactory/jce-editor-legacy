@@ -1160,8 +1160,11 @@
                 if (!toolbarsExist) {
                     o.deltaHeight -= s.theme_advanced_row_height;
                 }
+                
+                var html = toolbarGroup.renderHTML();
+                html = html.replace(/href="javascript:;"/gi, 'href="#"');
         
-                h.push(toolbarGroup.renderHTML());
+                h.push(html);
                 h.push(DOM.createHTML('a', {
                     href : '#', 
                     accesskey : 'z', 

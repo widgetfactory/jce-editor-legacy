@@ -18,7 +18,6 @@
                 ed.windowManager = new tinymce.InlineWindowManager(ed);
 
                 if (!ed.settings.compress.css) {
-                    DOM.loadCSS(ed.settings.jquery_ui);
                     DOM.loadCSS(url + '/css/dialog.css');
                 }
             });

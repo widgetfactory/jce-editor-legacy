@@ -86,7 +86,7 @@
 .o2k7Skin .mce_forecolor span.mceAction, .o2k7Skin .mce_backcolor span.mceAction {height:15px;overflow:hidden}
 
 /* Table Grid SplitButton */
-.o2k7Skin table.mceTableSplitMenu {width : 120px; height: 80px; background:#FFF; border:1px solid #ccc;}
+.o2k7Skin table.mceTableSplitMenu {width : 120px; height: 80px; background:#FFF; border:1px solid #ccc; border-spacing: 1px;}
 .o2k7Skin table.mceTableSplitMenu td {border: 1px solid #ccc;background-color: #FFF;}
 .o2k7Skin table.mceTableSplitMenu td.selected {background-color: #C2CBE0;}
 .o2k7Skin table.mceTableSplitMenu tfoot td.mceTableGridCount {background-color: #FFF;text-align: center;font-family:Tahoma,Verdana,Arial,Helvetica; font-size:11px; line-height:20px;}
@@ -116,7 +116,7 @@
 /* Dialog */
 .o2k7Skin .mceButtonDialog {position:absolute; left:0; top:1px; z-index:1000; border:1px solid #ABC6DD; direction:ltr; background : #E5EFFD; padding : 3px;}
 .o2k7Skin .mceButtonDialog fieldset {margin:0; padding:4px; border: 0 none; font-family:Verdana, Arial; font-size:10px;}
-.o2k7Skin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px;}
+.o2k7Skin .mceButtonDialog fieldset legend {color:#2B6FB6; font-weight:bold; font-size : 11px; margin: 0;}
 .o2k7Skin .mceButtonDialog .mceButtonDialogContent {background-color : #fff;}
 .o2k7Skin .mceButtonDialog label {margin : 5px; min-width : 30px; display : inline-block;}
 .o2k7Skin .mceButtonDialog input {margin : 3px;}
@@ -131,6 +131,25 @@
 
 .o2k7Skin .mceButtonDialog input, .defaultSkin .mceButtonDialog label {float : none; clear : none;}
 .o2k7Skin .mceButtonDialog {opacity : 0.9; -ms-filter:'alpha(opacity=90)'; filter:alpha(opacity=90);}
+
+.o2k7Skin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton {
+        background: #ccc;
+	-webkit-border-radius: 2px 2px;
+	border: solid 1px rgb(153, 153, 153);
+	-moz-border-radius: 2px 2px;
+	border-radius: 2px 2px;
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(255, 255, 255)), to(rgb(237, 237, 237)));
+	background: -moz-linear-gradient(center top, rgb(255,255,255), rgb(237,237,237));
+	color: #333;
+	text-decoration: none;
+	cursor: pointer;
+	display: inline-block;
+	text-align: center;
+	text-shadow: 0px 1px 1px rgba(255,255,255,1);
+	line-height: 1;
+        padding : 5px;
+        font-weight : bold;
+}
 
 /* Rtl */
 .mceRtl .mceListBox .mceText {text-align: right; padding: 0 4px 0 0}

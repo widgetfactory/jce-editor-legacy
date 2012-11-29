@@ -7,10 +7,11 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-var WFLinkBrowser = WFExtensions.add('LinkBrowser', {
+
+var WFLinkBrowser = {
 	
     options : {
-        element		: '#link-browser',
+        element	: '#link-browser',
         onClick 	: $.noop	
     },
 	
@@ -85,4 +86,4 @@ var WFLinkBrowser = WFExtensions.add('LinkBrowser', {
             }
         });
     }
-});
+};

@@ -14,17 +14,13 @@ class WFAdvlistPluginConfig {
 	public static function getConfig( &$settings ){
 		$wf = WFEditor::getInstance();
                 
-                $number = $wf->getParam('lists.number_styles', 'default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman', 'default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman');
-		$bullet = $wf->getParam('lists.bullet_styles', 'default,circle,disc,square', 'default,circle,disc,square');
+                $number = $wf->getParam('list.number_styles', 'default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman', 'default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman');
+		$bullet = $wf->getParam('list.bullet_styles', 'default,circle,disc,square', 'default,circle,disc,square');
                 
                 if ($number) {
                     $items = array();
                     
-                    if (is_string($number)) {
-                        $number = explode(',', $number);
-                    }
-                    
-                    foreach((array) $number as $item) {
+                    foreach(explode(',', $number) as $item) {
                         $title = $item == 'default' ? 'def' : str_replace('-', '_', $item);
                         $style = $item == 'default' ? '' : $item;
                         
@@ -37,11 +33,7 @@ class WFAdvlistPluginConfig {
                 if ($bullet) {
                     $items = array();
                     
-                    if (is_string($bullet)) {
-                        $bullet = explode(',', $bullet);
-                    }
-                    
-                    foreach((array) $bullet as $item) {
+                    foreach(explode(',', $bullet) as $item) {
                         $title = $item == 'default' ? 'def' : str_replace('-', '_', $item);
                         $style = $item == 'default' ? '' : $item;
                         

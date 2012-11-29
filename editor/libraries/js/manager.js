@@ -162,7 +162,7 @@
                 e.preventDefault();
             });
 
-            // add to browser list
+            // update browser list on scroll
             $('#browser-list').append(list).bind('scroll.browser-list', function(e) {
                 self._updateList();
             });
@@ -247,7 +247,7 @@
             }
 
             // Show / hide tree
-            this._toggleTree(this._treeLoaded());
+            //this._toggleTree(this._treeLoaded());
 
             $('#show-search').click( function() {
                 $('#searchbox').toggleClass('hide').attr('aria-hidden', function() {
@@ -674,7 +674,7 @@
 
             /* Initialise tree */
             this.setStatus({
-                message : self._translate('message_tree', 'Building tree list...'), 
+                message : self._translate('loading', 'Loading...'), 
                 state : 'load'
             });
 
@@ -837,7 +837,7 @@
 
                     $item = $('<li title="' + s + '" />').click(function(e) {
                         self._changeDir(path);						
-                    }).html('&rsaquo; ' + s).insertBefore($count);
+                    }).html('&rsaquo;&nbsp;' + s).insertBefore($count);
 
                     // add item width
                     w += $item.outerWidth(true);
@@ -2095,9 +2095,12 @@
             });
 
             if (items.length) {
-                var pos = $(items[0]).position();
+                //var pos = $(items[0]).position();
+                
+                var top = $(items).get(0).offsetTop - 2;
+                
                 $(this.options.dialog.list).animate({
-                    scrollTop : pos.top
+                    scrollTop : Math.round(top)
                 }, 1500);
             }
 

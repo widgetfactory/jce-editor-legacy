@@ -318,7 +318,7 @@
                         title           : ed.getLang('anchor.desc', 'Inserts an Anchor'),
                         'class'         : 'mce_anchor',
                         'content'       : content,
-                        'width'         : 210,
+                        'width'         : 250,
                         'buttons'       : [{
                             title : ed.getLang('insert', 'Insert'),
                             id    : 'insert',

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <params group="setup">
-        <param name="dialog_theme" type="folderlist" directory="components/com_jce/editor/libraries/css/jquery" hide_none="true" hide_default="true" default="smoothness" label="WF_PARAM_EDITOR_DIALOG_THEME" description="WF_PARAM_EDITOR_DIALOG_THEME_DESC" />
+        <!--param name="dialog_theme" type="folderlist" directory="components/com_jce/editor/libraries/css/jquery" hide_none="true" hide_default="true" default="smoothness" label="WF_PARAM_EDITOR_DIALOG_THEME" description="WF_PARAM_EDITOR_DIALOG_THEME_DESC" /-->
         <!-- URLS -->
-        <param name="relative_urls" type="list" default="1" label="WF_PARAM_RELATIVE" description="WF_PARAM_RELATIVE_DESC">
+        <param name="relative_urls" type="radio" default="1" label="WF_PARAM_RELATIVE" description="WF_PARAM_RELATIVE_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
@@ -59,7 +59,7 @@
         <param name="theme_advanced_fonts_add" type="text" size="100" default="" label="WF_PARAM_FONT_ADD" description="WF_PARAM_FONT_ADD_DESC" placeholder="eg: Arial=arial,helvetica,sans-serif;Georgia=georgia,palatino" />
         <param name="theme_advanced_fonts_remove" type="text" size="100" default="" label="WF_PARAM_FONT_REMOVE" description="WF_PARAM_FONT_REMOVE_DESC" placeholder="eg: Arial;Georgia;Courier New" />
         <param name="theme_advanced_font_sizes" type="text" size="100" default="" placeholder="eg: 8pt,10pt,12pt,14pt,18pt,24pt,36pt" label="WF_PARAM_FONT_STYLES" description="WF_PARAM_FONT_STYLES_DESC" />
-        <param name="custom_colors" type="textarea" rows="2" cols="55" default="" label="WF_PARAM_CUSTOM_COLORS" description="WF_PARAM_CUSTOM_COLORS_DESC" placeholder="eg: #CC0000,#FF0000" />
+        <param name="custom_colors" type="textarea" rows="3" cols="50" default="" label="WF_PARAM_CUSTOM_COLORS" description="WF_PARAM_CUSTOM_COLORS_DESC" placeholder="eg: #CC0000,#FF0000" />
     </params>
     <params group="filesystem">
 		<!-- Plugin parameters -->
@@ -79,7 +79,7 @@
             <option value="top">WF_LABEL_TOP</option>
             <option value="bottom">WF_LABEL_BOTTOM</option>
         </param>
-        <param name="folder_tree" type="list" default="1" label="WF_PARAM_FOLDER_TREE" description="WF_PARAM_FOLDER_TREE_DESC">
+        <param name="folder_tree" type="radio" default="1" label="WF_PARAM_FOLDER_TREE" description="WF_PARAM_FOLDER_TREE_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
@@ -90,7 +90,7 @@
             <option value="100">100</option>
             <option value="all">WF_OPTION_ALL</option>
         </param>
-        <param name="validate_mimetype" type="list" default="1" label="WF_PARAM_VALIDATE_MIMETYPE" description="WF_PARAM_VALIDATE_MIMETYPE_DESC">
+        <param name="validate_mimetype" type="radio" default="1" label="WF_PARAM_VALIDATE_MIMETYPE" description="WF_PARAM_VALIDATE_MIMETYPE_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
@@ -98,11 +98,11 @@
             <option value="utf-8">UTF-8</option>
             <option value="ascii">ASCII</option>
         </param>
-        <param name="websafe_allow_spaces" type="list" default="0" label="WF_PARAM_WEBSAFE_ALLOW_SPACES" description="WF_PARAM_WEBSAFE_ALLOW_SPACES_DESC">
+        <param name="websafe_allow_spaces" type="radio" default="0" label="WF_PARAM_WEBSAFE_ALLOW_SPACES" description="WF_PARAM_WEBSAFE_ALLOW_SPACES_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param> 
-        <param name="upload_add_random" type="list" default="0" label="WF_PARAM_UPLOAD_ADD_RANDOM" description="WF_PARAM_UPLOAD_ADD_RANDOM_DESC">
+        <param name="upload_add_random" type="radio" default="0" label="WF_PARAM_UPLOAD_ADD_RANDOM" description="WF_PARAM_UPLOAD_ADD_RANDOM_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param> 
@@ -113,19 +113,19 @@
         <param name="invalid_attributes" type="text" size="50" default="dynsrc,lowsrc" label="WF_PARAM_INVALID_ATTRIBUTES" description="WF_PARAM_INVALID_ATTRIBUTES_DESC" />
         <param name="invalid_attribute_values" type="text" size="50" default="" label="WF_PARAM_INVALID_ATTRIBUTE_VALUES" description="WF_PARAM_INVALID_ATTRIBUTE_VALUES_DESC" />
         <param name="extended_elements" type="textarea" rows="2" cols="46" default="" label="WF_PARAM_ELEMENTS" description="WF_PARAM_ELEMENTS_DESC" />
-        <param name="allow_javascript" type="list" default="0" label="WF_PARAM_JAVASCRIPT" description="WF_PARAM_JAVASCRIPT_DESC">
+        <param name="allow_javascript" type="radio" default="0" label="WF_PARAM_JAVASCRIPT" description="WF_PARAM_JAVASCRIPT_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="allow_css" type="list" default="0" label="WF_PARAM_CSS" description="WF_PARAM_CSS_DESC">
+        <param name="allow_css" type="radio" default="0" label="WF_PARAM_CSS" description="WF_PARAM_CSS_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="allow_php" type="list" default="0" label="WF_PARAM_PHP" description="WF_PARAM_PHP_DESC">
+        <param name="allow_php" type="radio" default="0" label="WF_PARAM_PHP" description="WF_PARAM_PHP_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="cdata" type="list" default="1" label="WF_PARAM_CDATA" description="WF_PARAM_CDATA_DESC">
+        <param name="cdata" type="radio" default="1" label="WF_PARAM_CDATA" description="WF_PARAM_CDATA_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>

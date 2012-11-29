@@ -8,7 +8,10 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
+@import url("../jquery/css/jquery-ui.custom.css");
+ 
 @import url("reset.css");
 @import url("dialog.css");
 @import url("tips.css");
 @import url("select.css");
+@import url("../../tiny_mce/themes/advanced/css/colorpicker.css");

@@ -7,9 +7,9 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
 */
-@import url("../../../libraries/css/files.css");
-@import url("../../../libraries/css/tree.css");
-@import url("../../../libraries/css/upload.css");
+@import url("files.css");
+@import url("tree.css");
+@import url("upload.css");
 
 div#browser {
     margin: 5px 0 0;
@@ -22,12 +22,16 @@ div#browser {
     margin: 0 0 5px 0;
 }
 
-div.layout-top,div.layout-bottom {
+div.layout-top, div.layout-bottom {
     width: 100%;
 }
 
 div.layout-bottom {
     margin: 1px 0 0 0;
+}
+
+#jce div.layout-bottom > div {
+    margin: 0 0 0 0;
 }
 
 div.layout-left,div.layout-center,div.layout-right {
@@ -62,7 +66,7 @@ div#browser span#layout-full-toggle {
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -1200px;
+    background: url('../img/icons.png') no-repeat 0 -1200px;
     width: 20px;
     height: 20px;
     margin: 0 5px 0 0;
@@ -171,7 +175,7 @@ div#browser-list-limit label {
 {
     height: 20px;
     cursor: pointer;
-    background: url('../../../libraries/img/icons.png') no-repeat;
+    background: url('../img/icons.png') no-repeat;
     width: 20px;
     display: none;
 }
@@ -232,6 +236,7 @@ div#browser-list-actions div:first-child {
     height: 20px;
     border: 1px solid #ccc;
     line-height: 20px;
+    margin: 0 1px 0 0;
 }
 
 div#browser-buttons {
@@ -293,7 +298,7 @@ img.icon {
 }
 
 div.button,div#message-status,div#message-info {
-    background-image: url('../../../libraries/img/icons.png');
+    background-image: url('../img/icons.png');
     background-repeat: no-repeat;
 }
 
@@ -304,15 +309,15 @@ span.layout-icon {
 }
 
 span#upload {
-    background: url('../../../libraries/img/icons-24.png') no-repeat 0 -24px;
+    background: url('../img/icons-24.png') no-repeat 0 -24px;
 }
 
 span#help {
-    background: url('../../../libraries/img/icons-24.png') no-repeat 0 -48px;
+    background: url('../img/icons-24.png') no-repeat 0 -48px;
 }
 
 span#folder_new {
-    background: url('../../../libraries/img/icons-24.png') no-repeat 0 0;
+    background: url('../img/icons-24.png') no-repeat 0 0;
 }
 
 /**
@@ -328,7 +333,7 @@ div#browser-message {
 }
 
 div#browser-message.load {
-    background: url('../../../libraries/img/load.gif') no-repeat left center;
+    background: url('../img/load.gif') no-repeat left center;
 }
 
 div#browser-message ul.pathway {
@@ -401,7 +406,7 @@ div#browser-list-actions div#searchbox input#search {
 
 div#browser-list-actions div#searchbox span.search-icon {
     position: absolute;
-    background: url("../../../libraries/img/icons.png") no-repeat 0 -940px;
+    background: url("../img/icons.png") no-repeat 0 -940px;
     right: 2px;
     top: 1px;
     width: 20px;
@@ -409,7 +414,7 @@ div#browser-list-actions div#searchbox span.search-icon {
 }
 
 div#browser-list-actions div#searchbox span.search-icon.clear {
-    background: url("../../../libraries/img/icons.png") no-repeat 0 -920px;
+    background: url("../img/icons.png") no-repeat 0 -920px;
     cursor: pointer;
 }
 
@@ -456,7 +461,7 @@ div#info-comment {
  * Checkboxes
 */
 span.checkbox {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -740px;
+    background: url('../img/icons.png') no-repeat 0 -740px;
     display: inline-block;
     margin: 0 0 0 3px;
     width: 30px;
@@ -464,11 +469,11 @@ span.checkbox {
 }
 
 span.checkbox.checked {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -760px;
+    background: url('../img/icons.png') no-repeat 0 -760px;
 }
 
 span.checkbox.mixed {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -780px;
+    background: url('../img/icons.png') no-repeat 0 -780px;
 }
 
 span.checkbox.disabled {
@@ -565,41 +570,41 @@ span.layout-icon.sort {
 }
 
 div.asc span.layout-icon.sort {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -40px;
+    background: url('../img/icons.png') no-repeat 0 -40px;
 }
 
 div.desc span.layout-icon.sort {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -60px;
+    background: url('../img/icons.png') no-repeat 0 -60px;
 }
 
 div#sort-date.asc span.layout-icon.sort {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -800px;
+    background: url('../img/icons.png') no-repeat 0 -800px;
 }
 
 div#sort-date.desc span.layout-icon.sort {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -820px;
+    background: url('../img/icons.png') no-repeat 0 -820px;
 }
 
 div#sort-size.asc span.layout-icon.sort {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -840px;
+    background: url('../img/icons.png') no-repeat 0 -840px;
 }
 
 div#sort-size.desc span.layout-icon.sort {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -860px;
+    background: url('../img/icons.png') no-repeat 0 -860px;
 }
 
 span.layout-icon.details {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -880px;
+    background: url('../img/icons.png') no-repeat 0 -880px;
     margin-left: 2px;
 }
 
 span.layout-icon.tree {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -900px;
+    background: url('../img/icons.png') no-repeat 0 -900px;
     margin-left: 2px;
 }
 
 span.layout-icon.search {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -440px;
+    background: url('../img/icons.png') no-repeat 0 -440px;
     margin-left: 2px;
 }
 
@@ -685,11 +690,11 @@ dd#info-preview dl dd.resize {
 }
 
 dd#info-preview dl dd.preview-error {
-    background: url('../../../libraries/img/broken.png') no-repeat center;
+    background: url('../img/broken.png') no-repeat center;
 }
 
 dd#info-preview dl dd.loader {
-    background: url('../../../libraries/img/load.gif') no-repeat center;
+    background: url('../img/load.gif') no-repeat center;
 }
 
 dd#info-properties dl dd.loader {
@@ -730,7 +735,7 @@ dd#info-properties dl dd.loader {
 {
     position: absolute;
     cursor: pointer;
-    background: url('../../../libraries/img/icons.png') no-repeat;
+    background: url('../img/icons.png') no-repeat;
     width: 20px;
     top: 0;
 }
@@ -749,13 +754,13 @@ dd#loader {
     height: 100px;
     width: 100%;
     text-align: center;
-    background: url('../../../libraries/img/load.gif') no-repeat center
+    background: url('../img/load.gif') no-repeat center
         center;
     margin: 10px;
 }
 
 div#browser-message {
-    background: url('../../../libraries/img/icons-24.png') no-repeat 0
+    background: url('../img/icons-24.png') no-repeat 0
         -120px;
     display: block;
     float: left;
@@ -807,7 +812,7 @@ div.button.insert {
 
 .noedit {
     height: 20px;
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -680px;
+    background: url('../img/icons.png') no-repeat 0 -680px;
     padding-left: 25px;
     vertical-align: middle;
     display: block;
@@ -878,7 +883,7 @@ ul.item-list li a:visited,ul.item-list li a:active,ul.item-list li a:link {
 }
 
 ul.item-list li.loading {
-    background: url('../../../libraries/img/load.gif') no-repeat left center;
+    background: url('../img/load.gif') no-repeat left center;
 }
 
 ul.item-list li.selected {
@@ -920,19 +925,19 @@ ul.item-list li span.date {
  * Extension Icons
 */
 ul.item-list li.folder.notwritable,dd.folder.notwritable {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -580px;
+    background: url('../img/icons.png') no-repeat 0 -580px;
 }
 
 ul.item-list li.folder.notsafe,dd.folder.notsafe {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -600px;
+    background: url('../img/icons.png') no-repeat 0 -600px;
 }
 
 ul.item-list li.folder {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -220px;
+    background: url('../img/icons.png') no-repeat 0 -220px;
 }
 
 ul.item-list li.folder-up {
-    background: url('../../../libraries/img/icons.png') no-repeat 0 -200px;
+    background: url('../img/icons.png') no-repeat 0 -200px;
 }
 
 /**
@@ -1040,4 +1045,20 @@ div.button span {
 
 div.actionPanel div {
     float: right;
+}
+
+/* Mobile stuff */
+@media (max-width: 767px) {
+    #browser div.layout-bottom div.layout-left {
+        display: none;
+        width : 0;
+    }
+    
+    #browser div.layout-bottom div.layout-center {
+        width : 70%;
+    }
+    
+    #browser div#browser-list-actions div#show-details {
+        display: none;
+    }
 }

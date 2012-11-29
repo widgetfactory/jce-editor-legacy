@@ -11,9 +11,10 @@ WFAggregator.add('vimeo', {
     /**
 	 * Parameter Object
 	 */
-    params 	: {
-        width : 400,
-        height: 225
+    params : {
+        width   : 400,
+        height  : 225,
+        embed   : true
     },
 
     props : {
@@ -26,7 +27,9 @@ WFAggregator.add('vimeo', {
         fullscreen			: 1
     },
 
-    setup 	: function() {},
+    setup : function() {
+        $('#vimeo_embed').toggle(this.params.embed);
+    },
     getTitle : function() {
         return this.title || this.name;
     },
@@ -34,7 +37,7 @@ WFAggregator.add('vimeo', {
 	 * Get the Media type
 	 */
     getType : function() {
-        return $('#vimeo_embed:visible').is(':checked') ? 'flash' : 'iframe';
+        return $('#vimeo_embed').is(':checked') ? 'flash' : 'iframe';
     },
     /**
 	 * Check whether a media type is supported

@@ -38,48 +38,15 @@
     visibility: hidden;
     margin: 0;
     font-size: 11px;
+    
+    border : 1px solid #ccc;
+    background: #fff;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius : 3px;
 }
-#jce-tooltip.jce-tooltip div.jce-tooltip-pointer, #jce-tooltip.jce-tooltip div.jce-tooltip-pointer-inner {
-    position: absolute;
-    width:0;
-    height:0;
-    border-bottom-width: 0;
-    background: none;
-}
-#jce-tooltip.jce-tooltip.jce-tooltip-bottom div.jce-tooltip-pointer, #jce-tooltip.jce-tooltip.jce-tooltip-bottom div.jce-tooltip-pointer-inner {
-    border-top-width: 0;
-}
-#jce-tooltip.jce-tooltip div.jce-tooltip-pointer {
-    border-left: 7px dotted transparent;
-    border-right: 7px dotted transparent;
-    right: auto;
-    left: 50%;
-    margin-left: -7px;
-}
-#jce-tooltip.jce-tooltip div.jce-tooltip-pointer {
-    border-top-width: 14px;
-    bottom:	-14px;
-}
-#jce-tooltip.jce-tooltip div.jce-tooltip-pointer-inner {
-    border-left: 5px dotted transparent;
-    border-right: 5px dotted transparent;
-    left: -5px;
-}
-#jce-tooltip.jce-tooltip div.jce-tooltip-pointer-inner {
-    border-top: 10px solid #fff;
-    bottom:	auto;
-    top: -14px;
-}
-#jce-tooltip.jce-tooltip.jce-tooltip-bottom div.jce-tooltip-pointer {
-    border-bottom-width: 14px;
-    top:	-14px;
-}
-#jce-tooltip.jce-tooltip.jce-tooltip-bottom div.jce-tooltip-pointer-inner {
-    border-bottom: 10px solid #fff;
-    top:	auto;
-    bottom: -14px;
-}
-label.hasTip, span.hasTip, label.hastip, span.hastip, label.tooltip, span.tooltip {
+
+label.hasTip, span.hasTip, label.hastip, span.hastip, label.tooltip, span.tooltip, label.wf-tooltip, span.wf-tooltip {
     cursor: help;
 }
 #jce-tooltip span.ui-icon-close {
@@ -88,14 +55,126 @@ label.hasTip, span.hasTip, label.hastip, span.hastip, label.tooltip, span.toolti
     top: 0px;
     cursor: pointer;
 }
-#jce-tooltip canvas {
+#jce-tooltip span.ui-icon-close:after {
+    content: "\00d7";
+    display: block;
+    font-family: arial;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 10px;
+    padding: 6px;
+}
+/*#jce-tooltip canvas {
     position: absolute;
-    right:50%;
+}
+#jce-tooltip canvas.top.center {
+    top : 100%;
+}
+#jce-tooltip canvas.bottom.center {
+    top : 0;
+    margin-top: -14px;
+}
+
+#jce-tooltip canvas.bottom.center, #jce-tooltip canvas.top.center {
+    left : 50%;
+    margin-left : -7px;
+}
+
+#jce-tooltip canvas.right {
+    left : 0;
+    margin-left: -14px;
+}
+
+#jce-tooltip canvas.left {
+    left : 100%;
+}
+
+#jce-tooltip canvas.center.right, #jce-tooltip canvas.center.left {
+    top : 50%;
+    margin-top : -7px;
+}*/
+
+
+#jce-tooltip .jce-tooltip-pointer, #jce-tooltip .jce-tooltip-pointer:after, #jce-tooltip .jce-tooltip-pointer-inner {
+    border-color: transparent;
+    border-style: solid;
+    display: inline-block;
+    height: 0;
+    position: absolute;
+    width: 0;
+}
+
+#jce-tooltip .jce-tooltip-pointer:after {
+    content: "";
+    z-index: -1;
+}
+#jce-tooltip .jce-tooltip-pointer.top, #jce-tooltip .jce-tooltip-pointer.top .jce-tooltip-pointer-inner {
+    border-top-color: #FFFFFF;
+    border-width: 7px 7px 0;
+    bottom: -7px;
+    left: 50%;
     margin-left: -7px;
 }
-#jce-tooltip canvas {
-    bottom: -14px;
+
+#jce-tooltip .jce-tooltip-pointer.top .jce-tooltip-pointer-inner {
+    bottom : 0;
 }
-#jce-tooltip.jce-tooltip.jce-tooltip-bottom canvas {
-    top: -14px;
+
+#jce-tooltip .jce-tooltip-pointer.top:after {
+    border-top-color: #ccc;
+    border-width: 8px 8px 0;
+    bottom: -3px;
+    left: -8px;
+}
+#jce-tooltip .jce-tooltip-pointer.right, #jce-tooltip .jce-tooltip-pointer.right .jce-tooltip-pointer-inner {
+    border-right-color: #FFFFFF;
+    border-width: 7px 7px 7px 0;
+    left: -7px;
+    margin-top: -7px;
+    top: 50%;
+}
+#jce-tooltip .jce-tooltip-pointer.right .jce-tooltip-pointer-inner {
+    left : 0;
+}
+#jce-tooltip .jce-tooltip-pointer.right:after {
+    border-right-color: #ccc;
+    border-width: 8px 8px 8px 0;
+    bottom: -8px;
+    left: -3px;
+}
+#jce-tooltip .jce-tooltip-pointer.bottom, #jce-tooltip .jce-tooltip-pointer.bottom .jce-tooltip-pointer-inner {
+    border-bottom-color: #FFFFFF;
+    border-width: 0 7px 7px;
+    left: 50%;
+    margin-left: -7px;
+    top: -7px;
+}
+#jce-tooltip .jce-tooltip-pointer.bottom .jce-tooltip-pointer-inner {
+    top : 0;
+}
+#jce-tooltip .jce-tooltip-pointer.bottom:after {
+    border-bottom-color: #ccc;
+    border-width: 0 8px 8px;
+    left: -8px;
+    top: -3px;
+}
+#jce-tooltip .jce-tooltip-pointer.left, #jce-tooltip .jce-tooltip-pointer.left .jce-tooltip-pointer-inner {
+    border-left-color: #FFFFFF;
+    border-width: 7px 0 7px 7px;
+    margin-top: -7px;
+    right: -7px;
+    top: 50%;
+}
+#jce-tooltip .jce-tooltip-pointer.left .jce-tooltip-pointer-inner {
+    right : 0;
+}
+#jce-tooltip .jce-tooltip-pointer.left:after {
+    border-left-color: #ccc;
+    border-width: 8px 0 8px 8px;
+    bottom: -8px;
+    right: -3px;
+}
+
+#jce-tooltip.wf-colorpicker {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }

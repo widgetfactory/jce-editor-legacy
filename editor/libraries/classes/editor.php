@@ -11,14 +11,6 @@
  */
 defined('_JEXEC') or die('RESTRICTED');
 
-//wfimport('editor.libraries.classes.error');
-wfimport('editor.libraries.classes.utility');
-wfimport('editor.libraries.classes.token');
-wfimport('editor.libraries.classes.document');
-wfimport('editor.libraries.classes.view');
-wfimport('editor.libraries.classes.tabs');
-wfimport('editor.libraries.classes.request');
-
 /**
  * JCE class
  *
@@ -70,27 +62,11 @@ class WFEditor extends JObject {
     }
 
     /**
-     * Get the Super Administrator status
-     *
-     * Determine whether the user is a Super Administrator
-     * @access protected
-     * @return boolean
-     */
-    protected function isSuperAdmin() {
-        $user = JFactory::getUser();
-
-        if (WF_JOOMLA15) {
-            return (strtolower($user->usertype) == 'superadministrator' || strtolower($user->usertype) == 'super administrator' || $user->gid == 25) ? true : false;
-        }
-        return false;
-    }
-
-    /**
      * Get an appropriate editor profile
      * @access public
      * @return $profile Object
      */
-    public function getProfile() {
+    public function getProfile($plugin = null) {
         static $profile;
 
         if (!is_object($profile)) {
@@ -99,15 +75,15 @@ class WFEditor extends JObject {
             $db = JFactory::getDBO();
             $user = JFactory::getUser();
             $option = $this->getComponentOption();
-            
+
             $query = $db->getQuery(true);
 
             if (is_object($query)) {
                 $query->select('*')->from('#__wf_profiles')->where('published = 1')->order('ordering ASC');
             } else {
                 $query = 'SELECT * FROM #__wf_profiles'
-                . ' WHERE published = 1'
-                . ' ORDER BY ordering ASC';
+                        . ' WHERE published = 1'
+                        . ' ORDER BY ordering ASC';
             }
 
             $db->setQuery($query);
@@ -121,80 +97,78 @@ class WFEditor extends JObject {
                     $option = isset($component->element) ? $component->element : $component->option;
                 }
             }
-
-            /* $items  = array();
-              $name   = JRequest::getWord('profile');
-
-              if ($name) {
-              for ($i = 0; $i < count($profiles); $i++) {
-              if ($profiles[$i]->name == $name) {
-              $items[] = $profiles[$i];
-              }
-              }
-              }
-
-              // revert if no name or valid items
-              if (!$name || empty($items)) {
-              $items = $profiles;
-              } */
-
+            // get the Joomla! area (admin or site)
             $area = $mainframe->isAdmin() ? 2 : 1;
 
-            foreach ($profiles as $item) {
-                // check if option is in list
-                $isComponent = in_array($option, explode(',', $item->components));
+            // load mobile detect class
+            include_once(dirname(__FILE__) . '/mobile.php');
+            $mobile = new Mobile_Detect();
 
-                // Set area default as Front-end / Back-end
-                if (!isset($item->area) || $item->area == '') {
-                    $item->area = 0;
-                }
-
-                if ($item->area == $area || $item->area == 0) {
-                    // Check user
-                    if ($user->id && in_array($user->id, explode(',', $item->users))) {
-                        if ($item->components) {
-                            if ($isComponent) {
-                                $profile = $item;
-                                return $profile;
-                            }
-                        } else {
-                            $profile = $item;
-                            return $profile;
-                        }
-                    }
-
-                    // Joomla! 1.6+
-                    if (method_exists('JUser', 'getAuthorisedGroups')) {
-                        $keys = $user->getAuthorisedGroups();
-                    } else {
-                        $keys = array($user->gid);
-                    }
-
-                    if ($item->types) {
-                        $groups = array_intersect($keys, explode(',', $item->types));
-
-                        if (!empty($groups)) {
-                            // Check components
-                            if ($item->components) {
-                                if ($isComponent) {
-                                    $profile = $item;
-                                    return $profile;
-                                }
-                            } else {
-                                $profile = $item;
-                                return $profile;
-                            }
-                        }
-                    }
-
-                    // Check components only
-                    if ($item->components && $isComponent) {
-                        $profile = $item;
-                        return $profile;
-                    }
-                }
+            // set device values
+            if ($mobile->isMobile()) {
+                $device = 'phone';
+            } else if ($mobile->isTablet()) {
+                $device = 'tablet';
+            } else {
+                $device = 'desktop';
             }
 
+            // Joomla! 1.6+
+            if (method_exists('JUser', 'getAuthorisedGroups')) {
+                $keys = $user->getAuthorisedGroups();
+            } else {
+                $keys = array($user->gid);
+            }
+
+            foreach ($profiles as $item) {
+                // at least one user group must be set
+                if (empty($item->types)) {
+                    continue;
+                }
+
+                // check users if set
+                if ($item->users && in_array($user->id, explode(',', $item->users)) === false) {
+                    continue;
+                }
+
+                // check user groups - a value should always be set
+                $groups = array_intersect($keys, explode(',', $item->types));
+
+                // no users set and user not in group
+                if (empty($item->users) && empty($groups)) {
+                    continue;
+                }
+
+                // check component
+                if ($item->components && in_array($option, explode(',', $item->components)) === false) {
+                    continue;
+                }
+
+                // set device default as 'desktop,tablet,mobile'
+                if (!isset($item->device) || empty($item->device)) {
+                    $item->device = 'desktop,tablet,phone';
+                }
+
+                // check device
+                if (in_array($device, explode(',', $item->device)) == false) {
+                    continue;
+                }
+
+                // check area
+                if (!empty($item->area) && (int) $item->area !== $area) {
+                    continue;
+                }
+
+                // check for individual plugin
+                if ($plugin && in_array($plugin, explode(',', $item->plugins)) === false) {
+                    continue;
+                }
+
+                $profile = $item;
+                
+                return $profile;
+            }
+            
             return null;
         }
 
@@ -246,14 +220,21 @@ class WFEditor extends JObject {
             $options['path'] = '';
         }
 
+        $plugin = JRequest::getCmd('plugin');
+
+        if ($plugin) {
+            $options['plugin'] = $plugin;
+        }
+
         $signature = serialize($options);
 
         if (empty($params[$signature])) {
             wfimport('admin.helpers.extension');
             // get component
             $component = WFExtensionHelper::getComponent();
+
             // get params data for this profile
-            $profile = $this->getProfile();
+            $profile = $this->getProfile($plugin);
 
             $profile_params = array();
             $component_params = array();
@@ -342,12 +323,12 @@ class WFEditor extends JObject {
         $file = JPATH_SITE . '/language/' . $tag . '/' . $tag . '.com_jce.xml';
 
         if (file_exists($file)) {
-            wfimport('admin.helpers.xml');
+            wfimport('admin.classes.xml');
 
-            $xml = WFXMLHelper::getXML($file);
+            $xml = WFXMLElement::load($file);
 
             if ($xml) {
-                $version = WFXMLHelper::getAttribute($xml, 'version');
+                $version = (string) $xml->attributes()->version;
 
                 if ($version == '2.0') {
                     return true;
@@ -433,34 +414,11 @@ class WFEditor extends JObject {
         return $this->getProfile();
     }
 
-    /**
-     * XML encode a string.
-     *
-     * @access	public
-     * @param 	string	String to encode
-     * @return 	string	Encoded string
-     */
-    public function xmlEncode($string) {
-        return preg_replace(array('/&/', '/</', '/>/', '/\'/', '/"/'), array('&amp;', '&lt;', '&gt;', '&apos;', '&quot;'), $string);
-    }
-
-    /**
-     * XML decode a string.
-     *
-     * @access	public
-     * @param 	string	String to decode
-     * @return 	string	Decoded string
-     */
-    public function xmlDecode($string) {
-        return preg_replace(array('&amp;', '&lt;', '&gt;', '&apos;', '&quot;'), array('/&/', '/</', '/>/', '/\'/', '/"/'), $string);
-    }
-
     protected function log($file, $msg) {
         jimport('joomla.error.log');
         $log = JLog::getInstance($file);
         $log->addEntry(array('comment' => 'LOG: ' . $msg));
     }
-
 }
 
 ?>

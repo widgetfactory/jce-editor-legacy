@@ -119,6 +119,7 @@ var WFPopups = WFExtensions.add('Popups', {
         if(this.popup) {			
             // Select popup in list
             this.selectPopup(this.popup);
+            
             // Process attributes
             return this.getAttributes(n, index);
         }

@@ -9,83 +9,88 @@
  * other free or open source software licenses.
  */
 (function($){
-	$.jce = {
-		Help : {
-			options : {
-				url : '',
-				key : [],
-				pattern : ''
-			},
-			init: function(options) {
-				var key, id, n, self = this;
-				$.extend(this.options, options);
+    $.jce = {
+        Help : {
+            options : {
+                url : '',
+                key : [],
+                pattern : ''
+            },
+            init: function(options) {
+                var key, id, n, self = this;
+                $.extend(this.options, options);
 
-				// add ui-jce class to body
-            	$('body').addClass('ui-jce');
+                // add ui-jce class to body
+                $('body').addClass('ui-jce');
             	
-            	// init layout
-            	$('#jce').height($(window).height() - 20).layout({ applyDefaultStyles: true });
+                // init layout
+                //$('#jce').height($('body').height() - 20);
             	
-            	// add resize
-            	$(window).bind('resize', function() {
-            		$('#jce').height($(window).height() - 20);
-            	});
+                // add resize
+                $(window).bind('resize', function() {
+                    $('#jce').height($('body').height() - 20);
+                });
 
-				if ($('#help-menu')) {
+                if ($('#help-menu')) {
 					
-					$('dd.subtopics', '#help-menu').click(function() {
-						// hide all
-						$(this).parent('dl').children('dl').addClass('hidden');
-						// toggle clicked
-						$(this).next('dl').removeClass('hidden');
-					});
+                    $('dd.subtopics', '#help-menu').click(function() {
+                        // hide all
+                        $(this).parent('dl').children('dl').addClass('hidden');
+                        // toggle clicked
+                        $(this).next('dl').removeClass('hidden');
+                    });
 					
-					this.nodes = $('dd[id]', '#help-menu').click(function(e) {
-						$('dd.loading', '#help-menu').removeClass('loading');
+                    this.nodes = $('dd[id]', '#help-menu').click(function(e) {
+                        $('dd.loading', '#help-menu').removeClass('loading');
 						
-						self.loadItem(e.target);
-					});
+                        self.loadItem(e.target);
+                    });
 					
-					$('iframe#help-iframe').load(function() {
-						$('.loading', '#help-menu').removeClass('loading');
-					});
+                    $('iframe#help-iframe').load(function() {
+                        $('.loading', '#help-menu').removeClass('loading');
+                    });
 	
-					key = this.options.key;
+                    key = this.options.key;
 					
-					if (!key.length) {
-						n = this.nodes[0];
-					} else {
-						id 	= key.join('.');	
-						n 	= document.getElementById(id) || this.nodes[0];
-					}
-					if (n) {
-						this.loadItem(n);
-					}
-				}
-			},
+                    if (!key.length) {
+                        n = this.nodes[0];
+                    } else {
+                        id 	= key.join('.');	
+                        n 	= document.getElementById(id) || this.nodes[0];
+                    }
+                    if (n) {
+                        this.loadItem(n);
+                    }
+                }
+                
+                $('#help-menu-toggle div').click(function() {
+                    $('#help-menu').parent().toggle();
+                    $('#help-frame').parent().toggleClass('span8 span12');
+                });
+            },
 			
-			loadItem: function(el) {
-				var s, n, keys, p, map;
-				$(el).addClass('loading');
-				var id = $(el).attr('id');
+            loadItem: function(el) {
+                var s, n, keys, p, map;
+                $(el).addClass('loading');
+                var id = $(el).attr('id');
 	
-				if (this.options.pattern) {
-					keys = id.split('.');
-					map = {
-						'section' 	: keys[0] || '',
-						'category' 	: keys[1] || '',
-						'article'	: keys[2] || ''
-					};
-					p = this.options.pattern;	
-					s = p.replace(/\{\$([^\}]+)\}/g, function(a, b) {
-						return map[b] || '';
-					});
-				} else {
-					s = id;
-				}
+                if (this.options.pattern) {
+                    keys = id.split('.');
+                    map = {
+                        'section' 	: keys[0] || '',
+                        'category' 	: keys[1] || '',
+                        'article'	: keys[2] || ''
+                    };
+                    p = this.options.pattern;	
+                    s = p.replace(/\{\$([^\}]+)\}/g, function(a, b) {
+                        return map[b] || '';
+                    });
+                } else {
+                    s = id;
+                }
 	
-				$('iframe#help-iframe').attr('src', this.options.url + s);
-			}
-		}
-	};
+                $('iframe#help-iframe').attr('src', this.options.url + s);
+            }
+        }
+    };
 })(jQuery);

@@ -246,6 +246,12 @@ class WFDocument extends JObject {
                 case 'libraries':
                     $pre = $base . 'libraries/' . $type;
                     break;
+                case 'jquery':
+                    $pre = $base . 'libraries/jquery/' . $type;
+                    break;
+                case 'bootstrap':
+                    $pre = $base . 'libraries/bootstrap/' . $type;
+                    break;
                 // TinyMCE folder
                 case 'tiny_mce':
                     $pre = $base . 'tiny_mce';
@@ -493,19 +499,10 @@ class WFDocument extends JObject {
     private function getHead() {
         $version = $this->get('version', '000000');
         // set title		
-        $output = '<title>' . $this->getTitle() . ' : ' . $version . '</title>' . "\n";
+        $output = '<title>' . $this->getTitle() . '</title>' . "\n";
         // create timestamp
         $stamp = preg_match('/\d+/', $version) ? '?version=' . $version : '';
 
-        // Render scripts
-        if ($this->get('compress_javascript', 0)) {
-            $script = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . $this->getQueryString(array('task' => 'pack'));
-            $output .= "\t\t<script type=\"text/javascript\" src=\"" . $script . "\"></script>\n";
-        } else {
-            foreach ($this->_scripts as $src => $type) {
-                $output .= "\t\t<script type=\"" . $type . "\" src=\"" . $src . $stamp . "\"></script>\n";
-            }
-        }
         // render stylesheets
         if ($this->get('compress_css', 0)) {
             $file = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . $this->getQueryString(array('task' => 'pack', 'type' => 'css'));
@@ -514,6 +511,16 @@ class WFDocument extends JObject {
         } else {
             foreach ($this->_styles as $k => $v) {
                 $output .= "\t\t<link href=\"" . $k . $stamp . "\" rel=\"stylesheet\" type=\"" . $v . "\" />\n";
+            }
+        }
+
+        // Render scripts
+        if ($this->get('compress_javascript', 0)) {
+            $script = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . $this->getQueryString(array('task' => 'pack'));
+            $output .= "\t\t<script type=\"text/javascript\" src=\"" . $script . "\"></script>\n";
+        } else {
+            foreach ($this->_scripts as $src => $type) {
+                $output .= "\t\t<script type=\"" . $type . "\" src=\"" . $src . $stamp . "\"></script>\n";
             }
         }
 
@@ -597,9 +604,22 @@ class WFDocument extends JObject {
                 case 'javascript':
                     foreach ($this->getScripts() as $script => $type) {
                         $script .= preg_match('/\.js$/', $script) ? '' : '.js';
-
                         $files[] = $this->urlToPath($script);
                     }
+
+                    if (WF_INI_LANG) {
+                        wfimport('admin.classes.language');
+
+                        $parser = new WFLanguageParser(array(
+                            'plugins'   => array($this->getName()),
+                            'sections'  => array('dlg', $this->getName() . '_dlg'),
+                            'mode'      => 'plugin'
+                        ));
+
+                        $data = $parser->load();
+                        $packer->setContentEnd($data);
+                    }
+
                     break;
                 case 'css':
                     foreach ($this->getStyleSheets() as $style => $type) {

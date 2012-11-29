@@ -18,6 +18,8 @@ var XHTMLXtrasDialog = {
         }
 
         TinyMCE_Utils.fillClassList('class');
+        
+        $.Plugin.init();
 
         if(n) {            
             var text = n.textContent || n.innerText || '';
@@ -42,9 +44,7 @@ var XHTMLXtrasDialog = {
                 primary : 'ui-icon-minus'
             }
         }).toggle(!!element);
-
-        $.Plugin.init();
-                
+       
         // hide HTML5 fields
         if (ed.settings.schema !== 'html5' && ed.settings.validate === true) {
             $('input.html5').parent('td').parent('tr').hide();

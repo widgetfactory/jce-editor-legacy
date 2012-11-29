@@ -15,7 +15,7 @@
         <param name="dir" type="text" default="" size="50" label="WF_PARAM_DIRECTORY" description="WF_PARAM_DIRECTORY_DESC"/>
         <param name="max_size" class="upload_size" max="" type="text" default="" label="WF_PARAM_UPLOAD_SIZE" description="WF_PARAM_UPLOAD_SIZE_DESC" />
         <param name="extensions" type="extension" class="extensions" default="image=jpeg,jpg,png,gif" label="WF_PARAM_EXTENSIONS" description="WF_PARAM_EXTENSIONS_DESC" />
-        <param name="hide_xtd_btns" type="list" default="0" label="WF_IMGMANAGER_HIDE_BUTTONS" description="WF_IMGMANAGER_HIDE_BUTTONS_DESC">
+        <param name="hide_xtd_btns" type="radio" default="0" label="WF_IMGMANAGER_HIDE_BUTTONS" description="WF_IMGMANAGER_HIDE_BUTTONS_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
@@ -80,7 +80,7 @@
             <option value="9">9</option>
             <option value="10">10</option>
         </param>
-        <param name="border" type="list" default="0" label="WF_PARAM_BORDER_ENABLE" description="WF_PARAM_BORDER_ENABLE_DESC">
+        <param name="border" type="radio" default="0" label="WF_PARAM_BORDER_ENABLE" description="WF_PARAM_BORDER_ENABLE_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
@@ -121,7 +121,7 @@
             <option value="left">WF_OPTION_ALIGN_LEFT</option>
             <option value="right">WF_OPTION_ALIGN_RIGHT</option>
         </param>
-        <param name="always_include_dimensions" type="list" default="1" label="WF_IMGMANAGER_PARAM_ALWAYS_INCLUDE_DIMENSIONS" description="WF_IMGMANAGER_PARAM_ALWAYS_INCLUDE_DIMENSIONS_DESC">
+        <param name="always_include_dimensions" type="radio" default="1" label="WF_IMGMANAGER_PARAM_ALWAYS_INCLUDE_DIMENSIONS" description="WF_IMGMANAGER_PARAM_ALWAYS_INCLUDE_DIMENSIONS_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
@@ -140,64 +140,64 @@
         
     </params>
     <params group="access">
-        <param name="tabs_rollover" type="list" default="1" label="WF_IMGMANAGER_PARAM_TAB_ROLLOVER" description="WF_IMGMANAGER_PARAM_TAB_ROLLOVER_DESC">
+        <param name="tabs_rollover" type="radio" default="1" label="WF_IMGMANAGER_PARAM_TAB_ROLLOVER" description="WF_IMGMANAGER_PARAM_TAB_ROLLOVER_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="tabs_advanced" type="list" default="1" label="WF_IMGMANAGER_PARAM_TAB_ADVANCED" description="WF_IMGMANAGER_PARAM_TAB_ADVANCED_DESC">
+        <param name="tabs_advanced" type="radio" default="1" label="WF_IMGMANAGER_PARAM_TAB_ADVANCED" description="WF_IMGMANAGER_PARAM_TAB_ADVANCED_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="attributes_dimensions" type="list" default="1" label="WF_IMGMANAGER_SHOW_DIMENSIONS" description="WF_IMGMANAGER_SHOW_DIMENSIONS_DESC">
+        <param name="attributes_dimensions" type="radio" default="1" label="WF_IMGMANAGER_SHOW_DIMENSIONS" description="WF_IMGMANAGER_SHOW_DIMENSIONS_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="attributes_align" type="list" default="1" label="WF_IMGMANAGER_SHOW_ALIGN" description="WF_IMGMANAGER_SHOW_ALIGN_DESC">
+        <param name="attributes_align" type="radio" default="1" label="WF_IMGMANAGER_SHOW_ALIGN" description="WF_IMGMANAGER_SHOW_ALIGN_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="attributes_margin" type="list" default="1" label="WF_IMGMANAGER_SHOW_MARGIN" description="WF_IMGMANAGER_SHOW_MARGIN_DESC">
+        <param name="attributes_margin" type="radio" default="1" label="WF_IMGMANAGER_SHOW_MARGIN" description="WF_IMGMANAGER_SHOW_MARGIN_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="attributes_border" type="list" default="1" label="WF_IMGMANAGER_SHOW_BORDER" description="WF_IMGMANAGER_SHOW_BORDER_DESC">
+        <param name="attributes_border" type="radio" default="1" label="WF_IMGMANAGER_SHOW_BORDER" description="WF_IMGMANAGER_SHOW_BORDER_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="upload" type="list" default="1" label="WF_PARAM_UPLOAD" description="WF_PARAM_UPLOAD_DESC">
+        <param name="upload" type="radio" default="1" label="WF_PARAM_UPLOAD" description="WF_PARAM_UPLOAD_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="folder_new" type="list" default="1" label="WF_PARAM_FOLDER_CREATE" description="WF_PARAM_FOLDER_CREATE_DESC">
+        <param name="folder_new" type="radio" default="1" label="WF_PARAM_FOLDER_CREATE" description="WF_PARAM_FOLDER_CREATE_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="folder_delete" type="list" default="1" label="WF_PARAM_FOLDER_DELETE" description="WF_PARAM_FOLDER_DELETE_DESC">
+        <param name="folder_delete" type="radio" default="1" label="WF_PARAM_FOLDER_DELETE" description="WF_PARAM_FOLDER_DELETE_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="folder_rename" type="list" default="1" label="WF_PARAM_FOLDER_RENAME" description="WF_PARAM_FOLDER_RENAME_DESC">
+        <param name="folder_rename" type="radio" default="1" label="WF_PARAM_FOLDER_RENAME" description="WF_PARAM_FOLDER_RENAME_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="folder_move" type="list" default="1" label="WF_PARAM_FOLDER_PASTE" description="WF_PARAM_FOLDER_PASTE_DESC">
+        <param name="folder_move" type="radio" default="1" label="WF_PARAM_FOLDER_PASTE" description="WF_PARAM_FOLDER_PASTE_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="file_delete" type="list" default="1" label="WF_PARAM_FILE_DELETE" description="WF_PARAM_FILE_DELETE_DESC">
+        <param name="file_delete" type="radio" default="1" label="WF_PARAM_FILE_DELETE" description="WF_PARAM_FILE_DELETE_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="file_rename" type="list" default="1" label="WF_PARAM_FILE_RENAME" description="WF_PARAM_FILE_RENAME_DESC">
+        <param name="file_rename" type="radio" default="1" label="WF_PARAM_FILE_RENAME" description="WF_PARAM_FILE_RENAME_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="file_move" type="list" default="1" label="WF_PARAM_FILE_PASTE" description="WF_PARAM_FILE_PASTE_DESC">
+        <param name="file_move" type="radio" default="1" label="WF_PARAM_FILE_PASTE" description="WF_PARAM_FILE_PASTE_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
         
-        <param name="dragdrop_upload" type="list" default="1" label="WF_PARAM_DRAPDROP_UPLOAD" description="WF_PARAM_DRAPDROP_UPLOAD_DESC">
+        <param name="dragdrop_upload" type="radio" default="1" label="WF_PARAM_DRAPDROP_UPLOAD" description="WF_PARAM_DRAPDROP_UPLOAD_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>

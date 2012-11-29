@@ -11,10 +11,7 @@
 
 defined('_JEXEC') or die('RESTRICTED');
 
-jimport('joomla.application.component.model');
-
 wfimport('admin.models.editor');
-
-$model = JModel::getInstance('editor', 'WFModel');
+$model = new WFModelEditor();
 echo $model->getToken('source');
 ?>

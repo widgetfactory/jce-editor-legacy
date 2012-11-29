@@ -74,19 +74,19 @@
         <param type="text" name="accesskey" default="" size="50" label="WF_LABEL_ACCESSKEY" description="WF_LABEL_ACCESSKEY_DESC" />		
     </params>
     <params group="access">
-        <param name="file_browser" type="list" default="1" label="WF_LINK_PARAM_FILE_BROWSER" description="WF_LINK_PARAM_FILE_BROWSER_DESC">
+        <param name="file_browser" type="radio" default="1" label="WF_LINK_PARAM_FILE_BROWSER" description="WF_LINK_PARAM_FILE_BROWSER_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>	
         </param>
-        <param name="tabs_advanced" type="list" default="1" label="WF_LINK_PARAM_TAB_ADVANCED" description="WF_LINK_PARAM_TAB_ADVANCED_DESC">
+        <param name="tabs_advanced" type="radio" default="1" label="WF_LINK_PARAM_TAB_ADVANCED" description="WF_LINK_PARAM_TAB_ADVANCED_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>	
         </param>
-        <param name="attributes_anchor" type="list" default="1" label="WF_LINK_SHOW_ANCHOR" description="WF_LINK_SHOW_ANCHOR_DESC">
+        <param name="attributes_anchor" type="radio" default="1" label="WF_LINK_SHOW_ANCHOR" description="WF_LINK_SHOW_ANCHOR_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="attributes_target" type="list" default="1" label="WF_LINK_SHOW_TARGET" description="WF_LINK_SHOW_TARGET_DESC">
+        <param name="attributes_target" type="radio" default="1" label="WF_LINK_SHOW_TARGET" description="WF_LINK_SHOW_TARGET_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>

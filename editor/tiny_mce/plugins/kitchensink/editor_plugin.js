@@ -14,10 +14,16 @@
     tinymce.create('tinymce.plugins.KitchenSink', {
         init : function(ed, url) {
             
-            var state = false;
+            var self= this, state = false;
             
-            function toggle(row) {
-                var n = DOM.getNext(row, 'table.mceToolbar');
+            function toggle() {
+                var row = DOM.getParents(ed.id + '_kitchensink', 'table.mceToolbar');
+               
+                if (!row) {
+                    return;
+                }
+               
+                var n = DOM.getNext(row[0], 'table.mceToolbar');
                 
                 while(n) {
                     if (DOM.isHidden(n)) {
@@ -35,17 +41,11 @@
                 ed.controlManager.setActive('kitchensink', state);
             }
             
-            ed.addCommand('mceKitchenSink', function() {
-                var row = DOM.getParents(ed.id + '_kitchensink', 'table.mceToolbar');
-                
-                if (row) {                    
-                    toggle(row[0]);
-                }
-            });
+            ed.addCommand('mceKitchenSink', toggle);
 
             ed.addButton('kitchensink', {
-                title : 'kitchensink.desc', 
-                cmd : 'mceKitchenSink'
+                title   : 'kitchensink.desc', 
+                cmd     : 'mceKitchenSink'
             });
 
             ed.onPostRender.add(function(ed, cm) {  
@@ -54,10 +54,9 @@
                     return;
                 }
 
-                ed.execCommand('mceKitchenSink');
+                toggle();
                 
-                // adjust iframe
-                
+                // adjust iframe 
                 DOM.setStyle(ed.id + '_ifr', 'height', ed.getContentAreaContainer().offsetHeight);
             });
             

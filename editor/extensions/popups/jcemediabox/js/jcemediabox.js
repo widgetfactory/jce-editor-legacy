@@ -239,6 +239,9 @@ WFPopups.addPopup('jcemediabox', {
         // set default index
         index = index || 0;
 
+        // set default index
+        index = index || 0;
+
         var title 	= ed.dom.getAttrib(n, 'title');
         var rel 	= ed.dom.getAttrib(n, 'rel');
 
@@ -352,6 +355,9 @@ WFPopups.addPopup('jcemediabox', {
         index = index || 0;
 
         this.remove(n);
+        
+        // set default index
+        index = index || 0;
 
         // Add jcepopup class
         ed.dom.addClass(n, 'jcepopup');

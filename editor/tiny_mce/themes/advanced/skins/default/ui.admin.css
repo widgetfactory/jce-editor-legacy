@@ -14,6 +14,9 @@
 #jce span.mceButton, #jce span.mceSplitButton {
 	width: auto;
 	display: inline-block;
+}
+
+#jce .defaultSkin span.mceButton, #jce .defaultSkin span.mceSplitButton {
         background: #F0F0EE;
 }
 
@@ -52,7 +55,8 @@
 #jce span.mceIcon.mce_styleselect:after,
 #jce span.mceIcon.mce_formatselect:after,
 #jce span.mceIcon.mce_fontsizeselect:after {
-    font-size: 10px !important;
+    font-family: Tahoma,Verdana,Arial,Helvetica;
+    font-size: 11px !important;
     line-height: 20px;
     padding: 0 3px;
 }
@@ -101,47 +105,22 @@
 }
 
 #jce.multiplebg span.mceSplitButton span.mceIcon {
-    background-image: url("img/button_bg.png"), url("../../img/icons.png");
+    background-image: url("../../img/icons.png");
 }
 
 #jce span.mceSplitButton {
     position: relative;
 }
 
-#jce span.mceSplitButton span.mceIcon + span {
+#jce span.mceSplitButton span.mceIcon:after {
+    content : "";
+    display: inline-block;
     position : absolute;
     top : 0px;
     right : -1px;
     background: url("img/button_bg.png") no-repeat 0 0;
     width : 10px;
-}
-
-#jce span.mceIcon.mce_paste {
-    background-position: 21px 0, -560px 0;
-}
-
-#jce span.mceIcon.mce_numlist {
-    background-position: 21px 0, -80px 0;
-}
-
-#jce span.mceIcon.mce_bullist {
-    background-position: 21px 0, -20px 0;
-}
-
-#jce span.mceIcon.mce_forecolor {
-    background-position: 21px 0, -720px 0;
-}
-
-#jce span.mceIcon.mce_backcolor {
-    background-position: 21px 0, -760px 0;
-}
-
-#jce span.mceIcon.mce_spellchecker {
-    background-position: 21px 0, -120px -20px;
-}
-
-#jce span.mceIcon.mce_textcase {
-    background-position: 21px 0, -60px -40px;
+    height : 20px;
 }
 
 #jce .defaultSkin .mceStatusbar {
@@ -155,4 +134,9 @@
 
 #jce span.mceButton[style="display: none;"] + span.mceSeparator {
     display: none;
+}
+
+#jce li.defaultSkin span.mceButton + span.tabs-label {
+    display: block;
+    font-size : 0.9em;
 }

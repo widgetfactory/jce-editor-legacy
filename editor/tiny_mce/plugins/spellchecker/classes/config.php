@@ -14,11 +14,16 @@ class WFSpellcheckerPluginConfig {
 
 		$wf = WFEditor::getInstance();
                 
-                $engine = $wf->getParam('spellchecker.engine', 'browser', 'browser' );
+                $engine = $wf->getParam('spellchecker.engine', 'browser', 'browser');
+                
+                $url = JURI::base(true).'/index.php?option=com_jce&view=editor&layout=plugin&plugin=spellchecker&component_id=' . $settings['component_id'];
                 
                 switch($engine) {
+                    default:
                     case 'browser':
                         $languages = '';
+                        
+                        $settings['spellchecker_browser_state'] = $wf->getParam('spellchecker.browser_state', 0, 0);
                         
                         break;
                     case 'googlespell':
@@ -28,12 +33,16 @@ class WFSpellcheckerPluginConfig {
                         if (!$languages) {
                             $languages = $wf->getParam('spellchecker.languages', 'English=en', '' );
                         }
-                        
+
                         break;
-                    default:
+                    case 'pspell':
+                    case 'pspellshell':
+                    case 'enchantspell':
                         $languages = $wf->getParam('spellchecker.languages', 'English=en', '' );
                         break;
                 }
+                
+                $settings['spellchecker_rpc_url'] = $url;
                 
                 // cast as array
                 if ($languages) {
@@ -44,8 +53,7 @@ class WFSpellcheckerPluginConfig {
                     $settings['spellchecker_languages'] = '+' . implode(',', $languages);
                 }
 
-		$settings['spellchecker_engine'] 	= $engine;
-		$settings['spellchecker_rpc_url'] 	= JURI::base(true).'/index.php?option=com_jce&view=editor&layout=plugin&plugin=spellchecker&component_id=' . $settings['component_id'];
+		$settings['spellchecker_engine'] = $engine;
 	}
 }
 ?>

@@ -23,11 +23,15 @@ var WFAggregator = WFExtensions.add('Aggregator', {
     	return this.aggregators[name] || null;
     },
 
-    setup : function() {
+    setup : function(options) {
         var self = this;
         
+        options = options || {};
+
         tinymce.each(this.aggregators, function(o, k) {
-        	return self._call(o, 'setup');
+            self.setParams(o, options);
+            
+            return self._call(o, 'setup');
         });
     },
 

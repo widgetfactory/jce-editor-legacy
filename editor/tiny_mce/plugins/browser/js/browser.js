@@ -30,6 +30,8 @@ var BrowserDialog = {
             src = tinyMCEPopup.editor.convertURL(src);
             action = "update";
         }
+        
+        $.Plugin.init();
 
         $('#insert').button('option', 'label', tinyMCEPopup.getLang('lang_' + action, 'Insert', true));
 		
@@ -38,9 +40,7 @@ var BrowserDialog = {
         }
 		
         $('<input type="hidden" id="src" value="'+ src +'" />').appendTo(document.body);
-		
-        $.Plugin.init();
-		
+	
         // Create File Browser
         WFFileBrowser.init('#src', {        	
             onFileClick : function(e, file) {

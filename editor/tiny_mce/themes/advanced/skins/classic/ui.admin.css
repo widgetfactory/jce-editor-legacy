@@ -26,47 +26,15 @@
     border : 1px solid #ccc;
 }
 
-#jce .classicSkin span.mceSplitButton span.mceIcon + span {
+#jce .classicSkin span.mceSplitButton span.mceIcon:after {
+    content : "";
+    display: inline-block;
     position : absolute;
     top : 0px;
     right : -1px;
     background: url("img/layout.png") no-repeat -61px -1px;
     width : 11px;
-}
-
-#jce.multiplebg .classicSkin span.mceIcon.mce_paste {
-    background-image: url("img/layout.png"), url("../../img/icons.png");
-    background-position: -41px -1px, -560px 0;
-}
-
-#jce.multiplebg .classicSkin span.mceIcon.mce_numlist {
-    background-image: url("img/layout.png"), url("../../img/icons.png");
-    background-position: -41px -1px, -80px 0;
-}
-
-#jce.multiplebg .classicSkin span.mceIcon.mce_bullist {
-    background-image: url("img/layout.png"), url("../../img/icons.png");
-    background-position: -41px -1px, -20px 0;
-}
-
-#jce.multiplebg .classicSkin span.mceIcon.mce_forecolor {
-    background-image: url("img/layout.png"), url("../../img/icons.png");
-    background-position: -41px -1px, -720px 0;
-}
-
-#jce.multiplebg .classicSkin span.mceIcon.mce_backcolor {
-    background-image: url("img/layout.png"), url("../../img/icons.png");
-    background-position: -41px -1px, -760px 0;
-}
-
-#jce.multiplebg .classicSkin span.mceIcon.mce_spellchecker {
-    background-image: url("img/layout.png"), url("../../img/icons.png");
-    background-position: -41px -1px, -120px -20px;
-}
-
-#jce.multiplebg .classicSkin span.mceIcon.mce_textcase {
-    background-image: url("img/layout.png"), url("../../img/icons.png");
-    background-position: -41px -1px, -60px -40px;
+    height : 20px;
 }
 
 #jce .classicSkin .mceToolbar {

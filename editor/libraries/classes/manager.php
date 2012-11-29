@@ -13,7 +13,7 @@ defined('_JEXEC') or die('RESTRICTED');
 
 // Load class dependencies
 wfimport('editor.libraries.classes.plugin');
-wfimport('editor.libraries.classes.extensions.browser');
+wfimport('editor.libraries.classes.browser');
 
 class WFMediaManager extends WFEditorPlugin {
 
@@ -22,7 +22,7 @@ class WFMediaManager extends WFEditorPlugin {
      */
     public function __construct($config = array()) {
         // Call parent
-        parent::__construct();
+        //parent::__construct();
         
         if (!array_key_exists('type', $config)) {
             $config['type'] = 'manager';
@@ -40,7 +40,11 @@ class WFMediaManager extends WFEditorPlugin {
             $config['template_path'] = WF_EDITOR_LIBRARIES . '/views/plugin/tmpl';
         }
 
-        $this->setProperties(array_merge($this->getConfig(), $config));
+        // Call parent
+        parent::__construct($config);
+        
+        // update properties
+        $this->setProperties($this->getConfig());
 
         // initialize the browser
         $browser = $this->getBrowser();
@@ -55,7 +59,7 @@ class WFMediaManager extends WFEditorPlugin {
         static $browser;
 
         if (!is_object($browser)) {
-            $browser = WFBrowserExtension::getInstance('file', $this->getProperties());
+            $browser = WFFileBrowser::getInstance($this->getProperties());
         }
 
         return $browser;
@@ -90,8 +94,8 @@ class WFMediaManager extends WFEditorPlugin {
      * @return array
      */
     private function getConfig() {
-        $filesystem = $this->getParam('filesystem.name', 'joomla', '', 'string', false);
-        $filetypes = $this->getParam('extensions', $this->get('_filetypes', 'images=jpg,jpeg,png,gif'));
+        $filesystem = $this->getParam('filesystem.name', 'joomla', '', 'string', false);        
+        $filetypes  = $this->getParam('extensions', $this->get('_filetypes', 'images=jpg,jpeg,png,gif'));
 
         $config = array(
             'dir' => $this->getParam('dir', '', '', 'string', false),

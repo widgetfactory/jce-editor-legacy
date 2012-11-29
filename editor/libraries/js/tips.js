@@ -17,7 +17,29 @@
  */
 (function($){
 	
-    $.support.canvas = !!document.createElement('canvas').getContext;
+    $.support.canvas = false;//!!document.createElement('canvas').getContext;
+    
+    // http://www.abeautifulsite.net/blog/2011/11/detecting-mobile-devices-with-javascript/
+    var isMobile = {
+        Android: function() {
+            return navigator.userAgent.match(/Android/i);
+        },
+        BlackBerry: function() {
+            return navigator.userAgent.match(/BlackBerry/i);
+        },
+        iOS: function() {
+            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+        },
+        Opera: function() {
+            return navigator.userAgent.match(/Opera Mini/i);
+        },
+        Windows: function() {
+            return navigator.userAgent.match(/IEMobile/i);
+        },
+        any: function() {
+            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+        }
+    };
 	
     $.widget("ui.tips", {
 		
@@ -25,14 +47,18 @@
             speed: 150,
             position: 'top center',
             opacity: 0.9,
-            className: 'tooltip',
+            className: '',
             offsets: {
                 'x': 16,
-                'y': 18
+                'y': 16
             },
             width: 200,
             fixed: true,
-            sticky: false
+            parent : 'body',
+            trigger : 'hover',
+            show : $.noop,
+            hide : $.noop,
+            disabled : ':disabled, .disabled'
         },
 		
         /**
@@ -45,42 +71,52 @@
 			
             $.extend(this.options, options);
 			
-            if (this.options.sticky) {
-                self._pin();
-            } else {				
-                // cancel on drag/drop/sortable		
-                if ($(this.element).hasClass('tooltip-cancel-ondrag')) {
-                    this._cancelOnDrag();
-                }
-                           
-                $(this.element).click(function(e) {					
-                    // don't pin tip if a link or parent of a link
-                    if (this.nodeName == 'A' || $('a', this).length || $(this).hasClass('tooltip-cancel-ondrag')) {
-                        return;
-                    }
-					
-                    if ($('#jce-tooltip').hasClass('sticky')) {
-                        return self._unpin();
-                    } else {
-                        return self._pin();
-                    }
-                });
+            // cancel on drag/drop/sortable		
+            if ($(this.element).hasClass('wf-tooltip-cancel-ondrag')) {
+                this._cancelOnDrag();
             }
-
-            $(this.element).hover(
-                function (e) {
-                    if ($('#jce-tooltip').hasClass('sticky') || $(this).hasClass('nohover')) {
-                        return;
-                    } 
-                    return self._start(e);
-                },
-                function () {
-                    if ($('#jce-tooltip').hasClass('sticky') || $(this).hasClass('nohover')) {
-                        return;
-                    }
-                    return self._end();
+                           
+            $(this.element).click(function(e) {					
+                if (self.options.trigger == 'click' && $(this).is(self.options.disabled)) {
+                    return;
                 }
-                );
+                
+                // don't pin tip if a link or parent of a link
+                if (this.nodeName == 'A' || $('a', this).length || $(this).hasClass('wf-tooltip-cancel-ondrag')) {
+                    return;
+                }
+                
+                if (self.options.trigger == 'click') {
+                    if ($('#jce-tooltip').is(':visible')) {
+                        return self._end();
+                    }
+
+                    self._start(e);
+                }
+			
+                if ($('#jce-tooltip').hasClass('sticky')) {
+                    self._unpin();
+                } else {
+                    self._pin();
+                }
+            });
+            
+            if (this.options.trigger == 'hover') {
+                $(this.element).hover(
+                    function (e) {
+                        if ($('#jce-tooltip').hasClass('sticky') || $(this).hasClass('nohover')) {
+                            return;
+                        } 
+                        return self._start(e);
+                    },
+                    function (e) {                        
+                        if ($('#jce-tooltip').hasClass('sticky') || $(this).hasClass('nohover')) {
+                            return;
+                        }
+                        return self._end();
+                    }
+                    );
+            }
         },
 		
         /**
@@ -88,22 +124,17 @@
 	 	*/
         _createTips: function() {
             var self = this, $tips = $('#jce-tooltip');
-			
+	
             if (!$tips.get(0)) {				
-                $tips = $('<div id="jce-tooltip" class="jce-tooltip ui-widget ui-widget-content ui-corner-all" role="tooltip" aria-hidden="true">' +
+                $tips = $('<div id="jce-tooltip" role="tooltip" aria-hidden="true">' +
                     '<span class="ui-icon ui-icon-close" title="Close"></span>' +	
                     '<div class="jce-tooltip-content"></div>' +
-                    '</div>').appendTo('body');
-				
-                if ($.support.canvas) {
-                    var canvas = document.createElement('canvas');
-                    $(canvas).attr({
-                        'width' : 14, 
-                        'height' : 14
-                    }).addClass('jce-tooltip-pointer');
-                    $('#jce-tooltip').append(canvas);					
-                } else {
-                    $('#jce-tooltip').append('<div class="jce-tooltip-pointer ui-widget-content"><div class="jce-tooltip-pointer-inner"></div></div>');
+                    '</div>').appendTo(this.options.parent);
+                
+                $('#jce-tooltip').append('<div class="jce-tooltip-pointer"></div>');
+                
+                if ($.support.leadingWhitespace === false) {
+                    $('#jce-tooltip div.jce-tooltip-pointer').append('<div class="jce-tooltip-pointer-inner"></div>');
                 }
 								
                 $('span.ui-icon-close', $tips).click(function() {
@@ -114,6 +145,8 @@
                     $tips.css('opacity', 0);
                 }
             }
+            
+            $tips.removeAttr('class').addClass('jce-tooltip').addClass(this.options.className);
         },
 		
         /**
@@ -125,51 +158,49 @@
             var self = this;
             // Create tooltip if it doesn't exist
             this._createTips();
-			
+	
             var $tips = $('#jce-tooltip');
             // store element
             $tips.data('source', this.element);
-
-            // Get tooltip text from title
-            var text = $(this.element).attr('title') || '', title = '';
+            
+            if (this.options.content) {
+                var h = this.options.content;
+            } else {
+                // Get tooltip text from title
+                var text = $(this.element).attr('title') || '', title = '';
 			
-            // Split tooltip text ie: title::text
-            if (/::/.test(text)) {
-                var parts = text.split('::');
-                title 	= $.trim(parts[0]);
-                text 	= $.trim(parts[1]);
-            }
-            // Store original title and remove
-            $(this.element).data('title',  $(this.element).attr('title')).attr('title', '');
-            // add aria description
-            $(this.element).attr('aria-describedby', 'jce-tooltip');
+                // Split tooltip text ie: title::text
+                if (/::/.test(text)) {
+                    var parts = text.split('::');
+                    title 	= $.trim(parts[0]);
+                    text 	= $.trim(parts[1]);
+                }
+                // Store original title and remove
+                $(this.element).data('title',  $(this.element).attr('title')).attr('title', '');
+                // add aria description
+                $(this.element).attr('aria-describedby', 'jce-tooltip');
 			
-            var h = '';
-            // Set tooltip title html
-            if (title) {
-                h += '<h4>' + title + '</h4>';
+                var h = '';
+                // Set tooltip title html
+                if (title) {
+                    h += '<h4>' + title + '</h4>';
+                }
+                // Set tooltip text html
+                if (text) {
+                    h += '<p>' + text + '</p>';
+                }
             }
-            // Set tooltip text html
-            if (text) {
-                h += '<p>' + text + '</p>';
-            }
-			
+	
             // Set tooltip html
             $('div.jce-tooltip-content', $tips).html(h);
-
-            if (this.options.fixed) {
-                this._position();
-            } else {
-                this._locate(e);
-            }
-			
-            $('div.jce-tooltip-pointer-down-inner', $tips).css({
+	
+            /*$('div.jce-tooltip-pointer-down-inner', $tips).css({
                 'border-top-color' : $tips.css('background-color')
-            });
+            });*/
 
             // Set visible
-            $tips.css('visibility', 'visible').attr('aria-hidden', 'false');
-			
+            $tips.show().attr('aria-hidden', 'false');
+	
             if ($.support.cssFloat) {
                 $tips.animate({
                     'opacity': this.options.opacity
@@ -179,6 +210,25 @@
                     $tips.css('width', 200);
                 }
             }
+            
+            this._trigger('show');
+            
+            window.setTimeout(function() {
+                /*if (self.options.fixed) {
+                    self._position();
+                } else {
+                    self._locate(e);
+                }*/
+                
+                self._position();
+                
+                $tips.css('visibility', 'visible');
+                
+            }, 1);
+        },
+        
+        close : function() {
+            return this._end();
         },
 		
         /**
@@ -188,16 +238,22 @@
 		 */
         _end: function() {
             var $tips = $('#jce-tooltip'), element = $tips.data('source') || this.element;
-            // Restore title
-            $(element).attr('title', $(element).data('title'));
+
+            if ($(element).data('title')) {
+                // Restore title
+                $(element).attr('title', $(element).data('title'));
+            }
+
             // remove aria
             $(element).removeAttr('aria-describedby');			
             // Fade out tooltip and hide			
-            $tips.css('visibility', 'hidden').attr('aria-hidden', 'true');
+            $tips.css('visibility', 'hidden').attr('aria-hidden', 'true').hide();
 			
             if ($.support.cssFloat) {
                 $tips.css('opacity', 0);
             }
+            
+            this._trigger('hide');
 			
             this._unpin();
         },
@@ -222,69 +278,129 @@
         },
 		
         _pin : function() {
+            var self = this;
+            
             $('#jce-tooltip').addClass('sticky');
             $('span.ui-icon-close', '#jce-tooltip').show();
+            
+            // add blur handler
+            $(window).on('click.tooltip-blur', function(e) {                
+                var el = $(self.element).get(0), n = e.target;
+                
+                if (n == el || (el.nodeName == 'LABEL' && $(el).attr('for') && n == $('#' + $(el).attr('for')).get(0)) || n == $('#jce-tooltip').get(0)) {
+                    return;
+                }
+                    
+                if ($(n).parents('#jce-tooltip').length === 0) {
+                    self._end();
+                }
+            });
         },
 		
         _unpin : function() {
             $('#jce-tooltip').removeClass('sticky');
             $('span.ui-icon-close', '#jce-tooltip').hide();
+            
+            $(window).off('click.tooltip-blur');
         },
 		
         _position: function() {
-            var $tips 	= $('#jce-tooltip');
-            var p 		= $(this.element).offset();
-            var o 		= this.options.offsets;	
+            var $tips       = $('#jce-tooltip');
+            var $pointer    = $('.jce-tooltip-pointer', $tips);
+            var o           = this.options.offsets;	
 			
             var tip = {
-                'x': $tips.outerWidth(),
-                'y': $tips.outerHeight()
+                'width'  : $tips.outerWidth(),
+                'height' : $tips.outerHeight()
             };
-			
-            var pos = {
-                x: p.left 	- tip.x / 2 + $(this.element).outerWidth() / 2,
-                y: p.top 	- (tip.y + o.y)
-            };
-			
-            var position 	  = this.options.position;
-            var scrollTop 	  = $(document).scrollTop();
-			
-            if (pos.y < 0 || pos.y < scrollTop) {				
-                $tips.removeClass('jce-' + this.options.className + '-top');
-                position = position.replace('top', 'bottom');
-                $tips.addClass('jce-' + this.options.className + '-bottom');
-				
-                pos.y = p.top + o.y + 10;				
-            } else {
-                $tips.removeClass('jce-' + this.options.className + '-bottom');
-                position = position.replace('bottom', 'top');
-                $tips.addClass('jce-' + this.options.className + '-top');
-            }
-			
-            var tmp = pos.x;
-			
-            while (pos.x < 5) {
-                pos.x += 5;
-            }
-			
-            // get default left position (eg: 50%)
-            if (tmp < 0) {
-                $('.jce-tooltip-pointer', $tips).css('left', p.left - pos.x + $(this.element).outerWidth() / 2);
-            } else {
-                $('.jce-tooltip-pointer', $tips).css('left', '50%');
-            }
-			
-            if ($.support.canvas) {
-                this._createPointer();
-            }
-			
-            $tips.css({
-                top	: pos.y,
-                left: pos.x
+
+            // reset
+            $($pointer).attr('style', '');
+            
+            // get position
+            var position = this.options.position;
+            
+            // remove center
+            var at = position.replace(/\s*center\s*/, '');
+            
+            // flip position
+            var my = at.replace(/(left|right|top|bottom)/, function(s) {
+               switch(s) {
+                   case 'left':
+                       return 'right-' + o.x;
+                       break;
+                   case 'right':
+                       return 'left+' + o.x;
+                       break; 
+                   case 'top':
+                       return 'bottom-' + o.y;
+                       break;
+                   case 'bottom':
+                       return 'top+' + o.y;
+                       break;
+               }
             });
+            
+            // get window dimensions
+            var pos = {}, ww = Math.round($(window).width()), wh = Math.round($(window).height()), pw = 10, ph = 10;
+
+            $tips.position({
+                my  : my,
+                at  : at,
+                of  : $(this.element),
+                collision : 'flipfit flipfit',
+                using : function(props, fb) {                                                            
+                    if (Math.round(props.top) == 0) {
+                        props.top += 10;
+                    }
+                    
+                    if (Math.round(props.left) == 0) {
+                        props.left += 10;
+                    }
+                    
+                    if (Math.round(props.top + tip.height) == wh) {
+                        props.top -= 10;
+                    }
+                    
+                    if (Math.round(props.left + tip.width) == ww) {
+                        props.left -= 10;
+                    }
+                    
+                    // re-position pointer
+                    if (/left|right/.test(position)) {
+                        $pointer.css('top', Math.round(fb.target.top - props.top) + (ph / 2 - 1));
+                    }
+
+                    if (/top|bottom/.test(position) && Math.round(fb.element.left) == 0) {
+                        $pointer.css('left', Math.round(fb.target.width / 2));
+                    }
+                    
+                    if (fb.element.left < fb.target.left) {
+                        position = position.replace('right', 'left');
+                    } else {
+                        position = position.replace('left', 'right');
+                    }
+                    
+                    if (fb.element.top < fb.target.top) {
+                        position = position.replace('bottom', 'top');
+                    } else {
+                        position = position.replace('top', 'bottom');
+                    }
+
+                    $tips.css(props);
+                }
+            });
+            
+            // set pointer
+            $pointer.removeClass('top right bottom left center').addClass(position);
+            
+            // create pointer    
+            /*if ($.support.canvas) {
+                this._createPointer(position);
+            }*/
         },
 		
-        _createPointer : function() {
+        _createPointer : function(position) {
             var $tips = $('#jce-tooltip'), canvas = $('canvas', $tips).get(0), context = canvas.getContext('2d');
 			
             var w = canvas.width, h = canvas.height;
@@ -298,16 +414,31 @@
             context.lineWidth   = 1.8;
 
             context.beginPath();
-			
-            if ($tips.hasClass('jce-' + this.options.className + '-top')) {
-                context.moveTo(0, 0);
-                context.lineTo(w/2, h);
-                context.lineTo(w, 0);
-            } else {
-                context.moveTo(0, h);
-                context.lineTo(w/2, 0);
-                context.lineTo(w, h);
-            }
+            
+            var pos = /(top|bottom|left|right)/.exec(position) || ['', 'top'];
+		
+            switch(pos[1]) {
+                case 'top':
+                    context.moveTo(0, 0);
+                    context.lineTo(w/2, h);
+                    context.lineTo(w, 0);
+                    break;
+                case 'bottom':
+                    context.moveTo(0, h);
+                    context.lineTo(w/2, 0);
+                    context.lineTo(w, h);
+                    break;
+                case 'left':
+                    context.moveTo(0, 0);
+                    context.lineTo(w, h/2);
+                    context.lineTo(0, h);
+                    break;
+                case 'right':
+                    context.moveTo(w, 0);
+                    context.lineTo(0, h/2);
+                    context.lineTo(w, h);
+                    break;
+            }    
 
             context.fill();
             context.stroke();
@@ -322,7 +453,7 @@
             this._createTips();
 
             var $tips 	= $('#jce-tooltip');
-            var o 		= this.options.offsets;
+            var o 	= this.options.offsets;
 			
             var page = {
                 'x': e.pageX,

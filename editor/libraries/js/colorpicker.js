@@ -16,28 +16,28 @@
 
         options : {
             color : '#FFFFFF',
-            dialog: true,
             detail 	: 50,
             speed 	: 200,
             template_colors : '',
             custom_colors 	: '',
             forcedHighContrastMode : false,
             labels : {
-                picker_tab 		: 'Picker',
-                title			: 'Color Picker',
-                palette_tab 	: 'Palette',
-                palette			: 'Web Colors',
-                named_tab 		: 'Named',
-                named			: 'Named Colors',
-                template_tab 	: 'Template',
-                template		: 'Template Colors',
-                custom 			: 'Custom Colors',
-                color 			: 'Color',
-                apply 			: 'Apply',
-                name 			: 'Name'
+                picker          : 'Picker',
+                title		: 'Color Picker',
+                //palette_tab 	: 'Palette',
+                palette		: 'Web Colors',
+                // named_tab 	: 'Named',
+                named		: 'Named Colors',
+                //template_tab 	: 'Template',
+                template	: 'Template Colors',
+                custom 		: 'Custom Colors',
+                color 		: 'Color',
+                apply 		: 'Apply',
+                name 		: 'Name'
             },
             insert 	: $.noop,
-            close	: $.noop
+            close	: $.noop,
+            dialog      : false
         },
         _strhex : "0123456789abcdef",
         /**
@@ -229,52 +229,122 @@
          * @param {Object} options Options object
          */
         _init : function() {
-            var self = this;
+            var self = this, o = this.options;
 
+            // as a dialog, eg: from the editor font color etc.
             if (this.options.dialog) {
-                $('<span class="colorpicker_widget"></span>').insertAfter(this.element).css('background-color', $(this.element).val()).click( function(event) {
-                    // is it open?
-                    if ($('#colorpicker').get(0)) {
-                        if ($('#colorpicker').dialog('isOpen')) {
-                            return self._close();
-                        } else {
-                            $('#colorpicker').dialog('open', event);
-                        }
-                    } else {
-                        self._open(event, true);
+                // tabs already created
+                if ($('#tab-content .colorpicker_generated').length) {
+                    return;
+                }
+                
+                var color = $(this.element).val() || '#000000';
+            
+                // convert color
+                if (/rgb/.test(color)) {
+                    color = this._rgbToHex(color);
+                }
+            
+                // remove colour value if placeholder
+                if ($(self.element).hasClass('placeholder')) {
+                    color = '';
+                }
+                
+                this._createTabs();
+                
+                $('#colorpicker_insert').button({
+                    icons: {
+                        primary: 'ui-icon-check'
                     }
+                }).click(function(e) {
+                    e.preventDefault();
+                            
+                    self._insert();
                 });
-
-                // update widget
-                $(this.element).change( function() {
-                    $(this).next('span.colorpicker_widget').css('background-color', $(this).val());
-                });
-
-            } else {
-                var color = $(this.element).val();
-
-                self._createTabs();
-                // update color picker preview
-                $('#colorpicker_preview_color').css('background-color', color);
-                $('#colorpicker_color').val(color);
-
+                    
                 // set wheel colour
                 if (self._wheel) {
                     self._wheel.setColor(color);
                 }
+                
+            } else {
+                if (this.options.widget) {
+                    this.widget = $(this.options.widget);
+                } else {
+                    this.widget = $('<span class="colorpicker_widget"></span>').insertAfter(this.element);
+                }
+                
+                $(this.widget).css('background-color', $(this.element).val() || '#000000').tips({
+                    trigger  : 'click',
+                    position : 'right center',
+                    content  : '<div id="colorpicker" title="Color Picker">' + self._getContent() + '</div>',
+                    className: 'wf-colorpicker',
+                    opacity  : 1,
+                    show : function() {
+                        var color = $(self.element).val() || '#000000';
+            
+                        // convert color
+                        if (/rgb/.test(color)) {
+                            color = this._rgbToHex(color);
+                        }
+            
+                        // remove colour value if placeholder
+                        if ($(self.element).hasClass('placeholder')) {
+                            color = '';
+                        }
+                        
+                        // set wheel colour
+                        if (self._wheel) {
+                            self._wheel.setColor(color);
+                        }
+                        
+                        // tabs already created
+                        if ($('#tab-content .colorpicker_generated').length) {
+                            return;
+                        }
+
+                        // translate labels
+                        $('#colorpicker_tabs').html( function(i, h) {
+                            return h.replace(/\{#(\w+)\}/gi, function(a, b) { 
+                                return o.labels[b];
+                            });
+                        });
+
+                        $('#colorpicker').append(
+                            '<div id="colorpicker_preview">' +
+                            '	<div id="colorpicker_preview_text">' +
+                            '		<input type="text" id="colorpicker_color" size="8" maxlength="8" value="' + color + '" class="ui-corner-all" aria-required="true" />' +
+                            '	</div>' +
+                            '	<div id="colorpicker_preview_color" class="ui-widget-content ui-corner-all"></div>' +
+                            '	<div id="colorpicker_insert" class="btn btn-small"><i class="icon-save"></i>&nbsp;' + o.labels.apply + '</div>' +
+                            '</div>'
+                            );
+
+                        $('#colorpicker_preview_color').css('background-color', color);
+                        
+                        $('#colorpicker_insert').button({
+                            icons: {
+                                primary: 'ui-icon-check'
+                            }
+                        }).click(function(e) {
+                            e.preventDefault();
+                            
+                            self._insert();
+                        });
+                        
+                        // create tabs
+                        self._createTabs();
+                    }
+                });
             }
         },
-
-        /**
-         * Open the colorpicker
-         * @param {Object} el Trigger element
-         */
-        _open : function(event, init) {
-            var self = this, h = '', o = this.options, widget = event.target;
-
+        
+        _getContent : function() {
+            var self = this, h = '', o = this.options;
+            
             h += '<div id="colorpicker_tabs">';
-            h += '<ul>';
-            h += '<li><a href="#colorpicker_picker" aria-controls="colorpicker_picker">{#picker}</a></li>';
+            h += '<ul class="nav nav-tabs">';
+            h += '<li class="active"><a href="#colorpicker_picker" aria-controls="colorpicker_picker" class="active">{#picker}</a></li>';
             h += '<li><a href="#colorpicker_web" aria-controls="colorpicker_web">{#palette}</a></li>';
             h += '<li><a href="#colorpicker_named" aria-controls="colorpicker_named">{#named}</a></li>';
 
@@ -284,95 +354,46 @@
             }
 
             h += '</ul>';
-            h += '<div id="colorpicker_picker" data-type="picker"></div>';
-            h += '<div id="colorpicker_web" data-type="web"></div>';
-            h += '<div id="colorpicker_named" data-type="named"></div>';
+            h += '<div class="tab-content">';
+            h += '<div id="colorpicker_picker" data-type="picker" class="tab-pane active"></div>';
+            h += '<div id="colorpicker_web" data-type="web" class="tab-pane"></div>';
+            h += '<div id="colorpicker_named" data-type="named" class="tab-pane"></div>';
 
             // add template / custom colours
             if (o.template_colors || o.custom_colors) {
-                h += '<div id="colorpicker_template" data-type="template"></div>';
+                h += '<div id="colorpicker_template" data-type="template" class="tab-pane"></div>';
             }
-
             h += '</div>';
-
-            var pos = $(widget).offset();
-
-            $('<div id="colorpicker"></div>').html(h).dialog({
-                width : 320,
-                height: 385,
-                title: o.labels.title,
-                buttons : [{
-                    text : o.labels.apply,
-                    click : function() {
-                        self._insert();
-                    }
-
-                }
-                ],
-                autoOpen : false,
-                open : function(event, ui) {
-                    var color = $(self.element).val() || '#FFFFFF';
-
-                    // remove colour value if placeholder
-                    if ($(self.element).hasClass('placeholder')) {
-                        color = '';
-                    }
-
-                    if (/rgb/.test(color)) {
-                        color = self._rgbToHex(color);
-                    }
-
-                    $(this).dialog('widget').css({
-                        left : pos.left + $(widget).outerWidth() + 2 + 'px',
-                        top : pos.top + 'px'
-                    });
-
-                    // set wheel colour
-                    if (self._wheel) {
-                        self._wheel.setColor(color);
-                    }
-
-                    // tabs already created
-                    if ($('#colorpicker_tabs').is('.ui-tabs')) {
-                        return;
-                    }
-
-                    // translate labels
-                    $(this).html( function(i, h) {
-                        return h.replace(/\{#([a-z]+)\}/gi, function(a, b) {
-                            return o.labels[b];
-                        });
-
-                    });
-
-                    // create tabs
-                    self._createTabs();
-
-                    $('#colorpicker').append(
-                    '<div id="colorpicker_preview">' +
-                    '	<div id="colorpicker_preview_text">' +
-                    '		<input type="text" id="colorpicker_color" size="8" maxlength="8" value="' + color + '" class="ui-corner-all" aria-required="true" />' +
-                    '	</div>' +
-                    '	<div id="colorpicker_preview_color" class="ui-widget-content ui-corner-all"></div>' +
-                    '</div>'
-                    );
-
-                    $('#colorpicker_preview_color').css('background-color', color);
-
-                    $(this).dialog('widget').find('button:ui-button').addClass('ui-button-text-icon-primary').prepend('<span class="i-button-icon-primary ui-icon ui-icon-check"></span>');
-                }
-
-            }).dialog('open');
+            h += '</div>';
+            
+            return h;
         },
 
         _createTabs : function() {
             var self = this;
-            $('#colorpicker_tabs', '#colorpicker').tabs({
-                show: function(event, ui) {
-                    self['_create' + $(ui.panel).data('type')].call(self, $(ui.panel));
-                }
-
-            });
+            
+            if ($.isFunction($.fn.tab)) {
+                $('#colorpicker_tabs a').on('show', function(e) {
+                    var id = $(e.target).attr('href'), type = $(id).data('type');                   
+                    self['_create' + type].call(self, $(id));
+                    
+                    $('#colorpicker_insert, #insert').toggle(type == 'picker');
+                    
+                }).click(function(e) {
+                    e.preventDefault();
+                    $(this).tab('show');
+                });
+            } else {
+                $('#colorpicker_tabs', '#colorpicker').tabs({
+                    activate: function(event, ui) {
+                        var type = $(ui.newPanel).data('type');
+                        
+                        self['_create' + type].call(self, $(ui.newPanel));
+                        
+                        $('#colorpicker_insert, #insert').toggle(type == 'picker');
+                    }
+                });
+            }
 
             // create initial picker
             self._createpicker($('#colorpicker_picker', '#colorpicker_tabs'));
@@ -409,7 +430,7 @@
         _close : function() {
             this._trigger('close', null);
 
-            $('#colorpicker').dialog('close');
+            $(this.widget).tips('close');
         },
 
         /**
@@ -421,7 +442,9 @@
             this._trigger('insert', null, color);
 
             if (color) {
-                $(this.element).val(color).removeClass('placeholder').next('span.colorpicker_widget').css('background-color', color);
+                $(this.element).val(color).removeClass('placeholder').change();
+                
+                $(this.widget).css('background-color', color);
             }
 
             this._close();
@@ -434,7 +457,7 @@
          * @param {String} c RGB Color
          */
         _rgbToHex : function(c) {
-            var re = new RegExp("rgb\\s*\\(\\s*([0-9]+).*,\\s*([0-9]+).*,\\s*([0-9]+).*\\)", "gi");
+            var r, g, b, re = new RegExp("rgb\\s*\\(\\s*([0-9]+).*,\\s*([0-9]+).*,\\s*([0-9]+).*\\)", "gi");
 
             if (!c) {
                 return c;
@@ -463,6 +486,8 @@
          * @param {String} c Hex Color
          */
         _hexToRGB : function(c) {
+            var r, g, b;
+            
             if (c.indexOf('#') != -1) {
                 c = c.replace(new RegExp('[^0-9A-F]', 'gi'), '');
 
@@ -520,11 +545,11 @@
                 h += '<span class="mceVoiceLabel" id="web_colors_' + i + '">' + v.toUpperCase() + '</span>';
 
                 if ((i + 1) % 18 == 0) {
-                    h += '</ul><ul>';
+                // h += '</ul><ul>';
                 }
             });
 
-            h += '</div>';
+            h += '</ul></div>';
 
             $(parent).append(h).append('<br style="clear:both;" />').addClass('colorpicker_generated');
 
@@ -559,12 +584,12 @@
                 h += '<span class="mceVoiceLabel" id="named_colors_' + k + '">' + v.toUpperCase() + '</span>';
 
                 if ((i + 1) % 18 == 0) {
-                    h += '</ul><ul>';
+                //h += '</ul><ul>';
                 }
                 i++;
             });
 
-            h += '</div>';
+            h += '</ul></div>';
 
             $(parent).append(h).append('<br style="clear:both;" />').addClass('colorpicker_generated').append('<div id="colorpicker_colorname">' + this.options.labels.name + '</div>');
 
@@ -589,8 +614,6 @@
             }
 
             if (this.options.template_colors) {
-                $(parent).append('<p id="colorpicker_template_label">'+this.options.labels.template + '</p>');
-
                 var templateColors = this.options.template_colors;
 
                 if ($.type(this.options.template_colors) == 'string') {
@@ -610,11 +633,11 @@
                     }
                     h += '<span class="mceVoiceLabel" id="template_colors_' + i + '">' + v.toUpperCase() + '</span>';
                     if ((i + 1) % 18 == 0) {
-                        h += '</ul><ul>';
+                    //h += '</ul><ul>';
                     }
                 });
 
-                h += '</div>';
+                h += '</ul></div>';
 
                 $(parent).append(h);
             }
@@ -746,8 +769,6 @@
         // Store farbtastic object
         var fb = this;
 
-        fb.clr = color || '#000000';
-
         // Insert markup
         $(container).html('<div class="farbtastic"><div class="color"></div><div class="wheel"></div><div class="overlay"></div><div class="h-marker marker"></div><div class="sl-marker marker"></div></div>');
         var e = $('.farbtastic', container);
@@ -758,8 +779,8 @@
         fb.width = 194;
 
         // Fix background PNGs in IE6
-        if (!!window.ActiveXObject && !window.XMLHttpRequest) {
-            $('*', e).each( function() {
+        if (navigator.appVersion.match(/MSIE [0-6]\./)) {
+            $('*', e).each(function () {
                 if (this.currentStyle.backgroundImage != 'none') {
                     var image = this.currentStyle.backgroundImage;
                     image = this.currentStyle.backgroundImage.substring(5, image.length - 2);
@@ -769,13 +790,11 @@
                     });
                 }
             });
-
         }
-
         /**
-         * Link to the given element(s) or callback.
-         */
-        fb.linkTo = function(callback) {
+   * Link to the given element(s) or callback.
+   */
+        fb.linkTo = function (callback) {
             // Unbind previous nodes
             if (typeof fb.callback == 'object') {
                 $(fb.callback).unbind('keyup', fb.updateValue);
@@ -787,7 +806,8 @@
             // Bind callback or elements
             if (typeof callback == 'function') {
                 fb.callback = callback;
-            } else if (typeof callback == 'object' || typeof callback == 'string') {
+            }
+            else if (typeof callback == 'object' || typeof callback == 'string') {
                 fb.callback = $(callback);
                 fb.callback.bind('keyup', fb.updateValue);
                 if (fb.callback.get(0).value) {
@@ -795,18 +815,17 @@
                 }
             }
             return this;
-        };
-
-        fb.updateValue = function(event) {
+        }
+        fb.updateValue = function (event) {
             if (this.value && this.value != fb.color) {
                 fb.setColor(this.value);
             }
-        };
+        }
 
         /**
-         * Change color with HTML syntax #123456
-         */
-        fb.setColor = function(color) {
+   * Change color with HTML syntax #123456
+   */
+        fb.setColor = function (color) {
             var unpack = fb.unpack(color);
             if (fb.color != color && unpack) {
                 fb.color = color;
@@ -815,51 +834,91 @@
                 fb.updateDisplay();
             }
             return this;
-        };
+        }
 
         /**
-         * Change color with HSL triplet [0..1, 0..1, 0..1]
-         */
-        fb.setHSL = function(hsl) {
+   * Change color with HSL triplet [0..1, 0..1, 0..1]
+   */
+        fb.setHSL = function (hsl) {
             fb.hsl = hsl;
             fb.rgb = fb.HSLToRGB(hsl);
             fb.color = fb.pack(fb.rgb);
             fb.updateDisplay();
             return this;
-        };
+        }
 
         /////////////////////////////////////////////////////
 
         /**
-         * Retrieve the coordinates of the given event relative to the center
-         * of the widget.
-         */
-        fb.widgetCoords = function(event) {
+   * Retrieve the coordinates of the given event relative to the center
+   * of the widget.
+   */
+        fb.widgetCoords = function (event) {
             var x, y;
             var el = event.target || event.srcElement;
             var reference = fb.wheel;
 
-            // Use absolute coordinates
-            var pos = fb.absolutePosition(reference);
-            x = (event.pageX || 0 * (event.clientX + $('html').get(0).scrollLeft)) - pos.x;
-            y = (event.pageY || 0 * (event.clientY + $('html').get(0).scrollTop)) - pos.y;
+            if (typeof event.offsetX != 'undefined') {
+                // Use offset coordinates and find common offsetParent
+                var pos = {
+                    x: event.offsetX, 
+                    y: event.offsetY
+                };
 
+                // Send the coordinates upwards through the offsetParent chain.
+                var e = el;
+                while (e) {
+                    e.mouseX = pos.x;
+                    e.mouseY = pos.y;
+                    pos.x += e.offsetLeft;
+                    pos.y += e.offsetTop;
+                    e = e.offsetParent;
+                }
+
+                // Look for the coordinates starting from the wheel widget.
+                var e = reference;
+                var offset = {
+                    x: 0, 
+                    y: 0
+                }
+                while (e) {
+                    if (typeof e.mouseX != 'undefined') {
+                        x = e.mouseX - offset.x;
+                        y = e.mouseY - offset.y;
+                        break;
+                    }
+                    offset.x += e.offsetLeft;
+                    offset.y += e.offsetTop;
+                    e = e.offsetParent;
+                }
+
+                // Reset stored coordinates
+                e = el;
+                while (e) {
+                    e.mouseX = undefined;
+                    e.mouseY = undefined;
+                    e = e.offsetParent;
+                }
+            }
+            else {
+                // Use absolute coordinates
+                var pos = fb.absolutePosition(reference);
+                x = (event.pageX || 0*(event.clientX + $('html').get(0).scrollLeft)) - pos.x;
+                y = (event.pageY || 0*(event.clientY + $('html').get(0).scrollTop)) - pos.y;
+            }
             // Subtract distance to middle
             return {
-                x: x - fb.width / 2,
+                x: x - fb.width / 2, 
                 y: y - fb.width / 2
             };
-        };
+        }
 
         /**
-         * Mousedown handler
-         */
-        fb.mousedown = function(event) {
-            // Capture mouse
-            if (!document.dragging) {
-                $(document).bind('mousemove', fb.mousemove).bind('mouseup', fb.mouseup);
-                document.dragging = true;
-            }
+   * Mousedown handler
+   */
+        fb.mousedown = function (event) {
+
+    
 
             // Check which area is being dragged
             var pos = fb.widgetCoords(event);
@@ -868,44 +927,72 @@
             // Process
             fb.mousemove(event);
             return false;
-        };
+        }
 
         /**
-         * Mousemove handler
-         */
-        fb.mousemove = function(event) {
+   * TouchConvert: Converts touch co-ordinates to mouse co-ordinates
+   */
+        fb.touchconvert = function (e) {
+            var e = e.originalEvent.touches.item(0);
+            return e;
+        }
+
+        /**
+   * Touchmove handler for iPad, iPhone etc
+   */
+        fb.touchmove = function (e) {
+            fb.mousemove( fb.touchconvert(e)  );
+            event.preventDefault();
+            return false;
+        }
+
+        /**
+   * Touchend handler for iPad, iPhone etc
+   */
+        fb.touchend = function (event) {
+            $(document).unbind('touchmove', fb.touchmove);
+            $(document).unbind('touchend', fb.touchend);
+            document.dragging = false;
+            event.preventDefault();
+            return false;
+        }
+
+
+        /**
+   * Mousemove handler
+   */
+        fb.mousemove = function (event) {
             // Get coordinates relative to color picker center
             var pos = fb.widgetCoords(event);
 
             // Set new HSL parameters
             if (fb.circleDrag) {
                 var hue = Math.atan2(pos.x, -pos.y) / 6.28;
-                if (hue < 0) {
-                    hue += 1;
-                }
+                if (hue < 0) hue += 1;
                 fb.setHSL([hue, fb.hsl[1], fb.hsl[2]]);
-            } else {
+            }
+            else {
                 var sat = Math.max(0, Math.min(1, -(pos.x / fb.square) + .5));
                 var lum = Math.max(0, Math.min(1, -(pos.y / fb.square) + .5));
                 fb.setHSL([fb.hsl[0], sat, lum]);
             }
             return false;
-        };
+        }
 
         /**
-         * Mouseup handler
-         */
-        fb.mouseup = function() {
+   * Mouseup handler
+   */
+        fb.mouseup = function () {
             // Uncapture mouse
             $(document).unbind('mousemove', fb.mousemove);
             $(document).unbind('mouseup', fb.mouseup);
             document.dragging = false;
-        };
+        }
 
         /**
-         * Update the markers and styles
-         */
-        fb.updateDisplay = function() {
+   * Update the markers and styles
+   */
+        fb.updateDisplay = function () {
             // Markers
             var angle = fb.hsl[0] * 6.28;
             $('.h-marker', e).css({
@@ -930,25 +1017,23 @@
                 });
 
                 // Change linked value
-                $(fb.callback).each( function() {
+                $(fb.callback).each(function() {
                     if (this.value && this.value != fb.color) {
                         this.value = fb.color;
                     }
                 });
-
-            } else {
-                if (typeof fb.callback == 'function') {
-                    fb.callback.call(fb, fb.color);
-                }
             }
-        };
+            else if (typeof fb.callback == 'function') {
+                fb.callback.call(fb, fb.color);
+            }
+        }
 
         /**
-         * Get absolute position of element
-         */
-        fb.absolutePosition = function(el) {
+   * Get absolute position of element
+   */
+        fb.absolutePosition = function (el) {
             var r = {
-                x: el.offsetLeft,
+                x: el.offsetLeft, 
                 y: el.offsetTop
             };
             // Resolve relative to offsetParent
@@ -961,45 +1046,47 @@
         };
 
         /* Various color utility functions */
-        fb.pack = function(rgb) {
+        fb.pack = function (rgb) {
             var r = Math.round(rgb[0] * 255);
             var g = Math.round(rgb[1] * 255);
             var b = Math.round(rgb[2] * 255);
             return '#' + (r < 16 ? '0' : '') + r.toString(16) +
-            (g < 16 ? '0' : '') +
-            g.toString(16) +
-            (b < 16 ? '0' : '') +
-            b.toString(16);
-        };
+            (g < 16 ? '0' : '') + g.toString(16) +
+            (b < 16 ? '0' : '') + b.toString(16);
+        }
 
-        fb.unpack = function(color) {
+        fb.unpack = function (color) {
             if (color.length == 7) {
-                return [parseInt('0x' + color.substring(1, 3)) / 255, parseInt('0x' + color.substring(3, 5)) / 255, parseInt('0x' + color.substring(5, 7)) / 255];
-            } else if (color.length == 4) {
-                return [parseInt('0x' + color.substring(1, 2)) / 15, parseInt('0x' + color.substring(2, 3)) / 15, parseInt('0x' + color.substring(3, 4)) / 15];
+                return [parseInt('0x' + color.substring(1, 3)) / 255,
+                parseInt('0x' + color.substring(3, 5)) / 255,
+                parseInt('0x' + color.substring(5, 7)) / 255];
             }
-        };
+            else if (color.length == 4) {
+                return [parseInt('0x' + color.substring(1, 2)) / 15,
+                parseInt('0x' + color.substring(2, 3)) / 15,
+                parseInt('0x' + color.substring(3, 4)) / 15];
+            }
+        }
 
-        fb.HSLToRGB = function(hsl) {
+        fb.HSLToRGB = function (hsl) {
             var m1, m2, r, g, b;
             var h = hsl[0], s = hsl[1], l = hsl[2];
-            m2 = (l <= 0.5) ? l * (s + 1) : l + s - l * s;
+            m2 = (l <= 0.5) ? l * (s + 1) : l + s - l*s;
             m1 = l * 2 - m2;
-            return [this.hueToRGB(m1, m2, h + 0.33333), this.hueToRGB(m1, m2, h), this.hueToRGB(m1, m2, h - 0.33333)];
-        };
+            return [this.hueToRGB(m1, m2, h+0.33333),
+            this.hueToRGB(m1, m2, h),
+            this.hueToRGB(m1, m2, h-0.33333)];
+        }
 
-        fb.hueToRGB = function(m1, m2, h) {
+        fb.hueToRGB = function (m1, m2, h) {
             h = (h < 0) ? h + 1 : ((h > 1) ? h - 1 : h);
-            if (h * 6 < 1)
-                return m1 + (m2 - m1) * h * 6;
-            if (h * 2 < 1)
-                return m2;
-            if (h * 3 < 2)
-                return m1 + (m2 - m1) * (0.66666 - h) * 6;
+            if (h * 6 < 1) return m1 + (m2 - m1) * h * 6;
+            if (h * 2 < 1) return m2;
+            if (h * 3 < 2) return m1 + (m2 - m1) * (0.66666 - h) * 6;
             return m1;
-        };
+        }
 
-        fb.RGBToHSL = function(rgb) {
+        fb.RGBToHSL = function (rgb) {
             var min, max, delta, h, s, l;
             var r = rgb[0], g = rgb[1], b = rgb[2];
             min = Math.min(r, Math.min(g, b));
@@ -1012,22 +1099,38 @@
             }
             h = 0;
             if (delta > 0) {
-                if (max == r && max != g)
-                    h += (g - b) / delta;
-                if (max == g && max != b)
-                    h += (2 + (b - r) / delta);
-                if (max == b && max != r)
-                    h += (4 + (r - g) / delta);
+                if (max == r && max != g) h += (g - b) / delta;
+                if (max == g && max != b) h += (2 + (b - r) / delta);
+                if (max == b && max != r) h += (4 + (r - g) / delta);
                 h /= 6;
             }
             return [h, s, l];
-        };
+        }
 
         // Install mousedown handler (the others are set on the document on-demand)
-        $('*', e).mousedown(fb.mousedown);
+        $('*', e).mousedown(function(e){
+            // Capture mouse
+            if (!document.dragging) {
+                $(document).bind('mousemove', fb.mousemove).bind('mouseup', fb.mouseup);
+                document.dragging = true;
+            }
+            fb.mousedown(e);
+        });
 
+        // TouchStart bound, calls conversion of touchpoints to mousepoints
+        $('*', e).bind("touchstart", function (e) {
+            // Capture mouse
+            if (!document.dragging) {
+                $(document).bind('touchmove', fb.touchmove).bind('touchend', fb.touchend);
+                document.dragging = true;
+            }
+            fb.mousedown( fb.touchconvert(e) );
+            e.preventDefault();
+            return false;
+        });
+  
         // Init color
-        fb.setColor(fb.clr);
+        fb.setColor('#000000');
 
         // Set linked elements/callback
         if (callback) {

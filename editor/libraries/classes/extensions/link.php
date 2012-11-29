@@ -11,9 +11,9 @@
  */
 defined('_JEXEC') or die('RESTRICTED');
 
-wfimport('editor.libraries.classes.extensions.browser');
+wfimport('editor.libraries.classes.extensions');
 
-class WFLinkBrowser extends WFBrowserExtension {
+class WFLinkExtension extends WFExtension {
     /*
      *  @var varchar
      */
@@ -28,25 +28,31 @@ class WFLinkBrowser extends WFBrowserExtension {
     public function __construct() {
         parent::__construct();
 
-        $extensions = self::loadExtensions(array(
-                    'types' => array('links')
-                ));
+        $extensions = self::loadExtensions('links');
 
         // Load all link extensions		
-        foreach ($extensions['links'] as $link) {
+        foreach ($extensions as $link) {
             $this->extensions[] = $this->getLinkExtension($link);
         }
 
         $request = WFRequest::getInstance();
         $request->setRequest(array($this, 'getLinks'));
     }
+    
+    public function getInstance($config = array()) {
+        static $instance;
+
+        if (!is_object($instance)) {
+            $instance = new WFLinkExtension($config);
+        }
+        return $instance;
+    }
 
     public function display() {
         parent::display();
 
         $document = WFDocument::getInstance();
-        $document->addScript(array('tree'), 'libraries');
-        $document->addScript(array('link'), 'extensions.browser.js');
+        $document->addScript(array('tree', 'link'), 'libraries');
 
         $document->addStyleSheet(array('tree'), 'libraries');
 
@@ -55,7 +61,7 @@ class WFLinkBrowser extends WFBrowserExtension {
         }
     }
 
-    private function &getLinkExtension($name) {
+    private function getLinkExtension($name) {
         static $links;
 
         if (!isset($links)) {
@@ -82,7 +88,7 @@ class WFLinkBrowser extends WFBrowserExtension {
         }
 
         if (count($list)) {
-            $view = $this->getView('links');
+            $view = $this->getView('links', 'links');
             $view->assign('list', implode("\n", $list));
             $view->display();
         }
@@ -99,9 +105,9 @@ class WFLinkBrowser extends WFBrowserExtension {
         if (isset($items)) {
             foreach ($items as $item) {
                 $array[] = array(
-                    'id' => isset($item['id']) ? WFEditor::xmlEncode($item['id']) : '',
-                    'url' => isset($item['url']) ? WFEditor::xmlEncode($item['url']) : '',
-                    'name' => WFEditor::xmlEncode($item['name']), 'class' => $item['class']
+                    'id' => isset($item['id']) ? self::xmlEncode($item['id']) : '',
+                    'url' => isset($item['url']) ? self::xmlEncode($item['url']) : '',
+                    'name' => self::xmlEncode($item['name']), 'class' => $item['class']
                 );
             }
             $result = array('folders' => $array);
@@ -202,4 +208,16 @@ class WFLinkBrowser extends WFBrowserExtension {
         return $match ? '&Itemid=' . $match : '';
     }
 
+    /**
+     * XML encode a string.
+     *
+     * @access	public
+     * @param 	string	String to encode
+     * @return 	string	Encoded string
+     */
+    private static function xmlEncode($string) {
+        return str_replace(array('&', '<', '>', "'", '"'), array('&amp;', '&lt;', '&gt;', '&apos;', '&quot;'), $string);
+    }
 }
+
+abstract class WFLinkBrowser extends WFLinkExtension {}
