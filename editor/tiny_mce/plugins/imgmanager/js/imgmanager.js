@@ -158,7 +158,7 @@
             });
             // set styles events
             $('#align, #clear, #border_width, #border_styles, #border_color').change(function() {
-                self.setStyles(); 
+                self.updateStyles(); 
             });
             // set border click event
             $('#border').click(function() {
