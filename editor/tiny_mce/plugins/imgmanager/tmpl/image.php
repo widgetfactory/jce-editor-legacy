@@ -72,7 +72,7 @@ $plugin = WFEditorPlugin::getInstance();
                     <tr id="attributes-border">
                         <td><label for="border" class="hastip" title="<?php echo WFText::_('WF_LABEL_BORDER_DESC'); ?>"><?php echo WFText::_('WF_LABEL_BORDER'); ?></label></td>
                         <td colspan="3">
-                            <input type="checkbox" class="checkbox">
+                            <input type="checkbox" class="checkbox" id="border">
                             <label for="border_width" class="hastip" title="<?php echo WFText::_('WF_LABEL_BORDER_WIDTH_DESC'); ?>"><?php echo WFText::_('WF_LABEL_WIDTH'); ?></label>
                             <select id="border_width" class="mceEditableSelect" data-pattern="[0-9]+">
                                 <option value="inherit"><?php echo WFText::_('WF_OPTION_NOT_SET'); ?></option>

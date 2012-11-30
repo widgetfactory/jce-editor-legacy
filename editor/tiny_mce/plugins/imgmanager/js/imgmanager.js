@@ -597,29 +597,36 @@
 
             var styles = ed.dom.parseStyle($(img).attr('style'));
 			
-            function compressBorder(target, a, b, c) {
-                function check(s) {
-                    return s in styles && styles[s] !== '';
-                }
-				
-                if (!check(a) || !check(b) || !check(c)) {
-                    return;
-                }
-
-                // Compress
-                styles[target] = styles[a] + ' ' + styles[b] + ' ' + styles[c];
-                delete styles[a];
-                delete styles[b];
-                delete styles[c];
+            function compressBorder(n) {                
+                var s = [];
+                
+                $.each(n, function(i, k) {                    
+                    k = 'border-' + k, v = styles[k];
+                    
+                    if (v == 'none') {
+                        delete styles[k];
+                        return;
+                    }
+                    
+                    if (v) {
+                        s.push(styles[k]);
+                        delete styles[k];
+                    }
+                });
+                
+                if (s.length) {
+                    styles.border = s.join(' ');
+                }                
             }
+
             // compress border
-            compressBorder('border', 'border-width', 'border-style', 'border-color');
+            compressBorder(['width', 'style', 'color', 'image']);
 			
             // remove -moz and -webkit styles
-            for (k in styles) {
-                if (k.indexOf('-moz-') !== -1 || k.indexOf('-webkit-') !== -1) {
+            for(k in styles) {
+                if(k.indexOf('-moz-') >= 0 || k.indexOf('-webkit-') >= 0) {
                     delete styles[k];
-                } 
+                }
             }
 
             // Merge
