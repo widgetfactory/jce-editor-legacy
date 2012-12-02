@@ -88,8 +88,8 @@ final class WFImageManagerPlugin extends WFMediaManager {
                 $dim = @getimagesize($file);
 
                 if ($dim) {
-                    $result['width'] = $dim[0];
-                    $result['height'] = $dim[1];
+                    $result['width']    = $dim[0];
+                    $result['height']   = $dim[1];
                 }
             }
 
@@ -97,9 +97,7 @@ final class WFImageManagerPlugin extends WFMediaManager {
 
             unset($defaults['always_include_dimensions']);
 
-            if (!empty($defaults)) {
-                $styles = array();
-            }
+            $styles = array();
 
             foreach ($defaults as $k => $v) {
                 switch ($k) {
@@ -147,11 +145,32 @@ final class WFImageManagerPlugin extends WFMediaManager {
                             $styles[str_replace('_', '-', $k)] = $v;
                         }
                         break;
+                    case 'classes':
+                    case 'title':
+                    case 'id':
+                    case 'direction':
+                    case 'usemap':
+                    case 'longdesc':
+                    case 'style':
+                    case 'alt':
+                        if ($k == 'direction') {
+                            $k = 'dir';
+                        }
+                        
+                        if ($k == 'classes') {
+                            $k = 'class';
+                        }
+
+                        if ($v != '') {
+                            $result[$k] = $v;
+                        }
+
+                        break;
                 }
             }
 
             if (!empty($styles)) {
-                $result['style'] = $styles;
+                $result['styles'] = $styles;
             }
 
             return $result;

@@ -65,19 +65,39 @@
             var ed = this.editor;
             
             if (/\.(gif|png|jpeg|jpg)$/.test(o.file)) {
-                var args = {'src' : o.file, 'alt' : o.name};
+                var args = {'src' : o.file, 'alt' : o.alt || o.name, 'style' : {}};
                 
-                if (o.width && o.height) {
-                    tinymce.extend(args, {
-                        'width' : o.width,
-                        'height': o.height
-                    })
+                delete o.file;
+                delete o.name;
+                
+                // get styles object
+                if (o.styles) {
+                    // serialize to string and parse to object
+                    var s = ed.dom.parseStyle(ed.dom.serializeStyle(o.styles));
+                    
+                    // extend args.style object
+                    tinymce.extend(args.style, s);
+                    
+                    delete o.styles;
                 }
                 
+                // get style attribute
                 if (o.style) {
-                    args.style = ed.dom.parseStyle(ed.dom.serializeStyle(o.style));
+                    // parse to object
+                    var s = ed.dom.parseStyle(o.style);
+                    
+                    // extend args.style object
+                    tinymce.extend(args.style, s);
+                    
+                    delete o.style;
                 }
                 
+                tinymce.each(o, function(v, k) {                    
+                    if (ed.schema.isValid('img', k)) {
+                        args[k] = v;
+                    }
+                });
+
                 return ed.dom.create('img', args);
             }
             
