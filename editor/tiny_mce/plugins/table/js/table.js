@@ -112,8 +112,15 @@ var TableDialog = {
             $('#tframe').val(ed.dom.getAttrib(elm, 'frame'));
             $('#rules').val(ed.dom.getAttrib(elm, 'rules'));
             
-            $('#classes').val(ed.dom.getAttrib(elm, 'class'));
-            $('#classlist').val(ed.dom.getAttrib(elm, 'class'));
+            var cls = ed.dom.getAttrib(elm, 'class');
+            
+            $('#classlist').val(function() {
+                if($('option[value="' + cls + '"]', this).length == 0) {
+                    $(this).append(new Option(cls, cls));
+                }
+
+                return cls;
+            }).change();
 
             $('#cols').val(cols);
             $('#rows').val(rowsAr.length);
@@ -195,13 +202,13 @@ var TableDialog = {
 
             $('#align').val(align);
             $('#valign').val(valign);
-            $('#class').val(function() {
+            $('#classlist').val(function() {
                 if($('option[value="' + className + '"]', this).length == 0) {
                     $(this).append(new Option(className, className));
                 }
 
                 return className;
-            });
+            }).change();
 
 
             $('#dir').val(dir);
@@ -250,13 +257,13 @@ var TableDialog = {
 
             $('#align').val(align);
             $('#valign').val(valign);
-            $('#class').val(function() {
+            $('#classlist').val(function() {
                 if($('option[value="' + className + '"]', this).length == 0) {
                     $(this).append(new Option(className, className));
                 }
 
                 return className;
-            });
+            }).change();
 
 
             $('#dir').val(dir);
@@ -694,6 +701,10 @@ var TableDialog = {
             if(k == 'style') {
                 v = dom.serializeStyle(dom.parseStyle(v));
             }
+            
+            if (k == 'classes') {
+                k = 'class';
+            }
 
             dom.setAttrib(tr_elm, k, v);
         });
@@ -851,6 +862,10 @@ var TableDialog = {
 
             if(k == 'style') {
                 v = dom.serializeStyle(dom.parseStyle(v));
+            }
+            
+            if (k == 'classes') {
+                k = 'class';
             }
 
             if(v === '') {
