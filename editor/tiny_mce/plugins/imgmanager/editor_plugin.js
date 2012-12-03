@@ -67,8 +67,8 @@
             if (/\.(gif|png|jpeg|jpg)$/.test(o.file)) {
                 var args = {'src' : o.file, 'alt' : o.alt || o.name, 'style' : {}};
                 
-                delete o.file;
-                delete o.name;
+                // supported attributes
+                var attribs = ['alt', 'title', 'id', 'dir', 'class', 'usemap', 'style', 'longdesc'];
                 
                 // get styles object
                 if (o.styles) {
@@ -92,10 +92,10 @@
                     delete o.style;
                 }
                 
-                tinymce.each(o, function(v, k) {                    
-                    if (ed.schema.isValid('img', k)) {
-                        args[k] = v;
-                    }
+                tinymce.each(attribs, function(k) {
+                   if (typeof o[k] !== 'undefined') {
+                       args[k] = o[k];
+                   } 
                 });
 
                 return ed.dom.create('img', args);
