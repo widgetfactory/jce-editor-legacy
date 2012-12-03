@@ -135,7 +135,7 @@
 .classicSkin .mceButtonDialog div, .classicSkin .mceButtonDialog input {font-family:Verdana, Arial, Helvetica, sans-serif; font-size:11px;}
 
 .classicSkin .mceButtonDialog .mceButtonDialogButtons a.mceDialogButton {
-        background: #ccc;
+        background: #EDEDED;
 	-webkit-border-radius: 2px 2px;
 	border: solid 1px rgb(153, 153, 153);
 	-moz-border-radius: 2px 2px;
