@@ -30,10 +30,6 @@ class WFSpellCheckerPlugin extends WFEditorPlugin {
             self::error('No Spellchecker Engine available');
         }
 
-        if (isset($config['general.remote_rpc_url'])) {
-            $this->remoteRPC();
-        }
-
         $request = WFRequest::getInstance();
 
         // Setup plugin XHR callback functions 
@@ -111,43 +107,6 @@ class WFSpellCheckerPlugin extends WFEditorPlugin {
         }
 
         return $engine;
-    }
-
-    private function remoteRPC() {
-        $config = $this->getConfig();
-
-        $url = parse_url($config['general.remote_rpc_url']);
-
-        // Setup request
-        $req = "POST " . $url["path"] . " HTTP/1.0\r\n";
-        $req .= "Connection: close\r\n";
-        $req .= "Host: " . $url['host'] . "\r\n";
-        $req .= "Content-Length: " . strlen($raw) . "\r\n";
-        $req .= "\r\n" . $raw;
-
-        if (!isset($url['port']) || !$url['port'])
-            $url['port'] = 80;
-
-        $errno = $errstr = "";
-
-        $socket = fsockopen($url['host'], intval($url['port']), $errno, $errstr, 30);
-        if ($socket) {
-            // Send request headers
-            fputs($socket, $req);
-
-            // Read response headers and data
-            $resp = "";
-            while (!feof($socket))
-                $resp .= fgets($socket, 4096);
-
-            fclose($socket);
-
-            // Split response header/data
-            $resp = explode("\r\n\r\n", $resp);
-            echo $resp[1]; // Output body
-        }
-
-        die();
     }
     
     private static function error($str) {
