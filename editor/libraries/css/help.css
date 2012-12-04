@@ -11,7 +11,7 @@
 html {
     /*height : 100%;*/
     background: #FFFFFF none;
-    overflow : auto;
+    overflow : hidden;
 }
 body.contentpane {
     font-size: 8pt;
