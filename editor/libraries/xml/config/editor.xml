@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
 	<params group="cleanup">
-		<param name="verify_html" type="radio" default="0" label="WF_PARAM_CLEANUP" description="WF_PARAM_CLEANUP_DESC">
+		<param name="verify_html" type="radio" default="1" label="WF_PARAM_CLEANUP" description="WF_PARAM_CLEANUP_DESC">
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
 		</param>
