@@ -371,8 +371,8 @@
                         $pointer.css('top', Math.round(fb.target.top - props.top) + (ph / 2 - 1));
                     }
 
-                    if (/top|bottom/.test(position) && Math.round(fb.element.left) == 0) {
-                        $pointer.css('left', Math.round(fb.target.width / 2));
+                    if (/top|bottom/.test(position) && Math.round(fb.element.left) == 0) {                        
+                        $pointer.css('left', fb.target.left + Math.round(fb.target.width / 2) - pw);
                     }
                     
                     if (fb.element.left < fb.target.left) {
