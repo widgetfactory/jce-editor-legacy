@@ -97,6 +97,8 @@ table#help-table td {
 div#help-frame {
     width: 100%;
     height: 100%;
+    
+    overflow: hidden;
 }
 
 div#help-frame iframe {
@@ -122,20 +124,6 @@ div#help-frame iframe {
 }
 
 /** Bootstrap stuff **/
-.container-fluid {
-  padding-right: 20px;
-  padding-left: 20px;
-  *zoom: 1;
-}
-.container-fluid:before,
-.container-fluid:after {
-  display: table;
-  content: "";
-  line-height: 0;
-}
-.container-fluid:after {
-  clear: both;
-}
 .well {
   min-height: 20px;
   padding: 19px;
@@ -148,62 +136,4 @@ div#help-frame iframe {
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-}
-
-.row-fluid {
-  width: 100%;
-  *zoom: 1;
-}
-.row-fluid:before,
-.row-fluid:after {
-  display: table;
-  content: "";
-  line-height: 0;
-}
-.row-fluid:after {
-  clear: both;
-}
-.row-fluid [class*="span"] {
-  display: block;
-  width: 100%;
-  min-height: 30px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  float: left;
-  margin-left: 2.127659574468085%;
-  *margin-left: 2.074468085106383%;
-}
-.row-fluid [class*="span"]:first-child {
-  margin-left: 0;
-}
-
-.row-fluid .span12 {
-  width: 99%;
-  *width: 99%;
-}
-
-.row-fluid .span11 {
-  width: 91.48936170212765%;
-  *width: 91.43617021276594%;
-}
-
-.row-fluid .span8 {
-  width: 65.95744680851064%;
-  *width: 65.90425531914893%;
-}
-
-.row-fluid .span7 {
-  width: 57.44680851063829%;
-  *width: 57.39361702127659%;
-}
-
-.row-fluid .span4 {
-  width: 31.914893617021278%;
-  *width: 31.861702127659576%;
-}
-
-.row-fluid .span1 {
-  width: 6.382978723404255%;
-  *width: 6.329787234042553%;
 }
