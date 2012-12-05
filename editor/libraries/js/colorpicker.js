@@ -292,12 +292,7 @@
                         if ($(self.element).hasClass('placeholder')) {
                             color = '';
                         }
-                        
-                        // set wheel colour
-                        if (self._wheel) {
-                            self._wheel.setColor(color);
-                        }
-                        
+
                         // tabs already created
                         if ($('#tab-content .colorpicker_generated').length) {
                             return;
@@ -334,6 +329,11 @@
                         
                         // create tabs
                         self._createTabs();
+                        
+                        // set wheel colour
+                        if (self._wheel) {
+                            self._wheel.setColor(color);
+                        }
                     }
                 });
             }
@@ -826,7 +826,7 @@
    * Change color with HTML syntax #123456
    */
         fb.setColor = function (color) {
-            var unpack = fb.unpack(color);
+            var unpack = fb.unpack(color);            
             if (fb.color != color && unpack) {
                 fb.color = color;
                 fb.rgb = unpack;
