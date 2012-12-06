@@ -251,8 +251,11 @@ function jInsertEditorText(text, editor) {
 
             var s = this.settings;
 
+            // pass settings object to tinymce
+            tinymce.settings = s;
+
             // setup editor before init
-            tinyMCE.onAddEditor.add(function(mgr, ed) {
+            tinyMCE.onAddEditor.add(function(mgr, ed) {                
                 // load packer css
                 if(s.compress.css) {
                     ed.onPreInit.add(function() {                    
