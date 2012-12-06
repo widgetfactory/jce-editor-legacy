@@ -212,9 +212,12 @@
 
                     if (file) {
                         // create language key from message
-                        var msg = err.message.replace(/[^a-z ]/gi, '').replace(/\s+/g, '_').toLowerCase();
+                        var msg     = err.message.replace(/[^a-z ]/gi, '').replace(/\s+/g, '_').toLowerCase();                        
+                        // get code as string
+                        var code    = err.code.toString();
+                        
                         // get details
-                        details = $.Plugin.translate(err.code, err.code);
+                        details = $.Plugin.translate('error_' + code.replace(/[\D]/g, ''), code);
 
                         message = '<p><strong>' + $.Plugin.translate(msg, err.message) + '</strong></p>';
 
