@@ -126,17 +126,15 @@ class WFEditor extends JObject {
                     continue;
                 }
 
-                // check users if set
-                if ($item->users && in_array($user->id, explode(',', $item->users)) === false) {
-                    continue;
-                }
-
                 // check user groups - a value should always be set
                 $groups = array_intersect($keys, explode(',', $item->types));
 
-                // no users set and user not in group
-                if (empty($item->users) && empty($groups)) {
-                    continue;
+                // user not in the current group...
+                if (empty($groups)) {
+                    // no additional users set or no user match
+                    if (empty($item->users) || in_array($user->id, explode(',', $item->users)) === false) {
+                        continue;
+                    }
                 }
 
                 // check component
@@ -165,10 +163,10 @@ class WFEditor extends JObject {
                 }
 
                 $profile = $item;
-                
+
                 return $profile;
             }
-            
+
             return null;
         }
 
@@ -419,6 +417,7 @@ class WFEditor extends JObject {
         $log = JLog::getInstance($file);
         $log->addEntry(array('comment' => 'LOG: ' . $msg));
     }
+
 }
 
 ?>
