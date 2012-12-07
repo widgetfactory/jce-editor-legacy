@@ -148,12 +148,12 @@ class WFEditor extends JObject {
                 }
 
                 // check device
-                if (in_array($device, explode(',', $item->device)) == false) {
+                if (in_array($device, explode(',', $item->device)) === false) {
                     continue;
                 }
 
                 // check area
-                if (!empty($item->area) && (int) $item->area !== $area) {
+                if (!empty($item->area) && (int) $item->area != $area) {
                     continue;
                 }
 
