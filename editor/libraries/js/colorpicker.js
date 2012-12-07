@@ -377,7 +377,7 @@
                     var id = $(e.target).attr('href'), type = $(id).data('type');                   
                     self['_create' + type].call(self, $(id));
                     
-                    $('#colorpicker_insert, #insert').toggle(type == 'picker');
+                    $('#colorpicker_insert').toggle(type == 'picker');
                     
                 }).click(function(e) {
                     e.preventDefault();
@@ -390,7 +390,7 @@
                         
                         self['_create' + type].call(self, $(ui.newPanel));
                         
-                        $('#colorpicker_insert, #insert').toggle(type == 'picker');
+                        $('#colorpicker_insert').toggle(type == 'picker');
                     }
                 });
             }

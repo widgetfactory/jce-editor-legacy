@@ -34,5 +34,5 @@ defined('_JEXEC') or die('RESTRICTED');
 </div>
 <input type="hidden" id="tmp_color" />	
 <div class="mceActionPanel">
-    <button type="button" id="insert" onclick="ColorPicker.insert();"><?php echo WFText::_('WF_LABEL_APPLY'); ?></button>
+    <button type="button" id="colorpicker_insert" onclick="ColorPicker.insert();"><?php echo WFText::_('WF_LABEL_APPLY'); ?></button>
 </div>
