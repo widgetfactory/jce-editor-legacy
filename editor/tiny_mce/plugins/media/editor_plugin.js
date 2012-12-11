@@ -221,7 +221,7 @@
                             self.toImage(node);
                         // remove node
                         } else {
-                            nodes.remove();
+                            node.remove();
                         }
                     }
                 });
