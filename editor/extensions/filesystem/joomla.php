@@ -232,14 +232,23 @@ class WFJoomlaFileSystem extends WFFileSystem {
             // Sort alphabetically
             natcasesort($list);
             foreach ($list as $item) {
-                $item = WFUtility::isUTF8($item) ? $item : utf8_encode($item);
+                $item   = WFUtility::isUTF8($item) ? $item : utf8_encode($item);
+                
+                // create relative file
+                $id     = WFUtility::makePath($relative, $item);
+                
+                // create url
+                $url    = WFUtility::makePath($this->getRootDir(), $id);
 
+                // remove leading slash
+                $url    = ltrim($url, '/');
+                        
                 $data = array(
-                    'id' => WFUtility::makePath($relative, $item),
-                    'url' => WFUtility::makePath($this->getRootDir(), WFUtility::makePath($relative, $item)),
-                    'name' => $item,
-                    'writable' => is_writable(WFUtility::makePath($path, $item)) || $this->isFtp(),
-                    'type' => 'files'
+                    'id'        => $id,
+                    'url'       => $url,
+                    'name'      => $item,
+                    'writable'  => is_writable(WFUtility::makePath($path, $item)) || $this->isFtp(),
+                    'type'      => 'files'
                 );
 
                 $properties = self::getFileDetails($data['id'], $x);
