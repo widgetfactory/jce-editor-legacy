@@ -860,11 +860,11 @@ class WFFileBrowser extends JObject {
         clearstatcache();
 
         // check the file sizes match
-        if ((int) @filesize($file['tmp_name']) !== (int) $file['size']) {
-            @unlink($file['tmp_name']);
+        /* if ((int) @filesize($file['tmp_name']) !== (int) $file['size']) {
+          @unlink($file['tmp_name']);
 
-            throw new InvalidArgumentException('INVALID FILE SIZE');
-        }
+          throw new InvalidArgumentException('INVALID FILE SIZE');
+          } */
 
         // get extension
         $ext = WFUtility::getExtension($file['name']);
@@ -955,7 +955,7 @@ class WFFileBrowser extends JObject {
         $file = JRequest::getVar('file', '', 'files', 'array');
 
         // validate file data
-        $this->validateUploadedFile($file);
+        $this->validateUploadedFile($file); 
 
         $wf = WFEditor::getInstance();
 
@@ -1013,7 +1013,7 @@ class WFFileBrowser extends JObject {
 
         // rebuild file name - name + extension
         $name = $name . '.' . $ext;
-
+        
         // create a filesystem result object
         $result = new WFFileSystemResult();
 
