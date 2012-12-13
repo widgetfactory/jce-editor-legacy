@@ -70,10 +70,11 @@
             <option value="unique">WF_PARAM_UPLOAD_EXISTS_UNIQUE</option>
             <option value="overwrite">WF_PARAM_UPLOAD_EXISTS_OVERWRITE</option>
         </param>
-        <param name="upload_runtimes" class="checklist sortable" type="list" multiple="multiple" default="html5,flash,silverlight" label="WF_PARAM_UPLOAD_RUNTIME" description="WF_PARAM_UPLOAD_RUNTIME_DESC">
+        <param name="upload_runtimes" class="checklist sortable" type="list" multiple="multiple" default="html5,flash,silverlight,html4" label="WF_PARAM_UPLOAD_RUNTIME" description="WF_PARAM_UPLOAD_RUNTIME_DESC">
             <option value="html5">WF_PARAM_UPLOAD_RUNTIME_HTML5</option>
             <option value="flash">WF_PARAM_UPLOAD_RUNTIME_FLASH</option>
             <option value="silverlight">WF_PARAM_UPLOAD_RUNTIME_SILVERLIGHT</option>
+            <option value="html4">WF_PARAM_UPLOAD_RUNTIME_HTML4</option>
         </param> 
         <param name="browser_position" type="list" default="bottom" label="WF_PARAM_BROWSER_POSITION" description="WF_PARAM_BROWSER_POSITION_DESC">
             <option value="top">WF_LABEL_TOP</option>

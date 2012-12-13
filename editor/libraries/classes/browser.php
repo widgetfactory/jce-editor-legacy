@@ -42,7 +42,7 @@ class WFFileBrowser extends JObject {
             'filesystem' => 'joomla',
             'filetypes' => 'images=jpg,jpeg,png,gif',
             'upload' => array(
-                'runtimes' => 'html5,flash,silverlight',
+                'runtimes' => 'html5,flash,silverlight,html4',
                 'chunk_size' => null,
                 'max_size' => 1024,
                 'validate_mimetype' => 1,
@@ -1325,9 +1325,6 @@ class WFFileBrowser extends JObject {
                 $runtimes[] = $v;
             }
         }
-
-        // add html4
-        $runtimes[] = 'html4';
 
         // remove flash runtime if $chunk_size is 0 (no chunking)
         /* if (!$chunk_size) {
