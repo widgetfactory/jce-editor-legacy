@@ -94,7 +94,18 @@ class WFMediaManager extends WFEditorPlugin {
      * @return array
      */
     private function getConfig() {
-        $filesystem = $this->getParam('filesystem.name', 'joomla', '', 'string', false);        
+        $filesystem = $this->getParam('filesystem', '');
+        
+        // if an object, get the name
+        if (is_object($filesystem)) {
+            $filesystem = isset($filesystem->name) ? $filesystem->name : 'joomla';
+        }
+        
+        // if no value, default to "joomla"
+        if (empty($filesystem)) {
+            $filesystem = 'joomla';
+        }
+        
         $filetypes  = $this->getParam('extensions', $this->get('_filetypes', 'images=jpg,jpeg,png,gif'));
 
         $config = array(

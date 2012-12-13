@@ -59,8 +59,15 @@ class WFElementFilesystem extends WFElement {
                 $options[] = JHTML::_('select.option', basename($file, '.xml'), WFText::_($xml['name']));
             }
         }
+        
+        // if a group is sepcified, setup to be an object
+        if ((string) $node->attributes()->group) {
+            $name = $control_name . '[filesystem][' . $name . ']';
+        } else {
+            $name = $control_name . '[filesystem]';
+        }
 
-        return JHTML::_('select.genericlist', $options, '' . $control_name . '[filesystem][' . $name . ']', 'class="inputbox"', 'value', 'text', $value, $id);
+        return JHTML::_('select.genericlist', $options, $name, 'class="inputbox"', 'value', 'text', $value, $id);
     }
 
 }
