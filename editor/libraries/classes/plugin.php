@@ -179,7 +179,7 @@ class WFEditorPlugin extends WFEditor {
 
             if (WF_INI_LANG) {
                 // ini language
-                $document->addScript(array('index.php?option=com_jce&view=editor&' . $document->getQueryString(array('task' => 'loadlanguages'))), 'joomla');
+                $document->addScript(array('index.php?option=com_jce&view=editor&' . $document->getQueryString(array('task' => 'loadlanguages', 'lang' => $this->getLanguage()))), 'joomla');
             }
 
             // pack assets if required
