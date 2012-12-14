@@ -103,7 +103,7 @@ class JoomlalinksMenu extends JObject {
                             break;
                     }
 
-                    $children = self::_children($menu->id);
+                    $children = (int) self::_children($menu->id);
                     $title = isset($menu->name) ? $menu->name : $menu->title;
 
                     if ($children) {
@@ -227,7 +227,7 @@ class JoomlalinksMenu extends JObject {
             }
         } else {
             if ($id) {
-                $where = 'parent = ' . (int) $id;
+                $where = ' AND parent = ' . (int) $id;
             }
 
             $query = 'SELECT COUNT(id)'
