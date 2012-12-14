@@ -221,6 +221,18 @@
             '#FFFF00':'Yellow',
             '#9ACD32':'YellowGreen'
         },
+        
+        _translate : function(s, d) {
+            var o = this.options;
+            
+            var v = o.labels[s] || d || '';
+            
+            if (typeof tinyMCEPopup !== 'undefined') {
+                v = tinyMCEPopup.getLang('colorpicker.' + s, v);
+            }
+            
+            return v;
+        },
 
         /**
          * Initialise the plugin
@@ -301,7 +313,7 @@
                         // translate labels
                         $('#colorpicker_tabs').html( function(i, h) {
                             return h.replace(/\{#(\w+)\}/gi, function(a, b) { 
-                                return o.labels[b];
+                                return self._translate(b);
                             });
                         });
 
@@ -577,7 +589,7 @@
             h += '<ul>';
 
             $.each(this._named, function(k, v) {
-                h += '<li style="background-color:' + k + '"><span class="colorpicker_namedblock" aria-labelledby="named_colors_' + k + '" title="' + v + '"></span></li>';
+                h += '<li style="background-color:' + k + '"><span class="colorpicker_namedblock" aria-labelledby="named_colors_' + k + '" title="' + self._translate(k.replace(/[^\w]/g, ''), v) + '"></span></li>';
                 if (self.options.forcedHighContrastMode) {
                     h += '<canvas class="mceColorSwatch" data-color="' + v + '"></canvas>';
                 }
