@@ -634,20 +634,19 @@
             }
 
             // Remove classes based on paste_strip_class_attributes setting. All Mso classes will be removed
-            var stripClass = ed.getParam(ed, 'clipboard_paste_strip_class_attributes');
+            var stripClass  = ed.getParam('clipboard_paste_strip_class_attributes', 'all');
 
-            if (stripClass !== 'none') {
+            if (stripClass != 'none') {
                 function removeClasses(match, g1) {
                     // remove all classes
-                    if (stripClass === 'all') {
+                    if (stripClass == 'all') {
                         return '';
                     }
+                    
                     // remove Mso classes
                     var cls = tinymce.grep(tinymce.explode(g1.replace(/^(["'])(.*)\1$/, "$2"), " "), function(v) {
                         return (/^(?!mso)/i.test(v));
-                    }
-
-                    );
+                    });
 
                     return cls.length ? ' class="' + cls.join(" ") + '"' : '';
                 };
@@ -834,9 +833,9 @@
         },
 
         /**
-		 * Paste as Plain Text
-		 * Remove all html form pasted contents. Newlines will be converted to paragraphs or linebreaks
-		 */
+         * Paste as Plain Text
+         * Remove all html form pasted contents. Newlines will be converted to paragraphs or linebreaks
+         */
         _insertPlainText : function(h) {
             var ed = this.editor, dom = ed.dom, rb, entities = null;
 
@@ -886,8 +885,8 @@
         },
 
         /**
-		 * Convert some deprecated elements to inline-styles
-		 */
+         * Convert some deprecated elements to inline-styles
+         */
         _convertToInline : function(node) {
             var ed = this.editor, dom = ed.dom;
 
@@ -935,9 +934,9 @@
         },
 
         /**
-		 * Process style attributes
-		 * @param node Node to process
-		 */
+         * Process style attributes
+         * @param node Node to process
+         */
         _processStyles : function(node) {
             var ed = this.editor, dom = ed.dom;
 
@@ -985,9 +984,9 @@
         },
 
         /**
-		 * Convert URL strings to elements
-		 * @param h HTML to process
-		 */
+         * Convert URL strings to elements
+         * @param h HTML to process
+         */
         _convertURLs : function(h) {			
             var ex = '([-!#$%&\'\*\+\\./0-9=?A-Z^_`a-z{|}~]+@[-!#$%&\'\*\+\\/0-9=?A-Z^_`a-z{|}~]+\.[-!#$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+)';
             var ux = '((news|telnet|nttp|file|http|ftp|https)://[-!#$%&\'\*\+\\/0-9=?A-Z^_`a-z{|}~;]+\.[-!#$%&\'\*\+\\./0-9=?A-Z^_`a-z{|}~;]+)';
@@ -1014,8 +1013,8 @@
         },
 
         /**
-		 * Various post process items.
-		 */
+         * Various post process items.
+         */
         _postProcess : function(pl, o) {
             var self = this, ed = this.editor, dom = ed.dom, h;
 
@@ -1107,8 +1106,8 @@
             },
 
             /*
-		 * Process content after it has been serialized.
-		 */
+     * Process content after it has been serialized.
+     */
             _onBeforeInsert : function(pl, o) {
                 var ed = pl.editor, dom = ed.dom, h = o.content;
 
@@ -1121,8 +1120,8 @@
             },
 
             /**
-		 * Converts the most common bullet and number formats in Office into a real semantic UL/LI list.
-		 */
+     * Converts the most common bullet and number formats in Office into a real semantic UL/LI list.
+     */
             _convertLists : function(node) {
                 var ed = this.editor, dom = ed.dom, listElm, li, lastMargin = -1, margin, levels = [], lastType;
 
@@ -1242,8 +1241,8 @@
             },
 
             /**
-		 * Inserts the specified contents at the caret position.
-		 */
+     * Inserts the specified contents at the caret position.
+     */
             _insert : function(h, skip_undo) {
                 var ed = this.editor;
 			
