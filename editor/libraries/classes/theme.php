@@ -82,6 +82,8 @@ final class WFEditorTheme extends WFEditor {
                     'name' => $this->get('dialog')
                 ));
 
+        $this->loadLanguage('com_jce', JPATH_ADMINISTRATOR);
+
         $this->display();
 
         // pack assets if required
@@ -104,20 +106,16 @@ final class WFEditorTheme extends WFEditor {
 
         $document = WFDocument::getInstance();
 
-        // get UI Theme
-        $uitheme = $this->getParam('editor.dialog_theme', 'jce');
-
         $document->addScript(array('tiny_mce_popup'), 'tiny_mce');
-
         $document->addScript(array('jquery-' . WF_JQUERY . '.min', 'jquery-ui-' . WF_JQUERYUI . '.custom.min', 'jquery.ui.touch-punch.min'), 'jquery');
 
         $document->addStyleSheet(array(
             'plugin'
-        ), 'libraries');
-        
+                ), 'libraries');
+
         $document->addStyleSheet(array(
             'themes/' . $this->get('theme') . '/css/' . $this->get('dialog')
-        ), 'tiny_mce');
+                ), 'tiny_mce');
 
         if ($this->get('dialog') == 'colorpicker') {
             $document->addScript(array('colorpicker'), 'libraries');
@@ -131,14 +129,14 @@ final class WFEditorTheme extends WFEditor {
 
             $document->addScriptDeclaration('ColorPicker.settings=' . json_encode($settings));
         }
-        
+
         $document->addScript(array(
             'themes/' . $this->get('theme') . '/js/' . $this->get('dialog')
-        ), 'tiny_mce');
+                ), 'tiny_mce');
 
         $tabs = WFTabs::getInstance(array(
-            'base_path' => WF_EDITOR_THEMES . '/' . $this->get('theme')
-        ));
+                    'base_path' => WF_EDITOR_THEMES . '/' . $this->get('theme')
+                ));
 
         $tabs->addPanel($this->get('dialog'), 1);
     }
