@@ -142,7 +142,7 @@ class WFEditorPlugin extends WFEditor {
 
                 $parser = new WFLanguageParser(array(
                     'plugins'   => array($name),
-                    'sections'  => array('dlg', $name . '_dlg'),
+                    'sections'  => array('dlg', $name . '_dlg', 'colorpicker'),
                     'mode'      => 'plugin'
                 ));
 
@@ -217,7 +217,7 @@ class WFEditorPlugin extends WFEditor {
             'tips',
             'colorpicker',
             'plugin'
-                ), 'libraries');
+        ), 'libraries');
 
         // load plugin dialog language file if necessary
         if ($this->getParam('editor.compress_javascript', 0)) {
