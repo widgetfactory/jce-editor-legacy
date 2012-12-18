@@ -482,25 +482,39 @@
             var self = this, doc = document, max_file_size = this.uploader.settings.max_file_size, input, info;
 
             $(this.element).empty();
+            
+            var filters = $.map(this.uploader.settings.filters, function(o) {
+                return o.extensions.split(',');
+            });
+            
+            function _triggerError(file) {
+                self.uploader.trigger('Error', {
+                    code 	: self.FILE_INVALID_ERROR,
+                    message : 'File invalid error',
+                    file 	: file
+                });
+
+                self.uploader.removeFile(file);
+                    
+                if (!self.uploader.files.length) {
+                    self._createDragDrop();
+                }
+                    
+                return false;
+            }
 
             $.each(files, function(x, file) {
-                var title = $.String.basename(file.name);                
+                var title = $.String.basename(file.name);  
+                
+                if (filters.length) {
+                    if (new RegExp('\\.(' + filters.join('|') + ')$', 'i').test(title) === false) {
+                        _triggerError(file);
+                    }
+                }
                 
                 // check for extension in file name, eg. image.php.jpg
-                if (/\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b/i.test(title)) {
-                    self.uploader.trigger('Error', {
-                        code 	: self.FILE_INVALID_ERROR,
-                        message : 'File invalid error',
-                        file 	: file
-                    });
-
-                    self.uploader.removeFile(file);
-                    
-                    if (!self.uploader.files.length) {
-                        self._createDragDrop();
-                    }
-                    
-                    return false;
+                if (/\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\./i.test(title)) {
+                    _triggerError(file);
                 }
                 
                 // sanitize name
