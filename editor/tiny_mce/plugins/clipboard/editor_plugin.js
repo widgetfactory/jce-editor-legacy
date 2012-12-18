@@ -1074,12 +1074,13 @@
                 each(dom.select('img', o.node), function(el) {					
                     var s = dom.getAttrib(el, 'src');
 					
-                    if (!s || /file:\/\//.test(s)) {
+                    // remove img element if blank, local file url or base64 encoded
+                    if (!s || /file:\/\//.test(s) || /data:image\/(gif|png|jpeg|jpg|bmp|tiff);base64/i.test(s)) {
                         dom.remove(el);
                     }		
 					
                     dom.getAttrib(el, 'src', ed.convertURL(s));			
-                    });
+                });
 				
                 // Process links
                 each(dom.select('a', o.node), function(el) {
