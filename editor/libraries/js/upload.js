@@ -484,7 +484,9 @@
             $(this.element).empty();
             
             var filters = $.map(this.uploader.settings.filters, function(o) {
-                return o.extensions.split(',');
+                if (o.extensions.indexOf('*') == -1) {
+                    return o.extensions.split(',');
+                }
             });
             
             function _triggerError(file) {
@@ -499,8 +501,6 @@
                 if (!self.uploader.files.length) {
                     self._createDragDrop();
                 }
-                    
-                return false;
             }
 
             $.each(files, function(x, file) {
@@ -509,12 +509,16 @@
                 if (filters.length) {
                     if (new RegExp('\\.(' + filters.join('|') + ')$', 'i').test(title) === false) {
                         _triggerError(file);
+              
+                        return false;
                     }
                 }
                 
                 // check for extension in file name, eg. image.php.jpg
                 if (/\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\./i.test(title)) {
                     _triggerError(file);
+                    
+                    return false;
                 }
                 
                 // sanitize name
