@@ -692,7 +692,7 @@ abstract class WFMimeType {
                     @finfo_close($finfo);
 
                     // we can't validate these files...
-                    if ($mimetype === 'application/zip' && in_array($extension, $ms_x)) {
+                    if ($mimetype == 'application/zip' && in_array($extension, $ms_x)) {
                         return true;
                     }
 
@@ -705,7 +705,7 @@ abstract class WFMimeType {
             if ($mimetype = @mime_content_type($path)) {
                 
                 // we can't validate these files...
-                if ($mimetype === 'application/zip' && in_array($extension, $ms_x)) {
+                if ($mimetype == 'application/zip' && in_array($extension, $ms_x)) {
                     return true;
                 }
 
