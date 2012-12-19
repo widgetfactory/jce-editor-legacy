@@ -851,13 +851,13 @@ class WFFileBrowser extends JObject {
         }
 
         // check for invalid extension in file name
-        if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\b#i', $file['name'])) {
+        if (preg_match('#\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\.#i', $file['name'])) {
             @unlink($file['tmp_name']);
 
             throw new InvalidArgumentException('INVALID FILE NAME');
         }
 
-        clearstatcache();
+        //clearstatcache();
 
         // check the file sizes match
         /* if ((int) @filesize($file['tmp_name']) !== (int) $file['size']) {
