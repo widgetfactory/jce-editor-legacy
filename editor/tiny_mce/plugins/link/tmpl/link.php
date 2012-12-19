@@ -31,7 +31,6 @@ $plugin = WFLinkPlugin::getInstance();
                 echo $plugin->getSearch('link')->render();
             endif;
         ?>
-        <h3><?php echo WFText::_('WF_LABEL_BROWSE'); ?></h3>
         <?php echo $plugin->getLinks()->render(); ?>
     </div>
 </fieldset>
