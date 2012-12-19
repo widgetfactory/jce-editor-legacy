@@ -34,7 +34,9 @@ select {
     margin : 10px 0;
 }
 
-#link-options {}
+#link-options {
+    min-height : 200px;
+}
 
 #link-browser {
     height: 160px;
