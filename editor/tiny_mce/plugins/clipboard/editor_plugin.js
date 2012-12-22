@@ -678,6 +678,15 @@
             if (ed.getParam('clipboard_paste_convert_urls', true)) {
                 h = this._convertURLs(h);
             }
+            
+            // convert some tags if cleanup is off
+            if(ed.settings.verify_html === false) {
+                h = h.replace(/<i\b([^>]*)>/gi, '<em$1>');
+                h = h.replace(/<\/i>/gi, '</em>');
+                
+                h = h.replace(/<b\b([^>]*)>/gi, '<strong$1>');
+                h = h.replace(/<\/b>/gi, '</strong>');
+            }
 
             o.content = h;
         },
