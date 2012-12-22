@@ -161,8 +161,14 @@ class WFEditor extends JObject {
                 }
 
                 // check for individual plugin
-                if ($plugin && in_array($plugin, explode(',', $item->plugins)) === false) {
-                    continue;
+                if ($plugin) {
+                    wfimport('admin.models.editor');
+                    $model      = new WFModelEditor();
+                    $plugins    = (array) $model->getPlugins();
+                    
+                    if (in_array($plugin, $plugins) === false) {
+                        continue;
+                    }
                 }
 
                 $profile = $item;
