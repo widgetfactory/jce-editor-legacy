@@ -100,12 +100,9 @@ class WFEditor extends JObject {
             // get the Joomla! area (admin or site)
             $area = $mainframe->isAdmin() ? 2 : 1;
             
-            if (!class_exists('Mobile_Detect')) {
-                // load mobile detect class
-                require_once(dirname(__FILE__) . '/mobile.php');
-            }
-
-            $mobile = new Mobile_Detect();
+            // Load device detection class
+            require_once(dirname(__FILE__) . '/mobile.php');
+            $mobile = new WFMobileDetect();
 
             // set device values
             if ($mobile->isMobile()) {
