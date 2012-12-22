@@ -276,7 +276,7 @@ abstract class WFMimeType {
         'application/vnd.ms-lrm' => 'lrm',
         'application/vnd.ms-pki.seccat' => 'cat',
         'application/vnd.ms-pki.stl' => 'stl',
-        'application/vnd.ms-powerpoint' => 'ppt pps pot',
+        'application/vnd.ms-powerpoint' => 'ppt pps pot pptx',
         'application/vnd.ms-powerpoint.addin.macroenabled.12' => 'ppam',
         'application/vnd.ms-powerpoint.presentation.macroenabled.12' => 'pptm',
         'application/vnd.ms-powerpoint.slide.macroenabled.12' => 'sldm',
