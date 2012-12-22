@@ -142,7 +142,7 @@
             forecolorpicker : ['forecolor_desc', 'mceForeColor'],
             backcolor : ['backcolor_desc', 'HiliteColor'],
             backcolorpicker : ['backcolor_desc', 'mceBackColor'],
-            charmap : ['charmap_desc', 'mceCharMap'],
+            //charmap : ['charmap_desc', 'mceCharMap'],
             visualaid : ['visualaid_desc', 'mceToggleVisualAid'],
             //anchor : ['anchor_desc', 'mceInsertAnchor'],
             newdocument : ['newdocument_desc', 'mceNewDocument'],
@@ -885,10 +885,10 @@
                     }
                 });
 
-                if (ed.getParam('accessibility_shortcut', 1)) {
+                /*if (ed.getParam('accessibility_shortcut', 1)) {
                     // alt+0 is the UK recommended shortcut for accessing the list of access controls.
                     ed.addShortcut('alt+0', '', 'mceShortcuts', t);
-                }
+                }*/
 			
                 return {
                     iframeContainer : ic,
@@ -1567,23 +1567,6 @@
             },
 		
             /**
-     * WF Editor Custom Charmap Command
-     */
-            _mceCharMap : function() {
-                var ed = this.editor;
-
-                ed.windowManager.open({
-                    url	: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=theme&theme=' + ed.getParam('theme') + '&dialog=charmap',
-                    width : 550 + parseInt(ed.getLang('advanced.charmap_delta_width', 0)),
-                    height : 250 + parseInt(ed.getLang('advanced.charmap_delta_height', 0)),
-                    inline : true,
-                    popup_css : false
-                }, {
-                    theme_url : this.url
-                });
-            },
-		
-            /**
      * WF Editor Custom Help Command
      */
             _mceHelp : function() {
@@ -1608,18 +1591,7 @@
 
                 v = v || {};
 
-                ed.windowManager.open({
-                    url	: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=theme&theme=' + ed.getParam('theme') + '&dialog=colorpicker',
-                    width : 375 + parseInt(ed.getLang('advanced.colorpicker_delta_width', 0)),
-                    height : 310 + parseInt(ed.getLang('advanced.colorpicker_delta_height', 0)),
-                    close_previous : false,
-                    inline : true,
-                    popup_css : false
-                }, {
-                    input_color : v.color,
-                    func : v.func,
-                    theme_url : this.url
-                });
+                ed.execCommand('mceColorPicker', false, v);
             },
 
             _mceNewDocument : function() {
@@ -1655,7 +1627,7 @@
                 });
             },
 		
-            _mceShortcuts : function() {
+            /*_mceShortcuts : function() {
                 var ed = this.editor;
                 ed.windowManager.open({
                     url	: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=theme&theme=' + ed.getParam('theme') + '&dialog=shortcuts',
@@ -1666,7 +1638,7 @@
                 }, {
                     theme_url: this.url
                 });
-            },
+            },*/
 
             _ufirst : function(s) {
                 return s.substring(0, 1).toUpperCase() + s.substring(1);
