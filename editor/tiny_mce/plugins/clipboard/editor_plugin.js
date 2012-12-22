@@ -626,7 +626,7 @@
 
             // replace paragraphs with linebreaks
             if (!ed.getParam('forced_root_block')) {
-                h = h.replace(/<\/p>/gi, '<br /><br />').replace(/<p([^>]*)>/g, '').replace(/(<br \/>){2}$/g, '');
+                h = h.replace(/<\/(p|div)>/gi, '<br /><br />').replace(/<(p|div)([^>]*)>/g, '').replace(/(<br \/>){2}$/g, '');
             }
 
             if (o.wordContent) {
@@ -683,7 +683,7 @@
         },
 
         _processWordContent : function(h) {
-            var ed = this.editor, stripClass;
+            var ed = this.editor, stripClass, len;
 
             if (ed.getParam('clipboard_paste_convert_lists', true)) {
                 h = h.replace(/<!--\[if !supportLists\]-->/gi, '$&__MCE_ITEM__'); // Convert supportLists to a list item marker
