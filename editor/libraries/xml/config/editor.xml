@@ -28,7 +28,6 @@
 			<option value="p">WF_OPTION_PARAGRAPH</option>
 			<option value="div">WF_OPTION_DIV</option>
                         <option value="forced_root_block:0|force_p_newlines:1">WF_OPTION_PARAGRAPH_MIXED</option>
-                        <option value="forced_root_block:0|force_div_newlines:1">WF_OPTION_DIV_MIXED</option>
 			<option value="0">WF_OPTION_LINEBREAK</option>
 		</param>
 		<!--param name="newlines" type="list" default="0" label="WF_PARAM_NEWLINES" description="WF_PARAM_NEWLINES_DESC">
