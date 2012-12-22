@@ -71,7 +71,7 @@ class WFPopupsExtension_Jcemediabox extends JObject
 		$file = JPATH_PLUGINS . '/system/jcemediabox.xml';
 		
 		if (!is_file($file)) {
-			$file = JPATH_PLUGINS . '/system' . 'jcemediabox/jcemediabox.xml';
+			$file = JPATH_PLUGINS . '/system/jcemediabox/jcemediabox.xml';
 		}
 		
 		$required = $this->get('_requires');
