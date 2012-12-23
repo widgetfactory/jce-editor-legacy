@@ -624,11 +624,6 @@
                 }
             }
 
-            // replace paragraphs with linebreaks
-            if (!ed.getParam('forced_root_block')) {
-                h = h.replace(/<\/(p|div)>/gi, '<br /><br />').replace(/<(p|div)([^>]*)>/g, '').replace(/(<br \/>){2}$/g, '');
-            }
-
             if (o.wordContent) {
                 h = this._processWordContent(h);
             }
@@ -654,6 +649,8 @@
                 h = h.replace(/ class="([^"]+)"/gi, removeClasses);
                 h = h.replace(/ class=([\-\w]+)/gi, removeClasses);
             }
+            
+            h = h.replace(/&nbsp;/g, '\u00a0'); // Replace nsbp entites to char since it's easier to handle
 
             // Remove all spans (and font, u, strike if inline_styles = true as these would get converted to spans later)
             if (ed.getParam('clipboard_paste_remove_spans')) {
@@ -665,8 +662,16 @@
                 }
                 h = h.replace(/<\/?(span)[^>]*>/gi, '');
             }
-
-            h = h.replace(/&nbsp;/g, '\u00a0'); // Replace nsbp entites to char since it's easier to handle
+            
+            // replace paragraphs with linebreaks
+            if (!ed.getParam('forced_root_block')) {
+                // remove empty paragraphs first
+                if (ed.getParam('clipboard_paste_remove_empty_paragraphs', true)) {
+                    h = h.replace(/<p([^>]*)>(\s|&nbsp;|\u00a0)*<\/p>/gi, '');
+                }
+                
+                h = h.replace(/<\/(p|div)>/gi, '<br /><br />').replace(/<(p|div)([^>]*)>/g, '').replace(/(<br \/>){2}$/g, '');
+            }
 
             // Chrome...
             h = h.replace(/<meta([^>]+)>/, '');
@@ -687,6 +692,9 @@
                 h = h.replace(/<b\b([^>]*)>/gi, '<strong$1>');
                 h = h.replace(/<\/b>/gi, '</strong>');
             }
+            
+            // remove multiple linebreaks
+            //h = h.replace(/(<br \/>){2,}/gi, '<br /><br />');
 
             o.content = h;
         },
