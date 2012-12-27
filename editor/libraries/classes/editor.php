@@ -43,7 +43,7 @@ class WFEditor extends JObject {
      * @access	public
      * @return	JCE  The editor object.
      */
-    public function & getInstance($config = array()) {
+    public function getInstance($config = array()) {
         static $instance;
 
         if (!is_object($instance)) {
