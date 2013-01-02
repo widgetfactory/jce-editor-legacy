@@ -1047,7 +1047,18 @@
             } else {
                 // remove src in audio / video attributes if source element present
                 if (root.src && root.source) {
-                    delete root.src;
+                    if (tinymce.is(root.source, 'array')) {
+                        // get first item
+                        var o = root.source.shift();
+                        // if src is the same, transfer mimetype
+                        if (o.src && o.src == root.src) {
+                            if (!root.type) {
+                                root.type = o.type || this.getMimeType(o.src);
+                            }
+                        } else {
+                            root.source.unshift(o);
+                        }
+                    }
                 }
             }
 
