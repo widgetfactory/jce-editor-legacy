@@ -343,34 +343,19 @@
                 
                 window.setTimeout(function() {
                     self.setHighlight(ed.getParam('source_highlight', true));
+
+                    if (se) {
+                        se.focus();
+                    }
+                    
                 }, 10);
             } else {
-                if (se) {
-                    //var selection = se.getSelection();
-                    
+                if (se) {                    
                     // pass content
                     ed.setContent(self.getContent());
 
                     DOM.hide('wf_' + ed.id + '_source_container');
                     DOM.setAttrib('wf_' + ed.id + '_source_container', 'aria-hidden', true);
-                    
-                    se.focus();
-                    
-                    /*if (selection) {
-                        if (tinymce.isIE) {
-                            ed.focus();
-                            var r = ed.getDoc().selection.createRange();
-
-                            if (r.findText(selection, 1, false)) {
-                                r.scrollIntoView();
-                                r.select();
-                            }
-
-                            tinyMCEPopup.storeSelection();
-                        } else {
-                            ed.getWin().find(selection, false, false, false, false, false, false);
-                        }
-                    }*/
                 }
 
                 // show iframe
@@ -393,7 +378,7 @@
         },
 
         loadEditor : function() {
-            var self = this, ed = this.editor, cm = ed.controlManager, DOM = tinymce.DOM, iframe = DOM.get(ed.id + '_ifr');
+            var self = this, ed = this.editor, k, cm = ed.controlManager, DOM = tinymce.DOM, iframe = DOM.get(ed.id + '_ifr');
             var w = iframe.clientWidth, h = iframe.clientHeight;
 
             // create the container

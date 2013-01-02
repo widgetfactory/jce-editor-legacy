@@ -2,6 +2,10 @@
     var DOM = tinymce.DOM, Event = tinymce.dom.Event, ed = tinyMCEPopup.editor;   
     var writer = new tinymce.html.Writer(ed.settings), parser = new tinymce.html.SaxParser(writer, ed.schema);
     
+    /* Source Editor Class
+     * Depends on codemirror.js with modes (css, javascript, htmlmixed, xml) and utilities (search, searchcursor, matchbrackets, match-highlighter, closetag) 
+     */
+    
     var SourceEditor = {
         
         options : {
@@ -175,55 +179,56 @@
                 var settings = {
                     mode    : "text/html",
                     theme   : o.theme,
-                    onChange : function() {
-                        // callback
-                        o.change.call();
-                    },
                     indentWithTabs : true,
                     smartIndent : true,
-                    tabMode: "indent",
-                    closeTagIndent: false // Pass false or an array of tag names to override the default indentation behavior.
+                    tabMode: "indent"
                 };
-                
-                if (o.selection_match) {
-                    tinymce.extend(settings, {
-                        onCursorActivity: function() {
-                            cm.matchHighlight("CodeMirror-matchhighlight");
-                            cm.setLineClass(hlLine, null, null);
-                            hlLine = cm.setLineClass(cm.getCursor().line, null, "activeline");
-                        }
-                    });
-                }
-                
+
                 if (o.tag_closing) {
                     tinymce.extend(settings, {
-                        extraKeys: {
-                            "'>'": function(cm) {
-                                cm.closeTag(cm, '>');
-                            },
-                            "'/'": function(cm) {
-                                cm.closeTag(cm, '/');
-                            }
-                        }
+                        autoCloseTags: true
                     });
                 }
                                 
                 cm = CodeMirror(this.container, settings);
                 
-                var hlLine = cm.setLineClass(0, "activeline");              
+                // onchange
+                cm.on('change', function() {
+                    o.change.call();
+                });
 
+                // line highlight and selection matching
+                if (o.selection_match) {
+                    // line highlight
+                    var marked = cm.addLineClass(0, "background", "activeline");
+                    
+                    cm.on('cursorActivity', function() {
+                        cm.matchHighlight("CodeMirror-matchhighlight");
+                            
+                        var cur = cm.getLineHandle(cm.getCursor().line);
+                        if (cur != marked) {
+                            cm.removeLineClass(marked, "background", "activeline");
+                            marked = cm.addLineClass(cur, "background", "activeline");
+                        }
+                            
+                    });
+                }
+                
+                // line wrapping
                 cm.setWrap = function(s) {
                     cm.setOption('lineWrapping', s);
                     
                     cm.focus();
                 };
 
+                // gutter
                 cm.showGutter = function(s) {
                     cm.setOption('lineNumbers', s);
                     
                     cm.focus();
                 };
-
+                
+                // syntax highlighting
                 cm.highlight = function(s) {
                     var c = cm.getCursor();
 
@@ -237,7 +242,8 @@
                     
                     cm.focus();
                 };
-
+                
+                // resize editor
                 cm.resize = function(w, h, init) {
                     var gutter = cm.getGutterElement(), scroller = cm.getScrollerElement(), scrollbar = scroller.previousSibling;
                     
@@ -358,17 +364,15 @@
                     }
                     
                     if (all) {
-                        cm.compoundChange(function() {
-                            cm.operation(function() {
-                                for (var cursor = cm.getSearchCursor(query); cursor.findNext();) {
-                                    if (typeof query != "string") {
-                                        var match = cm.getRange(cursor.from(), cursor.to()).match(query);
-                                        cursor.replace(text.replace(/\$(\d)/, function(w, i) {
-                                            return match[i];
-                                        }));
-                                    } else cursor.replace(text);
-                                }
-                            })
+                        cm.operation(function() {
+                            for (var cursor = cm.getSearchCursor(query); cursor.findNext();) {
+                                if (typeof query != "string") {
+                                    var match = cm.getRange(cursor.from(), cursor.to()).match(query);
+                                    cursor.replace(text.replace(/\$(\d)/, function(w, i) {
+                                        return match[i];
+                                    }));
+                                } else cursor.replace(text);
+                            }
                         });
                     } else {
                         cm.clearSearch();
@@ -446,10 +450,11 @@
             // set line numbers / gutter
             this.linenumbers(!!o.linenumbers);
 
-            this.focus();
-
             // callback
             o.load.call();
+            
+            // focus
+            this.focus();
         },
         
         search : function(find, rev, re) {
@@ -500,10 +505,14 @@
             return this.editor.focus();
         },
         undo : function() {
-            return this.editor.undo();
+            this.editor.undo();
+            
+            this.focus();
         },
         redo : function() {
-            return this.editor.redo();
+            this.editor.redo();
+            
+            this.focus();
         },
         indent : function() {},
         getContainer : function() {
