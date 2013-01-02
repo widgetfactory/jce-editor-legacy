@@ -597,6 +597,10 @@
             if (/(class=\"?Mso|style=\"[^\"]*\bmso\-|w:WordDocument)/.test(h)) {
                 o.wordContent = true; // Mark the pasted contents as word specific content
             }
+            
+            if (o.wordContent) {
+                h = this._processWordContent(h);
+            }
 
             // Remove all styles
             if (ed.getParam('clipboard_paste_remove_styles')) {
@@ -623,11 +627,7 @@
                     h = blocks;
                 }
             }
-
-            if (o.wordContent) {
-                h = this._processWordContent(h);
-            }
-
+            
             // Remove classes based on paste_strip_class_attributes setting. All Mso classes will be removed
             var stripClass  = ed.getParam('clipboard_paste_strip_class_attributes', 'all');
 
@@ -701,12 +701,19 @@
 
         _processWordContent : function(h) {
             var ed = this.editor, stripClass, len;
-
+            
+            // convert list items to marker
             if (ed.getParam('clipboard_paste_convert_lists', true)) {
                 h = h.replace(/<!--\[if !supportLists\]-->/gi, '$&__MCE_ITEM__'); // Convert supportLists to a list item marker
                 h = h.replace(/(<span[^>]+:\s*symbol[^>]+>)/gi, '$1__MCE_ITEM__'); // Convert symbol spans to list items
                 h = h.replace(/(<span[^>]+mso-list:[^>]+>)/gi, '$1__MCE_ITEM__'); // Convert mso-list to item marker
                 h = h.replace(/(<p[^>]+(?:MsoListParagraph)[^>]+>)/gi, '$1__MCE_ITEM__');
+            }
+            
+            // remove footnotes
+            if (ed.getParam('clipboard_paste_remove_footnotes', true)) {
+                h = h.replace(/<a[^>]+mso-footnote-id[^>]+>[\s\S]+?<\/a>/gi, '');
+                h = h.replace(/<div[^>]+mso-element:footnote[^>]+>[\s\S]+?<\/div>/gi, '');
             }
 
             // Word comments like conditional comments etc
