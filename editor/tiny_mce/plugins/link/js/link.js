@@ -137,18 +137,7 @@ var LinkDialog = {
             });
 
             $('#dir').val(ed.dom.getAttrib(n, 'dir'));
-            $('#rev').val(ed.dom.getAttrib(n, 'rel'), true);
-
-            $('#rel').val( function() {
-                var v = ed.dom.getAttrib(n, 'rel');
-
-                if ($('option[value="'+ v +'"]', this).length == 0) {
-                    $(this).append(new Option(v, v));
-                    $(this).val(v);
-                }
-                
-                return v;
-            });
+            $('#rev').val(ed.dom.getAttrib(n, 'rev'), true);
 
             if (href.charAt(0) == '#') {
                 $('#anchor').val(href);
@@ -158,7 +147,26 @@ var LinkDialog = {
             $('#target').val(ed.dom.getAttrib(n, 'target'));
 
             // check for popups
-            WFPopups.getPopup(n);
+            var data = WFPopups.getPopup(n) || {};
+            
+            // process rel after popups as it is used by MediaBox
+            $('#rel').val( function() {
+                var v = data.rel;
+                
+                if ($.type(v) !== "string") {
+                    v = ed.dom.getAttrib(n, 'rel');
+                }    
+
+                v = ed.dom.encode(v);
+
+                if ($('option[value="'+ v +'"]', this).length == 0) {
+                    $(this).append(new Option(v, v));
+                    $(this).val(v);
+                }
+                
+                return v;
+            });
+            
         } else {
             $.Plugin.setDefaults(this.settings.defaults);
         }
