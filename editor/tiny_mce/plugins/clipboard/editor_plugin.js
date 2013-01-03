@@ -603,9 +603,9 @@
             }
 
             // Remove all styles
-            if (ed.getParam('clipboard_paste_remove_styles')) {
+            /*if (ed.getParam('clipboard_paste_remove_styles')) {
                 h = h.replace(/\sstyle="([^"]+?)"/gi, '');
-            }
+            }*/
 			
             // remove attributes
             if (ed.getParam('clipboard_paste_remove_attributes')) {
@@ -704,16 +704,16 @@
             
             // convert list items to marker
             if (ed.getParam('clipboard_paste_convert_lists', true)) {
-                h = h.replace(/<!--\[if !supportLists\]-->/gi, '$&__MCE_ITEM__'); // Convert supportLists to a list item marker
-                h = h.replace(/(<span[^>]+:\s*symbol[^>]+>)/gi, '$1__MCE_ITEM__'); // Convert symbol spans to list items
-                h = h.replace(/(<span[^>]+mso-list:[^>]+>)/gi, '$1__MCE_ITEM__'); // Convert mso-list to item marker
-                h = h.replace(/(<p[^>]+(?:MsoListParagraph)[^>]+>)/gi, '$1__MCE_ITEM__');
+                h = h.replace(/<!--\[if !supportLists\]-->/gi, '$1__MCE_LIST_ITEM__'); // Convert supportLists to a list item marker
+                h = h.replace(/(<span[^>]+:\s*symbol[^>]+>)/gi, '$1__MCE_LIST_ITEM__'); // Convert symbol spans to list items
+                h = h.replace(/(<span[^>]+mso-list:[^>]+>)/gi, '$1__MCE_LIST_ITEM__'); // Convert mso-list to item marker
+                h = h.replace(/(<p[^>]+(?:MsoListParagraph)[^>]+>)/gi, '$1__MCE_LIST_ITEM__');
             }
             
             // remove footnotes
             if (ed.getParam('clipboard_paste_remove_footnotes', true)) {
-                h = h.replace(/<a[^>]+mso-footnote-id[^>]+>[\s\S]+?<\/a>/gi, '');
-                h = h.replace(/<div[^>]+mso-element:footnote[^>]+>[\s\S]+?<\/div>/gi, '');
+                h = h.replace(/<a[^>]+(mso-(end|foot)note-id|sdfootnoteanc)[^>]+>[\s\S]+?<\/a>/gi, '');
+                h = h.replace(/<div[^>]+(mso-element:(end|foot)note|sdfootnote)[^>]+>[\s\S]+?<\/div>/gi, '');
             }
 
             // Word comments like conditional comments etc
@@ -1083,17 +1083,23 @@
                     });
 
                 } // end word content
-				
-                if (!ed.getParam('clipboard_paste_remove_styles')) {
-                    // process style attributes
-                    this._processStyles(o.node);
-                }
-	
+                
                 // convert lists
                 if (ed.getParam('clipboard_paste_convert_lists', true)) {
                     this._convertLists(o.node);
                 }
-	
+		
+                // Remove all styles
+                if (ed.getParam('clipboard_paste_remove_styles')) {
+                    // Remove style attribute
+                    each(dom.select('*[style]', o.node), function(el) {
+                        el.removeAttribute('style');
+                    });
+                } else {
+                    // process style attributes
+                    this._processStyles(o.node);
+                }
+
                 // Process images - remove local
                 each(dom.select('img', o.node), function(el) {					
                     var s = dom.getAttrib(el, 'src');
@@ -1150,8 +1156,8 @@
             _convertLists : function(node) {
                 var ed = this.editor, dom = ed.dom, listElm, li, lastMargin = -1, margin, levels = [], lastType;
 
-                var ULRX = /^(__MCE_ITEM__)+[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*\u00a0*/;
-                var OLRX = /^__MCE_ITEM__\s*\(?(\w+)(\.|\))?\s*\u00a0+/;
+                var ULRX = /^(__MCE_LIST_ITEM__)+[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*\u00a0*/;
+                var OLRX = /^(__MCE_LIST_ITEM__)*\(?(\w+)(\.|\))?\s*\u00a0+/;
 
                 // Convert middot lists into real semantic lists
                 each(dom.select('p', node), function(p) {
@@ -1161,8 +1167,10 @@
                     for (sib = p.firstChild; sib && sib.nodeType == 3; sib = sib.nextSibling) {
                         val += sib.nodeValue;
                     }
-
-                    val = p.innerHTML.replace(/<\/?\w+[^>]*>/gi, '').replace(/&nbsp;/g, '\u00a0');
+                    // get paragraph html
+                    html    = p.innerHTML;
+                    // remove tags and replace spaces
+                    val     = html.replace(/<\/?\w+[^>]*>/gi, '').replace(/&nbsp;/g, '\u00a0');
 
                     // Detect unordered lists look for bullets
                     if (ULRX.test(val)) {
@@ -1171,12 +1179,13 @@
 
                     if (s = val.match(OLRX)) {
                         type = 'ol';
-
-                        chars = s[1];
+                        
+                        // get list character
+                        chars = s[2];
 
                         // Detect ordered lists 1., a. or ixv. if style allowed
                         if (!ed.getParam('clipboard_paste_remove_styles')) {
-                            if (chars && chars != '__MCE_ITEM__') {
+                            if (chars && chars != '__MCE_LIST_ITEM__') {
                                 if (/0[1-9]/.test(chars)) {
                                     st = 'decimal-leading-zero';
                                 }
@@ -1232,13 +1241,11 @@
                             }
                         });
 
-                        html = p.innerHTML;
-
                         // Remove middot/list items
                         if (type == 'ul') {
-                            html = html.replace(/__MCE_ITEM__/g, '').replace(/^[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*(&nbsp;|\u00a0)+\s*/, '');
+                            html = html.replace(/__MCE_LIST_ITEM__/g, '').replace(/^[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*(&nbsp;|\u00a0)+\s*/, '');
                         } else {
-                            html = html.replace(/__MCE_ITEM__/g, '').replace(/\s*\(?(\w+)(\.|\))?\s*(&nbsp;|\u00a0)+\s*/, '');
+                            html = html.replace(/__MCE_LIST_ITEM__/g, '').replace(/(\s|&nbsp;|\u00a0)*\(?(\w+)(\.|\))?\s*(&nbsp;|\u00a0)+\s*/, '');
                         }
 
                         // Create li and add paragraph data into the new li
@@ -1260,8 +1267,8 @@
                 // Remove any left over makers
                 html = node.innerHTML;
 
-                if (html.indexOf('__MCE_ITEM__') != -1) {
-                    node.innerHTML = html.replace(/__MCE_ITEM__/g, '');
+                if (html.indexOf('__MCE_LIST_ITEM__') != -1) {
+                    node.innerHTML = html.replace(/__MCE_LIST_ITEM__/g, '');
                 }
             },
 
