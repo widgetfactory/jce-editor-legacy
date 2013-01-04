@@ -91,7 +91,7 @@ class JoomlalinksMenu extends JObject {
                             break;
 
                         case 'alias':
-                            $params = new JParameter($menu->params);
+                            $params = new JRegistry($menu->params);
 
                             // If this is an alias use the item id stored in the parameters to make the link.
                             $link = 'index.php?Itemid=' . $params->get('aliasoptions');
@@ -194,7 +194,7 @@ class JoomlalinksMenu extends JObject {
         }
 
         $db->setQuery($query, 0);
-        $params = new JParameter($db->loadResult());
+        $params = new JRegistry($db->loadResult());
         
         $query->clear();
 
