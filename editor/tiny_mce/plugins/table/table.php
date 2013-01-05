@@ -13,6 +13,6 @@ defined( '_JEXEC' ) or die('RESTRICTED');
 
 require_once(dirname( __FILE__ ).'/classes/table.php' );
 
-$plugin = WFTablesPlugin::getInstance();
+$plugin = new WFTablesPlugin();
 $plugin->execute();
 ?>

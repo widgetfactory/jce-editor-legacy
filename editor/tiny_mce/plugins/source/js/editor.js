@@ -245,7 +245,7 @@
                 
                 // resize editor
                 cm.resize = function(w, h, init) {
-                    var gutter = cm.getGutterElement(), scroller = cm.getScrollerElement(), scrollbar = scroller.previousSibling;
+                    var scroller = cm.getScrollerElement();
                     
                     // only if drag resize
                     if (!init) {
@@ -253,16 +253,7 @@
                     }
 
                     DOM.setStyles(scroller, {
-                        width   : w - scrollbar.offsetWidth,
                         height  : h
-                    });
-                    
-                    DOM.setStyles(scrollbar, {
-                        height : h 
-                    });
-
-                    DOM.setStyles(gutter, {
-                        height : h
                     });
                 };
 
@@ -433,11 +424,11 @@
                 
                 cm.refresh();
                 
-                window.setTimeout(function() {
+                /*window.setTimeout(function() {
                     var scroller = cm.getScrollerElement(), h = cm.getScrollerElement().offsetHeight - self.toolbar.offsetHeight;
                     DOM.setStyle(scroller, 'height', h);
                     DOM.setStyle(scroller.previoussibling, 'height', h);
-                }, 10);
+                }, 10);*/
             }
         },
         _loaded : function(content) {

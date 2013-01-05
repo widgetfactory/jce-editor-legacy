@@ -42,25 +42,6 @@ class WFSpellCheckerPlugin extends WFEditorPlugin {
         $this->execute();
     }
 
-    /**
-     * Returns a reference to a plugin object
-     *
-     * This method must be invoked as:
-     * 		<pre>  $advlink =AdvLink::getInstance();</pre>
-     *
-     * @access	public
-     * @return	JCE  The editor object.
-     * @since	1.5
-     */
-    public function &getInstance() {
-        static $instance;
-
-        if (!is_object($instance)) {
-            $instance = new WFSpellCheckerPlugin();
-        }
-        return $instance;
-    }
-
     private function getConfig() {
         static $config;
 
@@ -90,7 +71,7 @@ class WFSpellCheckerPlugin extends WFEditorPlugin {
         return $config;
     }
 
-    private function &getEngine() {
+    private function getEngine() {
         static $engine;
 
         $config = $this->getConfig();

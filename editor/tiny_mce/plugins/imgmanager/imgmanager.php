@@ -12,5 +12,5 @@
  */
 require_once(dirname(__FILE__) . '/classes/imgmanager.php');
 
-$plugin = WFImageManagerPlugin::getInstance();
+$plugin = new WFImageManagerPlugin();
 $plugin->execute();

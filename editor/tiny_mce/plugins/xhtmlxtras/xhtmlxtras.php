@@ -13,6 +13,6 @@ defined( '_JEXEC' ) or die('RESTRICTED');
 
 require_once(dirname( __FILE__ ).'/classes/xhtmlxtras.php' );
 
-$plugin  = WFXHTMLXtrasPlugin::getInstance();
+$plugin  = new WFXHTMLXtrasPlugin();
 $plugin->execute();
 ?>

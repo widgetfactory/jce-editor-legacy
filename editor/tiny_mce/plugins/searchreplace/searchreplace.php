@@ -13,6 +13,6 @@ defined( '_JEXEC' ) or die('RESTRICTED');
 
 require_once(dirname( __FILE__ ).'/classes/searchreplace.php');
 
-$plugin = WFSearchReplacePlugin::getInstance();
+$plugin = new WFSearchReplacePlugin();
 $plugin->execute();
 ?>

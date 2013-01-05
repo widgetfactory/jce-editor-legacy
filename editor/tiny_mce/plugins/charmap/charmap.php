@@ -11,5 +11,5 @@
  */
 require_once(dirname(__FILE__) . '/classes/charmap.php');
 
-$plugin = WFCharacterMapPlugin::getInstance();
+$plugin = new WFCharacterMapPlugin();
 $plugin->execute();

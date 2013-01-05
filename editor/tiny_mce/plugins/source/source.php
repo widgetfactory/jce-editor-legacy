@@ -13,6 +13,6 @@ defined( '_JEXEC' ) or die('RESTRICTED');
 
 require_once(dirname( __FILE__ ).'/classes/source.php');
 
-$plugin = WFSourcePlugin::getInstance();
+$plugin = new WFSourcePlugin();
 $plugin->execute();
 ?>

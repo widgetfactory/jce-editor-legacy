@@ -13,5 +13,5 @@ defined( '_JEXEC' ) or die('RESTRICTED');
 
 require_once( dirname( __FILE__ ) . '/classes/preview.php' );
 
-$preview = WFPreviewPlugin::getInstance();
+$preview = new WFPreviewPlugin();
 ?>

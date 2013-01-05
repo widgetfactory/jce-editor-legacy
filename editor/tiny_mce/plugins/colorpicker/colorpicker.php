@@ -11,5 +11,5 @@
  */
 require_once(dirname(__FILE__) . '/classes/colorpicker.php');
 
-$plugin = WFColorpickerPlugin::getInstance();
+$plugin = new WFColorpickerPlugin();
 $plugin->execute();

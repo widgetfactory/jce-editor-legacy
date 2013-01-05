@@ -16,30 +16,6 @@ require_once( WF_EDITOR_LIBRARIES . '/classes/plugin.php' );
 
 class WFClipboardPlugin extends WFEditorPlugin 
 {
-	
-	public function __construct() {	
-		parent::__construct();
-	}
-	
-	/**
-	 * Returns a reference to a manager object
-	 *
-	 * This method must be invoked as:
-	 * 		<pre>  $manager =FileManager::getInstance();</pre>
-	 *
-	 * @access	public
-	 * @return	FileManager  The manager object.
-	 * @since	1.5
-	 */
-	public function &getInstance(){
-		static $instance;
-
-		if ( !is_object( $instance ) ){
-			$instance = new WFClipboardPlugin();
-		}
-		return $instance;
-	}
-	
 	public function display()
 	{
 		parent::display();

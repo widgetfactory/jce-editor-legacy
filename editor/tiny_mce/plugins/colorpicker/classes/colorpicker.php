@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package   	JCE
  * @copyright 	Copyright (c) 2009-2012 Ryan Demmer. All rights reserved.
@@ -8,52 +9,25 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-
-defined( 'WF_EDITOR' ) or die('RESTRICTED');
+defined('WF_EDITOR') or die('RESTRICTED');
 
 require_once( WF_EDITOR_LIBRARIES . '/classes/plugin.php' );
 
+class WFColorpickerPlugin extends WFEditorPlugin {
 
-class WFColorpickerPlugin extends WFEditorPlugin 
-{
-	
-	public function __construct() {	
-		parent::__construct();
-	}
-	
-	/**
-	 * Returns a reference to a manager object
-	 *
-	 * This method must be invoked as:
-	 * 		<pre>  $manager =FileManager::getInstance();</pre>
-	 *
-	 * @access	public
-	 * @return	FileManager  The manager object.
-	 * @since	1.5
-	 */
-	public function &getInstance(){
-		static $instance;
+    public function display() {
+        parent::display();
 
-		if ( !is_object( $instance ) ){
-			$instance = new WFColorpickerPlugin();
-		}
-		return $instance;
-	}
-	
-	public function display()
-	{
-		parent::display();
+        $document = WFDocument::getInstance();
 
-		$document = WFDocument::getInstance();
+        $document->addScript(array('colorpicker'), 'plugins');
+        $document->addStyleSheet(array('colorpicker'), 'plugins');
+    }
 
-		$document->addScript(array('colorpicker'), 'plugins');
-		$document->addStyleSheet(array('colorpicker'), 'plugins');
-	}
-	
-	function getSettings()
-	{
-            $settings = array();		
-            return parent::getSettings($settings);
-	}
+    public function getSettings() {
+        $settings = array();
+        return parent::getSettings($settings);
+    }
 }
+
 ?>

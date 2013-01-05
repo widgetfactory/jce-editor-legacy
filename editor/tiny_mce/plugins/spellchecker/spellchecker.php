@@ -13,5 +13,5 @@ defined( '_JEXEC' ) or die('RESTRICTED');
 
 require_once( dirname( __FILE__ ) . '/classes/spellchecker.php' );
 
-$spellchecker = WFSpellcheckerPlugin::getInstance();
+$spellchecker = new WFSpellcheckerPlugin();
 ?>

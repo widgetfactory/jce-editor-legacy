@@ -14,11 +14,6 @@ defined('_JEXEC') or die('RESTRICTED');
 require_once (WF_EDITOR_LIBRARIES . '/classes/plugin.php');
 
 class WFTablesPlugin extends WFEditorPlugin {
-
-    public function __construct() {
-        parent::__construct();
-    }
-
     function getContext() {
         return JRequest::getWord('context', 'table');
     }
@@ -49,26 +44,7 @@ class WFTablesPlugin extends WFEditorPlugin {
         }
     }
 
-    /**
-     * Returns a reference to a manager object
-     *
-     * This method must be invoked as:
-     * 		<pre>  $manager =FileManager::getInstance();</pre>
-     *
-     * @access	public
-     * @return	FileManager  The manager object.
-     * @since	1.5
-     */
-    public function & getInstance() {
-        static $instance;
-
-        if (!is_object($instance)) {
-            $instance = new WFTablesPlugin();
-        }
-        return $instance;
-    }
-
-    function getSettings() {
+    public function getSettings() {
         $profile = $this->getProfile();
 
         $settings = array(
@@ -83,7 +59,7 @@ class WFTablesPlugin extends WFEditorPlugin {
      * Get default parameters
      * @return string parameters
      */
-    function getDefaults() {        
+    public function getDefaults() {        
         return parent::getDefaults(array());
     }
 

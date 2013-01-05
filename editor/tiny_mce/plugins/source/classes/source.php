@@ -14,35 +14,6 @@
 require_once (WF_EDITOR_LIBRARIES . '/classes/plugin.php');
 
 final class WFSourcePlugin extends WFEditorPlugin {
-
-    /**
-     * Constructor activating the default information of the class
-     *
-     * @access	protected
-     */
-    function __construct() {
-        parent::__construct();
-    }
-
-    /**
-     * Returns a reference to a plugin object
-     *
-     * This method must be invoked as:
-     * 		<pre>  $advlink =AdvLink::getInstance();</pre>
-     *
-     * @access	public
-     * @return	JCE  The editor object.
-     * @since	1.5
-     */
-    public function & getInstance() {
-        static $instance;
-
-        if (!is_object($instance)) {
-            $instance = new WFSourcePlugin();
-        }
-        return $instance;
-    }
-
     public function display() {
         $document = WFDocument::getInstance();
 

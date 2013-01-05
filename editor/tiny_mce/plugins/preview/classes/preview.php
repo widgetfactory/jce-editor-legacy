@@ -32,25 +32,6 @@ class WFPreviewPlugin extends WFEditorPlugin {
     }
 
     /**
-     * Returns a reference to a plugin object
-     *
-     * This method must be invoked as:
-     * 		<pre>  $advlink =AdvLink::getInstance();</pre>
-     *
-     * @access	public
-     * @return	JCE  The editor object.
-     * @since	1.5
-     */
-    function &getInstance() {
-        static $instance;
-
-        if (!is_object($instance)) {
-            $instance = new WFPreviewPlugin();
-        }
-        return $instance;
-    }
-
-    /**
      * Display Preview content
      * @return void
      */

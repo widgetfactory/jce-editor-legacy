@@ -29,24 +29,6 @@ final class WFImageManagerPlugin extends WFMediaManager {
     }
 
     /**
-     * Returns a reference to the Image Manager object
-     *
-     * This method must be invoked as:
-     * 		<pre>  $imgmanager = WFImageManagerPlugin::getInstance();</pre>
-     *
-     * @access	public
-     * @return	object WFImageManagerPlugin
-     */
-    public function &getInstance() {
-        static $instance;
-
-        if (!is_object($instance)) {
-            $instance = new WFImageManagerPlugin();
-        }
-        return $instance;
-    }
-
-    /**
      * Display the plugin
      * @access public
      */

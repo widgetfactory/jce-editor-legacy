@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package   	JCE
  * @copyright 	Copyright (c) 2009-2012 Ryan Demmer. All rights reserved.
@@ -8,77 +9,51 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-
-defined( '_JEXEC' ) or die('RESTRICTED');
+defined('_JEXEC') or die('RESTRICTED');
 
 require_once( WF_EDITOR_LIBRARIES . '/classes/plugin.php' );
 
+class WFStylePlugin extends WFEditorPlugin {
 
-class WFStylePlugin extends WFEditorPlugin 
-{
-	
-	function __construct() {	
-		parent::__construct();
-	}
-	
-	/**
-	 * Returns a reference to a manager object
-	 *
-	 * This method must be invoked as:
-	 * 		<pre>  $manager =FileManager::getInstance();</pre>
-	 *
-	 * @access	public
-	 * @return	FileManager  The manager object.
-	 * @since	1.5
-	 */
-	function &getInstance(){
-		static $instance;
+    /**
+     * Display the plugin
+     */
+    public function display() {
+        parent::display();
 
-		if ( !is_object( $instance ) ){
-			$instance = new WFStylePlugin();
-		}
-		return $instance;
-	}
-  
-  /**
-   * Display the plugin
-   */
-  function display()
-  {
-    parent::display();
+        $document = WFDocument::getInstance();
 
-    $document = WFDocument::getInstance();
-    
-    $document->addScript(array('style'), 'plugins');
-    $document->addStyleSheet(array('style'), 'plugins');
-    
-    $settings = $this->getSettings();
-    
-    $document->addScriptDeclaration('StyleDialog.settings='.json_encode($settings).';');
-    
-    $tabs = WFTabs::getInstance(array(
-    	'base_path' => WF_EDITOR_PLUGIN
-    )); 
-    
-    // Add tabs
-    $tabs->addTab('text');
-    $tabs->addTab('background');
-    $tabs->addTab('block');
-    $tabs->addTab('box');
-    $tabs->addTab('border');
-    $tabs->addTab('list');
-    $tabs->addTab('positioning');
-  }
-	
-	function getSettings()
-	{
-		$profile = $this->getProfile();		
-			
-		$settings = array(
-			'file_browser' 	=> $this->getParam('file_browser', 1) && in_array('browser', explode(',', $profile->plugins)),
-		);
-		
-		return parent::getSettings($settings);
-	}
+        $document->addScript(array('style'), 'plugins');
+        $document->addStyleSheet(array('style'), 'plugins');
+
+        $settings = $this->getSettings();
+
+        $document->addScriptDeclaration('StyleDialog.settings=' . json_encode($settings) . ';');
+
+        $tabs = WFTabs::getInstance(array(
+                    'base_path' => WF_EDITOR_PLUGIN
+                ));
+
+        // Add tabs
+        $tabs->addTab('text');
+        $tabs->addTab('background');
+        $tabs->addTab('block');
+        $tabs->addTab('box');
+        $tabs->addTab('border');
+        $tabs->addTab('list');
+        $tabs->addTab('positioning');
+    }
+
+    public function getSettings() {
+        $profile = $this->getProfile();
+
+        $settings = array(
+            'file_browser' => $this->getParam('file_browser', 1) && in_array('browser', explode(',', $profile->plugins)),
+        );
+
+        return parent::getSettings($settings);
+    }
+
 }
+
 ?>
