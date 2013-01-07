@@ -1574,8 +1574,8 @@
 
                 ed.windowManager.open({
                     url : ed.getParam('site_url') + 'index.php?option=com_jce&view=help&tmpl=component&lang='+ ed.getParam('language') +'&section=editor&category=editor&article=about',
-                    width : 760,
-                    height : 640,
+                    width : 780,
+                    height : 560,
                     inline : true,
                     popup_css : false
                 }, {
