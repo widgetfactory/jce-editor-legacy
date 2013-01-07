@@ -34,33 +34,14 @@ class WFLinkPlugin extends WFEditorPlugin {
      *
      * @access	protected
      */
-    function __construct() {
+    public function __construct() {
         parent::__construct();
 
         $this->getLinks();
         $this->getSearch('link');
     }
 
-    /**
-     * Returns a reference to a plugin object
-     *
-     * This method must be invoked as:
-     * 		<pre>  $advlink =AdvLink::getInstance();</pre>
-     *
-     * @access	public
-     * @return	JCE  The editor object.
-     * @since	1.5
-     */
-    function getInstance() {
-        static $instance;
-
-        if (!is_object($instance)) {
-            $instance = new WFLinkPlugin();
-        }
-        return $instance;
-    }
-
-    function display() {
+    public function display() {
         parent::display();
 
         $document = WFDocument::getInstance();
@@ -73,12 +54,14 @@ class WFLinkPlugin extends WFEditorPlugin {
                 ));
 
         // Add tabs
-        $tabs->addTab('link', 1);
+        $tabs->addTab('link', 1, array('plugin' => $this));
         $tabs->addTab('advanced', $this->getParam('tabs_advanced', 1));
 
+        // get and display links
         $links = $this->getLinks();
         $links->display();
 
+        // get and display search
         $search = $this->getSearch('link');
         $search->display();
 
@@ -96,7 +79,7 @@ class WFLinkPlugin extends WFEditorPlugin {
         $document->addScript(array('link'), 'plugins');
     }
     
-    function getLinks() {
+    public function getLinks() {
 
         static $links;
 
@@ -107,7 +90,7 @@ class WFLinkPlugin extends WFEditorPlugin {
         return $links;
     }
     
-    function getSearch($type = 'link') {
+    public function getSearch($type = 'link') {
         static $search;
 
         if (!isset($search)) {
@@ -121,7 +104,7 @@ class WFLinkPlugin extends WFEditorPlugin {
         return $search[$type];
     }
 
-    function getSettings() {
+    public function getSettings() {
         $profile = $this->getProfile();
 
         $settings = array(
