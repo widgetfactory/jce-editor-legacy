@@ -14,10 +14,9 @@ defined('_JEXEC') or die('RESTRICTED');
 wfimport('editor.libraries.classes.extensions');
 
 class WFPopupsExtension extends WFExtension {
-    /*
-     *  @var varchar
-     */
-
+    
+    protected static $instance;
+    
     private $_popups = array();
     private $_templates = array();
 
@@ -43,13 +42,11 @@ class WFPopupsExtension extends WFExtension {
      * @since 1.5
      */
     public static function getInstance($config = array()) {
-        static $instance;
-
-        if (!is_object($instance)) {
-            $instance = new WFPopupsExtension($config);
+        if (!isset(self::$instance)) {
+            self::$instance = new WFPopupsExtension($config);
         }
 
-        return $instance;
+        return self::$instance;
     }
 
     public function display() {
@@ -92,6 +89,7 @@ class WFPopupsExtension extends WFExtension {
         // Add popup tab and assign popups reference to document
         if (count($this->getPopups())) {
             $tabs->addTab('popups', 1);
+            $tabs->getPanel('popups')->assign('popups', $this);
         }
     }
 

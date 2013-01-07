@@ -19,6 +19,8 @@ class WFLinkExtension extends WFExtension {
      */
 
     private $extensions = array();
+    
+    protected static $instance;
 
     /**
      * Constructor activating the default information of the class
@@ -39,13 +41,11 @@ class WFLinkExtension extends WFExtension {
         $request->setRequest(array($this, 'getLinks'));
     }
     
-    public function getInstance($config = array()) {
-        static $instance;
-
-        if (!is_object($instance)) {
-            $instance = new WFLinkExtension($config);
+    public static function getInstance($config = array()) {
+        if (!isset(self::$instance)) {
+            self::$instance = new WFLinkExtension($config);
         }
-        return $instance;
+        return self::$instance;
     }
 
     public function display() {

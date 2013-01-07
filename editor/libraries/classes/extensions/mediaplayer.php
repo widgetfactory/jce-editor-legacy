@@ -15,6 +15,8 @@ wfimport('editor.libraries.classes.extensions');
 
 class WFMediaPlayerExtension extends WFExtension {
 
+    protected static $instance;
+
     /**
      * @access  protected
      */
@@ -41,9 +43,7 @@ class WFMediaPlayerExtension extends WFExtension {
      * @since 1.5
      */
     public static function getInstance($name = 'jceplayer') {
-        static $instance;
-
-        if (!is_object($instance)) {
+        if (!isset(self::$instance)) {
             $classname = '';
 
             if ($name && $name != 'none') {
@@ -52,13 +52,13 @@ class WFMediaPlayerExtension extends WFExtension {
             }
 
             if ($classname && class_exists($classname)) {
-                $instance = new $classname();
+                self::$instance = new $classname();
             } else {
-                $instance = new WFMediaPlayerExtension();
+                self::$instance = new WFMediaPlayerExtension();
             }
         }
 
-        return $instance;
+        return self::$instance;
     }
 
     public function display() {
