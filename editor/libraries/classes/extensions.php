@@ -226,7 +226,7 @@ class WFExtension extends JObject {
      * @return 	string Parameter value
      */
     public function getParam($param, $default = '') {
-        $wf = WFEditorPlugin::getInstance();
+        $wf = WFEditor::getInstance();
 
         return $wf->getParam($param, $default);
     }

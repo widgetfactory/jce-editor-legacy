@@ -87,9 +87,9 @@ class WFFileSystem extends WFExtension {
         static $root;
 
         if (!isset($root)) {
-            $user = JFactory::getUser();
-            $wf = WFEditorPlugin::getInstance();
-            $profile = $wf->getProfile();
+            $user       = JFactory::getUser();
+            $wf         = WFEditor::getInstance();
+            $profile    = $wf->getProfile();
 
             // Get base directory as shared parameter
             $root = $this->get('dir', '');    
