@@ -41,6 +41,10 @@
                     });
 					
                     this.nodes = $('dd[id]', '#help-menu').click(function(e) {
+                        if (this.id == '') {
+                            return;
+                        }
+                        
                         $('dd.loading', '#help-menu').removeClass('loading');
 						
                         self.loadItem(e.target);
