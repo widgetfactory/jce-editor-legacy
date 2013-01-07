@@ -119,10 +119,20 @@ div#help-frame iframe {
     cursor: pointer;
     width   : 10px;
     height  : 50px;
-    background : #ccc;
+    background : #ddd;
     top : 50%;
     position: relative;
     margin-top : -25px;
+}
+
+#jce div#help-menu-toggle div.toggle-handle:after {
+    color: #888888;
+    content: "::";
+    display: block;
+    font-weight: bold;
+    padding-top: 20px;
+    text-align: center;
+    text-shadow: 0 1px 0 #eee;
 }
 
 /** Bootstrap stuff **/
