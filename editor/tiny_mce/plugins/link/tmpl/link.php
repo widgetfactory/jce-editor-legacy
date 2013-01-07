@@ -10,7 +10,6 @@
  */
 defined('_JEXEC') or die('RESTRICTED');
 
-$plugin = WFLinkPlugin::getInstance();
 ?>
 <table width="100%">
     <tr>
@@ -27,11 +26,11 @@ $plugin = WFLinkPlugin::getInstance();
     <legend><?php echo WFText::_('WF_LABEL_LINKS'); ?></legend>
     <div id="link-options">
         <?php 
-            if ($plugin->getSearch('link')->isEnabled()) :
-                echo $plugin->getSearch('link')->render();
+            if ($this->plugin->getSearch('link')->isEnabled()) :
+                echo $this->plugin->getSearch('link')->render();
             endif;
         ?>
-        <?php echo $plugin->getLinks()->render(); ?>
+        <?php echo $this->plugin->getLinks()->render(); ?>
     </div>
 </fieldset>
 <h4><?php echo WFText::_('WF_LABEL_ATTRIBUTES'); ?></h4>
