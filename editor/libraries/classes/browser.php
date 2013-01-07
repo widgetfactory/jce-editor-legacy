@@ -147,7 +147,7 @@ class WFFileBrowser extends JObject {
                 ));
 
         // assign session data
-        $view->assignRef('session', $session);
+        $view->assign('session', $session);
         // assign form action
         $view->assign('action', $this->getFormAction());
         // return view output
