@@ -248,7 +248,7 @@
             }
         },
 
-        resize : function(w, h) {
+        resize : function(w, h, init) {
             if (!this.state)
                 return;
 
@@ -268,7 +268,7 @@
                     'height' 	: h
                 });
 
-                se.resize(w, h);
+                se.resize(w, h, init);
             }
         },
 
@@ -454,7 +454,8 @@
                     }
                 }, content);
             	
-                editor.resize('100%', h, true);
+                //editor.resize('100%', h, true);
+                self.resize();
             });
             
             DOM.add(container, iframe);
