@@ -85,7 +85,23 @@ class WFMediaManager extends WFEditorPlugin {
         $browser->display();
 
         $browser->set('position', $this->getParam('editor.browser_position', 'bottom'));
-        $view->assignRef('browser', $browser);
+        $view->assign('browser', $browser);
+    }
+    
+    private function getFileSystem() {
+        $filesystem = $this->getParam('filesystem.name', '', '', 'string', false);
+        
+        // if an object, get the name
+        if (is_object($filesystem)) {
+            $filesystem = isset($filesystem->name) ? $filesystem->name : 'joomla';
+        }
+
+        // if no value, default to "joomla"
+        if (empty($filesystem)) {
+            $filesystem = 'joomla';
+        }
+        
+        return $filesystem;
     }
 
     /**
@@ -94,18 +110,8 @@ class WFMediaManager extends WFEditorPlugin {
      * @return array
      */
     private function getConfig() {
-        $filesystem = $this->getParam('filesystem', '');
-        
-        // if an object, get the name
-        if (is_object($filesystem)) {
-            $filesystem = isset($filesystem->name) ? $filesystem->name : 'joomla';
-        }
-        
-        // if no value, default to "joomla"
-        if (empty($filesystem)) {
-            $filesystem = 'joomla';
-        }
-        
+        $filesystem = $this->getFileSystem();
+
         $filetypes  = $this->getParam('extensions', $this->get('_filetypes', 'images=jpg,jpeg,png,gif'));
 
         $config = array(
