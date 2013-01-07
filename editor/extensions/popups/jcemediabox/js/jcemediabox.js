@@ -50,7 +50,7 @@ JCEMediaBox = {
          * @param {Object} n
          */
         getAddon: function(v, n) {
-            var t = this, cp = false, r, each = tinymce.each;
+            var t = this, cp = false, r;
 
             var addons = this.getAddons(n);
 
@@ -205,28 +205,15 @@ WFPopups.addPopup('jcemediabox', {
         if (/^{[\w\W]+}$/.test(s)) {
             return $.parseJSON(s);
         }
-        
-        // split parameters
-        $.each(s.split(';'), function(i, n) {
-            if (n) {
-                // get the parameter parts, eg: key[value]
-                var parts = /\s?([^\[]+)(\[|=|:)([^\]]*)(\]?)\s?/.exec(n);
-                // map to array as json pairs eg: "key":"value"
-                if (parts && parts.length > 3) {
-                    var k = parts[1];
-                    var v = parts[3];
-            		
-                    if (!/[^0-9]/.test(v)) {
-                        a.push('"' + k + '":' + parseInt(v));
-                    } else {
-                        a.push('"' + k + '":"' + v + '"');
-                    }
-                }
-            }
-        });
-        
-        // return object from json string
-        return $.parseJSON('{' + a.join(',') + '}');
+
+        // parameter format eg: title[title]
+        if (/\w+\[[^\]]+\]/.test(s)) {                	                	
+            s = s.replace(/([\w]+)\[([^\]]+)\](;)?/g, function(a, b, c, d) {
+                return '"' + b + '":"' + tinymce.DOM.encode(c) + '"' + (d ? ',' : '');
+            });
+
+            return $.parseJSON('{' + s + '}');
+        }
     },
 
     /**
@@ -274,14 +261,19 @@ WFPopups.addPopup('jcemediabox', {
         }
 
         if (rel && /\w+\[.*\]/.test(rel)) {
+            var ra = '';
             if (rv = new RegExp(relRX, 'g').exec(rel)) {
-                // set rel value
-                $('#rel').val(rv[1]);
-        		
+                // pass on rel value
+                ra = rv[1];
+        	// remove rel values	
                 rel = rel.replace(new RegExp(relRX, 'g'), '');
             }
+            
             // convert to object
             data = this.convertData($.trim(rel));
+            // add to object
+            data.rel = ra;
+            
         } else {
             // remove standard rel values
             var group = $.trim(rel.replace(new RegExp(relRX, 'g'), ''));
@@ -301,6 +293,9 @@ WFPopups.addPopup('jcemediabox', {
 
         $.each(data, function(k, v) {
             if ($('#jcemediabox_popup_' + k).get(0)) {        		                
+                
+                v = tinymce.DOM.decode(v);
+                
                 if (k == 'title' || k == 'caption') {
                     $('input[name^="jcemediabox_popup_' + k + '"]').eq(index).val(v);
                 } else {
@@ -396,7 +391,7 @@ WFPopups.addPopup('jcemediabox', {
                 }
             }
                 
-            data[k] = v; 
+            data[k] = v;
         });
         
         $('li', '#jcemediabox_popup_params').each(function() {
