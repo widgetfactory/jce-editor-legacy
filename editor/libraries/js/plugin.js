@@ -982,13 +982,22 @@
                         'scrolling': 'auto',
                         'frameborder': 0
                     }).css({
-                        width: '99%',
-                        height: '95%'
+                        width   : '99%',
+                        height  : '99%'
                     }).load( function () {
                         if ($.isFunction(options.onFrameLoad)) {
                             options.onFrameLoad.call();
                         }
-
+                        
+                        var win = this.contentWindow, d = win.document, b = d.body;
+                        var w   = win.innerWidth    || b.clientWidth;
+                        var h   = win.innerHeight   || b.clientHeight;
+                        
+                        $(this).css({
+                            width   : w,
+                            height  : h
+                        });
+                        
                         $(div).removeClass('loading');
                     });
 
