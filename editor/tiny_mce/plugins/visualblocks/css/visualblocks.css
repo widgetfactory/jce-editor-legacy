@@ -1,4 +1,4 @@
-p, h1, h2, h3, h4, h5, h6, hgroup, aside, div, section, article, blockquote, address, pre, figure, ul, ol, dl, dt, dd  {display: block; padding-top : 10px; border: 1px dashed #BBB;background: transparent no-repeat 2px 2px;}
+p, h1, h2, h3, h4, h5, h6, hgroup, aside, div, section, article, blockquote, address, pre, figure, ul, ol, dl, dt, dd  {display: block; padding-top : 5px; padding-bottom : 5px; border: 1px dashed #BBB;background: transparent no-repeat 2px 2px;}
 p, h1, h2, h3, h4, h5, h6, hgroup, aside, div, section, article, address, pre, figure, ul, ol, dl, dt, dd {margin-left: 2px; margin-right : 2px;}
 section, article, address, hgroup, aside, figure {margin: 0 0 1em 2px}
 figcaption {border: 1px dashed #BBB}
