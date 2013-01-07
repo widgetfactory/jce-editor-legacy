@@ -44,7 +44,7 @@ final class WFTabs extends JObject {
      * @access  public
      * @return  object WFTabs
      */
-    public function &getInstance($config = array()) {
+    public function getInstance($config = array()) {
         static $instance;
 
         if (!is_object($instance)) {
@@ -85,19 +85,34 @@ final class WFTabs extends JObject {
 
         return $view;
     }
+    
+    public function getPanel($panel) {
+        if (array_key_exists($panel, $this->_panels)) {
+            return $this->_panels[$panel];
+        }
+        
+        return false;
+    }
 
     /**
      * Add a tab to the document. A panel is automatically created and assigned
      * @access	public
      * @param object $tab Tab name
+     * @param int $state Tab state (active or inactive)
+     * @param array $values An array of values to assign to panel view
      */
-    public function addTab($tab, $state = 1) {
+    public function addTab($tab, $state = 1, $values = array()) {
         if (!array_key_exists($tab, $this->_tabs)) {
             if ($state) {
                 $this->_tabs[$tab] = $tab;
             }
 
-            $this->addPanel($tab, $state);
+            $panel = $this->addPanel($tab, $state);
+
+            // array is not empty and is associative
+            if (!empty($values) && array_values($values) !== $values) {
+               $panel->assign($values); 
+            }
         }
     }
 
@@ -106,9 +121,11 @@ final class WFTabs extends JObject {
      * @access	public
      * @param 	object $panel Panel name
      */
-    public function addPanel($panel, $state = 1) {
-        if (!array_key_exists($panel, $this->_panels)) {
-            $this->_panels[$panel] = $this->loadPanel($panel, $state);
+    public function addPanel($tab, $state = 1) {
+        if (!array_key_exists($tab, $this->_panels)) {
+            $this->_panels[$tab] = $this->loadPanel($tab, $state);
+            
+            return $this->_panels[$tab];
         }
     }
 
@@ -137,9 +154,9 @@ final class WFTabs extends JObject {
 
             $x = 0;
 
-            foreach ($this->_tabs as $tab) {                
+            foreach ($this->_tabs as $tab) {
                 $class = "ui-state-default ui-corner-top";
-                
+
                 if ($x == 0) {
                     $class .= " ui-tabs-active ui-state-active";
                 }
