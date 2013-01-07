@@ -40,13 +40,13 @@
                 // Display "a#name" instead of "img" in element path
                 if (ed.theme && ed.theme.onResolveName) {
                     ed.theme.onResolveName.add( function(theme, o) {
-                        var n = o.node, v;
+                        var n = o.node, v, href = n.href;
 
                         if (o.name === 'span' && /mceItemAnchor/.test(n.className)) {
                             v = ed.dom.getAttrib(n, 'data-mce-name') || n.id;
                         }
 
-                        if (o.name === 'a' && !n.href && (n.name || n.id)) {
+                        if (o.name === 'a' && (!href || href.charAt(0) == '#') && (n.name || n.id)) {
                             v = n.name || n.id;
                         }
                         
@@ -66,13 +66,20 @@
                 // Convert anchor elements to image placeholder
                 ed.parser.addNodeFilter('a', function(nodes) {
                     for (var i = 0, len = nodes.length; i < len; i++) {
-                        var node = nodes[i], fc = node.firstChild;
+                        var node = nodes[i], fc = node.firstChild, href = node.attr('href'), cls = node.attr('class') || '';
                         
                         if (!fc || (fc && fc.type == 3 && fc.value === '\uFEFF')) {
                             node.empty();
 
-                            if (!node.attr('href') && (node.attr('name') || node.attr('id'))) {
+                            // allow double anchors
+                            if ((!href || href.charAt(0) == '#') && (node.attr('name') || node.attr('id'))) {
                                 self._createAnchorSpan(node);
+                            }
+                        } else {
+                            if ((!href || href.charAt(0) == '#') && (node.attr('name') || node.attr('id'))) {
+                                if (!cls || /mceItemAnchor/.test(cls) === false) {
+                                    node.attr('class', tinymce.trim(cls + ' mceItemAnchor'))
+                                }
                             }
                         }
                     }
@@ -100,7 +107,7 @@
                     };
                 });
             };
-            
+            // prevent anchor from collapsing
             ed.onBeforeSetContent.add(function(ed, o) {
                 o.content = o.content.replace(/<a id="([^"]+)"><\/a>/gi, '<a id="$1">\uFEFF</a>');
             });
@@ -251,6 +258,7 @@
             // get data
             at = {
                 name    : n.attr('data-mce-name'),
+                href    : n.attr('data-mce-href'),
                 id      : n.attr('id')
             };
 			
@@ -268,8 +276,9 @@
                 return;
 			
             at = {
-                'data-mce-name'   : n.attr('name'),
-                id                : n.attr('id')
+                'data-mce-name' : n.attr('name'),
+                'data-mce-href' : n.attr('href'),
+                id              : n.attr('id')
             };
 			
             // get classes as array
