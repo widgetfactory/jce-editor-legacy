@@ -1,5 +1,4 @@
 /**
- * @version		$Id: help.css 203 2011-06-01 19:02:19Z happy_noodle_boy $
  * @package   	JCE
  * @copyright 	Copyright (c) 2009-2012 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later
@@ -8,6 +7,8 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
 */
+@import url('bootstrap-responsive.min.css');
+
 html {
     /*height : 100%;*/
     background: #FFFFFF none;
@@ -24,6 +25,7 @@ div#jce {
     padding: 10px;
     margin: 0;
     height : 530px;
+    border : 0 none;
 }
 
 div#jce div {
