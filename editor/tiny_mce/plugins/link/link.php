@@ -13,5 +13,5 @@ defined( '_JEXEC' ) or die('RESTRICTED');
 
 require_once( dirname( __FILE__ ) . '/classes/link.php' );
 
-$plugin = WFLinkPlugin::getInstance();
+$plugin = new WFLinkPlugin();
 $plugin->execute();
