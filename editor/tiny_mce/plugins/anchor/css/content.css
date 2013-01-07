@@ -1,4 +1,4 @@
-a.mceItemAnchor {width:11px !important; height:11px !important; background:url(../img/anchor.gif) no-repeat 2px center; padding-left : 14px;border: 1px dashed #B4D4FF;}
+a.mceItemAnchor {width:11px !important; height:11px !important; background:url(../img/anchor.gif) no-repeat 2px center; padding-left : 14px;border: 1px dashed #B4D4FF;text-decoration:none;font-weight:normal;color:inherit;}
 a.mceItemAnchor::selection {
     background-color: #b4d4ff;
 }
