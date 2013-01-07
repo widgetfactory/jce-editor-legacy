@@ -12,7 +12,7 @@
 defined('WF_EDITOR') or die('RESTRICTED');
 
 ?> 
-<!DOCTYPE HTML> 
+<!DOCTYPE html> 
 <html lang="<?php echo $this->language;?>" dir="<?php echo $this->direction;?>">
 	<head>
 		<meta charset="utf-8">
