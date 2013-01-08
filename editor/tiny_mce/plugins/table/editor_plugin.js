@@ -1216,11 +1216,11 @@
                 }
             });
 			
-            ed.onGetContent.add(function(ed, o) {
+            /*ed.onGetContent.add(function(ed, o) {
                 if (!tinymce.isIE) {
                     o.content = o.content.replace(/<td([^>]*)>&nbsp;<\/td>/gi, '<td$1></td>');
                 }
-            });
+            });*/
 			
             ed.onPreInit.add(function(ed, o) {
                 // add support for border attribute
