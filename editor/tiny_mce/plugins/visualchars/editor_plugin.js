@@ -75,7 +75,7 @@
         // Private methods
 
         _toggleVisualChars: function(state, o) {
-            var t = this, ed = t.editor, nl, i, h, d = ed.getDoc(), b = o || ed.getBody(), nv, s = ed.selection, bo, div;
+            var t = this, ed = t.editor, nl, i, h, d = ed.getDoc(), b = o || ed.getBody(), nv, s = ed.selection, bo, div, node;
 
             if (state) {
                 nl = [];
@@ -86,7 +86,7 @@
 				
                 for (i = 0; i < nl.length; i++) {
                     nv = nl[i].nodeValue;
-                    nv = nv.replace(/(\u00a0|&nbsp;)/g, '<span data-mce-bogus="1" class="mceItemHidden mceItemNbsp">$1</span>');
+                    nv = nv.replace(/(\u00a0|&nbsp;)/g, '<span data-mce-bogus="1" class="mceItemHidden mceItemNbsp">&middot;</span>');
 					
                     div = ed.dom.create('div', null, nv);
                     while (node = div.lastChild)
@@ -98,7 +98,14 @@
                 nl = ed.dom.select('span.mceItemNbsp', b);
 
                 for (i = nl.length - 1; i >= 0; i--) {
-                    ed.dom.remove(nl[i], 1);
+                    n = nl[i];
+                    
+                    if (n.firstChild !== null) {
+                        n.removeChild(n.firstChild);
+                        n.appendChild(d.createTextNode('\u00a0'));
+                    }
+
+                    ed.dom.remove(n, 1);
                 }
             }
         }
