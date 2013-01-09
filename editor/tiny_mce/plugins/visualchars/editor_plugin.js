@@ -59,7 +59,7 @@
             
             ed.onSetContent.add(function(ed, o) {
                 t._toggleVisualChars(state);
-            }); 
+            });
         },
         
         getInfo: function() {
@@ -86,7 +86,7 @@
 				
                 for (i = 0; i < nl.length; i++) {
                     nv = nl[i].nodeValue;
-                    nv = nv.replace(/(\u00a0|&nbsp;)/g, '<span data-mce-bogus="1" class="mceItemHidden mceItemNbsp">&middot;</span>');
+                    nv = nv.replace(/(\u00a0|&nbsp;)/g, '<span data-mce-bogus="1" class="mceItemHidden mceItemNbsp">$1</span>');
 					
                     div = ed.dom.create('div', null, nv);
                     while (node = div.lastChild)
@@ -98,14 +98,7 @@
                 nl = ed.dom.select('span.mceItemNbsp', b);
 
                 for (i = nl.length - 1; i >= 0; i--) {
-                    n = nl[i];
-                    
-                    if (n.firstChild !== null) {
-                        n.removeChild(n.firstChild);
-                        n.appendChild(d.createTextNode('\u00a0'));
-                    }
-
-                    ed.dom.remove(n, 1);
+                    ed.dom.remove(nl[i], 1);
                 }
             }
         }
