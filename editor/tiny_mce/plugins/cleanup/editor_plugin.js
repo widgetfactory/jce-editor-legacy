@@ -196,16 +196,16 @@
                     // legacy mce stuff
                     o.content = o.content.replace(/_mce_(src|href|style|coords|shape)="([^"]+)"\s*?/gi, '');
 
-                    if(ed.getParam('keep_nbsp', true)) {
-                        o.content = o.content.replace(/\u00a0/g, '&nbsp;');
-                    }
-
                     if(ed.settings.validate === false) {
                         // fix body content
                         o.content = o.content.replace(/<body([^>]*)>([\s\S]*)<\/body>/, '$2');
                         // padd empty elements
                         o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)([^>]*)><\/\1>/gi, '<$1$2>&nbsp;</$1>');
                     }
+                    
+                    /*if(ed.getParam('keep_nbsp', true)) {
+                        o.content = o.content.replace(/\u00a0/g, '&nbsp;');
+                    }*/
                 }
             });
             // Save callback
