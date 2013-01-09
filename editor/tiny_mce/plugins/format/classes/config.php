@@ -23,8 +23,15 @@ class WFFormatPluginConfig {
         }
 
         // Encoding
-        $settings['entity_encoding'] = $wf->getParam('editor.entity_encoding', 'raw', 'named');
-        $settings['inline_styles'] = $wf->getParam('editor.inline_styles', 1, 1, 'boolean');
+        $settings['entity_encoding']    = $wf->getParam('editor.entity_encoding', 'raw', 'named');
+        
+        // use named encoding with limited entities set if raw/utf-8
+        if ($settings['entity_encoding'] == 'raw') {
+            $settings['entity_encoding'] = '';
+            $settings['entities'] = '160,nbsp';
+        }
+        
+        $settings['inline_styles']      = $wf->getParam('editor.inline_styles', 1, 1, 'boolean');
 
         // Paragraph handling
         $settings['forced_root_block'] = $wf->getParam('editor.forced_root_block', 'p');
