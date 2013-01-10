@@ -102,15 +102,22 @@ div#help-frame iframe {
     height: 100%;
 }
 
-#jce div#help-menu-toggle {
+#jce div#help-menu-toggle, #jce div#help-menu-toggle-clone {
     margin : 0 2px;
     height : 100%;
     background : #eee;
     float : left;
 }
 
-#jce div#help-menu-toggle div {
-    cursor: pointer;
+#jce div#help-menu-toggle-clone {
+    margin : 0;
+    width : 10px;
+    top : 10px;
+    background : #ccc;
+}
+
+#jce div#help-menu-toggle div.resize-handle {
+    cursor: ew-resize;
     width   : 10px;
     height  : 50px;
     background : #ddd;
@@ -119,7 +126,16 @@ div#help-frame iframe {
     margin-top : -25px;
 }
 
-#jce div#help-menu-toggle div.toggle-handle:after {
+#jce div#help-menu-toggle div.toggle-handle {
+    cursor: pointer;
+    width   : 10px;
+    height  : 14px;
+    background : #ddd;
+    top : 0;
+    position: relative;
+}
+
+#jce div#help-menu-toggle div.resize-handle:after {
     color: #888888;
     content: "::";
     display: block;
@@ -127,6 +143,21 @@ div#help-frame iframe {
     padding-top: 20px;
     text-align: center;
     text-shadow: 0 1px 0 #eee;
+}
+
+#jce div#help-menu-toggle div.toggle-handle:after {
+    content : "\2039";
+    color: #888888;
+    display: block;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 1px 0 #eee;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#jce div#help-menu-toggle div.toggle-handle.collapsed:after {
+    content : "\203A";
 }
 
 /** Bootstrap stuff **/
@@ -168,11 +199,11 @@ div#help-frame iframe {
     margin-left: 0;
 }
 #jce .row-fluid .span4 {
-    width: 33%;
+    width: 30%;
 }
 #jce .row-fluid .span8 {
-    width: 67%;
+    width: 68.1%;
 }
 #jce .row-fluid .span12 {
-    width: 100%;
+    width: 98.1%;
 }
