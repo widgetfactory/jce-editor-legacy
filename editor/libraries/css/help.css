@@ -93,9 +93,7 @@ table#help-table td {
     border: 1px solid #ccc;
 }
 div#help-frame {
-    width: 100%;
     height: 100%;
-
     overflow: hidden;
 }
 
@@ -105,7 +103,7 @@ div#help-frame iframe {
 }
 
 #jce div#help-menu-toggle {
-    margin-left : -12.5px;
+    margin : 0 2px;
     height : 100%;
     background : #eee;
     float : left;
@@ -162,7 +160,6 @@ div#help-frame iframe {
     float: left;
     width: 100%;
     min-height: 30px;
-    margin-left: 2.7624309392265194%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -171,11 +168,11 @@ div#help-frame iframe {
     margin-left: 0;
 }
 #jce .row-fluid .span4 {
-    width: 31.491712707182323%;
+    width: 33%;
 }
 #jce .row-fluid .span8 {
-    width: 65.74585635359117%;
+    width: 67%;
 }
 #jce .row-fluid .span12 {
-    width: 98%;
+    width: 100%;
 }
