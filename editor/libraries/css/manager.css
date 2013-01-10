@@ -220,11 +220,6 @@ div#browser-list-actions div:first-child {
     margin: 0 0 1px 0;
 }
 
-/** Ugly hack **/
-#jce.webkit div.layout-header,#jce.opera div.layout-header {
-    margin: 0 1px 0 0;
-}
-
 #browser div.header {
     font-size: 1.1em;
     text-shadow: 0px 1px 1px rgba(255, 255, 255, 1);
@@ -236,7 +231,6 @@ div#browser-list-actions div:first-child {
     height: 20px;
     border: 1px solid #ccc;
     line-height: 20px;
-    margin: 0 1px 0 0;
 }
 
 div#browser-buttons {
