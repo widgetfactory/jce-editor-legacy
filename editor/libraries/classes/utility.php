@@ -23,8 +23,15 @@ abstract class WFUtility {
         return substr($path, 0, $dot);
     }
 
-    public static function cleanPath($path) {
-        return preg_replace('#[/\\\\]+#', '/', trim(urldecode($path)));
+    public static function cleanPath($path, $ds = DIRECTORY_SEPARATOR, $prefix = '') {
+        $path = trim(urldecode($path));
+        
+        // check for UNC path on IIS and prepend backslash, eg: \\some\path\to\folder
+        if ($ds == '\\' && $path[0] == '\\' && $path[1] == '\\') {
+            $prefix = '\\';
+        }
+        
+        return $prefix . preg_replace('#[/\\\\]+#', $ds, $path);
     }
 
     /**
