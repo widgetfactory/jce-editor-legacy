@@ -1030,7 +1030,7 @@ div.button span {
 /* Loader */
 .ui-dialog div.big-loader {
     background:
-        url('../../../tiny_mce/themes/advanced/skins/default/img/progress.gif')
+        url('../../tiny_mce/themes/advanced/skins/default/img/progress.gif')
         center 50% no-repeat;
     margin-top: -33px !important;
     width: 100%;
