@@ -24,31 +24,31 @@
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param-->
-        <param name="content" type="list" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_CONTENT" description="WF_LINKS_JOOMLALINKS_PARAM_CONTENT_DESC" parent="enable[1]">
+        <param name="content" type="radio" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_CONTENT" description="WF_LINKS_JOOMLALINKS_PARAM_CONTENT_DESC" parent="enable[1]">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="article_alias" type="list" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_ARTICLE_ALIAS" description="WF_LINKS_JOOMLALINKS_PARAM_ARTICLE_ALIAS_DESC" parent="enable[1]">
+        <param name="article_alias" type="radio" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_ARTICLE_ALIAS" description="WF_LINKS_JOOMLALINKS_PARAM_ARTICLE_ALIAS_DESC" parent="enable[1]">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="static" type="list" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_UNCATEGORIZED" description="WF_LINKS_JOOMLALINKS_PARAM_UNCATEGORIZED_DESC" parent="enable[1]">
+        <param name="static" type="radio" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_UNCATEGORIZED" description="WF_LINKS_JOOMLALINKS_PARAM_UNCATEGORIZED_DESC" parent="enable[1]">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="contacts" type="list" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_CONTACT" description="WF_LINKS_JOOMLALINKS_PARAM_CONTACT_DESC" parent="enable[1]">
+        <param name="contacts" type="radio" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_CONTACT" description="WF_LINKS_JOOMLALINKS_PARAM_CONTACT_DESC" parent="enable[1]">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="weblinks" type="list" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_WEBLINKS" description="WF_LINKS_JOOMLALINKS_PARAM_WEBLINKS_DESC" parent="enable[1]">
+        <param name="weblinks" type="radio" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_WEBLINKS" description="WF_LINKS_JOOMLALINKS_PARAM_WEBLINKS_DESC" parent="enable[1]">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="weblinks_alias" type="list" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_WEBLINKS_ALIAS" description="WF_LINKS_JOOMLALINKS_PARAM_WEBLINKS_ALIAS_DESC" parent="enable[1]">
+        <param name="weblinks_alias" type="radio" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_WEBLINKS_ALIAS" description="WF_LINKS_JOOMLALINKS_PARAM_WEBLINKS_ALIAS_DESC" parent="enable[1]">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="menu" type="list" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_MENU" description="WF_LINKS_JOOMLALINKS_PARAM_MENU_DESC" parent="enable[1]">
+        <param name="menu" type="radio" default="1" label="WF_LINKS_JOOMLALINKS_PARAM_MENU" description="WF_LINKS_JOOMLALINKS_PARAM_MENU_DESC" parent="enable[1]">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
