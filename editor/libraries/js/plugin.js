@@ -1400,9 +1400,6 @@
 
         safe: function (s, mode, spaces) {     
             mode = mode || 'utf-8';
-        	
-            // remove multiple period characters and some special characters
-            s = s.replace(/(\.){2,}/g, '');
             
             // replace spaces with underscore
             if (!spaces) {
@@ -1413,7 +1410,8 @@
                 s = this.utf8_to_ascii(s);
                 s = s.replace(/[^\w\.\-~\s ]/gi, '');
             } else {
-                s = s.replace(/[+\\\/\?\#%&<>"\'=\[\]\{\},;@^\(\)]/g, '');
+                // remove some common characters
+                s = s.replace(/[\+\\\/\?\#%&<>"\'=\[\]\{\},;@\^\(\)£€$]/g, '');
                 var r = '';
             	
                 for(var i = 0, ln = s.length; i < ln; i++) {
@@ -1430,10 +1428,16 @@
                 }
             	
                 s = r;
-            }        	
+            }  
+
+            // remove multiple period characters
+            s = s.replace(/(\.){2,}/g, '');
         	
             // remove leading period
             s = s.replace(/^\./, '');
+            
+            // remove trailing period
+            s = s.replace(/\.$/, '');
         	
             return this.basename(s);
         },
