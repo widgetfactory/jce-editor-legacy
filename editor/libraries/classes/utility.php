@@ -26,27 +26,31 @@ abstract class WFUtility {
     public static function cleanPath($path, $ds = DIRECTORY_SEPARATOR, $prefix = '') {
         $path = trim(urldecode($path));
         
-        // check for UNC path on IIS and prepend backslash, eg: \\some\path\to\folder
+        // check for UNC path on IIS and set prefix
         if ($ds == '\\' && $path[0] == '\\' && $path[1] == '\\') {
-            $prefix = '\\';
+            $prefix = "\\";
         }
+        // clean path, removing double slashes, replacing back/forward slashes with DIRECTORY_SEPARATOR
+        $path = preg_replace('#[/\\\\]+#', $ds, $path);
         
-        return $prefix . preg_replace('#[/\\\\]+#', $ds, $path);
+        // return path with prefix if any
+        return $prefix . $path;
     }
 
     /**
-     * Append a / to the path if required.
+     * Append a DIRECTORY_SEPARATOR to the path if required.
      * @param string $path the path
-     * @return string path with trailing /
+     * @param string $ds optional directory seperator
+     * @return string path with trailing DIRECTORY_SEPARATOR
      */
-    public static function fixPath($path) {
-        return self::cleanPath($path . '/');
+    public static function fixPath($path, $ds = DIRECTORY_SEPARATOR) {
+        return self::cleanPath($path . $ds);
     }
 
     private static function checkCharValue($string) {
-        if (preg_match('/([^\w\.\-~\/\s ])/i', $string, $matches)) {
+        if (preg_match('/([^\w\.\-~\/\s ])/i', $string, $matches)) {            
             foreach ($matches as $match) {
-                // not a UTF-8 character
+                // not a safe UTF-8 character
                 if (ord($match) < 127) {
                     return false;
                 }
@@ -69,10 +73,11 @@ abstract class WFUtility {
      * Concat two paths together. Basically $a + $b
      * @param string $a path one
      * @param string $b path two
+     * @param string $ds optional directory seperator
      * @return string $a DIRECTORY_SEPARATOR $b
      */
-    public static function makePath($a, $b) {
-        return self::cleanPath($a . '/' . $b);
+    public static function makePath($a, $b, $ds = DIRECTORY_SEPARATOR) {
+        return self::cleanPath($a . $ds . $b, $ds);
     }
 
     private static function utf8_latin_to_ascii($subject) {
@@ -112,8 +117,7 @@ abstract class WFUtility {
      * @return mixed The sanitised string or array
      */
     public static function makeSafe($subject, $mode = 'utf-8', $allowspaces = false) {
-        // remove multiple . characters
-        $search = array('#(\.){2,}#');
+        $search = array();
 
         // replace spaces with underscore
         if (!$allowspaces) {
@@ -122,33 +126,39 @@ abstract class WFUtility {
 
         switch ($mode) {
             default:
-            case 'utf-8':
+            case 'utf-8':                
                 $search[] = '#[^a-zA-Z0-9_\.\-~\p{L}\p{N}\s ]#u';
                 $mode = 'utf-8';
                 break;
             case 'ascii':
-                $subject = self::utf8_latin_to_ascii($subject);
+                $subject = self::utf8_latin_to_ascii($subject);                
                 $search[] = '#[^a-zA-Z0-9_\.\-~\s ]#';
                 break;
         }
+        
+        // remove multiple . characters
+        $search[] = '#(\.){2,}#';
 
-        // strip leading .
-        $search[] = '#^\.*#';
+        // strip leading period
+        $search[] = '#^\.#';
+        
+        // strip trailing period
+        $search[] = '#\.$#';
 
         // strip whitespace
         $search[] = '#^\s*|\s*$#';
 
         // only for utf-8 to avoid PCRE errors - PCRE must be at least version 5
         if ($mode == 'utf-8') {
-            try {
-                $result = preg_replace($search, '', $subject);
+            try {                
+                $result = preg_replace($search, '', $subject);                
             } catch (Exception $e) {
                 // try ascii
                 return self::makeSafe($subject, 'ascii');
             }
             
             // try ascii
-            if (is_null($result) || $result === false) {
+            if (is_null($result) || $result === false) {                
                 return self::makeSafe($subject, 'ascii');
             }
 

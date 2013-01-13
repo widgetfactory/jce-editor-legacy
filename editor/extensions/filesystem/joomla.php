@@ -201,10 +201,10 @@ class WFJoomlaFileSystem extends WFFileSystem {
                 $item = WFUtility::isUTF8($item) ? $item : utf8_encode($item);
 
                 $data = array(
-                    'id' => WFUtility::makePath($relative, $item),
-                    'name' => $item,
-                    'writable' => is_writable(WFUtility::makePath($path, $item)) || $this->isFtp(),
-                    'type' => 'folders'
+                    'id'        => WFUtility::makePath($relative, $item, '/'),
+                    'name'      => $item,
+                    'writable'  => is_writable(WFUtility::makePath($path, $item)) || $this->isFtp(),
+                    'type'      => 'folders'
                 );
 
                 $properties = self::getFolderDetails($data['id']);
@@ -235,10 +235,10 @@ class WFJoomlaFileSystem extends WFFileSystem {
                 $item   = WFUtility::isUTF8($item) ? $item : utf8_encode($item);
                 
                 // create relative file
-                $id     = WFUtility::makePath($relative, $item);
+                $id     = WFUtility::makePath($relative, $item, '/');
                 
                 // create url
-                $url    = WFUtility::makePath($this->getRootDir(), $id);
+                $url    = WFUtility::makePath($this->getRootDir(), $id, '/');
 
                 // remove leading slash
                 $url    = ltrim($url, '/');
@@ -288,7 +288,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
         }
 
         // remove leading / trailing slash
-        $path = trim($path, '/');
+        //$path = trim($path, '/');
 
         // directory path relative to base dir
         if (is_dir(WFUtility::makePath($this->getBaseDir(), $path))) {
@@ -352,9 +352,9 @@ class WFJoomlaFileSystem extends WFFileSystem {
             $height = $props[1];
 
             $image = array(
-                'width' => $width,
-                'height' => $height,
-                'preview' => $url
+                'width'     => $width,
+                'height'    => $height,
+                'preview'   => WFUtility::cleanPath($url, '/')
             );
 
             return array_merge_recursive($data, $image);
