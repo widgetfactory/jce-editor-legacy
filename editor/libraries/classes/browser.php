@@ -416,13 +416,11 @@ class WFFileBrowser extends JObject {
 
             foreach ($items as $item) {
                 $item['classes'] = '';
-
                 if ($item['type'] == 'folders') {
                     $folderArray[] = $item;
                 } else {
                     // check for selected item
                     $item['selected'] = $filesystem->isMatch($item['url'], $path);
-
                     $fileArray[] = $item;
                 }
             }
@@ -462,8 +460,8 @@ class WFFileBrowser extends JObject {
         if (!empty($folders)) {
             foreach ($folders as $folder) {
                 $array[] = array(
-                    'id' => $folder['id'],
-                    'name' => $folder['name'],
+                    'id'    => $folder['id'],
+                    'name'  => $folder['name'],
                     'class' => 'folder'
                 );
             }
