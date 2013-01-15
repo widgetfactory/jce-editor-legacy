@@ -19,9 +19,7 @@ class WFXHTMLXtrasPlugin extends WFEditorPlugin {
     }
 
     public function isHTML5() {
-        $wf = WFEditor::getInstance();
-
-        return $wf->getParam('editor.schema', 'html4') == 'html5' && (bool) $wf->getParam('editor.verify_html', 0) === true;
+        return $this->getParam('editor.schema', 'html4') == 'html5' && (bool) $this->getParam('editor.verify_html', 0) === true;
     }
 
     /**
@@ -29,19 +27,22 @@ class WFXHTMLXtrasPlugin extends WFEditorPlugin {
      */
     public function display() {
         parent::display();
-        $document = WFDocument::getInstance();
+        
+        $document   = WFDocument::getInstance();  
+        $element    = $this->getElementName();
 
-        $document->setTitle(WFText::_('WF_' . strtoupper($this->getElementName()) . '_TITLE'));
+        $document->setTitle(WFText::_('WF_' . strtoupper($element) . '_TITLE'));
 
         $document->addScript(array('xhtmlxtras'), 'plugins');
         $document->addStyleSheet(array('xhtmlxtras'), 'plugins');
 
         $document->addScriptDeclaration('XHTMLXtrasDialog.settings=' . json_encode($this->getSettings()) . ';');
+        
         $tabs = WFTabs::getInstance(array('base_path' => WF_EDITOR_PLUGIN));
 
-        $tabs->addTab('standard');
+        $tabs->addTab('standard', 1, array('plugin' => $this));
 
-        if ($this->getElementName() == 'attributes') {
+        if ($element == 'attributes') {
             $tabs->addTab('events');
         }
     }

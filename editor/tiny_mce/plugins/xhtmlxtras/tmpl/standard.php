@@ -10,9 +10,7 @@
  */
 defined('_JEXEC') or die('RESTRICTED');
 
-$plugin = WFXHTMLXtrasPlugin::getInstance();
-
-$element = $plugin->getElementName();
+$element = $this->plugin->getElementName();
 
 if ($element == 'del' || $element == 'ins') :
     echo $this->loadTemplate('datetime');
@@ -53,7 +51,7 @@ endif;
         </td>
     </tr>
 <?php
-if ($plugin->isHTML5()) :
+if ($this->plugin->isHTML5()) :
     echo $this->loadTemplate('html5');
 endif;
 ?>
