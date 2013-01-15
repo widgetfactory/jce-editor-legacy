@@ -428,6 +428,10 @@ class WFDocument extends JObject {
         }
     }
 
+    private function getScriptDeclarations() {
+        return $this->_script;
+    }
+
     private function getScripts() {
         return $this->_scripts;
     }
@@ -522,11 +526,11 @@ class WFDocument extends JObject {
             foreach ($this->_scripts as $src => $type) {
                 $output .= "\t\t<script type=\"" . $type . "\" src=\"" . $src . $stamp . "\"></script>\n";
             }
-        }
 
-        // Script declarations
-        foreach ($this->_script as $type => $content) {
-            $output .= "\t\t<script type=\"" . $type . "\">" . $content . "</script>";
+            // Script declarations
+            foreach ($this->_script as $type => $content) {
+                $output .= "\t\t<script type=\"" . $type . "\">" . $content . "</script>";
+            }
         }
 
         // Other head data
@@ -602,6 +606,8 @@ class WFDocument extends JObject {
 
             switch ($type) {
                 case 'javascript':
+                    $data = '';
+
                     foreach ($this->getScripts() as $script => $type) {
                         $script .= preg_match('/\.js$/', $script) ? '' : '.js';
                         $files[] = $this->urlToPath($script);
@@ -611,14 +617,20 @@ class WFDocument extends JObject {
                         wfimport('admin.classes.language');
 
                         $parser = new WFLanguageParser(array(
-                            'plugins'   => array($this->getName()),
-                            'sections'  => array('dlg', $this->getName() . '_dlg'),
-                            'mode'      => 'plugin'
-                        ));
+                                    'plugins' => array($this->getName()),
+                                    'sections' => array('dlg', $this->getName() . '_dlg'),
+                                    'mode' => 'plugin'
+                                ));
 
-                        $data = $parser->load();
-                        $packer->setContentEnd($data);
+                        $data .= $parser->load();
                     }
+
+                    // add script declarations
+                    foreach ($this->getScriptDeclarations() as $script) {
+                        $data .= $script;
+                    }
+
+                    $packer->setContentEnd($data);
 
                     break;
                 case 'css':
