@@ -22,7 +22,7 @@ final class WFImageManagerPlugin extends WFMediaManager {
      * @access	protected
      */
     public function __construct() {
-        parent::__construct();
+        parent::__construct(array('colorpicker' => true));
 
         $browser = $this->getBrowser();
         $browser->addEvent('onUpload', array($this, 'onUpload'));
