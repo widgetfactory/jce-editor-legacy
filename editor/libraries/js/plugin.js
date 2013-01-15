@@ -89,10 +89,10 @@
 
         options: {
             selectChange 	: $.noop,
-            site 			: '',
-            root			: '',
-            help			: $.noop,
-            alerts			: ''
+            site 		: '',
+            root		: '',
+            help		: $.noop,
+            alerts		: ''
         },
 
         getURI : function(absolute) {
@@ -128,15 +128,6 @@
             // ie8 flag
             if (!$.support.cssFloat && document.querySelector) {
                 $('#jce').addClass('ie8');
-            }
-            // ie7 flag
-            if (!$.support.cssFloat && !!window.XMLHttpRequest && !document.querySelector) {
-                $('#jce').addClass('ie7');
-            }
-
-            // ie6 flag
-            if (!$.support.cssFloat && !window.XMLHttpRequest) {
-                $('#jce').addClass('ie6');
             }
 
             // add button actions
@@ -340,7 +331,7 @@
                     }
                 };
                 
-                $(this).colorpicker({
+                var settings = $.extend(ColorPicker.settings, {
                     widget : $picker,
                     labels : {
                         picker_tab 	: 'Picker',
@@ -357,6 +348,8 @@
                         name 	: 'Name'
                     }
                 });
+                
+                $(this).colorpicker(settings);
             });
         },
 
@@ -1645,3 +1638,9 @@
     // load Language
     $.Plugin.loadLanguage();
 })(jQuery);
+
+if (typeof ColorPicker === 'undefined') {
+    var ColorPicker = {
+        settings : {}
+    };
+}

@@ -72,6 +72,11 @@ class WFEditorPlugin extends JObject {
                 $config['template_path'] = WF_EDITOR_PLUGIN . '/tmpl';
             }
 
+            // backwards compatability
+            if (!array_key_exists('colorpicker', $config)) {
+                $config['colorpicker'] = in_array($plugin, array('imgmanager_ext', 'caption', 'mediamanager'));
+            }
+
             $this->setProperties($config);
         } else {
             die(JError::raiseError(403, 'RESTRICTED ACCESS'));
@@ -115,15 +120,15 @@ class WFEditorPlugin extends JObject {
                         'layout' => $this->get('layout')
                     ));
         }
-        
+
         $view->assign('plugin', $this);
 
         return $view;
     }
-    
+
     protected function getVersion() {
         $wf = WFEditor::getInstance();
-        
+
         return $wf->getVersion();
     }
 
@@ -131,10 +136,10 @@ class WFEditorPlugin extends JObject {
         $format = JRequest::getWord('format');
         return ($format == 'json' || $format == 'raw') && (JRequest::getVar('json') || JRequest::getWord('action'));
     }
-    
+
     protected function getProfile() {
         $wf = WFEditor::getInstance();
-        
+
         return $wf->getProfile();
     }
 
@@ -146,25 +151,25 @@ class WFEditorPlugin extends JObject {
             $request = WFRequest::getInstance();
             $request->process();
         } else {
-            $wf         = WFEditor::getInstance();
-            
-            $version    = $this->getVersion();
-            $name       = $this->getName();
+            $wf = WFEditor::getInstance();
+
+            $version = $this->getVersion();
+            $name = $this->getName();
 
             // process javascript languages
             if (JRequest::getWord('task') == 'loadlanguages') {
                 wfimport('admin.classes.language');
 
                 $parser = new WFLanguageParser(array(
-                    'plugins'   => array($name),
-                    'sections'  => array('dlg', $name . '_dlg', 'colorpicker'),
-                    'mode'      => 'plugin'
-                ));
+                            'plugins' => array($name),
+                            'sections' => array('dlg', $name . '_dlg', 'colorpicker'),
+                            'mode' => 'plugin'
+                        ));
 
                 $data = $parser->load();
                 $parser->output($data);
             }
-            
+
             // load core language
             WFLanguage::load('com_jce', JPATH_ADMINISTRATOR);
             // Load Plugin language
@@ -178,14 +183,14 @@ class WFEditorPlugin extends JObject {
 
             // create the document
             $document = WFDocument::getInstance(array(
-                'version' => $version,
-                'title' => WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')),
-                'name' => $name,
-                        'language'  => WFLanguage::getTag(),
+                        'version' => $version,
+                        'title' => WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')),
+                        'name' => $name,
+                        'language' => WFLanguage::getTag(),
                         'direction' => WFLanguage::getDir(),
                         'compress_javascript' => $this->getParam('editor.compress_javascript', 0),
                         'compress_css' => $this->getParam('editor.compress_css', 0)
-            ));
+                    ));
 
             // set standalone mode
             $document->set('standalone', JRequest::getInt('standalone', 0));
@@ -219,8 +224,6 @@ class WFEditorPlugin extends JObject {
     public function display() {
         jimport('joomla.filesystem.folder');
         $document = WFDocument::getInstance();
-        
-        $wf = WFEditor::getInstance();
 
         if ($document->get('standalone') == 0) {
             $document->addScript(array('tiny_mce_popup'), 'tiny_mce');
@@ -229,11 +232,18 @@ class WFEditorPlugin extends JObject {
 
         $document->addScript(array('jquery-' . WF_JQUERY . '.min', 'jquery-ui-' . WF_JQUERYUI . '.custom.min', 'jquery.ui.touch-punch.min'), 'jquery');
 
+        // add colorpicker
+        if ($this->get('colorpicker')) {
+            wfimport('admin.helpers.tools');
+
+            $document->addScript(array('colorpicker'), 'libraries');
+            $document->addScriptDeclaration('ColorPicker.settings=' . json_encode(array('template_colors' => WFToolsHelper::getTemplateColors(), 'custom_colors' => $this->getParam('editor.custom_colors', ''))) . ';');
+        }
+        
         $document->addScript(array(
             'html5',
             'select',
             'tips',
-            'colorpicker',
             'plugin'
         ), 'libraries');
 
@@ -390,10 +400,10 @@ class WFEditorPlugin extends JObject {
 
         return $settings;
     }
-    
+
     public function getParams($options = array()) {
         $wf = WFEditor::getInstance();
-        
+
         return $wf->getParams($options);
     }
 
@@ -413,7 +423,7 @@ class WFEditorPlugin extends JObject {
         $name = $this->getName();
         // get all keys
         $keys = explode('.', $key);
-        
+
         $wf = WFEditor::getInstance();
 
         // root key set

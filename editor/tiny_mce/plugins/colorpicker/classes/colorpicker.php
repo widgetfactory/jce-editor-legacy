@@ -14,12 +14,13 @@ defined('WF_EDITOR') or die('RESTRICTED');
 require_once( WF_EDITOR_LIBRARIES . '/classes/plugin.php' );
 
 class WFColorpickerPlugin extends WFEditorPlugin {
-
+    
     public function display() {
         parent::display();
 
         $document = WFDocument::getInstance();
 
+        $document->addScript(array('colorpicker'), 'libraries');
         $document->addScript(array('colorpicker'), 'plugins');
         $document->addStyleSheet(array('colorpicker'), 'plugins');
         
