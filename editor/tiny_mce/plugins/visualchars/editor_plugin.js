@@ -1,6 +1,4 @@
 /**
- * $Id: editor_plugin.js 226 2011-06-13 09:59:05Z happy_noodle_boy $
- *
  * Copyright 2009, Moxiecode Systems AB
  * Copyright 2009, Ryan Demmer
  * Released under LGPL License.
