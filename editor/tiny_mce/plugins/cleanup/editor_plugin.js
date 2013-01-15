@@ -199,24 +199,28 @@
                     if(ed.settings.validate === false) {
                         // fix body content
                         o.content = o.content.replace(/<body([^>]*)>([\s\S]*)<\/body>/, '$2');
+                        
                         // padd empty elements
                         o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)([^>]*)><\/\1>/gi, '<$1$2>&nbsp;</$1>');
                     }
                 }
             });
-            // Save callback
-            ed.onGetContent.add(function(ed, o) {
-                if(o.save) {
-                    // Convert entities to characters
-                    if(ed.getParam('cleanup_pluginmode')) {
-                        o.content = o.content.replace(/&#39;/gi, "'");
-                        o.content = o.content.replace(/&apos;/gi, "'");
-                        o.content = o.content.replace(/&amp;/gi, "&");
-                        o.content = o.content.replace(/&quot;/gi, '"');
-                    }
+            
+            ed.onSaveContent.add(function(ed, o) {
+                // Convert entities to characters
+                if(ed.getParam('cleanup_pluginmode')) {
+                    
+                    var entities = {
+                        '&#39;'     : "'",
+                        '&amp;'     : '&',
+                        '&quot;'    : '"',
+                        '&apos;'    : "'"
+                    };
+                    
+                    o.content = o.content.replace(/&(#39|apos|amp|quot);/gi, function(a) {
+                        return entities[a];
+                    });
                 }
-                
-                //o.content = o.content.replace(/\u00a0/g, ' ');
             });
 
             // Register buttons
