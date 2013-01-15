@@ -22,10 +22,19 @@ class WFColorpickerPlugin extends WFEditorPlugin {
 
         $document->addScript(array('colorpicker'), 'plugins');
         $document->addStyleSheet(array('colorpicker'), 'plugins');
+        
+        $document->addScriptDeclaration('ColorPicker.settings=' . json_encode($this->getSettings()) . ';');
     }
 
     public function getSettings() {
-        $settings = array();
+        
+        wfimport('admin.helpers.tools');
+        
+        $settings = array(
+            'template_colors'   => WFToolsHelper::getTemplateColors(),
+            'custom_colors'     => $this->getParam('editor.custom_colors', '')
+        );
+        
         return parent::getSettings($settings);
     }
 }
