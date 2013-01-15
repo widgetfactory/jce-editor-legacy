@@ -14,7 +14,12 @@ defined('_JEXEC') or die('RESTRICTED');
 require_once (WF_EDITOR_LIBRARIES . '/classes/plugin.php');
 
 class WFTablesPlugin extends WFEditorPlugin {
-    function getContext() {
+    
+    public function __construct() {
+        parent::__construct(array('colorpicker' => true));
+    }
+    
+    public function getContext() {
         return JRequest::getWord('context', 'table');
     }
 
@@ -39,8 +44,8 @@ class WFTablesPlugin extends WFEditorPlugin {
             // Add tabs
             $tabs->addTab('merge');
         } else {
-            $tabs->addTab('general', 1);
-            $tabs->addTab('advanced', 1);
+            $tabs->addTab('general', 1, array('plugin' => $this));
+            $tabs->addTab('advanced', 1, array('plugin' => $this));
         }
     }
 

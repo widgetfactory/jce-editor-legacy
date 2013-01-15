@@ -10,13 +10,12 @@
  */
 
 defined( '_JEXEC' ) or die('RESTRICTED');
-$plugin = WFTablesPlugin::getInstance();
-$tabs	= WFTabs::getInstance();
+$tabs = WFTabs::getInstance();
 ?>
 <form onsubmit="return false;">
 	<?php echo $tabs->render(); ?>
 	<div class="mceActionPanel">
-	<?php if ($plugin->getContext() == 'cell') : ?>
+	<?php if ($this->plugin->getContext() == 'cell') : ?>
 	<div>
 		<select id="action" name="action">
 			<option value="cell"><?php echo WFText::_('WF_TABLE_CELL_CELL');?></option>
@@ -25,7 +24,7 @@ $tabs	= WFTabs::getInstance();
 		</select>
 	</div>
 	<?php endif;
-	if ($plugin->getContext() == 'row') : ?>
+	if ($this->plugin->getContext() == 'row') : ?>
 	<div>
 		<select id="action" name="action">
 			<option value="row"><?php echo WFText::_('WF_TABLE_ROW_ROW');?></option>

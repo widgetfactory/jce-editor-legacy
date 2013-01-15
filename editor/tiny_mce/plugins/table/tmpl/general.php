@@ -11,8 +11,6 @@
 
 defined('_JEXEC') or die('RESTRICTED');
 
-$plugin = WFTablesPlugin::getInstance();
-
-echo $this->loadTemplate($plugin->getContext());
+echo $this->loadTemplate($this->plugin->getContext());
 
 ?>
