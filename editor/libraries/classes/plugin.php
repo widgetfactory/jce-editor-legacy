@@ -239,7 +239,7 @@ class WFEditorPlugin extends JObject {
 
         // load plugin dialog language file if necessary
         if ($this->getParam('editor.compress_javascript', 0)) {
-            $file = "/langs/" . $wf->getLanguage() . "_dlg.js";
+            $file = "/langs/" . WFLanguage::getCode() . "_dlg.js";
 
             if (!JFile::exists(WF_EDITOR_PLUGIN . $file)) {
                 $file = "/langs/en_dlg.js";
