@@ -14,10 +14,10 @@
 			<option value="named">WF_PARAM_NAMED</option>
 			<option value="numeric">WF_PARAM_NUMERIC</option>
 		</param>
-		<!--param name="keep_nbsp" type="list" default="0" label="WF_WF_PARAM_NBSP" description="WF_WF_PARAM_NBSP">
-			<option value="0">WF_OPTION_NO</option>
+		<param name="keep_nbsp" type="radio" default="1" label="WF_PARAM_KEEP_NBSP" description="WF_PARAM_KEEP_NBSP_DESC" parent="entity_encoding[raw]">
 			<option value="1">WF_OPTION_YES</option>
-		</param-->
+                        <option value="0">WF_OPTION_NO</option>
+		</param>
 		<param name="cleanup_pluginmode" type="radio" default="0" label="WF_PARAM_PLUGIN_MODE" description="WF_PARAM_PLUGIN_MODE_DESC">
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
