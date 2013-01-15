@@ -201,9 +201,21 @@ WFPopups.addPopup('jcemediabox', {
     convertData : function(s) {
         var a = [];
         
+        function trim(s) {
+            // trim
+            return s.replace(/:"([^"]+)"/, function(a, b) {
+                return ':"' + b.replace(/^\s+|\s+$/, '').replace(/\s*::\s*/, '::') + '"';
+            });
+        }
+        
+        // trim
+        s = s.replace(/:"([^"]+)"/, function(a, b) {
+            return ':"' + b.replace(/^\s+|\s+$/, '').replace(/\s*::\s*/, '::') + '"';
+        });
+        
         // if json string return object
         if (/^{[\w\W]+}$/.test(s)) {
-            return $.parseJSON(s);
+            return $.parseJSON(trim(s));
         }
 
         // parameter format eg: title[title]
@@ -212,7 +224,7 @@ WFPopups.addPopup('jcemediabox', {
                 return '"' + b + '":"' + tinymce.DOM.encode(c) + '"' + (d ? ',' : '');
             });
 
-            return $.parseJSON('{' + s + '}');
+            return $.parseJSON('{' + trim(s) + '}');
         }
     },
 
@@ -265,7 +277,7 @@ WFPopups.addPopup('jcemediabox', {
             if (rv = new RegExp(relRX, 'g').exec(rel)) {
                 // pass on rel value
                 ra = rv[1];
-        	// remove rel values	
+                // remove rel values	
                 rel = rel.replace(new RegExp(relRX, 'g'), '');
             }
             
