@@ -15,6 +15,10 @@ require_once( WF_EDITOR_LIBRARIES . '/classes/plugin.php' );
 
 class WFStylePlugin extends WFEditorPlugin {
 
+    public function __construct() {
+        parent::__construct(array('colorpicker' => true));
+    }
+    
     /**
      * Display the plugin
      */
