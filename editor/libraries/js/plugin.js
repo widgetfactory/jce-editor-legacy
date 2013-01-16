@@ -1369,8 +1369,11 @@
             }
             return s;
         },
-        
-        utf8_to_ascii : function(s) {
+        /*
+         * Replace diacritic with nearest ascii equivalent.
+         * Possible future replacement? - https://github.com/addyosmani/backbone.paginator/blob/master/plugins/diacritic.js
+         */
+        replaceDiacritic : function(s) {
             var utf8 	= this.utf8_chars;
             var ascii 	= this.ascii_chars;
         	
@@ -1400,7 +1403,7 @@
             }
 
             if (mode == 'ascii') {
-                s = this.utf8_to_ascii(s);
+                s = this.replaceDiacritic(s);
                 s = s.replace(/[^\w\.\-~\s ]/gi, '');
             } else {
                 // remove some common characters
