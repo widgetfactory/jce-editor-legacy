@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2012 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -137,10 +137,10 @@ class WFEditorPlugin extends JObject {
         return ($format == 'json' || $format == 'raw') && (JRequest::getVar('json') || JRequest::getWord('action'));
     }
 
-    protected function getProfile() {
+    protected function getProfile($plugin = null) {
         $wf = WFEditor::getInstance();
 
-        return $wf->getProfile();
+        return $wf->getProfile($plugin);
     }
 
     public function execute() {
@@ -307,10 +307,9 @@ class WFEditorPlugin extends JObject {
     public function checkPlugin($plugin = null) {
         if ($plugin) {
             // check existence of plugin directory
-            if (is_dir(WF_EDITOR_PLUGINS . '/' . $plugin) || is_dir(JPATH_PLUGINS . '/jce/' . $plugin)) {
+            if (is_dir(WF_EDITOR_PLUGINS . '/' . $plugin)) {
                 // check profile	
                 $profile = $this->getProfile($plugin);
-                //return is_object($profile) && isset($profile->id) && $profile->published = 1 && in_array($plugin, explode(',', $profile->plugins));
                 return is_object($profile) && $profile->id;
             }
         }
