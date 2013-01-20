@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2012 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -163,7 +163,7 @@ class WFEditor extends JObject {
                     continue;
                 }
 
-                // check for individual plugin
+                // check for individual plugin - use Editor Model as it adds "core" plugins to profile set
                 if ($plugin) {
                     wfimport('admin.models.editor');
                     $model      = new WFModelEditor();
@@ -313,16 +313,6 @@ class WFEditor extends JObject {
         }
 
         return $param;
-    }
-
-    /**
-     * Named wrapper to check access to a feature
-     *
-     * @access 			public
-     * @return 			string
-     */
-    public function checkUser() {
-        return $this->getProfile();
     }
 }
 
