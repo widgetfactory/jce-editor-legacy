@@ -1,10 +1,13 @@
 /**
- * $Id: editor_plugin.js 260 2011-07-04 14:01:33Z happy_noodle_boy $
- * @copyright Copyright (c) 2004-2008, Moxiecode Systems AB, All rights reserved.
- * @copyright Copyright (c) 2009-2010, Ryan Demmer, All rights reserved.
- * Modifications to support expansion - divx, pdf, object.
+ * @package   	JCE
+ * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
+ * @copyright   Copyright 2009, Moxiecode Systems AB
+ * @license   	GNU/LGPL 2.1 or later - http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * JCE is free software. This version may have been modified pursuant
+ * to the GNU General Public License, and as distributed it includes or
+ * is derivative of works licensed under the GNU General Public License or
+ * other free or open source software licenses.
  */
-
 (function() {
     var each = tinymce.each, extend = tinymce.extend, JSON = tinymce.util.JSON;
     var Node = tinymce.html.Node;
