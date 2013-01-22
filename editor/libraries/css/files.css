@@ -1,9 +1,8 @@
 /**
- * @version		$Id: files.css 221 2011-06-11 17:30:33Z happy_noodle_boy $
- * @package		JCE
- * @copyright	Copyright Â(c) 2009 - 2011 Ryan Demmer. All rights reserved.
- * @license		GNU/GPL 2
- * This version may have been modified pursuant
+ * @package   	JCE
+ * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
+ * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
@@ -57,46 +56,46 @@ li.file.notsafe, dd.file.notsafe {
     background: #FFFFFF url(../img/icons.png) no-repeat 0 -640px;
 }
 
-/* Adobe Flash Player¨ */
+/* Adobe Flash Player */
 li.file.swf, li.file.as, li.file.fla {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -340px;
 }
-/* Adobe Flash Video¨ */
+/* Adobe Flash Video */
 li.file.flv, li.file.f4v, li.file.f4p, li.file.f4a, li.file.f4b {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -340px;
 }
-/* Microsoft Word¨ */
+/* Microsoft Word */
 li.file.doc, li.file.docx {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -400px;
 }
-/* Microsoft Excel¨ */
+/* Microsoft Excel */
 li.file.xls, li.file.xlsx {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -320px;
 }
-/* Microsoft Powerpoint¨ */
+/* Microsoft Powerpoint */
 li.file.ppt, li.file.pptx {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -380px;
 }
-/* AdobeÂ® Acrobat¨ */
+/* AdobeÂ® Acrobat */
 li.file.pdf {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -360px;
 }
 
 /** Application specific file types. These currently use a generic set of icons but can be edited to use custom / specific icons where the user has licence from the trademark holders to use such icons **/
 
-/* Apple Quicktime¨ */
+/* Apple Quicktime */
 li.file.mov, li.file.qt, li.file.m4a {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
 }
-/* RealPlayer¨ */
+/* RealPlayer */
 li.file.ra, li.file.rm, li.file.ram {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
 }
-/* Adobe¨Shockwave¨ */
+/* Adobe Shockwave */
 li.file.dcr {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
 }
-/* Windows Media Player¨ */
+/* Windows Media Player */
 li.file.wmv, li.file.wma, li.file.wm, li.file.wmx, li.file.wvx, li.file.asf, li.file.asx, li.file.avi {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -200px;
 }
