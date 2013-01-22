@@ -199,10 +199,12 @@ class WFEditor extends JObject {
                 $option = 'com_content';
                 break;
             case 'com_categories' :
-                $section = JRequest::getVar('section');
+                $section = JRequest::getCmd('section');
+                
                 if ($section) {
                     $option = $section;
                 }
+                
                 break;
         }
 
