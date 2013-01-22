@@ -132,9 +132,10 @@ class WFLinkSearchExtension extends WFSearchExtension {
      * @copyright Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
      */
     public function doSearch($query) {
-        $wf = WFEditorPlugin::getInstance();
+        $wf     = WFEditorPlugin::getInstance();
+        $filter = JFilterInput::getInstance();
 
-        $app = JFactory::getApplication('site');
+        $app    = JFactory::getApplication('site');
         // get SearchHelper
         require_once(JPATH_ADMINISTRATOR . '/components/com_search/helpers/search.php');
 
@@ -143,22 +144,22 @@ class WFLinkSearchExtension extends WFSearchExtension {
         $router->setMode(0);
 
         // slashes cause errors, <> get stripped anyway later on. # causes problems.
-        $badchars = array('#', '>', '<', '\\');
-        $searchword = trim(str_replace($badchars, '', $query));
+        $searchword     = trim(str_replace(array('#', '>', '<', '\\'), '', $filter->clean($query)));
 
-        $ordering = JRequest::getWord('ordering', null, 'post');
-        $searchphrase = JRequest::getWord('searchphrase', 'all', 'post');
-        $areas = JRequest::getVar('areas', null, 'post', 'array');
+        $ordering       = JRequest::getWord('ordering', null, 'post');
+        $searchphrase   = JRequest::getWord('searchphrase', 'all', 'post');
+        $areas          = JRequest::getVar('areas', null, 'post', 'array');
 
         // if searchword enclosed in double quotes, strip quotes and do exact match
         if (substr($searchword, 0, 1) == '"' && substr($searchword, -1) == '"') {
             $searchword = substr($searchword, 1, -1);
             $searchphrase = 'exact';
         }
-
+        
+        // clean areas
         if (!empty($areas)) {
             foreach ($areas as $area) {
-                $areas[] = JFilterInput::getInstance()->clean($area, 'cmd');
+                $areas[] = $filter->clean($area, 'cmd');
             }
         }
 
