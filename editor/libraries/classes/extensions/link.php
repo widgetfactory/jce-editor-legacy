@@ -21,6 +21,8 @@ class WFLinkExtension extends WFExtension {
     private $extensions = array();
     
     protected static $instance;
+    
+    protected static $links = array();
 
     /**
      * Constructor activating the default information of the class
@@ -62,20 +64,15 @@ class WFLinkExtension extends WFExtension {
     }
 
     private function getLinkExtension($name) {
-        static $links;
-
-        if (!isset($links)) {
-            $links = array();
-        }
-
-        if (empty($links[$name])) {
+        if (array_key_exists($name, self::$links) === false || empty(self::$links[$name])) {
             $classname = 'WFLinkBrowser_' . ucfirst($name);
+            // create class
             if (class_exists($classname)) {
-                $links[$name] = new $classname();
+                self::$links[$name] = new $classname();
             }
         }
 
-        return $links[$name];
+        return self::$links[$name];
     }
 
     public function render() {
@@ -93,8 +90,20 @@ class WFLinkExtension extends WFExtension {
             $view->display();
         }
     }
+    
+    private static function cleanInput($args, $method = 'string') {
+        $filter = JFilterInput::getInstance();
+        
+        foreach($args as $k => $v) {
+            $args->$k = $filter->clean($v, $method);
+        }
+        
+        return $args;
+    }
 
-    public function getLinks($args) {
+    public function getLinks($args) {        
+        $args = self::cleanInput($args, 'cmd');
+        
         foreach ($this->extensions as $extension) {
             if (in_array($args->option, $extension->getOption())) {
                 $items = $extension->getLinks($args);
