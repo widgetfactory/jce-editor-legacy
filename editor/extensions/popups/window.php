@@ -9,40 +9,40 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
+defined('_WF_EXT') or die('RESTRICTED');
 
-defined( '_WF_EXT' ) or die('RESTRICTED');
-class WFPopupsExtension_Window extends JObject
-{
-	/**
-	* Constructor activating the default information of the class
-	*
-	* @access	protected
-	*/
-	function __construct($options = array()){
-		// only if enabled
-		if (self::isEnabled()) {	
-			
-			$document = WFDocument::getInstance();
-			
-			$document->addScript('window', 'extensions/popups/window/js');
-			$document->addStyleSheet('window', 'extensions/popups/window/css');
-		}
-	}
-	
-	function getParams()
-	{
-		return array();
-	}
-	
-	function isEnabled()
-	{
-		$plugin = WFEditorPlugin::getInstance();
-		
-		if ($plugin->getParam('popups.window.enable', 1) && ($plugin->getName() == 'link' || $plugin->getName() == 'imgmanager_ext')) {
-	      return true;
-		}
-		
-		return false;
-	}
+class WFPopupsExtension_Window {
+
+    /**
+     * Constructor activating the default information of the class
+     *
+     * @access	protected
+     */
+    public function __construct() {
+        // only if enabled
+        if (self::isEnabled()) {
+
+            $document = WFDocument::getInstance();
+
+            $document->addScript('window', 'extensions/popups/window/js');
+            $document->addStyleSheet('window', 'extensions/popups/window/css');
+        }
+    }
+
+    public function getParams() {
+        return array();
+    }
+
+    public function isEnabled() {
+        $plugin = WFEditorPlugin::getInstance();
+
+        if ($plugin->getParam('popups.window.enable', 1) && ($plugin->getName() == 'link' || $plugin->getName() == 'imgmanager_ext')) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
+
 ?>

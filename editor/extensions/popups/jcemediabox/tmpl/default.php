@@ -11,7 +11,6 @@
  */
 defined('_WF_EXT') or die('RESTRICTED');
 
-$this->popup->checkVersion();
 ?>
 <table border="0" cellpadding="3" cellspacing="0">
     <tr>
