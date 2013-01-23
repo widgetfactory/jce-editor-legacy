@@ -96,6 +96,10 @@ function jInsertEditorText(text, editor) {
                 whitespace_elements : 'pre,script,style,textarea,code',
                 fix_list_elements : true,
                 formats: {
+                    'div_container' : {
+                        block : 'div',
+                        wrapper : true
+                    },
                     'span' : {
                         inline : 'span'
                     }, 

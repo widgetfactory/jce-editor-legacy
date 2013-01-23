@@ -74,16 +74,17 @@ class WFFormatPluginConfig {
             'aside' => 'advanced.aside',
             'figure' => 'advanced.figure',
             'dt' => 'advanced.dt',
-            'dd' => 'advanced.dd'
+            'dd' => 'advanced.dd',
+            'div_container' => 'advanced.div_container'
         );
 
-        $html5 = array('section', 'article', 'hgroup', 'aside', 'figure');
-        $schema = $wf->getParam('editor.schema', 'html4');
-        $verify = (bool) $wf->getParam('editor.verify_html', 0);
+        $html5      = array('section', 'article', 'hgroup', 'aside', 'figure');
+        $schema     = $wf->getParam('editor.schema', 'html4');
+        $verify     = (bool) $wf->getParam('editor.verify_html', 0);
 
-        $tmpblocks = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,hgroup,aside,figure,dt,dd', 'p,address,pre,h1,h2,h3,h4,h5,h6');
-        $list = array();
-        $blocks = array();
+        $tmpblocks  = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,hgroup,aside,figure,dt,dd', 'p,address,pre,h1,h2,h3,h4,h5,h6');
+        $list       = array();
+        $blocks     = array();
 
         // make an array
         if (is_string($tmpblocks)) {
@@ -103,6 +104,10 @@ class WFFormatPluginConfig {
             }
 
             $blocks[] = $v;
+            
+            if ($v == 'div') {
+                $list['advanced.div_container'] = 'div_container';
+            }
         }
 
         $selector = $settings['removeformat_selector'] == '' ? 'span,b,strong,em,i,font,u,strike' : $settings['removeformat_selector'];
