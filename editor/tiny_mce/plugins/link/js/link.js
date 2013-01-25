@@ -10,10 +10,6 @@
 var LinkDialog = {
     settings : {},
 
-    preInit : function() {
-        //tinyMCEPopup.requireLangPack();
-    },
-
     init : function() {
         tinyMCEPopup.restoreSelection();
     	
@@ -375,14 +371,14 @@ var LinkDialog = {
                             $('#href').val('mailto:' + args.join('&').replace(/&/, '?'));
                         }
                     }
-                    $(this).modal('hide');
+                    $(this).dialog('destroy').remove();
                 }
 
             },
             {
                 text : ed.getLang('dlg.cancel', 'Cancel'),
                 click : function() {
-                    $(this).modal('hide');
+                    $(this).dialog('destroy').remove();
                 }
 
             }
