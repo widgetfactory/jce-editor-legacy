@@ -694,7 +694,6 @@ dd#info-preview dl dd.loader {
 dd#info-properties dl dd.loader {
     width: 100%;
     height: 50px;
-    margin-left: -18px;
 }
 
 #info-buttons {
