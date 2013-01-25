@@ -591,18 +591,17 @@ class WFDocument extends JObject {
             WFToken::checkToken('GET') or die('RESTRICTED');
 
             wfimport('admin.classes.packer');
+            wfimport('admin.classes.language');
 
             $component = WFExtensionHelper::getComponent();
             $params = new WFParameter($component->params);
 
             $type = JRequest::getWord('type', 'javascript');
 
-            // javascript
-            $packer = new WFPacker(array(
-                        'type' => $type
-                    ));
+            // create packer
+            $packer = new WFPacker(array('type' => $type));
 
-            $files = array();
+            $files  = array();
 
             switch ($type) {
                 case 'javascript':
@@ -613,17 +612,13 @@ class WFDocument extends JObject {
                         $files[] = $this->urlToPath($script);
                     }
 
-                    if (WF_INI_LANG) {
-                        wfimport('admin.classes.language');
-
-                        $parser = new WFLanguageParser(array(
-                                    'plugins' => array($this->getName()),
-                                    'sections' => array('dlg', $this->getName() . '_dlg'),
-                                    'mode' => 'plugin'
-                                ));
-
-                        $data .= $parser->load();
-                    }
+                    // parse ini language files
+                    $parser = new WFLanguageParser(array(
+                                'plugins' => array($this->getName()),
+                                'sections' => array('dlg', $this->getName() . '_dlg'),
+                                'mode' => 'plugin'
+                            ));
+                    $data .= $parser->load();
 
                     // add script declarations
                     foreach ($this->getScriptDeclarations() as $script) {
