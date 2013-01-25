@@ -30,6 +30,8 @@
 		 */
         TableSplitButton : function(id, s, ed) {
             var t = this;
+            
+            this.editor = ed;
 
             t.parent(id, s, ed);
 
@@ -1938,7 +1940,7 @@
         },
 		
         createControl: function(n, cm) {
-            var t = this, ed = t.editor;
+            var t = this, ed = t.editor, bm;
 
             switch (n) {
                 case 'table_insert':
