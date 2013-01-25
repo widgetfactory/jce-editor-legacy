@@ -39,48 +39,46 @@ class WFEditorPlugin extends JObject {
         // Call parent
         parent::__construct();
 
-        $db = JFactory::getDBO();
-
         // get plugin name
         $plugin = JRequest::getCmd('plugin');
 
-        // check plugin
-        if ($this->checkPlugin($plugin)) {
-            $this->set('name', $plugin);
+        // check plugin is valid
+        //$this->checkPlugin($plugin) or die('RESTRICTED');
+        
+        // set plugin name
+        $this->set('name', $plugin);
 
-            if (!array_key_exists('type', $config)) {
-                $config['type'] = 'standard';
-            }
-
-            if (!array_key_exists('base_path', $config)) {
-                $config['base_path'] = WF_EDITOR_PLUGINS . '/' . $plugin;
-            }
-
-            if (!defined('WF_EDITOR_PLUGIN')) {
-                define('WF_EDITOR_PLUGIN', $config['base_path']);
-            }
-
-            if (!array_key_exists('view_path', $config)) {
-                $config['view_path'] = WF_EDITOR_PLUGINS . '/' . $plugin;
-            }
-
-            if (!array_key_exists('layout', $config)) {
-                $config['layout'] = 'default';
-            }
-
-            if (!array_key_exists('template_path', $config)) {
-                $config['template_path'] = WF_EDITOR_PLUGIN . '/tmpl';
-            }
-
-            // backwards compatability
-            if (!array_key_exists('colorpicker', $config)) {
-                $config['colorpicker'] = in_array($plugin, array('imgmanager_ext', 'caption', 'mediamanager'));
-            }
-
-            $this->setProperties($config);
-        } else {
-            die(JError::raiseError(403, 'RESTRICTED ACCESS'));
+        // set config
+        if (!array_key_exists('type', $config)) {
+            $config['type'] = 'standard';
         }
+
+        if (!array_key_exists('base_path', $config)) {
+            $config['base_path'] = WF_EDITOR_PLUGINS . '/' . $plugin;
+        }
+
+        if (!defined('WF_EDITOR_PLUGIN')) {
+            define('WF_EDITOR_PLUGIN', $config['base_path']);
+        }
+
+        if (!array_key_exists('view_path', $config)) {
+            $config['view_path'] = WF_EDITOR_PLUGINS . '/' . $plugin;
+        }
+
+        if (!array_key_exists('layout', $config)) {
+            $config['layout'] = 'default';
+        }
+
+        if (!array_key_exists('template_path', $config)) {
+            $config['template_path'] = WF_EDITOR_PLUGIN . '/tmpl';
+        }
+
+        // backwards compatability
+        if (!array_key_exists('colorpicker', $config)) {
+            $config['colorpicker'] = in_array($plugin, array('imgmanager_ext', 'caption', 'mediamanager'));
+        }
+
+        $this->setProperties($config);
     }
 
     /**
@@ -198,10 +196,8 @@ class WFEditorPlugin extends JObject {
             // create display
             $this->display();
 
-            if (WF_INI_LANG) {
-                // ini language
-                $document->addScript(array('index.php?option=com_jce&view=editor&' . $document->getQueryString(array('task' => 'loadlanguages', 'lang' => WFLanguage::getCode()))), 'joomla');
-            }
+            // ini language
+            $document->addScript(array('index.php?option=com_jce&view=editor&' . $document->getQueryString(array('task' => 'loadlanguages', 'lang' => WFLanguage::getCode()))), 'joomla');
 
             // pack assets if required
             $document->pack(true, $this->getParam('editor.compress_gzip', 0));
@@ -239,13 +235,13 @@ class WFEditorPlugin extends JObject {
             $document->addScript(array('colorpicker'), 'libraries');
             $document->addScriptDeclaration('ColorPicker.settings=' . json_encode(array('template_colors' => WFToolsHelper::getTemplateColors(), 'custom_colors' => $this->getParam('editor.custom_colors', ''))) . ';');
         }
-        
+
         $document->addScript(array(
             'html5',
             'select',
             'tips',
             'plugin'
-        ), 'libraries');
+                ), 'libraries');
 
         // load plugin dialog language file if necessary
         if ($this->getParam('editor.compress_javascript', 0)) {
@@ -308,9 +304,10 @@ class WFEditorPlugin extends JObject {
         if ($plugin) {
             // check existence of plugin directory
             if (is_dir(WF_EDITOR_PLUGINS . '/' . $plugin)) {
-                // check profile	
+                // get profile	
                 $profile = $this->getProfile($plugin);
-                return is_object($profile) && $profile->id;
+                // check for valid object and profile id
+                return is_object($profile) && isset($profile->id);
             }
         }
 
