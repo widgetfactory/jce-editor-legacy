@@ -109,7 +109,7 @@
             $.extend(this.options, options);
 
             // add browser flags
-            if ($.browser.webkit) {
+            /*if ($.browser.webkit) {
                 $('#jce').addClass('webkit');
             }
 
@@ -123,7 +123,7 @@
 
             if ($.browser.gecko) {
                 $('#jce').addClass('gecko');
-            }
+            }*/
             
             // ie8 flag
             if (!$.support.cssFloat && document.querySelector) {

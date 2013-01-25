@@ -327,13 +327,15 @@
             // setup directory
             this._setupDir();
 			
-            if ($.browser.webkit && /Safari/i.test(navigator.userAgent)) {
+            /*if ($.browser.webkit && /Safari/i.test(navigator.userAgent)) {
                 $(window).load(function() {
                     self.resize(ih);
                 });
             } else {
                 self.resize(ih);
-            }
+            }*/
+            
+            self.resize(ih);
 
             this._trigger('onInit');
         },

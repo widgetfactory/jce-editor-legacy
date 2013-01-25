@@ -73,9 +73,9 @@
 				}
 
 				// Gecko
-				if ($.browser.gecko) {
+				/*if ($.browser.gecko) {
 					$(this).css('moz-user-select', 'none');
-				}
+				}*/
 			}).click(function(e) {
 				var p = self._findParent(this);
 				self._trigger('onNodeClick', e, p);
