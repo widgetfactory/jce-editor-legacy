@@ -52,6 +52,10 @@ div.tree ul li div.tree-row span {
 	background-repeat: no-repeat;
 	display: block;
 	cursor: pointer;
+        user-select : none;
+        -moz-user-select : none;
+        -ms-user-select : none;
+        -webkit-user-select: none;
 }
 div.tree ul li div.tree-row span.folder {
 	background-position: 0 -220px;
