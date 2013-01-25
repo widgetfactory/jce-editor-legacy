@@ -201,7 +201,7 @@ ul#upload-queue li span.tooltip {
 	position: absolute;
 }
 ul#upload-queue li#upload-queue-drag {
-	background: url("../img/drag.png") no-repeat 30% center transparent;
+    background: url("../img/drag.png") no-repeat 25% center transparent;
     border: 1px dashed #CCCCCC;
     display: block;
     line-height: 230px;
