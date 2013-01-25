@@ -10,37 +10,48 @@
  * other free or open source software licenses.
  */
 class WFAdvlistPluginConfig {
-	public static function getConfig( &$settings ){
-		$wf = WFEditor::getInstance();
-                
-                $number = $wf->getParam('list.number_styles', 'default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman', 'default,lower-alpha,lower-greek,lower-roman,upper-alpha,upper-roman');
-		$bullet = $wf->getParam('list.bullet_styles', 'default,circle,disc,square', 'default,circle,disc,square');
-                
-                if ($number) {
-                    $items = array();
-                    
-                    foreach(explode(',', $number) as $item) {
-                        $title = $item == 'default' ? 'def' : str_replace('-', '_', $item);
-                        $style = $item == 'default' ? '' : $item;
-                        
-                        $items[] = array('title' => 'advlist.' . $title, 'styles' => array('listStyleType' => $style));
-                    }
-                    
-                    $settings['advlist_number_styles'] 	= json_encode($items);
+
+    protected static $defaultNumList    = array('default', 'lower-alpha', 'lower-greek', 'lower-roman', 'upper-alpha', 'upper-roman');
+    
+    protected static $defaultBulletList = array('default', 'circle', 'disc', 'square');
+    
+    public static function getConfig(&$settings) {
+        $wf = WFEditor::getInstance();
+
+        $number = (array) $wf->getParam('lists.number_styles');
+        $bullet = (array) $wf->getParam('lists.bullet_styles');
+
+        if (!empty($number)) {            
+            if (count($number) < count(self::$defaultNumList)) {
+                $items = array();
+
+                foreach ($number as $item) {
+                    $title = $item == 'default' ? 'def' : str_replace('-', '_', $item);
+                    $style = $item == 'default' ? '' : $item;
+
+                    $items[] = array('title' => 'advlist.' . $title, 'styles' => array('listStyleType' => $style));
                 }
-                
-                if ($bullet) {
-                    $items = array();
-                    
-                    foreach(explode(',', $bullet) as $item) {
-                        $title = $item == 'default' ? 'def' : str_replace('-', '_', $item);
-                        $style = $item == 'default' ? '' : $item;
-                        
-                        $items[] = array('title' => 'advlist.' . $title, 'styles' => array('listStyleType' => $style));
-                    }
-                    
-                    $settings['advlist_bullet_styles'] 	= json_encode($items);
+
+                $settings['advlist_number_styles'] = json_encode($items);
+            }
+        }
+
+        if (!empty($bullet)) {                        
+            if (count($bullet) < count(self::$defaultBulletList)) {
+                $items = array();
+
+                foreach ($bullet as $item) {
+                    $title = $item == 'default' ? 'def' : str_replace('-', '_', $item);
+                    $style = $item == 'default' ? '' : $item;
+
+                    $items[] = array('title' => 'advlist.' . $title, 'styles' => array('listStyleType' => $style));
                 }
-	}
+
+                $settings['advlist_bullet_styles'] = json_encode($items);
+            }
+        }
+    }
+
 }
+
 ?>
