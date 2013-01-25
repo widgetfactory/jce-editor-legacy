@@ -6,7 +6,7 @@
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
- */
+*/
 
 html {
     overflow: hidden;
@@ -20,7 +20,7 @@ body#jce {
     position: relative;
     height: 100%;
     overflow: hidden;
-    
+
     -webkit-overflow-scrolling : 'touch';
 }
 #jce {
@@ -452,14 +452,32 @@ div#popups_tab {
     display: inline-block;
 }	
 
+/* spinner */
+.spinner {
+    background : url(../img/spinner.png) no-repeat center;
+    width   :16px;
+    height  :16px;
+    display :block;
 
-/** IE7 **/
-body#jce.ie7 {
-    margin: 5px !important;
+    -webkit-animation: spinner 1s infinite linear; /* Safari 4+ */
+    -moz-animation:    spinner 1s infinite linear; /* Fx 5+ */
+    -o-animation:      spinner 1s infinite linear; /* Opera 12+ */
+    animation:         spinner 1s infinite linear; /* IE 10+ */
 }
-body#jce.ie7 input ~ label, body#jce.ie7 select ~ label, body#jce.ie7 table td + td label {
-    min-width: 40px;
+
+@-webkit-keyframes spinner {
+    from {-webkit-transform:rotate(0deg);}
+to {-webkit-transform:rotate(360deg);}
 }
-body#jce.ie7 input.checkbox {
-    vertical-align: middle;
+@-moz-keyframes spinner {
+    from {-moz-transform:rotate(0deg);}
+to {-moz-transform:rotate(360deg);}
+}
+@-o-keyframes spinner {
+    from {-o-transform:rotate(0deg);}
+to {-o-transform:rotate(360deg);}
+}
+@keyframes spinner {
+    from {transform:rotate(0deg);}
+to {transform:rotate(360deg);}
 }
