@@ -372,6 +372,9 @@ var LinkDialog = {
                         }
                     }
                     $(this).dialog('destroy').remove();
+                },
+                icons : {
+                    primary : 'ui-icon-check'
                 }
 
             },
@@ -379,8 +382,10 @@ var LinkDialog = {
                 text : ed.getLang('dlg.cancel', 'Cancel'),
                 click : function() {
                     $(this).dialog('destroy').remove();
+                },
+                icons : {
+                    primary : 'ui-icon-close'
                 }
-
             }
             ]
         });
@@ -391,5 +396,4 @@ var LinkDialog = {
     }
 
 };
-LinkDialog.preInit();
 tinyMCEPopup.onInit.add(LinkDialog.init, LinkDialog);

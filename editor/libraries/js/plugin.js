@@ -817,9 +817,9 @@
                 resizable: false,
                 buttons: [{
                     text: $.Plugin.translate('yes', 'Yes'),
-                    /*icons: {
-                     primary: 'ui-icon-check'
-                     },*/
+                    icons: {
+                        primary: 'ui-icon-check'
+                    },
                     click: function () {
                         cb.call(this, true);
                         $(this).dialog("close");
@@ -827,9 +827,9 @@
 
                 }, {
                     text: $.Plugin.translate('no', 'No'),
-                    /*icons: {
-                     primary: 'ui-icon-cancel'
-                     },*/
+                    icons: {
+                        primary: 'ui-icon-close'
+                    },
                     click: function () {
                         cb.call(this, false);
                         $(this).dialog("close");
@@ -888,9 +888,9 @@
                 width: 320,
                 buttons: [{
                     text: $.Plugin.translate('ok', 'Ok'),
-                    /*icons: {
-                     primary: 'ui-icon-check'
-                     },*/
+                    icons: {
+                        primary: 'ui-icon-check'
+                    },
                     click: function () {
                         if ($.isFunction(options.confirm)) {
                             options.confirm.call(this, $('#' + id).val());
@@ -933,7 +933,7 @@
                 buttons: [{
                     text	: $.Plugin.translate('browse', 'Browse'),
                     id 		: 'upload-browse',
-                    icons	: 'ui-icon-search'
+                    icons	: {primary : 'ui-icon-search'}
                 },{
                     text: $.Plugin.translate('upload', 'Upload'),
                     click: function () {
@@ -941,14 +941,18 @@
                             options.upload.call();
                         }
                     },
-                    icons	: 'ui-icon-arrowthick-1-n'
+                    icons : {
+                        primary : 'ui-icon-arrowthick-1-n'
+                    }
 
                 }, {
                     text: $.Plugin.translate('close', 'Close'),
                     click: function () {
                         $(this).dialog("close");
                     },
-                    icons	: 'ui-icon-close'
+                    icons : {
+                        primary : 'ui-icon-close'
+                    }
 
                 }]
             }, options);
