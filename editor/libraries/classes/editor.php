@@ -30,7 +30,7 @@ class WFEditor extends JObject {
     protected static $profile;
     
     // Editor Params
-    protected static $params;
+    protected static $params = array();
 
     /**
      * Constructor activating the default information of the class
