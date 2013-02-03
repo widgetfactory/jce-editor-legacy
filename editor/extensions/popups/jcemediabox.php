@@ -60,6 +60,10 @@ class WFPopupsExtension_Jcemediabox {
 
         return false;
     }
+    
+    public function checkVersion() {
+        return true;
+    }
 
 }
 
