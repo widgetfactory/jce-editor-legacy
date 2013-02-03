@@ -378,7 +378,7 @@ class WFDocument extends JObject {
 
         foreach ($files as $file) {
             // external link
-            if (preg_match('#^(http:)?\/\/#i', $file) || strpos($file, 'index.php?option=com_jce') !== false) {
+            if (strpos($file, '://') !== false || strpos($file, 'index.php?option=com_jce') !== false) {
                 $this->_scripts[$file] = $type;
             } else {
                 $file = $this->buildScriptPath($file, $root);
