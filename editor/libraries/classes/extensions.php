@@ -212,7 +212,7 @@ class WFExtension extends JObject {
         }
 
         // only return extension types requested
-        if ($type) {
+        if ($type && array_key_exists($type, $result)) {
             return $result[$type];
         }
 
@@ -232,13 +232,21 @@ class WFExtension extends JObject {
         return $wf->getParam($param, $default);
     }
 
-    protected function getView($name, $layout) {
-        $view = new WFView(array(
-                    'name' => $name,
-                    'layout' => $layout
-                ));
+    public function getView($options = array()) {
+        static $view;
+        
+        if (!is_array($view)) {
+            $view = array();
+        }
+        
+        $instance = serialize($options);
 
-        return $view;
+        if (!is_object($view[$instance])) {
+            // create plugin view
+            $view[$instance] = new WFView($options);
+        }
+
+        return $view[$instance];
     }
 
 }
