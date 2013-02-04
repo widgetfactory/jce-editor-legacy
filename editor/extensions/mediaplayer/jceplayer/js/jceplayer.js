@@ -21,7 +21,7 @@ WFMediaPlayer.init({
     },
 
     props : {
-        autoPlay 			: false,
+        autoPlay 		: false,
         bufferingOverlay 	: false,
         controlBarAutoHide 	: true,
         controlBarMode		: 'docked',
@@ -30,7 +30,9 @@ WFMediaPlayer.init({
         playButtonOverlay	: true,
         bufferingOverlay	: true,
         volume			: 1,
-        audioPan		: 0
+        audioPan		: 0,
+        poster                  : '',
+        endOfVideoOverlay       : ''
     },
 
     type : 'flash',
@@ -102,7 +104,7 @@ WFMediaPlayer.init({
 	 * Return player values
 	 * @param {String} s FLV file path
 	 */
-    getValues: function(s) {
+    getValues: function(s, args) {
         var self = this, s, u, k, v, data = [];
 		
         var url = tinyMCEPopup.getParam('document_base_url'); 
@@ -113,60 +115,92 @@ WFMediaPlayer.init({
 
         // add src
         data.push('src=' + $.String.encodeURI(s, true));
+        
+        // set args default
+        args = args || {};
 
-	$(':input', '#mediaplayer_options').each( function() {
+        // get all form values
+        $(':input:visible', '#mediaplayer_options').each( function() {
             k = $(this).attr('id'), v = $(this).val();
             
             if (k) {
                 // remove mediaplayer_ prefix
                 k = k.substr(k.indexOf('_') + 1);
-
-                switch(k) {
-                    case 'volume':
-                        v = parseInt(v) / 100;
-                        break;
-                    case 'audioPan':
-                        v = parseInt(v);
-                        break;
-                    case 'backgroundColor':
-                        v = v.replace('#', '0x');
-                        break;
-                    case 'poster':
-                    case 'endOfVideoOverlay':
-                        if (v) {
-                            u 	= /http(s)?:\/\/[^\/]+(.*)/.exec(url);
-                            s 	= (u && u.length > 1) ? u[2] : '';
-                            v 	= $.String.path(s, v);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
+                
+                // update value if checkbox
                 if ($(this).is(':checkbox')) {
                     v = $(this).is(':checked');
                 }
-
-                // value is opposite of checked value
-                if (k == 'controlBarAutoHide') {
-                    v = !v;
+                
+                if (typeof args[k] == 'undefined') {
+                    args[k] = v;
                 }
-
-                if (self.props[k] === v || v === '') {
-                    return;
-                }
-
-                data.push(k + '=' + $.String.encodeURI(v, true));
             }
         });
         
+        var map = {
+          'autoplay' : 'autoPlay',
+          'controls' : 'controlBarAutoHide'
+        };
+        
+        // iterate through args
+        $.each(args, function(k, v) {            
+            // must be a string...
+            if (typeof k != 'string') {
+                return;
+            }
+            
+            // map HTML5 items
+            if (map[k]) {
+                k = map[k];
+            }
+            
+            // skip invalid keys
+            if (typeof self.props[k] == 'undefined') {
+                return;
+            }
+            
+            switch(k) {
+                case 'volume':
+                    v = parseInt(v) / 100;
+                    break;
+                case 'audioPan':
+                    v = parseInt(v);
+                    break;
+                case 'backgroundColor':
+                    v = v.replace('#', '0x');
+                    break;
+                case 'poster':
+                case 'endOfVideoOverlay':
+                    if (v) {
+                        u = /http(s)?:\/\/[^\/]+(.*)/.exec(url);
+                        s = (u && u.length > 1) ? u[2] : '';
+                        v = $.String.path(s, v);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            // value is opposite of checked value
+            if (k == 'controlBarAutoHide') {
+                v = !v;
+            }
+
+            if (self.props[k] === v || v === '') {
+                return;
+            }
+
+            data.push(k + '=' + $.String.encodeURI(v, true));
+        });
+        
         return {
-            'src' 	: this.getPath(),
-            'type'	: 'application/x-shockwave-flash',
+            'src'   : this.getPath(),
+            'type'  : 'application/x-shockwave-flash',
             'param' : {
-                'flashvars' 		: data.join('&'),
-                'allowfullscreen' 	: true,
-                'wmode'				: 'opaque'
+                'flashvars'       : data.join('&'),
+                'allowfullscreen' : true,
+                'wmode'           : 'opaque'
             }
         };
     },
