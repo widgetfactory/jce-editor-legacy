@@ -1117,10 +1117,27 @@ tinymce.util.Quirks = function(editor) {
 	function isDefaultPrevented(e) {
 		return e.isDefaultPrevented();
 	};
-        /* Patch in commit https://github.com/tinymce/tinymce/commit/113bd1ceaef1e1de5f2fdf54633d58424817182c */
+        
+        /**
+	 * Fixes a WebKit bug when deleting contents using backspace or delete key.
+	 * WebKit will produce a span element if you delete across two block elements.
+	 *
+	 * Example:
+	 * <h1>a</h1><p>|b</p>
+	 *
+	 * Will produce this on backspace:
+	 * <h1>a<span class="Apple-style-span" style="<all runtime styles>">b</span></p>
+	 *
+	 * This fixes the backspace to produce:
+	 * <h1>a|b</p>
+	 *
+	 * See bug: https://bugs.webkit.org/show_bug.cgi?id=45784
+	 *
+	 * This code is a bit of a hack and hopefully it will be fixed soon in WebKit.
+	 */
 	function cleanupStylesWhenDeleting() {
 		function removeMergedFormatSpans(isDelete) {
-			var rng, blockElm, wrapperElm, bookmark, container, offset;
+			var rng, blockElm, wrapperElm, bookmark, container, offset, elm;
 
 			function isAtStartOrEndOfElm() {
 				if (container.nodeType == 3) {
@@ -1135,6 +1152,12 @@ tinymce.util.Quirks = function(editor) {
 			}
 
 			rng = selection.getRng();
+			var tmpRng = [rng.startContainer, rng.startOffset, rng.endContainer, rng.endOffset];
+
+			if (!rng.collapsed) {
+				isDelete = true;
+			}
+
 			container = rng[(isDelete ? 'start' : 'end') + 'Container'];
 			offset = rng[(isDelete ? 'start' : 'end') + 'Offset'];
 
@@ -1146,7 +1169,7 @@ tinymce.util.Quirks = function(editor) {
 					blockElm = dom.getNext(blockElm, dom.isBlock);
 				}
 
-				if (blockElm && isAtStartOrEndOfElm()) {
+				if (blockElm && (isAtStartOrEndOfElm() || !rng.collapsed)) {
 					// Wrap children of block in a EM and let WebKit stick is
 					// runtime styles junk into that EM
 					wrapperElm = dom.create('em', {'id': '__mceDel'});
@@ -1160,12 +1183,20 @@ tinymce.util.Quirks = function(editor) {
 			}
 
 			// Do the backspace/delete action
+			rng = dom.createRng();
+			rng.setStart(tmpRng[0], tmpRng[1]);
+			rng.setEnd(tmpRng[2], tmpRng[3]);
+			selection.setRng(rng);
 			editor.getDoc().execCommand(isDelete ? 'ForwardDelete' : 'Delete', false, null);
 
 			// Remove temp wrapper element
 			if (wrapperElm) {
 				bookmark = selection.getBookmark();
-				dom.remove(dom.get('__mceDel'), true);
+
+				while (elm = dom.get('__mceDel')) {
+					dom.remove(elm, true);
+				}
+
 				selection.moveToBookmark(bookmark);
 			}
 		}
@@ -18775,16 +18806,14 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 				undoManager.add();
 			};
 
-			// Walks the parent block to the right and look for BR elements
-			function hasRightSideBr() {
+			// Walks the parent block to the right and look for any contents
+			function hasRightSideContent() {
 				var walker = new TreeWalker(container, parentBlock), node;
 
-				while (node = walker.current()) {
-					if (node.nodeName == 'BR') {
+				while (node = walker.next()) {
+					if (nonEmptyElementsMap[node.nodeName.toLowerCase()] || node.length > 0) {
 						return true;
 					}
-
-					node = walker.next();
 				}
 			}
 			
@@ -18794,7 +18823,7 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 
 				if (container && container.nodeType == 3 && offset >= container.nodeValue.length) {
 					// Insert extra BR element at the end block elements
-					if (!tinymce.isIE && !hasRightSideBr()) {
+					if (!tinymce.isIE && !hasRightSideContent()) {
 						brElm = dom.create('br');
 						rng.insertNode(brElm);
 						rng.setStartAfter(brElm);
