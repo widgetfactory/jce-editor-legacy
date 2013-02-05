@@ -85,7 +85,7 @@ class WFLinkExtension extends WFExtension {
         }
 
         if (count($list)) {
-            $view = $this->getView('links', 'links');
+            $view = $this->getView(array('name' => 'links', 'layout' => 'links'));
             $view->assign('list', implode("\n", $list));
             $view->display();
         }
