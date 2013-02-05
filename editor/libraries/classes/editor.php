@@ -63,7 +63,7 @@ class WFEditor extends JObject {
      * @return string
      */
     public function getVersion() {
-        return $this->get('_version');
+        return preg_replace('#[^a-z0-9]+#i', '', $this->get('_version'));
     }
 
     /**
@@ -127,8 +127,8 @@ class WFEditor extends JObject {
             }
 
             foreach ($profiles as $item) {
-                // at least one user group must be set
-                if (empty($item->types)) {
+                // at least one user group or user must be set
+                if (empty($item->types) && empty($item->users)) {
                     continue;
                 }
 
