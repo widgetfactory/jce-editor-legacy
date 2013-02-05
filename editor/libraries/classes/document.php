@@ -485,7 +485,7 @@ class WFDocument extends JObject {
 
         if (preg_match('/\d+/', $version)) {
             // set version
-            $query['version'] = preg_replace('/[^a-z0-9]/i', '', $version);
+            $query['v'] = preg_replace('#[^a-z0-9]#i', '', $version);
         }
 
         $output = array();
@@ -504,8 +504,6 @@ class WFDocument extends JObject {
         $version = $this->get('version', '000000');
         // set title		
         $output = '<title>' . $this->getTitle() . '</title>' . "\n";
-        // create timestamp
-        $stamp = preg_match('/\d+/', $version) ? '?version=' . $version : '';
 
         // render stylesheets
         if ($this->get('compress_css', 0)) {
@@ -513,8 +511,15 @@ class WFDocument extends JObject {
 
             $output .= "\t\t<link href=\"" . $file . "\" rel=\"stylesheet\" type=\"text/css\" />\n";
         } else {
-            foreach ($this->_styles as $k => $v) {
-                $output .= "\t\t<link href=\"" . $k . $stamp . "\" rel=\"stylesheet\" type=\"" . $v . "\" />\n";
+            foreach ($this->_styles as $src => $type) {
+                
+                $stamp = '';
+                
+                if (strpos($src, '://') === false) {
+                    $stamp = strpos($src, '?') === false ? '?v=' . $version : '&v=' . $version;
+                }
+                
+                $output .= "\t\t<link href=\"" . $src . $stamp . "\" rel=\"stylesheet\" type=\"" . $type . "\" />\n";
             }
         }
 
@@ -524,6 +529,12 @@ class WFDocument extends JObject {
             $output .= "\t\t<script type=\"text/javascript\" src=\"" . $script . "\"></script>\n";
         } else {
             foreach ($this->_scripts as $src => $type) {
+                $stamp = '';
+                
+                if (strpos($src, '://') === false) {
+                    $stamp = strpos($src, '?') === false ? '?v=' . $version : '&v=' . $version;
+                }
+                
                 $output .= "\t\t<script type=\"" . $type . "\" src=\"" . $src . $stamp . "\"></script>\n";
             }
 
