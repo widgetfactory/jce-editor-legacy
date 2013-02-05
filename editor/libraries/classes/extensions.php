@@ -233,22 +233,8 @@ class WFExtension extends JObject {
     }
 
     public function getView($options = array()) {
-        static $view;
-        
-        if (!is_array($view)) {
-            $view = array();
-        }
-        
-        $instance = serialize($options);
-
-        if (!is_object($view[$instance])) {
-            // create plugin view
-            $view[$instance] = new WFView($options);
-        }
-
-        return $view[$instance];
+        return new WFView($options);
     }
-
 }
 
 ?>
