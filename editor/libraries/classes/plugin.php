@@ -175,20 +175,27 @@ class WFEditorPlugin extends JObject {
 
             $xml = WFXMLHelper::parseInstallManifest(WF_EDITOR_PLUGIN . '/' . $name . '.xml');
 
+            // set default plugin version
+            $plugin_version = '';
+            
             if (isset($xml['version'])) {
-                $version = $xml['version'];
+                $plugin_version = $xml['version'];
+            }
+            
+            if ($plugin_version) {
+                $version .= '-' . $plugin_version;
             }
 
             // create the document
             $document = WFDocument::getInstance(array(
-                        'version' => $version,
-                        'title' => WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')),
-                        'name' => $name,
-                        'language' => WFLanguage::getTag(),
-                        'direction' => WFLanguage::getDir(),
-                        'compress_javascript' => $this->getParam('editor.compress_javascript', 0),
-                        'compress_css' => $this->getParam('editor.compress_css', 0)
-                    ));
+                'version'   => $version,
+                'title'     => WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')),
+                'name'      => $name,
+                'language'  => WFLanguage::getTag(),
+                'direction' => WFLanguage::getDir(),
+                'compress_javascript' => $this->getParam('editor.compress_javascript', 0),
+                'compress_css' => $this->getParam('editor.compress_css', 0)
+            ));
 
             // set standalone mode
             $document->set('standalone', JRequest::getInt('standalone', 0));
@@ -241,7 +248,7 @@ class WFEditorPlugin extends JObject {
             'select',
             'tips',
             'plugin'
-                ), 'libraries');
+        ), 'libraries');
 
         // load plugin dialog language file if necessary
         if ($this->getParam('editor.compress_javascript', 0)) {
