@@ -21,5 +21,5 @@
 		<param name="width" type="text" default="425" label="WF_LABEL_WIDTH" description="WF_AGGREGATOR_GOOGLEMAPS_WIDTH_DESC" />
 		<param name="height" type="text" default="350" label="WF_LABEL_HEIGHT" description="WF_AGGREGATOR_GOOGLEMAPS_HEIGHT_DESC" />
 	</params>
-	<plugins></plugins>
+	<plugins>iframe</plugins>
 </install>
