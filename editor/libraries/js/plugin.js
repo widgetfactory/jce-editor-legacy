@@ -1084,58 +1084,11 @@
                     // pdf (only for Firefox really)
                     } else if (/\.pdf$/i.test(url)) {                                                
                         $(div).addClass('media-preview big-loader').height($(parent).height() - 20);
-                        
-                        // use pdfjs
-                        if ($.support.pdfjs && !$.support.pdf) {
-                            $.getScript($.Plugin.getURI(true) + 'components/com_jce/editor/libraries/js/pdf.js', function() {
-                                var $canvas = $('<canvas/>').attr({
-                                    'id' : 'pdf'
-                                }).appendTo(div);
-                            
-                                //
-                                // Disable workers to avoid yet another cross-origin issue (workers need the URL of
-                                // the script to be loaded, and currently do not allow cross-origin scripts)
-                                //
-                                PDFJS.disableWorker = true;
 
-                                var pdfDoc = null,
-                                pageNum = 1,
-                                scale = 0.8,
-                                canvas = $canvas.get(0),
-                                ctx = canvas.getContext('2d');
-
-                                //
-                                // Get page info from document, resize canvas accordingly, and render page
-                                //
-                                function renderPage(num) {
-                                    // Using promise to fetch the page
-                                    pdfDoc.getPage(num).then(function(page) {
-                                        var viewport = page.getViewport(scale);
-                                        canvas.height = viewport.height;
-                                        canvas.width = viewport.width;
-
-                                        // Render PDF page into canvas context
-                                        var renderContext = {
-                                            canvasContext: ctx,
-                                            viewport: viewport
-                                        };
-                                        page.render(renderContext);
-                                    
-                                        $(div).removeClass('big-loader');
-                                    
-                                    });
-                                }
-                            
-                                //
-                                // Asynchronously download PDF as an ArrayBuffer
-                                //
-                                PDFJS.getDocument(url).then(function getPdf(_pdfDoc) {
-                                    pdfDoc = _pdfDoc;
-                                    renderPage(pageNum);
-                                });
-                            });
-                        } else {
+                        if ($.support.pdf) {
                             $(div).html('<object data="' + url + '" type="application/pdf" width="' + $(div).innerWidth() + '" height="' + $(div).innerHeight() + '"></object>').removeClass('big-loader');
+                        } else {
+                            $(div).html('<iframe src="' + url + '" width="' + $(div).innerWidth() + '" height="' + $(div).innerHeight() + '" frameborder="0"></iframe>').removeClass('big-loader');
                         }
                     } else {
                         $(div).addClass('media-preview big-loader').height($(parent).height() - 20);
