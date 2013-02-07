@@ -106,7 +106,7 @@
                         $('#help-menu').parent().css('width', size);
                         $('#help-frame').parent().css('width', $('div.row-fluid').width() - size - 14);
                     }
-                }).disableSelection();
+                });
                 
                 // resize help frame
                 this.resizeFrame();
