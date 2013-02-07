@@ -70,7 +70,6 @@ class WFFileBrowser extends JObject {
 
         $config = array_merge($default, $config);
 
-
         $this->setProperties($config);
 
         // Setup XHR callback funtions
@@ -460,8 +459,8 @@ class WFFileBrowser extends JObject {
         if (!empty($folders)) {
             foreach ($folders as $folder) {
                 $array[] = array(
-                    'id'    => $folder['id'],
-                    'name'  => $folder['name'],
+                    'id' => $folder['id'],
+                    'name' => $folder['name'],
                     'class' => 'folder'
                 );
             }
@@ -856,7 +855,6 @@ class WFFileBrowser extends JObject {
         }
 
         //clearstatcache();
-
         // check the file sizes match
         /* if ((int) @filesize($file['tmp_name']) !== (int) $file['size']) {
           @unlink($file['tmp_name']);
@@ -953,7 +951,7 @@ class WFFileBrowser extends JObject {
         $file = JRequest::getVar('file', '', 'files', 'array');
 
         // validate file data
-        $this->validateUploadedFile($file); 
+        $this->validateUploadedFile($file);
 
         $wf = WFEditor::getInstance();
 
@@ -1011,7 +1009,7 @@ class WFFileBrowser extends JObject {
 
         // rebuild file name - name + extension
         $name = $name . '.' . $ext;
-        
+
         // create a filesystem result object
         $result = new WFFileSystemResult();
 
@@ -1078,6 +1076,16 @@ class WFFileBrowser extends JObject {
             // check path	
             WFUtility::checkPath($item);
 
+            if ($filesystem->is_file($item)) {
+                if ($this->checkFeature('delete', 'file') === false) {
+                    JError::raiseError(403, 'RESTRICTED ACCESS');
+                }
+            } elseif ($filesystem->is_dir($item)) {
+                if ($this->checkFeature('delete', 'folder') === false) {
+                    JError::raiseError(403, 'RESTRICTED ACCESS');
+                }
+            }
+
             $result = $filesystem->delete($item);
 
             if ($result instanceof WFFileSystemResult) {
@@ -1126,6 +1134,17 @@ class WFFileBrowser extends JObject {
         }
 
         $filesystem = $this->getFileSystem();
+
+        if ($filesystem->is_file($source)) {
+            if ($this->checkFeature('rename', 'file') === false) {
+                JError::raiseError(403, 'RESTRICTED ACCESS');
+            }
+        } elseif ($filesystem->is_dir($source)) {
+            if ($this->checkFeature('rename', 'folder') === false) {
+                JError::raiseError(403, 'RESTRICTED ACCESS');
+            }
+        }
+
         $result = $filesystem->rename($source, WFUtility::makeSafe($destination, $this->get('websafe_mode'), $this->get('websafe_spaces')), $args);
 
         if ($result instanceof WFFileSystemResult) {
@@ -1171,6 +1190,16 @@ class WFFileBrowser extends JObject {
 
             // check source path
             WFUtility::checkPath($item);
+
+            if ($filesystem->is_file($item)) {
+                if ($this->checkFeature('move', 'file') === false) {
+                    JError::raiseError(403, 'RESTRICTED ACCESS');
+                }
+            } elseif ($filesystem->is_dir($item)) {
+                if ($this->checkFeature('move', 'folder') === false) {
+                    JError::raiseError(403, 'RESTRICTED ACCESS');
+                }
+            }
 
             $result = $filesystem->copy($item, $destination);
 
@@ -1218,6 +1247,16 @@ class WFFileBrowser extends JObject {
             // check source path
             WFUtility::checkPath($item);
 
+            if ($filesystem->is_file($item)) {
+                if ($this->checkFeature('move', 'file') === false) {
+                    JError::raiseError(403, 'RESTRICTED ACCESS');
+                }
+            } elseif ($filesystem->is_dir($item)) {
+                if ($this->checkFeature('move', 'folder') === false) {
+                    JError::raiseError(403, 'RESTRICTED ACCESS');
+                }
+            }
+
             $result = $filesystem->move($item, $destination);
 
             if ($result instanceof WFFileSystemResult) {
@@ -1243,7 +1282,7 @@ class WFFileBrowser extends JObject {
      * @return string $error on failure
      */
     public function folderNew() {
-        if (!$this->checkFeature('create', 'folder')) {
+        if ($this->checkFeature('create', 'folder') === false) {
             JError::raiseError(403, 'RESTRICTED ACCESS');
         }
 

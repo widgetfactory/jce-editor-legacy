@@ -667,5 +667,17 @@ class WFJoomlaFileSystem extends WFFileSystem {
 
         return JFile::write($path, $content);
     }
+    
+    public function is_file($path) {
+        $path = WFUtility::makePath($this->getBaseDir(), $path);
+        
+        return is_file($path);
+    }
+    
+    public function is_dir($path) {
+        $path = WFUtility::makePath($this->getBaseDir(), $path);
+        
+        return is_dir($path);
+    }
 
 }

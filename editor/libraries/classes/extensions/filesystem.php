@@ -20,17 +20,17 @@ class WFFileSystem extends WFExtension {
      *
      * @access  protected
      */
-    function __construct($config = array()) {
+    public function __construct($config = array()) {
         parent::__construct();
 
         $this->setProperties(array_merge($config, array(
-                    'local' => true,
-                    'upload' => array(
-                        'stream' => false,
-                        'chunking' => false,
-                        'unique_filenames' => false
-                    )
-                )));
+            'local'     => true,
+            'upload'    => array(
+                'stream'    => false,
+                'chunking'  => false,
+                'unique_filenames' => false
+            )
+        )));
     }
 
     /**
@@ -64,7 +64,7 @@ class WFFileSystem extends WFExtension {
      * Get the base directory.
      * @return string base dir
      */
-    function getBaseDir() {
+    public function getBaseDir() {
         return WFUtility::makePath(JPATH_SITE, $this->getRootDir());
     }
 
@@ -72,7 +72,7 @@ class WFFileSystem extends WFExtension {
      * Get the full base url
      * @return string base url
      */
-    function getBaseURL() {
+    public function getBaseURL() {
         return WFUtility::makePath(JURI::root(true), 'images');
     }
 
@@ -83,17 +83,17 @@ class WFFileSystem extends WFExtension {
      * @access public
      * @return Full path to folder
      */
-    function getRootDir() {
+    public function getRootDir() {
         static $root;
 
         if (!isset($root)) {
-            $user       = JFactory::getUser();
-            $wf         = WFEditor::getInstance();
-            $profile    = $wf->getProfile();
+            $user = JFactory::getUser();
+            $wf = WFEditor::getInstance();
+            $profile = $wf->getProfile();
 
             // Get base directory as shared parameter
-            $root = $this->get('dir', '');    
-            
+            $root = $this->get('dir', '');
+
             // Remove whitespace
             $root = trim($root);
 
@@ -146,61 +146,61 @@ class WFFileSystem extends WFExtension {
         return $root;
     }
 
-    function toAbsolute($path) {
+    public function toAbsolute($path) {
         return $path;
     }
 
-    function toRelative($path) {
+    public function toRelative($path) {
         return $path;
     }
 
-    function getFiles($path, $filter) {
+    public function getFiles($path, $filter) {
         return array();
     }
 
-    function getFolders($path) {
+    public function getFolders($path) {
         return array();
     }
 
-    function getSourceDir($path) {
+    public function getSourceDir($path) {
         return $path;
     }
 
-    function isMatch($needle, $haystack) {
+    public function isMatch($needle, $haystack) {
         return $needle == $haystack;
     }
 
-    function pathinfo($path) {
+    public function pathinfo($path) {
         return pathinfo($path);
     }
 
-    function delete($path) {
+    public function delete($path) {
         return true;
     }
 
-    function createFolder($path, $new) {
+    public function createFolder($path, $new) {
         return true;
     }
 
-    function rename($src, $dest) {
+    public function rename($src, $dest) {
         return true;
     }
 
-    function copy($src, $dest) {
+    public function copy($src, $dest) {
         return true;
     }
 
-    function move($src, $dest) {
+    public function move($src, $dest) {
         return true;
     }
 
-    function getFolderDetails($path) {
+    public function getFolderDetails($path) {
         return array(
             'properties' => array('modified' => '')
         );
     }
 
-    function getFileDetails($path) {
+    public function getFileDetails($path) {
         $data = array(
             'properties' => array(
                 'size' => '',
@@ -223,31 +223,39 @@ class WFFileSystem extends WFExtension {
         return $data;
     }
 
-    function getDimensions($path) {
+    public function getDimensions($path) {
         return array(
             'width' => '',
             'height' => ''
         );
     }
 
-    function upload($method, $src, $dir, $name, $chunks = 0, $chunk = 0) {
+    public function upload($method, $src, $dir, $name, $chunks = 0, $chunk = 0) {
         return true;
     }
 
-    function exists($path) {
+    public function exists($path) {
         return true;
     }
 
-    function read($path) {
+    public function read($path) {
         return '';
     }
 
-    function write($path, $content) {
+    public function write($path, $content) {
         return true;
     }
 
-    function isLocal() {
+    public function isLocal() {
         return $this->get('local') === true;
+    }
+    
+    public function is_file($path) {
+        return true;
+    }
+    
+    public function is_dir($path) {
+        return true;
     }
 
 }
