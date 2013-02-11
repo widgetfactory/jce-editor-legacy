@@ -19,10 +19,10 @@
             <option value="0">WF_OPTION_NO</option>
             <option value="1">WF_OPTION_YES</option>
         </param-->
-        <param name="hide_xtd_btns" type="radio" default="0" label="WF_ARTICLE_PARAM_HIDE_BUTTONS" description="WF_ARTICLE_PARAM_HIDE_BUTTONS_DESC">
+        <!--param name="hide_xtd_btns" type="radio" default="0" label="WF_ARTICLE_PARAM_HIDE_BUTTONS" description="WF_ARTICLE_PARAM_HIDE_BUTTONS_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
-        </param>
+        </param-->
     </params>
     <params group="buttons">
             <param name="buttons" class="checklist buttonlist" type="list" multiple="multiple" default="readmore,pagebreak" label="WF_PARAM_BUTTONS" description="WF_PARAM_BUTTONS_DESC">

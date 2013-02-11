@@ -15,7 +15,7 @@
             function isMceItem(n) {
                 return /mceItem/.test(n.className);
             };
-			
+	
             // Register commands
             ed.addCommand('mceImageManager', function() {
                 // Internal image object like a flash placeholder
@@ -57,69 +57,83 @@
                     });
                 }
             });
+            
+            /*ed.onBeforeRenderUI.add(function() {
+                var DOM = tinymce.DOM;
+            
+               if (ed.getParam('imgmanager_hide_xtd_buttons', true)) {
+                    tinymce.each(DOM.select('div.image', 'editor-xtd-buttons'), function(n) {
+                        DOM.hide(n.parentNode);
+                    });
+                }
+            });*/
         },
         
         insertUploadedFile : function(o) {
             var ed = this.editor;
             
             if (/\.(gif|png|jpeg|jpg)$/.test(o.file)) {
-                var args = {'src' : o.file, 'alt' : o.alt || o.name, 'style' : {}};
-                
-                // supported attributes
-                var attribs = ['alt', 'title', 'id', 'dir', 'class', 'usemap', 'style', 'longdesc'];
-                
-                // get styles object
-                if (o.styles) {
-                    // serialize to string and parse to object
-                    var s = ed.dom.parseStyle(ed.dom.serializeStyle(o.styles));
-                    
-                    // extend args.style object
-                    tinymce.extend(args.style, s);
-                    
-                    delete o.styles;
-                }
-                
-                // get style attribute
-                if (o.style) {
-                    // parse to object
-                    var s = ed.dom.parseStyle(o.style);
-                    
-                    // extend args.style object
-                    tinymce.extend(args.style, s);
-                    
-                    delete o.style;
-                }
-                
-                tinymce.each(attribs, function(k) {
-                   if (typeof o[k] !== 'undefined') {
-                       args[k] = o[k];
-                   } 
-                });
-
-                return ed.dom.create('img', args);
-            }
-            
-            return false;
-        },
-        
-        getUploadURL : function(file) {
-            if (/image\/(gif|png|jpeg|jpg)/.test(file.type)) {
-                return this.editor.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=imgmanager';
-            }
-            
-            return false;
-        },
-        
-        getInfo : function() {
-            return {
-                longname : 'Image Manager',
-                author : 'Ryan Demmer',
-                authorurl : 'http://www.joomlacontenteditor.net',
-                infourl : 'http://www.joomlacontenteditor.net/index2.php?option=com_content&amp;task=findkey&amp;pop=1&amp;lang=en&amp;keyref=imgmanager.about',
-                version : '@@version@@'
+                var args = {
+                    'src' : o.file, 
+                    'alt' : o.alt || o.name, 
+                    'style' : {}
             };
+                
+            // supported attributes
+            var attribs = ['alt', 'title', 'id', 'dir', 'class', 'usemap', 'style', 'longdesc'];
+                
+            // get styles object
+            if (o.styles) {
+                // serialize to string and parse to object
+                var s = ed.dom.parseStyle(ed.dom.serializeStyle(o.styles));
+                    
+                // extend args.style object
+                tinymce.extend(args.style, s);
+                    
+                delete o.styles;
+            }
+                
+            // get style attribute
+            if (o.style) {
+                // parse to object
+                var s = ed.dom.parseStyle(o.style);
+                    
+                // extend args.style object
+                tinymce.extend(args.style, s);
+                    
+                delete o.style;
+            }
+                
+            tinymce.each(attribs, function(k) {
+                if (typeof o[k] !== 'undefined') {
+                    args[k] = o[k];
+                } 
+            });
+
+            return ed.dom.create('img', args);
         }
+            
+        return false;
+    },
+        
+    getUploadURL : function(file) {
+        if (/image\/(gif|png|jpeg|jpg)/.test(file.type)) {
+            return this.editor.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=imgmanager';
+        }
+            
+        return false;
+    },
+        
+    getInfo : function() {
+        return {
+            longname : 'Image Manager',
+            author : 'Ryan Demmer',
+            authorurl : 'http://www.joomlacontenteditor.net',
+            infourl : 'http://www.joomlacontenteditor.net/index2.php?option=com_content&amp;task=findkey&amp;pop=1&amp;lang=en&amp;keyref=imgmanager.about',
+            version : '@@version@@'
+        };
+    }
     });
-    // Register plugin
-    tinymce.PluginManager.add('imgmanager', tinymce.plugins.ImageManager);
-})();
+// Register plugin
+tinymce.PluginManager.add('imgmanager', tinymce.plugins.ImageManager);
+    })();

@@ -53,15 +53,22 @@
                     cmd: 'mceReadMore'
                 });
             }
+            
+            /*ed.onBeforeRenderUI.add(function() {
+                var DOM = tinymce.DOM;
+            
+               if (ed.getParam('article_hide_xtd_btns', true)) {
+                    tinymce.each(DOM.select('div.readmore, div.pagebreak', 'editor-xtd-buttons'), function(n) {
+                        DOM.hide(n.parentNode);
+                    });
+                }
+            });*/
 
             ed.onInit.add(function() {
                 if (!ed.settings.compress.css)
                     ed.dom.loadCSS(url + "/css/content.css");
                 
-                if (ed.getParam('article_hide_xtd_btns')) {
-                    // Remove Joomla! Readmore / PageBreak buttons
-                    tinymce.DOM.hide(ed.dom.select('div.readmore, div.pagebreak', tinymce.DOM.get('editor-xtd-buttons')));
-                }
+                
                 
                 // Display "a#name" instead of "img" in element path
                 if (ed.theme && ed.theme.onResolveName) {

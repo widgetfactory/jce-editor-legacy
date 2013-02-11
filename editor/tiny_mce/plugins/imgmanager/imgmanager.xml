@@ -15,10 +15,10 @@
         <param name="dir" type="text" default="" size="50" label="WF_PARAM_DIRECTORY" description="WF_PARAM_DIRECTORY_DESC"/>
         <param name="max_size" class="upload_size" max="" type="text" default="" label="WF_PARAM_UPLOAD_SIZE" description="WF_PARAM_UPLOAD_SIZE_DESC" />
         <param name="extensions" type="extension" class="extensions" default="image=jpeg,jpg,png,gif" label="WF_PARAM_EXTENSIONS" description="WF_PARAM_EXTENSIONS_DESC" />
-        <param name="hide_xtd_btns" type="radio" default="0" label="WF_IMGMANAGER_HIDE_BUTTONS" description="WF_IMGMANAGER_HIDE_BUTTONS_DESC">
+        <!--param name="hide_xtd_btns" type="radio" default="0" label="WF_IMGMANAGER_HIDE_BUTTONS" description="WF_IMGMANAGER_HIDE_BUTTONS_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
-        </param>
+        </param-->
         <param name="name" type="filesystem" group="filesystem" default="" label="WF_PARAM_FILESYSTEM" description="WF_PARAM_FILESYSTEM_DESC" />
     </params>
     <params group="defaults">
