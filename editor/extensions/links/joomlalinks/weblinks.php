@@ -96,7 +96,7 @@ class JoomlalinksWeblinks extends JObject {
                 break;
             // Get all links in the category
             case 'category':
-                if (!WF_JOOMLA15) {
+                if (defined('JPATH_PLATFORM')) {
                     $categories = WFLinkBrowser::getCategory('com_weblinks', $args->id);
 
                     if (count($categories)) {
@@ -135,9 +135,15 @@ class JoomlalinksWeblinks extends JObject {
                 $weblinks = self::_weblinks($args->id);
 
                 foreach ($weblinks as $weblink) {
+                    $id = WeblinksHelperRoute::getWeblinkRoute($weblink->slug, $weblink->catslug);
+
+                    if (defined('JPATH_PLATFORM')) {
+                        $id .= '&task=weblink.go'; 
+                    }
+                    
                     $items[] = array(
-                        'id' => WeblinksHelperRoute::getWeblinkRoute($weblink->slug, $weblink->catslug),
-                        'name' => $weblink->title . ' / ' . $weblink->alias,
+                        'id'    => $id,
+                        'name'  => $weblink->title . ' / ' . $weblink->alias,
                         'class' => 'file'
                     );
                 }
