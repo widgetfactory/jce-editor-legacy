@@ -482,9 +482,13 @@
 				
                 var type = n.attr('type');
 
+                data = this.createTemplate(n);
+                
                 // convert from single embed
                 if (name == 'embed' && type == 'application/x-shockwave-flash') {					
                     name = 'object';
+                    
+                    data.param = {};
 
                     // get and assign flash variables
                     each(['bgcolor', 'flashvars', 'wmode', 'allowfullscreen', 'allowscriptaccess', 'quality'], function(k) {
@@ -497,12 +501,12 @@
                                 } catch(e) {}
                             }
 
-                            data[k] = v;
+                            data.param[k] = v;
                         }
+                        
+                        delete data[k];
                     });
                 }
-
-                data = this.createTemplate(n);
 
                 // remove nested children
                 each(['audio', 'embed', 'object', 'video', 'iframe'], function(el) {
@@ -922,7 +926,7 @@
 		 * @return Object / Audio / Video / Embed element
 		 */
         restoreElement : function(n, args) {
-            var self = this, ed = this.editor, dom = ed.dom, cl, props;
+            var self = this, ed = this.editor, dom = ed.dom, cl, props, v;
 
             var data    = JSON.parse(n.attr('data-mce-json'));
             var name    = this.getNodeName(n.attr('class'));
