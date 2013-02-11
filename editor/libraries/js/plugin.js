@@ -28,8 +28,6 @@
         return s;
     })();
     
-    $.support.pdfjs = $.support.canvas && window.ArrayBuffer;
-    
     /* http://downloads.beninzambia.com/blog/acrobat_detection.js.txt
      * Modified for our purposes
      */    
@@ -933,7 +931,9 @@
                 buttons: [{
                     text	: $.Plugin.translate('browse', 'Browse'),
                     id 		: 'upload-browse',
-                    icons	: {primary : 'ui-icon-search'}
+                    icons	: {
+                        primary : 'ui-icon-search'
+                    }
                 },{
                     text: $.Plugin.translate('upload', 'Upload'),
                     click: function () {
@@ -1604,3 +1604,67 @@ if (typeof ColorPicker === 'undefined') {
         settings : {}
     };
 }
+
+// UI Tabs backwards compat
+(function( $, prototype ) {
+    var _trigger = prototype._trigger;
+    prototype._trigger = function( type, event, data ) {
+        var ret = _trigger.apply( this, arguments );
+        if ( !ret ) {
+            return false;
+        }
+
+        if ( type === "beforeActivate" ) {
+            ret = _trigger.call( this, "select", event, data );
+        } else if ( type === "activate" ) {
+            ret = _trigger.call( this, "selected", event, data );
+        }
+        return ret;
+    }
+}( jQuery, jQuery.ui.tabs.prototype ) );
+
+// UI Accordian backwards compat
+(function( $, prototype ) {
+    prototype.activate = prototype._activate;
+}( jQuery, jQuery.ui.accordion.prototype ) );
+
+// change events
+(function( $, prototype ) {
+    var _trigger = prototype._trigger;
+    prototype._trigger = function( type, event, data ) {
+        var ret = _trigger.apply( this, arguments );
+        if ( !ret ) {
+            return false;
+        }
+
+        if ( type === "beforeActivate" ) {
+            ret = _trigger.call( this, "changestart", event, data );
+        } else if ( type === "activate" ) {
+            ret = _trigger.call( this, "change", event, data );
+        }
+        return ret;
+    }
+}( jQuery, jQuery.ui.accordion.prototype ) );
+
+// height options
+(function( $, prototype ) {
+    prototype.options.heightStyle = "content";
+}( jQuery, jQuery.ui.accordion.prototype ) );
+
+// namespace backwards compat
+(function( $, ui ) {
+    $( document ).ready( function() {        
+        $.each(['resize', 'crop', 'rotate', 'sortable'], function(i, k) {
+            if (ui[k]) {
+                var proto = ui[k].prototype;
+                var _init = proto._init;
+                
+                proto._init = function() {
+                    _init.apply( this, arguments );
+                    // store name
+                    $(this.element).data( k, true );
+                };
+            }
+        });
+    });
+}( jQuery, jQuery.ui ) );
