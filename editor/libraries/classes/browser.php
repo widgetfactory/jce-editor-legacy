@@ -942,7 +942,7 @@ class WFFileBrowser extends JObject {
         //JError::setErrorHandling(E_ALL, 'callback', array('WFError', 'raiseError'));
         // check for feature access	
         if (!$this->checkFeature('upload')) {
-            JError::raiseError(403, 'RESTRICTED ACCESS');
+            JError::raiseError(403, 'Access to this resource is restricted');
         }
 
         jimport('joomla.filesystem.file');
@@ -1063,7 +1063,7 @@ class WFFileBrowser extends JObject {
     public function deleteItem($items) {
         // check for feature access	
         if (!$this->checkFeature('delete', 'folder') && !$this->checkFeature('delete', 'file')) {
-            JError::raiseError(403, 'RESTRICTED ACCESS');
+            JError::raiseError(403, 'Access to this resource is restricted');
         }
 
         $filesystem = $this->getFileSystem();
@@ -1078,11 +1078,11 @@ class WFFileBrowser extends JObject {
 
             if ($filesystem->is_file($item)) {
                 if ($this->checkFeature('delete', 'file') === false) {
-                    JError::raiseError(403, 'RESTRICTED ACCESS');
+                    JError::raiseError(403, 'Access to this resource is restricted');
                 }
             } elseif ($filesystem->is_dir($item)) {
                 if ($this->checkFeature('delete', 'folder') === false) {
-                    JError::raiseError(403, 'RESTRICTED ACCESS');
+                    JError::raiseError(403, 'Access to this resource is restricted');
                 }
             }
 
@@ -1114,7 +1114,7 @@ class WFFileBrowser extends JObject {
     public function renameItem() {
         // check for feature access	
         if (!$this->checkFeature('rename', 'folder') && !$this->checkFeature('rename', 'file')) {
-            JError::raiseError(403, 'RESTRICTED ACCESS');
+            JError::raiseError(403, 'Access to this resource is restricted');
         }
 
         $args = func_get_args();
@@ -1137,11 +1137,11 @@ class WFFileBrowser extends JObject {
 
         if ($filesystem->is_file($source)) {
             if ($this->checkFeature('rename', 'file') === false) {
-                JError::raiseError(403, 'RESTRICTED ACCESS');
+                JError::raiseError(403, 'Access to this resource is restricted');
             }
         } elseif ($filesystem->is_dir($source)) {
             if ($this->checkFeature('rename', 'folder') === false) {
-                JError::raiseError(403, 'RESTRICTED ACCESS');
+                JError::raiseError(403, 'Access to this resource is restricted');
             }
         }
 
@@ -1171,7 +1171,7 @@ class WFFileBrowser extends JObject {
     public function copyItem($items, $destination) {
         // check for feature access	
         if (!$this->checkFeature('move', 'folder') && !$this->checkFeature('move', 'file')) {
-            JError::raiseError(403, 'RESTRICTED ACCESS');
+            JError::raiseError(403, 'Access to this resource is restricted');
         }
 
         $filesystem = $this->getFileSystem();
@@ -1193,11 +1193,11 @@ class WFFileBrowser extends JObject {
 
             if ($filesystem->is_file($item)) {
                 if ($this->checkFeature('move', 'file') === false) {
-                    JError::raiseError(403, 'RESTRICTED ACCESS');
+                    JError::raiseError(403, 'Access to this resource is restricted');
                 }
             } elseif ($filesystem->is_dir($item)) {
                 if ($this->checkFeature('move', 'folder') === false) {
-                    JError::raiseError(403, 'RESTRICTED ACCESS');
+                    JError::raiseError(403, 'Access to this resource is restricted');
                 }
             }
 
@@ -1228,7 +1228,7 @@ class WFFileBrowser extends JObject {
     public function moveItem($items, $destination) {
         // check for feature access	
         if (!$this->checkFeature('move', 'folder') && !$this->checkFeature('move', 'file')) {
-            JError::raiseError(403, 'RESTRICTED ACCESS');
+            JError::raiseError(403, 'Access to this resource is restricted');
         }
 
         $filesystem = $this->getFileSystem();
@@ -1249,11 +1249,11 @@ class WFFileBrowser extends JObject {
 
             if ($filesystem->is_file($item)) {
                 if ($this->checkFeature('move', 'file') === false) {
-                    JError::raiseError(403, 'RESTRICTED ACCESS');
+                    JError::raiseError(403, 'Access to this resource is restricted');
                 }
             } elseif ($filesystem->is_dir($item)) {
                 if ($this->checkFeature('move', 'folder') === false) {
-                    JError::raiseError(403, 'RESTRICTED ACCESS');
+                    JError::raiseError(403, 'Access to this resource is restricted');
                 }
             }
 
@@ -1283,7 +1283,7 @@ class WFFileBrowser extends JObject {
      */
     public function folderNew() {
         if ($this->checkFeature('create', 'folder') === false) {
-            JError::raiseError(403, 'RESTRICTED ACCESS');
+            JError::raiseError(403, 'Access to this resource is restricted');
         }
 
         $args = func_get_args();

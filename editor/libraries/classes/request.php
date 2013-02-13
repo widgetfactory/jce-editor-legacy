@@ -109,7 +109,7 @@ final class WFRequest extends JObject {
      */
     public function process($array = false) {
         // Check for request forgeries
-        WFToken::checkToken() or die('RESTRICTED ACCESS');
+        WFToken::checkToken() or die('Access to this resource is restricted');
 
         $filter = JFilterInput::getInstance();
 

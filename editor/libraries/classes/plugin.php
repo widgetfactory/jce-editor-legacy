@@ -142,7 +142,7 @@ class WFEditorPlugin extends JObject {
     }
 
     public function execute() {
-        WFToken::checkToken() or die('RESTRICTED ACCESS');
+        WFToken::checkToken() or die('Access to this resource is restricted');
 
         // JSON request or upload action
         if ($this->isRequest()) {
