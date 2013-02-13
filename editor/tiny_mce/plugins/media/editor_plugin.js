@@ -318,11 +318,25 @@
 
             if (!url)
                 return url;
+            
+            var parts, query = '', n = url.indexOf('?');
+            
+            if (n === -1) {
+                url = url.replace(/&amp;/g, '&');
+                n   = url.indexOf('&');
+            }
+            
+            if (n > 0) {
+                query = url.substring(n + 1, url.length), url = url.substr(0, n);
+            }
 
-            if (force_absolute)
-                return ed.documentBaseURI.toAbsolute(url);
+            if (force_absolute) {
+                url = ed.documentBaseURI.toAbsolute(url);
+            } else {
+                url = converter.call(scope, url, 'src', 'object');
+            }
 
-            return converter.call(scope, url, 'src', 'object');
+            return url + (query ? '?' + query : '');
         },
 
         /**
