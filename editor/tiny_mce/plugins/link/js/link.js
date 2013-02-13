@@ -271,11 +271,14 @@ var LinkDialog = {
             args[k] = v;
         });
         
-        var selector = 'a[href="#mce_temp_url#"]';
+        var selector = 'a[data-mce-link]';
+        
+        // set for removal
+        args['data-mce-link'] = null;
 
         // no selection
         if (se.isCollapsed()) {
-            ed.execCommand('mceInsertContent', false, '<a href="#mce_temp_url#">' + $('#text').val() + '</a>', {
+            ed.execCommand('mceInsertContent', false, '<a href="#" data-mce-link="1">' + $('#text').val() + '</a>', {
                 skip_undo : 1
             });
 
@@ -286,7 +289,7 @@ var LinkDialog = {
             });
         // create link on selection or update existing link
         } else {            
-            ed.execCommand('mceInsertLink', false, '#mce_temp_url#', {
+            ed.execCommand('mceInsertLink', false, {'href' : '#', 'data-mce-link' : '1'}, {
                 skip_undo : 1
             });
             
