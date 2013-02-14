@@ -3,7 +3,7 @@
     var writer = new tinymce.html.Writer(ed.settings), parser = new tinymce.html.SaxParser(writer, ed.schema);
     
     /* Source Editor Class
-     * Depends on codemirror.js with modes (css, javascript, htmlmixed, xml) and utilities (search, searchcursor, matchbrackets, match-highlighter, closetag) 
+     * Depends on codemirror.js with modes (css, javascript, htmlmixed, xml, php, clike) and utilities (search, searchcursor, matchbrackets, match-highlighter, closetag, mark-selection, active-line) 
      */
     
     var SourceEditor = {
