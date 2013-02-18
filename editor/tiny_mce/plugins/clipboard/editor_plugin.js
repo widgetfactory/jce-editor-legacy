@@ -8,28 +8,28 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-(function () {
+(function() {
     var each = tinymce.each, VK = tinymce.VK;
 
     var styleProps = new Array(
-        'background', 'background-attachment', 'background-color', 'background-image', 'background-position', 'background-repeat',
-        'border', 'border-bottom', 'border-bottom-color', 'border-bottom-style', 'border-bottom-width', 'border-color', 'border-left', 'border-left-color', 'border-left-style', 'border-left-width', 'border-right', 'border-right-color', 'border-right-style', 'border-right-width', 'border-style', 'border-top', 'border-top-color', 'border-top-style', 'border-top-width', 'border-width', 'outline', 'outline-color', 'outline-style', 'outline-width',
-        'height', 'max-height', 'max-width', 'min-height', 'min-width', 'width',
-        'font', 'font-family', 'font-size', 'font-style', 'font-variant', 'font-weight',
-        'content', 'counter-increment', 'counter-reset', 'quotes',
-        'list-style', 'list-style-image', 'list-style-position', 'list-style-type',
-        'margin', 'margin-bottom', 'margin-left', 'margin-right', 'margin-top',
-        'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top',
-        'bottom', 'clear', 'clip', 'cursor', 'display', 'float', 'left', 'overflow', 'position', 'right', 'top', 'visibility', 'z-index',
-        'orphans', 'page-break-after', 'page-break-before', 'page-break-inside', 'widows',
-        'border-collapse', 'border-spacing', 'caption-side', 'empty-cells', 'table-layout',
-        'color', 'direction', 'letter-spacing', 'line-height', 'text-align', 'text-decoration', 'text-indent', 'text-shadow', 'text-transform', 'unicode-bidi', 'vertical-align', 'white-space', 'word-spacing'
-        );
+            'background', 'background-attachment', 'background-color', 'background-image', 'background-position', 'background-repeat',
+            'border', 'border-bottom', 'border-bottom-color', 'border-bottom-style', 'border-bottom-width', 'border-color', 'border-left', 'border-left-color', 'border-left-style', 'border-left-width', 'border-right', 'border-right-color', 'border-right-style', 'border-right-width', 'border-style', 'border-top', 'border-top-color', 'border-top-style', 'border-top-width', 'border-width', 'outline', 'outline-color', 'outline-style', 'outline-width',
+            'height', 'max-height', 'max-width', 'min-height', 'min-width', 'width',
+            'font', 'font-family', 'font-size', 'font-style', 'font-variant', 'font-weight',
+            'content', 'counter-increment', 'counter-reset', 'quotes',
+            'list-style', 'list-style-image', 'list-style-position', 'list-style-type',
+            'margin', 'margin-bottom', 'margin-left', 'margin-right', 'margin-top',
+            'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top',
+            'bottom', 'clear', 'clip', 'cursor', 'display', 'float', 'left', 'overflow', 'position', 'right', 'top', 'visibility', 'z-index',
+            'orphans', 'page-break-after', 'page-break-before', 'page-break-inside', 'widows',
+            'border-collapse', 'border-spacing', 'caption-side', 'empty-cells', 'table-layout',
+            'color', 'direction', 'letter-spacing', 'line-height', 'text-align', 'text-decoration', 'text-indent', 'text-shadow', 'text-transform', 'unicode-bidi', 'vertical-align', 'white-space', 'word-spacing'
+            );
 
     tinymce.create('tinymce.plugins.ClipboardPlugin', {
-        init: function (ed, url) {
+        init: function(ed, url) {
             var self = this,
-            cb;
+                    cb;
 
             self.editor = ed;
             self.url = url;
@@ -49,16 +49,16 @@
             //self.onBeforeInsert.add(self._onBeforeInsert);
 
             // Register optional preprocess handler
-            self.onPreProcess.add(function (pl, o) {
+            self.onPreProcess.add(function(pl, o) {
                 ed.execCallback('paste_preprocess', pl, o);
             });
 
             // Register optional postprocess
-            self.onPostProcess.add(function (pl, o) {
+            self.onPostProcess.add(function(pl, o) {
                 ed.execCallback('paste_postprocess', pl, o);
             });
 
-            ed.onKeyDown.addToTop(function (ed, e) {
+            ed.onKeyDown.addToTop(function(ed, e) {
                 // Block ctrl+v from adding an undo level since the default logic in tinymce.Editor will add that
                 if ((VK.metaKeyPressed && e.keyCode == 86) || (e.shiftKey && e.keyCode == 45)) {
                     return false; // Stop other listeners
@@ -82,7 +82,7 @@
             // This function executes the process handlers and inserts the contents
             function process(o) {
                 var dom = ed.dom,
-                rng;
+                        rng;
 
                 ed.setProgressState(1);
 
@@ -132,7 +132,8 @@
                     rng = ed.selection.getRng(true);
                     if (rng.startContainer == rng.endContainer && rng.startContainer.nodeType == 3) {
                         // Is only one block node and it doesn't contain word stuff
-                        if (o.node.childNodes.length === 1 && /^(p|h[1-6]|pre)$/i.test(o.node.firstChild.nodeName) && o.content.indexOf('__MCE_ITEM__') === -1) dom.remove(o.node.firstChild, true);
+                        if (o.node.childNodes.length === 1 && /^(p|h[1-6]|pre)$/i.test(o.node.firstChild.nodeName) && o.content.indexOf('__MCE_ITEM__') === -1)
+                            dom.remove(o.node.firstChild, true);
                     }
                 }
 
@@ -160,16 +161,17 @@
 
                 // reset to default
                 self.command = 'mcePaste';
-            };
+            }
+            ;
 
             // Add command for external usage
-            ed.addCommand('mceInsertClipboardContent', function (u, o) {
+            ed.addCommand('mceInsertClipboardContent', function(u, o) {
                 process(o);
             });
 
-            ed.onInit.add(function () {
+            ed.onInit.add(function() {
                 if (ed.plugins.contextmenu) {
-                    ed.plugins.contextmenu.onContextMenu.add(function (th, m, e) {
+                    ed.plugins.contextmenu.onContextMenu.add(function(th, m, e) {
                         var c = ed.selection.isCollapsed();
 
                         if (ed.getParam('clipboard_cut', 1)) {
@@ -216,10 +218,10 @@
             // is done it grabs that contents and processes that
             function grabContent(e) {
                 var n, or, rng, oldRng, sel = ed.selection,
-                dom = ed.dom,
-                doc = ed.getDoc(),
-                body = ed.getBody(),
-                posY, textContent;
+                        dom = ed.dom,
+                        doc = ed.getDoc(),
+                        body = ed.getBody(),
+                        posY, textContent;
 
                 // Check if browser supports direct plaintext access
                 if (e.clipboardData || doc.dataTransfer) {
@@ -246,8 +248,10 @@
                 }, '\uFEFF\uFEFF');
 
                 // If contentEditable mode we need to find out the position of the closest element
-                if (body != ed.getDoc().body) posY = dom.getPos(ed.selection.getStart(), body).y;
-                else posY = body.scrollTop + dom.getViewPort(ed.getWin()).y;
+                if (body != ed.getDoc().body)
+                    posY = dom.getPos(ed.selection.getStart(), body).y;
+                else
+                    posY = body.scrollTop + dom.getViewPort(ed.getWin()).y;
 
                 // Styles needs to be applied after the element is added to the document since WebKit will otherwise remove all styles
                 // If also needs to be in view on IE or the paste would fail
@@ -289,7 +293,7 @@
                     // For some odd reason we need to detach the the mceInsertContent call from the paste event
                     // It's like IE has a reference to the parent element that you paste in and the selection gets messed up
                     // when it tries to restore the selection
-                    setTimeout(function () {
+                    setTimeout(function() {
                         // Process contents
                         process({
                             content: n.innerHTML
@@ -301,7 +305,8 @@
                 } else {
                     function block(e) {
                         e.preventDefault();
-                    };
+                    }
+                    ;
 
                     // set paste state as true...we got this far right?
                     self.canPaste = true;
@@ -322,16 +327,16 @@
                     sel.setRng(rng);
 
                     // Wait a while and grab the pasted contents
-                    window.setTimeout(function () {
+                    window.setTimeout(function() {
                         var h = '',
-                        nl;
+                                nl;
 
                         // Paste divs duplicated in paste divs seems to happen when you paste plain text so lets first look for that broken behavior in WebKit
                         if (!dom.select('div.mcePaste > div.mcePaste').length) {
                             nl = dom.select('div.mcePaste');
 
                             // WebKit will split the div into multiple ones so this will loop through then all and join them to get the whole HTML string
-                            each(nl, function (n) {
+                            each(nl, function(n) {
                                 var child = n.firstChild;
 
                                 // WebKit inserts a DIV container with lots of odd styles
@@ -340,17 +345,18 @@
                                 }
 
                                 // Remove apply style spans
-                                each(dom.select('span.Apple-style-span', n), function (n) {
+                                each(dom.select('span.Apple-style-span', n), function(n) {
                                     dom.remove(n, 1);
                                 });
 
                                 // Remove bogus br elements
-                                each(dom.select('br[data-mce-bogus]', n), function (n) {
+                                each(dom.select('br[data-mce-bogus]', n), function(n) {
                                     dom.remove(n);
                                 });
 
                                 // WebKit will make a copy of the DIV for each line of plain text pasted and insert them into the DIV
-                                if (n.parentNode.className != 'mcePaste') h += n.innerHTML;
+                                if (n.parentNode.className != 'mcePaste')
+                                    h += n.innerHTML;
                             });
 
                         } else {
@@ -360,12 +366,13 @@
                         }
 
                         // Remove the nodes
-                        each(dom.select('div.mcePaste'), function (n) {
+                        each(dom.select('div.mcePaste'), function(n) {
                             dom.remove(n);
                         });
 
                         // Restore the old selection
-                        if (or) sel.setRng(or);
+                        if (or)
+                            sel.setRng(or);
 
                         process({
                             content: h
@@ -377,17 +384,19 @@
                     }, 0);
 
                 }
-            };
+            }
+            ;
 
             // Is it's Opera or older FF use key handler
             if (tinymce.isOpera || /Firefox\/2/.test(navigator.userAgent)) {
-                ed.onKeyDown.addToTop(function (ed, e) {
-                    if (((tinymce.isMac ? e.metaKey : e.ctrlKey) && e.keyCode == 86) || (e.shiftKey && e.keyCode == 45)) grabContent(e);
+                ed.onKeyDown.addToTop(function(ed, e) {
+                    if (((tinymce.isMac ? e.metaKey : e.ctrlKey) && e.keyCode == 86) || (e.shiftKey && e.keyCode == 45))
+                        grabContent(e);
                 });
 
             } else {
                 // Grab contents on paste event on Gecko and WebKit
-                ed.onPaste.addToTop(function (ed, e) {
+                ed.onPaste.addToTop(function(ed, e) {
                     return grabContent(e);
                 });
 
@@ -395,8 +404,8 @@
 
             // Block all drag/drop events
             if (ed.getParam('clipboard_paste_block_drop')) {
-                ed.onInit.add(function () {
-                    ed.dom.bind(ed.getBody(), ['dragend', 'dragover', 'draggesture', 'dragdrop', 'drop', 'drag'], function (e) {
+                ed.onInit.add(function() {
+                    ed.dom.bind(ed.getBody(), ['dragend', 'dragover', 'draggesture', 'dragdrop', 'drop', 'drag'], function(e) {
                         e.preventDefault();
                         e.stopPropagation();
 
@@ -408,35 +417,35 @@
             }
 
             /*each(['Cut', 'Copy'], function(command) {
-                ed.addCommand(command, function() {
-                    var doc = ed.getDoc(), failed;
-
-                    // Try executing the native command
-                    try {
-                        doc.execCommand(command, false, null);
-                    } catch (ex) {
-                        // Command failed
-                        failed = true;
-                    }
-	
-                    // Present alert message about clipboard access not being available
-                    if (failed || (tinymce.isIE && !doc.queryCommandSupported('Paste'))) {
-                        if (tinymce.isGecko) {
-                            ed.windowManager.confirm(ed.getLang('clipboard_msg'), function(state) {
-                                if (state) {
-                                    open('http://www.mozilla.org/editor/midasdemo/securityprefs.html', '_blank');
-                                }
-                            });
-                        } else {
-                            ed.windowManager.alert(ed.getLang('clipboard_no_support'));
-                        }
-                    }
-                });
-            });*/
+             ed.addCommand(command, function() {
+             var doc = ed.getDoc(), failed;
+             
+             // Try executing the native command
+             try {
+             doc.execCommand(command, false, null);
+             } catch (ex) {
+             // Command failed
+             failed = true;
+             }
+             
+             // Present alert message about clipboard access not being available
+             if (failed || (tinymce.isIE && !doc.queryCommandSupported('Paste'))) {
+             if (tinymce.isGecko) {
+             ed.windowManager.confirm(ed.getLang('clipboard_msg'), function(state) {
+             if (state) {
+             open('http://www.mozilla.org/editor/midasdemo/securityprefs.html', '_blank');
+             }
+             });
+             } else {
+             ed.windowManager.alert(ed.getLang('clipboard_no_support'));
+             }
+             }
+             });
+             });*/
 
             // Add commands
-            each(['mcePasteText', 'mcePaste'], function (cmd) {
-                ed.addCommand(cmd, function () {
+            each(['mcePasteText', 'mcePaste'], function(cmd) {
+                ed.addCommand(cmd, function() {
                     var doc = ed.getDoc();
                     // set command
                     self.command = cmd;
@@ -492,27 +501,26 @@
                 });
             }
         },
-
-        createControl: function (n, cm) {
+        createControl: function(n, cm) {
             var self = this,
-            ed = self.editor;
+                    ed = self.editor;
 
             switch (n) {
                 case 'paste':
                     if (self.pasteHtml && self.pasteText) {
                         var c = cm.createSplitButton('paste', {
                             title: 'paste.paste_desc',
-                            onclick: function (e) {
+                            onclick: function(e) {
                                 ed.execCommand('mcePaste');
                             }
 
                         });
 
-                        c.onRenderMenu.add(function (c, m) {
+                        c.onRenderMenu.add(function(c, m) {
                             m.add({
                                 title: 'paste.paste_desc',
                                 icon: 'paste',
-                                onclick: function (e) {
+                                onclick: function(e) {
                                     ed.execCommand('mcePaste');
                                 }
 
@@ -521,7 +529,7 @@
                             m.add({
                                 title: 'paste.paste_text_desc',
                                 icon: 'pastetext',
-                                onclick: function (e) {
+                                onclick: function(e) {
                                     ed.execCommand('mcePasteText');
                                 }
 
@@ -536,8 +544,7 @@
 
             return null;
         },
-
-        getInfo: function () {
+        getInfo: function() {
             return {
                 longname: 'Paste text/word',
                 author: 'Moxiecode Systems AB / Ryan demmer',
@@ -546,8 +553,7 @@
                 version: '@@version@@'
             };
         },
-
-        _openWin: function (cmd) {
+        _openWin: function(cmd) {
             var ed = this.editor;
 
             ed.windowManager.open({
@@ -560,11 +566,10 @@
                 cmd: cmd
             });
         },
-
-        _preProcess: function (pl, o) {
+        _preProcess: function(pl, o) {
             var ed = pl.editor,
-            h = o.content,
-            rb;
+                    h = o.content,
+                    rb;
 
             if (ed.settings.paste_enable_default_filters == false) {
                 return;
@@ -614,8 +619,8 @@
 
             // Remove all styles
             /*if (ed.getParam('clipboard_paste_remove_styles')) {
-                h = h.replace(/\sstyle="([^"]+?)"/gi, '');
-            }*/
+             h = h.replace(/\sstyle="([^"]+?)"/gi, '');
+             }*/
 
             // remove attributes
             if (ed.getParam('clipboard_paste_remove_attributes')) {
@@ -630,7 +635,7 @@
                 // only split if a double break exists
                 if (h.indexOf('<br><br>') != -1) {
                     // convert marker to paragraphs
-                    tinymce.each(h.split('<br><br>'), function (block) {
+                    tinymce.each(h.split('<br><br>'), function(block) {
                         blocks += '<' + rb + '>' + block + '</' + rb + '>';
                     });
 
@@ -649,12 +654,13 @@
                     }
 
                     // remove Mso classes
-                    var cls = tinymce.grep(tinymce.explode(g1.replace(/^(["'])(.*)\1$/, "$2"), " "), function (v) {
+                    var cls = tinymce.grep(tinymce.explode(g1.replace(/^(["'])(.*)\1$/, "$2"), " "), function(v) {
                         return (/^(?!mso)/i.test(v));
                     });
 
                     return cls.length ? ' class="' + cls.join(" ") + '"' : '';
-                };
+                }
+                ;
 
                 h = h.replace(/ class="([^"]+)"/gi, removeClasses);
                 h = h.replace(/ class=([\-\w]+)/gi, removeClasses);
@@ -708,10 +714,9 @@
 
             o.content = h;
         },
-
-        _processWordContent: function (h) {
+        _processWordContent: function(h) {
             var ed = this.editor,
-            stripClass, len;
+                    stripClass, len;
 
             // convert list items to marker
             if (ed.getParam('clipboard_paste_convert_lists', true)) {
@@ -722,13 +727,22 @@
             }
 
             // remove footnote anchors
+            if (ed.getParam('clipboard_paste_process_footnotes', 'convert') == 'convert') {
+                h = h.replace(/<a\b([^>]+)style="(mso-(end|foot)note-id|sdfootnoteanc)[^"]+"([^>]+)>/gi, '<a$1data-mce-footnote="1"$4>');
+                // remove div
+                h = h.replace(/<div[^>]+(mso-element:(end|foot)note|sdfootnote)[^>]+>([\s\S]+?)<\/div>/gi, '$3');
+            }
+
+            // remove footnote anchors
             if (ed.getParam('clipboard_paste_process_footnotes', 'convert') == 'remove') {
-                h = h.replace(/<a[^>]+(mso-(end|foot)note-id|sdfootnoteanc)[^>]+>([\s\S]+?)<\/a>/gi, '');
+                h = h.replace(/<a\b[^>]+(mso-(end|foot)note-id|sdfootnoteanc)[^>]+>([\s\S]+?)<\/a>/gi, '');
                 h = h.replace(/<div[^>]+(mso-element:(end|foot)note|sdfootnote)[^>]+>[\s\S]+?<\/div>/gi, '');
             }
             // unlink footnotes
             if (ed.getParam('clipboard_paste_process_footnotes', 'convert') == 'unlink') {
-                h = h.replace(/<a[^>]+(mso-(end|foot)note-id|sdfootnoteanc)[^>]+>([\s\S]+?)<\/a>/gi, '$3');
+                h = h.replace(/<a\b[^>]+(mso-(end|foot)note-id|sdfootnoteanc)[^>]+>([\s\S]+?)<\/a>/gi, '$3');
+                // remove div
+                h = h.replace(/<div[^>]+(mso-element:(end|foot)note|sdfootnote)[^>]+>([\s\S]+?)<\/div>/gi, '$3');
             }
 
             // Word comments like conditional comments etc
@@ -758,20 +772,20 @@
                 // CSS Reference: http://msdn.microsoft.com/en-us/library/aa155477.aspx
 
                 // Convert <span style="mso-spacerun:yes">___</span> to string of alternating breaking/non-breaking spaces of same length
-                h = h.replace(/<span\s+style\s*=\s*"\s*mso-spacerun\s*:\s*yes\s*;?\s*"\s*>([\s\u00a0]*)<\/span>/gi, function (str, spaces) {
+                h = h.replace(/<span\s+style\s*=\s*"\s*mso-spacerun\s*:\s*yes\s*;?\s*"\s*>([\s\u00a0]*)<\/span>/gi, function(str, spaces) {
                     return (spaces.length > 0) ? spaces.replace(/./, " ").slice(Math.floor(spaces.length / 2)).split("").join("\u00a0") : "";
                 });
 
                 // Examine all styles: delete junk, transform some, and keep the rest
-                h = h.replace(/(<[a-z][^>]*)\sstyle="([^"]*)"/gi, function (str, tag, style) {
+                h = h.replace(/(<[a-z][^>]*)\sstyle="([^"]*)"/gi, function(str, tag, style) {
                     var n = [],
-                    i = 0,
-                    s = tinymce.explode(tinymce.trim(style).replace(/&quot;/gi, "'"), ";");
+                            i = 0,
+                            s = tinymce.explode(tinymce.trim(style).replace(/&quot;/gi, "'"), ";");
 
                     // Examine each style definition within the tag's style attribute
-                    each(s, function (v) {
+                    each(s, function(v) {
                         var name, value,
-                        parts = tinymce.explode(v, ":");
+                                parts = tinymce.explode(v, ":");
 
                         function ensureUnits(v) {
                             return v + ((v !== "0") && (/\d$/.test(v))) ? "px" : "";
@@ -841,6 +855,12 @@
                                         n[i++] = "display:none";
                                     }
                                     return;
+
+                                case 'mso-special-character':
+                                    if (value == "footnote") {
+                                        n[i++] = 'vertical-align:super';
+                                    }
+                                    break;
                             }
 
                             // Eliminate all MS Office style definitions that have no CSS equivalent by examining the first characters in the name
@@ -870,15 +890,14 @@
 
             return h;
         },
-
         /**
          * Paste as Plain Text
          * Remove all html form pasted contents. Newlines will be converted to paragraphs or linebreaks
          */
-        _insertPlainText: function (h) {
+        _insertPlainText: function(h) {
             var ed = this.editor,
-            dom = ed.dom,
-            rb, entities = null;
+                    dom = ed.dom,
+                    rb, entities = null;
 
             if ((typeof (h) === "string") && (h.length > 0)) {
 
@@ -924,26 +943,27 @@
 
             this._insert(h);
         },
-
         /**
          * Convert some deprecated elements to inline-styles
          */
-        _convertToInline: function (node) {
+        _convertToInline: function(node) {
             var ed = this.editor,
-            dom = ed.dom;
+                    dom = ed.dom;
 
             var fontSizes = tinymce.explode(ed.settings.font_size_style_values);
 
             function replaceWithSpan(n, styles) {
-                tinymce.each(styles, function (value, name) {
-                    if (value) dom.setStyle(n, name, value);
+                tinymce.each(styles, function(value, name) {
+                    if (value)
+                        dom.setStyle(n, name, value);
                 });
 
                 dom.rename(n, 'span');
-            };
+            }
+            ;
 
             filters = {
-                font: function (n) {
+                font: function(n) {
                     replaceWithSpan(n, {
                         backgroundColor: n.style.backgroundColor,
                         color: n.color,
@@ -951,14 +971,12 @@
                         fontSize: fontSizes[parseInt(n.size) - 1]
                     });
                 },
-
-                u: function (n) {
+                u: function(n) {
                     replaceWithSpan(n, {
                         textDecoration: 'underline'
                     });
                 },
-
-                strike: function (n) {
+                strike: function(n) {
                     replaceWithSpan(n, {
                         textDecoration: 'line-through'
                     });
@@ -967,20 +985,19 @@
             };
 
             if (ed.settings.convert_fonts_to_spans) {
-                tinymce.each(dom.select('font,u,strike', node), function (n) {
+                tinymce.each(dom.select('font,u,strike', node), function(n) {
                     filters[n.nodeName.toLowerCase()](n);
                 });
 
             }
         },
-
         /**
          * Process style attributes
          * @param node Node to process
          */
-        _processStyles: function (node) {
+        _processStyles: function(node) {
             var ed = this.editor,
-            dom = ed.dom;
+                    dom = ed.dom;
 
             // Process style information
             var s = ed.getParam('clipboard_paste_retain_style_properties');
@@ -991,14 +1008,14 @@
             }
 
             // Retains some style properties
-            each(dom.select('*[style]', node), function (n) {
+            each(dom.select('*[style]', node), function(n) {
                 var ns = {}, x = 0;
 
                 // get styles on element
                 var styles = dom.parseStyle(n.style.cssText);
 
                 // check style against styleProps array
-                each(styles, function (v, k) {
+                each(styles, function(v, k) {
                     if (tinymce.inArray(styleProps, k) != -1) {
                         ns[k] = v;
                         x++;
@@ -1024,16 +1041,15 @@
             });
 
         },
-
         /**
          * Convert URL strings to elements
          * @param h HTML to process
          */
-        _convertURLs: function (h) {
+        _convertURLs: function(h) {
             var ex = '([-!#$%&\'\*\+\\./0-9=?A-Z^_`a-z{|}~]+@[-!#$%&\'\*\+\\/0-9=?A-Z^_`a-z{|}~]+\.[-!#$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+)';
             var ux = '((news|telnet|nttp|file|http|ftp|https)://[-!#$%&\'\*\+\\/0-9=?A-Z^_`a-z{|}~;]+\.[-!#$%&\'\*\+\\./0-9=?A-Z^_`a-z{|}~;]+)';
 
-            h = h.replace(new RegExp('(=["\'])?' + ux, 'g'), function (a, b, c) {
+            h = h.replace(new RegExp('(=["\'])?' + ux, 'g'), function(a, b, c) {
                 // only if not already a link
                 if (!b) {
                     return '<a href="' + c + '">' + c + '</a>';
@@ -1042,7 +1058,7 @@
                 return a;
             });
 
-            h = h.replace(new RegExp('(=["\']mailto:)?' + ex, 'g'), function (a, b, c) {
+            h = h.replace(new RegExp('(=["\']mailto:)?' + ex, 'g'), function(a, b, c) {
                 // only if not already a mailto: link
                 if (!b) {
                     return '<a href="mailto:' + c + '">' + c + '</a>';
@@ -1053,15 +1069,12 @@
 
             return h;
         },
-
         /**
          * Various post process items.
          */
-        _postProcess: function (pl, o) {
+        _postProcess: function(pl, o) {
             var self = this,
-            ed = this.editor,
-            dom = ed.dom,
-            h;
+                    ed = this.editor, dom = ed.dom, h;
 
             if (ed.settings.paste_enable_default_filters == false) {
                 return;
@@ -1070,7 +1083,7 @@
             if (!this.plainText) {
 
                 // Remove Apple style spans
-                each(dom.select('span.Apple-style-span', o.node), function (n) {
+                each(dom.select('span.Apple-style-span', o.node), function(n) {
                     dom.remove(n, 1);
                 });
 
@@ -1085,62 +1098,82 @@
                 // post process Word content
                 if (o.wordContent) {
                     var ftn = /(mso-(end|foot)note-id|sdfootnoteanc)/;
-                    
+
                     // process anchors
-                    each(dom.select('a', o.node), function (n) {
+                    each(dom.select('a', o.node), function(n) {
                         var href = n.getAttribute('href');
-                        
+
                         // remove anchors
-                        if (!href || href.indexOf('#_Toc') != -1){
+                        if (!href || href.indexOf('#_Toc') != -1) {
                             dom.remove(n, 1);
                         }
-                        
+
                         // convert footnotes to anchors
                         if (ed.getParam('clipboard_paste_process_footnotes', 'convert') == 'convert') {
-                            var s = n.getAttribute('style'), anchor, id;
-                            
+                            var s = n.getAttribute('data-mce-footnote'), anchor, id;
+
+                            each(ed.dom.select('span', n), function(span) {
+                                if (!span.getAttribute('style')) {
+                                    ed.dom.remove(span, 1);
+                                }
+                            });
+
                             // footnote anchor
-                            if (ftn.test(s) && href) {
+                            if (s && href) {
                                 // remove #
                                 if (href.charAt(0) == '#') {
                                     id = href.substring(1);
                                 }
-                                // get associated anchor
-                                anchor = dom.select('a[name="' + id + '"]', o.node);
-                                
-                                // if there is an anchor
-                                if (anchor.length) {                                    
-                                    // fix anchor id/name
-                                    id = id.replace(/[^a-z]+(\w+)/gi, '$1');
-                                    
-                                    var attribs = {
-                                        'class' : 'mceItemAnchor',
-                                        'name'  : null,
-                                        'id'    : null
-                                    };
-                                    // get correct anchor attribute for schema
-                                    var k = ed.settings.schema == 'html5' ? 'id' : 'name';
-                                    
-                                    // set attribute
-                                    attribs[k] = id;
-                                    
-                                    // update attributes
-                                    dom.setAttribs(anchor, attribs);
-                                    
-                                    // update anchor link
-                                    dom.setAttribs(n, {
-                                        'href' : '#' + id
-                                    });
-                                // remove link
-                                } else {
-                                    dom.remove(n);
+
+                                // remove marker
+                                n.removeAttribute('data-mce-footnote');
+
+                                if (id) {
+                                    // get associated anchor
+                                    anchor = dom.select('a[name="' + id + '"]', o.node);
+
+                                    // if there is an anchor
+                                    if (anchor.length) {
+                                        // fix anchor id/name
+                                        id = id.replace(/[^a-z]+(\w+)/gi, '$1');
+
+                                        var attribs = {
+                                            'class': 'mceItemAnchor',
+                                            'name': null,
+                                            'id': null
+                                        };
+                                        // get correct anchor attribute for schema
+                                        var k = ed.settings.schema == 'html5' ? 'id' : 'name';
+
+                                        // set attribute
+                                        attribs[k] = id;
+
+                                        // update attributes
+                                        dom.setAttribs(anchor, attribs);
+
+                                        // update anchor link
+                                        dom.setAttribs(n, {
+                                            'href': '#' + id
+                                        });
+                                        
+                                        // remove name attribute from link
+                                        n.removeAttribute('name');
+                                    } else {
+                                        n.removeAttribute('href');
+                                        // remove extra spans
+                                        each(ed.dom.select('span', n.parentNode), function(span) {
+                                            if (span.firstChild && span.firstChild.nodeType == 1) {
+                                                ed.dom.remove(span, 1);
+                                            }
+                                        });
+                                    }
                                 }
                             }
                         }
                     });
 
                     // Remove lang attribute
-                    each(dom.select('*[lang]', o.node), function (el) {
+                    each(dom.select('*[lang]', o.node), function(el) {
                         el.removeAttribute('lang');
                     });
                 } // end word content
@@ -1148,7 +1181,7 @@
                 // Remove all styles
                 if (ed.getParam('clipboard_paste_remove_styles')) {
                     // Remove style attribute
-                    each(dom.select('*[style]', o.node), function (el) {
+                    each(dom.select('*[style]', o.node), function(el) {
                         el.removeAttribute('style');
                         el.removeAttribute('data-mce-style');
                     });
@@ -1156,17 +1189,17 @@
                     // process style attributes
                     this._processStyles(o.node);
                 }
-                
+
                 // convert lists
                 if (ed.getParam('clipboard_paste_convert_lists', true)) {
                     this._convertLists(o.node);
                 }
-                
+
                 // image file/data regular expression
                 var imgRe = /(file:|data:image)\//i;
 
                 // Process images - remove local
-                each(dom.select('img', o.node), function (el) {
+                each(dom.select('img', o.node), function(el) {
                     var s = dom.getAttrib(el, 'src');
 
                     // remove img element if blank, local file url or base64 encoded
@@ -1178,21 +1211,21 @@
                 });
 
                 // Process links (ignore anchors)
-                each(dom.select('a', o.node), function (el) {
+                each(dom.select('a[href]', o.node), function(el) {
                     var s = dom.getAttrib(el, 'href');
                     // convert url
-                    if (s && s.charAt(0) != '#') {
+                    if (s.charAt(0) != '#') {
                         dom.getAttrib(el, 'href', ed.convertURL(s));
                     }
                 });
-                
+
                 // Empty element regular expression
                 var emptyRe = /^(\s|&nbsp;|\u00a0)?$/;
 
                 if (ed.getParam('clipboard_paste_remove_empty_paragraphs', true)) {
                     ed.dom.remove(dom.select('p:empty', o.node));
 
-                    each(dom.select('p', o.node), function (n) {
+                    each(dom.select('p', o.node), function(n) {
                         var h = n.innerHTML;
 
                         if (emptyRe.test(h)) {
@@ -1204,11 +1237,11 @@
                 // remove all spans
                 if (ed.getParam('clipboard_paste_remove_spans')) {
                     dom.remove(dom.select('span', o.node), 1);
-                // remove empty spans
+                    // remove empty spans
                 } else {
                     ed.dom.remove(dom.select('span:empty', o.node));
 
-                    each(dom.select('span', o.node), function (n) {
+                    each(dom.select('span', o.node), function(n) {
                         var h = n.innerHTML;
 
                         if (emptyRe.test(h)) {
@@ -1218,24 +1251,23 @@
                 }
             }
         },
-
         /**
          * Converts the most common bullet and number formats in Office into a real semantic UL/LI list.
          */
-        _convertLists: function (node) {
+        _convertLists: function(node) {
             var ed = this.editor,
-            dom = ed.dom,
-            listElm, li, lastMargin = -1,
-            margin, levels = [],
-            lastType;
+                    dom = ed.dom,
+                    listElm, li, lastMargin = -1,
+                    margin, levels = [],
+                    lastType;
 
             var ULRX = /^(__MCE_LIST_ITEM__)+[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*\u00a0*/;
             var OLRX = /^(__MCE_LIST_ITEM__)*\(?(\w+)(\.|\))?\s*\u00a0+/;
 
             // Convert middot lists into real semantic lists
-            each(dom.select('p', node), function (p) {
+            each(dom.select('p', node), function(p) {
                 var sib, val = '',
-                type, html, idx, parents, s, chars, st;
+                        type, html, idx, parents, s, chars, st;
 
                 // Get text node value at beginning of paragraph
                 for (sib = p.firstChild; sib && sib.nodeType == 3; sib = sib.nextSibling) {
@@ -1281,7 +1313,8 @@
                 if (type) {
                     margin = parseFloat(p.style.marginLeft || 0);
 
-                    if (margin > lastMargin) levels.push(margin);
+                    if (margin > lastMargin)
+                        levels.push(margin);
 
                     if (!listElm || type != lastType) {
                         listElm = dom.create(type);
@@ -1299,24 +1332,24 @@
                     }
 
                     // Remove middot or number spans if they exists
-                    each(dom.select('span', p), function (span) {
+                    each(dom.select('span', p), function(span) {
                         var html = span.innerHTML.replace(/<\/?\w+[^>]*>/gi, '').replace(/&nbsp;/g, '\u00a0');
 
                         // Remove span with the middot or the number
                         if (ULRX.test(html) || OLRX.test(html)) {
                             dom.remove(span);
-                        // remove empty spans
+                            // remove empty spans
                         } else if (/^(\s|\u00a0)?$/.test(html)) {
                             dom.remove(span);
                         }
                     });
-                        
+
                     // get edited paragraph html
                     html = p.innerHTML;
 
                     // Remove middot/list items
                     if (type == 'ul') {
-                        html = html.replace(/__MCE_LIST_ITEM__/g, '').replace(/^[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*(&nbsp;|\u00a0)+\s*/, '');                            
+                        html = html.replace(/__MCE_LIST_ITEM__/g, '').replace(/^[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*(&nbsp;|\u00a0)+\s*/, '');
                     } else {
                         html = html.replace(/__MCE_LIST_ITEM__/g, '').replace(/(\s|&nbsp;|\u00a0)*\(?(\w+)(\.|\))?\s*(&nbsp;|\u00a0)+\s*/, '');
                     }
@@ -1344,11 +1377,10 @@
                 node.innerHTML = html.replace(/__MCE_LIST_ITEM__/g, '');
             }
         },
-
         /**
          * Inserts the specified contents at the caret position.
          */
-        _insert: function (h, skip_undo) {
+        _insert: function(h, skip_undo) {
             var ed = this.editor;
 
             // reset validate to fix issues in IE7-
