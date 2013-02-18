@@ -167,7 +167,7 @@ class JoomlalinksWeblinks extends JObject {
             if (is_object($dbquery) && method_exists($dbquery, 'charLength')) {
                 //sqlsrv changes
                 $case_when1 = ' CASE WHEN ';
-                $case_when1 .= $dbquery->charLength('a.alias');
+                $case_when1 .= $dbquery->charLength('a.alias', '!=', '0');
                 $case_when1 .= ' THEN ';
                 $a_id = $dbquery->castAsChar('a.id');
                 $case_when1 .= $dbquery->concatenate(array($a_id, 'a.alias'), ':');
@@ -175,7 +175,7 @@ class JoomlalinksWeblinks extends JObject {
                 $case_when1 .= $a_id . ' END as slug';
 
                 $case_when2 = ' CASE WHEN ';
-                $case_when2 .= $dbquery->charLength('b.alias');
+                $case_when2 .= $dbquery->charLength('b.alias', '!=', '0');
                 $case_when2 .= ' THEN ';
                 $c_id = $dbquery->castAsChar('b.id');
                 $case_when2 .= $dbquery->concatenate(array($c_id, 'b.alias'), ':');
