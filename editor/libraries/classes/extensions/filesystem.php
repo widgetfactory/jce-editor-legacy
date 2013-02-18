@@ -73,7 +73,7 @@ class WFFileSystem extends WFExtension {
      * @return string base url
      */
     public function getBaseURL() {
-        return WFUtility::makePath(JURI::root(true), 'images');
+        return WFUtility::makePath(JURI::root(true), $this->getRootDir());
     }
 
     /**
