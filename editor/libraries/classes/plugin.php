@@ -77,6 +77,11 @@ class WFEditorPlugin extends JObject {
         if (!array_key_exists('colorpicker', $config)) {
             $config['colorpicker'] = in_array($plugin, array('imgmanager_ext', 'caption', 'mediamanager'));
         }
+        
+        // backwards compatability
+        if (!array_key_exists('mediaplayer', $config)) {
+            $config['mediaplayer'] = false;
+        }
 
         $this->setProperties($config);
     }
@@ -263,9 +268,14 @@ class WFEditorPlugin extends JObject {
             }
         }
 
-        $document->addStyleSheet(array(
-            'plugin'
-                ), 'libraries');
+        $document->addStyleSheet(array('plugin'), 'libraries');
+        
+        // MediaElement in the future perhaps?
+        
+        /*if ($this->get('mediaplayer')) {
+            $document->addScript(array('mediaelement-and-player.min'), 'mediaelement');
+            $document->addStyleSheet(array('mediaelementplayer.min'), 'mediaelement');
+        }*/
 
         // add custom plugin.css if exists
         if (is_file(JPATH_SITE . '/media/jce/css/plugin.css')) {
