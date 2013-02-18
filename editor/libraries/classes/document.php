@@ -249,6 +249,9 @@ class WFDocument extends JObject {
                 case 'jquery':
                     $pre = $base . 'libraries/jquery/' . $type;
                     break;
+                case 'mediaelement':
+                    $pre = $base . 'libraries/mediaelement/' . $type;
+                    break;
                 case 'bootstrap':
                     $pre = $base . 'libraries/bootstrap/' . $type;
                     break;
