@@ -1042,9 +1042,16 @@ class WFFileBrowser extends JObject {
             if ($result instanceof WFFileSystemResult) {
                 if ($result->state === true) {
 
-                    $path = $result->path;
+                    $path       = $result->path;
+                    // get root dir eg: JPATH_SITE
+                    $root       = substr($filesystem->getBaseDir(), 0, -(strlen($filesystem->getRootDir())));
+                    
+                    // get relative path
+                    $relative   = substr($path, strlen($root)); 
+                    // clean
+                    $relative   = WFUtility::cleanPath($relative);
 
-                    $this->setResult($this->fireEvent('onUpload', array($result->path)));
+                    $this->setResult($this->fireEvent('onUpload', array($result->path, $relative)));
                     $this->setResult(basename($result->path), 'files');
                 } else {
                     $this->setResult($result->message, 'error');
