@@ -157,7 +157,7 @@ class WFLinkExtension extends WFExtension {
             if (is_object($query)) {
                 //sqlsrv changes
                 $case = ' CASE WHEN ';
-                $case .= $query->charLength('alias');
+                $case .= $query->charLength('alias', '!=', '0');
                 $case .= ' THEN ';
                 $a_id  = $query->castAsChar('id');
                 $case .= $query->concatenate(array($a_id, 'alias'), ':');
