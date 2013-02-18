@@ -1049,7 +1049,7 @@ class WFFileBrowser extends JObject {
                     // get relative path
                     $relative   = substr($path, strlen($root)); 
                     // clean
-                    $relative   = WFUtility::cleanPath($relative);
+                    $relative   = WFUtility::cleanPath($relative, '/');
 
                     $this->setResult($this->fireEvent('onUpload', array($result->path, $relative)));
                     $this->setResult(basename($result->path), 'files');
