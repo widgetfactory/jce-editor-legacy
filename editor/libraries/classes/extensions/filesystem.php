@@ -21,7 +21,7 @@ class WFFileSystem extends WFExtension {
      * @access  protected
      */
     public function __construct($config = array()) {
-        parent::__construct();
+        parent::__construct($config);
 
         $this->setProperties(array_merge($config, array(
             'local'     => true,
@@ -164,10 +164,6 @@ class WFFileSystem extends WFExtension {
 
     public function getSourceDir($path) {
         return $path;
-    }
-
-    public function isMatch($needle, $haystack) {
-        return $needle == $haystack;
     }
 
     public function pathinfo($path) {

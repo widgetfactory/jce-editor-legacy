@@ -303,10 +303,6 @@ class WFJoomlaFileSystem extends WFFileSystem {
         return '';
     }
 
-    function isMatch($needle, $haystack) {
-        return $needle == $haystack;
-    }
-
     /**
      * Return constituent parts of a file path eg: base directory, file name
      * @param $path Relative or absolute path
