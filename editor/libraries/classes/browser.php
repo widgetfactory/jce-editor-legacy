@@ -201,7 +201,8 @@ class WFFileBrowser extends JObject {
 
             $config = array(
                 'dir' => $this->get('dir'),
-                'upload_conflict' => $wf->getParam('editor.upload_conflict', 'overwrite')
+                'upload_conflict' => $wf->getParam('editor.upload_conflict', 'overwrite'),
+                'filetypes' => $this->getFileTypes('array')
             );
 
             $filesystem = WFFileSystem::getInstance($this->get('filesystem'), $config);
