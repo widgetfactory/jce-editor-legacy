@@ -1345,14 +1345,10 @@ class WFFileBrowser extends JObject {
 
         $upload = $this->get('upload');
 
-        /* $chunk_size = '512KB'; //$upload_max ? $upload_max / 1024 . 'KB' : '1MB';
-          $chunk_size = isset($upload['chunk_size']) ? $upload['chunk_size'] : $chunk_size;
-
-          // chunking not yet supported in safe_mode, check base directory is writable and chunking supported by filesystem
-          if (!$features['chunking']) {
-          $chunk_size = 0;
-          } */
-
+        if (empty($upload['max_size'])) {
+            $upload['max_size'] = 1024;
+        }
+        
         // get upload size
         $size = intval(preg_replace('/[^0-9]/', '', $upload['max_size'])) . 'kb';
 
