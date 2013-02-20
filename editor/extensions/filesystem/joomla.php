@@ -184,6 +184,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
 
     function getFolders($relative) {
         $path = WFUtility::makePath($this->getBaseDir(), $relative);
+        $path = WFUtility::fixPath($path);
 
         if (!JFolder::exists($path)) {
             $relative = '/';
@@ -216,6 +217,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
 
     function getFiles($relative, $filter = '') {
         $path = WFUtility::makePath($this->getBaseDir(), $relative);
+        $path = WFUtility::fixPath($path);
 
         if (!JFolder::exists($path)) {
             $relative = '/';
