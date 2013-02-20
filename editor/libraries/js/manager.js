@@ -505,6 +505,21 @@
             // get the file src from the widget element
             var src = $(this.element).val();
             
+            // check for and remove base (external filesystems)
+            if (this.options.base) {
+                if (s)
+                if (new RegExp('://' + this.options.base).test(src)) {
+                    // remove scheme
+                    src = src.replace(/http(s)?:\/\//i, '');
+                    // remove query etc.
+                    src = src.substr(0, src.indexOf('?'));
+                    // remove base
+                    src = src.replace(this.options.base, '');
+                    // remove leading slash
+                    src = src.replace(/^[\/\\]+/, '');
+                }
+            }
+            
             // invalid src or not a local file resource
             if (!this._validatePath(src)) {
                 src = '';
@@ -2315,9 +2330,9 @@
                     $('dd', $('#info-preview')).removeClass('loader').addClass('preview-error');
                 };
 
-                src = /http(s)?:\/\//.test(src) ? src : $.String.encodeURI(src);
+                src = /:\/\//.test(src) ? src : $.String.encodeURI(src);
 
-                img.src = src + (/\?/.test(src) ? '&' : '?') + new Date().getTime();
+                img.src = src + (src.indexOf('?') == -1 ? '?' : '&') + new Date().getTime();
             }
 
             if (comments) {
