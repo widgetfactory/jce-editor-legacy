@@ -506,9 +506,8 @@
             var src = $(this.element).val();
             
             // check for and remove base (external filesystems)
-            if (this.options.base) {
-                if (s)
-                if (new RegExp('://' + this.options.base).test(src)) {
+            if (src && this.options.base) {
+                if (src.indexOf('://' + this.options.base) !== -1) {
                     // remove scheme
                     src = src.replace(/http(s)?:\/\//i, '');
                     // remove query etc.
