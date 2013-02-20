@@ -119,12 +119,16 @@ class WFFileBrowser extends JObject {
             'sort',
             'filter',
             'manager'
-        ), 'libraries');
+                ), 'libraries');
 
-        $document->addScript(array('plupload.full'), 'jce.libraries.plupload');
-        
+        $document->addScript(array(
+            'plupload.full',
+                ), 'jce.libraries.plupload');
+
         //$document->addStyleSheet(array('files', 'tree', 'upload'), 'libraries');
         $document->addStyleSheet(array('manager'), 'libraries');
+        // custom stylesheet
+        //$document->addStyleSheet(array('custom'), 'libraries.css');
         // file browser options
         $document->addScriptDeclaration('WFFileBrowser.settings=' . json_encode($this->getSettings()) . ';');
     }
@@ -414,6 +418,8 @@ class WFFileBrowser extends JObject {
                 if ($item['type'] == 'folders') {
                     $folderArray[] = $item;
                 } else {
+                    // check for selected item
+                    $item['selected'] = $filesystem->isMatch($item['url'], $path);
                     $fileArray[] = $item;
                 }
             }
@@ -1331,7 +1337,7 @@ class WFFileBrowser extends JObject {
 
     private function getUploadDefaults() {
         $filesystem = $this->getFileSystem();
-        $features = $filesystem->get('upload');        
+        $features = $filesystem->get('upload');
         $elements = isset($features['elements']) ? $features['elements'] : array();
 
         $upload_max = $this->getUploadValue();
