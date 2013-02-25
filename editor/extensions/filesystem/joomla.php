@@ -33,13 +33,6 @@ class WFJoomlaFileSystem extends WFFileSystem {
         } else {
             $safe_mode = true;
         }
-        
-        /*$chunking = true;
-
-        // no chunking in safe_mode or FTP mode or if base dir not writable
-        if ($safe_mode || $this->isFTP() || !is_writable($this->getBaseDir())) {
-            $chunking = false;
-        }*/
 
         $this->setProperties(array(
             'local' => true,
@@ -84,7 +77,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
 
             // Restricted Joomla! folders
             $restricted = explode(',', $wf->getParam('editor.filesystem.joomla.restrict_dir', 'administrator,cache,components,includes,language,libraries,logs,media,modules,plugins,templates,xmlrpc'));
-            $allowroot  = $wf->getParam('editor.filesystem.joomla.allow_root', 0);
+            $allowroot = $wf->getParam('editor.filesystem.joomla.allow_root', 0);
 
             // Revert to default if empty
             if (empty($root) && !$allowroot) {
@@ -96,7 +89,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
             if (in_array(strtolower($parts[0]), $restricted) && !$allowroot) {
                 $root = 'images';
             }
-            
+
             if (!empty($root)) {
                 // Create the folder
                 $full = WFUtility::makePath(JPATH_SITE, $root);
@@ -112,14 +105,12 @@ class WFJoomlaFileSystem extends WFFileSystem {
 
         return $root;
     }
-    
-    function toAbsolute($path)
-    {
+
+    function toAbsolute($path) {
         return WFUtility::makePath($this->getBaseDir(), $path);
     }
-    
-    function toRelative($path, $isabsolute = true)
-    {
+
+    function toRelative($path, $isabsolute = true) {
         // path is relative to Joomla! root, eg: images/folder
         if ($isabsolute === false) {
             return rtrim($path, $this->getRootDir());
@@ -202,10 +193,10 @@ class WFJoomlaFileSystem extends WFFileSystem {
                 $item = WFUtility::isUTF8($item) ? $item : utf8_encode($item);
 
                 $data = array(
-                    'id'        => WFUtility::makePath($relative, $item, '/'),
-                    'name'      => $item,
-                    'writable'  => is_writable(WFUtility::makePath($path, $item)) || $this->isFtp(),
-                    'type'      => 'folders'
+                    'id' => WFUtility::makePath($relative, $item, '/'),
+                    'name' => $item,
+                    'writable' => is_writable(WFUtility::makePath($path, $item)) || $this->isFtp(),
+                    'type' => 'folders'
                 );
 
                 $properties = self::getFolderDetails($data['id']);
@@ -234,23 +225,23 @@ class WFJoomlaFileSystem extends WFFileSystem {
             // Sort alphabetically
             natcasesort($list);
             foreach ($list as $item) {
-                $item   = WFUtility::isUTF8($item) ? $item : utf8_encode($item);
-                
+                $item = WFUtility::isUTF8($item) ? $item : utf8_encode($item);
+
                 // create relative file
-                $id     = WFUtility::makePath($relative, $item, '/');
-                
+                $id = WFUtility::makePath($relative, $item, '/');
+
                 // create url
-                $url    = WFUtility::makePath($this->getRootDir(), $id, '/');
+                $url = WFUtility::makePath($this->getRootDir(), $id, '/');
 
                 // remove leading slash
-                $url    = ltrim($url, '/');
-                        
+                $url = ltrim($url, '/');
+
                 $data = array(
-                    'id'        => $id,
-                    'url'       => $url,
-                    'name'      => $item,
-                    'writable'  => is_writable(WFUtility::makePath($path, $item)) || $this->isFtp(),
-                    'type'      => 'files'
+                    'id' => $id,
+                    'url' => $url,
+                    'name' => $item,
+                    'writable' => is_writable(WFUtility::makePath($path, $item)) || $this->isFtp(),
+                    'type' => 'files'
                 );
 
                 $properties = self::getFileDetails($data['id'], $x);
@@ -291,7 +282,6 @@ class WFJoomlaFileSystem extends WFFileSystem {
 
         // remove leading / trailing slash
         //$path = trim($path, '/');
-
         // directory path relative to base dir
         if (is_dir(WFUtility::makePath($this->getBaseDir(), $path))) {
             return $path;
@@ -354,9 +344,9 @@ class WFJoomlaFileSystem extends WFFileSystem {
             $height = $props[1];
 
             $image = array(
-                'width'     => $width,
-                'height'    => $height,
-                'preview'   => WFUtility::cleanPath($url, '/')
+                'width' => $width,
+                'height' => $height,
+                'preview' => WFUtility::cleanPath($url, '/')
             );
 
             return array_merge_recursive($data, $image);
@@ -412,11 +402,19 @@ class WFJoomlaFileSystem extends WFFileSystem {
             $file = $dest . '.' . $ext;
             $path = WFUtility::makePath($dir, $file);
 
+            if (is_file($path)) {
+                return $result;
+            }
+
             $result->type = 'files';
             $result->state = JFile::move($src, $path);
             $result->path = $path;
         } else if (is_dir($src)) {
             $path = WFUtility::makePath($dir, $dest);
+            
+            if (is_folder($path)) {
+                return $result;
+            }
 
             $result->type = 'folders';
             $result->state = JFolder::move($src, $path);
@@ -571,7 +569,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
                     $result->state = true;
                     $result->path = $dest;
                 }
-                
+
                 break;
             case 'multipart-chunking' :
                 if ($safe_mode || !is_writable(dirname($dest))) {
@@ -669,16 +667,16 @@ class WFJoomlaFileSystem extends WFFileSystem {
 
         return JFile::write($path, $content);
     }
-    
+
     public function is_file($path) {
         $path = WFUtility::makePath($this->getBaseDir(), $path);
-        
+
         return is_file($path);
     }
-    
+
     public function is_dir($path) {
         $path = WFUtility::makePath($this->getBaseDir(), $path);
-        
+
         return is_dir($path);
     }
 
