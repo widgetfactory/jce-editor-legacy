@@ -3,7 +3,7 @@
 .CodeMirror {
   /* Set height, width, borders, and global font properties here */
   font-family: monospace;
-  height: 300px;
+  min-height: 300px;
 }
 .CodeMirror-scroll {
   /* Set scrolling behaviour here */
@@ -148,6 +148,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 .CodeMirror-gutters {
   position: absolute; left: 0; top: 0;
   height: 100%;
+  padding-bottom: 30px;
   z-index: 3;
 }
 .CodeMirror-gutter {
@@ -197,6 +198,10 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
   position: relative;
   z-index: 2;
   overflow: auto;
+}
+
+.CodeMirror-widget {
+  display: inline-block;
 }
 
 .CodeMirror-wrap .CodeMirror-scroll {

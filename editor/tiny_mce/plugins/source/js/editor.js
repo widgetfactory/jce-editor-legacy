@@ -3,7 +3,7 @@
     var writer = new tinymce.html.Writer(ed.settings), parser = new tinymce.html.SaxParser(writer, ed.schema);
     
     /* Source Editor Class
-     * Depends on codemirror.js with modes (css, javascript, htmlmixed, xml, php, clike) and utilities (search, searchcursor, matchbrackets, match-highlighter, closetag, mark-selection, active-line) 
+     * Depends on codemirror.js with modes (css, javascript, htmlmixed, xml, php, clike) and utilities (search, searchcursor, matchbrackets, closebrackets, match-highlighter, closetag, mark-selection, active-line) 
      */
     
     var SourceEditor = {
@@ -181,14 +181,17 @@
                     theme   : o.theme,
                     indentWithTabs : true,
                     smartIndent : true,
-                    tabMode: "indent"
+                    tabMode: "indent",
+                    styleActiveLine: !!o.selection_match,
+                    highlightSelectionMatches: !!o.selection_match,
+                    autoCloseTags: !!o.tag_closing
                 };
 
-                if (o.tag_closing) {
+                /*if (o.tag_closing) {
                     tinymce.extend(settings, {
                         autoCloseTags: true
                     });
-                }
+                }*/
                                 
                 cm = CodeMirror(this.container, settings);
                 
@@ -198,7 +201,7 @@
                 });
 
                 // line highlight and selection matching
-                if (o.selection_match) {
+                /*if (o.selection_match) {
                     // line highlight
                     var marked = cm.addLineClass(0, "background", "activeline");
                     
@@ -212,7 +215,7 @@
                         }
                             
                     });
-                }
+                }*/
                 
                 // line wrapping
                 cm.setWrap = function(s) {
