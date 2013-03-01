@@ -136,6 +136,9 @@ var TableDialog = {
             $('#rows').val(rowsAr.length);
 
             var border = trimSize(getStyle(elm, 'border', 'borderWidth'));
+            
+            // clean border
+            border = border.replace(/[\D]/g, '');
 
             // set border
             if ($('#border').is(':checkbox')) {
@@ -437,6 +440,9 @@ var TableDialog = {
                 elm.style.borderColor = bordercolor;
                 elm.style.borderStyle = elm.style.borderStyle == "" ? "solid" : elm.style.borderStyle;
                 elm.style.borderWidth = this.cssSize(border);
+                
+                dom.setAttrib(elm, 'border', '');
+                
             } else {
                 elm.style.borderColor = '';
             }
