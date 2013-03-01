@@ -289,6 +289,14 @@ var LinkDialog = {
             });
         // create link on selection or update existing link
         } else {            
+            var styles;
+            
+            if (tinymce.isWebKit) {
+                if(n && n.nodeName == 'IMG') {
+                    styles = n.style.cssText;
+                }
+            }
+            
             ed.execCommand('mceInsertLink', false, {'href' : '#', 'data-mce-link' : '1'}, {
                 skip_undo : 1
             });
@@ -302,6 +310,10 @@ var LinkDialog = {
             // if text selection, update
             if (!$('#text').is(':disabled') && el) {
                 ed.dom.setHTML(el, $('#text').val());
+            }
+            
+            if (styles) {
+                ed.dom.setAttrib(n, 'style', styles);
             }
         }
 
