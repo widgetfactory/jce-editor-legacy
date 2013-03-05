@@ -26,7 +26,7 @@
             
             // Register buttons
             ed.addButton('charmap', {
-                title : 'charmap.desc',
+                title : 'advanced.charmap_desc',
                 cmd : 'mceCharacterMap'
             });
         }
