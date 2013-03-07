@@ -13,7 +13,7 @@
             this.editor = ed;
 			
             // Register commands
-            ed.addCommand('mceColorPicker', function(v) {
+            ed.addCommand('mceColorPicker', function(ui, v) { 
                 ed.windowManager.open({
                     url     : ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=colorpicker',
                     width   : 375 + parseInt(ed.getLang('advanced.colorpicker_delta_width', 0)),
