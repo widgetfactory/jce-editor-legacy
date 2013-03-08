@@ -46,7 +46,7 @@ abstract class WFMimeType {
         'application/mbox' => 'mbox',
         'application/mediaservercontrol+xml' => 'mscml',
         'application/mp4' => 'mp4s',
-        'application/msword' => 'doc dot',
+        'application/msword' => 'doc dot ppt xls',
         'application/mxf' => 'mxf',
         'application/octet-stream' => 'bin dms lha lrf lzh so iso dmg dist distz pkg bpk dump elc deploy',
         'application/oda' => 'oda',
