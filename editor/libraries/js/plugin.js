@@ -713,7 +713,7 @@
             });
         },
         serialize: function(o) {
-            if (window.JSON.stringify) {
+            if (window.JSON) {
                 return JSON.stringify(o);
             }
 
