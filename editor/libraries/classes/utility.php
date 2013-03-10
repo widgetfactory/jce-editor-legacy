@@ -48,7 +48,7 @@ abstract class WFUtility {
     }
 
     private static function checkCharValue($string) {
-        if (preg_match('/([^\w\.\-~\/\\\s ])/i', $string, $matches)) {            
+        if (preg_match('#([^\w\.\-~\/\\\\\s ])#i', $string, $matches)) {            
             foreach ($matches as $match) {
                 // not a safe UTF-8 character
                 if (ord($match) < 127) {
