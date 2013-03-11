@@ -340,18 +340,14 @@
                         'buttons'       : [{
                             title : ed.getLang('insert', 'Insert'),
                             id    : 'insert',
-                            click : function(e) {
-                                c.restoreSelection();
-                                
+                            click : function(e) {                                
                                 return self._insertAnchor(input.value);
                             },
                             scope : self
                         }, {
                             title : ed.getLang('anchor.remove', 'Remove'),
                             id    : 'remove',
-                            click : function(e) {
-                                c.restoreSelection();
-                                
+                            click : function(e) {                                
                                 if (!DOM.hasClass(e.target, 'disabled')) {
                                     self._removeAnchor();
                                 }

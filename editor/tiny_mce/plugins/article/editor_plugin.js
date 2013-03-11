@@ -341,9 +341,7 @@
                             buttons         : [{
                                 title : ed.getLang('common.insert', 'Insert'),
                                 id    : 'insert',
-                                click : function(e) {
-                                    c.restoreSelection();
-                                    
+                                click : function(e) {                                    
                                     ed.execCommand('mcePageBreak', false, {
                                         title   : title.value, 
                                         alt     : alt.value
