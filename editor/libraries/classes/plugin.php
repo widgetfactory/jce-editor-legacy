@@ -177,16 +177,21 @@ class WFEditorPlugin extends JObject {
             WFLanguage::load('com_jce', JPATH_ADMINISTRATOR);
             // Load Plugin language
             WFLanguage::load('com_jce_' . trim($this->getName()));
-
-            $xml = WFXMLHelper::parseInstallManifest(WF_EDITOR_PLUGIN . '/' . $name . '.xml');
-
+            
             // set default plugin version
             $plugin_version = '';
             
-            if (isset($xml['version'])) {
-                $plugin_version = $xml['version'];
-            }
+            $manifest = WF_EDITOR_PLUGIN . '/' . $name . '.xml';
             
+            if (is_file($manifest)) {
+                $xml = WFXMLHelper::parseInstallManifest();
+                
+                if ($xml && isset($xml['version'])) {
+                    $plugin_version = $xml['version'];
+                }
+            }
+
+            // add plugin version
             if ($plugin_version) {
                 $version .= '-' . $plugin_version;
             }
@@ -301,13 +306,21 @@ class WFEditorPlugin extends JObject {
      */
     public function getDefaults($defaults = array()) {
         $name = $this->getName();
+        
+        // get manifest path
+        $manifest = WF_EDITOR_PLUGIN . '/' . $name . '.xml';
+        
+        // get parameter defaults
+        if (is_file($manifest)) {
+            $params = $this->getParams(array(
+                'key'   => $name,
+                'path'  => $manifest
+            ));
+            
+            return array_merge($defaults, (array) $params->getAll('defaults'));
+        }
 
-        $params = $this->getParams(array(
-            'key' => $name,
-            'path' => WF_EDITOR_PLUGIN . '/' . $name . '.xml'
-                ));
-
-        return array_merge($defaults, (array) $params->getAll('defaults'));
+        return $defaults;
     }
 
     /**
