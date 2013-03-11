@@ -184,7 +184,7 @@ class WFEditorPlugin extends JObject {
             $manifest = WF_EDITOR_PLUGIN . '/' . $name . '.xml';
             
             if (is_file($manifest)) {
-                $xml = WFXMLHelper::parseInstallManifest();
+                $xml = WFXMLHelper::parseInstallManifest($manifest);
                 
                 if ($xml && isset($xml['version'])) {
                     $plugin_version = $xml['version'];
