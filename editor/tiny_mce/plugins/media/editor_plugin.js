@@ -1061,7 +1061,7 @@
                             }
                             // get mimetype
                             if (!root.type) {
-                               root.type = this.getMimeType(o.src); 
+                               root.type = this.getMimeType(root.src); 
                             }
                         } else {
                             delete root.src;
