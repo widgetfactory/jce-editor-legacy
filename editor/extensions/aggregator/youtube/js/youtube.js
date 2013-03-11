@@ -118,6 +118,24 @@ WFAggregator.add('youtube', {
             src = src.replace('youtube-nocookie', 'youtube');
         }
 
+        if (type == 'iframe') {
+            $.extend(data, {
+                allowfullscreen : true,
+                frameborder : 0
+            });	
+            
+            // add wmode
+            args['wmode'] = 'opaque';
+            
+        } else {
+            $.extend(true, data, {
+                param : {
+                    allowfullscreen : true,
+                    wmode : 'opaque'
+                }
+            });
+        }
+        
         // convert args to URL query string
         var query = $.param(args);
 
@@ -127,20 +145,6 @@ WFAggregator.add('youtube', {
         }
 
         data.src = src;
-
-        if (type == 'iframe') {
-            $.extend(data, {
-                allowfullscreen : true,
-                frameborder : 0
-            });			
-        } else {
-            $.extend(true, data, {
-                param : {
-                    allowfullscreen : true,
-                    wmode : 'opaque'
-                }
-            });
-        }
 
         return data;
     },
@@ -182,6 +186,11 @@ WFAggregator.add('youtube', {
         // decode playlist
         if (data.playlist) {
             data.playlist = decodeURIComponent(data.playlist);
+        }
+        
+        // remove wmode
+        if (query.wmode) {
+            delete query.wmode;
         }
 
         // add additional parameter fields
