@@ -13,10 +13,10 @@
     var Node = tinymce.html.Node;
 
     var Styles = new tinymce.html.Styles();
-    
+
     var validChildren = '#|a|abbr|area|address|article|aside|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|' +
-    'figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|' +
-    'p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var';
+            'figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|' +
+            'p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var';
 
     function toArray(obj) {
         var undef, out, i;
@@ -35,99 +35,87 @@
         }
 
         return obj;
-    };
+    }
+    ;
 
     function ucfirst(s) {
         return s.charAt(0).toUpperCase() + s.substring(1);
-    };
+    }
+    ;
 
     // Media types supported by this plugin
     var mediaTypes = {
         // Type, clsid, mime types, codebase
-        "Flash" : {
-            classid 	: "CLSID:D27CDB6E-AE6D-11CF-96B8-444553540000",
-            type		: "application/x-shockwave-flash",
-            codebase 	: "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,1,53,64"
+        "Flash": {
+            classid: "CLSID:D27CDB6E-AE6D-11CF-96B8-444553540000",
+            type: "application/x-shockwave-flash",
+            codebase: "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,1,53,64"
         },
-
-        "ShockWave" : {
-            classid 	: "CLSID:166B1BCA-3F9C-11CF-8075-444553540000",
-            type		: "application/x-director",
-            codebase 	: "http://download.macromedia.com/pub/shockwave/cabs/director/sw.cab#version=10,2,0,023"
+        "ShockWave": {
+            classid: "CLSID:166B1BCA-3F9C-11CF-8075-444553540000",
+            type: "application/x-director",
+            codebase: "http://download.macromedia.com/pub/shockwave/cabs/director/sw.cab#version=10,2,0,023"
         },
-
-        "WindowsMedia" : {
-            classid 	: "CLSID:6BF52A52-394A-11D3-B153-00C04F79FAA6",
-            type		: "application/x-mplayer2",
-            codebase	: "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=10,00,00,3646"
+        "WindowsMedia": {
+            classid: "CLSID:6BF52A52-394A-11D3-B153-00C04F79FAA6",
+            type: "application/x-mplayer2",
+            codebase: "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=10,00,00,3646"
         },
-
-        "QuickTime" : {
-            classid 	: "CLSID:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B",
-            type		: "video/quicktime",
-            codebase	: "http://www.apple.com/qtactivex/qtplugin.cab#version=7,3,0,0"
+        "QuickTime": {
+            classid: "CLSID:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B",
+            type: "video/quicktime",
+            codebase: "http://www.apple.com/qtactivex/qtplugin.cab#version=7,3,0,0"
         },
-
-        "DivX"		: {
-            classid 	: "CLSID:67DABFBF-D0AB-41FA-9C46-CC0F21721616",
-            type		: "video/divx",
-            codebase	: "http://go.divx.com/plugin/DivXBrowserPlugin.cab"
+        "DivX": {
+            classid: "CLSID:67DABFBF-D0AB-41FA-9C46-CC0F21721616",
+            type: "video/divx",
+            codebase: "http://go.divx.com/plugin/DivXBrowserPlugin.cab"
         },
-
-        "RealMedia" : {
-            classid : "CLSID:CFCDAA03-8BE4-11CF-B84B-0020AFBBCCFA",
-            type		: "audio/x-pn-realaudio-plugin"
+        "RealMedia": {
+            classid: "CLSID:CFCDAA03-8BE4-11CF-B84B-0020AFBBCCFA",
+            type: "audio/x-pn-realaudio-plugin"
         },
-
-        "Java" : {
-            classid 	: "CLSID:8AD9C840-044E-11D1-B3E9-00805F499D93",
-            type		  : "application/x-java-applet",
-            codebase	: "http://java.sun.com/products/plugin/autodl/jinstall-1_5_0-windows-i586.cab#Version=1,5,0,0"
+        "Java": {
+            classid: "CLSID:8AD9C840-044E-11D1-B3E9-00805F499D93",
+            type: "application/x-java-applet",
+            codebase: "http://java.sun.com/products/plugin/autodl/jinstall-1_5_0-windows-i586.cab#Version=1,5,0,0"
         },
-
-        "Silverlight" : {
-            classid		: "CLSID:DFEAF541-F3E1-4C24-ACAC-99C30715084A",
-            type		  : "application/x-silverlight-2"
+        "Silverlight": {
+            classid: "CLSID:DFEAF541-F3E1-4C24-ACAC-99C30715084A",
+            type: "application/x-silverlight-2"
         },
-
-        "Video" : {
-            type		: 'video/mp4'
+        "Video": {
+            type: 'video/mp4'
         },
-
-        "Audio" : {
-            type    : 'audio/mp3'
+        "Audio": {
+            type: 'audio/mp3'
         },
-        
-        "Iframe" : {}
+        "Iframe": {}
     };
 
     tinymce.create('tinymce.plugins.MediaPlugin', {
-        init : function(ed, url) {
+        init: function(ed, url) {
             var self = this, lookup = {};
-			
+
             var cbase = {
                 // Type, clsid, mime types, codebase
-                "Flash" : {
-                    codebase 	: "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=" + ed.getParam('media_version_flash', '10,1,53,64')
+                "Flash": {
+                    codebase: "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=" + ed.getParam('media_version_flash', '10,1,53,64')
                 },
-
-                "ShockWave" : {
-                    codebase 	: "http://download.macromedia.com/pub/shockwave/cabs/director/sw.cab#version=" + ed.getParam('media_version_shockwave', '10,2,0,023')
+                "ShockWave": {
+                    codebase: "http://download.macromedia.com/pub/shockwave/cabs/director/sw.cab#version=" + ed.getParam('media_version_shockwave', '10,2,0,023')
                 },
-
-                "WindowsMedia" : {
-                    codebase	: "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=" + ed.getParam('media_version_windowsmedia', '10,00,00,3646')
+                "WindowsMedia": {
+                    codebase: "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=" + ed.getParam('media_version_windowsmedia', '10,00,00,3646')
                 },
-
-                "QuickTime" : {
-                    codebase	: "http://www.apple.com/qtactivex/qtplugin.cab#version=" + ed.getParam('media_version_quicktime', '7,3,0,0')
+                "QuickTime": {
+                    codebase: "http://www.apple.com/qtactivex/qtplugin.cab#version=" + ed.getParam('media_version_quicktime', '7,3,0,0')
                 },
-
-                "Java" : {
-                    codebase	: "http://java.sun.com/products/plugin/autodl/jinstall-1_5_0-windows-i586.cab#Version=" + ed.getParam('media_version_java', '1,5,0,0')
+                "Java": {
+                    codebase: "http://java.sun.com/products/plugin/autodl/jinstall-1_5_0-windows-i586.cab#Version=" + ed.getParam('media_version_java', '1,5,0,0')
                 }
             };
-			
+
             each(cbase, function(v, k) {
                 extend(mediaTypes[k], v);
             });
@@ -146,32 +134,31 @@
                     }
                 }
             })(
-
-                "application/x-director,dcr" +
-                "video/divx,divx" +
-                "application/pdf,pdf," +
-                "application/x-shockwave-flash,swf swfl," +
-                "audio/mpeg,mpga mpega mp2 mp3," +
-                "audio/ogg,ogg spx oga," +
-                "audio/x-wav,wav," +
-                "video/mpeg,mpeg mpg mpe," +
-                "video/mp4,mp4 m4v," +
-                "video/ogg,ogg ogv,"+
-                "video/webm,webm,"+
-                "video/quicktime,qt mov," +
-                "video/x-flv,flv," +
-                "video/vnd.rn-realvideo,rv" +
-                "video/3gpp,3gp" +
-                "video/x-matroska,mkv"
-                );
+                    "application/x-director,dcr" +
+                    "video/divx,divx" +
+                    "application/pdf,pdf," +
+                    "application/x-shockwave-flash,swf swfl," +
+                    "audio/mpeg,mpga mpega mp2 mp3," +
+                    "audio/ogg,ogg spx oga," +
+                    "audio/x-wav,wav," +
+                    "video/mpeg,mpeg mpg mpe," +
+                    "video/mp4,mp4 m4v," +
+                    "video/ogg,ogg ogv," +
+                    "video/webm,webm," +
+                    "video/quicktime,qt mov," +
+                    "video/x-flv,flv," +
+                    "video/vnd.rn-realvideo,rv" +
+                    "video/3gpp,3gp" +
+                    "video/x-matroska,mkv"
+                    );
 
             self.editor = ed;
-            self.url    = url;
+            self.url = url;
 
             // Parse media types into a lookup table
             var scriptRegExp = '';
 
-            each (mediaTypes, function(v, k) {
+            each(mediaTypes, function(v, k) {
                 v.name = k;
 
                 if (v.classid) {
@@ -180,9 +167,9 @@
                 if (v.type) {
                     lookup[v.type] = v;
                 }
-                
-                lookup['mceItem' + k]    = v;
-                lookup[k.toLowerCase()]  = v;
+
+                lookup['mceItem' + k] = v;
+                lookup[k.toLowerCase()] = v;
             });
 
             //scriptRegExp = new RegExp('write(' + scriptRegExp + ')\\(([^)]+)\\)');
@@ -190,16 +177,17 @@
 
             function isMedia(n) {
                 return n && n.nodeName == 'IMG' && /mceItem(Flash|ShockWave|WindowsMedia|QuickTime|RealMedia|DivX|Silverlight|Audio|Video|Generic|Iframe)/.test(n.className);
-            };
+            }
+            ;
 
-            ed.onPreInit.add( function() {
+            ed.onPreInit.add(function() {
                 var invalid = ed.settings.invalid_elements;
 
                 if (ed.settings.schema === 'html5') {
                     // add valid children
                     ed.schema.addValidChildren('+object[video|audio|' + validChildren + ']');
                     ed.schema.addValidChildren('+audio[' + validChildren + ']');
-                    ed.schema.addValidChildren('+video[' + validChildren + ']'); 
+                    ed.schema.addValidChildren('+video[' + validChildren + ']');
                 } else {
                     ed.schema.addValidElements('video[src|autobuffer|autoplay|loop|controls|width|height|poster|*],audio[src|autobuffer|autoplay|loop|controls|*],source[src|type|media|*],embed[src|type|width|height|*]');
                 }
@@ -218,11 +206,11 @@
 
                     while (i--) {
                         node = nodes[i];
-                        
+
                         // if valid node (validate == false)
                         if (tinymce.inArray(invalid, node.name) == -1) {
                             self.toImage(node);
-                        // remove node
+                            // remove node
                         } else {
                             node.remove();
                         }
@@ -243,10 +231,10 @@
 
             });
 
-            ed.onInit.add( function() {
+            ed.onInit.add(function() {
                 // Display "media" instead of "img" in element path
                 if (ed.theme && ed.theme.onResolveName) {
-                    ed.theme.onResolveName.add( function(theme, o) {
+                    ed.theme.onResolveName.add(function(theme, o) {
                         if (o.name === 'img' && /mceItem(Object|Embed|Audio|Video|Generic)/.test(o.node.className)) {
                             o.name = 'media';
                         }
@@ -262,7 +250,7 @@
                     ed.dom.loadCSS(url + "/css/content.css");
             });
 
-            ed.onBeforeSetContent.add( function(ed, o) {
+            ed.onBeforeSetContent.add(function(ed, o) {
                 var h = o.content;
                 // fix some elements
                 //h = h.replace(/<(param|source)([^\/]+?)\/>(\s+?)<\/\1>/gi, '<$1$2/>');
@@ -275,57 +263,55 @@
 
                     // convert conditional comments
                     d = d.replace(/<!\[if([^\]]+)\]>/gi, function(a, b) {
-                        return '<comment data-comment-condition="[if'+ b +']">';
+                        return '<comment data-comment-condition="[if' + b + ']">';
                     });
 
                     // convert conditional comments end
                     d = d.replace(/<!(--<!)?\[endif\](--)?>/gi, '</comment>');
 
                     /* process comments
-					 d = d.replace(/<!--([\w\W]+?)-->/g, function(a, b) {
-					 return '<comment>' + ed.dom.encode(b) + '</comment>';
-					 });*/
+                     d = d.replace(/<!--([\w\W]+?)-->/g, function(a, b) {
+                     return '<comment>' + ed.dom.encode(b) + '</comment>';
+                     });*/
 
-                    return '<' + b + c + '>' + d + '</'+ b +'>';
+                    return '<' + b + c + '>' + d + '</' + b + '>';
                 });
 
                 o.content = h;
             });
 
-        /*ed.onPostProcess.add( function(ed, o) {
-			 if (o.get) {
-			 // cleanup param and source elements
-			 o.content = o.content.replace(/>(\s|&nbsp;)?<\/(source|param)>/gi, ' />');
-			 }
-			 });*/
+            /*ed.onPostProcess.add( function(ed, o) {
+             if (o.get) {
+             // cleanup param and source elements
+             o.content = o.content.replace(/>(\s|&nbsp;)?<\/(source|param)>/gi, ' />');
+             }
+             });*/
         },
-
-        getInfo : function() {
+        getInfo: function() {
             return {
-                longname 	: 'Media',
-                author 		: 'Ryan Demmer',
-                authorurl 	: 'http://www.joomlacontenteditor.net',
-                infourl 	: 'http://www.joomlacontenteditor.net',
-                version 	: '@@version@@'
+                longname: 'Media',
+                author: 'Ryan Demmer',
+                authorurl: 'http://www.joomlacontenteditor.net',
+                infourl: 'http://www.joomlacontenteditor.net',
+                version: '@@version@@'
             };
         },
-
         /**
-		 * Convert a URL
-		 */
-        convertUrl : function(url, force_absolute) {
+         * Convert a URL
+         */
+        convertUrl: function(url, force_absolute) {
             var self = this, ed = self.editor, settings = ed.settings, converter = settings.url_converter, scope = settings.url_converter_scope || self;
 
             if (!url)
                 return url;
-            
+
             var parts, query = '', n = url.indexOf('?');
-            
+
             if (n === -1) {
                 url = url.replace(/&amp;/g, '&');
-                n   = url.indexOf('&');
+                n = url.indexOf('&');
             }
-            
+
             if (n > 0) {
                 query = url.substring(n + 1, url.length), url = url.substr(0, n);
             }
@@ -338,15 +324,14 @@
 
             return url + (query ? '?' + query : '');
         },
-
         /**
-		 * Create Template object
-		 * Private internal function
-		 * @param n Node
-		 * @param o Object
-		 * @return o Object
-		 */
-        createTemplate : function(n, o) {
+         * Create Template object
+         * Private internal function
+         * @param n Node
+         * @param o Object
+         * @return o Object
+         */
+        createTemplate: function(n, o) {
             var self = this, ed = this.editor, dom = ed.dom, nn, hc, cn, html;
 
             hc = n.firstChild;
@@ -379,7 +364,7 @@
                             extend(o[nn], at);
 
                             o = o[nn];
-                        // otherwise add attributes (eg: iframe, embed, audio, video)
+                            // otherwise add attributes (eg: iframe, embed, audio, video)
                         } else {
                             extend(o, at);
                         }
@@ -413,7 +398,7 @@
                         }
 
                         extend(o[nn], {
-                            'data-comment-condition' : v
+                            'data-comment-condition': v
                         });
 
                         if (hc) {
@@ -428,7 +413,7 @@
                         }
                     } else {
                         v = new tinymce.html.Serializer({
-                            inner   : true,
+                            inner: true,
                             validate: false
                         }).serialize(n);
 
@@ -441,7 +426,7 @@
                 } else {
                     if (nn == '#text') {
                         html = n.value;
-                    } else {					
+                    } else {
                         html = new tinymce.html.Serializer().serialize(n);
                     }
                 }
@@ -457,14 +442,13 @@
 
             return o;
         },
-
         /**
-		 * Convert media elements to image placeholder
-		 * @param n Media Element
-		 * @param cl Classname
-		 * @return img Image Element
-		 */
-        toImage : function(n) {
+         * Convert media elements to image placeholder
+         * @param n Media Element
+         * @param cl Classname
+         * @return img Image Element
+         */
+        toImage: function(n) {
             var self = this, ed = this.editor, type, name, o = {}, data = {}, classid = '', styles, matches;
 
             // If node isn't in document or is child of media node
@@ -491,17 +475,17 @@
                 name = n.name;
                 var style = Styles.parse(n.attr('style'));
 
-                var w = n.attr('width')   || style.width   || '';
-                var h = n.attr('height')  || style.height  || '';
-				
+                var w = n.attr('width') || style.width || '';
+                var h = n.attr('height') || style.height || '';
+
                 var type = n.attr('type');
 
                 data = this.createTemplate(n);
-                
+
                 // convert from single embed
-                if (name == 'embed' && type == 'application/x-shockwave-flash') {					
+                if (name == 'embed' && type == 'application/x-shockwave-flash') {
                     name = 'object';
-                    
+
                     data.param = {};
 
                     // get and assign flash variables
@@ -512,19 +496,20 @@
                             if (k == 'flashvars') {
                                 try {
                                     v = encodeURIComponent(v);
-                                } catch(e) {}
+                                } catch (e) {
+                                }
                             }
 
                             data.param[k] = v;
                         }
-                        
+
                         delete data[k];
                     });
                 }
 
                 // remove nested children
                 each(['audio', 'embed', 'object', 'video', 'iframe'], function(el) {
-                    each(n.getAll(el), function(node) {                        
+                    each(n.getAll(el), function(node) {
                         node.remove();
                     });
                 });
@@ -540,7 +525,7 @@
                         if (param) {
                             data.data = param.src || param.url || param.movie || param.source;
                         }
-                    }					
+                    }
                 } else {
                     if (!data.src) {
                         if (data.source) {
@@ -548,7 +533,7 @@
                         }
                     }
                 }
-				
+
                 // get type data
                 var lookup = this.lookup[classid] || this.lookup[type] || this.lookup[name] || this.lookup['flash'];
                 type = lookup.name || '';
@@ -560,12 +545,12 @@
                     var v = n.attr(na);
 
                     if (v) {
-                        switch(na) {
+                        switch (na) {
                             case 'bgcolor':
                                 style['background-color'] = v;
                                 break;
                             case 'align':
-                                if(/^(left|right)$/.test(v)) {
+                                if (/^(left|right)$/.test(v)) {
                                     style['float'] = v;
                                 } else {
                                     style['vertical-align'] = v;
@@ -608,15 +593,15 @@
             if (n.attr('class')) {
                 classes = n.attr('class').split(' ');
             }
-			
+
             // make name lowercase
             name = name.toLowerCase();
 
             // add identifier class
             classes.push('mceItem' + ucfirst(name));
-            
+
             // add type class
-            if (type && name !== type.toLowerCase() ) {
+            if (type && name !== type.toLowerCase()) {
                 classes.push('mceItem' + ucfirst(type));
             }
 
@@ -629,20 +614,19 @@
 
             // Set data attribute and class
             img.attr({
-                src   			: this.url + '/img/trans.gif',
-                width 			: w,
-                height			: h,
-                'class'         : classes.join(' '),
-                'data-mce-json' : JSON.serialize(o)
+                src: this.url + '/img/trans.gif',
+                width: w,
+                height: h,
+                'class': classes.join(' '),
+                'data-mce-json': JSON.serialize(o)
             });
         },
-
         /**
-		 * Serialize node attributes into JSON Object
-		 * @param n Node
-		 * @return attribs Object
-		 */
-        serializeAttributes : function(n) {
+         * Serialize node attributes into JSON Object
+         * @param n Node
+         * @return attribs Object
+         */
+        serializeAttributes: function(n) {
             var self = this, dom = this.editor.dom, attribs = {}, ti = '';
 
             if (n != 'iframe' || n != 'param') {
@@ -672,7 +656,8 @@
                     if (k == 'flashvars') {
                         try {
                             v = encodeURIComponent(v);
-                        } catch(e) {}
+                        } catch (e) {
+                        }
                     }
                 }
                 attribs[k] = v;
@@ -691,7 +676,7 @@
                         case 'loop':
                             attribs[k] = k;
                             break;
-                        // needed for Youtube iframes!
+                            // needed for Youtube iframes!
                         case 'allowfullscreen':
                             attribs[k] = (v == '') ? true : v;
                             break;
@@ -718,7 +703,8 @@
                             if (k == 'flashvars') {
                                 try {
                                     v = encodeURIComponent(v);
-                                } catch(e) {}
+                                } catch (e) {
+                                }
                             }
                         }
 
@@ -730,25 +716,24 @@
 
             return attribs;
         },
-
         /**
-		 * Create Node structure from template object
-		 * @param data JSON Data Object
-		 * @param el Parent Element
-		 * @return Parent Element
-		 */
-        createNodes : function(data, el) {
+         * Create Node structure from template object
+         * @param data JSON Data Object
+         * @param el Parent Element
+         * @return Parent Element
+         */
+        createNodes: function(data, el) {
             var self = this, ed = this.editor, s;
 
             /**
-			 * Internal function to create or process a node
-			 * @param o Data object
-			 * @param el Element
-			 */
+             * Internal function to create or process a node
+             * @param o Data object
+             * @param el Element
+             */
             function createNode(o, el) {
 
                 // process node object
-                each (o, function(v, k) {
+                each(o, function(v, k) {
                     var nn = el.name;
 
                     if (tinymce.is(v, 'object')) {
@@ -773,11 +758,11 @@
                             // create source elements from array
                             if (v instanceof Array) {
                                 // iterate through array
-                                each (v, function(s) {
+                                each(v, function(s) {
                                     // set attribute if string
                                     if (tinymce.is(s, 'string')) {
                                         self.setAttribs(el, data, k, s);
-                                    // create node if object
+                                        // create node if object
                                     } else {
                                         node = new Node(k, 1);
 
@@ -790,7 +775,7 @@
                                     }
                                 });
 
-                            // create media elements
+                                // create media elements
                             } else {
                                 if (k == 'param') {
                                     for (n in v) {
@@ -826,14 +811,13 @@
 
             return el;
         },
-
         /**
-		 * Internal function to set a node's attributes
-		 * @param n Node
-		 * @param k Attribute Key
-		 * @param v Attribute Value
-		 */
-        setAttribs : function(n, data, k, v) {
+         * Internal function to set a node's attributes
+         * @param n Node
+         * @param k Attribute Key
+         * @param v Attribute Value
+         */
+        setAttribs: function(n, data, k, v) {
             var ed = this.editor, dom = ed.dom, nn = n.name;
 
             if (v == null || typeof v == 'undefined') {
@@ -845,7 +829,8 @@
                     case 'flashvars':
                         try {
                             v = decodeURIComponent(v);
-                        } catch(e) {}
+                        } catch (e) {
+                        }
                         break;
                     case 'src' :
                     case 'movie':
@@ -872,7 +857,7 @@
                         }
 
                         n.attr('class', tinymce.trim(cls.join(' ', v)));
-                        
+
                         break;
                     case 'type' :
                         n.attr(k, v.replace(/(&(quot|apos);|")/g, "'"));
@@ -880,8 +865,9 @@
                     case 'flashvars':
                         try {
                             v = decodeURIComponent(v);
-                        } catch(e) {}
-						
+                        } catch (e) {
+                        }
+
                         n.attr(k, v);
                         break;
                     case 'src' :
@@ -890,8 +876,8 @@
                         n.attr(k, this.convertUrl(v));
                         break;
                     case 'html':
-                        var html   = new Node('#text', 3);
-                        html.raw   = true;
+                        var html = new Node('#text', 3);
+                        html.raw = true;
                         html.value = (n.value ? n.value : '') + dom.decode(v);
                         n.append(html);
                         break;
@@ -906,13 +892,12 @@
                 }
             }
         },
-
         /**
-		 * Get the mimetype from the classname or src
-		 * @param Classname eg: mceItemFlash or src
-		 * @return mimetype eg: application/x-shockwave-flash
-		 */
-        getMimeType : function(s) {
+         * Get the mimetype from the classname or src
+         * @param Classname eg: mceItemFlash or src
+         * @return mimetype eg: application/x-shockwave-flash
+         */
+        getMimeType: function(s) {
             var props, type, ext, cl = s.match(/mceItem(Flash|ShockWave|WindowsMedia|QuickTime|RealMedia|DivX|PDF|Silverlight|Iframe)/);
 
             if (cl) {
@@ -932,28 +917,27 @@
 
             return type;
         },
-
         /**
-		 * Build Object / Embed / Audio / Video element
-		 * @param o Properties object containing classid, codebase, mimetype etc.
-		 * @param n Image Element to replace
-		 * @return Object / Audio / Video / Embed element
-		 */
-        restoreElement : function(n, args) {
+         * Build Object / Embed / Audio / Video element
+         * @param o Properties object containing classid, codebase, mimetype etc.
+         * @param n Image Element to replace
+         * @return Object / Audio / Video / Embed element
+         */
+        restoreElement: function(n, args) {
             var self = this, ed = this.editor, dom = ed.dom, cl, props, v;
 
-            var data    = JSON.parse(n.attr('data-mce-json'));
-            var name    = this.getNodeName(n.attr('class'));
+            var data = JSON.parse(n.attr('data-mce-json'));
+            var name = this.getNodeName(n.attr('class'));
 
             // create parent node
-            var parent 	= new Node(name, 1);
+            var parent = new Node(name, 1);
 
             // get root object
-            var root 	= data[name];
-            var src 	= root.src 		|| root.data || '';
-            var params 	= root.param 	|| '';
+            var root = data[name];
+            var src = root.src || root.data || '';
+            var params = root.param || '';
 
-            each (['width', 'height'], function(k) {
+            each(['width', 'height'], function(k) {
                 v = n.attr(k);
                 // set width and height but not for audio element
                 if (v && name != 'audio') {
@@ -963,7 +947,7 @@
                 }
 
                 // check for and set width and height for child object/embed/video
-                each (['object', 'embed', 'video'], function(s) {
+                each(['object', 'embed', 'video'], function(s) {
                     if (root[s] && !root[s][k]) {
                         root[s][k] = v;
                     }
@@ -1003,7 +987,7 @@
 
                     // add movie param
                     extend(params, {
-                        'movie' : src
+                        'movie': src
                     });
 
                     // remove src param if present
@@ -1017,10 +1001,10 @@
                     if (!root.embed) {
                         // create embed node
                         root.embed = {
-                            width	: root.width,
-                            height	: root.height,
-                            src		: src,
-                            type	: root.type || this.getMimeType(n.attr('class')) || this.getMimeType(src)
+                            width: root.width,
+                            height: root.height,
+                            src: src,
+                            type: root.type || this.getMimeType(n.attr('class')) || this.getMimeType(src)
                         };
                     }
 
@@ -1037,9 +1021,9 @@
                     // transfer embed attributes
                     for (k in params) {
                         if (/^(movie|source|url)$/.test(k)) {
-                            root.embed.src 	= params[k];
+                            root.embed.src = params[k];
                         } else {
-                            root.embed[k] 	= params[k];
+                            root.embed[k] = params[k];
                         }
                     }
 
@@ -1064,20 +1048,23 @@
                     delete root.data;
                     delete root.type;
                 }
-            // audio / video
-            } else {
-                // remove src in audio / video attributes if source element present
+                // audio / video
+            } else {                
+                // remove src in audio / video attributes if multiple source elements present
                 if (root.src && root.source) {
-                    if (tinymce.is(root.source, 'array')) {
-                        // get first item
-                        var o = root.source.shift();
-                        // if src is the same, transfer mimetype
-                        if (o.src && o.src == root.src) {
+                    if (tinymce.is(root.source, 'array') && root.source.length) {
+                        // only one source item...
+                        if (root.source.length == 1) {
+                            // if the values are the same, remove source
+                            if (root.source[0].src == root.src) {
+                                delete root.source;
+                            }
+                            // get mimetype
                             if (!root.type) {
-                                root.type = o.type || this.getMimeType(o.src);
+                               root.type = this.getMimeType(o.src); 
                             }
                         } else {
-                            root.source.unshift(o);
+                            delete root.src;
                         }
                     }
                 }
@@ -1092,8 +1079,7 @@
             // create nodes
             n.replace(this.createNodes(root, parent));
         },
-
-        getNodeName : function(s) {
+        getNodeName: function(s) {
             s = /mceItem(Audio|Embed|Object|Video|Iframe)/.exec(s);
             if (s) {
                 return s[1].toLowerCase();
