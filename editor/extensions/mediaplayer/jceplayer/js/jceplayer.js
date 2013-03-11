@@ -120,7 +120,7 @@ WFMediaPlayer.init({
         args = args || {};
 
         // get all form values
-        $(':input:visible', '#mediaplayer_options').each( function() {
+        $(':input', '#mediaplayer_options').each( function() {
             k = $(this).attr('id'), v = $(this).val();
             
             if (k) {
