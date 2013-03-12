@@ -128,6 +128,12 @@ function jInsertEditorText(text, editor) {
                     'dl' : {
                         block : 'dl', 
                         wrapper: true
+                    },
+                    'code' : {
+                        inline : 'code'
+                    },
+                    'samp' : {
+                        inline : 'samp'
                     }
                 },
                 indent_before   : indent,
