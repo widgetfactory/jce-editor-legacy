@@ -193,7 +193,7 @@ class WFEditorPlugin extends JObject {
 
             // add plugin version
             if ($plugin_version) {
-                $version .= '-' . $plugin_version;
+                $version .= '-' . preg_replace('#[^a-z0-9]+#i', '', $plugin_version);
             }
 
             // create the document
