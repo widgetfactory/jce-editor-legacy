@@ -37,10 +37,7 @@ class WFLinkSearchExtension extends WFSearchExtension {
         }
 
         foreach ($plugins as $plugin) {
-            $plugin = JPluginHelper::getPlugin('search', $plugin);
-
-            // get saerch plugins
-            if (!empty($plugin)) {
+            if (JPluginHelper::isEnabled('search', $plugin)) {
                 JPluginHelper::importPlugin('search', $plugin);
             }
         }
