@@ -45,11 +45,13 @@ var SearchReplaceDialog = {
             e.preventDefault();
         });
         
-        $('#tabs').tabs('option', 'select', function(e, ui) {
-            var id = ui.panel.id;
+        var index = $('a[href="#' + m + '_tab"]').parent().index();
+        
+        $('#tabs').on('tabsactivate', function(e, ui) {
+            var id = $(ui.newPanel).attr('id');            
             self.switchMode(id.substring(0, id.indexOf('_')));
-        }).tabs('select', '#' + m + '_tab');
-
+        }).tabs('option', 'active', index);
+        
         this.switchMode(m);
 
         $('#' + m + '_panel_searchstring').val(tinyMCEPopup.getWindowArg("search_string"));
@@ -70,8 +72,12 @@ var SearchReplaceDialog = {
                 $('#' + m + '_panel_casesensitivebox').prop('checked',  $('#' + lm + '_panel_casesensitivebox').is(':checked'));
             }
 
-            $("#replaceBtn").css('display', (m == "replace") ? "inline" : "none");
-            $("#replaceAllBtn").css('display', (m == "replace") ? "inline" : "none");
+            $("#replaceBtn, #replaceAllBtn").css('display', function() {                
+                if (m == 'replace') {
+                    return 'inline';
+                }
+                return 'none';
+            });
             
             this.lastMode = m;
         }

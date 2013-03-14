@@ -40,7 +40,7 @@
             // Register commands
             ed.addCommand('mceSearch', function(ui, s) {
                 if (ed.getParam('searchreplace_use_dialog', 1)) {
-                    return open('search');
+                    return open('find');
                 }
                 
                 var se = ed.selection, r, b, w = ed.getWin(), ca = s.casesensitive , v = s.value || '', b = s.backwards, fl = 0, fo = 0, rs = s.replace, result;
