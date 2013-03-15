@@ -199,8 +199,12 @@
                         // fix body content
                         o.content = o.content.replace(/<body([^>]*)>([\s\S]*)<\/body>/, '$2');
                         
-                        // padd empty elements
+                        // pad empty elements
                         o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)([^>]*)><\/\1>/gi, '<$1$2>&nbsp;</$1>');
+                    }
+                    
+                    if (!ed.getParam('table_pad_empty_cells', true)) {
+                        o.content = o.content.replace(/<(th|td)([^>]*)>(&nbsp;|\u00a0)<\/\1>/gi, '<$1$2></$1>');
                     }
                 }
             });
