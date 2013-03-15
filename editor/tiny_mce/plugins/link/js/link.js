@@ -270,23 +270,14 @@ var LinkDialog = {
     		
             args[k] = v;
         });
-        
-        var selector = 'a[data-mce-link]';
-        
-        // set for removal
-        args['data-mce-link'] = null;
 
         // no selection
         if (se.isCollapsed()) {
-            ed.execCommand('mceInsertContent', false, '<a href="#" data-mce-link="1">' + $('#text').val() + '</a>', {
+            ed.execCommand('mceInsertContent', false, '<a href="#" id="__mce_tmp">' + $('#text').val() + '</a>', {
                 skip_undo : 1
             });
 
-            tinymce.each(ed.dom.select(selector), function(link) {
-                ed.dom.setAttribs(link, args);
-
-                el = link;
-            });
+            el = ed.dom.get('__mce_tmp');
         // create link on selection or update existing link
         } else {            
             var styles;
@@ -297,24 +288,25 @@ var LinkDialog = {
                 }
             }
             
-            ed.execCommand('mceInsertLink', false, {'href' : '#', 'data-mce-link' : '1'}, {
+            ed.execCommand('mceInsertLink', false, {'href' : '#', 'id' : '__mce_tmp'}, {
                 skip_undo : 1
             });
             
-            tinymce.each(ed.dom.select(selector), function(link) {
-                ed.dom.setAttribs(link, args);
-
-                el = link;
-            });
+            el = ed.dom.get('__mce_tmp');
         	
             // if text selection, update
             if (!$('#text').is(':disabled') && el) {
                 ed.dom.setHTML(el, $('#text').val());
             }
             
+            // restore IMG styles
             if (styles) {
                 ed.dom.setAttrib(n, 'style', styles);
             }
+        }
+        // set attributes
+        if (el) {
+            ed.dom.setAttribs(el, args);
         }
 
         // Create or remove popup
