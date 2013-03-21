@@ -247,8 +247,8 @@ WFMediaPlayer.init({
 	 * @param {String} fv Flashvars value
 	 * @param {Object} p Parameter Object
 	 */
-    setValues: function(data) {
-        var fv = data.param.flashvars || '';
+    setValues: function(data) {        
+        var fv = data.flashvars || data.param.flashvars || '';
         var at = this.parseValues(decodeURIComponent(fv));
 
         $.each(at, function(k, v) {
