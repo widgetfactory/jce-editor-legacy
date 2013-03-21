@@ -423,6 +423,17 @@ WFPopups.addPopup('jcemediabox', {
             delete data.caption;
         }
         
+        // set type
+        var mt = $('#jcemediabox_popup_mediatype').val() || n.type || data.type || '';
+
+        // Set media type
+        ed.dom.setAttrib(n, 'type', mt);
+        
+        // remove type so it is not added to rel attribute
+        if (data.type) {
+            delete data.type;
+        }
+
         // map object properties to options array
         var props = $.map(data, function(v, k) {
             return k + '[' + v + ']';
@@ -453,11 +464,6 @@ WFPopups.addPopup('jcemediabox', {
 
         // Set target
         ed.dom.setAttrib(n, 'target', '_blank');
-
-        var mt = $('#jcemediabox_popup_mediatype').val() || n.type || args.type || '';
-
-        // Set media type
-        ed.dom.setAttrib(n, 'type', mt);
     },
 
     /**
