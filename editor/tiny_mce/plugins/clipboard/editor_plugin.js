@@ -642,22 +642,28 @@
                     h = blocks;
                 }
             }
-
-            // Remove classes based on paste_strip_class_attributes setting. All Mso classes will be removed
-            var stripClass = ed.getParam('clipboard_paste_strip_class_attributes', 'all');
-
-            if (stripClass != 'none') {
+            
+            var stripClasses = ed.getParam('clipboard_paste_strip_class_attributes');
+            // backwards compatible setting
+            if (stripClasses == 'none' || stripClasses == 'mso') {
+                stripClasses = false;
+            }
+            
+            // Remove classes if required
+            if (stripClasses || o.wordContent) {
+                
                 function removeClasses(match, g1) {
                     // remove all classes
-                    if (stripClass == 'all') {
+                    if (stripClasses) {
                         return '';
                     }
-
-                    // remove Mso classes
-                    var cls = tinymce.grep(tinymce.explode(g1.replace(/^(["'])(.*)\1$/, "$2"), " "), function(v) {
-                        return (/^(?!mso)/i.test(v));
-                    });
-
+                    // only remove word classes
+                    if (o.wordContent) {
+                        // remove Mso classes
+                        var cls = tinymce.grep(tinymce.explode(g1.replace(/^(["'])(.*)\1$/, "$2"), " "), function(v) {
+                            return (/^(?!mso)/i.test(v));
+                        });
+                    }
                     return cls.length ? ' class="' + cls.join(" ") + '"' : '';
                 }
                 ;
@@ -1155,7 +1161,7 @@
                                         dom.setAttribs(n, {
                                             'href': '#' + id
                                         });
-                                        
+
                                         // remove name attribute from link
                                         n.removeAttribute('name');
                                     } else {
