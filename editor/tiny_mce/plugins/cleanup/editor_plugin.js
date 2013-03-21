@@ -25,6 +25,23 @@
                     ed.schema.addValidChildren('a[#|abbr|area|address|article|aside|audio|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var|video]');
                 }*/
                 
+                if (ed.settings.validate) {
+                    // add support for "bootstrap" icons
+                    ed.schema.addValidElements('+i[*]');
+                    var elements = ed.schema.elements;
+                    
+                    if (elements) {
+                        // allow for empty i tags
+                        if (elements.i) {
+                            elements.i.removeEmpty = false;
+                        }
+                        // allow for empty a tags
+                        if (elements.a) {
+                            elements.a.removeEmpty = false;
+                        }
+                    }
+                }
+
                 // only if "Cleanup HTML" enabled
                 if (ed.settings.validate) {
                     // Invalid Attribute Values cleanup
