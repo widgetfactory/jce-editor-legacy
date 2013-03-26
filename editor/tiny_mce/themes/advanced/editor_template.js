@@ -1555,9 +1555,9 @@
                             na = 'strong';
                             break;
 
-                        case 'i':
+                        /*case 'i':
                             na = 'em';
-                            break;
+                            break;*/
 
                         case 'img':
                             if (v = DOM.getAttrib(n, 'src'))
