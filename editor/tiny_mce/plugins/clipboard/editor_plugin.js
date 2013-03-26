@@ -40,13 +40,11 @@
             // Setup plugin events
             self.onPreProcess = new tinymce.util.Dispatcher(this);
             self.onPostProcess = new tinymce.util.Dispatcher(this);
-            //self.onBeforeInsert 	= new tinymce.util.Dispatcher(this);
             self.onAfterPaste = new tinymce.util.Dispatcher(this);
 
             // Register default handlers
             self.onPreProcess.add(self._preProcess);
             self.onPostProcess.add(self._postProcess);
-            //self.onBeforeInsert.add(self._onBeforeInsert);
 
             // Register optional preprocess handler
             self.onPreProcess.add(function(pl, o) {
@@ -145,8 +143,6 @@
                     getInner: 1,
                     forced_root_block: ''
                 });
-
-                //self.onBeforeInsert.dispatch(self, o);
 
                 if (self.plainText) {
                     self._insertPlainText(o.content);
@@ -642,16 +638,16 @@
                     h = blocks;
                 }
             }
-            
+
             var stripClasses = ed.getParam('clipboard_paste_strip_class_attributes');
             // backwards compatible setting
             if (stripClasses == 'none' || stripClasses == 'mso') {
                 stripClasses = false;
             }
-            
+
             // Remove classes if required
             if (stripClasses || o.wordContent) {
-                
+
                 function removeClasses(match, g1) {
                     // remove all classes
                     if (stripClasses) {
@@ -708,9 +704,6 @@
 
             // convert some tags if cleanup is off
             if (ed.settings.verify_html === false) {
-                h = h.replace(/<i\b([^>]*)>/gi, '<em$1>');
-                h = h.replace(/<\/i>/gi, '</em>');
-
                 h = h.replace(/<b\b([^>]*)>/gi, '<strong$1>');
                 h = h.replace(/<\/b>/gi, '</strong>');
             }
@@ -944,7 +937,9 @@
                 h = h.replace(/\n+?/g, '<br />');
 
                 // remove empty paragraphs
-                h = h.replace(/<p><\/p>/gi, '');
+                if (ed.getParam('clipboard_paste_remove_empty_paragraphs', true)) {
+                    h = h.replace(/<p>(\s|&nbsp;|\u00a0)?<\/p>/gi, '');
+                }
             }
 
             this._insert(h);
@@ -1228,18 +1223,6 @@
                 // Empty element regular expression
                 var emptyRe = /^(\s|&nbsp;|\u00a0)?$/;
 
-                if (ed.getParam('clipboard_paste_remove_empty_paragraphs', true)) {
-                    ed.dom.remove(dom.select('p:empty', o.node));
-
-                    each(dom.select('p', o.node), function(n) {
-                        var h = n.innerHTML;
-
-                        if (emptyRe.test(h)) {
-                            dom.remove(n);
-                        }
-                    });
-                }
-
                 // remove all spans
                 if (ed.getParam('clipboard_paste_remove_spans')) {
                     dom.remove(dom.select('span', o.node), 1);
@@ -1248,6 +1231,18 @@
                     ed.dom.remove(dom.select('span:empty', o.node));
 
                     each(dom.select('span', o.node), function(n) {
+                        var h = n.innerHTML;
+
+                        if (emptyRe.test(h)) {
+                            dom.remove(n);
+                        }
+                    });
+                }
+
+                if (ed.getParam('clipboard_paste_remove_empty_paragraphs', true)) {
+                    dom.remove(dom.select('p:empty', o.node));
+
+                    each(dom.select('p', o.node), function(n) {
                         var h = n.innerHTML;
 
                         if (emptyRe.test(h)) {
@@ -1383,6 +1378,7 @@
                 node.innerHTML = html.replace(/__MCE_LIST_ITEM__/g, '');
             }
         },
+
         /**
          * Inserts the specified contents at the caret position.
          */
@@ -1392,6 +1388,11 @@
             // reset validate to fix issues in IE7-
             if (ed.settings.validate === false) {
                 ed.settings.validate = true;
+            }
+            
+            // remove empty paragraphs
+            if (ed.getParam('clipboard_paste_remove_empty_paragraphs', true)) {
+                h = h.replace(/<p([^>]+)>(&nbsp;|\u00a0)?<\/p>/g, '');
             }
 
             ed.execCommand('mceInsertContent', false, h, {
