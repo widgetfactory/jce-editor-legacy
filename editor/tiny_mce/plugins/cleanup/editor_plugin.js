@@ -8,70 +8,70 @@
  * other free or open source software licenses.
  */
 (function() {
-    var each = tinymce.each, extend = tinymce.extend;
+    var each = tinymce.each, extend = tinymce.extend, Node = tinymce.html.Node;
+
+    function split(str, delim) {
+        return str.split(delim || ',');
+    };
 
     tinymce.create('tinymce.plugins.CleanupPlugin', {
-        init : function(ed, url) {
+        init: function(ed, url) {
             var self = this;
             this.editor = ed;
 
             // set validate value to verify_html value
-            if(ed.settings.verify_html === false) {
+            if (ed.settings.verify_html === false) {
                 ed.settings.validate = false;
             }
 
-            ed.onPreInit.add(function() {				
+            ed.onPreInit.add(function() {
                 /*if (ed.settings.schema === "html5") {
-                    ed.schema.addValidChildren('a[#|abbr|area|address|article|aside|audio|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var|video]');
-                }*/
-                
+                 ed.schema.addValidChildren('a[#|abbr|area|address|article|aside|audio|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var|video]');
+                 }*/
+
                 if (ed.settings.validate) {
                     // add support for "bootstrap" icons
                     ed.schema.addValidElements('+i[*]');
                     var elements = ed.schema.elements;
-                    
-                    if (elements) {
-                        // allow for empty i tags
-                        if (elements.i) {
-                            elements.i.removeEmpty = false;
+
+                    each(split('span,a,i'), function(name) {
+                        if (elements[name]) {
+                            elements[name].removeEmpty = false;
+                            elements[name].paddEmpty = true;
                         }
-                        // allow for empty a tags
-                        if (elements.a) {
-                            elements.a.removeEmpty = false;
-                        }
-                    }
+                    });
                 }
 
                 // only if "Cleanup HTML" enabled
                 if (ed.settings.validate) {
                     // Invalid Attribute Values cleanup
                     var invalidAttribValue = ed.getParam('invalid_attribute_values', '');
-	
-                    if(invalidAttribValue) {
+
+                    if (invalidAttribValue) {
                         function replaceAttributeValue(nodes, name, re) {
                             var i = nodes.length, node;
-	
-                            while(i--) {
+
+                            while (i--) {
                                 node = nodes[i];
-	
+
                                 // remove attribute if it matches expression
-                                if(new RegExp(re).test(node.attr(name))) {
+                                if (new RegExp(re).test(node.attr(name))) {
                                     node.attr(name, "");
                                     // remove temp attribute
-                                    if(name == 'src' || name == 'href') {
+                                    if (name == 'src' || name == 'href') {
                                         node.attr('data-mce-' + name, "");
                                     }
                                 }
                             }
                         }
-	
+
                         each(tinymce.explode(invalidAttribValue), function(item) {
                             var re, matches = /([a-z\*]+)\[([a-z]+)([\^\$]?=)["']([^"']+)["']\]/i.exec(item);
-	
-                            if(matches && matches.length == 5) {
+
+                            if (matches && matches.length == 5) {
                                 var tag = matches[1], attrib = matches[2], expr = matches[3], value = matches[4];
-	
-                                switch(expr) {
+
+                                switch (expr) {
                                     default:
                                     case '=':
                                         re = '(' + value + ')';
@@ -87,11 +87,11 @@
                                         break;
                                 }
                                 // all tags
-                                if(tag == '*') {
+                                if (tag == '*') {
                                     ed.parser.addAttributeFilter(attrib, function(nodes, name) {
                                         replaceAttributeValue(nodes, name, re);
                                     });
-                                // specific tag
+                                    // specific tag
                                 } else {
                                     ed.parser.addNodeFilter(tag, function(nodes, name) {
                                         replaceAttributeValue(nodes, attrib, re);
@@ -103,20 +103,20 @@
                 } else {
                     ed.serializer.addNodeFilter(ed.settings.invalid_elements, function(nodes, name) {
                         var i = nodes.length, node;
-                        
+
                         if (ed.schema.isValidChild('body', name)) {
-                            while(i--) {
+                            while (i--) {
                                 node = nodes[i];
                                 node.remove();
                             }
-                        } 
+                        }
                     });
-                    
+
                     ed.parser.addNodeFilter(ed.settings.invalid_elements, function(nodes, name) {
                         var i = nodes.length, node;
-                        
+
                         if (ed.schema.isValidChild('body', name)) {
-                            while(i--) {
+                            while (i--) {
                                 node = nodes[i];
                                 node.remove();
                             }
@@ -124,56 +124,82 @@
                     });
                 }
                 
+                ed.parser.addNodeFilter('i', function(nodes, name) {
+                    var i = nodes.length, node, cls;
+
+                    while (i--) {
+                        node = nodes[i], cls = node.attr('class');
+
+                        if (cls && cls.indexOf('icon-') != -1) {
+                            node.attr('data-mce-bootstrap', '1');
+                        }
+                    }
+                });
+                
+                ed.serializer.addAttributeFilter('data-mce-bootstrap', function(nodes, name) {
+                    var i = nodes.length, node;
+
+                    while (i--) {
+                        node = nodes[i];
+                        
+                        if (!node.firstChild) {
+                            node.append(new Node('#text', '3')).value = '\u00a0';
+                        }
+
+                        node.attr('data-mce-bootstrap', null);
+                    }
+                });
+
                 // disable onclick etc.
                 ed.parser.addAttributeFilter('onclick,ondblclick', function(nodes, name) {
                     var i = nodes.length, node;
-	
-                    while(i--) {
+
+                    while (i--) {
                         node = nodes[i];
-	
+
                         node.attr('data-mce-' + name, node.attr(name));
                         node.attr(name, null);
                     }
                 });
-                
+
                 ed.serializer.addAttributeFilter('data-mce-onclick,data-mce-ondblclick', function(nodes, name) {
                     var i = nodes.length, node, k;
-	
-                    while(i--) {
+
+                    while (i--) {
                         node = nodes[i], k = name.replace('data-mce-', '');
-	
+
                         node.attr(k, node.attr(name));
                         node.attr(name, null);
                     }
                 });
-		
+
             });
             // run cleanup with default settings
-            if(ed.settings.validate === false && ed.settings.verify_html === false) {
+            if (ed.settings.validate === false && ed.settings.verify_html === false) {
                 ed.addCommand('mceCleanup', function() {
                     var s = ed.settings, se = ed.selection, bm;
                     bm = se.getBookmark();
 
                     var content = ed.getContent({
-                        cleanup : true
+                        cleanup: true
                     });
 
                     var schema = new tinymce.html.Schema({
-                        validate : true,
-                        verify_html : true,
-                        valid_styles : s.valid_styles,
-                        valid_children : s.valid_children,
-                        custom_elements : s.custom_elements,
-                        extended_valid_elements : s.extended_valid_elements
+                        validate: true,
+                        verify_html: true,
+                        valid_styles: s.valid_styles,
+                        valid_children: s.valid_children,
+                        custom_elements: s.custom_elements,
+                        extended_valid_elements: s.extended_valid_elements
                     });
                     content = new tinymce.html.Serializer({
-                        validate : true
+                        validate: true
                     }, schema).serialize(new tinymce.html.DomParser({
-                        validate : true
+                        validate: true
                     }, schema).parse(content));
 
                     ed.setContent(content, {
-                        cleanup : true
+                        cleanup: true
                     });
 
                     se.moveToBookmark(bm);
@@ -181,28 +207,30 @@
             }
 
             // Cleanup callback
-            ed.onBeforeSetContent.add(function(ed, o) {				
+            ed.onBeforeSetContent.add(function(ed, o) {
                 // Geshi
                 o.content = o.content.replace(/<pre xml:\s*(.*?)>(.*?)<\/pre>/g, '<pre class="geshi-$1">$2</pre>');
-				
+
                 // only if "Cleanup HTML" enabled
-                if(ed.settings.validate) {
+                if (ed.settings.validate) {
                     // remove attributes
-                    if(ed.getParam('invalid_attributes')) {
+                    if (ed.getParam('invalid_attributes')) {
                         var s = ed.getParam('invalid_attributes', '');
 
                         o.content = o.content.replace(new RegExp('<([^>]+)(' + s.replace(/,/g, '|') + ')="([^"]+)"([^>]*)>', 'gi'), '<$1$4>');
                     }
                 }
+                // pad bootstrap icons
+                o.content = o.content.replace(/<i class="icon-([\w-]+)"><\/i>/g, '<i class="icon-$1">&nbsp;</i>');
             });
-            
+
             // Cleanup callback
             ed.onPostProcess.add(function(ed, o) {
-                if(o.set) {
+                if (o.set) {
                     // Geshi
                     o.content = o.content.replace(/<pre xml:\s*(.*?)>(.*?)<\/pre>/g, '<pre class="geshi-$1">$2</pre>');
                 }
-                if(o.get) {
+                if (o.get) {
                     // Geshi
                     o.content = o.content.replace(/<pre class="geshi-(.*?)">(.*?)<\/pre>/g, '<pre xml:$1>$2</pre>');
                     // Remove empty jcemediabox / jceutilities anchors
@@ -212,31 +240,34 @@
                     // legacy mce stuff
                     o.content = o.content.replace(/_mce_(src|href|style|coords|shape)="([^"]+)"\s*?/gi, '');
 
-                    if(ed.settings.validate === false) {
+                    if (ed.settings.validate === false) {
                         // fix body content
                         o.content = o.content.replace(/<body([^>]*)>([\s\S]*)<\/body>/, '$2');
-                        
+
                         // pad empty elements
                         o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)([^>]*)><\/\1>/gi, '<$1$2>&nbsp;</$1>');
                     }
-                    
+
                     if (!ed.getParam('table_pad_empty_cells', true)) {
                         o.content = o.content.replace(/<(th|td)([^>]*)>(&nbsp;|\u00a0)<\/\1>/gi, '<$1$2></$1>');
                     }
+                    
+                    // clean bootstrap icons
+                    o.content = o.content.replace(/<i class="icon-([\w-]+)">(&nbsp;|\u00a0)<\/i>/g, '<i class="icon-$1"></i>');
                 }
             });
-            
+
             ed.onSaveContent.add(function(ed, o) {
                 // Convert entities to characters
-                if(ed.getParam('cleanup_pluginmode')) {
-                    
+                if (ed.getParam('cleanup_pluginmode')) {
+
                     var entities = {
-                        '&#39;'     : "'",
-                        '&amp;'     : '&',
-                        '&quot;'    : '"',
-                        '&apos;'    : "'"
+                        '&#39;': "'",
+                        '&amp;': '&',
+                        '&quot;': '"',
+                        '&apos;': "'"
                     };
-                    
+
                     o.content = o.content.replace(/&(#39|apos|amp|quot);/gi, function(a) {
                         return entities[a];
                     });
@@ -245,17 +276,17 @@
 
             // Register buttons
             ed.addButton('cleanup', {
-                title : 'advanced.cleanup_desc',
-                cmd : 'mceCleanup'
+                title: 'advanced.cleanup_desc',
+                cmd: 'mceCleanup'
             });
         },
-        getInfo : function() {
+        getInfo: function() {
             return {
-                longname : 'Cleanup',
-                author : 'Ryan Demmer',
-                authorurl : 'http://www.joomlacontenteditor.net',
-                infourl : 'http://www.joomlacontenteditor.net',
-                version : '@@version@@'
+                longname: 'Cleanup',
+                author: 'Ryan Demmer',
+                authorurl: 'http://www.joomlacontenteditor.net',
+                infourl: 'http://www.joomlacontenteditor.net',
+                version: '@@version@@'
             };
         }
     });
