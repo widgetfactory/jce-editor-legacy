@@ -622,7 +622,7 @@
             if (ed.getParam('clipboard_paste_remove_attributes')) {
                 var attribs = ed.getParam('clipboard_paste_remove_attributes').split(',');
 
-                h = h.replace(new RegExp('\s(' + attribs.join('|') + ')="([^"]+)"', 'gi'), '');
+                h = h.replace(new RegExp(' (' + attribs.join('|') + ')="([^"]+)"', 'gi'), '');
             }
 
             // replace double linebreaks with paragraphs
@@ -691,9 +691,6 @@
                 h = h.replace(/<\/(p|div)>/gi, '<br /><br />').replace(/<(p|div)([^>]*)>/g, '').replace(/(<br \/>){2}$/g, '');
             }
 
-            // Chrome...
-            h = h.replace(/<meta([^>]+)>/, '');
-
             // Copy paste from Java like Open Office will produce this junk on FF
             h = h.replace(/Version:[\d.]+\nStartHTML:\d+\nEndHTML:\d+\nStartFragment:\d+\nEndFragment:\d+/gi, '');
 
@@ -716,6 +713,9 @@
         _processWordContent: function(h) {
             var ed = this.editor,
                     stripClass, len;
+            
+            // Chrome...
+            h = h.replace(/<meta([^>]+)>/, '');
 
             // convert list items to marker
             if (ed.getParam('clipboard_paste_convert_lists', true)) {
@@ -1212,11 +1212,19 @@
                 });
 
                 // Process links (ignore anchors)
-                each(dom.select('a[href]', o.node), function(el) {
+                each(dom.select('a', o.node), function(el) {
                     var s = dom.getAttrib(el, 'href');
-                    // convert url
-                    if (s.charAt(0) != '#') {
-                        dom.getAttrib(el, 'href', ed.convertURL(s));
+                    
+                    if (s) {
+                        // convert url
+                        if (s.charAt(0) != '#') {
+                            dom.getAttrib(el, 'href', ed.convertURL(s));
+                        }
+                    } else {
+                        // not an anchor, remove...
+                        if (!el.name || !el.id) {
+                            dom.remove(el);
+                        }
                     }
                 });
 
