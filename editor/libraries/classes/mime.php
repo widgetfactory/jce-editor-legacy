@@ -46,7 +46,7 @@ abstract class WFMimeType {
         'application/mbox' => 'mbox',
         'application/mediaservercontrol+xml' => 'mscml',
         'application/mp4' => 'mp4s',
-        'application/msword' => 'doc dot ppt xls',
+        'application/msword' => 'doc dot ppt xls docx pptx ppsx xlsx sldx potx xltx dotx',
         'application/mxf' => 'mxf',
         'application/octet-stream' => 'bin dms lha lrf lzh so iso dmg dist distz pkg bpk dump elc deploy',
         'application/oda' => 'oda',
@@ -509,7 +509,7 @@ abstract class WFMimeType {
         'application/xslt+xml' => 'xslt',
         'application/xspf+xml' => 'xspf',
         'application/xv+xml' => 'mxml xhvml xvml xvm',
-        'application/zip' => 'zip',
+        'application/zip' => 'zip docx pptx ppsx xlsx sldx potx xltx dotx',
         'audio/adpcm' => 'adp',
         'audio/basic' => 'au snd',
         'audio/midi' => 'mid midi kar rmi',
@@ -684,32 +684,24 @@ abstract class WFMimeType {
     public function check($name, $path) {
         $extension = strtolower(substr($name, strrpos($name, '.') + 1));
 
-        $ms_x = array('docx', 'pptx', 'ppsx', 'xlsx', 'sldx', 'potx', 'xltx', 'dotx');
-
         if (function_exists('finfo_open')) {
             if ($finfo = @finfo_open(FILEINFO_MIME_TYPE)) {
                 if ($mimetype = @finfo_file($finfo, $path)) {
                     @finfo_close($finfo);
 
-                    // we can't validate these files...
-                    if ($mimetype == 'application/zip' && in_array($extension, $ms_x)) {
-                        return true;
-                    }
+                    $mime = self::getMime($mimetype);
 
-                    if ($mime = self::getMime($mimetype)) {
+                    if ($mime) {                        
                         return in_array($extension, $mime);
                     }
                 }
             }
         } else if (function_exists('mime_content_type')) {
             if ($mimetype = @mime_content_type($path)) {
-                
-                // we can't validate these files...
-                if ($mimetype == 'application/zip' && in_array($extension, $ms_x)) {
-                    return true;
-                }
 
-                if ($mime = self::getMime($mimetype)) {
+                $mime = self::getMime($mimetype);
+
+                if ($mime) {
                     return in_array($extension, $mime);
                 }
             }
