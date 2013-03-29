@@ -376,6 +376,12 @@ WFPopups.addPopup('jcemediabox', {
         }
 
         var data = {};
+        
+        // pass title to link
+        if (args.title) {
+            ed.dom.setAttrib(n, 'title', args.title);
+            delete args.title;
+        }
 
         tinymce.each(['group', 'width', 'height'], function(k) {
             var v = $('#jcemediabox_popup_' + k).val();
