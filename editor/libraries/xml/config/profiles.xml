@@ -59,7 +59,7 @@
         <param name="theme_advanced_fonts_add" type="text" size="100" default="" label="WF_PARAM_FONT_ADD" description="WF_PARAM_FONT_ADD_DESC" placeholder="eg: Arial=arial,helvetica,sans-serif;Georgia=georgia,palatino" />
         <param name="theme_advanced_fonts_remove" type="text" size="100" default="" label="WF_PARAM_FONT_REMOVE" description="WF_PARAM_FONT_REMOVE_DESC" placeholder="eg: Arial;Georgia;Courier New" />
         <param name="theme_advanced_font_sizes" type="text" size="100" default="" placeholder="eg: 8pt,10pt,12pt,14pt,18pt,24pt,36pt" label="WF_PARAM_FONT_STYLES" description="WF_PARAM_FONT_STYLES_DESC" />
-        <param name="custom_colors" type="textarea" rows="3" cols="50" default="" label="WF_PARAM_CUSTOM_COLORS" description="WF_PARAM_CUSTOM_COLORS_DESC" placeholder="eg: #CC0000,#FF0000" />
+        <!--param name="custom_colors" type="textarea" rows="3" cols="50" default="" label="WF_PARAM_CUSTOM_COLORS" description="WF_PARAM_CUSTOM_COLORS_DESC" placeholder="eg: #CC0000,#FF0000" /-->
     </params>
     <params group="filesystem">
 		<!-- Plugin parameters -->
