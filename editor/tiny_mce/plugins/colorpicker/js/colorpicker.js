@@ -1,20 +1,30 @@
 //tinyMCEPopup.requireLangPack();
 
 var ColorPicker = {
-		
-    settings : {},
-	
-    init : function() {
-        var self = this, ed = tinyMCEPopup.editor, color = tinyMCEPopup.getWindowArg('input_color') || '#FFFFFF';
-		
+    settings: {},
+    init: function() {
+        var self = this, ed = tinyMCEPopup.editor, color = tinyMCEPopup.getWindowArg('input_color') || '#FFFFFF', doc = ed.getDoc();
+
+        // get stylesheets form editor
+        var stylesheets = [];
+
+        if (doc.styleSheets.length) {
+            $.each(doc.styleSheets, function(i, s) {
+                if (s.href && s.href.indexOf('com_jce') == -1) {
+                    stylesheets.push(s);
+                }
+            });
+        }
+
         $('#tmp_color').val(color).colorpicker($.extend(this.settings, {
-            dialog : true,
-            insert : function() {
+            dialog: true,
+            insert: function() {
                 return ColorPicker.insert();
             },
-            close 			: function() {
+            close: function() {
                 return tinyMCEPopup.close();
-            }
+            },
+            stylesheets: stylesheets
         }));
 
         $('button#insert').button({
@@ -22,16 +32,15 @@ var ColorPicker = {
                 primary: 'ui-icon-check'
             }
         });
-		
+
         // show body
         $('#jce').css('display', 'block');
-        
-    },
 
+    },
     /**
-	 * Insert selected colorpicker value
-	 */
-    insert : function() {
+     * Insert selected colorpicker value
+     */
+    insert: function() {
         var color = $("#colorpicker_color").val(), f = tinyMCEPopup.getWindowArg('func');
         tinyMCEPopup.restoreSelection();
 

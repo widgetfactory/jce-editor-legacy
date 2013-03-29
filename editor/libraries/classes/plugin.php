@@ -247,10 +247,9 @@ class WFEditorPlugin extends JObject {
 
         // add colorpicker
         if ($this->get('colorpicker')) {
-            wfimport('admin.helpers.tools');
-
+            $wf = WFEditor::getInstance();
+            
             $document->addScript(array('colorpicker'), 'libraries');
-            $document->addScriptDeclaration('ColorPicker.settings=' . json_encode(array('template_colors' => WFToolsHelper::getTemplateColors(), 'custom_colors' => $this->getParam('editor.custom_colors', ''))) . ';');
         }
 
         $document->addScript(array(

@@ -350,7 +350,7 @@
             $('#' + n).val($tmp.attr('class'));
         },
         createColourPickers: function() {
-            var self = this;
+            var self = this, ed = tinyMCEPopup.editor, doc = ed.getDoc();
 
             $('input.color, input.colour').each(function() {
                 var id = $(this).attr('id');
@@ -372,6 +372,17 @@
                         ev.call(this);
                     }
                 };
+                
+                // get stylesheets form editor
+                var stylesheets = [];
+                
+                if (doc.styleSheets.length) {
+                    $.each(doc.styleSheets, function(i, s) {
+                        if (s.href && s.href.indexOf('com_jce') == -1) {
+                            stylesheets.push(s);
+                        }
+                    });
+                }
 
                 var settings = $.extend(ColorPicker.settings, {
                     widget: $picker,
@@ -384,11 +395,12 @@
                         named: 'Named Colors',
                         template_tab: 'Template',
                         template: 'Template Colors',
-                        custom: 'Custom Colors',
+                        //custom: 'Custom Colors',
                         color: 'Color',
                         apply: 'Apply',
                         name: 'Name'
-                    }
+                    },
+                    stylesheets : stylesheets
                 });
 
                 $(this).colorpicker(settings);
