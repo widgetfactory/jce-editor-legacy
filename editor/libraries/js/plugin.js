@@ -180,12 +180,47 @@
             if (!$.support.cssFloat && document.querySelector) {
                 $('#jce').addClass('ie8');
             }
+            
+            // create buttons
+            $('button#insert, input#insert, button#update, input#update').button({
+                icons: {
+                    primary: 'ui-icon-check'
+                }
+            });
+
+            $('button#refresh, input#refresh').button({
+                icons: {
+                    primary: 'ui-icon-refresh'
+                }
+            });
+            
+            // add button actions
+            $('button#cancel, input#cancel').button({
+                icons: {
+                    primary: 'ui-icon-close'
+                }
+            });
+
+            // go no further if standalone
+            if (standalone) {
+                return;
+            }
+            
+            $('button#apply, input#apply').button({
+                icons: {
+                    primary: 'ui-icon-plus'
+                }
+            });
+            
+            $('button#help, input#help').button({
+                icons: {
+                    primary: 'ui-icon-help'
+                }
+            });
 
             // add button actions
-            $('button#cancel').click(function(e) {
-                if (!standalone) {
-                    tinyMCEPopup.close();
-                }
+            $('button#cancel, input#cancel').click(function(e) {
+                tinyMCEPopup.close();
                 e.preventDefault();
             });
 
@@ -196,37 +231,6 @@
             $('#tabs').tabs({
                 activate: function(e, ui) {
                     $(ui.newPanel).removeClass('ui-tabs-hide').siblings('.ui-tabs-panel').addClass('ui-tabs-hide');
-                }
-            });
-
-            // create buttons
-            $('button#insert, input#insert, button#update, input#update').button({
-                icons: {
-                    primary: 'ui-icon-check'
-                }
-            });
-
-            $('button#apply, input#apply').button({
-                icons: {
-                    primary: 'ui-icon-plus'
-                }
-            });
-
-            $('button#refresh, input#refresh').button({
-                icons: {
-                    primary: 'ui-icon-refresh'
-                }
-            });
-
-            $('button#cancel, input#cancel').button({
-                icons: {
-                    primary: 'ui-icon-close'
-                }
-            });
-
-            $('button#help, input#help').button({
-                icons: {
-                    primary: 'ui-icon-help'
                 }
             });
 
@@ -372,10 +376,10 @@
                         ev.call(this);
                     }
                 };
-                
+
                 // get stylesheets form editor
                 var stylesheets = [];
-                
+
                 if (doc.styleSheets.length) {
                     $.each(doc.styleSheets, function(i, s) {
                         if (s.href && s.href.indexOf('com_jce') == -1) {
@@ -400,7 +404,7 @@
                         apply: 'Apply',
                         name: 'Name'
                     },
-                    stylesheets : stylesheets
+                    stylesheets: stylesheets
                 });
 
                 $(this).colorpicker(settings);
