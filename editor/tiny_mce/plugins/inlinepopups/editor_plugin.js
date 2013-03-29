@@ -99,6 +99,11 @@
                 f.resizable = false;
             }
             
+            // set modal as true by default
+            if (typeof f.modal == 'undefined') {
+                f.modal = true;
+            }
+            
             var title = f.title || '';
 
             // get ui container
@@ -391,7 +396,7 @@
             
             var overlay = DOM.get('ui-widget-overlay');
             
-            if (!overlay) {
+            if (!overlay && f.modal) {
                 overlay = DOM.add(wrapper, 'div', {
                     id : 'ui-widget-overlay',
                     'class' : 'ui-widget-overlay',
@@ -411,7 +416,7 @@
             
             DOM.setAttrib(id, 'aria-hidden', 'false');
             
-            if (tinymce.isIE6 || (tinymce.isIE && !DOM.boxModel)) {
+            if (tinymce.isIE6 || (tinymce.isIE && !DOM.boxModel) && overlay) {
                 DOM.setStyles(overlay, {
                     position : 'absolute', 
                     left : vp.x, 
