@@ -297,6 +297,10 @@ var LinkDialog = {
                 if (el) {
                     ed.dom.setHTML(el, $('#text').val());
                 }
+                
+                // reset cursor
+                ed.selection.select(el);
+                ed.selection.collapse(0);
             }
             
             // restore styles
