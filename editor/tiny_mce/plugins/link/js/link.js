@@ -273,40 +273,34 @@ var LinkDialog = {
 
         // no selection
         if (se.isCollapsed()) {
-            ed.execCommand('mceInsertContent', false, '<a href="#" id="__mce_tmp">' + $('#text').val() + '</a>', {
+            ed.execCommand('mceInsertContent', false, '<a href="#" id="mce_link_tmp">' + $('#text').val() + '</a>', {
                 skip_undo : 1
             });
-
-            el = ed.dom.get('__mce_tmp');
-        // create link on selection or update existing link
-        } else {            
-            var styles;
             
-            if (tinymce.isWebKit) {
-                if(n && n.nodeName == 'IMG') {
-                    styles = n.style.cssText;
+            ed.dom.setAttribs(ed.dom.get('mce_link_tmp'), args);
+            
+        // create link on selection or update existing link
+        } else {                                    
+            // insert link
+            ed.execCommand('mceInsertLink', false, args);
+        	
+            // if text selection, update
+            if (!$('#text').is(':disabled')) {
+                // get the current node
+                el = ed.selection.getNode();
+
+                // get link from selection
+                if (el && el.nodeName != 'A') {
+                    el = ed.dom.getParent(n, 'a');
+                }
+                
+                if (el) {
+                    ed.dom.setHTML(el, $('#text').val());
                 }
             }
             
-            ed.execCommand('mceInsertLink', false, {'href' : '#', 'id' : '__mce_tmp'}, {
-                skip_undo : 1
-            });
-            
-            el = ed.dom.get('__mce_tmp');
-        	
-            // if text selection, update
-            if (!$('#text').is(':disabled') && el) {
-                ed.dom.setHTML(el, $('#text').val());
-            }
-            
-            // restore IMG styles
-            if (styles) {
-                ed.dom.setAttrib(n, 'style', styles);
-            }
-        }
-        // set attributes
-        if (el) {
-            ed.dom.setAttribs(el, args);
+            // restore styles
+            ed.dom.setAttrib(n, 'style', ed.dom.getAttrib(n, 'data-mce-style'));
         }
 
         // Create or remove popup
