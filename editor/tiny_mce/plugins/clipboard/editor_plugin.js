@@ -9,7 +9,7 @@
  * other free or open source software licenses.
  */
 (function() {
-    var each = tinymce.each, VK = tinymce.VK;
+    var each = tinymce.each, VK = tinymce.VK, Event = tinymce.dom.Event;
 
     var styleProps = new Array(
             'background', 'background-attachment', 'background-color', 'background-image', 'background-position', 'background-repeat',
@@ -707,15 +707,27 @@
 
             // remove multiple linebreaks
             //h = h.replace(/(<br \/>){2,}/gi, '<br /><br />');
-
+            
             o.content = h;
+        },
+        _cleanWordContent: function(h) {
+            // Chrome...
+            h = h.replace(/<meta([^>]+)>/, '');
+
+            // Word comments like conditional comments etc
+            h = h.replace(/<!--[\s\S]+?-->/gi, '');
+
+            // remove styles
+            h = h.replace(/<style([^>]*)>([\w\W]*?)<\/style>/gi, '');
+
+            // Remove comments, scripts (e.g., msoShowComment), XML tag, VML content, MS Office namespaced tags, and a few other tags
+            h = h.replace(/<(!|script[^>]*>.*?<\/script(?=[>\s])|\/?(\?xml(:\w+)?|meta|link|\w:\w+)(?=[\s\/>]))[^>]*>/gi, '');
+
+            return h;
         },
         _processWordContent: function(h) {
             var ed = this.editor,
                     stripClass, len;
-            
-            // Chrome...
-            h = h.replace(/<meta([^>]+)>/, '');
 
             // convert list items to marker
             if (ed.getParam('clipboard_paste_convert_lists', true)) {
@@ -744,14 +756,7 @@
                 h = h.replace(/<div[^>]+(mso-element:(end|foot)note|sdfootnote)[^>]+>([\s\S]+?)<\/div>/gi, '$3');
             }
 
-            // Word comments like conditional comments etc
-            h = h.replace(/<!--[\s\S]+?-->/gi, '');
-
-            // remove styles
-            h = h.replace(/<style([^>]*)>([\w\W]*?)<\/style>/gi, '');
-
-            // Remove comments, scripts (e.g., msoShowComment), XML tag, VML content, MS Office namespaced tags, and a few other tags
-            h = h.replace(/<(!|script[^>]*>.*?<\/script(?=[>\s])|\/?(\?xml(:\w+)?|meta|link|\w:\w+)(?=[\s\/>]))[^>]*>/gi, '');
+            h = this._cleanWordContent(h);
 
             // Convert <s> into <strike> for line-though
             h = h.replace(/<(\/?)s>/gi, "<$1strike>");
@@ -900,6 +905,9 @@
 
             if ((typeof (h) === "string") && (h.length > 0)) {
 
+                // clean any Word specific tags
+                h = this._cleanWordContent(h);
+
                 // If HTML content with line-breaking tags, then remove all cr/lf chars because only tags will break a line
                 if (/<(?:p|br|h[1-6]|ul|ol|dl|table|t[rdh]|div|blockquote|fieldset|pre|address|center)[^>]*>/i.test(h)) {
                     h = h.replace(/[\n\r]+/g, '');
@@ -912,6 +920,7 @@
 
                 h = h.replace(/<br[^>]*>|<\/tr>/gi, "\n"); // Single linebreak for <br /> tags and table rows
                 h = h.replace(/<\/t[dh]>\s*<t[dh][^>]*>/gi, "\t"); // Table cells get tabs betweem them
+
                 h = h.replace(/<[a-z!\/?][^>]*>/gi, ''); // Delete all remaining tags
                 h = h.replace(/&nbsp;/gi, " "); // Convert non-break spaces to regular spaces (remember, *plain text*)
 
@@ -1197,24 +1206,30 @@
                 }
 
                 // image file/data regular expression
-                var imgRe = /(file:|data:image)\//i;
+                var imgRe = /(file:|data:image)\//i, uploader = ed.plugins.upload;
+                var canUpload = uploader && uploader.plugins.length;
 
                 // Process images - remove local
                 each(dom.select('img', o.node), function(el) {
                     var s = dom.getAttrib(el, 'src');
 
                     // remove img element if blank, local file url or base64 encoded
-                    if (!s || imgRe.test(s)) {
-                        dom.remove(el);
+                    if (!s || imgRe.test(s)) {                        
+                        if (ed.getParam('clipboard_paste_upload_images') && canUpload) {
+                            // add marker
+                            ed.dom.setAttrib(el, 'data-mce-upload-marker', '1');
+                        } else {
+                            dom.remove(el);
+                        }
+                    } else {
+                        dom.setAttrib(el, 'src', ed.convertURL(s));
                     }
-
-                    dom.getAttrib(el, 'src', ed.convertURL(s));
                 });
 
                 // Process links (ignore anchors)
                 each(dom.select('a', o.node), function(el) {
                     var s = dom.getAttrib(el, 'href');
-                    
+
                     if (s) {
                         // convert url
                         if (s.charAt(0) != '#') {
@@ -1260,6 +1275,7 @@
                 }
             }
         },
+        
         /**
          * Converts the most common bullet and number formats in Office into a real semantic UL/LI list.
          */
@@ -1386,18 +1402,12 @@
                 node.innerHTML = html.replace(/__MCE_LIST_ITEM__/g, '');
             }
         },
-
         /**
          * Inserts the specified contents at the caret position.
          */
         _insert: function(h, skip_undo) {
             var ed = this.editor;
 
-            // reset validate to fix issues in IE7-
-            if (ed.settings.validate === false) {
-                ed.settings.validate = true;
-            }
-            
             // remove empty paragraphs
             if (ed.getParam('clipboard_paste_remove_empty_paragraphs', true)) {
                 h = h.replace(/<p([^>]+)>(&nbsp;|\u00a0)?<\/p>/g, '');
@@ -1406,11 +1416,6 @@
             ed.execCommand('mceInsertContent', false, h, {
                 skip_undo: skip_undo
             });
-
-            // reset validate
-            if (ed.settings.verify_html === false) {
-                ed.settings.validate = false;
-            }
         }
 
     });
