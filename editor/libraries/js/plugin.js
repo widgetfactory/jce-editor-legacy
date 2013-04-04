@@ -382,7 +382,8 @@
 
                 if (doc.styleSheets.length) {
                     $.each(doc.styleSheets, function(i, s) {
-                        if (s.href && s.href.indexOf('com_jce') == -1) {
+                        // only load template stylesheets, not from tinymce plugins
+                        if (s.href && s.href.indexOf('tiny_mce') == -1) {
                             stylesheets.push(s);
                         }
                     });

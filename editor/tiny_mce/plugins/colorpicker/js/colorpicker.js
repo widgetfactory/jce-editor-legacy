@@ -5,12 +5,12 @@ var ColorPicker = {
     init: function() {
         var self = this, ed = tinyMCEPopup.editor, color = tinyMCEPopup.getWindowArg('input_color') || '#FFFFFF', doc = ed.getDoc();
 
-        // get stylesheets form editor
+        // get stylesheets from editor
         var stylesheets = [];
 
         if (doc.styleSheets.length) {
             $.each(doc.styleSheets, function(i, s) {
-                if (s.href && s.href.indexOf('com_jce') == -1) {
+                if (s.href && s.href.indexOf('tiny_mce') == -1) {
                     stylesheets.push(s);
                 }
             });
