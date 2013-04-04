@@ -8,19 +8,19 @@
  * other free or open source software licenses.
  */
 div.mceEditor {
-	position: relative;
+    position: relative;
 }
 div.mceEditor.fullscreen {
-	position: fixed;
-	z-index: 10000;
-	top:0;
-	left:0;
+    position: fixed;
+    z-index: 10000;
+    top:0;
+    left:0;
 }
 
 div.mceEditor table.mceLayout td {
-	padding: 0;
-	margin: 0;
-	text-align: left;
+    padding: 0;
+    margin: 0;
+    text-align: left;
 }
 
 textarea.wfEditor, textarea.wfNoEditor {
@@ -29,27 +29,48 @@ textarea.wfEditor, textarea.wfNoEditor {
     font-size: 12px;
     color: #333;
     line-height: 16px;
-	position: relative;
-	border: 1px solid #CCCCCC;
+    position: relative;
+    border: 1px solid #CCCCCC;
 }
 textarea.wfEditor:focus, textarea.wfNoEditor:focus {
-	background: #FFFFFF none;
+    background: #FFFFFF none;
     color: #333;
 }
 
 span.wf_editor_toggle {
-	cursor: pointer;
-	display: block;
-	padding: 5px;
-	line-height: 20px;
+    cursor: pointer;
+    display: block;
+    padding: 5px;
+    line-height: 20px;
 }
 div.mceEditor table.mceLayout td.mceIframeContainer iframe.hidden {
-	visibility: hidden;
-	z-index: 0;
+    visibility: hidden;
+    z-index: 0;
 }
 div.mceEditor table.mceLayout td.mceIframeContainer iframe.offleft {
-	position: absolute;
-	position: absolute;
+    position: absolute;
+    position: absolute;
     top: -10000px;
     left: -10000px;
+}
+
+span#wf_upload_button {
+    background: url("../img/cloud_upload.png") no-repeat center #EEEEEE;
+    border: 1px dashed #999999;
+    border-radius: 3px 3px 3px 3px;
+    cursor: pointer;
+    display: none;
+    font-size: 0;
+    height: 20px;
+    overflow: hidden;
+    padding: 5px;
+    position: absolute;
+    width: 40px;
+}
+span#wf_upload_button input[type="file"] {
+    font-size: 20px;
+    right: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
 }
