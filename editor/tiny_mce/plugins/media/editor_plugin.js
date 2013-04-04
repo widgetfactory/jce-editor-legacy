@@ -431,6 +431,8 @@
                     }
                 }
             }
+            
+            html = tinymce.trim(html);
 
             if (html) {
                 if (typeof o.html == 'undefined') {
@@ -528,7 +530,7 @@
                     }
                 } else {
                     if (!data.src) {
-                        if (data.source) {
+                        if (data.source.length > 1) {
                             data.src = data.source[0].src;
                         }
                     }
@@ -536,7 +538,7 @@
 
                 // get type data
                 var lookup = this.lookup[classid] || this.lookup[type] || this.lookup[name] || this.lookup['flash'];
-                type = lookup.name || '';
+                type = lookup.name || type || '';
 
                 var style = Styles.parse(n.attr('style'));
 
@@ -1051,7 +1053,7 @@
                 // audio / video
             } else {                
                 // remove src in audio / video attributes if multiple source elements present
-                if (root.src && root.source) {
+                if (root.src && root.source) {                    
                     if (tinymce.is(root.source, 'array') && root.source.length) {
                         // only one source item...
                         if (root.source.length == 1) {
