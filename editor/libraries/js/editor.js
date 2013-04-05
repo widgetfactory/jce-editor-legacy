@@ -316,11 +316,6 @@ function jInsertEditorText(text, editor) {
                     n = null;
                 });
                 
-                // indent
-                ed.onSaveContent.add(function(ed, o) {
-                    o.content = self.indent(o.content);
-                });
-                
                 // fix link quirk in WebKit
                 ed.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
                     var se = ed.selection, n = se.getNode();
