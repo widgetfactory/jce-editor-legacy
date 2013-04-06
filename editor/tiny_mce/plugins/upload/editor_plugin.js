@@ -184,10 +184,17 @@
             self.plugin_url = url;
 
             ed.onPreInit.add(function() {
+                // get list of supported plugins
+                each(ed.plugins, function(o, k) {
+                    if (ed.getParam(k + '_upload') && tinymce.is(o.getUploadURL, 'function') && tinymce.is(o.insertUploadedFile, 'function')) {
+                        self.plugins.push(o);
+                    }
+                });
+
                 if (!ed.settings.compress.css) {
                     ed.dom.loadCSS(url + "/css/content.css");
                 }
-
+                // find and convert upload markers
                 ed.parser.addNodeFilter('img', function(nodes) {
                     var i = nodes.length, node, cls, data;
 
@@ -204,14 +211,22 @@
                         }
                     }
                 });
-                
-                ed.serializer.addNodeFilter('span', function(nodes) {
+                // remove upload markers
+                ed.serializer.addNodeFilter('img', function(nodes) {
                     var i = nodes.length, node, cls;
 
                     while (i--) {
                         node = nodes[i], cls = node.attr('class');
                         if (cls && /mceItemUploadMarker/.test(cls)) {
-                            node.remove();
+                            // remove marker classes
+                            cls = cls.replace(/(?:^|\s)mceItem(Upload|UploadMarker)(?!\S)/g, '');
+                            // add placeholder class
+                            cls += ' upload-placeholder';
+                            // set class and src
+                            node.attr({
+                                'data-mce-src': 'placeholder.png',
+                                'class': tinymce.trim(cls)
+                            });
                         }
                     }
                 });
@@ -220,15 +235,9 @@
             ed.onInit.add(function() {
                 // check for support - basically IE 10+, Firefox 4+, Chrome 7+, Safari 5+
                 if (!window.FormData) {
-                    cancel();
+                    cancel();                    
                     return;
                 }
-                // get list of supported plugins
-                each(ed.plugins, function(o, k) {
-                    if (ed.getParam(k + '_dragdrop_upload') && tinymce.is(o.getUploadURL, 'function') && tinymce.is(o.insertUploadedFile, 'function')) {
-                        self.plugins.push(o);
-                    }
-                });
 
                 // no supported plugins
                 if (self.plugins.length == 0) {
@@ -236,26 +245,20 @@
                     return;
                 }
 
-                // create marker events
-                ed.onGetContent.add(function(ed, o) {                                                                                                                                                                                                                             
-                    each(ed.dom.select('span.mceItemUploadMarker', ed.getBody()), function(n) {                        
+                function bindUploadEvents() {
+                    each(ed.dom.select('img.mceItemUploadMarker', ed.getBody()), function(n) {
                         if (self.plugins.length == 0) {
                             ed.dom.remove(n);
                         } else {
                             self._bindUploadMarkerEvents(n);
                         }
                     });
-                });
-                
-                ed.onSetContent.add(function(ed, o) {                                                                                                                                                                                                                             
-                    each(ed.dom.select('span.mceItemUploadMarker', ed.getBody()), function(n) {                        
-                        if (self.plugins.length == 0) {
-                            ed.dom.remove(n);
-                        } else {
-                            self._bindUploadMarkerEvents(n);
-                        }
-                    });
-                });
+                }
+
+                // update events when content is inserted
+                ed.selection.onSetContent.add(bindUploadEvents);
+                // update events when content is set
+                ed.onSetContent.add(bindUploadEvents);
 
                 // fake drag & drop in Windows Safari
                 if (isSafari && isWin) {
@@ -318,9 +321,14 @@
 
                     return;
                 }
+                
+                // Opera drag&drop does not work... :(
+                if (window.Opera) {
+                    return;
+                }
 
                 // Block browser default drag over
-                ed.dom.bind(ed.getBody(), 'dragover', function(e) {
+                ed.dom.bind(ed.getBody(), 'dragover', function(e) {                    
                     e.preventDefault();
                 });
 
@@ -350,6 +358,7 @@
             self.FileUploaded = new tinymce.util.Dispatcher(this);
             self.UploadError = new tinymce.util.Dispatcher(this);
 
+            // default settings
             this.settings = {
                 multipart: true,
                 multi_selection: true,
@@ -358,7 +367,7 @@
             };
 
             self.FileUploaded.add(function(file, o) {
-                var n = file.marker, s;
+                var n = file.marker, s, w, h;
 
                 function showError(error) {
                     ed.windowManager.alert(error || ed.getLang('upload.response_error', 'Invalid Upload Response'));
@@ -393,7 +402,7 @@
 
                                 if (s = o.insertUploadedFile(r)) {
                                     var styles = ed.dom.getAttrib(n, 'data-mce-style');
-                                    
+                                    // transfer styles
                                     if (styles) {
                                         // parse to object
                                         styles = ed.dom.styles.parse(styles);
@@ -401,6 +410,14 @@
                                         ed.dom.setStyles(s, styles);
                                     }
 
+                                    // transfer width and height if marker
+                                    if (ed.dom.hasClass(n, 'mceItemUploadMarker')) {
+                                        ed.dom.setAttribs(s, {
+                                            'width': n.width || s.width,
+                                            'height': n.height || s.height
+                                        });
+                                    }
+                                    // replace marker with new element
                                     if (ed.dom.replace(s, n)) {
                                         ed.nodeChanged();
 
@@ -415,7 +432,7 @@
                     } else {
                         return showError();
                     }
-
+                    // remove marker
                     ed.dom.remove(n);
                 }
             });
@@ -428,70 +445,34 @@
                 }
 
             });
-
-            self.UploadProgress.add(function(file) {
-                file.marker.innerHTML = '<span class="upload-progress">' + Math.round(file.loaded / file.size * 100) + '</span>';
-            });
         },
                 
-        _bindUploadMarkerEvents : function(marker) {
+        /*
+         * Bind events to upload marker and create upload input
+         * @param marker Marker / Placeholder element 
+         */
+        _bindUploadMarkerEvents: function(marker) {
             var self = this, ed = this.editor, dom = tinymce.DOM;
-            
-            // get close button
-            var close = marker.firstChild;
-            
-            if (close) {
-                close.onclick = function() {
-                    // create undo
-                    ed.undoManager.add();
-                    // remove parent span
-                    ed.dom.remove(marker);
-                    // remove upload input if no markers left
-                    if (ed.dom.select('span.mceItemUploadMarker').length == 0) {
-                        dom.remove('wf_upload_button');
-                    }
-                };
-            }
 
-            function remove() {
+            function removeUpload() {
                 dom.setStyles('wf_upload_button', {
-                    'top': 0,
-                    'left': 0,
+                    'top': '',
+                    'left': '',
                     'display': 'none'
                 });
             }
 
             // remove upload on nodechange
-            ed.onNodeChange.add(function() {
-                remove();
-            });
-
-            ed.dom.bind(ed.getWin(), 'scroll', function() {
-                remove();
-            });
-
-            // add upload on mouseover
-            marker.onmouseover = function() {
-                var vp = ed.dom.getViewPort(ed.getWin());
-                var p1 = dom.getPos(ed.getContentAreaContainer());
-                var p2 = ed.dom.getRect(marker);
-                var st = ed.getBody().scrollTop;
- 
-                var x = Math.max(p2.x - vp.x, 0) + p1.x;
-                var y = Math.max(p2.y - vp.y, 0) + p1.y - Math.max(st - p2.y, 0);
-
-                dom.setStyles('wf_upload_button', {
-                    'top': y + p2.h / 2 - 10,
-                    'left': x + (p2.w / 2 - 25),
-                    'display': 'block'
-                });
-            };
+            ed.onNodeChange.add(removeUpload);
+            // remove on window scroll
+            ed.dom.bind(ed.getWin(), 'scroll', removeUpload);
 
             var input = dom.get('wf_upload_input');
-
+            // create input
             if (!input) {
-                var btn = dom.add(dom.doc.body, 'span', {
-                    'id': 'wf_upload_button'
+                var btn = dom.add(dom.doc.body, 'div', {
+                    'id': 'wf_upload_button',
+                    'title' : ed.getLang('upload.button_description', 'Click to upload a file')
                 });
 
                 // create upload input
@@ -499,48 +480,74 @@
                     'type': 'file',
                     'id': 'wf_upload_input'
                 });
+            }
 
-                dom.bind(input, 'change', function() {
+            // add upload on mouseover
+            ed.dom.bind(marker, 'mouseover', function(e) {
+                var vp = ed.dom.getViewPort(ed.getWin());
+                var p1 = dom.getPos(ed.getContentAreaContainer());
+                var p2 = ed.dom.getRect(marker);
+                var st = ed.getBody().scrollTop;
+
+                if (st > p2.y + p2.h / 2 - 15) {
+                    return;
+                }
+
+                if (st + p2.h + 15 < p2.y) {
+                    return;
+                }
+
+                var x = Math.max(p2.x - vp.x, 0) + p1.x;
+                var y = Math.max(p2.y - vp.y, 0) + p1.y - Math.max(st - p2.y, 0);
+
+                dom.setStyles('wf_upload_button', {
+                    'top': y + p2.h / 2 - 14,
+                    'left': x + p2.w / 2 - 19,
+                    'display': 'block'
+                });
+
+                input.onchange = function() {
                     if (input.files) {
                         var file = input.files[0];
 
                         if (file) {
                             file.marker = marker;
 
-                            self.addFile(file);
-                            self.upload(file);
+                            if (self.addFile(file)) {
+                                ed.dom.addClass(marker, 'loading');
 
-                            remove();
-
-                            ed.dom.addClass(marker, 'loading');
+                                self.upload(file);
+                                removeUpload();
+                            }
                         }
                     }
-                });
-            }
-            
+                };
+            });
+
             // remove upload on mouseout
-            marker.onmouseout = function(e) {                
+            ed.dom.bind(marker, 'mouseout', function(e) {
                 // don't remove if over upload input
                 if (!e.relatedTarget) {
                     return;
                 }
-                
-                remove();
-            };
-        },        
-                
+
+                removeUpload();
+            });
+        },
         _createUploadMarker: function(n) {
-            var self = this, ed = this.editor, src = n.attr('src') || '', alt = n.attr('alt'), style = {}, styles;
-            
+            var self = this, ed = this.editor, src = n.attr('src') || '', style = {}, styles, cls = [];
+
             // get alt from src if not base64 encoded
-            if (!alt && !/data:image/.test(src)) {
-                alt = src.substring(src.length, src.lastIndexOf('/') + 1);
+            if (!n.attr('alt') && !/data:image/.test(src)) {
+                var alt = src.substring(src.length, src.lastIndexOf('/') + 1);
+                // set alt
+                n.attr('alt', alt);
             }
 
             if (n.attr('style')) {
                 style = ed.dom.styles.parse(n.attr('style'));
             }
-            
+
             // convert hspace
             if (n.attr('hspace')) {
                 style['margin-left'] = style['margin-right'] = n.attr('hspace');
@@ -549,48 +556,34 @@
             if (n.attr('vspace')) {
                 style['margin-top'] = style['margin-bottom'] = n.attr('vspace');
             }
-
+            // convert align
             if (n.attr('align')) {
                 style.float = n.attr('align');
             }
 
-            style.width     = n.attr('width');
-            style.height    = n.attr('height');
-
-            var marker = Node.create('span', {
+            if (n.attr('class')) {
+                cls = n.attr('class').replace(/\s*upload-placeholder\s*/, '').split(' ');
+            }
+            // add marker classes
+            cls.push('mceItemUpload');
+            cls.push('mceItemUploadMarker');
+            // set attribs
+            n.attr({
                 'src': this.plugin_url + '/img/trans.gif',
-                'class': 'mceItemUpload mceItemUploadMarker',
-                'unselectable': 'on',
-                'contenteditable': 'false'
+                'class': tinymce.trim(cls.join(' '))
             });
-            
+
             var tmp = ed.dom.create('span', {
-                'style' : style
+                'style': style
             });
-            
+
             // add styles if any
-            if (styles = ed.dom.getAttrib(tmp, 'style')) {                
-                marker.attr({
-                    'style' : styles,
-                    'data-mce-style' : styles
+            if (styles = ed.dom.getAttrib(tmp, 'style')) {
+                n.attr({
+                    'style': styles,
+                    'data-mce-style': styles
                 });
             }
-
-            // add remove button
-            var close = Node.create('span', {
-                'class' : 'mceItemRemoveUploadMarker'
-            });
-            
-            close.append(new Node('#text', '3')).value = "x";
-            
-            // add close button to marker
-            marker.append(close);
-            
-            // add title
-            marker.append(new Node('#text', '3')).value = alt;
-            
-            // replace img with span
-            n.replace(marker);
         },
         /**
          * Builds a full url out of a base URL and an object with items to append as query string items.
@@ -626,16 +619,33 @@
             });
 
             if (file.upload_url) {
+                if (tinymce.is(file.uploader.getUploadConfig, 'function')) {
+                    // check file type and size
+                    var config  = file.uploader.getUploadConfig();
+                    var type    = file.type.replace(/[a-z0-9]+\/([a-z0-9]{2,4})/i, '$1'); 
+                    if (tinymce.inArray(config.filetypes, type) == -1) {
+                        ed.windowManager.alert(ed.getLang('upload.file_extension_error', 'File type not supported'));
+                        return false;
+                    }
+
+                    if (file.size) {                        
+                        if (file.size > (parseInt(config.max_size) * 1024)) {
+                            ed.windowManager.alert(ed.getLang('upload.file_size_error', 'File size exceeds maximum allowed size'));
+                            return false;
+                        }
+                    }
+                }
+
                 // dispatch event
                 self.FilesAdded.dispatch(file);
 
                 if (!file.marker) {
                     var w = 300, h = 300;
 
-                    ed.execCommand('mceInsertContent', false, '<span id="__mce_tmp" data-mce-type="marker" class="mceItemUpload"></span>', {
+                    ed.execCommand('mceInsertContent', false, '<img id="__mce_tmp" class="mceItemUpload" />', {
                         skip_undo: 1
                     });
-
+                    // get approximate size of image from file size
                     if (/image\/(gif|png|jpeg|jpeg)/.test(file.type)) {
                         w = h = Math.round(Math.sqrt(file.size));
                     }
@@ -653,7 +663,11 @@
 
                 // add files to queue
                 self.files.push(file);
+                
+                return true;
             }
+            
+            return false;
         },
         upload: function(file) {
             var self = this, ed = this.editor;
