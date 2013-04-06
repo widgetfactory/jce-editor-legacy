@@ -1590,9 +1590,9 @@ tinymce.util.Quirks = function(editor) {
 			setEditorCommandState("StyleWithCSS", false);
 			setEditorCommandState("enableInlineTableEditing", false);
 
-			if (!settings.object_resizing) {
+			//if (!settings.object_resizing) {
 				setEditorCommandState("enableObjectResizing", false);
-			}
+			//}
 		};
 
 		if (!settings.readonly) {
@@ -1752,6 +1752,8 @@ tinymce.util.Quirks = function(editor) {
 					}
 				}
 			}
+                        
+                        editor.undoManager.add();
 
 			// Set width/height properties
 			setSizeProp('width', width);
@@ -1993,6 +1995,8 @@ tinymce.util.Quirks = function(editor) {
 		setGeckoEditingOptions();
 		addBrAfterLastLinks();
 		removeGhostSelection();
+                
+                fakeImageResize();
 	}
 
 	// Opera
