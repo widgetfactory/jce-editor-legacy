@@ -28,6 +28,10 @@ wfimport('editor.libraries.classes.request');
  */
 class WFEditorPlugin extends JObject {
 
+    // Editor Plugin instance
+    private static $instance;
+    
+    // array of alerts
     private $_alerts = array();
 
     /**
@@ -96,14 +100,12 @@ class WFEditorPlugin extends JObject {
      * @return	JCE  The editor object.
      * @since	1.5
      */
-    public function getInstance($config = array()) {
-        static $instance;
-
-        if (!is_object($instance)) {
-            $instance = new WFEditorPlugin($config);
+    public static function getInstance($config = array()) {
+        if (!isset(self::$instance)) {
+            self::$instance = new WFEditorPlugin($config);
         }
 
-        return $instance;
+        return self::$instance;
     }
 
     /**
