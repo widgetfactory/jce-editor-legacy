@@ -224,7 +224,7 @@
                             cls += ' upload-placeholder';
                             // set class and src
                             node.attr({
-                                'data-mce-src': 'placeholder.png',
+                                'data-mce-src': 'wf-placeholder.png',
                                 'class': tinymce.trim(cls)
                             });
                         }
@@ -484,6 +484,11 @@
 
             // add upload on mouseover
             ed.dom.bind(marker, 'mouseover', function(e) {
+                
+                if (ed.dom.getAttrib(marker, 'data-mce-selected')) {
+                    return;
+                }
+                
                 var vp = ed.dom.getViewPort(ed.getWin());
                 var p1 = dom.getPos(ed.getContentAreaContainer());
                 var p2 = ed.dom.getRect(marker);
