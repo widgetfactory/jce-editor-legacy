@@ -161,7 +161,7 @@ final class WFImageManagerPlugin extends WFMediaManager {
         return $browser->getResult();
     }
 
-    public function getSettings() {
+    public function getSettings($settings = array()) {
         $params = $this->getParams();
 
         $settings = array(
@@ -181,8 +181,8 @@ final class WFImageManagerPlugin extends WFMediaManager {
      * Get default parameters
      * @return string parameters
      */
-    public function getDefaults() {
-        return parent::getDefaults(array());
+    public function getDefaults($defaults = array()) {
+        return parent::getDefaults($defaults);
     }
 
 }
