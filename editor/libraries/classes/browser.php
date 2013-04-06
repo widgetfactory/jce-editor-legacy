@@ -86,24 +86,6 @@ class WFFileBrowser extends JObject {
     }
 
     /**
-     * Returns a reference to a editor object
-     *
-     * This method must be invoked as:
-     * 		<pre>  $browser =JContentEditor::getInstance();</pre>
-     *
-     * @access	public
-     * @return	JCE  The editor object.
-     */
-    public function getInstance($config = array()) {
-        static $instance;
-
-        if (!is_object($instance)) {
-            $instance = new WFFileBrowser($config);
-        }
-        return $instance;
-    }
-
-    /**
      * Display the browser
      * @access public
      */
@@ -221,7 +203,7 @@ class WFFileBrowser extends JObject {
      * @access public
      * @return extension list
      */
-    private function getFileTypes($format = 'map') {
+    public function getFileTypes($format = 'map') {
         $list = $this->get('filetypes');
 
         // Remove excluded file types (those that have a - prefix character) from the list
