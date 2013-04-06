@@ -29,50 +29,7 @@
 
 .mceItemUploadMarker {
     background-image: url("../img/picture.png");
-    -moz-user-select : none;
-    -webkit-user-select: none;
-    -ms-user-select : none;
-    user-select : none;
-    line-height: 50px;
-    position : relative;
-    text-shadow: 0 1px 0 #FFFFFF;
-    cursor: pointer;
 }
 .mceItemUploadMarker.loading {
     background-image: url("../img/upload.gif");
-}
-
-.mceItemUploadMarker span.upload-progress {
-    position: relative;
-    display: inline-block;
-    top: 50%;
-    font-family: Arial,Helvetica,sans-serif;
-    font-size: 7pt;
-    font-size: 10px;
-    vertical-align: baseline;
-    margin: -5px 0 0 0;
-    text-align: center;
-    width: 32px;
-    -moz-user-select : none;
-    -webkit-user-select: none;
-    -ms-user-select : none;
-    user-select: none;
-}
-
-.mceItemRemoveUploadMarker {
-    color: #666666;
-    cursor: pointer;
-    display: block;
-    font-size: 12px;
-    font-weight: bold;
-    font-family: Verdana,Arial,Helvetica,sans-serif;
-    height: 20px;
-    line-height: 16px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 20px;
-}
-.mceItemRemoveUploadMarker:hover {
-    color : #333;
 }
