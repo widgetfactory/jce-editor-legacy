@@ -10,6 +10,10 @@
  * other free or open source software licenses.
  */
 defined('_JEXEC') or die('RESTRICTED');
+// set as an extension parent
+if (!defined('_WF_EXT')) {
+    define('_WF_EXT', 1);
+}
 
 class WFExtension extends JObject {
 
