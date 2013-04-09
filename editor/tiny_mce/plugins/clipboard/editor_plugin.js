@@ -1287,7 +1287,7 @@
                     lastType;
 
             var ULRX = /^(__MCE_LIST_ITEM__)+[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*\u00a0*/;
-            var OLRX = /^(__MCE_LIST_ITEM__)*\(?(\w+)(\.|\))?\s*\u00a0+/;
+            var OLRX = /^(__MCE_LIST_ITEM__)+\(?(\w+)(\.|\))?\s*\u00a0+/;
 
             // Convert middot lists into real semantic lists
             each(dom.select('p', node), function(p) {
