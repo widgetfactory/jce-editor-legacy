@@ -131,7 +131,7 @@
             });
 
             ed.addButton('source', {
-                title : 'source.source_desc',
+                title : 'source.desc',
                 cmd : 'mceSource'
             });
 

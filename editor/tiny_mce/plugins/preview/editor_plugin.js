@@ -79,7 +79,7 @@
                 }
             });
 
-			ed.addButton('preview', {title : 'preview.preview_desc', cmd : 'mcePreview'});
+			ed.addButton('preview', {title : 'preview.desc', cmd : 'mcePreview'});
 			
 			// add theme resize
             ed.theme.onResize.add(function() {
