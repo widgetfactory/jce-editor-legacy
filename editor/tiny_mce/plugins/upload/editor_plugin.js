@@ -490,15 +490,15 @@
                 }
                 
                 var vp = ed.dom.getViewPort(ed.getWin());
-                var p1 = dom.getPos(ed.getContentAreaContainer());
+                var p1 = dom.getRect(ed.getContentAreaContainer());
                 var p2 = ed.dom.getRect(marker);
                 var st = ed.getBody().scrollTop;
 
-                if (st > p2.y + p2.h / 2 - 15) {
+                if (st > p2.y + p2.h / 2 - 16) {
                     return;
                 }
 
-                if (st + p2.h + 15 < p2.y) {
+                if (st < (p2.y + p2.h / 2 + 16) - p1.h) {
                     return;
                 }
 
