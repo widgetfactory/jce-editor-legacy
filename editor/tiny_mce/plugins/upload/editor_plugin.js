@@ -612,6 +612,12 @@
         },
         addFile: function(file) {
             var ed = this.editor, self = this, fileNames = {}, url;
+            
+            // check for extension in file name, eg. image.php.jpg
+            if (/\.(php|php(3|4|5)|phtml|pl|py|jsp|asp|htm|html|shtml|sh|cgi)\./i.test(file.name)) {
+                ed.windowManager.alert(ed.getLang('upload.file_extension_error', 'File type not supported'));
+                return false;
+            }
 
             // get first url for the file type
             each(self.plugins, function(o, k) {
@@ -670,6 +676,9 @@
                 self.files.push(file);
                 
                 return true;
+            } else {
+                ed.windowManager.alert(ed.getLang('upload.file_extension_error', 'File type not supported'));
+                return false;
             }
             
             return false;
