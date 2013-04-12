@@ -20,8 +20,9 @@ var ClipboardDialog = {
 		});
 		
 		var cmd = tinyMCEPopup.getWindowArg('cmd');
+                var msg = ed.getLang('paste_dlg.title', 'Use %s+V on your keyboard to paste text into the window.');
 		
-		title.innerHTML = ed.getLang('paste_dlg.title', 'Use CTRL+V on your keyboard to paste text into the window.');
+		title.innerHTML = msg.replace(/%s/g, tinymce.isMac ? 'CMD' : 'CTRL');
 		
 		if (cmd == 'mcePaste') {
 			// Set title

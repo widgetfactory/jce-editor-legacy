@@ -412,32 +412,33 @@
 
             }
 
-            /*each(['Cut', 'Copy'], function(command) {
-             ed.addCommand(command, function() {
-             var doc = ed.getDoc(), failed;
-             
-             // Try executing the native command
-             try {
-             doc.execCommand(command, false, null);
-             } catch (ex) {
-             // Command failed
-             failed = true;
-             }
-             
-             // Present alert message about clipboard access not being available
-             if (failed || (tinymce.isIE && !doc.queryCommandSupported('Paste'))) {
-             if (tinymce.isGecko) {
-             ed.windowManager.confirm(ed.getLang('clipboard_msg'), function(state) {
-             if (state) {
-             open('http://www.mozilla.org/editor/midasdemo/securityprefs.html', '_blank');
-             }
-             });
-             } else {
-             ed.windowManager.alert(ed.getLang('clipboard_no_support'));
-             }
-             }
-             });
-             });*/
+            each(['Cut', 'Copy'], function(command) {
+                ed.addCommand(command, function() {
+                    var doc = ed.getDoc(), failed;
+
+                    // Try executing the native command
+                    try {
+                        doc.execCommand(command, false, null);
+                    } catch (ex) {
+                        // Command failed
+                        failed = true;
+                    }
+
+                    var msg = ed.getLang('clipboard_msg', '');
+                    msg = msg.replace(/\%s/g, tinymce.isMac ? 'CMD' : 'CTRL');
+
+                    // Present alert message about clipboard access not being available
+                    if (failed || !doc.queryCommandSupported(command)) {
+                        if (tinymce.isGecko) {
+                            ed.windowManager.confirm(msg, function(state) {
+                                if (state)
+                                    open('http://www.mozilla.org/editor/midasdemo/securityprefs.html', '_blank');
+                            });
+                        } else
+                            ed.windowManager.alert(ed.getLang('clipboard_no_support'));
+                    }
+                });
+            });
 
             // Add commands
             each(['mcePasteText', 'mcePaste'], function(cmd) {
@@ -707,7 +708,7 @@
 
             // remove multiple linebreaks
             //h = h.replace(/(<br \/>){2,}/gi, '<br /><br />');
-            
+
             o.content = h;
         },
         _cleanWordContent: function(h) {
@@ -1214,7 +1215,7 @@
                     var s = dom.getAttrib(el, 'src');
 
                     // remove img element if blank, local file url or base64 encoded
-                    if (!s || imgRe.test(s)) {                        
+                    if (!s || imgRe.test(s)) {
                         if (ed.getParam('clipboard_paste_upload_images') && canUpload) {
                             // add marker
                             ed.dom.setAttrib(el, 'data-mce-upload-marker', '1');
@@ -1275,7 +1276,6 @@
                 }
             }
         },
-        
         /**
          * Converts the most common bullet and number formats in Office into a real semantic UL/LI list.
          */
