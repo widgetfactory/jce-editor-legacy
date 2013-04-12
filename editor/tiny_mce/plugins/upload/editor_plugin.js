@@ -640,7 +640,9 @@
                     }
 
                     if (file.size) {                        
-                        if (file.size > (parseInt(config.max_size) * 1024)) {
+                        var max = parseInt(config.max_size) || 1024;
+                        
+                        if (file.size > max * 1024) {
                             ed.windowManager.alert(ed.getLang('upload.file_size_error', 'File size exceeds maximum allowed size'));
                             return false;
                         }
@@ -659,6 +661,9 @@
                     // get approximate size of image from file size
                     if (/image\/(gif|png|jpeg|jpeg)/.test(file.type)) {
                         w = h = Math.round(Math.sqrt(file.size));
+                        // set minimum value of 100
+                        w = Math.max(100, w);
+                        h = Math.max(100, h);
                     }
 
                     var n = ed.dom.get('__mce_tmp');
