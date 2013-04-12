@@ -47,7 +47,8 @@ class WFPopupsExtension_Jcemediabox {
         return array(
             'width' => 600,
             'album' => '#jcemediabox_popup_group',
-            'multiple' => '#jcemediabox_popup_title,#jcemediabox_popup_caption'
+            'multiple' => '#jcemediabox_popup_title,#jcemediabox_popup_caption',
+            'attribute' => 'data-mediabox'
         );
     }
 

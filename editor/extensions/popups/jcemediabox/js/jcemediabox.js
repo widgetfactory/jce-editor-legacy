@@ -89,6 +89,10 @@ JCEMediaBox = {
 
 };
 WFPopups.addPopup('jcemediabox', {
+    
+    params : {
+        'attribute' : 'data-mediabox'
+    },
 
     setup : function() {
         var self = this;
@@ -191,7 +195,9 @@ WFPopups.addPopup('jcemediabox', {
         $.each(['jcepopup', 'jcelightbox', 'jcebox', 'icon-left', 'icon-right', 'icon-top-left', 'icon-top-right', 'icon-bottom-left', 'icon-bottom-right', 'noicon', 'noshow', 'autopopup-single', 'autopopup-multiple'], function(i, v) {
             ed.dom.removeClass(n, v);
         });
-
+        
+        // remove data attribute
+        ed.dom.setAttrib(n, 'data-mediabox', '');
     },
 
     /**
@@ -439,23 +445,31 @@ WFPopups.addPopup('jcemediabox', {
         if (data.type) {
             delete data.type;
         }
-
-        // map object properties to options array
-        var props = $.map(data, function(v, k) {
-            return k + '[' + v + ']';
-        });
-        
+        // get rel attribute value
         var rel = ed.dom.getAttrib(n, 'rel', '');
+        
         // remove any existing properties
         if (rel) {
             rel = rel.replace(/([a-z0-9]+)(\[([^\]]+)\]);?/gi, '');
         }
+        
+        // map object properties to options array
+        var props = $.map(data, function(v, k) {
+            return k + '[' + ed.dom.encode(v) + ']';
+        });
+
+        if (this.params.attribute == 'data-mediabox') {
+            ed.dom.setAttrib(n, 'data-mediabox', props.join(';'));
+        } else {            
+            rel = ' ' + props.join(';');
+            
+            // remove HTML5 data attributes if any
+            ed.dom.setAttrib(n, 'data-json', '');
+            ed.dom.setAttrib(n, 'data-mediabox', '');
+        }
 
         // set data to rel attribute
-        ed.dom.setAttrib(n, 'rel', $.trim(rel + ' ' + props.join(';')));
-        // remove HTML5 data attributes if any
-        ed.dom.setAttrib(n, 'data-json', '');
-        ed.dom.setAttrib(n, 'data-mediabox', '');
+        ed.dom.setAttrib(n, 'rel', $.trim(rel));
 
         // Add noicon class
         if ($('#jcemediabox_popup_icon').val() == 0) {
