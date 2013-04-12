@@ -88,6 +88,12 @@ class WFMediaManager extends WFEditorPlugin {
         $view->assign('browser', $browser);
     }
     
+    public function getFileTypes($format = 'array') {
+        $browser = $this->getBrowser();
+        
+        return $browser->getFileTypes($format);
+    }
+    
     private function getFileSystem() {
         $filesystem = $this->getParam('filesystem.name', '', '', 'string', false);
         
