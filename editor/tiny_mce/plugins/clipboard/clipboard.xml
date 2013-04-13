@@ -48,6 +48,10 @@
             <option value="unlink">WF_PASTE_PARAM_PROCESS_FOOTNOTES_UNLINK</option>
             <option value="remove">WF_PASTE_PARAM_PROCESS_FOOTNOTES_REMOVE</option>           
         </param>
+        <param name="paste_upload_images" type="radio" default="0" label="WF_PASTE_PARAM_UPLOAD_IMAGES" description="WF_PASTE_PARAM_UPLOAD_IMAGES_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>           
+        </param>
     </params>
     <params group="access">
         <param name="paste_html" type="radio" default="1" label="WF_PASTE_PARAM_PASTE_HTML" description="WF_PASTE_PARAM_PASTE_HTML_DESC">
