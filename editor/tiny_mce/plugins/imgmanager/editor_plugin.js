@@ -121,7 +121,7 @@
             var ed = this.editor, data = this.getUploadConfig();
 
             if (data && data.filetypes) {
-                if (new RegExp('image\/(' + data.filetypes.join('|') + ')').test(file.type)) {
+                if (new RegExp('\.(' + data.filetypes.join('|') + ')$').test(file.name)) {
                     return ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=imgmanager';
                 }
             }
