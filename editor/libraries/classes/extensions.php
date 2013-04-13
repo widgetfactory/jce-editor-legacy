@@ -90,10 +90,12 @@ class WFExtension extends JObject {
         if (JFolder::exists($path)) {
             foreach ($types as $type) {
                 if ($extension) {
-                    if (JFile::exists($path . '/' . $type . '/' . $extension . '.xml') && JFile::exists($path . '/' . $type . '/' . $extension . '.php')) {
+                    $path = $path . '/' . $type;
+                    
+                    if (JFile::exists($path . '/' . $extension . '.xml') && JFile::exists($path . '/' . $extension . '.php')) {
                         $object = new stdClass();
                         $object->folder = $type;
-                        $object->path = $path . '/' . $type;
+                        $object->path = $path;
                         $object->extension = $extension;
 
                         $extensions[] = $object;
@@ -102,15 +104,18 @@ class WFExtension extends JObject {
                     $files = JFolder::files($path . '/' . $type, '\.xml$', false, true);
 
                     foreach ($files as $file) {
+                        $name = basename($file, '.xml');
+                        $path = dirname($file);
+                        
+                        if (!JFile::exists($path . '/' . $name . '.php')) {
+                            continue;
+                        }
+                        
                         $object = new stdClass();
                         $object->folder = $type;
-                        $object->path = $path . '/' . $type;
+                        $object->path = $path;
+                        $object->extension = $name;
 
-                        $name = JFile::stripExt(basename($file));
-
-                        if (JFile::exists(dirname($file) . '/' . $name . '.php')) {
-                            $object->extension = $name;
-                        }
                         $extensions[] = $object;
                     }
                 }
