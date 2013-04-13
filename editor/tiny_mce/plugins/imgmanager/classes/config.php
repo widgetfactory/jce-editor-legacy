@@ -20,7 +20,7 @@ class WFImgmanagerPluginConfig
                 
                 $plugin = new WFImageManagerPlugin();
                 
-                if ($plugin->getParam('dragdrop_upload', 1, 0)) {
+                if ($plugin->getParam('inline_upload', $plugin->getParam('dragdrop_upload', 1, 0), 0)) {
                     
                     $settings['imgmanager_upload'] = json_encode(array(
                         'max_size'  => $plugin->getParam('max_size', 1024),
