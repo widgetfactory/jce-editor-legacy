@@ -122,32 +122,6 @@ class WFExtension extends JObject {
             }
         }
 
-        // set default prefix
-        /* if (!array_key_exists('prefix', $config)) {
-          $config['prefix'] = 'jce-';
-          }
-
-          // get external extensions
-          jimport('joomla.plugin.helper');
-
-          foreach ($types as $type) {
-          $installed = JPluginHelper::getPlugin($config['prefix'] . $type, $extension);
-
-          foreach ($installed as $item) {
-          $object = new stdClass();
-          $object->folder = $item->type;
-          $object->path = JPATH_PLUGINS . '/' . $item->type;
-
-          $name = $item->element;
-
-          if (JFile::exists(JPATH_PLUGINS . '/' . $item->type . '/' . $item->element . '.php')) {
-          $object->extension = $name;
-          }
-
-          $extensions[] = $object;
-          }
-          } */
-
         return $extensions;
     }
 
@@ -167,11 +141,6 @@ class WFExtension extends JObject {
         if (!isset($config['base_path'])) {
             $config['base_path'] = WF_EDITOR;
         }
-
-        // set default prefix
-        /* if (!array_key_exists('prefix', $config)) {
-          $config['prefix'] = 'jce-';
-          } */
 
         // sanitize $type
         $type = preg_replace('#[^A-Z0-9\._-]#i', '', $type);
@@ -205,8 +174,6 @@ class WFExtension extends JObject {
                         // Load Extension language file
                         $language->load('com_jce_' . $type . '_' . $name, JPATH_SITE);
 
-                        // remove prefix
-                        //$folder = str_replace($config['prefix'], '', $folder);
                         // Return array of extension names
 
                         $result[$type][] = $name;
