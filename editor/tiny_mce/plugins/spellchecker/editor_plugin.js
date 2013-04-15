@@ -13,33 +13,32 @@
     var JSON = tinymce.util.JSON, each = tinymce.each, DOM = tinymce.DOM;
 
     tinymce.create('tinymce.plugins.SpellcheckerPlugin', {
-        getInfo : function() {
+        getInfo: function() {
             return {
-                longname : 'Spellchecker',
-                author : 'Moxiecode Systems AB',
-                authorurl : 'http://tinymce.moxiecode.com',
-                infourl : 'http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/spellchecker',
-                version : tinymce.majorVersion + "." + tinymce.minorVersion
+                longname: 'Spellchecker',
+                author: 'Moxiecode Systems AB',
+                authorurl: 'http://tinymce.moxiecode.com',
+                infourl: 'http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/spellchecker',
+                version: tinymce.majorVersion + "." + tinymce.minorVersion
             };
         },
-
-        init : function(ed, url) {
+        init: function(ed, url) {
             var t = this, cm;
 
             t.url = url;
             t.editor = ed;
             t.rpcUrl = ed.getParam("spellchecker_rpc_url", "");
-            
-            t.native_spellchecker = (t.rpcUrl == '' || ed.getParam("spellchecker_engine", "browser") == 'browser'); 
 
-            if (t.native_spellchecker) {                
+            t.native_spellchecker = (t.rpcUrl == '' || ed.getParam("spellchecker_engine", "browser") == 'browser');
+
+            if (t.native_spellchecker) {
                 // < IE9 does not have a native spellchecker
                 if (tinymce.isIE && /Trident\/6\.0/.test(navigator.userAgent) === false) {
                     // no url set so no spellchecker
                     if (t.rpcUrl == '') {
                         return;
                     }
-                    
+
                     t.native_spellchecker = false;
                 }
 
@@ -81,7 +80,7 @@
 
             if (ed.settings.content_css !== false)
                 ed.contentCSS.push(url + '/css/content.css');
-            
+
 
             ed.onClick.add(t._showMenu, t);
             ed.onContextMenu.add(t._showMenu, t);
@@ -117,16 +116,15 @@
 
                 t.languages[k] = v;
             });
-            
+
             // Turn spellchecker on if required
             ed.onInit.add(function() {
                 if (t.native_spellchecker && ed.getParam('spellchecker_browser_state', 0)) {
                     ed.execCommand('mceSpellCheck', false);
-                } 
+                }
             });
         },
-
-        createControl : function(n, cm) {
+        createControl: function(n, cm) {
             var t = this, c, ed = t.editor;
 
             if (n == 'spellchecker') {
@@ -135,28 +133,28 @@
                     // Create simple toggle button if we have native support
                     if (t.hasSupport)
                         c = cm.createButton(n, {
-                            title : 'spellchecker.desc', 
-                            cmd : 'mceSpellCheck', 
-                            scope : t
+                            title: 'spellchecker.desc',
+                            cmd: 'mceSpellCheck',
+                            scope: t
                         });
 
                     return c;
                 }
 
                 c = cm.createSplitButton(n, {
-                    title : 'spellchecker.desc', 
-                    cmd : 'mceSpellCheck', 
-                    scope : t
+                    title: 'spellchecker.desc',
+                    cmd: 'mceSpellCheck',
+                    scope: t
                 });
 
                 c.onRenderMenu.add(function(c, m) {
                     m.add({
-                        title : 'spellchecker.langs', 
-                        'class' : 'mceMenuItemTitle'
+                        title: 'spellchecker.langs',
+                        'class': 'mceMenuItemTitle'
                     }).setDisabled(1);
                     each(t.languages, function(v, k) {
                         var o = {
-                            icon : 1
+                            icon: 1
                         }, mi;
 
                         o.onclick = function() {
@@ -182,10 +180,37 @@
                 return c;
             }
         },
+        setLanguage: function(lang) {
+            var t = this;
 
+            if (lang == t.selectedLang) {
+                // allowed
+                return;
+            }
+
+            if (tinymce.grep(t.languages, function(v) {
+                return v === lang;
+            }).length === 0) {
+                throw "Unknown language: " + lang;
+            }
+
+            t.selectedLang = lang;
+
+            // if the menu has been shown, update it as well
+            if (t.menuItems) {
+                t._updateMenu(t.menuItems[lang]);
+            }
+
+            if (t.active) {
+                // clear error in the old language.
+                t._done();
+
+                // Don't immediately block the UI to check spelling in the new language, this is an API not a user action.
+            }
+        },
         // Internal functions
 
-        _walk : function(n, f) {
+        _walk: function(n, f) {
             var d = this.editor.getDoc(), w;
 
             if (d.createTreeWalker) {
@@ -196,18 +221,16 @@
             } else
                 tinymce.walk(n, f, 'childNodes');
         },
-
-        _getSeparators : function() {
+        _getSeparators: function() {
             var re = '', i, str = this.editor.getParam('spellchecker_word_separator_chars', '\\s!"#$%&()*+,-./:;<=>?@[\]^_{|}ß©´Æ±∂∑∏ªºΩæø◊˜§\u201d\u201c');
 
             // Build word separator regexp
-            for (i=0; i<str.length; i++)
+            for (i = 0; i < str.length; i++)
                 re += '\\' + str.charAt(i);
 
             return re;
         },
-
-        _getWords : function() {
+        _getWords: function() {
             var ed = this.editor, wl = [], tx = '', lo = {}, rawWords = [];
 
             // Get area text
@@ -237,8 +260,7 @@
 
             return wl;
         },
-
-        _removeWords : function(w) {
+        _removeWords: function(w) {
             var ed = this.editor, dom = ed.dom, se = ed.selection, r = se.getRng(true);
 
             each(dom.select('span').reverse(), function(n) {
@@ -250,10 +272,9 @@
 
             se.setRng(r);
         },
-
-        _markWords : function(wl) {
+        _markWords: function(wl) {
             var ed = this.editor, dom = ed.dom, doc = ed.getDoc(), se = ed.selection, r = se.getRng(true), nl = [],
-            w = wl.join('|'), re = this._getSeparators(), rx = new RegExp('(^|[' + re + '])(' + w + ')(?=[' + re + ']|$)', 'g');
+                    w = wl.join('|'), re = this._getSeparators(), rx = new RegExp('(^|[' + re + '])(' + w + ')(?=[' + re + ']|$)', 'g');
 
             // Collect all text nodes
             this._walk(ed.getBody(), function(n) {
@@ -271,7 +292,7 @@
                     v = dom.encode(v);
                     // Create container element
                     elem = dom.create('span', {
-                        'class' : 'mceItemHidden'
+                        'class': 'mceItemHidden'
                     });
 
                     // Following code fixes IE issues by creating text nodes
@@ -290,13 +311,13 @@
                                 node = doc.createTextNode(dom.decode(txt));
                                 elem.appendChild(node);
                             }
-                            v = v.substring(pos+10);
+                            v = v.substring(pos + 10);
                             pos = v.indexOf('</mcespell>');
                             txt = v.substring(0, pos);
-                            v = v.substring(pos+11);
+                            v = v.substring(pos + 11);
                             // Add span element for the word
                             elem.appendChild(dom.create('span', {
-                                'class' : 'mceItemHiddenSpellWord'
+                                'class': 'mceItemHiddenSpellWord'
                             }, txt));
                         }
                         // Add text node for the rest of the content
@@ -316,15 +337,14 @@
 
             se.setRng(r);
         },
-
-        _showMenu : function(ed, e) {
+        _showMenu: function(ed, e) {
             var t = this, ed = t.editor, m = t._menu, p1, dom = ed.dom, vp = dom.getViewPort(ed.getWin()), wordSpan = e.target;
 
             e = 0; // Fixes IE memory leak
 
             if (!m) {
                 m = ed.controlManager.createDropMenu('spellcheckermenu', {
-                    'class' : 'mceNoIcons'
+                    'class': 'mceNoIcons'
                 });
                 t._menu = m;
             }
@@ -332,8 +352,8 @@
             if (dom.hasClass(wordSpan, 'mceItemHiddenSpellWord')) {
                 m.removeAll();
                 m.add({
-                    title : 'spellchecker.wait', 
-                    'class' : 'mceMenuItemTitle'
+                    title: 'spellchecker.wait',
+                    'class': 'mceMenuItemTitle'
                 }).setDisabled(1);
 
                 t._sendRPC('getSuggestions', [t.selectedLang, dom.decode(wordSpan.innerHTML)], function(r) {
@@ -343,13 +363,13 @@
 
                     if (r.length > 0) {
                         m.add({
-                            title : 'spellchecker.sug', 
-                            'class' : 'mceMenuItemTitle'
+                            title: 'spellchecker.sug',
+                            'class': 'mceMenuItemTitle'
                         }).setDisabled(1);
                         each(r, function(v) {
                             m.add({
-                                title : v, 
-                                onclick : function() {
+                                title: v,
+                                onclick: function() {
                                     dom.replace(ed.getDoc().createTextNode(v), wordSpan);
                                     t._checkDone();
                                 }
@@ -359,15 +379,15 @@
                         m.addSeparator();
                     } else
                         m.add({
-                            title : 'spellchecker.no_sug', 
-                            'class' : 'mceMenuItemTitle'
+                            title: 'spellchecker.no_sug',
+                            'class': 'mceMenuItemTitle'
                         }).setDisabled(1);
 
                     if (ed.getParam('show_ignore_words', true)) {
                         ignoreRpc = t.editor.getParam("spellchecker_enable_ignore_rpc", '');
                         m.add({
-                            title : 'spellchecker.ignore_word',
-                            onclick : function() {
+                            title: 'spellchecker.ignore_word',
+                            onclick: function() {
                                 var word = wordSpan.innerHTML;
 
                                 dom.remove(wordSpan, 1);
@@ -384,8 +404,8 @@
                         });
 
                         m.add({
-                            title : 'spellchecker.ignore_words',
-                            onclick : function() {
+                            title: 'spellchecker.ignore_words',
+                            onclick: function() {
                                 var word = wordSpan.innerHTML;
 
                                 t._removeWords(dom.decode(word));
@@ -404,8 +424,8 @@
 
                     if (t.editor.getParam("spellchecker_enable_learn_rpc")) {
                         m.add({
-                            title : 'spellchecker.learn_word',
-                            onclick : function() {
+                            title: 'spellchecker.learn_word',
+                            onclick: function() {
                                 var word = wordSpan.innerHTML;
 
                                 dom.remove(wordSpan, 1);
@@ -434,8 +454,7 @@
             } else
                 m.hideMenu();
         },
-
-        _checkDone : function() {
+        _checkDone: function() {
             var t = this, ed = t.editor, dom = ed.dom, o;
 
             each(dom.select('span'), function(n) {
@@ -448,8 +467,7 @@
             if (!o)
                 t._done();
         },
-
-        _done : function() {
+        _done: function() {
             var t = this, la = t.active;
 
             if (t.active) {
@@ -463,47 +481,46 @@
                     t.editor.nodeChanged();
             }
         },
-
-        _sendRPC : function(m, p, cb) {
+        _sendRPC: function(m, p, cb) {
             var t = this, ed = t.editor;
-			
+
             var query = '', args = {
-                'format' : 'raw'
+                'format': 'raw'
             };
 
             // set token
             args[ed.settings.token] = 1;
-			
+
             // create query
             for (k in args) {
                 query += '&' + k + '=' + encodeURIComponent(args[k]);
             }
 
             tinymce.util.XHR.send({
-                url : t.rpcUrl,
-                content_type : 'application/x-www-form-urlencoded',
-                data : 'json=' + JSON.serialize({
-                    'fn' : m, 
-                    'args' : p
+                url: t.rpcUrl,
+                content_type: 'application/x-www-form-urlencoded',
+                data: 'json=' + JSON.serialize({
+                    'fn': m,
+                    'args': p
                 }) + query,
-                success : function(o) {
+                success: function(o) {
                     var c = JSON.parse(o);
-					
+
                     if (typeof(c) == 'undefined') {
                         c = {
-                            error : 'JSON Parse error.'
+                            error: 'JSON Parse error.'
                         };
                     }
-					
+
                     if (c.error) {
                         ed.setProgressState(0);
-                        var e = c.error;						
+                        var e = c.error;
                         ed.windowManager.alert(e.errstr || ('Error response: ' + e));
                     } else {
                         cb.call(t, c.result || '');
                     }
                 },
-                error : function(x) {
+                error: function(x) {
                     ed.setProgressState(0);
                     ed.windowManager.alert('Error response: ' + x);
                 }
