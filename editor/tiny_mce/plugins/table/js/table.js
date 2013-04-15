@@ -130,7 +130,12 @@ var TableDialog = {
             $('#rules').val(ed.dom.getAttrib(elm, 'rules'));
 
             var cls = ed.dom.getAttrib(elm, 'class');
+            
+            cls = cls.replace(/(?:^|\s)mceItem(\w+)(?!\S)/g, '');
+            
             this.updateClassList(cls);
+            
+            $('#classes').val(cls);
 
             $('#cols').val(cols);
             $('#rows').val(rowsAr.length);
@@ -215,6 +220,8 @@ var TableDialog = {
             $('#align').val(align);
             $('#valign').val(valign);
             
+            className = className.replace(/(?:^|\s)mceItem(\w+)(?!\S)/g, '');
+            
             // update class list
             this.updateClassList(className);
 
@@ -263,6 +270,8 @@ var TableDialog = {
 
             $('#align').val(align);
             $('#valign').val(valign);
+            
+            className = className.replace(/(?:^|\s)mceItem(\w+)(?!\S)/g, '');
             
             // update class list
             this.updateClassList(className);
