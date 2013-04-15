@@ -38,6 +38,8 @@ final class WFFileBrowserPlugin extends WFMediaManager {
         if (JRequest::getString('filter')) {
             $browser->setFileTypes('files=' . JRequest::getString('filter'));
         }
+        // remove insert button
+        $browser->removeButton('file', 'insert');
     }
 
     /**
