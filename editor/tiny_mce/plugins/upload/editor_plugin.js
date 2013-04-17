@@ -366,7 +366,7 @@
                         });
                     }
                     // stop Firefox opening the image in a new window if the drop target is itself (drag cancelled)
-                    if (e.target.nodeName == 'IMG') {
+                    if (tinymce.isGecko && e.target.nodeName == 'IMG') {
                         cancelEvent(e);
                     }
                 });
