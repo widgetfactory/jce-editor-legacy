@@ -119,11 +119,11 @@ class WFEditorPlugin extends JObject {
         if (!is_object($view)) {
             // create plugin view
             $view = new WFView(array(
-                        'view_path' => $this->get('base_path'),
-                        'template_path' => $this->get('template_path'),
-                        'name' => $this->get('name'),
-                        'layout' => $this->get('layout')
-                    ));
+                'view_path' => $this->get('base_path'),
+                'template_path' => $this->get('template_path'),
+                'name' => $this->get('name'),
+                'layout' => $this->get('layout')
+            ));
         }
 
         $view->assign('plugin', $this);
@@ -260,19 +260,6 @@ class WFEditorPlugin extends JObject {
             'tips',
             'plugin'
         ), 'libraries');
-
-        // load plugin dialog language file if necessary
-        if ($this->getParam('editor.compress_javascript', 0)) {
-            $file = "/langs/" . WFLanguage::getCode() . "_dlg.js";
-
-            if (!JFile::exists(WF_EDITOR_PLUGIN . $file)) {
-                $file = "/langs/en_dlg.js";
-            }
-
-            if (JFile::exists(WF_EDITOR_PLUGIN . $file)) {
-                $document->addScript(array('plugins/' . $this->getName() . $file), 'tiny_mce');
-            }
-        }
 
         $document->addStyleSheet(array('plugin'), 'libraries');
         
