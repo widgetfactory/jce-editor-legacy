@@ -27,7 +27,7 @@
                 
                 while(n) {
                     if (DOM.isHidden(n)) {
-                        DOM.show(n);
+                        DOM.setStyle(n, 'display', '');
                         state = true;
                         
                     } else {
