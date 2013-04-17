@@ -42,14 +42,14 @@
                     self.toggleSource();
                 }    
             	
-                if (ed.plugins.fullscreen) {
-                    ed.onFullScreen.add(function(state, settings) {                                                
+                if (ed.onFullScreen) {
+                    ed.onFullScreen.add(function(editor, state) {                                                
 
                         if (!state) {
-                            ed.settings.source_state = !settings.source_state;
+                            ed.settings.source_state = !editor.settings.source_state;
 		            		
                             each(['source_highlight', 'source_numbers', 'source_wrap'], function(s) {
-                                ed.settings[s] = settings[s];
+                                ed.settings[s] = editor.settings[s];
                             });
 
                             self.toggleSource();
