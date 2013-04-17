@@ -55,7 +55,14 @@
             ed.addCommand('mceSpellCheck', function() {
                 if (t.native_spellchecker) {
                     // Enable/disable native spellchecker
-                    t.editor.getBody().spellcheck = t.active = !t.active;
+                    ed.getBody().spellcheck = t.active = !t.active;
+                    
+                    if (!t.active) {
+                        ed.getBody().blur();
+                    }
+                    
+                    ed.focus();
+                                   
                     return;
                 }
 
@@ -89,8 +96,8 @@
                     t._removeWords();
             });
 
-            ed.onNodeChange.add(function(ed, cm) {
-                cm.setActive('spellchecker', t.active);
+            ed.onNodeChange.add(function(ed, cm) {                                
+                cm.setActive('spellchecker', !!t.active);
             });
 
             ed.onSetContent.add(function() {
@@ -471,7 +478,7 @@
             var t = this, la = t.active;
 
             if (t.active) {
-                t.active = 0;
+                t.active = !!t.native_spellchecker;
                 t._removeWords();
 
                 if (t._menu)
