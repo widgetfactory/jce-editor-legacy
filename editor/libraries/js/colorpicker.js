@@ -399,6 +399,10 @@
                         self['_create' + type].call(self, $(ui.newPanel));
 
                         $('#colorpicker_insert').toggle(type == 'picker');
+                    },
+                    beforeActivate: function( event, ui ) {
+                        $(ui.oldTab).removeClass('active');
+                        $(ui.newTab).addClass('active');
                     }
                 });
             }
