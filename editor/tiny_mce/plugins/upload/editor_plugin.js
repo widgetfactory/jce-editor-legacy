@@ -232,7 +232,7 @@
                 });
             });
 
-            ed.onInit.add(function() {
+            ed.onInit.add(function() {                
                 // check for support - basically IE 10+, Firefox 4+, Chrome 7+, Safari 5+
                 if (!window.FormData) {
                     cancel();                    
@@ -245,20 +245,31 @@
                     return;
                 }
 
-                function bindUploadEvents() {
+                function bindUploadEvents(ed) {                                        
                     each(ed.dom.select('img.mceItemUploadMarker', ed.getBody()), function(n) {
                         if (self.plugins.length == 0) {
                             ed.dom.remove(n);
                         } else {
-                            self._bindUploadMarkerEvents(n);
+                            self._bindUploadMarkerEvents(ed, n);
                         }
                     });
                 }
 
                 // update events when content is inserted
-                ed.selection.onSetContent.add(bindUploadEvents);
+                ed.selection.onSetContent.add(function() {
+                    bindUploadEvents(ed);
+                });
                 // update events when content is set
-                ed.onSetContent.add(bindUploadEvents);
+                ed.onSetContent.add(function() {
+                    bindUploadEvents(ed);
+                });
+                
+                // update events when fullscreen is activated
+                if (ed.onFullScreen) {
+                    ed.onFullScreen.add(function(editor) {                    
+                        bindUploadEvents(editor);
+                    });
+                }
 
                 // fake drag & drop in Windows Safari
                 if (isSafari && isWin) {
@@ -326,11 +337,14 @@
                 if (window.Opera) {
                     return;
                 }
+                
+                function cancelEvent(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
 
                 // Block browser default drag over
-                ed.dom.bind(ed.getBody(), 'dragover', function(e) {                    
-                    e.preventDefault();
-                });
+                ed.dom.bind(ed.getBody(), 'dragover', cancelEvent);
 
                 // Attach drop handler and grab files
                 ed.dom.bind(ed.getBody(), 'drop', function(e) {
@@ -342,13 +356,19 @@
                             self.addFile(file);
                         });
 
-                        e.preventDefault();
+                        cancelEvent(e);
                     }
-
+                    
                     // upload...
-                    each(self.files, function(file) {
-                        self.upload(file);
-                    });
+                    if (self.files.length) {
+                        each(self.files, function(file) {
+                            self.upload(file);
+                        });
+                    }
+                    // stop Firefox opening the image in a new window if the drop target is itself (drag cancelled)
+                    if (e.target.nodeName == 'IMG') {
+                        cancelEvent(e);
+                    }
                 });
             });
 
@@ -451,14 +471,15 @@
          * Bind events to upload marker and create upload input
          * @param marker Marker / Placeholder element 
          */
-        _bindUploadMarkerEvents: function(marker) {
-            var self = this, ed = this.editor, dom = tinymce.DOM;
+        _bindUploadMarkerEvents: function(ed, marker) {
+            var self = this, dom = tinymce.DOM;
 
             function removeUpload() {
                 dom.setStyles('wf_upload_button', {
                     'top': '',
                     'left': '',
-                    'display': 'none'
+                    'display': 'none',
+                    'zIndex' : ''
                 });
             }
 
@@ -483,7 +504,7 @@
             }
 
             // add upload on mouseover
-            ed.dom.bind(marker, 'mouseover', function(e) {
+            ed.dom.bind(marker, 'mouseover', function(e) {               
                 
                 if (ed.dom.getAttrib(marker, 'data-mce-selected')) {
                     return;
@@ -504,11 +525,14 @@
 
                 var x = Math.max(p2.x - vp.x, 0) + p1.x;
                 var y = Math.max(p2.y - vp.y, 0) + p1.y - Math.max(st - p2.y, 0);
+                
+                var zIndex = ed.id == 'mce_fullscreen' ? dom.get('mce_fullscreen_container').style.zIndex : 0;
 
                 dom.setStyles('wf_upload_button', {
                     'top': y + p2.h / 2 - 14,
                     'left': x + p2.w / 2 - 19,
-                    'display': 'block'
+                    'display': 'block',
+                    'zIndex' : zIndex + 1
                 });
 
                 input.onchange = function() {
