@@ -56,7 +56,7 @@
                             var originalEditor = tinyMCE.get(fullscreenEditor.getParam('fullscreen_editor_id'));
                             originalEditor.plugins.fullscreen.saveState(fullscreenEditor);
                             
-                            originalEditor.onFullScreen.dispatch(false, ed.settings);
+                            originalEditor.onFullScreen.dispatch(originalEditor, false);
 
                             tinyMCE.remove(fullscreenEditor);
                         }, 10);
@@ -168,7 +168,7 @@
                         fed.theme.resizeTo(vp.w - outerSize.w + innerSize.w, vp.h - outerSize.h + innerSize.h);
                     });
                     
-                    ed.onFullScreen.dispatch(true, s);
+                    ed.onFullScreen.dispatch(t.fullscreenEditor, true);
                 }
             });
 
