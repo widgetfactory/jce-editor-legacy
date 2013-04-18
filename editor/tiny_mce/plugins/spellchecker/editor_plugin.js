@@ -56,6 +56,8 @@
                 if (t.native_spellchecker) {                    
                     // Enable/disable native spellchecker
                     ed.getBody().spellcheck = t.active = !t.active;
+                    
+                    ed.focus();
 
                     return;
                 }
