@@ -34,7 +34,8 @@
             },
             insert: $.noop,
             close: $.noop,
-            dialog: false
+            dialog: false,
+            parent : 'body'
         },
         _strhex: "0123456789abcdef",
         /**
@@ -290,6 +291,7 @@
                     content: '<div id="colorpicker" title="Color Picker">' + self._getContent() + '</div>',
                     className: 'wf-colorpicker',
                     opacity: 1,
+                    parent : this.options.parent,
                     show: function() {
                         var color = $(self.element).val() || '#000000';
 
@@ -316,14 +318,14 @@
                         });
 
                         $('#colorpicker').append(
-                                '<div id="colorpicker_preview">' +
-                                '	<div id="colorpicker_preview_text">' +
-                                '		<input type="text" id="colorpicker_color" size="8" maxlength="8" value="' + color + '" class="ui-corner-all" aria-required="true" />' +
-                                '	</div>' +
-                                '	<div id="colorpicker_preview_color" class="ui-widget-content ui-corner-all"></div>' +
-                                '	<div id="colorpicker_insert" class="btn btn-small"><i class="icon-save"></i>&nbsp;' + o.labels.apply + '</div>' +
-                                '</div>'
-                                );
+                            '<div id="colorpicker_preview">' +
+                            '	<div id="colorpicker_preview_text">' +
+                            '		<input type="text" id="colorpicker_color" size="8" maxlength="8" value="' + color + '" class="ui-corner-all" aria-required="true" />' +
+                            '	</div>' +
+                            '	<div id="colorpicker_preview_color" class="ui-widget-content ui-corner-all"></div>' +
+                            '	<div id="colorpicker_insert" class="btn btn-small"><i class="icon-ok"></i>&nbsp;' + o.labels.apply + '</div>' +
+                            '</div>'
+                        );
 
                         $('#colorpicker_preview_color').css('background-color', color);
 
