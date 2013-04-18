@@ -344,7 +344,7 @@
             });
             
             // get window dimensions
-            var pos = {}, ww = Math.round($(window).width()), wh = Math.round($(window).height()), pw = 10, ph = 10;
+            var pos = {}, ww = Math.round($(window).width()), wh = Math.round($(window).height()), pw = 10, ph = 10, st = $(window).scrollTop();
 
             $tips.position({
                 my  : my,
@@ -369,8 +369,8 @@
                     }
                     
                     // re-position pointer
-                    if (/left|right/.test(position)) {
-                        $pointer.css('top', Math.round(fb.target.top - props.top) + (ph / 2 - 1));
+                    if (/left|right/.test(position)) {                                                
+                        $pointer.css('top', Math.round(fb.target.top - fb.element.top) + fb.target.height / 2);
                     }
 
                     if (/top|bottom/.test(position) && Math.round(fb.element.left) == 0) {                        
@@ -509,7 +509,7 @@
             }
 
             $tips.css({
-                top	: pos.y,
+                top : pos.y,
                 left: pos.x
             });
         },
