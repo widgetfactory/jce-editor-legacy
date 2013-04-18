@@ -53,16 +53,10 @@
 
             // Register commands
             ed.addCommand('mceSpellCheck', function() {
-                if (t.native_spellchecker) {
+                if (t.native_spellchecker) {                    
                     // Enable/disable native spellchecker
                     ed.getBody().spellcheck = t.active = !t.active;
-                    
-                    if (!t.active) {
-                        ed.getBody().blur();
-                    }
-                    
-                    ed.focus();
-                                   
+
                     return;
                 }
 
