@@ -529,17 +529,19 @@ function jInsertEditorText(text, editor) {
 		 * @param {String} v The text to insert
 		 */
         insert : function(el, v) {
-            var ed;
+            var ed, parent;
             if( typeof el == 'string') {
                 el = document.getElementById(el);
             }
             if(/wfEditor/.test(el.className)) {
                 ed = tinyMCE.get(el.id);
                 if(window.parent.tinymce) {
-                    var ed = window.parent.tinyMCE.get(el.id);
-
-                    if(ed && ed.lastSelectionBookmark) {
-                        ed.selection.moveToBookmark(ed.lastSelectionBookmark);
+                    if (parent = window.parent.tinyMCE.get(el.id)) {
+                        ed = parent;
+                        
+                        if(ed.lastSelectionBookmark) {
+                            ed.selection.moveToBookmark(ed.lastSelectionBookmark);
+                        }
                     }
                 }
                 ed.execCommand('mceInsertContent', false, v);
