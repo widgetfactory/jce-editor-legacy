@@ -22,16 +22,6 @@
 
                 // add ui-jce class to body
                 $('body').addClass('ui-jce');
-            	
-                // init layout
-                $('#jce').height($(window).height() - 20);
-            	
-                // add resize
-                $(window).bind('resize', function() {
-                    $('#jce').height($(window).height() - 20);
-                    // resize frame
-                    self.resizeFrame();
-                });
 
                 if ($('#help-menu')) {
 					
@@ -108,8 +98,12 @@
                     }
                 });
                 
-                // resize help frame
-                this.resizeFrame();
+                // add resize
+                $(window).bind('resize', function() {
+                    $('#jce').height($(window).height() - 20);
+                    // resize frame
+                    self.resizeFrame();
+                }).resize();
             },
             
             resizeFrame : function() {
@@ -120,7 +114,7 @@
                         s = $("#help-menu-toggle").outerWidth(true);
                     }
                        
-                    return $('div.row-fluid').width() - self.getMenuSize(s);
+                    return $('div.row-fluid').width() - self.getMenuSize(s) - 1;
                 });
             },
             
