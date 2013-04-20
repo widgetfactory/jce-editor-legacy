@@ -1,4 +1,13 @@
-/* CSS crunched with Crunch - http://crunchapp.net/ */
+/*!
+ * Bootstrap v2.3.0
+ *
+ * Copyright 2012 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ * CSS crunched with Crunch - http://crunchapp.net/ 
+*/
 #jce .clearfix{*zoom:1;}
 #jce .clearfix:before,#jce .clearfix:after{display:table;content:"";line-height:0;}
 #jce .clearfix:after{clear:both;}
