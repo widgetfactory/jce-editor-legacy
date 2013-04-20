@@ -54,9 +54,11 @@
             var self = this, o, found, v = $(this.input).val();
 
             if (v != '') {
-            	// select if value exists
+            	$('option:selected', this.element).prop('selected', false);
+                
+                // select if value exists
             	if ($('option[value="'+ v +'"]', this.element).is('option')) {
-            		$(this.element).val(v);
+            		$(this.element).val(v).change();
             	} else {
             		// new value
                     if (!found) {
@@ -70,11 +72,11 @@
                     	
                     	// add new value if result
                     	if (v != '') {
-                    		// value exists, select
-                    		if ($('option[value="'+ v +'"]', this.element).length == 0) {
-                    			$(this.element).append(new Option(v, v));
-                    		}
-                    		$(this.element).val(v);
+                            // value exists, select
+                            if ($('option[value="'+ v +'"]', this.element).length == 0) {
+                                    $(this.element).append(new Option(v, v));
+                            }
+                            $(this.element).val(v).change();
                     	}
                     }
             	}
