@@ -22,7 +22,7 @@
         },
 
         _init : function() {
-            var self = this, el = this.element, busy;
+            var self = this, el = this.element, busy, x = [];
 
             var clear = this.options.clear;
 
@@ -35,7 +35,8 @@
                             self._reset();
 
                             $(el).val('');
-                            self._trigger('onFind', e, []);
+                            x = [];
+                            self._trigger('onFind', e, [x]);
                         }
                     }
                 });
@@ -98,8 +99,10 @@
             } else {
                 self._reset();
             }
+            
+            x = x || [];
 
-            self._trigger('onFind', e, x);
+            self._trigger('onFind', e, [x]);
         },
 
         _scroll : function(el) {
