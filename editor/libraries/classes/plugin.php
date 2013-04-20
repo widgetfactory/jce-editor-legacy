@@ -147,6 +147,26 @@ class WFEditorPlugin extends JObject {
 
         return $wf->getProfile($plugin);
     }
+    
+    protected function getPluginVersion() {
+        $manifest = WF_EDITOR_PLUGIN . '/' . $this->get('name') . '.xml';
+        
+        $version = '';
+            
+        if (is_file($manifest)) {
+            $xml = WFXMLHelper::parseInstallManifest($manifest);
+
+            if ($xml && isset($xml['version'])) {
+                $version = $xml['version'];
+            }
+        }
+        
+        if ($version) {
+            $version = preg_replace('#[^a-z0-9]+#i', '', $version);
+        }
+        
+        return $version;
+    }
 
     public function execute() {
         WFToken::checkToken() or die('Access to this resource is restricted');
@@ -181,21 +201,11 @@ class WFEditorPlugin extends JObject {
             WFLanguage::load('com_jce_' . trim($this->getName()));
             
             // set default plugin version
-            $plugin_version = '';
-            
-            $manifest = WF_EDITOR_PLUGIN . '/' . $name . '.xml';
-            
-            if (is_file($manifest)) {
-                $xml = WFXMLHelper::parseInstallManifest($manifest);
-                
-                if ($xml && isset($xml['version'])) {
-                    $plugin_version = $xml['version'];
-                }
-            }
+            $plugin_version = $this->getPluginVersion();
 
             // add plugin version
-            if ($plugin_version) {
-                $version .= '-' . preg_replace('#[^a-z0-9]+#i', '', $plugin_version);
+            if ($plugin_version && $plugin_version != $version) {
+                $version .= '-' . $plugin_version;
             }
 
             // create the document
