@@ -64,13 +64,15 @@
 
                         // Get the very last node inside the table cell
                         var end = n.lastChild;
+                        
                         while (end.lastChild) {
                             end = end.lastChild;
                         }
-
                         // Select the entire table cell. Nothing outside of the table cell should be selected.
-                        rng.setEnd(end, end.nodeValue.length);
-                        ed.selection.setRng(rng);
+                        if (end && end.nodeValue) {
+                            rng.setEnd(end, end.nodeValue.length);
+                            ed.selection.setRng(rng);
+                        }
                     }
                 }
 
