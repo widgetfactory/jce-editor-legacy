@@ -305,9 +305,11 @@ var TableDialog = {
     },
     insertTable: function() {
         var ed = tinyMCEPopup.editor, dom = ed.dom;
+        
+        tinyMCEPopup.restoreSelection();
 
-        var elm = ed.dom.getParent(ed.selection.getNode(), "table");
-        var action = tinyMCEPopup.getWindowArg('action');
+        var elm     = ed.dom.getParent(ed.selection.getNode(), "table");
+        var action  = tinyMCEPopup.getWindowArg('action');
 
         if (!action) {
             action = elm ? "update" : "insert";
@@ -317,13 +319,10 @@ var TableDialog = {
         var html = '', capEl, elm;
         var cellLimit, rowLimit, colLimit;
 
-        tinyMCEPopup.restoreSelection();
-
         if (!AutoValidator.validate($('form').get(0))) {
             tinyMCEPopup.alert(ed.getLang('invalid_data'));
             return false;
         }
-        elm = dom.getParent(ed.selection.getNode(), 'table');
 
         // Get form data
         cols = $('#cols').val();
