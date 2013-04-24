@@ -22,17 +22,17 @@ WFMediaPlayer.init({
 
     props : {
         autoPlay 		: false,
-        bufferingOverlay 	: false,
         controlBarAutoHide 	: true,
         controlBarMode		: 'docked',
         loop			: false,
         muted			: false,
         playButtonOverlay	: true,
-        bufferingOverlay	: true,
+        bufferingOverlay 	: true,
         volume			: 1,
         audioPan		: 0,
         poster                  : '',
-        endOfVideoOverlay       : ''
+        endOfVideoOverlay       : '',
+        backgroundColor         : ''
     },
 
     type : 'flash',
