@@ -115,7 +115,7 @@
             };
             
             ed.onBeforeSetContent.add( function(ed, o) {
-                o.content = o.content.replace(/<hr([^>]*) alt="([^"]+)"([^>]+)>/gi, '<hr$1data-mce-alt="$2"$3>');
+                o.content = o.content.replace(/<hr([^>]*)alt="([^"]+)"([^>]+)>/gi, '<hr$1data-mce-alt="$2"$3>');
             });
             
             ed.onSetContent.add(function() {                              
