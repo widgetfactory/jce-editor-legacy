@@ -270,7 +270,8 @@
             });
 
             $('body').click( function(e) {
-                if ($(e.target).is('#show-search, span.layout-icon.search') || $(e.target).parents('#searchbox').length) {
+                // keep search open if it has a value or if it or its parent is clicked
+                if ($('#searchbox input').val() || $(e.target).is('#show-search, span.layout-icon.search') || $(e.target).parents('#searchbox').length) {
                     return;
                 }
 
@@ -284,12 +285,33 @@
                 items	: '#item-list li.file',
                 clear 	: $('span.search-icon', '#searchbox'),
                 filter  : '#item-list li',
-                onFind 	: function(e, items, filter) {                                        
-                    if (items && items.length) {
-                        self._deselectItems();
-                        self._selectItems(items, true);
+                onFilter : function(e, s, cb, scope) {                    
+                    if (s == '.') {                        
+                        return;
+                    }
+                    
+                    if ($('#browser-list-limit-select').val() == 'all') {                        
+                        return $(this).listFilter('filter', s);
+                    }
+                    
+                    if(s && self._isWebSafe(s)) {                                                
+                        $('#browser-list').one('load.filter', function() {
+                            cb.call(scope || self, $('li.file', '#item-list').get());
+                        });
+                        
+                        self._getList('', s);
+                        
                     } else {
-                        self._deselectItems();
+                        self.refresh();
+                    }
+                },
+                onFind 	: function(e, items) {
+                    if (e.currentTarget == $('span.search-icon', '#searchbox').get(0)) {
+                        if ($('#browser-list-limit-select').val() == 'all') {
+                            return $(this).listFilter('reset');
+                        }
+                        
+                        self.refresh();
                     }
                 }
 
@@ -944,6 +966,10 @@
             this._reset();
             this._limitcount = 0;
             this._setDir(dir);
+            
+            // show loading message
+            this._setLoader();
+            
             this._getList();
         },
 
@@ -951,17 +977,17 @@
 		 * Retrieve a list of files and folders
 		 * @param {String} src optional src url eg: images/stories/fruit.jpg
 		 */
-        _getList : function(src) {
+        _getList : function(src, filter) {
             // get path from src or stored directory
             var path = src || this._dir;
 
             // store directory in cookie
-            if (this.options.use_cookies) {
+            if (src && this.options.use_cookies) {
                 $.Cookie.set("wf_" + $.Plugin.getName() + '_dir', this._cleanPath(path));
             }
 
             // show loading message
-            this._setLoader();
+            //this._setLoader();
 
             // hide all buttons
             this._hideButtons($('div.button', '#buttons'));
@@ -970,7 +996,7 @@
             this._limit = $('#browser-list-limit-select').val() || this.options.listlimit;
 
             // send request
-            $.JSON.request('getItems', [path, this._limit, this._limitcount], this._loadList, this);
+            $.JSON.request('getItems', [path, this._limit, this._limitcount, filter || ''], this._loadList, this);
         },
 
         /**
@@ -978,6 +1004,10 @@
 		 */
         refresh : function() {
             this._reset();
+            
+            // show loading message
+            this._setLoader();
+            
             this._getList();
         },
 
@@ -989,6 +1019,9 @@
             if (items) {
                 this._addReturnedItem(items);
             }
+            
+            // show loading message
+            this._setLoader();
 
             this._getList();
         },
@@ -1076,6 +1109,9 @@
             if (this._pasteitems) {
                 this._showPasteButton();
             }
+            
+            // trigger "load" event on browser list
+            $('#browser-list').trigger('load');
 
             this._resetStatus();
             this._resetMessage();

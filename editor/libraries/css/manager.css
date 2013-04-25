@@ -407,6 +407,10 @@ div#browser-list-actions div#searchbox span.search-icon {
     height: 20px;
 }
 
+div#browser-list-actions div#searchbox input.working + span.search-icon {
+    background: url("../img/load.gif") no-repeat center;
+}
+
 div#browser-list-actions div#searchbox span.search-icon.clear {
     background: url("../img/icons.png") no-repeat 0 -920px;
     cursor: pointer;

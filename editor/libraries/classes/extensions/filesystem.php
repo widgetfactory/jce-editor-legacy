@@ -158,7 +158,7 @@ class WFFileSystem extends WFExtension {
         return array();
     }
 
-    public function getFolders($path) {
+    public function getFolders($path, $filter) {
         return array();
     }
 

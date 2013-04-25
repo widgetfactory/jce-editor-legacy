@@ -173,7 +173,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
         return 0;
     }
 
-    function getFolders($relative) {
+    function getFolders($relative, $filter = '') {
         $path = WFUtility::makePath($this->getBaseDir(), $relative);
         $path = WFUtility::fixPath($path);
 
@@ -182,7 +182,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
             $path = $this->getBaseDir();
         }
 
-        $list = JFolder::folders($path);
+        $list = JFolder::folders($path, $filter);
 
         $folders = array();
 

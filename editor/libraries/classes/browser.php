@@ -343,6 +343,7 @@ class WFFileBrowser extends JObject {
      */
     private function getFiles($relative, $filter = '.') {
         $filesystem = $this->getFileSystem();
+        
         $list = $filesystem->getFiles($relative, $filter);
 
         return $list;
@@ -353,9 +354,9 @@ class WFFileBrowser extends JObject {
      * @param string $relative The relative path of the folder
      * @return Folder list array
      */
-    private function getFolders($relative) {
+    private function getFolders($relative, $filter) {
         $filesystem = $this->getFileSystem();
-        $list = $filesystem->getFolders($relative);
+        $list = $filesystem->getFolders($relative, $filter);
 
         return $list;
     }
@@ -367,8 +368,11 @@ class WFFileBrowser extends JObject {
      * @param int $limit List limit
      * @param int $start list start point
      */
-    public function getItems($path, $limit = 25, $start = 0) {
+    public function getItems($path, $limit = 25, $start = 0, $filter = '') {
         $filesystem = $this->getFileSystem();
+        
+        $files      = array();
+        $folders    = array();
 
         clearstatcache();
 
@@ -380,14 +384,33 @@ class WFFileBrowser extends JObject {
         // get source dir from path eg: images/stories/fruit.jpg = images/stories
         $dir = $filesystem->getSourceDir($path);
 
+        $filetypes  = explode(',', $this->getFileTypes('list'));
+        $name       = '';
+
+        if ($filter) {            
+            if ($filter{0} == '.') {
+                $ext = WFUtility::makeSafe($filter);
+                
+                for($i = 0; $i < count($filetypes); $i++) {
+                    if (preg_match('#^' . $ext . '#', $filetypes[$i]) === false) {
+                        unset($filetypes[$i]);
+                    }
+                }                
+            } else {
+                $name = '^(?i)' . WFUtility::makeSafe($filter) . '.*';
+            }
+        }
+
         // get file list by filter
-        $files = self::getFiles($dir, '\.(?i)(' . str_replace(',', '|', $this->getFileTypes('list')) . ')$');
+        $files = self::getFiles($dir, $name . '\.(?i)(' . implode('|', $filetypes) . ')$');
+        
+        if (empty($filter) || $filter{0} != '.') {
+            // get folder list
+            $folders = self::getFolders($dir, '^(?i)' . WFUtility::makeSafe($filter) . '.*');
+        }
 
-        // get folder list
-        $folders = self::getFolders($dir);
-
-        $folderArray = array();
-        $fileArray = array();
+        $folderArray    = array();
+        $fileArray      = array();
 
         $items = array_merge($folders, $files);
 
