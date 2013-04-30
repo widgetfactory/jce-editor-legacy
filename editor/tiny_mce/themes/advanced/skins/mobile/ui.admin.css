@@ -107,6 +107,7 @@
     content: "";
     padding : 0;
     margin: 0 0 0 5px;
+    cursor: move;
 } 
 
 #jce .mobileSkin .mceSplitButton .mceIcon:after {
@@ -117,8 +118,10 @@
     margin: -5px 0 0 -14px;
     padding: 0;
     vertical-align: top;
+    background: none;
+    position: relative;
+    vertical-align: text-top;
 }
-
 #jce .mobileSkin .mceSplitButton .mceIcon:before {
     margin: 0 0 0 30px;
 }
