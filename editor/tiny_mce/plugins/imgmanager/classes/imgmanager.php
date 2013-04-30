@@ -54,13 +54,14 @@ final class WFImageManagerPlugin extends WFMediaManager {
         $document->addScriptDeclaration('ImageManagerDialog.settings=' . json_encode($this->getSettings()) . ';');
     }
 
-    function onUpload($file, $relative = '') {
-        $browser = $this->getBrowser();
+    function onUpload($file, $relative = '', $method = '') {
+        $browser    = $this->getBrowser();
         $filesystem = $browser->getFileSystem();
 
         $params = $this->getParams();
 
-        if (JRequest::getWord('method') === 'dragdrop') {
+        // using inline upload method (drag&drop, placeholder)
+        if ($method == 'inline') {
             $result = array(
                 'file' => $relative,
                 'name' => basename($relative)
@@ -158,7 +159,7 @@ final class WFImageManagerPlugin extends WFMediaManager {
             return $result;
         }
 
-        return $browser->getResult();
+        return array();
     }
 
     public function getSettings($settings = array()) {

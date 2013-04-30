@@ -718,7 +718,7 @@
             var args = {
                 'action': 'upload',
                 'format': 'raw',
-                'method': 'dragdrop',
+                'method': 'inline',
                 'component_id': ed.settings.component_id
             };
 
