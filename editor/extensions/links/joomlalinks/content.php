@@ -139,7 +139,7 @@ class JoomlalinksContent extends JObject {
                         if (isset($article->sectionid)) {
                             $id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug, $article->sectionid);
                         } else {
-                            $id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug);
+                            $id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug, $article->language);
                         }
 
                         $items[] = array(
@@ -211,7 +211,7 @@ class JoomlalinksContent extends JObject {
                     if (isset($article->sectionid)) {
                         $id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug, $article->sectionid);
                     } else {
-                        $id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug);
+                        $id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug, $article->language);
                     }
 
                     $items[] = array(
@@ -336,7 +336,7 @@ class JoomlalinksContent extends JObject {
         if (is_object($query)) {
             $groups = implode(',', $user->getAuthorisedViewLevels());
 
-            $query->select('a.id AS slug, b.id AS catslug, a.alias, a.title AS title, a.access, ' . $query->concatenate(array('a.introtext', 'a.fulltext')) . ' AS content' . $case);
+            $query->select('a.id AS slug, b.id AS catslug, a.alias, a.title AS title, a.access, a.language, ' . $query->concatenate(array('a.introtext', 'a.fulltext')) . ' AS content' . $case);
             $query->from('#__content AS a');
             $query->innerJoin('#__categories AS b ON b.id = ' . (int) $id);
             $query->where('a.catid = ' . (int) $id);
@@ -346,13 +346,13 @@ class JoomlalinksContent extends JObject {
             $query->order('a.title');
         } else {
             $query = 'SELECT a.id AS slug, b.id AS catslug, a.alias, a.title AS title, u.id AS sectionid, a.access, a.introtext, a.fulltext' . $case
-                    . ' FROM #__content AS a'
-                    . ' INNER JOIN #__categories AS b ON b.id = ' . (int) $id
-                    . ' INNER JOIN #__sections AS u ON u.id = a.sectionid'
-                    . ' WHERE a.catid = ' . (int) $id
-                    . ' AND a.state = 1'
-                    . ' AND a.access <= ' . (int) $user->get('aid')
-                    . ' ORDER BY a.title';
+            . ' FROM #__content AS a'
+            . ' INNER JOIN #__categories AS b ON b.id = ' . (int) $id
+            . ' INNER JOIN #__sections AS u ON u.id = a.sectionid'
+            . ' WHERE a.catid = ' . (int) $id
+            . ' AND a.state = 1'
+            . ' AND a.access <= ' . (int) $user->get('aid')
+            . ' ORDER BY a.title';
         }
 
         $db->setQuery($query, 0);
@@ -364,11 +364,11 @@ class JoomlalinksContent extends JObject {
         $user = JFactory::getUser();
 
         $query = 'SELECT id, title, alias, access, introtext AS content'
-                . ' FROM #__content'
-                . ' WHERE state = 1'
-                . ' AND access <= ' . (int) $user->get('aid') . ' AND sectionid = 0'
-                . ' AND catid = 0'
-                . ' ORDER BY title';
+        . ' FROM #__content'
+        . ' WHERE state = 1'
+        . ' AND access <= ' . (int) $user->get('aid') . ' AND sectionid = 0'
+        . ' AND catid = 0'
+        . ' ORDER BY title';
 
         $db->setQuery($query, 0);
         return $db->loadObjectList();
