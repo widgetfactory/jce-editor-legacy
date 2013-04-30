@@ -47,7 +47,7 @@
         },
 
         sortList : function(selector, type, attribute, direction) {
-			var self = this;
+			var self = this, fn;
 			
             switch (type) {
                 case 'date' :
