@@ -150,22 +150,25 @@ final class WFTabs extends JObject {
         // add tabs
         if (!empty($this->_tabs)) {
             $output .= '<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">';
-            $output .= '<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">' . "\n";
+            
+            if (count($this->_tabs) > 1) {
+                $output .= '<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">' . "\n";
 
-            $x = 0;
+                $x = 0;
 
-            foreach ($this->_tabs as $tab) {
-                $class = "ui-state-default ui-corner-top";
+                foreach ($this->_tabs as $tab) {
+                    $class = "ui-state-default ui-corner-top";
 
-                if ($x == 0) {
-                    $class .= " ui-tabs-active ui-state-active";
+                    if ($x == 0) {
+                        $class .= " ui-tabs-active ui-state-active";
+                    }
+
+                    $output .= "\t" . '<li class="' . $class . '"><a href="#' . $tab . '_tab">' . WFText::_('WF_TAB_' . strtoupper($tab)) . '</a></li>' . "\n";
+                    $x++;
                 }
 
-                $output .= "\t" . '<li class="' . $class . '"><a href="#' . $tab . '_tab">' . WFText::_('WF_TAB_' . strtoupper($tab)) . '</a></li>' . "\n";
-                $x++;
+                $output .= "</ul>\n";
             }
-
-            $output .= "</ul>\n";
         }
         // add panels
         if (!empty($this->_panels)) {
