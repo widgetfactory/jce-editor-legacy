@@ -43,24 +43,20 @@ class WFJoomlaFileSystem extends WFFileSystem {
             )
         ));
     }
-    
-    public function getBasePath() {
-        return JPATH_SITE;
-    }
 
     /**
      * Get the base directory.
      * @return string base dir
      */
-    public function getBaseDir() {
-        return WFUtility::makePath($this->getBasePath(), $this->getRootDir());
+    function getBaseDir() {
+        return WFUtility::makePath(JPATH_SITE, $this->getRootDir());
     }
 
     /**
      * Get the full base url
      * @return string base url
      */
-    public function getBaseURL() {
+    function getBaseURL() {
         return WFUtility::makePath(JURI::root(true), $this->getRootDir());
     }
 
@@ -71,7 +67,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
      * @access public
      * @return Full path to folder
      */
-    public function getRootDir() {
+    function getRootDir() {
         static $root;
 
         if (!isset($root)) {
@@ -116,7 +112,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
 
     function toRelative($path, $isabsolute = true) {
         // path is relative to Joomla! root, eg: images/folder
-        if ($isabsolute === false) {            
+        if ($isabsolute === false) {
             return rtrim($path, $this->getRootDir());
         }
 
@@ -194,11 +190,17 @@ class WFJoomlaFileSystem extends WFFileSystem {
             // Sort alphabetically
             natcasesort($list);
             foreach ($list as $item) {
-                $item   = WFUtility::isUTF8($item) ? $item : utf8_encode($item);
-                $folder = WFUtility::makePath($relative, $item, '/'); 
-                
-                $data       = $this->getFolderDetails($folder);
-                $folders[]  = array_merge(array('name' => $item), $data);
+                $item = WFUtility::isUTF8($item) ? $item : utf8_encode($item);
+
+                $data = array(
+                    'id' => WFUtility::makePath($relative, $item, '/'),
+                    'name' => $item,
+                    'writable' => is_writable(WFUtility::makePath($path, $item)) || $this->isFtp(),
+                    'type' => 'folders'
+                );
+
+                $properties = self::getFolderDetails($data['id']);
+                $folders[] = array_merge($data, array('properties' => $properties));
             }
         }
         return $folders;
@@ -226,11 +228,25 @@ class WFJoomlaFileSystem extends WFFileSystem {
                 $item = WFUtility::isUTF8($item) ? $item : utf8_encode($item);
 
                 // create relative file
-                $file = WFUtility::makePath($relative, $item, '/');
-                
-                $data = $this->getFileDetails($file);
-                
-                $files[] = array_merge(array('name' => $item), $data);
+                $id = WFUtility::makePath($relative, $item, '/');
+
+                // create url
+                $url = WFUtility::makePath($this->getRootDir(), $id, '/');
+
+                // remove leading slash
+                $url = ltrim($url, '/');
+
+                $data = array(
+                    'id' => $id,
+                    'url' => $url,
+                    'name' => $item,
+                    'writable' => is_writable(WFUtility::makePath($path, $item)) || $this->isFtp(),
+                    'type' => 'files'
+                );
+
+                $properties = self::getFileDetails($data['id'], $x);
+
+                $files[] = array_merge($data, array('properties' => $properties));
 
                 $x++;
             }
@@ -246,79 +262,13 @@ class WFJoomlaFileSystem extends WFFileSystem {
      * @param string $dir Folder relative path
      * @param string $types File Types
      */
-    public function getFolderDetails($folder) {
-        clearstatcache();
-        
-        $path = WFUtility::makePath($this->getBaseDir(), $folder);
-        
-        $data = array(
-            'id'        => $folder,
-            'type'      => 'folders',
-            'writable'  => is_writable($path) || $this->isFtp(),
-            'properties' => array(
-                'modified' => @filemtime($path)
-            ) 
-        );
-
-        return $data;
-    }
-    
-    /**
-     * Get a files properties
-     * 
-     * @return array Array of properties
-     * @param string $file File relative path
-     */
-    public function getFileDetails($file, $count = 1) {
+    function getFolderDetails($dir) {
         clearstatcache();
 
-        // create url
-        $url = WFUtility::makePath($this->getRootDir(), $file, '/');
+        $path = WFUtility::makePath($this->getBaseDir(), rawurldecode($dir));
+        $date = @filemtime($path);
 
-        // remove leading slash
-        $url = ltrim($url, '/');
-        
-        $path = WFUtility::makePath($this->getBaseDir(), rawurldecode($file));
-        
-        $data = array(
-            'id'        => $file,
-            'url'       => $url,
-            'writable'  => is_writable($path) || $this->isFtp(),
-            'type'      => 'files',
-            'properties'=> array(
-                'size'      => @filesize($path),
-                'modified'  => @filemtime($path)
-            )
-        );
-
-        $preview  = WFUtility::makePath($this->getBaseUrl(), rawurldecode($file));
-
-        if (preg_match('#\.(jpg|jpeg|bmp|gif|tiff|png)#i', $file) && $count <= 100) {
-            $props = @getimagesize($path);
-
-            /* if (preg_match('#\.(jpg|jpeg|tiff)#i', $file)) {
-              $data = exif_read_data($path, 'IDF0', true, false);
-
-              if ($data !== false) {
-              $idf 	= isset($data['IDF0']) ? $data['IDF0'] : array();
-              $exif 	= isset($data['EXIF']) ? $data['EXIF'] : array();
-              $data 	= array_merge($idf, $exif);
-              }
-              } */
-
-            $width = $props[0];
-            $height = $props[1];
-
-            $image = array(
-                'width'     => $width,
-                'height'    => $height,
-                'preview'   => WFUtility::cleanPath($preview, '/')
-            );
-
-            $data['properties'] = array_merge($data['properties'], $image);
-        }
-
-        return $data;
+        return array('modified' => $date);
     }
 
     /**
@@ -355,6 +305,54 @@ class WFJoomlaFileSystem extends WFFileSystem {
      */
     public function pathinfo($path) {
         return pathinfo($path);
+    }
+
+    /**
+     * Get a files properties
+     * 
+     * @return array Array of properties
+     * @param string $file File relative path
+     */
+    public function getFileDetails($file, $count = 1) {
+        clearstatcache();
+
+        $path = WFUtility::makePath($this->getBaseDir(), rawurldecode($file));
+        $url = WFUtility::makePath($this->getBaseUrl(), rawurldecode($file));
+
+        $date = @filemtime($path);
+        $size = @filesize($path);
+
+        $data = array(
+            'size' => $size,
+            'modified' => $date
+        );
+
+        if (preg_match('#\.(jpg|jpeg|bmp|gif|tiff|png)#i', $file) && $count <= 100) {
+            $props = @getimagesize($path);
+
+            /* if (preg_match('#\.(jpg|jpeg|tiff)#i', $file)) {
+              $data = exif_read_data($path, 'IDF0', true, false);
+
+              if ($data !== false) {
+              $idf 	= isset($data['IDF0']) ? $data['IDF0'] : array();
+              $exif 	= isset($data['EXIF']) ? $data['EXIF'] : array();
+              $data 	= array_merge($idf, $exif);
+              }
+              } */
+
+            $width = $props[0];
+            $height = $props[1];
+
+            $image = array(
+                'width' => $width,
+                'height' => $height,
+                'preview' => WFUtility::cleanPath($url, '/')
+            );
+
+            return array_merge_recursive($data, $image);
+        }
+
+        return $data;
     }
 
     /**
@@ -414,7 +412,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
         } else if (is_dir($src)) {
             $path = WFUtility::makePath($dir, $dest);
             
-            if (is_dir($path)) {
+            if (is_folder($path)) {
                 return $result;
             }
 
@@ -442,7 +440,6 @@ class WFJoomlaFileSystem extends WFFileSystem {
         if (is_file($src)) {
             $result->type = 'files';
             $result->state = JFile::copy($src, $dest);
-            $result->path = $dest;
         } else if (is_dir($src)) {
             // Folders cannot be copied into themselves as this creates an infinite copy / paste loop	
             if ($file === $destination) {
@@ -475,7 +472,6 @@ class WFJoomlaFileSystem extends WFFileSystem {
             if (is_file($src)) {
                 $result->type = 'files';
                 $result->state = JFile::move($src, $dest);
-                $result->path = $dest;
             } else if (is_dir($src)) {
                 $result->type = 'folders';
                 $result->state = JFolder::move($src, $dest);
@@ -504,20 +500,15 @@ class WFJoomlaFileSystem extends WFFileSystem {
     /**
      * New folder
      * @param string $dir The base dir
-     * @param string $new (optional) The folder to be created (backwards compatability)
+     * @param string $new_dir The folder to be created
      * @return string $error on failure
      */
-    public function createFolder($dir, $name = null) {
+    public function createFolder($dir, $new) {
+        $dir = WFUtility::makePath(rawurldecode($dir), $new);
         $path = WFUtility::makePath($this->getBaseDir(), $dir);
-        
-        if ($name) {
-            $path = WFUtility::makePath($path, $name);
-        }
-        
         $result = new WFFileSystemResult();
 
-        $result->state  = $this->folderCreate($path);
-        $result->path   = $path; 
+        $result->state = $this->folderCreate($path);
 
         return $result;
     }
