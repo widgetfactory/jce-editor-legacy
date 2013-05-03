@@ -278,6 +278,14 @@ div#browser-details-nav {
     border: 1px solid #ccc;
 }
 
+#jce.ie7 {
+    margin-top: -5px;
+}
+
+#jce.ie7 #browser-actions span.spacer {
+    position: absolute;
+}
+
 img.icon {
     border: 0px;
     vertical-align: middle;
@@ -331,6 +339,9 @@ div#browser-message ul.pathway {
 }
 div#browser-message ul.pathway li {
     display : inline-block;
+    /* IE7 inline-block hack */
+    *display: inline;
+    *zoom: 1;
     margin : 0;
     padding: 0 2px;
     cursor: pointer;
@@ -379,6 +390,8 @@ div#browser-list-actions div#searchbox input#search {
     margin: 0;
     padding: 0 2px;
     width: 100%;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
     border-radius: 0;
     position: absolute;
     top: 0;
@@ -462,9 +475,9 @@ span.checkbox.mixed {
 }
 
 span.checkbox.disabled {
-    opacity : 0.8;
-    -ms-filter: "alpha(opacity=80)";
-    background-color : #fff;
+    opacity : 0.5;
+    filter: alpha(opacity=50);
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 }
 
 div#block-sort-standard,div#block-sort-details,div#block-search-icon,div#block-details-icon
@@ -537,7 +550,8 @@ div#show-search.active {
     border-top-color: #FFF;
     z-index: 10;
     position: relative;
-    box-shadow: -1px 1px 1px #DDDDDD;
+    -moz-box-shadow: -1px 1px 1px #DDDDDD;
+    -webkit-box-shadow: -1px 1px 1px #DDDDDD;
 }
 
 div#sort-name span span,div#sort-size span span,div#sort-date span span
@@ -625,6 +639,7 @@ div.layout-left-right div.spacer {
     font-weight: bold;
     overflow: hidden;
     text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
     white-space : nowrap;
 }
 
@@ -667,6 +682,8 @@ dd#info-preview dl dd {
 }
 
 dd#info-preview dl dd.resize {
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
     background-size: contain;
 }
 
@@ -734,12 +751,14 @@ dd#loader {
     height: 100px;
     width: 100%;
     text-align: center;
-    background: url('../img/load.gif') no-repeat center center;
+    background: url('../img/load.gif') no-repeat center
+        center;
     margin: 10px;
 }
 
 div#browser-message {
-    background: url('../img/icons-24.png') no-repeat 0 -120px;
+    background: url('../img/icons-24.png') no-repeat 0
+        -120px;
     display: block;
     float: left;
     height: 24px;
@@ -810,7 +829,10 @@ ul.item-list {
     white-space: nowrap;
     width: 100%; /* IE6 needs any width */
     overflow: hidden;
+    /* "overflow" value must be different from "visible" */
+    -o-text-overflow: ellipsis; /* Opera 9-10 */
     text-overflow: ellipsis;
+    /* IE, WebKit (Safari, Chrome), Firefox 7, Opera 11 */
 }
 
 ul.item-list li {
@@ -819,7 +841,7 @@ ul.item-list li {
     padding: 0px;
     line-height: 20px;
     position: relative;
-    height: 22px;
+    height: 20px;
 }
 
 ul.item-list li span.checkbox {
@@ -828,11 +850,6 @@ ul.item-list li span.checkbox {
     top: 0;
     position: absolute;
     width: 30px;
-}
-
-ul.item-list li.disabled span.checkbox {
-    opacity : 0.8;
-    -ms-filter: "alpha(opacity=80)";
 }
 
 ul.item-list li.file.hover,ul.item-list li.file:hover,ul.item-list li.folder.hover,ul.item-list li.folder:hover
@@ -853,22 +870,8 @@ ul.item-list li a {
     display : inline-block;
 }
 
-ul#item-list li a input[type="text"] {
-    width : 190px;
-    padding : 1px;
-    font-size: 11px;
-}
-
 div#browser.full-width ul.item-list li a { 
     width: 170px;	
-}
-
-div#browser.full-width ul.item-list li a input[type="text"] {
-    width : 160px;
-}
-
-div#browser.full-width ul.item-list li.disabled a {
-    color : #ccc;
 }
 
 ul.item-list li a:visited,ul.item-list li a:active,ul.item-list li a:link {
@@ -876,7 +879,7 @@ ul.item-list li a:visited,ul.item-list li a:active,ul.item-list li a:link {
     color: black;
 }
 
-ul#item-list li.loading {
+ul.item-list li.loading {
     background: url('../img/load.gif') no-repeat left center;
 }
 
@@ -958,6 +961,8 @@ div.button {
     width: 20px;
     height: 20px;
     padding: 1px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
     border-radius: 2px;
     cursor: pointer;
 }
@@ -1027,7 +1032,9 @@ div.button span {
 }
 /* Loader */
 .ui-dialog div.big-loader {
-    background: url('../../tiny_mce/themes/advanced/skins/default/img/progress.gif') center 50% no-repeat;
+    background:
+        url('../../tiny_mce/themes/advanced/skins/default/img/progress.gif')
+        center 50% no-repeat;
     margin-top: -33px !important;
     width: 100%;
     height: 100%;
@@ -1043,11 +1050,11 @@ div.actionPanel div {
         display: none;
         width : 0;
     }
-
+    
     #browser div.layout-bottom div.layout-center {
         width : 70%;
     }
-
+    
     #browser div#browser-list-actions div#show-details {
         display: none;
     }
