@@ -41,10 +41,10 @@ var XHTMLXtrasDialog = {
                 $('#insert').button('option', 'label', ed.getLang('update', 'Insert'));
             }
         }
-
+        
         $('#remove').button({
             icons : {
-                primary : 'ui-icon-minus'
+                primary : 'icon-minus-sign'
             }
         }).toggle(!!element);
        

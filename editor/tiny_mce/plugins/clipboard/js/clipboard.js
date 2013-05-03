@@ -29,7 +29,7 @@ var ClipboardDialog = {
 			document.title 	= ed.getLang('paste.paste_desc');
 			
 			// Create iframe
-			el.innerHTML = '<iframe id="content" src="javascript:\'\';" frameBorder="0" style="border: 1px solid gray"></iframe>';
+			el.innerHTML = '<iframe id="content" src="javascript:\'\';" frameBorder="0"></iframe>';
 			ifr = document.getElementById('content');
 			doc = ifr.contentWindow.document;
 	

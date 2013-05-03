@@ -18,7 +18,7 @@
                 ed.windowManager.open({
                     file 	: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=searchreplace',
                     width 	: 420 + parseInt(ed.getLang('searchreplace.delta_width', 0)),
-                    height 	: 190 + parseInt(ed.getLang('searchreplace.delta_height', 0)),
+                    height 	: 240 + parseInt(ed.getLang('searchreplace.delta_height', 0)),
                     inline 	: 1,
                     auto_focus : 0,
                     popup_css : false

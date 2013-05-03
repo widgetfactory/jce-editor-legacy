@@ -13,12 +13,11 @@ input[type="text"] {
 select {
 	width: 250px;
 }
-
-#href {
-	width: 330px;
+#jce #href {
+	width: 300px;
 }
-#text, #title {
-	width: 98%;
+#jce #text, #jce #title {
+	width: 350px;
 }
 
 #advanced_tab input[type="text"], #advanced_tab select {
@@ -28,7 +27,6 @@ select {
 #anchorlist, #target {
 	width: 380px;
 }
-
 
 #link_tab fieldset {
     margin : 10px 0;
@@ -41,7 +39,6 @@ select {
 #link-browser {
     height: 160px;
     overflow : auto;
-    padding : 5px;
 }
 
 #search-browser {
@@ -53,10 +50,18 @@ input.disabled {
 	border:1px solid #CCCCCC;
 	font-style: italic;
 }
-span.email {display:inline-block; vertical-align:middle;cursor:pointer;width:20px; height:20px; background: url(../img/icons.png) 0 0; border:1px solid #FFF; margin-left:1px;}
-span.email:hover {border:1px solid #0A246A; background-color:#B2BBD0;}
-span.email.disabled {border:1px solid white; -moz-opacity:0.3; opacity:0.3; filter:progid:DXImageTransform.Microsoft.Alpha(opacity=30);}
-span.email.disabled:hover {border:1px solid white; background-color:transparent;}
+#jce .btn.email + div.dropdown {
+    display: none;
+}
+#jce .btn.email + div.dropdown ul {
+    display: block;
+    padding: 10px;
+    right: 0;
+}
+
+#jce .btn.email + div.dropdown ul li:last-child {
+    text-align: right;
+}
 
 div.tree ul {}
 div.tree ul li {}

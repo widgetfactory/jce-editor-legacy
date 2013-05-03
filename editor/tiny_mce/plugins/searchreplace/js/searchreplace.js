@@ -20,7 +20,7 @@ var SearchReplaceDialog = {
 
         $('button#next').button({
             icons : {
-                primary : 'ui-icon-arrowthick-1-e'
+                primary : 'icon-arrow-right'
             }
         }).click(function(e) {
             self.searchNext('none');
@@ -29,7 +29,7 @@ var SearchReplaceDialog = {
 
         $('button#replaceBtn').button({
             icons : {
-                primary : 'ui-icon-transferthick-e-w'
+                primary : 'icon-exchange'
             }
         }).click(function(e) {
             self.searchNext('current');
@@ -38,7 +38,7 @@ var SearchReplaceDialog = {
 
         $('button#replaceAllBtn').button({
             icons : {
-                primary : 'ui-icon-transferthick-e-w'
+                primary : 'icon-exchange'
             }
         }).click(function(e) {
             self.searchNext('all');

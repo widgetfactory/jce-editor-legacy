@@ -17,7 +17,7 @@ defined( 'WF_EDITOR' ) or die('RESTRICTED');
 	<div id="container"></div>
 	
 	<div class="mceActionPanel">
-	<button id="insert" ><?php echo WFText::_('WF_LABEL_INSERT');?></button>
-	<button id="cancel"><?php echo WFText::_('WF_LABEL_CANCEL');?></button>
+	<button id="insert" class="btn"><?php echo WFText::_('WF_LABEL_INSERT');?></button>
+	<button id="cancel" class="btn"><?php echo WFText::_('WF_LABEL_CANCEL');?></button>
 	</div>
 </form>

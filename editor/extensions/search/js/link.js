@@ -27,11 +27,11 @@ var WFLinkSearch = WFExtensions.add('LinkSearch', {
             e.preventDefault();
         }).button({
             icons: {
-                primary: 'ui-icon-search'
+                primary: 'icon-search'
             }
         });
 
-        $(this.options.clear).addClass('ui-icon ui-icon-circle-close').click(function(e) {
+        $(this.options.clear).addClass('ui-icon icon-remove-sign').click(function(e) {
             if($(this).hasClass('clear')) {
                 $(this).removeClass('clear');
 
@@ -40,14 +40,14 @@ var WFLinkSearch = WFExtensions.add('LinkSearch', {
             }
         });
         
-        $('#search-options-button').click(function() {
-            $(this).toggleClass('active');
-            
+        $('#search-options-button').click(function(e) {            
             var $p = $('#search-options').parent();
             
             $('#search-options').height($p.parent().height() - $p.outerHeight()).toggle(); 
+            
+            e.preventDefault();
+            
         }).on('close', function() {
-            $(this).removeClass('active');
             $('#search-options').hide();
         });
     },

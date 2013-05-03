@@ -158,6 +158,10 @@
             var self = this;
 
             $.extend(this.options, options);
+            
+            if (typeof tinyMCEPopup != 'undefined') {
+                tinyMCEPopup.resizeToInnerSize();
+            }
 
             // add browser flags
             /*if ($.browser.webkit) {
@@ -180,24 +184,24 @@
             if (!$.support.cssFloat && document.querySelector) {
                 $('#jce').addClass('ie8');
             }
-            
+
             // create buttons
             $('button#insert, input#insert, button#update, input#update').button({
                 icons: {
-                    primary: 'ui-icon-check'
+                    primary: 'icon-ok'
                 }
             });
 
             $('button#refresh, input#refresh').button({
                 icons: {
-                    primary: 'ui-icon-refresh'
+                    primary: 'icon-refresh'
                 }
             });
-            
+
             // add button actions
             $('button#cancel, input#cancel').button({
                 icons: {
-                    primary: 'ui-icon-close'
+                    primary: 'icon-remove'
                 }
             });
 
@@ -205,16 +209,16 @@
             if (standalone) {
                 return;
             }
-            
+
             $('button#apply, input#apply').button({
                 icons: {
-                    primary: 'ui-icon-plus'
+                    primary: 'icon-plus'
                 }
             });
-            
+
             $('button#help, input#help').button({
                 icons: {
-                    primary: 'ui-icon-help'
+                    primary: 'icon-question-sign'
                 }
             });
 
@@ -414,11 +418,22 @@
         createBrowsers: function() {
             var self = this;
             $('input.browser').each(function() {
-                var input = this, type = $(this).hasClass('image') ? 'image' : 'file';
+                var input = this, type = $(this).hasClass('image') ? 'image' : 'file', classname = 'file';
+                
+                if (!$(this).parent('.input-append').length) {
+                    $(this).wrap('<div class="input-append" />');
+                }
 
                 var ev = $(this).get(0).onchange;
+                
+                // map to "picture" for font-awesome
+                if (type == 'image') {
+                    classname = 'picture';
+                }
 
-                $('<span role="button" class="browser_icon" title="' + self.translate('browse') + '"></span>').click(function() {
+                $('<button class="btn browser_icon" title="' + self.translate('browse') + '"><i class="icon-' + classname + '"></i></button>').click(function(e) {
+                    e.preventDefault();
+                    
                     return TinyMCE_Utils.openBrowser(this, $(input).attr('id'), type, 'file_browser_callback');
                 }).insertAfter(this);
 
@@ -677,7 +692,7 @@
                 if (!e) {
                     return;
                 }
-                
+
                 var txt = $.type(e) == 'array' ? e.join('\n') : e;
                 // remove linebreaks
                 txt = txt.replace(/<br([^>]+?)>/, '');
@@ -693,7 +708,7 @@
                 //dataType: 'text',
                 success: function(o) {
                     var s, r;
-                    
+
                     // check result - should be object, parse as JSON if string
                     if ($.type(o) == 'string') {
                         // parse string as JSON object
@@ -715,7 +730,7 @@
                         if (r && r.error && r.error.length) {
                             // show error
                             showError(r.error);
-                            
+
                             r = false;
                         }
                     } else {
@@ -837,7 +852,7 @@
                     }).addClass('ui-button-text-icon-primary').removeClass('ui-button-text-only');
 
                     if ($.isFunction(options.onOpen)) {
-                        options.onOpen.call();
+                        options.onOpen.call(this);
                     }
                 },
                 close: function() {
@@ -858,13 +873,15 @@
          */
         confirm: function(s, cb, options) {
             var html = '<div class="confirm"><span class="icon"></span>' + s + '</div>';
-
+            
+            options = options || {};
+            
             options = $.extend({
                 resizable: false,
                 buttons: [{
-                        text: $.Plugin.translate('yes', 'Yes'),
+                        text: options.label_yes || $.Plugin.translate('yes', 'Yes'),
                         icons: {
-                            primary: 'ui-icon-check'
+                            primary: 'icon-ok'
                         },
                         click: function() {
                             cb.call(this, true);
@@ -872,9 +889,9 @@
                         }
 
                     }, {
-                        text: $.Plugin.translate('no', 'No'),
+                        text: options.label_no || $.Plugin.translate('no', 'No'),
                         icons: {
-                            primary: 'ui-icon-close'
+                            primary: 'icon-remove'
                         },
                         click: function() {
                             cb.call(this, false);
@@ -977,7 +994,7 @@
                         text: $.Plugin.translate('browse', 'Browse'),
                         id: 'upload-browse',
                         icons: {
-                            primary: 'ui-icon-search'
+                            primary: 'icon-search'
                         }
                     }, {
                         text: $.Plugin.translate('upload', 'Upload'),
@@ -987,7 +1004,7 @@
                             }
                         },
                         icons: {
-                            primary: 'ui-icon-arrowthick-1-n'
+                            primary: 'icon-arrowthick-1-n'
                         }
 
                     }, {

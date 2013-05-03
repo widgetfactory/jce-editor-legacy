@@ -12,13 +12,17 @@
 defined('_JEXEC') or die('RESTRICTED');
 ?>
 <div id="search-browser">
-    <span id="searchbox"><input type="text" id="search-input" placeholder="<?php echo WFText::_('WF_LABEL_SEARCH'); ?>..." /><span class="search-icon"></span></span>
-    <button class="button" id="search-button" role="button"><?php echo WFText::_('WF_LABEL_SEARCH'); ?></button>
-    <span id="search-options-button" role="button" title="<?php echo WFText::_('WF_LABEL_SEARCH_OPTIONS'); ?>"><span class="icon"></span></span>
-    <div id="search-options">
-        <fieldset class="phrases">
-            <legend><?php echo JText::_('WF_SEARCH_FOR'); ?>
-            </legend>
+    <div class="input-append">
+        <input type="text" id="search-input" placeholder="<?php echo WFText::_('WF_LABEL_SEARCH'); ?>..." /><span class="search-icon"></span>
+        <div class="btn-group">
+            <button class="button btn" id="search-button" role="button"><?php echo WFText::_('WF_LABEL_SEARCH'); ?></button>
+             <button class="btn dropdown-toggle" data-toggle="dropdown" id="search-options-button">
+                <span class="caret"></span>
+            </button>
+        </div>
+    </div>
+    <div id="search-options" class="dropdown-menu">
+            <h3><?php echo JText::_('WF_SEARCH_FOR'); ?></h3>
             <div class="phrases-box">
                 <?php echo $this->lists['searchphrase']; ?>
             </div>
@@ -28,9 +32,7 @@ defined('_JEXEC') or die('RESTRICTED');
                 </label>
                 <?php echo $this->lists['ordering']; ?>
             </div>
-        </fieldset>
-        <fieldset class="only">
-            <legend><?php echo JText::_('WF_SEARCH_SEARCH_ONLY'); ?></legend>
+            <h3><?php echo JText::_('WF_SEARCH_SEARCH_ONLY'); ?></h3>
             <ul>
             <?php
             foreach ($this->searchareas as $val => $txt) :
@@ -43,7 +45,6 @@ defined('_JEXEC') or die('RESTRICTED');
                 </li>
             <?php endforeach; ?>
             </ul>
-        </fieldset>
     </div>
-    <div id="search-result"></div>
+    <div id="search-result" class="dropdown-menu"></div>
 </div>

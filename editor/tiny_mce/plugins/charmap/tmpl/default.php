@@ -13,7 +13,6 @@
 defined( '_JEXEC' ) or die('RESTRICTED');
 ?>
 <div id="charmap" role="presentation">
-	<h3><?php echo WFText::_('WF_ADVANCED_CHARMAP_TITLE');?></h3>
 	<div id="charmapView"><!-- Chars will be rendered here --></div>
 	<div id="charmapDescription">
 		<div id="codeV"></div>

@@ -17,43 +17,42 @@ if ($element == 'del' || $element == 'ins') :
     echo $this->loadTemplate('datetime');
 endif;
 ?>
-<h4><?php echo WFText::_('WF_XHTMLXTRAS_FIELDSET_ATTRIB_TAB');?></h4>
-<table>
-    <tr>
-        <td class="label"><label for="title"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_TITLE');?></label></td>
-        <td><input id="title" type="text" value=""
-                   class="field mceFocus" /></td>
-    </tr>
-    <tr>
-        <td class="label"><label for="id"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_ID');?></label></td>
-        <td><input id="id" type="text" value="" class="field" /></td>
-    </tr>
-    <tr>
-        <td class="label"><label for="class"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_CLASS');?></label></td>
-        <td><select id="class" class="field mceEditableSelect">
+<div class="container-fluid">
+    <div class="row-fluid">
+        <label for="title" class="span3"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_TITLE');?></label>
+        <input id="title" type="text" value=""
+                   class="span9" />
+    </div>
+    <div class="row-fluid">
+        <label for="id"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_ID');?></label>
+        <input id="id" type="text" value="" class="field" />
+    </div>
+    <div class="row-fluid">
+        <label for="class"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_CLASS');?></label>
+        <select id="class" class="field mceEditableSelect">
                 <option value="">{#not_set}</option>
-            </select></td>
-    </tr>
-    <tr>
-        <td class="label"><label for="class"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_STYLE');?></label></td>
-        <td><input id="style" type="text" value="" class="field" /></td>
-    </tr>
-    <tr>
-        <td class="label"><label for="dir"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_LANGDIR');?></label></td>
-        <td><select id="dir" class="field">
+            </select>
+    </div>
+    <div class="row-fluid">
+        <label for="class"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_STYLE');?></label>
+        <input id="style" type="text" value="" class="field" />
+    </div>
+    <div class="row-fluid">
+        <label for="dir"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_LANGDIR');?></label>
+        <select id="dir" class="field">
                 <option value="">{#not_set}</option>
                 <option value="ltr"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_OPTION_LTR');?></option>
                 <option value="rtl"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_OPTION_RTL');?></option>
-            </select></td>
-    </tr>
-    <tr>
-        <td class="label"><label for="lang"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_LANGCODE');?></label></td>
-        <td><input id="lang" type="text" value="" class="field" />
-        </td>
-    </tr>
+            </select>
+    </div>
+    <div class="row-fluid">
+        <label for="lang"><?php echo WFText::_('WF_XHTMLXTRAS_ATTRIBUTE_LABEL_LANGCODE');?></label>
+        <input id="lang" type="text" value="" class="field" />
+        
+    </div>
 <?php
 if ($this->plugin->isHTML5()) :
     echo $this->loadTemplate('html5');
 endif;
 ?>
-</table>
+</div>

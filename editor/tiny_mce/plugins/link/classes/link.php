@@ -48,8 +48,8 @@ class WFLinkPlugin extends WFEditorPlugin {
         $document->addScriptDeclaration('LinkDialog.settings=' . json_encode($settings) . ';');
 
         $tabs = WFTabs::getInstance(array(
-                    'base_path' => WF_EDITOR_PLUGIN
-                ));
+            'base_path' => WF_EDITOR_PLUGIN
+        ));
 
         // Add tabs
         $tabs->addTab('link', 1, array('plugin' => $this));

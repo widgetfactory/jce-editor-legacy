@@ -15,4 +15,5 @@ span.editable-edit {
 	cursor:pointer;
 	background: transparent url("../img/icons.png") no-repeat 0 -1080px;
 	vertical-align:middle;
+        margin : 0 0 10px 5px;
 }

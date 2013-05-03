@@ -14,7 +14,7 @@ html {
 }
 body#jce {
     padding: 5px !important;
-    font: 10px Verdana, Arial, Helvetica, sans-serif;
+    font: 12px "Helvetica Neue",Helvetica,Arial,sans-serif;
     background-color: #FFF;
     margin: 0;
     position: relative;
@@ -27,49 +27,45 @@ body#jce {
     border: 0 none;
 }
 #jce select, #jce input #jce textarea {
-    font: 10px Verdana, Arial, Helvetica, sans-serif;
+    font: 8pt Verdana, Arial, Helvetica, sans-serif;
 }
 
 #jce .ui-widget {}
 #tabs.ui-tabs .ui-tabs-panel {
-    margin:0;
-    padding:4px;
+    margin: 10px 0;
+    padding: 0 5px;
 }
-textarea {
+#jce textarea {
     resize:none;
     outline:none;
 }
-a:link, a:visited {
+#jce a:link, a:visited {
     color:#000;
 }
-a:hover {
+#jce a:hover {
     color:#2B6FB6;
 }
-fieldset {
+#jce fieldset {
     margin:0;
     padding:4px;
 }
-legend {
+#jce legend {
     color:#2B6FB6;
     font-weight: bold;
     padding: 0 5px;
 }
-label {
+#jce label {
     display: inline-block;
     min-width: 80px;
 }
-label.invalid {
+#jce label.invalid {
     color:#E00;
 }
-input.invalid {
+#jce input.invalid {
     border:1px solid #E00;
 }
 
-input, select, textarea {
-    font-size:10px;
-    border:1px solid gray;
-}
-a.browse span {
+#jce a.browse span {
     display:block;
     width:20px;
     height:20px;
@@ -77,31 +73,24 @@ a.browse span {
     border:1px solid #FFF;
     margin-left:1px;
 }
-a.browse span.datetime {
+#jce a.browse span.datetime {
     background:url(../img/icons.png) 0 -1020px;
 }
-.mceOldBoxModel a.browse span {
-    width:22px;
-    height:20px;
-}
-a.pickcolor span {
+
+#jce a.pickcolor span {
     display:block;
     width:16px;
     height:16px;
     background:url(../img/icons.png) 0 -1000px;
     margin-left:2px;
 }
-.mceOldBoxModel a.pickcolor span {
-    width:21px;
-    height:17px;
-}
-.wordWrapCode {
+#jce .wordWrapCode {
     vertical-align:middle;
     border:1px none #000;
     background:transparent;
 }
 
-h1, h2, h3, h4, h5 {
+#jce h1, #jce h2, #jce h3, #jce h4, #jce h5 {
     color:#2B6FB6;
     margin:0;
     padding: 2px 0;
@@ -252,13 +241,18 @@ input#dialog-prompt {
     display:inline-block;
     margin:0 5px 0 0;
 }
+
+#jce input.browser + button i {
+    font-size : 12pt;
+}
+
 span.browser_icon {
     display:inline-block;
     width:20px;
     height:20px;
     background:url(../img/icons.png) 0 -960px;
     border:1px solid #FFF;
-    margin-left:1px;
+    margin:0 0 10px 2px;
     cursor:pointer;
     vertical-align:middle;
 }
@@ -267,7 +261,7 @@ span.pickcolor_icon {
     width:16px;
     height:16px;
     background:url(../img/icons.png) 0 -1000px;
-    margin-left:2px;
+    margin:0 0 10px 2px;
     cursor:pointer;
     vertical-align:middle;
 }
@@ -289,6 +283,7 @@ input.radio, input.checkbox {
 a.browse {
     display: inline-block;
     vertical-align: middle;
+    margin: 0 0 10px;
 }
 a.browse span.image, span.browser_icon.image {
     background:url(../img/icons.png) 0 -980px;

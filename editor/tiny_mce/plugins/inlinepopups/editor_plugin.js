@@ -143,8 +143,8 @@
                     role : 'button'
                 },
                 ['span', {
-                    'class' : 'ui-icon ui-icon-closethick'
-                }, 'close']
+                    'class' : 'ui-icon icon-remove'
+                }, '×']
                 ]
                 ],
 					
@@ -259,7 +259,7 @@
                         'aria-labelledby' : id + '_ok_text'
                     }, '<span class="ui-button-text" id="' + id + '_cancel_text">' + ed.getLang('cancel', 'Cancel') + '</span>');
                 }
-                DOM.setHTML(id + '_content', '<span class="ui-icon ui-icon-'+ f.type +'"></span>' + f.content.replace('\n', '<br />'));
+                DOM.setHTML(id + '_content', '<span class="ui-icon icon-'+ f.type +'"></span>' + f.content.replace('\n', '<br />'));
                 
                 Event.add(id, 'keyup', function(evt) {
                     var VK_ESCAPE = 27;

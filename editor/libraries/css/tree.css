@@ -15,7 +15,7 @@ div.tree ul {
 }
 div.tree ul li {
 	padding: 0px 0px 0px 16px;
-	margin: 0px;
+	margin: 4px 0;
 	vertical-align: middle;
 }
 div.tree ul li.spacer {
@@ -32,19 +32,39 @@ div.tree ul li div.tree-row:hover {
 	color: black;
 }
 div.tree ul li div.tree-row div.tree-image {
-	height: 20px;
+	/*height: 20px;
 	width: 20px;
 	margin-left: -20px;
 	cursor: pointer;
 	background: url(../img/icons.png) no-repeat 0 -540px;
-	float: left;
+	float: left;*/
+        
+        background: none;
+        border: 2px solid #CCCCCC;
+        cursor: pointer;
+        float: left;
+        height: 10px;
+        margin: 3px 0 3px -16px;
+        width: 10px;
+}
+div.tree ul li div.tree-row div.tree-image:after {
+    content : "+";
+    font-size: 8.5pt;
+    font-weight: bold;
+    color : #333;
+    text-align: center;
+    vertical-align: text-top;
+    line-height: 9px;
+    margin-left: 0.5pt;
 }
 div.tree ul li div.tree-row div.tree-noimage {
 	float: left;
 	width: 20px;
 }
-div.tree ul li.open > div.tree-row div.tree-image {
-	background: url(../img/icons.png) no-repeat 0 -560px;
+div.tree ul li.open > div.tree-row div.tree-image:after {
+	/*background: url(../img/icons.png) no-repeat 0 -560px;*/
+        content : "\2013";
+        margin-left: 0.5pt;
 }
 div.tree ul li div.tree-row span {
 	height: 20px;

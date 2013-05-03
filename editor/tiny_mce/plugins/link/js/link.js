@@ -31,9 +31,7 @@ var LinkDialog = {
             $('#href').removeClass('browser');
         }
 
-        $('span.email').click( function() {
-            LinkDialog.createEmail();
-        });
+        self.createEmail($('button.email'));
 
         $('#anchor_container').html(this.getAnchorListHTML('anchor','href'));
 
@@ -329,70 +327,50 @@ var LinkDialog = {
         $('#href').val(tinyMCEPopup.editor.documentBaseURI.toRelative(v));
     },
 
-    createEmail : function() {
+    createEmail : function(n) {
         var ed = tinyMCEPopup.editor;
         
-        var fields = '<div class="formElm"><label for="email_to">' + ed.getLang('link_dlg.to', 'To') + '</label>' +
-        '<textarea id="email_mailto" class="email"></textarea>' +
-        '</div>' +
-        '<div class="formElm"><label for="email_cc">' + ed.getLang('link_dlg.cc', 'CC') + '</label>' +
-        '<textarea id="email_cc" class="email"></textarea>' +
-        '</div>' +
-        '<div class="formElm"><label for="email_bcc">' + ed.getLang('link_dlg.bcc', 'BCC') + '</label>' +
-        '<textarea id="email_bcc" class="email"></textarea>' +
-        '</div>' +
-        '<div class="formElm"><label for="email_subject">' + ed.getLang('link_dlg.subject', 'Subject') + '</label>' +
-        '<textarea id="email_subject" class="email"></textarea>' +
-        '</div>';
+        $(n).click(function(e) {
+            e.preventDefault();
+            
+            $(this).next('div.dropdown').toggle();
+        });
+        
+        $(n).next('div.dropdown button.ok').click(function(e) {
+            e.preventDefault();
+            
+            var args = [], errors = 0;
+            $.each(['mailto', 'cc', 'bcc', 'subject'], function(i, s) {
+                var v = $('#email_' + s).val();
+                if (v) {
+                    v = v.replace(/\n\r/g, '');
 
-        $.Dialog.dialog(ed.getLang('link_dlg.email', 'Create E-Mail Address'), fields, {
-            width	: 300,
-            height	: 250,
-            buttons : [
-            {
-                text : ed.getLang('dlg.ok', 'Ok'),
-                click: function() {
-                    var args = [], errors = 0;
-                    $.each(['mailto', 'cc', 'bcc', 'subject'], function(i, s) {
-                        var v = $('#email_' + s).val();
-                        if (v) {
-                            v = v.replace(/\n\r/g, '');
-
-                            $.each(v.split(','), function(i, o) {
-                                if (s !== 'subject') {
-                                    if (!Validator.isEmail(o)) {
-                                        $.Dialog.alert(s + ed.getLang('link_dlg.invalid_email', ' is not a valid e-mail address!'));
-                                        errors++;
-                                    }
-                                }
-                            });
-
-                            args.push((s == 'mailto') ? v : s + '=' + v);
+                    $.each(v.split(','), function(i, o) {
+                        if (s !== 'subject') {
+                            if (!Validator.isEmail(o)) {
+                                $.Dialog.alert(s + ed.getLang('link_dlg.invalid_email', ' is not a valid e-mail address!'));
+                                errors++;
+                            }
                         }
                     });
 
-                    if (errors == 0) {
-                        if (args.length) {
-                            $('#href').val('mailto:' + args.join('&').replace(/&/, '?'));
-                        }
-                    }
-                    $(this).dialog('destroy').remove();
-                },
-                icons : {
-                    primary : 'ui-icon-check'
+                    args.push((s == 'mailto') ? v : s + '=' + v);
                 }
+            });
 
-            },
-            {
-                text : ed.getLang('dlg.cancel', 'Cancel'),
-                click : function() {
-                    $(this).dialog('destroy').remove();
-                },
-                icons : {
-                    primary : 'ui-icon-close'
+            if (errors == 0) {
+                if (args.length) {
+                    $('#href').val('mailto:' + args.join('&').replace(/&/, '?'));
                 }
             }
-            ]
+            
+            $(this).parent().hide();
+        });
+        
+        $(n).next('div.dropdown button.cancel').click(function(e) {
+             e.preventDefault();
+            
+            $(this).parent().hide();
         });
     },
 

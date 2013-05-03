@@ -27,7 +27,7 @@ if ($this->browser->get('position') == 'bottom') {
 ?>	
 
 <div class="actionPanel">
-	<button class="button" id="refresh"><?php echo WFText::_('WF_LABEL_REFRESH')?></button>
-	<button class="button confirm" id="insert"><?php echo WFText::_('WF_LABEL_INSERT')?></button>
-	<button class="button cancel" id="cancel"><?php echo WFText::_('WF_LABEL_CANCEL')?></button>
+	<button class="button btn" id="refresh"><?php echo WFText::_('WF_LABEL_REFRESH')?></button>
+	<button class="button confirm btn" id="insert"><?php echo WFText::_('WF_LABEL_INSERT')?></button>
+	<button class="button cancel btn" id="cancel"><?php echo WFText::_('WF_LABEL_CANCEL')?></button>
 </div>

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package   	JCE
  * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
@@ -11,73 +10,72 @@
  */
 defined('_JEXEC') or die('RESTRICTED');
 ?>
-<h4><?php echo WFText::_('WF_TABLE_GENERAL_PROPS');?></h4>
-<table border="0" cellpadding="4" cellspacing="0" width="100%">
-    <tr>
-        <td><label id="colslabel" for="cols">
-                <?php echo WFText::_('WF_TABLE_COLS');?></label></td>
-        <td>
-            <input id="cols" type="text" value="" size="3"
-                   maxlength="3" class="required number min1 mceFocus" />
-        </td>
-        <td><label id="rowslabel" for="rows">
-                <?php echo WFText::_('WF_TABLE_ROWS');?></label></td>
-        <td>
-            <input id="rows" type="text" value="" size="3"
-                   maxlength="3" class="required number min1" />
-        </td>
-    </tr>
-    <tr>
-        <td><label id="cellpaddinglabel" for="cellpadding">
-                <?php echo WFText::_('WF_TABLE_CELLPADDING');?></label></td>
-        <td>
-            <input id="cellpadding" type="text" value=""
-                   size="3" maxlength="3" class="number" />
-        </td>
-        <td><label id="cellspacinglabel" for="cellspacing">
-                <?php echo WFText::_('WF_TABLE_CELLSPACING');?></label></td>
-        <td>
-            <input id="cellspacing" type="text" value=""
-                   size="3" maxlength="3" class="number" />
-        </td>
-    </tr>
-    <tr>
-        <td><label id="alignlabel" for="align">
-                <?php echo WFText::_('WF_TABLE_ALIGN');?></label></td>
-        <td>
-            <select id="align" >
-                <option value="">{#not_set}</option>
-                <option value="center"><?php echo WFText::_('WF_TABLE_ALIGN_MIDDLE');?></option>
-                <option value="left"><?php echo WFText::_('WF_TABLE_ALIGN_LEFT');?></option>
-                <option value="right"><?php echo WFText::_('WF_TABLE_ALIGN_RIGHT');?></option>
-            </select></td>
-        <td><label id="borderlabel" for="border">
-                <?php echo WFText::_('WF_TABLE_BORDER');?></label></td>
-        <td>
-            <input id="border" type="text" value="" size="3"
-                   maxlength="3" onchange="TableDialog.changedBorder();" class="number" />
-        </td>
-    </tr>
-    <tr id="width_row">
-        <td><label id="widthlabel" for="width">
-                <?php echo WFText::_('WF_TABLE_WIDTH');?></label></td>
-        <td>
-            <input type="text" id="width" value="" size="5"
-                   onchange="TableDialog.changedSize();" class="size" />
-        </td>
-        <td><label id="heightlabel" for="height">
-                <?php echo WFText::_('WF_TABLE_HEIGHT');?></label></td>
-        <td>
-            <input type="text" id="height" value="" size="5"
-                   onchange="TableDialog.changedSize();" class="size" />
-        </td>
-    </tr>
-    <tr>
-        <td class="column1"><label for="caption">
-                <?php echo WFText::_('WF_TABLE_CAPTION');?></label></td>
-        <td>
-            <input id="caption" type="checkbox"
-                   class="checkbox" value="true" />
-        </td>
-    </tr>
-</table>
+<div class="container-fluid">
+    <div class="row-fluid controls controls-row">
+        <label id="colslabel" for="cols">
+            <?php echo WFText::_('WF_TABLE_COLS'); ?></label>
+
+        <input id="cols" type="text" value="" size="3"
+               maxlength="3" class="required number min1 mceFocus input-mini" />
+
+        <label id="rowslabel" for="rows">
+            <?php echo WFText::_('WF_TABLE_ROWS'); ?></label>
+
+        <input id="rows" type="text" value="" size="3"
+               maxlength="3" class="required number min1 input-mini" />
+
+    </div>
+    <div class="row-fluid controls controls-row">
+        <label id="cellpaddinglabel" for="cellpadding">
+            <?php echo WFText::_('WF_TABLE_CELLPADDING'); ?></label>
+
+        <input id="cellpadding" type="text" value=""
+               size="3" maxlength="3" class="number input-mini" />
+
+        <label id="cellspacinglabel" for="cellspacing">
+            <?php echo WFText::_('WF_TABLE_CELLSPACING'); ?></label>
+
+        <input id="cellspacing" type="text" value=""
+               size="3" maxlength="3" class="number input-mini" />
+
+    </div>
+    <div class="row-fluid controls controls-row">
+        <label id="alignlabel" for="align">
+            <?php echo WFText::_('WF_TABLE_ALIGN'); ?></label>
+
+        <select id="align" class="span1">
+            <option value="">{#not_set}</option>
+            <option value="center"><?php echo WFText::_('WF_TABLE_ALIGN_MIDDLE'); ?></option>
+            <option value="left"><?php echo WFText::_('WF_TABLE_ALIGN_LEFT'); ?></option>
+            <option value="right"><?php echo WFText::_('WF_TABLE_ALIGN_RIGHT'); ?></option>
+        </select>
+        <label id="borderlabel" for="border">
+            <?php echo WFText::_('WF_TABLE_BORDER'); ?></label>
+
+        <input id="border" type="text" value="" size="3"
+               maxlength="3" onchange="TableDialog.changedBorder();" class="number input-mini" />
+
+    </div>
+    <div class="row-fluid controls controls-row" id="width_row">
+        <label id="widthlabel" for="width">
+            <?php echo WFText::_('WF_TABLE_WIDTH'); ?></label>
+
+        <input type="text" id="width" value="" size="5"
+               onchange="TableDialog.changedSize();" class="size input-mini" />
+
+        <label id="heightlabel" for="height">
+            <?php echo WFText::_('WF_TABLE_HEIGHT'); ?></label>
+
+        <input type="text" id="height" value="" size="5"
+               onchange="TableDialog.changedSize();" class="size input-mini" />
+
+    </div>
+    <div class="row-fluid controls controls-row">
+        <label for="caption">
+            <?php echo WFText::_('WF_TABLE_CAPTION'); ?></label>
+
+        <input id="caption" type="checkbox"
+               class="checkbox" value="true" />
+
+    </div>
+</div>

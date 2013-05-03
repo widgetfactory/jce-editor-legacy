@@ -66,15 +66,18 @@ div#browser span#layout-full-toggle {
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
-    background: url('../img/icons.png') no-repeat 0 -1200px;
+    text-align : center;
+    /*background: url('../img/icons.png') no-repeat 0 -1200px;*/
     width: 20px;
-    height: 20px;
-    margin: 0 5px 0 0;
+    margin: 5px;
+    float : left;
+    font-size : 12pt;
+    line-height : 20px;
 }
 
-div#browser.full-height span#layout-full-toggle {
+/*div#browser.full-height span#layout-full-toggle {
     background-position: 0 -1220px;
-}
+}*/
 
 div#browser.full-width div.layout-left {
     width: 0;
@@ -120,9 +123,6 @@ div#browser-list {
     overflow: auto;
     height: 235px;
     position: relative;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
 }
 
 div#browser-list-limit {
@@ -136,6 +136,8 @@ div#browser-list-limit select {
     height: 18px;
     margin: 1px 0 0;
     vertical-align: middle;
+    max-width : 50px;
+    padding : 2px;
 }
 
 div#browser-list-limit label {
@@ -445,26 +447,36 @@ div#info-comment {
 /**
  * Checkboxes
 */
-span.checkbox {
-    background: url('../img/icons.png') no-repeat 0 -740px;
-    display: inline-block;
-    margin: 0 0 0 3px;
-    width: 30px;
+#jce span.checkbox {
+    border: 2px solid #CCCCCC;
     cursor: pointer;
+    display: inline-block;
+    margin: 3px 0 0 6px;
+    width : 10px;
+    height : 10px;
+    padding : 0;
+    min-height: auto;
 }
 
-span.checkbox.checked {
-    background: url('../img/icons.png') no-repeat 0 -760px;
+ul.item-list li span.checkbox.checked:after {
+    content: "\2713";
+    display: inline-block;
+    height: 11px;
+    width: 13px;
+    font-size : 11pt;
+    color : #333;
+    vertical-align: text-top;
+    line-height: 2pt;
+    margin-left: -1px;
 }
 
-span.checkbox.mixed {
-    background: url('../img/icons.png') no-repeat 0 -780px;
+ul.item-list li span.checkbox.checked.disabled:after {
+    opacity : 0.5;
+    -ms-filter: "alpha(opacity=80)";
 }
 
 span.checkbox.disabled {
-    opacity : 0.8;
-    -ms-filter: "alpha(opacity=80)";
-    background-color : #fff;
+    border-color : #eee;
 }
 
 div#block-sort-standard,div#block-sort-details,div#block-search-icon,div#block-details-icon
@@ -744,8 +756,8 @@ div#browser-message {
     float: left;
     height: 24px;
     line-height: 24px;
-    margin: 3px 0 3px 5px;
-    width: 70%;
+    margin: 3px 0;
+    width: 65%;
 }
 
 span.message.info {
@@ -804,9 +816,6 @@ ul.item-list {
     margin: 0px;
     padding: 0px;
     vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
     white-space: nowrap;
     width: 100%; /* IE6 needs any width */
     overflow: hidden;
@@ -815,24 +824,26 @@ ul.item-list {
 
 ul.item-list li {
     cursor: pointer;
-    margin: 1px 2px 1px 30px;
+    margin: 4px 2px 4px 30px;
     padding: 0px;
     line-height: 20px;
     position: relative;
     height: 22px;
+    
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+ul.item-list.edit li {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
 }
 
 ul.item-list li span.checkbox {
-    height: 20px;
-    left: -30px;
-    top: 0;
+    left: -31px;
     position: absolute;
-    width: 30px;
-}
-
-ul.item-list li.disabled span.checkbox {
-    opacity : 0.8;
-    -ms-filter: "alpha(opacity=80)";
 }
 
 ul.item-list li.file.hover,ul.item-list li.file:hover,ul.item-list li.folder.hover,ul.item-list li.folder:hover
@@ -853,17 +864,18 @@ ul.item-list li a {
     display : inline-block;
 }
 
-ul#item-list li a input[type="text"] {
+ul#item-list li input[type="text"] {
     width : 190px;
     padding : 1px;
-    font-size: 11px;
+    font-size: 8.5pt;
+    margin-left : 30px;
 }
 
 div#browser.full-width ul.item-list li a { 
     width: 170px;	
 }
 
-div#browser.full-width ul.item-list li a input[type="text"] {
+div#browser.full-width ul.item-list li input[type="text"] {
     width : 160px;
 }
 
@@ -887,10 +899,10 @@ ul.item-list li.selected {
 }
 
 ul.item-list li.nofile {
-    font-size: 1.3em;
+    font-size: 1.5em;
     font-weight: bold;
     text-align: center;
-    color: #ddd;
+    color: #ccc;
     cursor: default;
     margin: 1px 2px;
 }
@@ -932,6 +944,10 @@ ul.item-list li.folder {
 
 ul.item-list li.folder-up {
     background: url('../img/icons.png') no-repeat 0 -200px;
+}
+
+ul.item-list li.folder.edit {
+    background-color: rgba(161, 202, 226, 0.5);
 }
 
 /**

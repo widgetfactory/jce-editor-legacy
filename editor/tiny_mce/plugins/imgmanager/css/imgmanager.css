@@ -1,7 +1,12 @@
 /* CSS file for ImageManager plugin */
 .ui-tabs-panel {
-	height: 200px;
+	height: 300px;
 	overflow: auto;
+}
+
+#jce .container-fluid, #jce .row-fluid {
+    padding : 0;
+    margin : 0;
 }
 
 #jce span#upload {
@@ -27,11 +32,11 @@ div.preview {
   border-left : 1px solid #B6B6B6;
 }
 
-#width, #height {
-	width: 50px;
-	text-align: center;
-        
-        color : #aaa;
+#jce #width, #jce #height {
+    width: 50px;
+    text-align: center;
+
+    color : #aaa;
 }
 
 #width.edited, #height.edited {

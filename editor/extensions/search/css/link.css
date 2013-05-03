@@ -20,31 +20,25 @@ div#search-browser button {
     vertical-align : middle;
 }
 
-div#search-browser span#searchbox input#search-input {
-    height: 20px;
-    line-height: 18px;
-    margin: 0;
-    padding: 2px;
+#jce div#search-browser div.input-append {
+    position: relative;
+    margin-bottom : 0;
+}
+
+#jce input#search-input {
     width: 350px;
-    vertical-align : middle;
+    height : 20px;  
 }
-#jce.ie8 div#search-browser span#searchbox input#search-input {
-    width : 346px;
+
+#jce #search-button {
+    border-bottom-left-radius : 0;
+    border-top-left-radius : 0;
 }
-div#search-browser span#searchbox span.search-icon {
-    /*position: absolute;
-    right: 1px;
-    top: -2px;
-    width: 20px;
-    height: 20px;
-    dispaly : none;*/
-    
-    height: 16px;
+
+#jce span.search-icon {    
     position: absolute;
-    right: 4px;
-    top: 0;
-    width: 16px;
-    
+    right: 110px;
+    top: 8px;
     visibility: hidden;
 }
 
@@ -127,66 +121,38 @@ div#search-browser div#search-result dl dd.anchor {
     cursor: pointer;
 }
 
-div#search-browser #search-options {
+#jce #search-options {
     display: none;
-    position : absolute;
-    background: #fff none;
-    border: 1px solid #ccc;
-    margin : 2px 0;
-    -moz-box-shadow:    1px 1px 3px #ccc;
-    -webkit-box-shadow: 1px 1px 3px #ccc;
-    box-shadow:         1px 1px 3px #ccc;
-    z-index: 999;
     width : 100%;
 }
 
-div#search-browser #search-options fieldset {
+#jce #search-options fieldset {
     margin : 5px;
     padding : 5px;
 }
 
-div#search-browser #search-options fieldset div {
+#jce #search-options fieldset legend {
+    margin : 0;
+}
+
+#jce #search-options fieldset div {
     margin : 5px 0;
 }
 
-div#search-browser #search-options label {
+#jce #search-options label {
     min-width : 40px;
 }
 
-div#search-browser #search-options-button {
-    display: inline-block;
-    cursor: pointer;
-    margin : 0 2px;
-    height: 20px;
-    background: #ffF none;
-}
-div#search-browser #search-options-button span.icon {
-    background: url("../../../libraries/img/icons.png") no-repeat 0 -1260px;
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    vertical-align: middle;
-}
-div#search-browser #search-options-button.active {
-    height: 28px;
-    position: absolute;
-    right: 1px;
-    z-index: 1000;
-    border: 1px solid #ccc;
-    border-bottom : 0;
-    width : 24px;
-}
-
-div#search-browser #search-options-button.active span.icon {
+#jce #search-options-button.active span.icon {
     margin : 2px;
 }
 
-div#search-options fieldset.only ul {
+#jce div#search-options fieldset.only ul {
     list-style: none;
     padding : 0;
     margin : 0;
 }
 
-div#search-options fieldset.only ul li {
+#jce div#search-options fieldset.only ul li {
     display : inline-block;
 }
