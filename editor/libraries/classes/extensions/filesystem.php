@@ -59,17 +59,13 @@ class WFFileSystem extends WFExtension {
 
         return $instance;
     }
-    
-    public function getBasePath() {
-        return JPATH_SITE;
-    }
 
     /**
      * Get the base directory.
      * @return string base dir
      */
     public function getBaseDir() {
-        return WFUtility::makePath($this->getBasePath(), $this->getRootDir());
+        return WFUtility::makePath(JPATH_SITE, $this->getRootDir());
     }
 
     /**
@@ -182,7 +178,7 @@ class WFFileSystem extends WFExtension {
         return true;
     }
 
-    public function createFolder($path, $name = null) {
+    public function createFolder($path, $new) {
         return true;
     }
 
