@@ -654,6 +654,10 @@
                     });
 
                     $(input).focus();
+                    
+                    if (input.setSelectionRange) {
+                        input.setSelectionRange(name.length, name.length);
+                    }
                 });
 
                 $(file.element).addClass('queue-item').addClass('file').addClass($.String.getExt(file.name)).appendTo($(self.element));
