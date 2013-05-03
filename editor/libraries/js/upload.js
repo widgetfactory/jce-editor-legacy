@@ -301,7 +301,7 @@
         },
 
         _onComplete: function(file, response, status) {
-            var self = this, item = {};
+            var self = this;
             // remove loader
             $(file.element).removeClass('load');
             
@@ -327,10 +327,13 @@
 
                 if (file.status == plupload.DONE) {
                     if (response.files && response.files.length) {
-                        item = response.files[0];
+                        file.name = response.files[0];
                     }
-                    
-                    item.insert = $('span.queue-item-insert', file.element).hasClass('selected');
+
+                    var item = {
+                        name 	: file.name,//plupload.cleanName(file.name),
+                        insert 	: $('span.queue-item-insert', file.element).hasClass('selected')
+                    };
 
                     this._trigger('fileComplete', null, item);
                 }
@@ -584,7 +587,7 @@
                         }
                     });
 
-                }).addClass('queue-item-insert disabled');//.toggle(self.options.insert);
+                }).addClass('queue-item-insert disabled').toggle(self.options.insert);
 
                 var buttons = [size, rename, insert, status];
 
