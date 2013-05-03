@@ -14,11 +14,13 @@ defined('_JEXEC') or die('RESTRICTED');
 abstract class WFUtility {
 
     public static function getExtension($path) {
-        return pathinfo($path, PATHINFO_EXTENSION);
+        $dot = strrpos($path, '.') + 1;
+        return substr($path, $dot);
     }
 
     public static function stripExtension($path) {
-        return pathinfo($path, PATHINFO_FILENAME);
+        $dot = strrpos($path, '.');
+        return substr($path, 0, $dot);
     }
 
     public static function cleanPath($path, $ds = DIRECTORY_SEPARATOR, $prefix = '') {
