@@ -92,13 +92,10 @@
             }).on('click.item-list', function(e) {
                 var n = e.target, p = n.parentNode;
 
-                // renaming...
-                if (n.nodeName == 'INPUT' || $('a input[type="text"]', p).length) {
-                    return;
-                }
-
-                // don't do anything if the list item is disabled
-                if ($(p).hasClass('disabled')) {
+                // don't do anything if the list item is disabled or in "edit" mode
+                if ($(this).hasClass('edit') || $(p).hasClass('disabled')) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     return;
                 }
 
@@ -115,6 +112,7 @@
 
                         break;
                     case 'LI' :
+
                         if ($(n).hasClass('folder-up')) {
                             var u = $(p).data('url') || self._getPreviousDir();
                             return self._changeDir(u);
@@ -130,6 +128,7 @@
                         self._setSelectedItems(e, true);
                         break;
                     case 'SPAN' :
+
                         if ($(n).hasClass('checked')) {
                             $(n).removeClass('checked').attr('aria-checked', false);
                             self._removeSelectedItems([p], true);
@@ -143,33 +142,36 @@
                 e.preventDefault();
             }).on('dblclick.item-list', function(e) {
                 e.preventDefault();
+                e.stopPropagation();
                 return false;
             }).on('keydown.item-list', function(e) {
                 // get currently selected item
                 var n = $('li.selected:last', '#item-list').get(0);
 
-                if (!n || e.target.nodeName == 'INPUT') {
+                if ($(this).hasClass('edit')) {
                     return;
                 }
 
                 switch (e.which) {
                     case 13:
                         if ($(n).hasClass('folder')) {
-                            var u = $(p).data('url') || self._getPreviousDir();
-                            return self._changeDir(u);
+                            var u = $(n).data('url') || self._getPreviousDir();
+                            self._changeDir(u);
                         } else {
                             self._setSelectedItems(e, true);
                             self._trigger('onFileClick', e, n);
                         }
 
+                        e.preventDefault();
+
                         break;
                     case 38:
-                    case 40:
+                    case 40:                        
                         self._setSelectedItems(e);
+
+                        e.preventDefault();
                         break;
                 }
-
-                e.preventDefault();
             });
 
             // update browser list on scroll
@@ -351,6 +353,9 @@
             // Full Height Layout button
             $('#layout-full-toggle').toggle(this.options.expandable).click(function() {
                 $('#browser').toggleClass('full-height');
+                
+                $('i', this).toggleClass('icon-circle-arrow-down');
+                
                 self.resize(ih);
 
                 self._trigger($('#browser').hasClass('full-height') ? 'onMaximise' : 'onMinimise');
@@ -626,7 +631,7 @@
 
                 h += '<li class="folder ' + classes.join(' ') + '" title="' + e.name + '"' +
                         data.join(' ') +
-                        '><span class="checkbox" role="checkbox" aria-checked="false"></span><a href="javascript:;">' + e.name + '</a><span class="date" aria-hidden="true">' + $.String.formatDate(e.properties.modified) + '</span></li>';
+                        '><span class="checkbox" role="checkbox" aria-checked="false"></span><a href="#">' + e.name + '</a><span class="date" aria-hidden="true">' + $.String.formatDate(e.properties.modified) + '</span></li>';
             }
 
             if (type == 'file') {
@@ -659,7 +664,7 @@
 
                 h += '<li class="file ' + $.String.getExt(e.name) + ' ' + classes.join(' ') + '" title="' + e.name + '"' +
                         data.join(' ') +
-                        '><span class="checkbox" role="checkbox" aria-checked="false"></span><a href="javascript:;">' + e.name + '</a><span class="date" aria-hidden="true">' + $.String.formatDate(e.properties.modified) + '</span><span class="size" aria-hidden="true">' + $.String.formatSize(e.properties.size) + '</span></li>';
+                        '><span class="checkbox" role="checkbox" aria-checked="false"></span><a href="#">' + e.name + '</a><span class="date" aria-hidden="true">' + $.String.formatDate(e.properties.modified) + '</span><span class="size" aria-hidden="true">' + $.String.formatSize(e.properties.size) + '</span></li>';
 
             }
             return h;
@@ -1337,56 +1342,114 @@
                 case 'folder_new':
                     var elements = this._getDialogOptions('folder_new');
 
-                    this._dialog['folder_new'] = $.Dialog.prompt(self._translate('folder_new', 'New Folder'), {
-                        text: self._translate('name', 'Name'),
-                        elements: elements,
-                        height: elements ? 200 : 150,
-                        confirm: function(v) {
-                            if (v) {
+                    function new_folder(name, item, args) {
+                        // make folder name safe
+                        name = $.String.safe(name, self.options.websafe_mode, self.options.websafe_spaces);
 
-                                var name = $.String.safe(v, self.options.websafe_mode, self.options.websafe_spaces);
-
-                                // check if the folder exists (may fail if list is paginated)
-                                if (self._findItems({name: name}, 'folder').length) {
-                                    $.Dialog.alert(self._translate('folder_exists', 'A folder with that name already exists'));
-                                    return;
-                                }
-
-                                var args = [dir, name];
-
-                                $(':input:not(input[name="prompt"])', $(self._dialog['folder_new']).dialog('widget')).each(function() {
-                                    args.push($(this).val());
-                                });
-
-                                // start loader
-                                self._setLoader();
-
-                                $.JSON.request('folderNew', args, function(o) {
-                                    if (o) {
-                                        if (o.folders) {
-                                            $(self._dialog['folder_new']).dialog('close');
-
-                                            // add to tree
-                                            if (self._treeLoaded()) {
-                                                $(self.options.dialog.tree).tree('createNode', o.folders, self._dir);
-                                            }
-                                            // add item
-                                            $.each(o.folders, function(i, folder) {
-                                                self.addListItem(folder, 'folder');
-                                            });
-
-                                            self._trigger('onFolderNew');
-                                        }
-                                    }
-
-                                    // Remove loader
-                                    self._resetStatus();
-                                    self._resetMessage();
-                                });
-                            }
+                        // check if the folder exists (may fail if list is paginated)
+                        if (self._findItems({'name': name}, 'folder').length) {
+                            $.Dialog.alert(self._translate('folder_exists', 'A folder with that name already exists'));
+                            return;
                         }
 
-                    });
+                        if (item) {
+                            $(item).addClass('loading');
+                        } else {
+                            self._setLoader();
+                        }
+                        // get args array
+                        args = args || [];
+                        // add name
+                        args.unshift(name);
+                        // add dir
+                        args.unshift(dir);
+
+                        $.JSON.request('folderNew', args, function(o) {
+                            if (o) {
+                                if (o.folders) {
+                                    $(self._dialog['folder_new']).dialog('close');
+
+                                    // add to tree
+                                    if (self._treeLoaded()) {
+                                        $(self.options.dialog.tree).tree('createNode', o.folders, self._dir);
+                                    }
+                                    // add item
+                                    $.each(o.folders, function(i, folder) {
+                                        item ? self.replaceListItem(folder, item, 'folder') : self.addListItem(folder, 'folder');
+                                    });
+
+                                    self._trigger('onFolderNew');
+                                }
+                            }
+
+                            $(item).remove();
+
+                            // Remove loader
+                            self._resetStatus();
+                            self._resetMessage();
+                        });
+                    }
+
+                    if (elements) {
+                        this._dialog['folder_new'] = $.Dialog.prompt(self._translate('folder_new', 'New Folder'), {
+                            text: self._translate('name', 'Name'),
+                            elements: elements,
+                            height: elements ? 200 : 150,
+                            confirm: function(v) {
+                                if (v) {
+                                    var args = [];
+
+                                    $(':input:not(input[name="prompt"])', $(self._dialog['folder_new']).dialog('widget')).each(function() {
+                                        args.push($(this).val());
+                                    });
+
+                                    new_folder(name, null, args);
+                                }
+                            }
+
+                        });
+                    } else {
+                        // prevent clicking
+                        $('#item-list').addClass('edit');
+
+                        var el = $('<li class="folder edit"><input type="text" value="" size="50" /></li>');
+
+                        // append to list
+                        if ($('#item-list li.folder-up').length) {
+                            $('#item-list li.folder-up').after(el);
+                        } else {
+                            $('#item-list').prepend(el);
+                        }
+                        
+                        // create blur event for input
+                        $(el).children('input[type="text"]').one('blur', function(e) {
+                            var item = this.parentNode;
+                            
+                            // remove "edit" mode
+                            $(item.parentNode).removeClass('edit');
+
+                            // value must be new
+                            if (this.value !== "") {
+                                new_folder(this.value, item);
+
+                                // set link value again
+                                $(item).append('<a href="#">' + this.value + '</a>');
+                                // remove input
+                                $(this).remove();
+                            } else {
+                                $(item).remove();
+                            }
+                            
+                        }).on('keydown.new-folder', function(e) {
+                            if (e.keyCode === 13 || e.keyCode === 27) {
+                                $(this).blur();
+
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }
+                        }).focus();
+                    }
+
                     break;
 
                     // Cut / Copy operation
@@ -1504,75 +1567,104 @@
                         v = $.String.basename($.String.stripExt(list));
                     }
 
-                    this._dialog['rename'] = $.Dialog.prompt(self._translate('rename', 'Rename Item'), {
-                        text: self._translate('name', 'Name'),
-                        value: v,
-                        elements: this._getDialogOptions('rename'),
-                        confirm: function(name) {
-                            name = $.String.safe(name, self.options.websafe_mode, self.options.websafe_spaces);
+                    function _rename(item, name) {
+                        name = $.String.safe(name, self.options.websafe_mode, self.options.websafe_spaces);
 
-                            if (v == name) {
-                                $.Dialog.alert(self._translate('rename_item_name_new', 'Please specify a new name for the item'));
-                                return false;
-                            }
+                        self._dialog['confirm'] = $.Dialog.confirm(self._translate('rename_item_alert', 'Renaming files/folders will break existing links.'), function(state) {
+                            if (state) {
+                                // add loader and disable
+                                $(item).addClass('loading disabled');
 
-                            self._dialog['confirm'] = $.Dialog.confirm(self._translate('rename_item_alert', 'Renaming files/folders will break existing links. Continue?'), function(state) {
-                                if (state) {
-                                    // get selected item
-                                    var item = self.getSelectedItems(0);
+                                var args = [list, name];
 
-                                    // add loader and disable
-                                    $(item).addClass('loading disabled');
+                                $(':input:not(input[name="prompt"])', $(self._dialog['rename']).dialog('widget')).each(function() {
+                                    args.push($(this).val());
+                                });
 
-                                    var args = [list, name];
+                                $.JSON.request('renameItem', args, function(o) {                                    
+                                    if (!o || o.error.length) {
+                                        $('a', item).text(function(i, v) {                                            
+                                            v = $('a', item).data('original-text') || v;
+                                            
+                                            // reset
+                                            $('a', item).data('original-text', '');
+                                            
+                                            return v;
+                                        });
+                                    }
+                                    
+                                    if (o) {
+                                        self._reset();
 
-                                    $(':input:not(input[name="prompt"])', $(self._dialog['rename']).dialog('widget')).each(function() {
-                                        args.push($(this).val());
-                                    });
+                                        // folder rename successful
+                                        if (o.folders.length) {
+                                            var id = $.String.path(self._dir, name);
 
-                                    $.JSON.request('renameItem', args, function(o) {
-                                        if (o) {
-                                            self._reset();
-
-                                            // folder rename successful
-                                            if (o.folders.length) {
-                                                var id = $.String.path(self._dir, name);
-
-                                                // rename in tree
-                                                if (self._treeLoaded()) {
-                                                    $(self.options.dialog.tree).tree('renameNode', list, id);
-                                                }
-
-                                                $.each(o.folders, function(i, folder) {
-                                                    self.replaceListItem(folder, item, 'folder', true);
-                                                });
-
-                                                // trigger event
-                                                self._trigger('onFolderRename', null, list, id);
+                                            // rename in tree
+                                            if (self._treeLoaded()) {
+                                                $(self.options.dialog.tree).tree('renameNode', list, id);
                                             }
 
-                                            // file rename successful
-                                            if (o.files.length) {
-                                                $.each(o.files, function(i, file) {
-                                                    self.replaceListItem(file, item, 'file', true);
-                                                });
+                                            $.each(o.folders, function(i, folder) {
+                                                self.replaceListItem(folder, item, 'folder', true);
+                                            });
 
-                                                // trigger event
-                                                self._trigger('onFileRename', null, o.files[0]);
-                                            }
-
-                                            $(self._dialog['rename']).dialog('close');
+                                            // trigger event
+                                            self._trigger('onFolderRename', null, list, id);
                                         }
-                                        // remove loader
-                                        $(item).removeClass('loading disabled');
-                                    });
 
-                                }
-                            });
+                                        // file rename successful
+                                        if (o.files.length) {
+                                            $.each(o.files, function(i, file) {
+                                                self.replaceListItem(file, item, 'file', true);
+                                            });
 
+                                            // trigger event
+                                            self._trigger('onFileRename', null, o.files[0]);
+                                        }
+
+                                        $(self._dialog['rename']).dialog('close');
+                                    }
+                                    // remove loader
+                                    $(item).removeClass('loading disabled');
+                                });
+
+                            }
+                        }, {'label_yes' : self._translate('rename', 'Rename'), 'label_no' : self._translate('cancel', 'Cancel')});
+                    }
+                    
+                    // set list to edit mode
+                    $(item.parentNode).addClass('edit');
+                    // hide link
+                    $('a', item).hide();
+
+                    var el = $('<input type="text" value="' + v + '" size="50" />').appendTo(item).one('blur', function(e) {
+                        // remove "edit" mode
+                        $(item.parentNode).removeClass('edit');
+                        
+                        // value must be new
+                        if (v != '' && v != this.value) {
+                            _rename(item, this.value);
                         }
+                        // set link value again
+                        $(item).children('a').text(this.value).data('original-text', v).show();
+                        
+                        // remove input
+                        $(this).remove();
 
-                    });
+                    }).on('keydown.rename', function(e) {
+                        if (e.keyCode === 13 || e.keyCode === 27) {                        
+                            $(this).blur();
+
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    }).focus();
+                    
+                    if ($(el).get(0).setSelectionRange) {
+                        $(el).get(0).setSelectionRange(v.length, v.length);
+                    }
+
                     break;
             }
         },
@@ -2111,6 +2203,13 @@
                 this._showItemDetails();
             }
         },
+        _scrollToItem: function(item) {
+            var top = $(item).get(0).offsetTop - 2;
+
+            $('#item-list').animate({
+                scrollTop: Math.round(top)
+            }, 1500);
+        },
         /*
          * Add a new list item
          * @param {Object} item Item object, eg: {"name":"file.jpg"}
@@ -2269,13 +2368,7 @@
 
             if (select) {
                 if (items.length) {
-                    //var pos = $(items[0]).position();
-
-                    var top = $(items).get(0).offsetTop - 2;
-
-                    $(this.options.dialog.list).animate({
-                        scrollTop: Math.round(top)
-                    }, 1500);
+                    self._scrollToItem(items[0]);
                 }
 
                 // Select items and display properties
