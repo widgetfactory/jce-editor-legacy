@@ -674,10 +674,6 @@
             url = url.replace(/&wf([a-z0-9]+)=1/, '');
 
             function showError(e) {
-                if (!e) {
-                    return;
-                }
-                
                 var txt = $.type(e) == 'array' ? e.join('\n') : e;
                 // remove linebreaks
                 txt = txt.replace(/<br([^>]+?)>/, '');
@@ -692,12 +688,10 @@
                 data: 'json=' + $.JSON.serialize(json) + '&' + $.param(args),
                 //dataType: 'text',
                 success: function(o) {
-                    var s, r;
-                    
                     // check result - should be object, parse as JSON if string
                     if ($.type(o) == 'string') {
                         // parse string as JSON object
-                        s = $.parseJSON(o);
+                        var s = $.parseJSON(o);
                         // pass if successful
                         if (s) {
                             o = s;
@@ -710,19 +704,24 @@
                             showError(o.text || o.error || '');
                         }
 
-                        r = o.result || false;
+                        var r = o.result || null;
 
                         if (r && r.error && r.error.length) {
-                            // show error
                             showError(r.error);
-                            
-                            r = false;
                         }
+                        // show error
                     } else {
-                        showError(o);
+                        if (o) {
+                            showError(o);
+                        }
+                        return false;
                     }
-                    // execute callback
-                    return callback.call(scope || this, r);
+
+                    if ($.isFunction(callback)) {
+                        callback.call(scope || this, r);
+                    } else {
+                        return r;
+                    }
                 },
                 error: function(e, txt, status) {
                     $.Dialog.alert(status || ('SERVER ERROR - ' + txt.toUpperCase()));
