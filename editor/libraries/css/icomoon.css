@@ -1,0 +1,78 @@
+@font-face {
+    font-family: 'icomoon-ultimate';
+    src:url('fonts/icomoon-ultimate.eot');
+    src:url('fonts/icomoon-ultimate.eot?#iefix') format('embedded-opentype'),
+        url('fonts/icomoon-ultimate.woff') format('woff'),
+        url('fonts/icomoon-ultimate.ttf') format('truetype'),
+        url('fonts/icomoon-ultimate.svg#icomoon-ultimate') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.ui-jce [class*="icon-"] {
+    font-family: 'icomoon-ultimate';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+.ui-jce .icon-image:before {
+	content: "\e02d";
+}
+.ui-jce .icon-spinner:before {
+	content: "\e1a7";
+}
+.ui-jce .icon-anchor:before {
+	content: "\e2d0";
+}
+.ui-jce .icon-close:before {
+	content: "\e36b";
+}
+.ui-jce .icon-minus:before {
+	content: "\e375";
+}
+.ui-jce .icon-plus:before {
+	content: "\e376";
+}
+.ui-jce .icon-search:before {
+	content: "\e1ba";
+}
+.ui-jce .icon-minus-circle:before {
+	content: "\e360";
+}
+.ui-jce .icon-clock:before {
+	content: "\e0f8";
+}
+.ui-jce .icon-question:before {
+	content: "\e35c";
+}
+.ui-jce .icon-expand:before {
+	content: "\e1c8";
+}
+.ui-jce .icon-contract:before {
+	content: "\e1c9";
+}
+.ui-jce .icon-arrow:before {
+	content: "\e3de";
+}
+.ui-jce .icon-email:before {
+	content: "\e001";
+}
+.ui-jce .icon-ok:before {
+	content: "\e002";
+}
+.ui-jce .icon-refresh:before {
+	content: "\e003";
+}
+.ui-jce .icon-edit:before {
+	content: "\e004";
+}
+.ui-jce .icon-arrow-right:before {
+	content: "\e3bb";
+}
+.ui-jce .icon-file:before {
+	content: "\e000";
+}

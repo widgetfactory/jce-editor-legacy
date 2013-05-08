@@ -1,0 +1,67 @@
+/**
+* @package JCE IFrames
+* @copyright Copyright (C) 2005 - 2012 Ryan Demmer. All rights reserved.
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see licence.txt
+* JCE IFrames is free software. This version may have been modified pursuant
+* to the GNU General Public License, and as distributed it includes or
+* is derivative of works licensed under the GNU General Public License or
+* other free or open source software licenses.
+*/
+
+.ui-tabs-panel {
+    height: 200px;
+    overflow: auto;
+}
+
+div.preview {
+    overflow: hidden;
+    padding: 6px 0;
+    margin: 0px;
+    text-align:left;
+    height: 150px;
+    position: relative;
+}
+
+#width, #height {
+    width: 50px;
+    text-align: center;
+}
+
+#constrain {
+    width: auto;
+}
+#src {
+    width: 430px;
+}
+#id, #title, #classlist, #style, #classes, #name {
+    width: 450px;
+}
+#margin_top, #margin_right, #margin_bottom, #margin_left {
+    margin: 0px 5px;
+}
+
+#align {
+    margin-right: 5px;
+}
+
+#jce table td {
+    padding: 3px 2px;
+}
+
+#jce.ie div.preview {
+    padding: 7px 0 7px 0;
+}
+
+#jce.ie7 .ui-tabs-panel {
+    height: 210px;
+} 
+#jce.ie7 div.preview {
+    padding: 8px 0 10px 0;
+}
+
+label[for^="margin_"] {
+    min-width: 40px;
+}
+#margin_check + label {
+    min-width: 40px;
+}

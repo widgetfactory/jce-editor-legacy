@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<install version="2.0" type="plugin" plugin="jbtype" core="0" row="4" editable="0">
+	<name>JCE_JBTYPE_TITLE</name>
+	<version>2.0.4</version>
+	<creationDate>21 May 2012</creationDate>
+	<author>@@author@@</author>
+	<authorEmail>@@email@@</authorEmail>
+	<authorUrl>http://www.joomlacontenteditor.net/</authorUrl>
+	<copyright>@@copyright</copyright>
+	<license>GNU/GPL Version 2 - http://www.gnu.org/licenses/gpl-2.0.html</license>
+	<description>JCE_JBTYPE_DESC</description>
+	<icon>jbtype</icon>
+	<files>
+		<file>editor_plugin.js</file>
+		<folder>classes</folder>
+		<folder>css</folder>
+		<folder>img</folder>
+		<folder>langs</folder>
+	</files>
+	<params></params>
+	<languages>
+		<language tag="en-GB">en-GB.com_jce_jbtype.ini</language>
+	</languages>
+	<help></help>
+</install>

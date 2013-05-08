@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="JCE Iframe Plugin" basedir="." default="build">
+    <property description="Package Version" name="package_version" value="202" />
+    <property description="Version" name="version" value="2.0.2" />
+    <property description="Plugin Name" name="name" value="IFrame" />
+    <property description="Plugin Name" name="plugin_name" value="iframe" />
+    <property description="Language directory" name="lang_dir" value="../../../../../../language/en-GB" />
+    <property description="Export directory" name="export_dir" value="/Users/ryandemmer/Releases/plugins/" />
+    <property description="E-mail" name="e-mail" value="info@joomlacontenteditor.net" />
+    <property description="Licence" name="licence" value="GNU/GPL Version 2 - http://www.gnu.org/licenses/gpl-2.0.html" />
+    <property description="Copyright" name="copyright" value="Copyright (C) 2006 - 2012 Ryan Demmer. All rights reserved" />
+
+    <target name="phing" description="Builds the project">
+        <tstamp>
+            <format property="DATE" pattern="%d %B %Y" />
+        </tstamp>
+        
+        <delete dir="${export_dir}/${plugin_name}/${package_version}" quiet="true" />
+        <delete file="${export_dir}/jce_${plugin_name}_${package_version}.zip" quiet="true" />
+		
+        <copy todir="${export_dir}/${plugin_name}/${package_version}/">
+            <fileset dir=".">
+                <include name="**" />
+                <exclude name="build.xml" />
+                <exclude name=".project" />
+                <exclude name=".externalToolBuilders/" />
+            </fileset>
+            <fileset dir="${lang_dir}">
+                <include name="en-GB.com_jce_${plugin_name}.ini" />
+            </fileset>		
+        </copy>
+        <reflexive>
+            <fileset dir="${export_dir}/${plugin_name}/${package_version}/">
+                <include name="**" />
+            </fileset>
+            <filterchain>
+                <replacetokens begintoken="@@" endtoken="@@">
+                    <token key="version" value="${version}" />
+                    <token key="e-mail" value="${e-mail}" />
+                    <token key="date" value="${DATE}" />
+                    <token key="licence" value="${licence}" />
+                    <token key="copyright" value="${copyright}" />
+                </replacetokens>
+            </filterchain>
+        </reflexive>
+		<!--taskdef name="jfilemanifest" classname="phing.tasks.ext.JFileManifest" />
+		<jfilemanifest file="${export_dir}/${plugin_name}/${package_version}/${plugin_name}.xml" type="plugin" token="##filelist##">
+			<fileset dir="${export_dir}/${plugin_name}/${package_version}/">
+		        <include name="**" />
+				<exclude name="en-GB.com_jce_${plugin_name}.ini" />
+				<exclude name="${plugin_name}.xml" />
+		    </fileset>
+		</jfilemanifest-->
+        <zip destfile="${export_dir}/jce_${plugin_name}_${package_version}.zip" basedir="${export_dir}/${plugin_name}/${package_version}/">
+            <fileset dir="${export_dir}/${plugin_name}/${package_version}/">
+                <include name="**" />
+            </fileset>
+        </zip>
+    </target>
+    
+    <target name="ant" description="Builds the project">
+
+        <taskdef name="jsmin"
+                 classname="net.matthaynes.jsmin.JSMin_Task"
+                 classpath="../../../../../../../../ant-tools/jsmin.jar"/>
+        
+        <tstamp>
+            <format property="DATE" pattern="dd MMMM yyyy" />
+        </tstamp>
+
+        <delete dir="${export_dir}/${plugin_name}/${package_version}"
+                quiet="true" />
+        <delete file="${export_dir}/jce_${plugin_name}_${package_version}.zip"
+                quiet="true" />
+
+        <copy todir="${export_dir}/${plugin_name}/${package_version}/">
+            <fileset dir="." defaultexcludes="yes">
+                <include name="**" />
+                <exclude name="build.xml" />
+                <exclude name=".project" />
+                <exclude name=".settings" />
+                <exclude name=".buildpath" />
+                <exclude name=".externalToolBuilders/" />
+                <exclude name="**.project" />
+                <exclude name="**.settings" />
+                <exclude name="*.settings" />
+                <exclude name="**.settings/" />
+                <exclude name="**.buildpath" />
+                <exclude name="**.externalToolBuilders/" />
+                <exclude name="changelog.txt" />
+                <exclude name="README" />
+                <exclude name="**/nbproject" />
+                <exclude name="**/nbproject/**" />
+            </fileset>
+            <fileset dir="${lang_dir}">
+                <include name="en-GB.com_jce_${plugin_name}.ini" />
+            </fileset>
+        </copy>
+        
+        <replace 
+            dir="${export_dir}/${plugin_name}/${package_version}/">
+            <replacefilter 
+                token="@@name@@" 
+                value="${name}"/>
+            <replacefilter 
+                token="@@version@@" 
+                value="${version}"/>
+            <replacefilter 
+                token="@@e-mail@@" 
+                value="${e-mail}"/>
+            <replacefilter 
+                token="@@date@@" 
+                value="${DATE}"/>
+            <replacefilter 
+                token="@@licence@@" 
+                value="${licence}"/>
+            <replacefilter 
+                token="@@copyright@@" 
+                value="${copyright}"/>
+        </replace>
+        
+        <!-- Load Header file -->
+        
+        <loadfile property="header" srcFile="${export_dir}/${plugin_name}/${package_version}/header.txt"/>
+        <loadfile property="header_tinymce" srcFile="${export_dir}/${plugin_name}/${package_version}/header_tinymce.txt"/>
+        
+        <!-- JSMin -->
+        
+        <jsmin force="true" copyright="${header_tinymce}">
+            <fileset dir="${export_dir}/${plugin_name}/${package_version}">
+                <contains text="http://tinymce.moxiecode.com/license" />          
+                <include name="**/*.js" />
+            </fileset>
+        </jsmin>
+        
+        <jsmin force="true" copyright="${header}">
+            <fileset dir="${export_dir}/${plugin_name}/${package_version}">                
+                <include name="**/*.js" />                
+                <not>
+                    <contains text="http://tinymce.moxiecode.com/license" />
+                </not>
+            </fileset>
+        </jsmin>
+        
+        <delete file="${export_dir}/${plugin_name}/${package_version}/header.txt" quiet="true" />
+        <delete file="${export_dir}/${plugin_name}/${package_version}/header_tinymce.txt" quiet="true" />
+        
+        <zip destfile="${export_dir}/jce_${plugin_name}_${package_version}.zip"
+             basedir="${export_dir}/${plugin_name}/${package_version}/">
+            <fileset dir="${export_dir}/${plugin_name}/${package_version}/" />
+        </zip>
+    </target>
+</project>

@@ -1,0 +1,74 @@
+/* CSS file for advimage plugin popup */
+.ui-tabs-panel {
+	height: 450px;
+}
+
+#advanced_tab {
+    overflow-y: scroll;
+}
+
+#link-options {
+    min-height : 200px;
+}
+
+#jce label[for="href"] + div.input-append {
+    margin-left : 0;
+}
+
+#jce #link-browser {
+    margin : 10px 0 0 0;
+    min-height : 270px;
+    overflow : auto;
+    padding : 10px;
+}
+
+#search-browser {
+    padding : 5px 0;
+    position: relative;
+}
+
+input.disabled {
+	border:1px solid #CCCCCC;
+	font-style: italic;
+}
+
+#jce div.input-append {
+    position: relative;
+}
+
+#jce .btn.email + div.dropdown, #jce .btn.anchor + div.dropdown {
+    display: none;
+    position: absolute;
+    width: 100%;
+}
+#jce .btn.email + div.dropdown ul, #jce .btn.anchor + div.dropdown ul  {
+    display: block;
+    padding: 10px;
+    right: 0;
+}
+
+#jce .btn.email + div.dropdown ul li:last-child {
+    text-align: right;
+}
+
+div.tree ul {}
+div.tree ul li {}
+div.tree ul li span {}
+div.tree ul li div {}
+div.tree ul li span.file {
+	background-position: 0 -180px;
+}
+#email_mailto, #email_subject, #email_cc, #email_bcc {
+	width: 200px;
+	height: 30px;
+}
+
+div.formElm {
+	margin: 2px 0;
+}
+div.formElm label {
+	vertical-align: top;
+}
+div.formElm textarea {
+	overflow: hidden;
+}

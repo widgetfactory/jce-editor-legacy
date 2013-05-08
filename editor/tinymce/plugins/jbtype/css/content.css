@@ -1,0 +1,628 @@
+p.mceItemTypography.jb_blackbox {
+	border: 1px solid #ddd;
+	border-left: 8px solid #333;
+	padding: 8px;
+	background: #fafafa;
+	margin: 10px 0 20px;
+}
+
+p.mceItemTypography.jb_greenbox {
+	border: 1px solid #ddd;
+	border-left: 8px solid #CDD452;
+	padding: 8px;
+	background: #fafafa;
+	margin: 10px 0 20px;
+}
+
+p.mceItemTypography.jb_bluebox {
+	border: 1px solid #ddd;
+	border-left: 8px solid #417378;
+	padding: 8px;
+	background: #fafafa;
+	margin: 10px 0 20px;
+}
+
+p.mceItemTypography.jb_redbox {
+	border: 1px solid #ddd;
+	border-left: 8px solid #521218;
+	padding: 8px;
+	background: #fafafa;
+	margin: 10px 0 20px;
+}
+
+p.mceItemTypography.jb_yellowbox {
+	border: 1px solid #ddd;
+	border-left: 8px solid #F2F096;
+	padding: 8px;
+	background: #fafafa;
+	margin: 10px 0 20px;
+}
+
+p.mceItemTypography.jb_brownbox {
+	border: 1px solid #ddd;
+	border-left: 8px solid #B05A3A;
+	padding: 8px;
+	background: #fafafa;
+	margin: 10px 0 20px;
+}
+
+p.mceItemTypography.jb_purplebox {
+	border: 1px solid #ddd;
+	border-left: 8px solid #7F176B;
+	padding: 8px;
+	background: #fafafa;
+	margin: 10px 0 20px;
+}
+
+span.mceItemTypography.jb_dropcap {
+	font-size: 80px;
+	display: block;
+	float: left;
+	padding: 24px 16px 16px 0;
+	margin: 0;
+	color: #666;
+	font-family: georgia;
+}
+
+blockquote {
+	font-size: 1.5em;
+	line-height: 1.5em;
+	font-style: italic;
+	font-family: georgia;
+	padding-left: 50px;
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/quoteL.png)
+		no-repeat;
+	padding-right: 30px;
+	margin-bottom: 30px;
+}
+
+blockquote p {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/quoteR.png)
+		no-repeat right bottom
+}
+
+div.mceItemTypography.jb_quoteleft {
+	font-size: 1.5em;
+	line-height: 1.5em;
+	font-style: italic;
+	font-family: georgia;
+	padding-left: 50px;
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/quoteL.png)
+		no-repeat;
+	float: left;
+	width: 40%;
+	margin: 0 30px 30px 0;
+}
+
+div.mceItemTypography.quoteleft p {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/quoteR.png)
+		no-repeat right bottom;
+	margin: 0;
+}
+
+span.mceItemTypography.jb_quoteright {
+	font-size: 1.5em;
+	line-height: 1.5em;
+	font-style: italic;
+	font-family: georgia;
+	padding-left: 50px;
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/quoteL.png)
+		no-repeat;
+	float: right;
+	width: 40%;
+	margin: 0 0 30px 30px;
+}
+
+span.mceItemTypography.jb_quoteright p {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/quoteR.png)
+		no-repeat right bottom;
+	margin: 0;
+}
+
+span.mceItemTypography.jb_left45 {
+	float: left;
+	width: 45%;
+	margin: 30px 10px 30px 0;
+	padding: 10px 0;
+}
+
+span.mceItemTypography.jb_right45 {
+	float: right;
+	width: 45%;
+	margin: 30px 10px 30px 0;
+	padding: 10px 0;
+}
+
+span.mceItemTypography.jb_jbclear {
+	clear: both;
+	height: 20px;
+}
+
+span.mceItemTypography.jb_black {
+	color: #000
+}
+
+span.mceItemTypography.jb_blue {
+	color: #417378
+}
+
+span.mceItemTypography.jb_red {
+	color: #521218
+}
+
+span.mceItemTypography.jb_green {
+	color: #CDD452
+}
+
+span.mceItemTypography.jb_yellow {
+	color: #F2F096
+}
+
+span.mceItemTypography.jb_white {
+	color: #ddd
+}
+
+span.mceItemTypography.jb_brown {
+	color: #B05A3A
+}
+
+span.mceItemTypography.jb_purple {
+	color: #7F176B
+}
+
+span.mceItemTypography.jb_jbone {
+	background: url(../../../../../../../media/jbtype/images/1.jpg)
+		no-repeat -100px 20px;
+	min-height: 200px;
+	margin-bottom: 30px;
+	border-bottom: 1px solid #eee;
+	padding: 10px 0 10px 240px;
+	clear: both;
+}
+
+span.mceItemTypography.jb_jbline {
+	background:
+		url(../../../../../../../media/jbtype/images/separator.jpg)
+		repeat-x left top;
+	float: left;
+	width: 100%;
+	padding-bottom: 60px;
+}
+
+span.mceItemTypography.jb_new {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/new.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_code {
+	font-family: georgia;
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/code.png)
+		no-repeat left center;
+	padding: 20px 20px 20px 80px;
+	display: block;
+}
+
+span.mceItemTypography.jb_attachment {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/attachment.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_calculator {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/calculator.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_cut {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/cut.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_dollar {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/dollar_currency_sign.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_euro {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/euro_currency_sign.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_pound {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/sterling_pound_currency_sign.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_support {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/support.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_next {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/next.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_previous {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/previous.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_cart {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/cart.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_sound {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/sound.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_info {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/info.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_warning {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/warning.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_camera {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/camera.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_comment {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/comment.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_chat {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/chat.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_document {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/document.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_accessible {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/accessible.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_star {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/star.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_heart {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/heart.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_mail {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/mail.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_film {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/film.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_pin {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/pin.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_recycle {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/recycle.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+
+span.mceItemTypography.jb_lightbulb {
+	background:
+		url(../../../../../../../media/jbtype/images/coquette/light_bulb.png)
+		no-repeat left center;
+	padding: 20px 0 20px 60px;
+	display: block;
+}
+/** Discs **/
+span.mceItemTypography.jb_bluedisc,
+span.mceItemTypography.jb_greendisc,
+span.mceItemTypography.jb_reddisc,
+span.mceItemTypography.jb_browndisc,
+span.mceItemTypography.jb_greydisc,
+span.mceItemTypography.jb_charcoaldisc,
+span.mceItemTypography.jb_purpledisc,
+span.mceItemTypography.jb_orangedisc,
+span.mceItemTypography.jb_yellowdisc,
+span.mceItemTypography.jb_blackdisc {
+	font-size: 1.4em;
+	text-align: center;
+	margin-right: 10px;
+	padding-top: 9px;
+	color: #fff;
+	display: block;
+	float: left;
+	width: 40px;
+	height: 40px
+}
+span.mceItemTypography.jb_bluedisc {
+	background:
+		url(../../../../../../../media/jbtype/images/discs/blue.png)
+		no-repeat left top;
+}
+
+span.mceItemTypography.jb_greendisc {
+	background:
+		url(../../../../../../../media/jbtype/images/discs/green.png)
+		no-repeat left top;
+}
+
+span.mceItemTypography.jb_reddisc {
+	background:
+		url(../../../../../../../media/jbtype/images/discs/red.png)
+		no-repeat left top;
+}
+
+span.mceItemTypography.jb_browndisc {
+	background:
+		url(../../../../../../../media/jbtype/images/discs/brown.png)
+		no-repeat left top;
+}
+
+span.mceItemTypography.jb_greydisc {
+	background:
+		url(../../../../../../../media/jbtype/images/discs/grey.png)
+		no-repeat left top;
+}
+
+span.mceItemTypography.jb_charcoaldisc {
+	background:
+		url(../../../../../../../media/jbtype/images/discs/charcoal.png)
+		no-repeat left top;
+}
+
+span.mceItemTypography.jb_purpledisc {
+	background:
+		url(../../../../../../../media/jbtype/images/discs/purple.png)
+		no-repeat left top;
+}
+
+span.mceItemTypography.jb_orangedisc {
+	background:
+		url(../../../../../../../media/jbtype/images/discs/orange.png)
+		no-repeat left top;
+}
+
+span.mceItemTypography.jb_yellowdisc {
+	background:
+		url(../../../../../../../media/jbtype/images/discs/yellow.png)
+		no-repeat left top;
+}
+
+span.mceItemTypography.jb_blackdisc {
+	background:
+		url(../../../../../../../media/jbtype/images/discs/black.png)
+		no-repeat left top;
+}
+/** Icons **/
+span.mceItemTypography.jb_iconic_download,
+span.mceItemTypography.jb_iconic_info,
+span.mceItemTypography.jb_iconic_star,
+span.mceItemTypography.jb_iconic_heart,
+span.mceItemTypography.jb_iconic_tag,
+span.mceItemTypography.jb_iconic_arrival,
+span.mceItemTypography.jb_iconic_truck,
+span.mceItemTypography.jb_iconic_arrow,
+span.mceItemTypography.jb_iconic_article,
+span.mceItemTypography.jb_iconic_email,
+span.mceItemTypography.jb_iconic_beaker,
+span.mceItemTypography.jb_iconic_bolt,
+span.mceItemTypography.jb_iconic_book,
+span.mceItemTypography.jb_iconic_box,
+span.mceItemTypography.jb_iconic_calendar,
+span.mceItemTypography.jb_iconic_comment,
+span.mceItemTypography.jb_iconic_tick,
+span.mceItemTypography.jb_iconic_cloud,
+span.mceItemTypography.jb_iconic_document,
+span.mceItemTypography.jb_iconic_image,
+span.mceItemTypography.jb_iconic_quote,
+span.mceItemTypography.jb_iconic_lightbulb,
+span.mceItemTypography.jb_iconic_search,
+span.mceItemTypography.jb_iconic_mail,
+span.mceItemTypography.jb_iconic_dash,
+span.mceItemTypography.jb_iconic_movie {
+	padding: 2px 0 2px 30px;
+	display: block;
+	line-height: 21px;
+	background:url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 0;
+}
+span.mceItemTypography.jb_iconic_download {
+	background-position: 0 -87px;
+}
+
+span.mceItemTypography.jb_iconic_info {
+	background-position: 0 -160px;
+}
+
+span.mceItemTypography.jb_iconic_star {
+	background-position: 0 -238px;
+}
+
+span.mceItemTypography.jb_iconic_heart {
+	background-position: 0 -316px;
+}
+
+span.mceItemTypography.jb_iconic_tag {
+	background-position: 0 -396px;
+}
+
+span.mceItemTypography.jb_iconic_arrival {
+	background-position: 0 -477px;
+}
+
+span.mceItemTypography.jb_iconic_truck {
+	background-position: 0 -554px;
+}
+
+span.mceItemTypography.jb_iconic_arrow {
+	background-position: 0 -637px;
+}
+
+span.mceItemTypography.jb_iconic_article {
+	background-position: 0 -716px;
+}
+
+span.mceItemTypography.jb_iconic_email {
+	background-position: 0 -796px;
+}
+
+span.mceItemTypography.jb_iconic_beaker {
+	background-position: 0 -878px;
+}
+
+span.mceItemTypography.jb_iconic_bolt {
+	background-position: 0 -956px;
+}
+
+span.mceItemTypography.jb_iconic_book {
+	background-position: 0 -1036px;
+}
+
+span.mceItemTypography.jb_iconic_box {
+	background-position: 0 -1117px;
+}
+
+span.mceItemTypography.jb_iconic_calendar {
+	background-position: 0 -1198px;
+}
+
+span.mceItemTypography.jb_iconic_comment {
+	background-position: 0 -1276px;
+}
+
+span.mceItemTypography.jb_iconic_tick {
+	background-position: 0 -1355px;
+}
+
+span.mceItemTypography.jb_iconic_cloud {
+	background-position: 0 -1434px;
+}
+
+span.mceItemTypography.jb_iconic_document {
+	background-position: 0 -1517px;
+}
+
+span.mceItemTypography.jb_iconic_image {
+	background-position: 0 -1597px;
+}
+
+span.mceItemTypography.jb_iconic_quote {
+	background-position: 0 -1678px;
+}
+
+span.mceItemTypography.jb_iconic_lightbulb {
+	background-position: 0 -1756px;
+}
+
+span.mceItemTypography.jb_iconic_search {
+	background-position: 0 -1836px;
+}
+
+span.mceItemTypography.jb_iconic_mail {
+	background-position: 0 -1914px;
+}
+
+span.mceItemTypography.jb_iconic_dash {
+	background-position: 0 -1991px;
+}
+
+span.mceItemTypography.jb_iconic_movie {
+	background-position: 0 -2076px;
+}

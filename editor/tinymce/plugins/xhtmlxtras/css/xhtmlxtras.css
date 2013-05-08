@@ -1,0 +1,20 @@
+#jce .ui-tabs-panel {
+    height: 225px;
+}
+
+#jce div#attributes .ui-tabs-panel {
+    height: 260px;
+}
+
+#jce div#del .ui-tabs-panel,
+#jce div#ins .ui-tabs-panel {
+    height: 305px;
+}
+
+#events_tab {
+    overflow: auto;
+}
+
+#jce .row-fluid #datetime {
+    min-width: 310px;
+}

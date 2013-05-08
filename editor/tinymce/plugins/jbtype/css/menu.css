@@ -1,0 +1,128 @@
+td.jb_menu_title {
+	background-color: #eee;
+	font-weight: bold;
+}
+
+td.jb_menu_title span.mceText {
+	font-weight: bold
+}
+
+td.jb_icons span.mceText {
+	line-height: 48px;
+	padding-left: 55px !important;
+}
+
+td.jb_icons span.mceIcon,tr.mceMenuItemSelected td.jb_icons span.mceIcon {
+	margin-left: 4px;
+}
+
+/** Iconic **/
+td.jb_iconic_download span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_download span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -87px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_info span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_info span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -160px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_star span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_star span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -238px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_heart span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_heart span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -316px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_tag span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_tag span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -396px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_arrival span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_arrival span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -477px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_truck span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_truck span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -554px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_arrow span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_arrow span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -637px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_article span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_article span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -716px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_email span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_email span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -796px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_beaker span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_beaker span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -878px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_bolt span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_bolt span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -956px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_book span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_book span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -1036px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_box span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_box span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -1117px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_calendar span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_calendar span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -1198px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_comment span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_comment span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -1276px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_tick span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_tick span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -1355px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_cloud span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_cloud span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -1434px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_document span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_document span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -1517px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_image span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_image span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -1597px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_quote span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_quote span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -1678px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_lightbulb span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_lightbulb span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -1756px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_search span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_search span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -1836px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_mail span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_mail span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -1914px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_dash span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_dash span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -1991px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+td.jb_iconic_movie span.mceIcon, tr.mceMenuItemSelected td.jb_iconic_movie span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/iconic/allicons.png) no-repeat 0 -2076px;padding: 2px 0 2px 30px; margin: 15px 0 0 15px;display:block;
+}
+/** Discs **/
+td.jb_bluedisc span.mceIcon, tr.mceMenuItemSelected td.jb_bluedisc span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/discs/blue.png) no-repeat left top;;margin:5px 0 0 5px;padding:0 0 0 60px;display: block;float: left;width:40px;height:40px
+}
+td.jb_greendisc span.mceIcon, tr.mceMenuItemSelected td.jb_greendisc span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/discs/green.png) no-repeat left top;;margin:5px 0 0 5px;padding:0 0 0 60px;display: block;float: left;width:40px;height:40px
+}
+td.jb_reddisc span.mceIcon, tr.mceMenuItemSelected td.jb_reddisc span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/discs/red.png) no-repeat left top;;margin:5px 0 0 5px;padding:0 0 0 60px;display: block;float: left;width:40px;height:40px
+}
+td.jb_browndisc span.mceIcon, tr.mceMenuItemSelected td.jb_browndisc span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/discs/brown.png) no-repeat left top;;margin:5px 0 0 5px;padding:0 0 0 60px;display: block;float: left;width:40px;height:40px
+}
+td.jb_greydisc span.mceIcon, tr.mceMenuItemSelected td.jb_greydisc span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/discs/grey.png) no-repeat left top;;margin:5px 0 0 5px;padding:0 0 0 60px;display: block;float: left;width:40px;height:40px
+}
+td.jb_charcoaldisc span.mceIcon, tr.mceMenuItemSelected td.jb_charcoaldisc span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/discs/charcoal.png) no-repeat left top;;margin:5px 0 0 5px;padding:0 0 0 60px;display: block;float: left;width:40px;height:40px
+}
+td.jb_purpledisc span.mceIcon, tr.mceMenuItemSelected td.jb_purpledisc span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/discs/purple.png) no-repeat left top;;margin:5px 0 0 5px;padding:0 0 0 60px;display: block;float: left;width:40px;height:40px
+}
+td.jb_orangedisc span.mceIcon, tr.mceMenuItemSelected td.jb_orangedisc span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/discs/orange.png) no-repeat left top;;margin:5px 0 0 5px;padding:0 0 0 60px;display: block;float: left;width:40px;height:40px
+}
+td.jb_yellowdisc span.mceIcon, tr.mceMenuItemSelected td.jb_yellowdisc span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/discs/yellow.png) no-repeat left top;;margin:5px 0 0 5px;padding:0 0 0 60px;display: block;float: left;width:40px;height:40px
+}
+td.jb_blackdisc span.mceIcon, tr.mceMenuItemSelected td.jb_blackdisc span.mceIcon {
+background: url(../../../../../../../media/jbtype/images/discs/black.png) no-repeat left top;;margin:5px 0 0 5px;padding:0 0 0 60px;display: block;float: left;width:40px;height:40px
+}

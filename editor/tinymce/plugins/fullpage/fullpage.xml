@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+<install version="2.0" type="plugin" plugin="fullpage" editable="1" core="0">
+	<name>WF_FULLPAGE_TITLE</name>
+	<version>@@version@@</version>
+	<creationDate>@@date@@</creationDate>
+	<author>Moxiecode / Ryan Demmer</author>
+	<authorEmail>@@email@@</authorEmail>
+	<authorUrl>http://www.joomlacontenteditor.net/</authorUrl>
+	<copyright>@@copyright@@</copyright>
+	<license>@@licence@@</license>
+	<description>WF_FULLPAGE_DESC</description>
+	<icon>fullpage</icon>
+	<files>
+		<file>editor_plugin.js</file>
+		<file>fullpage.php</file>
+		<folder>classes</folder>
+		<folder>css</folder>
+		<folder>js</folder>
+		<folder>tmpl</folder>
+	</files>
+	<params group="standard">
+		<param name="fullpage_hide_in_source_view" type="list" default="0" label="WF_FULLPAGE_PARAM_SOURCE" description="WF_FULLPAGE_PARAM_SOURCE_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>
+		</param>
+	</params>
+	<params group="defaults">
+		<param name="fullpage_default_doctype" type="list" default="HTML 4.01 Transitional" label="WF_FULLPAGE_PARAM_DOCTYPE" description="WF_FULLPAGE_PARAM_DOCTYPE_DESC">
+			<option value="HTML 4.01 Strict">HTML 4.01 Strict</option>
+			<option value="HTML 4.01 Transitional">HTML 4.01 Transitional</option>
+			<option value="HTML 4.01 Frameset">HTML 4.01 Frameset</option>
+			<option value="XHTML 1.0 Strict">XHTML 1.0 Strict</option>
+			<option value="XHTML 1.0 Transitional">XHTML 1.0 Transitional</option>
+			<option value="XHTML 1.0 Frameset">XHTML 1.0 Frameset</option>
+			<option value="XHTML 1.1">XHTML 1.1</option>
+			<option value="HTML 5">HTML 5</option>
+		</param>
+		<param name="fullpage_default_title" type="text" size="50" default="" label="WF_FULLPAGE_PARAM_TITLE" description="WF_FULLPAGE_PARAM_TITLE_DESC" />
+		<param name="fullpage_default_font_size" type="text" size="10" default="" label="WF_FULLPAGE_PARAM_FONTSIZE" description="WF_FULLPAGE_PARAM_FONTSIZE_DESC" />
+		<param name="fullpage_default_font_family" type="list" class="editable" default="" label="WF_FULLPAGE_PARAM_FONTFAMILY" description="WF_FULLPAGE_PARAM_FONTFAMILY_DESC">
+			<option value="">WF_PARAM_NOT_SET</option>
+			<option value="Andale Mono=andale mono,times">Andale Mono=andale mono,times</option>
+			<option value="Arial=arial,helvetica,sans-serif">Arial=arial,helvetica,sans-serif</option>
+			<option value="Arial Black=arial black,avant garde">Arial Black=arial black,avant garde</option>
+			<option value="Book Antiqua=book antiqua,palatino">Book Antiqua=book antiqua,palatino</option>
+			<option value="Comic Sans MS=comic sans ms,sans-serif">Comic Sans MS=comic sans ms,sans-serif</option>
+			<option value="Courier New=courier new,courier">Courier New=courier new,courier</option>
+			<option value="Georgia=georgia,palatino">Georgia=georgia,palatino</option>
+			<option value="Helvetica=helvetica">Helvetica=helvetica</option>
+			<option value="Impact=impact,chicago">Impact=impact,chicago</option>
+			<option value="Symbol=symbol">Symbol=symbol</option>
+			<option value="Tahoma=tahoma,arial,helvetica,sans-serif">Tahoma=tahoma,arial,helvetica,sans-serif</option>
+			<option value="Terminal=terminal,monaco">Terminal=terminal,monaco</option>
+			<option value="Times New Roman=times new roman,times">Times New Roman=times new roman,times</option>
+			<option value="Trebuchet MS=trebuchet ms,geneva">Trebuchet MS=trebuchet ms,geneva</option>
+			<option value="Verdana=verdana,geneva">Verdana=verdana,geneva</option>
+			<option value="Webdings=webdings">Webdings=webdings</option>
+			<option value="Wingdings=wingdings,zapf dingbats">Wingdings=wingdings,zapf dingbats</option>
+		</param>
+		<param name="fullpage_default_text_color" type="text" class="color" size="10" default="" label="WF_FULLPAGE_PARAM_TEXTCOLOR" description="WF_FULLPAGE_PARAM_TEXTCOLOR_DESC" />
+		<param name="fullpage_default_langcode" class="autocomplete" placeholder="af,sq,ar-sa,ar-iq,ar-eg,ar-ly,ar-dz,ar-ma,ar-tn,ar-om,ar-ye,ar-sy,ar-jo,ar-lb,ar-kw,ar-ae,ar-bh,ar-qa,eu,bg,be,ca,zh-tw,zh-cn,zh-hk,zh-sg,hr,cs,da,nl,nl-be,en,en-us,en-gb,en-au,en-ca,en-nz,en-ie,en-za,en-jm,en,en-bz,en-tt,et,fo,fa,fi,fr,fr-be,fr-ca,fr-ch,fr-lu,gd,ga,de,de-ch,de-at,de-lu,de-li,el,he,hi,hu,is,id,it,it-ch,ja,ko,ko,lv,lt,mk,ms,mt,no,no,pl,pt-br,pt,rm,ro,ro-mo,ru,ru-mo,sz,sr,sr,sk,sl,sb,es,es-mx,es-gt,es-cr,es-pa,es-do,es-ve,es-co,es-pe,es-ar,es-ec,es-cl,es-uy,es-py,es-bo,es-sv,es-hn,es-ni,es-pr,sx,sv,sv-fi,th,ts,tn,tr,uk,ur,ve,vi,xh,ji,zu" type="text" size="10" default="" label="WF_FULLPAGE_PARAM_LANGCODE" description="WF_FULLPAGE_PARAM_LANGCODE_DESC" />
+		<param name="fullpage_default_xml_pi" type="list" default="0" label="WF_FULLPAGE_PARAM_XML" description="WF_FULLPAGE_PARAM_XML_DESC">
+			<option value="1">WF_OPTION_YES</option>
+      <option value="0">WF_OPTION_NO</option>
+		</param>
+	</params>
+	<params group="advanced">
+		<param name="fullpage_encodings" class="checklist" multiple="multiple" type="list" default="iso-8859-1|iso-8859-2|utf-8|big5|iso-8859-5|iso-2022-jp|iso-8859-7|iso-2022-kr|us-ascii" label="WF_FULLPAGE_PARAM_ENCODING" description="WF_FULLPAGE_PARAM_ENCODING_DESC">
+			<option value="iso-8859-1">iso-8859-1</option>
+			<option value="iso-8859-2">iso-8859-2</option>
+			<option value="utf-8">utf-8</option>
+			<option value="big5">big5</option>
+			<option value="iso-8859-5">iso-8859-5</option>
+			<option value="iso-2022-jp">iso-2022-jp</option>
+			<option value="iso-8859-7">iso-8859-7</option>
+			<option value="iso-2022-kr">iso-2022-kr</option>
+			<option value="us-ascii">us-ascii</option>
+		</param>
+	</params>
+	<languages>
+		<language tag="en-GB">en-GB.com_jce_fullpage.ini</language>
+	</languages>
+	<help></help>
+</install>

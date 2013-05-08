@@ -1,0 +1,204 @@
+@import url('menu.css');
+td.jb_blackbox span.mceText {
+    border: 1px solid #ddd;
+    border-left: 8px solid #333;
+    padding: 8px !important;
+    background: #fafafa;
+}
+td.jb_greenbox span.mceText {
+    border: 1px solid #ddd;
+    border-left: 8px solid #CDD452;
+    padding: 8px !important;
+    background: #fafafa;
+}
+td.jb_bluebox span.mceText {
+    border: 1px solid #ddd;
+    border-left: 8px solid #417378;
+    padding: 8px !important;
+    background: #fafafa;
+}
+td.jb_redbox span.mceText {
+    border: 1px solid #ddd;
+    border-left: 8px solid #521218;
+    padding: 8px !important;
+    background: #fafafa;
+}
+td.jb_yellowbox span.mceText {
+    border: 1px solid #ddd;
+    border-left: 8px solid #F2F096;
+    padding: 8px !important;
+    background: #fafafa;
+}
+td.jb_brownbox span.mceText {
+    border: 1px solid #ddd;
+    border-left: 8px solid #B05A3A;
+    padding: 8px !important;
+    background: #fafafa;
+}
+td.jb_purplebox span.mceText {
+    border: 1px solid #ddd;
+    border-left: 8px solid #7F176B;
+    padding: 8px !important;
+    background: #fafafa;
+}
+td.jb_black span.mceText { color: #000 !important }
+td.jb_blue span.mceText { color: #417378 !important }
+td.jb_red span.mceText { color: #521218 !important }
+td.jb_green span.mceText { color: #CDD452 !important }
+td.jb_yellow span.mceText { color: #F2F096 !important }
+td.jb_white span.mceText { color: #ddd !important }
+td.brown span.mceText { color: #B05A3A !important }
+td.jb_purple span.mceText { color: #7F176B !important }
+
+
+
+td.jb_jbone span.mceIcon, tr.mceMenuItemSelected td.jb_jbone span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/1.jpg) no-repeat -100px 20px;
+    min-height: 200px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding: 10px 0 10px 240px;
+    clear: both;
+}
+td.jb_jbline span.mceIcon, tr.mceMenuItemSelected td.jb_jbline span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/separator.jpg) repeat-x left top;
+    float: left;
+    width: 100%;
+    padding-bottom: 60px;
+}
+td.jb_new span.mceIcon, tr.mceMenuItemSelected td.jb_new span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/new.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_code span.mceIcon, tr.mceMenuItemSelected td.jb_code span.mceIcon {
+    font-family: georgia;
+    background: url(../../../../../../../media/jbtype/images/coquette/code.png) no-repeat left center;
+    padding: 20px 20px 20px 80px;
+    display: block;
+}
+td.jb_attachment span.mceIcon, tr.mceMenuItemSelected td.jb_attachment span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/attachment.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_calculator span.mceIcon, tr.mceMenuItemSelected td.jb_calculator span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/calculator.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_cut span.mceIcon, tr.mceMenuItemSelected td.jb_cut span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/cut.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_dollar span.mceIcon, tr.mceMenuItemSelected td.jb_dollar span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/dollar_currency_sign.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_euro span.mceIcon, tr.mceMenuItemSelected td.jb_euro span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/euro_currency_sign.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_pound span.mceIcon, tr.mceMenuItemSelected td.jb_pound span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/sterling_pound_currency_sign.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_support span.mceIcon, tr.mceMenuItemSelected td.jb_support span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/support.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_next span.mceIcon, tr.mceMenuItemSelected td.jb_next span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/next.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_previous span.mceIcon, tr.mceMenuItemSelected td.jb_previous span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/previous.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_cart span.mceIcon, tr.mceMenuItemSelected td.jb_cart span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/cart.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_sound span.mceIcon, tr.mceMenuItemSelected td.jb_sound span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/sound.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_info span.mceIcon, tr.mceMenuItemSelected td.jb_info span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/info.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_warning span.mceIcon, tr.mceMenuItemSelected td.jb_warning span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/warning.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_camera span.mceIcon, tr.mceMenuItemSelected td.jb_camera span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/camera.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_comment span.mceIcon, tr.mceMenuItemSelected td.jb_comment span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/comment.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_chat span.mceIcon, tr.mceMenuItemSelected td.jb_chat span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/chat.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_document span.mceIcon, tr.mceMenuItemSelected td.jb_document span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/document.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_accessible span.mceIcon, tr.mceMenuItemSelected td.jb_accessible span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/accessible.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_star span.mceIcon, tr.mceMenuItemSelected td.jb_star span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/star.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_heart span.mceIcon, tr.mceMenuItemSelected td.jb_heart span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/heart.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_mail span.mceIcon, tr.mceMenuItemSelected td.jb_mail span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/mail.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_film span.mceIcon, tr.mceMenuItemSelected td.jb_film span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/film.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_pin span.mceIcon, tr.mceMenuItemSelected td.jb_pin span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/pin.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_recycle span.mceIcon, tr.mceMenuItemSelected td.jb_recycle span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/recycle.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}
+td.jb_lightbulb span.mceIcon, tr.mceMenuItemSelected td.jb_lightbulb span.mceIcon {
+    background: url(../../../../../../../media/jbtype/images/coquette/light_bulb.png) no-repeat left center;
+    padding: 20px 0 20px 60px;
+    display: block;
+}

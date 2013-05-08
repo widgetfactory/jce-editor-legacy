@@ -1,0 +1,45 @@
+/* CSS file for ImageManager plugin */
+.ui-tabs-panel {
+    height: 210px;
+    overflow: auto;
+}
+
+#jce span#upload {
+    background-position: 0 -72px;
+}
+
+#jce .row-fluid div.preview {
+    overflow: hidden;
+    padding: 0 5px;
+    margin: 0;
+    text-align:left;
+    min-height: 150px;
+    position: relative;
+    font-size : 8pt;
+    border-left : 1px solid #B6B6B6;
+}
+
+#jce #attributes-align .controls {
+    margin-left : 0;
+}
+
+#jce #attributes-align label {
+    float : left;
+    min-width : 50px;
+}
+
+#jce #width, #jce #height {
+    color : #aaa;
+}
+
+#width.edited, #height.edited {
+    color : inherit;
+}
+
+#jce #margin_top, #jce #margin_right, #jce #margin_bottom, #jce #margin_left {
+    width : 30px;
+    float: left;
+}
+#jce.ie div.preview {
+    padding: 7px 0 8px 0;
+}

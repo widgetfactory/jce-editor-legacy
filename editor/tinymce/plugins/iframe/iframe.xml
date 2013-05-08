@@ -1,0 +1,138 @@
+<?xml version="1.0" ?>
+<install version="2.0" type="plugin" plugin="iframe" core="0" editable="1">
+    <name>WF_IFRAME_TITLE</name>
+    <version>@@version@@</version>
+    <creationDate>@@date@@</creationDate>
+    <author>Ryan Demmer</author>
+    <authorEmail>@@email@@</authorEmail>
+    <authorUrl>http://www.joomlacontenteditor.net</authorUrl>
+    <copyright>@@copyright@@</copyright>
+    <license>@@licence@@</license>
+    <description>WF_IFRAME_DESC</description>
+    <icon>iframe</icon>
+    <files>
+        <file>editor_plugin.js</file>
+        <file>iframe.php</file>
+        <file>licence.txt</file>
+        <folder>classes</folder>
+        <folder>css</folder>
+        <folder>img</folder>
+        <folder>js</folder>
+        <folder>langs</folder>
+        <folder>tmpl</folder>
+    </files>
+    <params group="defaults">
+        <param name="width" type="text" default="100" size="10" pattern="[0-9]+" label="WF_IFRAME_WIDTH" description="WF_IFRAME_WIDTH_DESC"/>
+        <param name="width_unit" type="list" default="%" label="WF_IFRAME_WIDTH_UNIT" description="WF_IFRAME_WIDTH_UNIT_DESC">
+            <option value="%">%</option>
+            <option value="px">px</option>
+        </param>
+        <param name="height" type="text" default="100" size="10" pattern="[0-9]+" label="WF_IFRAME_HEIGHT" description="WF_IFRAME_HEIGHT_DESC"/>
+        <param name="height_unit" type="list" default="%" label="WF_IFRAME_HEIGHT_UNIT" description="WF_IFRAME_HEIGHT_UNIT_DESC">
+            <option value="%">%</option>
+            <option value="px">px</option>
+        </param>
+		
+        <param name="margin_top" type="list" default="" pattern="[0-9]+" class="editable" label="WF_PARAM_MARGIN_TOP" description="WF_PARAM_MARGIN_TOP_DESC">
+            <option value="">WF_OPTION_NOT_SET</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </param>
+        <param name="margin_right" type="list" default="" pattern="[0-9]+" class="editable" label="WF_PARAM_MARGIN_RIGHT" description="WF_PARAM_MARGIN_RIGHT_DESC">
+            <option value="">WF_OPTION_NOT_SET</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </param>
+        <param name="margin_bottom" type="list" default="" pattern="[0-9]+" class="editable" label="WF_PARAM_MARGIN_BOTTOM" description="WF_PARAM_MARGIN_BOTTOM_DESC">
+            <option value="">WF_OPTION_NOT_SET</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </param>
+        <param name="margin_left" type="list" default="" pattern="[0-9]+" class="editable" label="WF_PARAM_MARGIN_LEFT" description="WF_PARAM_MARGIN_LEFT_DESC">
+            <option value="">WF_OPTION_NOT_SET</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </param>
+        <param name="align" type="list" default="" label="WF_PARAM_ALIGN_DEFAULT" description="WF_PARAM_ALIGN_DEFAULT_DESC">
+            <option value="">WF_OPTION_NOT_SET</option>
+            <option value="top">WF_OPTION_ALIGN_TOP</option>
+            <option value="middle">WF_OPTION_ALIGN_MIDDLE</option>
+            <option value="bottom">WF_OPTION_ALIGN_BOTTOM</option>
+            <option value="left">WF_OPTION_ALIGN_LEFT</option>
+            <option value="right">WF_OPTION_ALIGN_RIGHT</option>
+        </param>
+        
+        <param name="frameborder" type="list" default="0" label="WF_IFRAME_FRAMEBORDER" description="WF_IFRAME_FRAMEBORDER_DESC">
+            <option value="0">NO</option>
+            <option value="1">YES</option>
+        </param>
+        <param name="scrolling" type="list" default="auto" label="WF_IFRAME_SCROLLING" description="WF_IFRAME_SCROLLING_DESC">
+            <option value="no">NO</option>
+            <option value="yes">YES</option>
+            <option value="auto">AUTO</option>
+        </param>
+        <param name="marginwidth" type="text" size="10" pattern="[0-9]+" default="" label="WF_IFRAME_MARGINWIDTH" description="WF_IFRAME_MARGINWIDTH_DESC"/>
+        <param name="marginheight" type="text" size="10" pattern="[0-9]+" default="" label="WF_IFRAME_MARGINHEIGHT" description="WF_IFRAME_MARGINHEIGHT_DESC"/>
+        <param name="allowtransparency" type="list" default="no" label="WF_IFRAME_ALLOWTRANSPARENCY" description="WF_IFRAME_ALLOWTRANSPARENCY_DESC">
+            <option value="no">NO</option>
+            <option value="yes">YES</option>
+        </param>
+    </params>
+    <params group="access">
+        <param name="tabs_advanced" type="list" default="1" label="WF_IFRAME_TAB_ADVANCED" description="WF_IFRAME_TAB_ADVANCED_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>
+        </param>
+        
+        <param name="file_browser" type="list" default="1" label="WF_IFRAME_FILE_BROWSER" description="WF_IFRAME_FILE_BROWSER_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>	
+        </param>
+    </params>
+    <extensions>aggregator</extensions>
+    <languages>
+        <language tag="en-GB">en-GB.com_jce_iframe.ini</language>
+    </languages>
+    <help>
+        <topic key="iframe.about" title="WF_IFRAME_HELP_ABOUT" />
+        <topic key="iframe.interface" title="WF_IFRAME_HELP_INTERFACE" />
+        <topic key="iframe.advanced" title="WF_IFRAME_HELP_ADVANCED" />
+        <topic key="iframe.insert" title="WF_IFRAME_HELP_INSERT" />
+    </help>
+</install>
