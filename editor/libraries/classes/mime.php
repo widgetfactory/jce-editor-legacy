@@ -637,7 +637,7 @@ abstract class WFMimeType {
         'video/x-fli' => 'fli',
         'video/x-flv' => 'flv',
         'video/x-m4v' => 'm4v',
-        'video/x-ms-asf' => 'asf asx',
+        'video/x-ms-asf' => 'asf asx wmv',
         'video/x-ms-wm' => 'wm',
         'video/x-ms-wmv' => 'wmv',
         'video/x-ms-wmx' => 'wmx',
