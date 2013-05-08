@@ -7,27 +7,11 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
 */
-
-html {
-    overflow: hidden;
-    height: 100%;
-}
 body#jce {
-    padding: 5px !important;
     font: 12px "Helvetica Neue",Helvetica,Arial,sans-serif;
-    background-color: #FFF;
-    margin: 0;
-    position: relative;
-    height: 100%;
-    overflow: hidden;
-
-    -webkit-overflow-scrolling : 'touch';
 }
 #jce {
     border: 0 none;
-}
-#jce select, #jce input #jce textarea {
-    font: 8pt Verdana, Arial, Helvetica, sans-serif;
 }
 
 #jce .ui-widget {}
@@ -54,10 +38,7 @@ body#jce {
     font-weight: bold;
     padding: 0 5px;
 }
-#jce label {
-    display: inline-block;
-    min-width: 80px;
-}
+
 #jce label.invalid {
     color:#E00;
 }
@@ -65,25 +46,6 @@ body#jce {
     border:1px solid #E00;
 }
 
-#jce a.browse span {
-    display:block;
-    width:20px;
-    height:20px;
-    background:url(../img/icons.png) 0 -960px;
-    border:1px solid #FFF;
-    margin-left:1px;
-}
-#jce a.browse span.datetime {
-    background:url(../img/icons.png) 0 -1020px;
-}
-
-#jce a.pickcolor span {
-    display:block;
-    width:16px;
-    height:16px;
-    background:url(../img/icons.png) 0 -1000px;
-    margin-left:2px;
-}
 #jce .wordWrapCode {
     vertical-align:middle;
     border:1px none #000;
@@ -192,14 +154,6 @@ span.browser_container, span.colour_container {
     display:inline-block;
     vertical-align:middle;
 }
-span.hastip, span.tooltip {
-    border-bottom:1px dashed #919B9C;
-}
-
-.hastip:first-line, .tooltip:first-line {
-    background: url('../img/dash.gif') repeat-x bottom center;
-}
-
 div.ui-preview div.ui-dialog-content.ui-widget-content {
     padding: 10px;
 }
@@ -446,33 +400,3 @@ div#popups_tab {
     cursor:pointer;
     display: inline-block;
 }	
-
-/* spinner */
-.spinner {
-    background : url(../img/spinner.png) no-repeat center;
-    width   :16px;
-    height  :16px;
-    display :block;
-
-    -webkit-animation: spinner 1s infinite linear; /* Safari 4+ */
-    -moz-animation:    spinner 1s infinite linear; /* Fx 5+ */
-    -o-animation:      spinner 1s infinite linear; /* Opera 12+ */
-    animation:         spinner 1s infinite linear; /* IE 10+ */
-}
-
-@-webkit-keyframes spinner {
-    from {-webkit-transform:rotate(0deg);}
-to {-webkit-transform:rotate(360deg);}
-}
-@-moz-keyframes spinner {
-    from {-moz-transform:rotate(0deg);}
-to {-moz-transform:rotate(360deg);}
-}
-@-o-keyframes spinner {
-    from {-o-transform:rotate(0deg);}
-to {-o-transform:rotate(360deg);}
-}
-@keyframes spinner {
-    from {transform:rotate(0deg);}
-to {transform:rotate(360deg);}
-}

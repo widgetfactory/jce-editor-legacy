@@ -190,20 +190,20 @@
                 icons: {
                     primary: 'icon-ok'
                 }
-            });
+            }).addClass('btn btn-success');
 
             $('button#refresh, input#refresh').button({
                 icons: {
                     primary: 'icon-refresh'
                 }
-            });
+            }).addClass('btn');
 
             // add button actions
             $('button#cancel, input#cancel').button({
                 icons: {
-                    primary: 'icon-remove'
+                    primary: 'icon-close'
                 }
-            });
+            }).addClass('btn');
 
             // go no further if standalone
             if (standalone) {
@@ -214,13 +214,13 @@
                 icons: {
                     primary: 'icon-plus'
                 }
-            });
+            }).addClass('btn');
 
             $('button#help, input#help').button({
                 icons: {
-                    primary: 'icon-question-sign'
+                    primary: 'icon-question'
                 }
-            });
+            }).addClass('btn btn-info');
 
             // add button actions
             $('button#cancel, input#cancel').click(function(e) {
@@ -363,7 +363,7 @@
             $('input.color, input.colour').each(function() {
                 var id = $(this).attr('id');
                 var ev = $(this).get(0).onchange;
-
+                
                 var $picker = $('<span role="button" class="pickcolor_icon" title="' + self.translate('browse') + '" id="' + id + '_pick"></span>').insertAfter(this).toggleClass('disabled', $(this).is(':disabled')).attr('aria-disabled', function() {
                     return $(this).hasClass('disabled');
                 });
@@ -421,17 +421,12 @@
                 var input = this, type = $(this).hasClass('image') ? 'image' : 'file', classname = 'file';
                 
                 if (!$(this).parent('.input-append').length) {
-                    $(this).wrap('<div class="input-append" />');
+                    $(this).wrap('<div class="input-append span8" />');
                 }
 
                 var ev = $(this).get(0).onchange;
                 
-                // map to "picture" for font-awesome
-                if (type == 'image') {
-                    classname = 'picture';
-                }
-
-                $('<button class="btn browser_icon" title="' + self.translate('browse') + '"><i class="icon-' + classname + '"></i></button>').click(function(e) {
+                $('<button class="btn browser_icon" title="' + self.translate('browse') + '"><i class="icon-' + type + '"></i></button>').click(function(e) {
                     e.preventDefault();
                     
                     return TinyMCE_Utils.openBrowser(this, $(input).attr('id'), type, 'file_browser_callback');

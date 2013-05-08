@@ -9,20 +9,118 @@
  */
 @import url("reset.css");
 @import url("bootstrap.min.css");
+@import url("bootstrap-typography.min.css");
 @import url("../jquery/css/jquery-ui.custom.css");
-@import url("font-awesome.min.css");
-@import url("dialog.css");
+@import url("icomoon.css");
+/*@import url("font-awesome.min.css");*/
+/*@import url("dialog.css");*/
 @import url("tips.css");
 @import url("select.css");
 @import url("colorpicker.css");
 
-#jce td.label {
-    background : none;
-    border-radius: 0;
-    text-shadow : inherit;
-    color : inherit;
+html {
+    overflow: hidden;
+    height: 100%;
+}
+body#jce {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    padding: 5px;
+    -webkit-overflow-scrolling : 'touch';
+    background-color: #fff;
+}
+
+#jce #tabs ul.ui-tabs-nav {
+    margin-left : 0;
 }
 
 #jce [class^="icon-"], #jce [class*=" icon-"] {
     background: none;
+}
+
+#jce .container-fluid {
+    padding: 0;
+}
+
+#jce .radio, #jce .checkbox {
+    line-height: 26px;
+}
+
+#jce input.browser {
+    min-width: 80%;
+}
+
+#jce a.browse span {
+    display:inline-block;
+    width:20px;
+    height:20px;
+    background:url(../img/icons.png) 0 -960px;
+    border:1px solid #FFF;
+    margin-left:1px;
+}
+
+#jce a.pickcolor span {
+    display:inline-block;
+    width:16px;
+    height:16px;
+    background:url(../img/icons.png) 0 -1000px;
+    margin-left:2px;
+}
+
+/*#jce .row-fluid .input-append select, #jce .row-fluid .input-append input[type="text"] {
+    margin-left : -9px !important;
+}*/
+
+#jce .row-fluid .input-append[class*="span"] {
+    margin-left : 0;
+}
+
+.hastip:first-line, .tooltip:first-line {
+    background: url('../img/dash.gif') repeat-x bottom center;
+}
+
+
+#jce span.pickcolor_icon {
+    display:inline-block;
+    width:16px;
+    height:16px;
+    background:url(../img/icons.png) 0 -1000px;
+    margin: 0 0 10px 5px;
+    cursor:pointer;
+    vertical-align:middle;
+}
+
+#jce .input-append .btn i {
+    font-size : 14px;
+}
+
+/* spinner */
+.spinner {
+    background : url(../img/spinner.png) no-repeat center;
+    width   :16px;
+    height  :16px;
+    display :block;
+
+    -webkit-animation: spinner 1s infinite linear; /* Safari 4+ */
+    -moz-animation:    spinner 1s infinite linear; /* Fx 5+ */
+    -o-animation:      spinner 1s infinite linear; /* Opera 12+ */
+    animation:         spinner 1s infinite linear; /* IE 10+ */
+}
+
+@-webkit-keyframes spinner {
+    from {-webkit-transform:rotate(0deg);}
+to {-webkit-transform:rotate(360deg);}
+}
+@-moz-keyframes spinner {
+    from {-moz-transform:rotate(0deg);}
+to {-moz-transform:rotate(360deg);}
+}
+@-o-keyframes spinner {
+    from {-o-transform:rotate(0deg);}
+to {-o-transform:rotate(360deg);}
+}
+@keyframes spinner {
+    from {transform:rotate(0deg);}
+to {transform:rotate(360deg);}
 }

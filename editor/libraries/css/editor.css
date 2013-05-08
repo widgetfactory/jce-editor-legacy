@@ -76,3 +76,8 @@ div#wf_upload_button input[type="file"] {
     top: 0;
     cursor: pointer;
 }
+
+.mce-btn button:hover, button.mce-close:hover, .mce-btn-group button:hover {
+    background: none;
+    border: 0 none;
+}

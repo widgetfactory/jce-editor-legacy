@@ -17,7 +17,7 @@ defined('_JEXEC') or die('RESTRICTED');
 
             <div class="layout-top">
                 <div class="layout-header">
-                    <span id="layout-full-toggle" role="button"><i class="icon-circle-arrow-up"></i></span>
+                    <span id="layout-full-toggle" role="button"><i class="icon-expand"></i></span>
                     <div id="browser-message"></div>
                     <div id="browser-actions"></div>
                 </div>

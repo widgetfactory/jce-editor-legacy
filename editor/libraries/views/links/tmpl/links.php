@@ -11,6 +11,6 @@
  */
 defined('_JEXEC') or die('RESTRICTED');
 ?>
-<div id="link-browser" class="tree">
+<div id="link-browser" class="tree span12 well">
     <ul class="root"><?php echo $this->list; ?></ul>
 </div>

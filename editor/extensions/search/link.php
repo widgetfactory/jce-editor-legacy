@@ -108,13 +108,13 @@ class WFLinkSearchExtension extends WFSearchExtension {
         $orders[] = JHtml::_('select.option', 'category', JText::_('WF_CATEGORY'));
 
         $lists = array();
-        $lists['ordering'] = JHtml::_('select.genericlist', $orders, 'ordering', 'class="inputbox"', 'value', 'text');
+        $lists['ordering'] = JHtml::_('select.genericlist', $orders, 'ordering', 'class="span9"', 'value', 'text');
 
         $searchphrases = array();
         $searchphrases[] = JHtml::_('select.option', 'all', JText::_('WF_SEARCH_ALL_WORDS'));
         $searchphrases[] = JHtml::_('select.option', 'any', JText::_('WF_SEARCH_ANY_WORDS'));
         $searchphrases[] = JHtml::_('select.option', 'exact', JText::_('WF_SEARCH_EXACT_PHRASE'));
-        $lists['searchphrase'] = JHtml::_('select.radiolist', $searchphrases, 'searchphrase', '', 'value', 'text', 'all');
+        $lists['searchphrase'] = JHtml::_('select.radiolist', $searchphrases, 'searchphrase', 'class="radio inline"', 'value', 'text', 'all');
 
 
         $view = $this->getView('search');

@@ -354,7 +354,7 @@
             $('#layout-full-toggle').toggle(this.options.expandable).click(function() {
                 $('#browser').toggleClass('full-height');
                 
-                $('i', this).toggleClass('icon-circle-arrow-down');
+                $('i', this).toggleClass('icon-contract');
                 
                 self.resize(ih);
 
@@ -400,8 +400,8 @@
             // get parent form element
             var p = $('#browser').parent('form');
 
-            if ($(p).next(':not(div.actionPanel)').length) {
-                ih = (Math.round($('div.actionPanel').offset().top) - 10) - $('#browser').innerHeight();
+            if ($(p).next(':not(div.modal-footer)').length) {
+                ih = (Math.round($('div.modal-footer').offset().top) - 10) - $('#browser').innerHeight();
             }
 
             return ih;
@@ -413,7 +413,7 @@
         resize: function(ih, init) {
             var fh = $('#browser').hasClass('full-height'), ih = ih || this._getInterfaceHeight();
 
-            var ap = Math.round($('div.actionPanel').offset().top) - 10;
+            var ap = Math.round($('div.modal-footer').offset().top) - 10;
 
             $('#browser').css({
                 width: $('body').width()

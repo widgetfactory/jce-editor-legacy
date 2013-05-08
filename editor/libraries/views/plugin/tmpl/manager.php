@@ -26,7 +26,7 @@ if ($this->browser->get('position') == 'bottom') {
 
 ?>	
 
-<div class="actionPanel">
+<div class="modal-footer">
 	<button class="button btn" id="refresh"><?php echo WFText::_('WF_LABEL_REFRESH')?></button>
 	<button class="button confirm btn" id="insert"><?php echo WFText::_('WF_LABEL_INSERT')?></button>
 	<button class="button cancel btn" id="cancel"><?php echo WFText::_('WF_LABEL_CANCEL')?></button>

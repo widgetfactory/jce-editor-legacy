@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package   	JCE
  * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
@@ -12,39 +11,39 @@
 defined('_JEXEC') or die('RESTRICTED');
 ?>
 <div id="search-browser">
-    <div class="input-append">
-        <input type="text" id="search-input" placeholder="<?php echo WFText::_('WF_LABEL_SEARCH'); ?>..." /><span class="search-icon"></span>
+    <div class="input-append span12">
+        <input type="text" id="search-input" class="span10" placeholder="<?php echo WFText::_('WF_LABEL_SEARCH'); ?>..." /><span class="search-icon"></span>
         <div class="btn-group">
             <button class="button btn" id="search-button" role="button"><?php echo WFText::_('WF_LABEL_SEARCH'); ?></button>
-             <button class="btn dropdown-toggle" data-toggle="dropdown" id="search-options-button">
+            <button class="btn dropdown-toggle" data-toggle="dropdown" id="search-options-button">
                 <span class="caret"></span>
             </button>
         </div>
     </div>
     <div id="search-options" class="dropdown-menu">
-            <h3><?php echo JText::_('WF_SEARCH_FOR'); ?></h3>
-            <div class="phrases-box">
-                <?php echo $this->lists['searchphrase']; ?>
-            </div>
-            <div class="ordering-box">
-                <label for="ordering" class="ordering">
-                    <?php echo JText::_('WF_SEARCH_ORDERING'); ?>
-                </label>
-                <?php echo $this->lists['ordering']; ?>
-            </div>
-            <h3><?php echo JText::_('WF_SEARCH_SEARCH_ONLY'); ?></h3>
-            <ul>
+        <h3><?php echo JText::_('WF_SEARCH_FOR'); ?></h3>
+        <div class="phrases-box">
+            <?php echo $this->lists['searchphrase']; ?>
+        </div>
+        <div class="ordering-box">
+            <label for="ordering" class="ordering span3">
+                <?php echo JText::_('WF_SEARCH_ORDERING'); ?>
+            </label>
+            <?php echo $this->lists['ordering']; ?>
+        </div>
+        <h3><?php echo JText::_('WF_SEARCH_SEARCH_ONLY'); ?></h3>
+        <ul>
             <?php
             foreach ($this->searchareas as $val => $txt) :
                 ?>
                 <li>
                     <input type="checkbox" name="areas[]" value="<?php echo $val; ?>" id="area-<?php echo $val; ?>" />
-                <label for="area-<?php echo $val; ?>">
-                    <?php echo JText::_($txt); ?>
-                </label>
+                    <label for="area-<?php echo $val; ?>">
+                        <?php echo JText::_($txt); ?>
+                    </label>
                 </li>
             <?php endforeach; ?>
-            </ul>
+        </ul>
     </div>
-    <div id="search-result" class="dropdown-menu"></div>
+    <div id="search-result" class="dropdown-menu span12"></div>
 </div>

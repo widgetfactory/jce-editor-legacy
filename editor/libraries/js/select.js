@@ -20,15 +20,23 @@
 
             $(this.element).removeClass('mceEditableSelect').addClass('editable');
             
-            $('<span role="button" class="editable-edit" title="'+ this.options.label +'"></span>').insertAfter(this.element).click(function(e) {
-            	if ($(this).hasClass('disabled'))
+            $(this.element).wrap('<div class="input-append" />').parent().addClass($(this.element).attr('class')).removeClass('editable');
+            
+            $(this.element).removeClass(function(i, cls) {
+                return cls.replace(/(span[0-9]+)?/, '');
+            }).addClass('span10');
+            
+            $('<button class="btn" title="'+ this.options.label +'"><i class="icon-edit"></i></button>').insertAfter(this.element).click(function(e) {
+            	e.preventDefault();
+                
+                if ($(this).hasClass('disabled'))
             		return;
 
             	self._onChangeEditableSelect(e);
             });
             
             if ($(this.element).is(':disabled')) {
-            	$(this.element).next('span.editable-edit').addClass('disabled');
+            	$(this.element).next('button').addClass('disabled').prop('disabled', true);
             }
         },
 

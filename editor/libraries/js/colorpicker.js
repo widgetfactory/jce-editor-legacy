@@ -265,7 +265,7 @@
 
                 $('#colorpicker_insert').button({
                     icons: {
-                        primary: 'ui-icon-check'
+                        primary: 'icon-ok'
                     }
                 }).click(function(e) {
                     e.preventDefault();
@@ -320,20 +320,16 @@
                         $('#colorpicker').append(
                             '<div id="colorpicker_preview">' +
                             '	<div id="colorpicker_preview_text">' +
-                            '		<input type="text" id="colorpicker_color" size="8" maxlength="8" value="' + color + '" class="ui-corner-all" aria-required="true" />' +
+                            '		<input type="text" id="colorpicker_color" size="8" maxlength="8" value="' + color + '" class="input-mini" aria-required="true" />' +
                             '	</div>' +
-                            '	<div id="colorpicker_preview_color" class="ui-widget-content ui-corner-all"></div>' +
+                            '	<div id="colorpicker_preview_color" class="input-mini label">&nbsp;</div>' +
                             '	<div id="colorpicker_insert" class="btn btn-small"><i class="icon-ok"></i>&nbsp;' + o.labels.apply + '</div>' +
                             '</div>'
                         );
 
                         $('#colorpicker_preview_color').css('background-color', color);
 
-                        $('#colorpicker_insert').button({
-                            icons: {
-                                primary: 'ui-icon-check'
-                            }
-                        }).click(function(e) {
+                        $('#colorpicker_insert').button().click(function(e) {
                             e.preventDefault();
 
                             self._insert();
@@ -354,7 +350,7 @@
             var self = this, h = '', o = this.options;
 
             h += '<div id="colorpicker_tabs">';
-            h += '<ul class="nav nav-tabs">';
+            h += '<ul>';
             h += '<li class="active"><a href="#colorpicker_picker" aria-controls="colorpicker_picker" class="active">{#picker}</a></li>';
             h += '<li><a href="#colorpicker_web" aria-controls="colorpicker_web">{#palette}</a></li>';
             h += '<li><a href="#colorpicker_named" aria-controls="colorpicker_named">{#named}</a></li>';
@@ -393,6 +389,9 @@
                     e.preventDefault();
                     $(this).tab('show');
                 });
+                
+                $('#colorpicker_tabs ul').addClass('nav nav-tabs');
+                
             } else {
                 $('#colorpicker_tabs', '#colorpicker').tabs({
                     activate: function(event, ui) {

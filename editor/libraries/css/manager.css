@@ -810,7 +810,7 @@ div.button.insert {
 /**
  * Item List
 */
-ul.item-list {
+#jce ul.item-list {
     list-style: none;
     white-space: nowrap;
     margin: 0px;
