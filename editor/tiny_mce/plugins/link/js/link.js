@@ -66,7 +66,7 @@ var LinkDialog = {
         if (!se.isCollapsed()) {
             n = se.getNode();
 
-            var state = false, v;
+            var state = false, v = se.getContent({format: 'text'});
 
             function setText(state, v) {
                 if (state && v) {
@@ -86,22 +86,20 @@ var LinkDialog = {
                     var c = n.childNodes;
                     if (c.length == 1 && c[0].nodeType == 3) {
                         state = true;
-                        v = se.getContent({
-                            format: 'text'
-                        });
                     }
-                } else {
+                } else {                    
                     if (ed.dom.isBlock(n) || n.nodeName === 'BODY') {                                                                       
-                        v = se.getContent();
-                        
-                        state = /<([^>]+)>/.test(v) === false;
+                        var html = se.getContent();
+                        // plain text
+                        if (v === html) {
+                            state = true;
+                        } else {
+                            $('#text').data('html', html);
+                        }
                     }
                 }
             } else {
                 state = true;
-                v = se.getContent({
-                    format: 'text'
-                });
             }
 
             // set text value and state
@@ -271,9 +269,11 @@ var LinkDialog = {
             args[k] = v;
         });
 
-        // no selection
-        if (se.isCollapsed()) {
-            ed.execCommand('mceInsertContent', false, '<a href="#" id="mce_link_tmp">' + $('#text').val() + '</a>', {
+        // no selection or stored html
+        if (se.isCollapsed() || $('#text').data('html')) {
+            var v = $('#text').data('html') || $('#text').val();
+            
+            ed.execCommand('mceInsertContent', false, '<a href="#" id="mce_link_tmp">' + v + '</a>', {
                 skip_undo : 1
             });
             
@@ -283,7 +283,7 @@ var LinkDialog = {
         } else {                                    
             // insert link
             ed.execCommand('mceInsertLink', false, args);
-        	
+
             // if text selection, update
             if (!$('#text').is(':disabled')) {
                 // get the current node
