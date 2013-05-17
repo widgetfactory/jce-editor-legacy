@@ -46,8 +46,8 @@ WFAggregator.add('googlemaps', {
     getValues : function(src) {
         var self = this, data = {}, args = {}, type = this.getType();
         
-        if (!/&(amp;)?output=embed/.test(src)) {
-            src += '&amp;output=embed';
+        if (!/\&(amp;)?output=embed/.test(src)) {
+            src += '&output=embed';
         }
 
         data.src = src;
@@ -69,7 +69,7 @@ WFAggregator.add('googlemaps', {
             return data;
         }
         
-        src = src.replace(/&(amp;)?output=embed/, '');
+        src = src.replace(/\&(amp;)?output=embed/, '');
 
         data.src = src;
         
