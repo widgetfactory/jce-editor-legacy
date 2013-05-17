@@ -1059,17 +1059,18 @@
         _convertURLs: function(h) {
             var ex = '([-!#$%&\'\*\+\\./0-9=?A-Z^_`a-z{|}~]+@[-!#$%&\'\*\+\\/0-9=?A-Z^_`a-z{|}~]+\.[-!#$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+)';
             var ux = '((news|telnet|nttp|file|http|ftp|https)://[-!#$%&\'\*\+\\/0-9=?A-Z^_`a-z{|}~;]+\.[-!#$%&\'\*\+\\./0-9=?A-Z^_`a-z{|}~;]+)';
-
-            h = h.replace(new RegExp('(=["\'])?' + ux, 'g'), function(a, b, c) {
-                // only if not already a link
-                if (!b) {
+            
+            // find and link url if not already linked
+            h = h.replace(new RegExp('(=["\']|>)?' + ux, 'g'), function(a, b, c) {
+                // only if not already a link, ie: b != =" or >
+                if (!b) {                    
                     return '<a href="' + c + '">' + c + '</a>';
                 }
 
                 return a;
             });
 
-            h = h.replace(new RegExp('(=["\']mailto:)?' + ex, 'g'), function(a, b, c) {
+            h = h.replace(new RegExp('(=["\']mailto:|>)?' + ex, 'g'), function(a, b, c) {
                 // only if not already a mailto: link
                 if (!b) {
                     return '<a href="mailto:' + c + '">' + c + '</a>';
