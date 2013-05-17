@@ -970,7 +970,7 @@
             // show loading message
             this._setLoader();
             
-            this._getList();
+            this._getList(dir);
         },
 
         /**
