@@ -358,6 +358,10 @@
             if (self.classes) {
                 return self.classes;
             }
+            
+            if (self.fontface) {
+                return;
+            }
 
             /* Make a css url absolute
          * @param u URL string
@@ -500,6 +504,10 @@
                 
                     // add to head
                     head.appendChild(style);
+                    
+                    // set a marker that this has been done
+                    self.fontface = true;
+                    
                 } catch (e) {}
             }
 
