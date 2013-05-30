@@ -49,18 +49,22 @@ var LinkDialog = {
                 self.insertLink(v);
             }
         });
-        
+
         // setup popups
         WFPopups.setup();
-        
-        var bh = $('#link-browser').innerHeight(), wh = $(window).height(), ww = $(window).width(), iw = $('#search-input').width(); 
-        
+
         // resize browser on window resize
-        $(window).bind('resize', function() {
-            $('#link-browser').height(bh + $(this).height() - wh);
+        $(window).bind('resize', function(e, init) {             
+            var vm = init ? 5 : 20;
             
-            $('#search-input').width(iw + $(this).width() - ww);
-        });
+            $('#link-browser').height($('#link-browser').innerHeight() + ($('div.actionPanel').position().top - $('#tabs').height()) - vm);
+            
+            $('#advanced_tab, #popups_tab').height($('#link_tab').height());
+            
+            
+            $('#search-input').width($('#search-browser').width() - ($('#search-button').outerWidth(true) + $('#search-options-button').outerWidth(true) + 15));
+            
+        }).trigger('resize', true);
 
         // if there is a selection
         if (!se.isCollapsed()) {
