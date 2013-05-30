@@ -193,7 +193,7 @@
                 }
 
                 // iframes
-                ed.schema.addValidElements('iframe[longdesc|name|src|frameborder|marginwidth|marginheight|scrolling|align|width|height|allowtransparency|*]');
+                ed.schema.addValidElements('iframe[longdesc|name|src|frameborder|marginwidth|marginheight|scrolling|align|width|height|allowtransparency|allowfullscreen="allowfullscreen"|*]');
 
                 // Add custom 'comment' element
                 ed.schema.addCustomElements('comment');
@@ -629,7 +629,7 @@
          * @return attribs Object
          */
         serializeAttributes: function(n) {
-            var self = this, dom = this.editor.dom, attribs = {}, ti = '';
+            var ed = this.editor, self = this, dom = this.editor.dom, attribs = {}, ti = '', k, v;
 
             if (n != 'iframe' || n != 'param') {
                 // get type and src
@@ -678,9 +678,15 @@
                         case 'loop':
                             attribs[k] = k;
                             break;
+                        case 'frameborder':
+                            // remove in html5
+                            if (parseInt(v) == 1 && ed.settings.schema == 'html5') {
+                                v = null;
+                            }
+                            break;
                             // needed for Youtube iframes!
                         case 'allowfullscreen':
-                            attribs[k] = (v == '') ? true : v;
+                            attribs[k] = k;
                             break;
                         case 'type':
                             attribs[k] = v.replace(/"/g, "'");
