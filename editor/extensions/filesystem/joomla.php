@@ -412,7 +412,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
         } else if (is_dir($src)) {
             $path = WFUtility::makePath($dir, $dest);
             
-            if (is_folder($path)) {
+            if (is_dir($path)) {
                 return $result;
             }
 
