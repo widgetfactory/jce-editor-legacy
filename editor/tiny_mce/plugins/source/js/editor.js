@@ -98,7 +98,7 @@
                     type: 'text',
                     'placeholder': ed.getLang('source.' + s, s)
                 });
-                
+
                 var btn = DOM.add(search, 'span', {
                     'class': 'button source_' + s,
                     'title': ed.getLang('source.' + s, s)
@@ -113,7 +113,7 @@
                     // replace
                     if (s == 'replace') {
                         r = DOM.get('source_replace_value').value;
-                        return fn.call(self, f, r, true, DOM.get('source_search_regex').checked);
+                        return fn.call(self, f, r, false, DOM.get('source_search_regex').checked);
                     }
                     // search
                     fn.call(self, f, false, DOM.get('source_search_regex').checked);
@@ -135,7 +135,7 @@
 
                         return fn.call(self, f, r, true, DOM.get('source_search_regex').checked);
                     }
-                    
+
                     // search
                     return fn.call(self, f, true, DOM.get('source_search_regex').checked);
                 });
@@ -323,7 +323,7 @@
                             if (!query) {
                                 return;
                             }
-                            
+
                             state.query = query;
                             cm.removeOverlay(state.overlay);
                             state.overlay = searchOverlay(state.query);
@@ -351,7 +351,7 @@
                         });
                     }
                     var state = cm.getSearchState(cm);
-                    
+
                     // query changed, clear
                     if (state.query !== query) {
                         // clear
@@ -371,17 +371,16 @@
                     }
 
                     if (all) {
-                        cm.operation(function() {
-                            for (var cursor = cm.getSearchCursor(query); cursor.findNext(); ) {
-                                if (typeof query != "string") {
-                                    var match = cm.getRange(cursor.from(), cursor.to()).match(query);
-                                    cursor.replace(text.replace(/\$(\d)/, function(w, i) {
-                                        return match[i];
-                                    }));
-                                } else
-                                    cursor.replace(text);
+                        for (var cursor = cm.getSearchCursor(query); cursor.findNext(); ) {
+                            if (typeof query != "string") {
+                                var match = cm.getRange(cursor.from(), cursor.to()).match(query);
+                                cursor.replace(text.replace(/\$(\d)/, function(w, i) {
+                                    return match[i];
+                                }));
+                            } else {
+                                cursor.replace(text);
                             }
-                        });
+                        }
                     } else {
                         cm.clearSearch();
 
@@ -401,9 +400,7 @@
                             doReplace(match);
                             cm.setCursor(cursor.to());
 
-                            var pos = cm.charCoords(cursor.to(), 'local');
-
-                            cm.scrollTo(pos.x, pos.y);
+                            cm.scrollIntoView(cursor.to());
 
                             cm.focus();
                         }
