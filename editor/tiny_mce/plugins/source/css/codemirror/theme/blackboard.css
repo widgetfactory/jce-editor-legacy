@@ -27,3 +27,8 @@
 .cm-s-blackboard .CodeMirror-activeline {background: none repeat scroll 0% 0% rgba(255, 255, 255, 0.06) !important;}
 
 .cm-s-blackboard .cm-matchhighlight {background: none repeat scroll 0% 0% rgba(37, 59, 118, 0.6);}
+
+.cm-s-blackboard .cm-searching {
+  background: #ffa;
+  background: rgba(255, 255, 0, .4);
+}

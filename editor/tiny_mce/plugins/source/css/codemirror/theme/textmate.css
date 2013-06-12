@@ -21,8 +21,12 @@
 .cm-s-textmate span.cm-attribute {color: #036A07;}
 
 .CodeMirror-matchingbracket {
-	border: 1px solid gray;
-	color:black !important;;
+    border: 1px solid gray;
+    color:black !important;;
 }
-.cm-s-textmate .CodeMirror-activeline {background: #e8f2ff !important;}
-.cm-s-textmate .cm-matchhighlight { background: #e9e9e9 }
+.cm-s-textmate .CodeMirror-activeline {background: #F0F0F0 !important;}
+.cm-s-textmate .cm-matchhighlight { background: #B5D5FF; }
+.cm-s-textmate .cm-searching {
+  background: #ffa;
+  background: rgba(255, 255, 0, .3);
+}
