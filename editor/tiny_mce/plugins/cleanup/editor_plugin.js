@@ -12,7 +12,7 @@
 
     function split(str, delim) {
         return str.split(delim || ',');
-    };
+    }
 
     tinymce.create('tinymce.plugins.CleanupPlugin', {
         init: function(ed, url) {
@@ -37,7 +37,7 @@
                     each(split('span,a,i'), function(name) {
                         if (elements[name]) {
                             elements[name].removeEmpty = false;
-                            elements[name].paddEmpty = true;
+                            //elements[name].paddEmpty = true;
                         }
                     });
                 }
@@ -123,7 +123,7 @@
                         }
                     });
                 }
-                
+
                 ed.parser.addNodeFilter('i', function(nodes, name) {
                     var i = nodes.length, node, cls;
 
@@ -135,13 +135,13 @@
                         }
                     }
                 });
-                
+
                 ed.serializer.addAttributeFilter('data-mce-bootstrap', function(nodes, name) {
                     var i = nodes.length, node;
 
                     while (i--) {
                         node = nodes[i];
-                        
+
                         if (!node.firstChild) {
                             node.append(new Node('#text', '3')).value = '\u00a0';
                         }
@@ -209,7 +209,11 @@
             // Cleanup callback
             ed.onBeforeSetContent.add(function(ed, o) {
                 // Geshi
-                o.content = o.content.replace(/<pre xml:\s*(.*?)>(.*?)<\/pre>/g, '<pre class="geshi-$1">$2</pre>');
+                o.content = o.content.replace(/<pre xml:lang="([^"]+)"([^>]+)>(.*?)<\/pre>/g, function(a, b, c, d) {
+                    var attr = c.split(' ').join(' data-geshi-');
+
+                    return '<pre data-geshi="1" xml:lang="' + b + '"' + attr + '>' + d + '</pre>';
+                });
 
                 // only if "Cleanup HTML" enabled
                 if (ed.settings.validate) {
@@ -228,11 +232,20 @@
             ed.onPostProcess.add(function(ed, o) {
                 if (o.set) {
                     // Geshi
-                    o.content = o.content.replace(/<pre xml:\s*(.*?)>(.*?)<\/pre>/g, '<pre class="geshi-$1">$2</pre>');
+                    o.content = o.content.replace(/<pre xml:lang="([^"]+)"([^>]+)>(.*?)<\/pre>/g, function(a, b, c, d) {
+                        var attr = c.split(' ').join(' data-geshi-');
+
+                        return '<pre data-geshi="1" xml:lang="' + b + '"' + attr + '>' + d + '</pre>';
+                    });
                 }
                 if (o.get) {
                     // Geshi
-                    o.content = o.content.replace(/<pre class="geshi-(.*?)">(.*?)<\/pre>/g, '<pre xml:$1>$2</pre>');
+                    o.content = o.content.replace(/<pre([^>]+)data-geshi="1"([^>]*)>(.*?)<\/pre>/g, function(a, b, c, d) {
+                        var s = b + c;
+                        s = s.replace(/data-geshi-/gi, '').replace(/\s+/g, ' ');
+                        
+                        return '<pre' + s + '>' + d + '</pre>';
+                    });
                     // Remove empty jcemediabox / jceutilities anchors
                     o.content = o.content.replace(/<a([^>]*)class="jce(box|popup|lightbox|tooltip|_tooltip)"([^>]*)><\/a>/gi, '');
                     // Remove span elements with jcemediabox / jceutilities classes
@@ -251,7 +264,7 @@
                     if (!ed.getParam('table_pad_empty_cells', true)) {
                         o.content = o.content.replace(/<(th|td)([^>]*)>(&nbsp;|\u00a0)<\/\1>/gi, '<$1$2></$1>');
                     }
-                    
+
                     // clean bootstrap icons
                     o.content = o.content.replace(/<i class="icon-([\w-]+)">(&nbsp;|\u00a0)<\/i>/g, '<i class="icon-$1"></i>');
                 }
