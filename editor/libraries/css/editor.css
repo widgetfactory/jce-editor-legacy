@@ -55,21 +55,25 @@ div.mceEditor table.mceLayout td.mceIframeContainer iframe.offleft {
 }
 
 div#wf_upload_button {
-    background: url("../img/cloud_upload.png") no-repeat center #EEEEEE;
+    background: url("../img/cloud_upload.png") no-repeat scroll center center #EEEEEE;
     border: 1px dashed #999999;
-    border-radius: 3px;
+    border-radius: 3px 3px 3px 3px;
     cursor: pointer;
-    font-size: 0;
-    height: 20px;
+    display: none;
+    font-size: 11px;
+    height: 50px;
+    line-height: 90px;
     overflow: hidden;
     padding: 5px;
-    display: none;
     position: absolute;
-    width: 30px;
+    text-align: center;
+    vertical-align: bottom;
+    width: 100px;
+    text-shadow: 0 1px 0 #FFFFFF;
 }
 
 div#wf_upload_button input[type="file"] {
-    font-size: 20px;
+    font-size: 50px;
     opacity: 0;
     position: absolute;
     right: 0;

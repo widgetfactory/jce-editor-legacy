@@ -494,7 +494,7 @@
                 var btn = dom.add(dom.doc.body, 'div', {
                     'id': 'wf_upload_button',
                     'title' : ed.getLang('upload.button_description', 'Click to upload a file')
-                });
+                }, ed.getLang('upload.button_description', 'Click to upload a file'));
 
                 // create upload input
                 input = dom.add(btn, 'input', {
@@ -515,11 +515,11 @@
                 var p2 = ed.dom.getRect(marker);
                 var st = ed.getBody().scrollTop;
 
-                if (st > p2.y + p2.h / 2 - 16) {
+                if (st > p2.y + p2.h / 2 - 25) {
                     return;
                 }
 
-                if (st < (p2.y + p2.h / 2 + 16) - p1.h) {
+                if (st < (p2.y + p2.h / 2 + 25) - p1.h) {
                     return;
                 }
 
@@ -529,8 +529,8 @@
                 var zIndex = ed.id == 'mce_fullscreen' ? dom.get('mce_fullscreen_container').style.zIndex : 0;
 
                 dom.setStyles('wf_upload_button', {
-                    'top': y + p2.h / 2 - 14,
-                    'left': x + p2.w / 2 - 19,
+                    'top': y + p2.h / 2 - 27,
+                    'left': x + p2.w / 2 - 54,
                     'display': 'block',
                     'zIndex' : zIndex + 1
                 });
