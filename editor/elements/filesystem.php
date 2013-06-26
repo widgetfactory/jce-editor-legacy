@@ -39,7 +39,7 @@ class WFElementFilesystem extends WFElement {
         $path = WF_EDITOR_EXTENSIONS . '/filesystem';
 
         $filter = '\.xml$';
-        $files  = JFolder::files($path, $filter, false, true);
+        $files  = JFolder::files($path, $filter, false, true, array('build.xml'));
 
         $options = array();
 

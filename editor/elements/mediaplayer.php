@@ -29,7 +29,7 @@ class WFElementMediaplayer extends WFElement {
 
         // path to images directory
         $path = WF_EDITOR . '/extensions/mediaplayer';
-        $files = JFolder::files($path, '\.xml', false, true);
+        $files = JFolder::files($path, '\.xml', false, true, array('build.xml'));
         
         $attribs = array('class="parameter-nested-parent"');
 
