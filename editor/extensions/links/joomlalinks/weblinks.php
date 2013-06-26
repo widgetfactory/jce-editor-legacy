@@ -34,7 +34,7 @@ class JoomlalinksWeblinks extends JObject {
      * @return	JCE  The editor object.
      * @since	1.5
      */
-    function & getInstance() {
+    function getInstance() {
         static $instance;
 
         if (!is_object($instance)) {
