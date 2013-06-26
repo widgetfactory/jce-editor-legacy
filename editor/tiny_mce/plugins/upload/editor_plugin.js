@@ -224,7 +224,7 @@
                             cls += ' upload-placeholder';
                             // set class and src
                             node.attr({
-                                'data-mce-src': 'wf-placeholder.png',
+                                'data-mce-src': 'media/jce/img/placeholder.png',
                                 'class': tinymce.trim(cls)
                             });
                         }
@@ -494,7 +494,7 @@
                 var btn = dom.add(dom.doc.body, 'div', {
                     'id': 'wf_upload_button',
                     'title' : ed.getLang('upload.button_description', 'Click to upload a file')
-                }, ed.getLang('upload.button_description', 'Click to upload a file'));
+                }, '<label for="wf_upload_input">' + ed.getLang('upload.upload', 'Upload') + '</label>');
 
                 // create upload input
                 input = dom.add(btn, 'input', {
