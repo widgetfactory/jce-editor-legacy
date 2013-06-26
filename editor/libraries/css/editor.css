@@ -56,20 +56,24 @@ div.mceEditor table.mceLayout td.mceIframeContainer iframe.offleft {
 
 div#wf_upload_button {
     background: url("../img/cloud_upload.png") no-repeat scroll center center #EEEEEE;
-    border: 1px dashed #999999;
-    border-radius: 3px 3px 3px 3px;
+    border: 2px dashed #999999;
+    border-radius: 3px;
     cursor: pointer;
-    display: none;
-    font-size: 11px;
-    height: 50px;
-    line-height: 90px;
+    display: none; 
+    height: 56px;
     overflow: hidden;
-    padding: 5px;
     position: absolute;
-    text-align: center;
-    vertical-align: bottom;
     width: 100px;
+    text-align: center;
+}
+
+div#wf_upload_button label {
     text-shadow: 0 1px 0 #FFFFFF;
+    position: relative;
+    font-size: 12px;
+    font-family: Arial,Helvetica,sans-serif;
+    margin-top: 38px;
+    display: inline-block;
 }
 
 div#wf_upload_button input[type="file"] {
