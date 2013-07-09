@@ -74,6 +74,8 @@ div#wf_upload_button label {
     font-family: Arial,Helvetica,sans-serif;
     margin-top: 38px;
     display: inline-block;
+    color : #666;
+    font-weight : bold;
 }
 
 div#wf_upload_button input[type="file"] {
