@@ -494,7 +494,7 @@
                 var btn = dom.add(dom.doc.body, 'div', {
                     'id': 'wf_upload_button',
                     'title' : ed.getLang('upload.button_description', 'Click to upload a file')
-                }, '<label for="wf_upload_input">' + ed.getLang('upload.upload', 'Upload') + '</label>');
+                }, '<label for="wf_upload_input">' + ed.getLang('upload.label', 'Upload') + '</label>');
 
                 // create upload input
                 input = dom.add(btn, 'input', {
@@ -556,7 +556,7 @@
             // remove upload on mouseout
             ed.dom.bind(marker, 'mouseout', function(e) {
                 // don't remove if over upload input
-                if (!e.relatedTarget) {
+                if (!e.relatedTarget && e.clientY > 0) {                    
                     return;
                 }
 
@@ -658,6 +658,10 @@
                     // check file type and size
                     var config  = file.uploader.getUploadConfig();
                     var type    = file.type.replace(/[a-z0-9]+\/([a-z0-9]{2,4})/i, '$1'); 
+                    
+                    // lowercase
+                    type = type.toLowerCase();
+                    
                     if (tinymce.inArray(config.filetypes, type) == -1) {
                         ed.windowManager.alert(ed.getLang('upload.file_extension_error', 'File type not supported'));
                         return false;
@@ -683,7 +687,7 @@
                         skip_undo: 1
                     });
                     // get approximate size of image from file size
-                    if (/image\/(gif|png|jpeg|jpeg)/.test(file.type)) {
+                    if (/image\/(gif|png|jpeg|jpg)/.test(file.type)) {
                         w = h = Math.round(Math.sqrt(file.size));
                         // set minimum value of 100
                         w = Math.max(100, w);
