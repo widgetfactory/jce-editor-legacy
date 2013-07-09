@@ -529,7 +529,7 @@ class WFDocument extends JObject {
         // Render scripts
         if ($this->get('compress_javascript', 0)) {
             $script = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . $this->getQueryString(array('task' => 'pack'));
-            $output .= "\t\t<script type=\"text/javascript\" src=\"" . $script . "\"></script>\n";
+            $output .= "\t\t<script type=\"text/javascript\" src=\"" . $script . "\" data-cfasync=\"false\"></script>\n";
         } else {
             foreach ($this->_scripts as $src => $type) {
                 $stamp = '';
@@ -538,12 +538,12 @@ class WFDocument extends JObject {
                     $stamp = strpos($src, '?') === false ? '?v=' . $version : '&v=' . $version;
                 }
                 
-                $output .= "\t\t<script type=\"" . $type . "\" src=\"" . $src . $stamp . "\"></script>\n";
+                $output .= "\t\t<script type=\"" . $type . "\" src=\"" . $src . $stamp . "\" data-cfasync=\"false\"></script>\n";
             }
 
             // Script declarations
             foreach ($this->_script as $type => $content) {
-                $output .= "\t\t<script type=\"" . $type . "\">" . $content . "</script>";
+                $output .= "\t\t<script type=\"" . $type . "\" data-cfasync=\"false\">" . $content . "</script>";
             }
         }
 
@@ -622,8 +622,10 @@ class WFDocument extends JObject {
                     $data = '';
 
                     foreach ($this->getScripts() as $script => $type) {
-                        $script .= preg_match('/\.js$/', $script) ? '' : '.js';
-                        $files[] = $this->urlToPath($script);
+                        $src = $script['src'];
+                        
+                        $src .= preg_match('/\.js$/', $src) ? '' : '.js';
+                        $files[] = $this->urlToPath($src);
                     }
 
                     // parse ini language files
