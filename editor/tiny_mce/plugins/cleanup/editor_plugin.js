@@ -123,6 +123,19 @@
                         }
                     });
                 }
+                
+                // try and keep empty a tags that are not anchors
+                ed.parser.addNodeFilter('a', function(nodes, name) {
+                    var i = nodes.length, node;
+
+                    while (i--) {
+                        node = nodes[i];
+
+                        if (!node.firstChild && (!node.attr('id') || !node.attr('name'))) {
+                            node.attr('data-mce-bootstrap', '1');
+                        }
+                    }
+                });
 
                 ed.parser.addNodeFilter('i', function(nodes, name) {
                     var i = nodes.length, node, cls;
@@ -142,7 +155,7 @@
                     while (i--) {
                         node = nodes[i];
 
-                        if (!node.firstChild) {
+                        if (!node.firstChild && name == 'i') {
                             node.append(new Node('#text', '3')).value = '\u00a0';
                         }
 
