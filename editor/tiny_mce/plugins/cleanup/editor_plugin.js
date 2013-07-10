@@ -25,10 +25,6 @@
             }
 
             ed.onPreInit.add(function() {
-                /*if (ed.settings.schema === "html5") {
-                 ed.schema.addValidChildren('a[#|abbr|area|address|article|aside|audio|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var|video]');
-                 }*/
-
                 if (ed.settings.validate) {
                     // add support for "bootstrap" icons
                     ed.schema.addValidElements('+i[*]');
@@ -123,15 +119,15 @@
                         }
                     });
                 }
-                
+
                 // try and keep empty a tags that are not anchors
                 ed.parser.addNodeFilter('a', function(nodes, name) {
-                    var i = nodes.length, node;
+                    var i = nodes.length, node, map;
 
                     while (i--) {
-                        node = nodes[i];
+                        node = nodes[i], map = node.attributes.map;
 
-                        if (!node.firstChild && (!node.attr('id') || !node.attr('name'))) {
+                        if (!node.firstChild && !map.name && !map.id) {
                             node.attr('data-mce-bootstrap', '1');
                         }
                     }
@@ -256,7 +252,7 @@
                     o.content = o.content.replace(/<pre([^>]+)data-geshi="1"([^>]*)>(.*?)<\/pre>/g, function(a, b, c, d) {
                         var s = b + c;
                         s = s.replace(/data-geshi-/gi, '').replace(/\s+/g, ' ');
-                        
+
                         return '<pre' + s + '>' + d + '</pre>';
                     });
                     // Remove empty jcemediabox / jceutilities anchors
