@@ -1506,6 +1506,9 @@
                                     $(':input:not(input[name="prompt"])', $(self._dialog['rename']).dialog('widget')).each( function() {
                                         args.push($(this).val());
                                     });
+                                    
+                                    // close dialog
+                                    $(self._dialog['rename']).dialog('close');
 
                                     $.JSON.request('renameItem', args, function(o) {
                                         if (o) {
@@ -1532,12 +1535,9 @@
                                                     name: item
                                                 });
                                             }
-
-                                            $(self._dialog['rename']).dialog('close');
                                         }
                                         self.refresh();
                                     });
-
                                 }
                             });
 
