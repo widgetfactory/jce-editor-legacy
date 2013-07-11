@@ -621,9 +621,7 @@ class WFDocument extends JObject {
                 case 'javascript':
                     $data = '';
 
-                    foreach ($this->getScripts() as $script => $type) {
-                        $src = $script['src'];
-                        
+                    foreach ($this->getScripts() as $src => $type) {                        
                         $src .= preg_match('/\.js$/', $src) ? '' : '.js';
                         $files[] = $this->urlToPath($src);
                     }
