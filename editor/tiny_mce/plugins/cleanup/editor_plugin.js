@@ -33,7 +33,6 @@
                     each(split('span,a,i'), function(name) {
                         if (elements[name]) {
                             elements[name].removeEmpty = false;
-                            //elements[name].paddEmpty = true;
                         }
                     });
                 }
@@ -120,26 +119,14 @@
                     });
                 }
 
-                // try and keep empty a tags that are not anchors
-                ed.parser.addNodeFilter('a', function(nodes, name) {
-                    var i = nodes.length, node, map;
+                // try and keep empty a tags that are not anchors, process bootstrap icons
+                ed.parser.addNodeFilter('a,i', function(nodes, name) {
+                    var i = nodes.length, node, cls, map;
 
                     while (i--) {
-                        node = nodes[i], map = node.attributes.map;
+                        node = nodes[i], cls = node.attr('class'), map = node.attributes.map;
 
-                        if (!node.firstChild && !map.name && !map.id) {
-                            node.attr('data-mce-bootstrap', '1');
-                        }
-                    }
-                });
-
-                ed.parser.addNodeFilter('i', function(nodes, name) {
-                    var i = nodes.length, node, cls;
-
-                    while (i--) {
-                        node = nodes[i], cls = node.attr('class');
-
-                        if (cls && cls.indexOf('icon-') != -1) {
+                        if ((name == 'i' && cls && cls.indexOf('icon-') !== -1) || (name == 'a' && !node.firstChild && !map.name && !map.id)) {
                             node.attr('data-mce-bootstrap', '1');
                         }
                     }
@@ -151,7 +138,7 @@
                     while (i--) {
                         node = nodes[i];
 
-                        if (!node.firstChild && name == 'i') {
+                        if (name == 'i' && !node.firstChild) {
                             node.append(new Node('#text', '3')).value = '\u00a0';
                         }
 
