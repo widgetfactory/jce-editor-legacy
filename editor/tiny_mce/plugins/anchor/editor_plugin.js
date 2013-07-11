@@ -75,17 +75,17 @@
                 // Convert anchor elements to image placeholder
                 ed.parser.addNodeFilter('a', function(nodes) {
                     for (var i = 0, len = nodes.length; i < len; i++) {
-                        var node = nodes[i], fc = node.firstChild, href = node.attr('href'), cls = node.attr('class') || '';
+                        var node = nodes[i], fc = node.firstChild, href = node.attr('href'), cls = node.attr('class') || '', name = node.attr('name') || node.attr('id');
                         
                         if (!fc || (fc && fc.type == 3 && fc.value === '\uFEFF')) {
                             node.empty();
 
                             // allow double anchors
-                            if ((!href || href.charAt(0) == '#') && (node.attr('name') || node.attr('id'))) {
+                            if ((!href || href.charAt(0) == '#') && name) {
                                 self._createAnchorSpan(node);
                             }
                         } else {
-                            if ((!href || href.charAt(0) == '#') && (node.attr('name') || node.attr('id'))) {
+                            if ((!href || href.charAt(0) == '#') && name) {
                                 if (!cls || /mceItemAnchor/.test(cls) === false) {
                                     node.attr('class', tinymce.trim(cls + ' mceItemAnchor'))
                                 }
