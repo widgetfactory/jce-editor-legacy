@@ -277,15 +277,17 @@ var LinkDialog = {
         if (se.isCollapsed() || $('#text').data('html')) {
             var v = $('#text').data('html') || $('#text').val();
             
-            ed.execCommand('mceInsertContent', false, '<a href="#" id="mce_link_tmp">' + v + '</a>', {
+            ed.execCommand('mceInsertContent', false, '<a href="#" id="__mce_tmp">' + v + '</a>', {
                 skip_undo : 1
             });
-            
-            ed.dom.setAttribs(ed.dom.get('mce_link_tmp'), args);
+            // get link
+            el = ed.dom.get('__mce_tmp');
+            // set attributes
+            ed.dom.setAttribs(el, args);
             
         // create link on selection or update existing link
         } else {                                    
-            // insert link
+            // insert link on selection
             ed.execCommand('mceInsertLink', false, args);
 
             // if text selection, update
@@ -310,10 +312,14 @@ var LinkDialog = {
             // restore styles
             ed.dom.setAttrib(n, 'style', ed.dom.getAttrib(n, 'data-mce-style'));
         }
+        
+        // get link or element
+        el = el || n;
 
         // Create or remove popup
         WFPopups.createPopup(el);
-
+        
+        // close dialog
         tinyMCEPopup.close();
     },
 

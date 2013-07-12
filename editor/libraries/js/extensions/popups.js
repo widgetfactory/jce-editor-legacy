@@ -275,19 +275,30 @@ var WFPopups = WFExtensions.add('Popups', {
 				
                 // no selection
                 if(se.isCollapsed()) {
-                    ed.execCommand('mceInsertContent', false, '<a href="#mce_temp_url#">' + $('#popup_text').val() + '</a>', {
+                    ed.execCommand('mceInsertContent', false, '<a href="#" id="__mce_tmp">' + $('#popup_text').val() + '</a>', {
                         skip_undo : 1
                     });
                 // create link on selection or update existing link
                 } else {
-                    ed.execCommand('mceInsertLink', false, '#mce_temp_url#', {
+                    var n = n || se.getNode();
+                    
+                    ed.execCommand('mceInsertLink', false, {'href' : '#', 'id' : '__mce_tmp'}, {
                         skip_undo : 1
                     });
+                    
+                    // restore styles
+                    ed.dom.setAttrib(n, 'style', ed.dom.getAttrib(n, 'data-mce-style'));
                 }
-
-                tinymce.each(ed.dom.select('a[href="#mce_temp_url#"]'), function(link) {
-                    self.setAttributes(link, args, index);
-                });
+                // get new link
+                n = ed.dom.get('__mce_tmp');
+                
+                if (n) {
+                    // remove temp id
+                    ed.dom.setAttrib(n, 'id', null);
+                    
+                    // set attributes
+                    self.setAttributes(n, args, index);
+                }
             }
         } else {
             var s = false;
