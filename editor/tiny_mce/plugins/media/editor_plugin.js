@@ -36,12 +36,10 @@
 
         return obj;
     }
-    ;
 
     function ucfirst(s) {
         return s.charAt(0).toUpperCase() + s.substring(1);
     }
-    ;
 
     // Media types supported by this plugin
     var mediaTypes = {
@@ -529,7 +527,7 @@
                         }
                     }
                 } else {
-                    if (!data.src) {
+                    if (!data.src && data.source) {
                         if (data.source.length > 1) {
                             data.src = data.source[0].src;
                         }
