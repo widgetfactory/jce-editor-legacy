@@ -778,9 +778,14 @@
                         }
                     }
                 };
+                // get name
+                var name = file.target_name || file.name;
+                
+                // remove some common characters
+                name = name.replace(/[\+\\\/\?\#%&<>"\'=\[\]\{\},;@\^\(\)£€$]/g, '');
 
                 extend(args, {
-                    'name': file.target_name || file.name
+                    'name': name
                 });
 
                 xhr.open("post", url, true);
