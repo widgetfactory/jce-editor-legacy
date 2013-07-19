@@ -137,8 +137,6 @@ class WFFormatPluginConfig {
         $settings['theme_advanced_font_sizes'] = $wf->getParam('editor.theme_advanced_font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');
         //$settings['theme_advanced_default_foreground_color'] = $wf->getParam('editor.theme_advanced_default_foreground_color', '#000000');
         //$settings['theme_advanced_default_background_color'] = $wf->getParam('editor.theme_advanced_default_background_color', '#FFFF00');
-        // colour picker custom colours
-        $settings['custom_colors'] = $wf->getParam('editor.custom_colors', '', '');
 
         // Styles list
         $styles = $wf->getParam('editor.theme_advanced_styles', '');

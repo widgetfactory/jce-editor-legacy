@@ -24,7 +24,8 @@ var ColorPicker = {
             close: function() {
                 return tinyMCEPopup.close();
             },
-            stylesheets: stylesheets
+            stylesheets: stylesheets,
+            custom_colors : ed.getParam('colorpicker_custom_colors')
         }));
 
         $('button#insert').button({

@@ -16,7 +16,7 @@
             speed: 200,
             //template_colors: '',
             'stylesheets': [],
-            //custom_colors: '',
+            custom_colors: '',
             forcedHighContrastMode: false,
             labels: {
                 picker: 'Picker',
@@ -27,7 +27,7 @@
                 named: 'Named Colors',
                 //template_tab 	: 'Template',
                 template: 'Template Colors',
-                //custom: 'Custom Colors',
+                custom: 'Custom Colors',
                 color: 'Color',
                 apply: 'Apply',
                 name: 'Name'
@@ -35,7 +35,7 @@
             insert: $.noop,
             close: $.noop,
             dialog: false,
-            parent : 'body'
+            parent: 'body'
         },
         _strhex: "0123456789abcdef",
         /**
@@ -291,7 +291,7 @@
                     content: '<div id="colorpicker" title="Color Picker">' + self._getContent() + '</div>',
                     className: 'wf-colorpicker',
                     opacity: 1,
-                    parent : this.options.parent,
+                    parent: this.options.parent,
                     show: function() {
                         var color = $(self.element).val() || '#000000';
 
@@ -318,14 +318,14 @@
                         });
 
                         $('#colorpicker').append(
-                            '<div id="colorpicker_preview">' +
-                            '	<div id="colorpicker_preview_text">' +
-                            '		<input type="text" id="colorpicker_color" size="8" maxlength="8" value="' + color + '" class="ui-corner-all" aria-required="true" />' +
-                            '	</div>' +
-                            '	<div id="colorpicker_preview_color" class="ui-widget-content ui-corner-all"></div>' +
-                            '	<div id="colorpicker_insert" class="btn btn-small"><i class="icon-ok"></i>&nbsp;' + o.labels.apply + '</div>' +
-                            '</div>'
-                        );
+                                '<div id="colorpicker_preview">' +
+                                '	<div id="colorpicker_preview_text">' +
+                                '		<input type="text" id="colorpicker_color" size="8" maxlength="8" value="' + color + '" class="ui-corner-all" aria-required="true" />' +
+                                '	</div>' +
+                                '	<div id="colorpicker_preview_color" class="ui-widget-content ui-corner-all"></div>' +
+                                '	<div id="colorpicker_insert" class="btn btn-small"><i class="icon-ok"></i>&nbsp;' + o.labels.apply + '</div>' +
+                                '</div>'
+                                );
 
                         $('#colorpicker_preview_color').css('background-color', color);
 
@@ -402,7 +402,7 @@
 
                         $('#colorpicker_insert').toggle(type == 'picker');
                     },
-                    beforeActivate: function( event, ui ) {
+                    beforeActivate: function(event, ui) {
                         $(ui.oldTab).removeClass('active');
                         $(ui.newTab).addClass('active');
                     }
@@ -646,36 +646,36 @@
 
                 $(parent).append(h);
             }
-            /*if (this.options.custom_colors) {
-             var h = '';
-             
-             $(parent).append('<p id="colorpicker_custom_label">' + this.options.labels.custom + '</p>');
-             
-             var customColors = this.options.custom_colors.split(',');
-             
-             h += '<div role="listbox" aria-labelledby="colorpicker_custom_label" tabindex="0">';
-             h += '<ul>';
-             
-             $.each(customColors, function(i, v) {
-             if (v.length == 4) {
-             v = v + v.replace('#', '');
-             }
-             h += '<li style="background-color:' + v + '"><span class="colorpicker_templateblock" aria-labelledby="custom_colors_' + i + '" title="' + v + '"></span></li>';
-             if (self.options.forcedHighContrastMode) {
-             h += '<canvas class="mceColorSwatch" data-color="' + v + '"></canvas>';
-             }
-             h += '<span class="mceVoiceLabel" style="display:none;" id="custom_colors_' + i + '">' + v.toUpperCase() + '</span>';
-             if ((i + 1) % 18 == 0) {
-             h += '</ul><ul>';
-             }
-             });
-             
-             h += '</div>';
-             
-             $(parent).append(h);
-             
-             this._paintCanvas(parent);
-             }*/
+            if (this.options.custom_colors) {
+                var h = '';
+
+                $(parent).append('<p id="colorpicker_custom_label">' + this.options.labels.custom + '</p>');
+
+                var customColors = this.options.custom_colors.split(',');
+
+                h += '<div role="listbox" aria-labelledby="colorpicker_custom_label" tabindex="0">';
+                h += '<ul>';
+
+                $.each(customColors, function(i, v) {
+                    if (v.length == 4) {
+                        v = v + v.replace('#', '');
+                    }
+                    h += '<li style="background-color:' + v + '"><span class="colorpicker_templateblock" aria-labelledby="custom_colors_' + i + '" title="' + v + '"></span></li>';
+                    if (self.options.forcedHighContrastMode) {
+                        h += '<canvas class="mceColorSwatch" data-color="' + v + '"></canvas>';
+                    }
+                    h += '<span class="mceVoiceLabel" style="display:none;" id="custom_colors_' + i + '">' + v.toUpperCase() + '</span>';
+                    if ((i + 1) % 18 == 0) {
+                        h += '</ul><ul>';
+                    }
+                });
+
+                h += '</div>';
+
+                $(parent).append(h);
+
+                this._paintCanvas(parent);
+            }
 
             $(parent).addClass('colorpicker_generated');
 
@@ -787,7 +787,7 @@
                         // Rule
                         case 1:
                             var css = r.cssText || r.style.cssText;
-                            
+
                             if (css) {
                                 hex = css.match(hexRe);
                                 rgb = css.match(rgbRe);
