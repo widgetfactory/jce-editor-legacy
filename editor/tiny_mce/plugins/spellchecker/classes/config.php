@@ -21,20 +21,22 @@ class WFSpellcheckerPluginConfig {
                 switch($engine) {
                     default:
                     case 'browser':
+                    case 'googlespell':
                         $languages = '';
                         
                         $settings['spellchecker_browser_state'] = $wf->getParam('spellchecker.browser_state', 0, 0);
                         
+                        $engine = 'browser';
+                        
                         break;
-                    case 'googlespell':
+                    /*case 'googlespell':
                         $languages = $wf->getParam('spellchecker.googlespell_languages', '');
                         
                         // use a default
                         if (!$languages) {
                             $languages = $wf->getParam('spellchecker.languages', 'English=en', '' );
                         }
-
-                        break;
+                        break;*/
                     case 'pspell':
                     case 'pspellshell':
                     case 'enchantspell':
