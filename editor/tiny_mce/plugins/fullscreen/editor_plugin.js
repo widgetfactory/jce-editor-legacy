@@ -101,6 +101,12 @@
                     de.style.overflow = 'hidden'; //Fix for IE6/7
                     vp = DOM.getViewPort();
                     DOM.win.scrollTo(0, 0);
+                    
+                    // allow adequate height for dialogs, or scroll
+                    if (vp.h < 680) {
+                        DOM.setStyle(DOM.doc.body, 'overflow', 'auto');
+                        de.style.overflow = 'auto';
+                    }
 
                     if (tinymce.isIE)
                         vp.h -= 1;
