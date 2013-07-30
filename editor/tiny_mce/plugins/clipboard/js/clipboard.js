@@ -57,6 +57,7 @@ var ClipboardDialog = {
 			document.title 	= ed.getLang('paste.paste_text_desc');
 			el.innerHTML 	= '<textarea id="content" name="content" rows="15" cols="100" dir="ltr" wrap="soft" class="mceFocus"></textarea>';		
 		}
+                
 		this.resize();
 	},
 

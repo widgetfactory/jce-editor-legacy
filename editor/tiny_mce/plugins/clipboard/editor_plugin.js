@@ -467,15 +467,16 @@
             });
 
             // Add buttons
-            if (self.pasteHtml && !self.pasteText) {
+            if (self.pasteHtml) {
                 ed.addButton('paste', {
                     title: 'paste.paste_desc',
                     cmd: 'mcePaste',
                     ui: true
                 });
             }
-            if (!self.pasteHtml && self.pasteText) {
-                ed.addButton('paste', {
+            
+            if (self.pasteText) {
+                ed.addButton('pastetext', {
                     title: 'paste.paste_text_desc',
                     cmd: 'mcePasteText',
                     ui: true
@@ -498,7 +499,7 @@
                 });
             }
         },
-        createControl: function(n, cm) {
+        /*createControl: function(n, cm) {
             var self = this,
                     ed = self.editor;
 
@@ -540,7 +541,7 @@
             }
 
             return null;
-        },
+        },*/
         getInfo: function() {
             return {
                 longname: 'Paste text/word',
@@ -554,7 +555,7 @@
             var ed = this.editor;
 
             ed.windowManager.open({
-                file: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=clipboard',
+                file: ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=clipboard&cmd=' + cmd,
                 width: parseInt(ed.getParam("clipboard_paste_dialog_width", "450")),
                 height: parseInt(ed.getParam("clipboard_paste_dialog_height", "400")),
                 inline: 1,
