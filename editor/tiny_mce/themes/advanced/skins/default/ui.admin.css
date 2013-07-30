@@ -99,7 +99,9 @@
     border :1px solid #CCC;
     background:#F0F0EE;
 }
-#jce span.mceIcon.mce_paste, #jce span.mceIcon.mce_numlist, #jce span.mceIcon.mce_bullist, 
+/*#jce span.mceIcon.mce_paste,*/ 
+#jce span.mceIcon.mce_numlist, 
+#jce span.mceIcon.mce_bullist, 
 #jce span.mceIcon.mce_forecolor, #jce span.mceIcon.mce_backcolor, #jce span.mceIcon.mce_spellchecker, #jce span.mceIcon.mce_textcase { 
     width : 30px;
 }
