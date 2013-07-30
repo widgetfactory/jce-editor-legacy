@@ -36,9 +36,8 @@ class WFClipboardPlugin extends WFEditorPlugin
 		$document->addStyleSheet(array('clipboard'), 'plugins');
 	}
 	
-	function getSettings()
-	{
-		$settings = array();		
+	public function getSettings($settings = array())
+	{		
 		return parent::getSettings($settings);
 	}
 }
