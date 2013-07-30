@@ -9,76 +9,74 @@
  */
 
 WFMediaPlayer.init({
-    params : {
-        extensions : 'mp3,mp4,flv,f4v',
-        dimensions : {
-            'audio'	: {
-                width 	: 300,
-                height 	: 35
+    params: {
+        extensions: 'mp3,mp4,flv,f4v',
+        dimensions: {
+            'audio': {
+                width: 300,
+                height: 35
             }
         },
-        path : 'media/jce/mediaplayer/mediaplayer.swf'
+        path: 'media/jce/mediaplayer/mediaplayer.swf'
     },
-
-    props : {
-        autoPlay 		: false,
-        controlBarAutoHide 	: true,
-        controlBarMode		: 'docked',
-        loop			: false,
-        muted			: false,
-        playButtonOverlay	: true,
-        bufferingOverlay 	: true,
-        volume			: 1,
-        audioPan		: 0,
-        poster                  : '',
-        endOfVideoOverlay       : '',
-        backgroundColor         : ''
+    props: {
+        autoPlay: false,
+        controlBarAutoHide: true,
+        controlBarMode: 'docked',
+        controlBarAutoHideTimeout : '',
+        loop: false,
+        muted: false,
+        playButtonOverlay: true,
+        bufferingOverlay: true,
+        volume: 1,
+        audioPan: 0,
+        poster: '',
+        endOfVideoOverlay: '',
+        backgroundColor: ''
     },
-
-    type : 'flash',
-
-    setup : function() {
+    type: 'flash',
+    setup: function() {
         // activate slider
-        $('#mediaplayer_volume, #mediaplayer_audioPan').each( function() {
+        $('#mediaplayer_volume, #mediaplayer_audioPan').each(function() {
             var n = this;
 
             $('<span id="' + $(n).attr('id') + '_slider" class="ui-slider-block"></span>').insertAfter(this).slider();
         });
-        $('#mediaplayer_volume').change( function() {
+        $('#mediaplayer_volume').change(function() {
             var v = parseFloat($(this).val());
-			
+
             v = Math.ceil(v);
-			
+
             $('#mediaplayer_volume_slider').slider('value', v);
-			
+
             $(this).val(v);
         });
-		
-        $('#mediaplayer_audioPan').change( function() {
+
+        $('#mediaplayer_audioPan').change(function() {
             $('#mediaplayer_audioPan_slider').slider('value', ($(this).val() * 10) + 20);
         });
-		
+
         $('#mediaplayer_volume_slider').slider('option', {
-            min 	: 0,
-            max	    : 100,
-            step    : 10,
-            value   : $('#mediaplayer_volume').val(),
-            slide 	: function(event, ui) {
+            min: 0,
+            max: 100,
+            step: 10,
+            value: $('#mediaplayer_volume').val(),
+            slide: function(event, ui) {
                 $('#mediaplayer_volume').val(ui.value);
             }
         });
 
         $('#mediaplayer_audioPan_slider').slider('option', {
-            min 	: 10,
-            max	    : 30,
-            step    : 1,
-            value   : ($('#mediaplayer_audioPan').val() * 10) + 20,
-            slide 	: function(event, ui) {
+            min: 10,
+            max: 30,
+            step: 1,
+            value: ($('#mediaplayer_audioPan').val() * 10) + 20,
+            slide: function(event, ui) {
                 $('#mediaplayer_audioPan').val((ui.value - 20) / 10);
             }
         });
     },
-    isSupported : function(data) {
+    isSupported: function(data) {
         var r, file = '', ext = tinymce.explode(this.getParam('extensions')).join('|'), re = new RegExp('\.(' + ext + ')$', 'i');
 
         var src = data.src || data.data || '';
@@ -101,66 +99,66 @@ WFMediaPlayer.init({
         return r;
     },
     /**
-	 * Return player values
-	 * @param {String} s FLV file path
-	 */
+     * Return player values
+     * @param {String} s FLV file path
+     */
     getValues: function(s, args) {
         var self = this, s, u, k, v, data = [];
-		
-        var url = tinyMCEPopup.getParam('document_base_url'); 
-		
+
+        var url = tinyMCEPopup.getParam('document_base_url');
+
         if (!/http(s)?:\/\//.test(s)) {
             s = $.String.path(url, s);
         }
 
         // add src
         data.push('src=' + $.String.encodeURI(s, true));
-        
+
         // set args default
         args = args || {};
 
         // get all form values
-        $(':input', '#mediaplayer_options').each( function() {
+        $(':input', '#mediaplayer_options').each(function() {
             k = $(this).attr('id'), v = $(this).val();
-            
+
             if (k) {
                 // remove mediaplayer_ prefix
                 k = k.substr(k.indexOf('_') + 1);
-                
+
                 // update value if checkbox
                 if ($(this).is(':checkbox')) {
                     v = $(this).is(':checked');
                 }
-                
+
                 if (typeof args[k] == 'undefined') {
                     args[k] = v;
                 }
             }
         });
-        
+
         var map = {
-          'autoplay' : 'autoPlay',
-          'controls' : 'controlBarAutoHide'
+            'autoplay': 'autoPlay',
+            'controls': 'controlBarAutoHide'
         };
-        
+
         // iterate through args
-        $.each(args, function(k, v) {            
+        $.each(args, function(k, v) {
             // must be a string...
             if (typeof k != 'string') {
                 return;
             }
-            
+
             // map HTML5 items
             if (map[k]) {
                 k = map[k];
             }
-            
+
             // skip invalid keys
             if (typeof self.props[k] == 'undefined') {
                 return;
             }
-            
-            switch(k) {
+
+            switch (k) {
                 case 'volume':
                     v = parseInt(v) / 100;
                     break;
@@ -193,22 +191,22 @@ WFMediaPlayer.init({
 
             data.push(k + '=' + $.String.encodeURI(v, true));
         });
-        
+
         return {
-            'src'   : this.getPath(),
-            'type'  : 'application/x-shockwave-flash',
-            'param' : {
-                'flashvars'       : data.join('&'),
-                'allowfullscreen' : true,
-                'wmode'           : 'opaque'
+            'src': this.getPath(),
+            'type': 'application/x-shockwave-flash',
+            'param': {
+                'flashvars': data.join('&'),
+                'allowfullscreen': true,
+                'wmode': 'opaque'
             }
         };
     },
-    parseValues : function(s) {
+    parseValues: function(s) {
         var ed = tinyMCEPopup.editor, data = {}, o = $.String.query(s.replace(/\?/, '&'));
-		
-        $.each(o, function(k, v) {			
-            switch(k) {
+
+        $.each(o, function(k, v) {
+            switch (k) {
                 case 'src' :
                     data['src'] = ed.convertURL(v);
                     break;
@@ -227,7 +225,7 @@ WFMediaPlayer.init({
                     data[k] = v;
                     break;
                 case 'controlBarAutoHide':
-                    v = (v === 'false' || v === '0') ? false : !!v;	
+                    v = (v === 'false' || v === '0') ? false : !!v;
                     data[k] = !v;
                     break;
                 case 'poster':
@@ -243,40 +241,45 @@ WFMediaPlayer.init({
         return data;
     },
     /**
-	 * Set returned player values
-	 * @param {String} fv Flashvars value
-	 * @param {Object} p Parameter Object
-	 */
-    setValues: function(data) {        
+     * Set returned player values
+     * @param {String} fv Flashvars value
+     * @param {Object} p Parameter Object
+     */
+    setValues: function(data) {
         var fv = data.flashvars || data.param.flashvars || '';
         var at = this.parseValues(decodeURIComponent(fv));
 
         $.each(at, function(k, v) {
-            if (k == 'src')
+            if (k == 'src') {
                 return;
+            }
 
             data[k] = v;
         });
-		
+        
+        // flip some values
+        data.controlBarAutoHide = !!data.controlBarAutoHide;
+        
+        // set src
         data.src = at.src;
 
         return data;
     },
     /**
-	 * Action when file selected
-	 */
+     * Action when file selected
+     */
     onSelectFile: function(file) {
         if (file && /\.mp3$/.test(file)) {
             $('#mediaplayer_controlBarMode').val('floating').prop('disabled', true);
         } else {
             $('#mediaplayer_controlBarMode').val('docked').prop('disabled', false);
-        }		
+        }
     },
     /**
-	 * Action when file is inserted.
-	 * Use to set variables for MediaPlayer format
-	 */
-    onInsert : function() {
+     * Action when file is inserted.
+     * Use to set variables for MediaPlayer format
+     */
+    onInsert: function() {
         var src = $('#src').val(), mp3 = /\.mp3$/.test(src), dimensions = this.getParam('dimensions');
 
         if (mp3 && dimensions.audio) {
