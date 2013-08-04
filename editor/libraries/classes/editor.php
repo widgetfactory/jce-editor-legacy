@@ -241,33 +241,44 @@ class WFEditor extends JObject {
 
         if (empty(self::$params[$signature])) {
             wfimport('admin.helpers.extension');
-            // get component
-            $component = WFExtensionHelper::getComponent();
-
+            
+            // get plugin
+            $plugin = WFExtensionHelper::getPlugin();
+            
             // get params data for this profile
             $profile = $this->getProfile($plugin);
 
-            $profile_params = array();
-            $component_params = array();
+            $profile_params  = array();
+            $editor_params   = array();
 
-            if (!empty($component->params)) {
-                $component_params = json_decode($component->params, true);
-                // set null as array
-                if (!$component_params) {
-                    $component_params = array();
+            // get params from editor plugin
+            if ($plugin->params && $plugin->params !== "{}") {
+                $editor_params['editor'] = json_decode($plugin->params, true);
+            } else {
+                // get component
+                $component = WFExtensionHelper::getComponent();
+                
+                // get params from component "params" field (legacy)
+                if ($component->params && $component->params !== "{}") {
+                    $data = json_decode($component->params, true);
+
+                    if (isset($data['editor'])) {
+                        $editor_params['editor'] = $data['editor'];
+                    }
                 }
             }
 
             if ($profile) {
                 $profile_params = json_decode($profile->params, true);
-                // set null as array
-                if (!$profile_params) {
-                    $profile_params = array();
-                }
             }
-
+            
+            // make sure we have an empty array if null or false
+            if (empty($editor_params)) {
+                $editor_params = array();
+            }
+            
             // merge data and convert to json string
-            $data = WFParameter::mergeParams($component_params, $profile_params);
+            $data = WFParameter::mergeParams((array) $editor_params, (array) $profile_params);
 
             self::$params[$signature] = new WFParameter($data, $options['path'], $options['key']);
         }
