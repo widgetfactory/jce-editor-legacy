@@ -1350,10 +1350,12 @@
                             onaction: function(data) {
                                 grid.merge(cell, data.cols, data.rows);
                             },
-                            plugin_url: url
+                            plugin_url: url,
+                            context : "merge"
                         });
-                    } else
+                    } else {
                         grid.merge();
+                    }
                 },
                 mceTableInsertRowBefore: function(grid) {
                     grid.insertRow(true);
@@ -1411,7 +1413,8 @@
                         popup_css: false
                     }, {
                         plugin_url: url,
-                        action: val ? val.action : 0
+                        action: val ? val.action : 0,
+                        context : "table"
                     });
                 },
                 mceTableRowProps: function() {
@@ -1422,7 +1425,8 @@
                         inline: 1,
                         popup_css: false
                     }, {
-                        plugin_url: url
+                        plugin_url: url,
+                        context : "row"
                     });
                 },
                 mceTableCellProps: function() {
@@ -1433,7 +1437,8 @@
                         inline: 1,
                         popup_css: false
                     }, {
-                        plugin_url: url
+                        plugin_url: url,
+                        context : "cell"
                     });
                 }
 

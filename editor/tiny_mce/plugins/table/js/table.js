@@ -3,7 +3,7 @@
 var TableDialog = {
     settings: {},
     init: function() {
-        var self = this, ed = tinyMCEPopup.editor;
+        var self = this, ed = tinyMCEPopup.editor, context = tinyMCEPopup.getWindowArg('context', 'table');
 
         this.html5 = ed.settings.schema == 'html5' && ed.settings.validate;
 
@@ -13,7 +13,7 @@ var TableDialog = {
 
         $.Plugin.init();
 
-        if (this.settings.context == 'merge') {
+        if (context == 'merge') {
             return this.initMerge();
         }
 
@@ -44,7 +44,7 @@ var TableDialog = {
             $('#border').replaceWith('<input type="checkbox" id="border" />');
         }
 
-        switch (this.settings.context) {
+        switch (context) {
             case 'table':
                 this.initTable();
                 break;
@@ -61,7 +61,9 @@ var TableDialog = {
         tinyMCEPopup.resizeToInnerSize();
     },
     insert: function() {
-        switch (this.settings.context) {
+        var context = tinyMCEPopup.getWindowArg('context', 'table');
+        
+        switch (context) {
             case 'table':
                 this.insertTable();
                 break;
