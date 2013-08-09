@@ -474,7 +474,7 @@
                     ui: true
                 });
             }
-            
+
             if (self.pasteText) {
                 ed.addButton('pastetext', {
                     title: 'paste.paste_text_desc',
@@ -500,48 +500,48 @@
             }
         },
         /*createControl: function(n, cm) {
-            var self = this,
-                    ed = self.editor;
-
-            switch (n) {
-                case 'paste':
-                    if (self.pasteHtml && self.pasteText) {
-                        var c = cm.createSplitButton('paste', {
-                            title: 'paste.paste_desc',
-                            onclick: function(e) {
-                                ed.execCommand('mcePaste');
-                            }
-
-                        });
-
-                        c.onRenderMenu.add(function(c, m) {
-                            m.add({
-                                title: 'paste.paste_desc',
-                                icon: 'paste',
-                                onclick: function(e) {
-                                    ed.execCommand('mcePaste');
-                                }
-
-                            });
-
-                            m.add({
-                                title: 'paste.paste_text_desc',
-                                icon: 'pastetext',
-                                onclick: function(e) {
-                                    ed.execCommand('mcePasteText');
-                                }
-
-                            });
-                        });
-
-                        // Return the new splitbutton instance
-                        return c;
-                    }
-                    break;
-            }
-
-            return null;
-        },*/
+         var self = this,
+         ed = self.editor;
+         
+         switch (n) {
+         case 'paste':
+         if (self.pasteHtml && self.pasteText) {
+         var c = cm.createSplitButton('paste', {
+         title: 'paste.paste_desc',
+         onclick: function(e) {
+         ed.execCommand('mcePaste');
+         }
+         
+         });
+         
+         c.onRenderMenu.add(function(c, m) {
+         m.add({
+         title: 'paste.paste_desc',
+         icon: 'paste',
+         onclick: function(e) {
+         ed.execCommand('mcePaste');
+         }
+         
+         });
+         
+         m.add({
+         title: 'paste.paste_text_desc',
+         icon: 'pastetext',
+         onclick: function(e) {
+         ed.execCommand('mcePasteText');
+         }
+         
+         });
+         });
+         
+         // Return the new splitbutton instance
+         return c;
+         }
+         break;
+         }
+         
+         return null;
+         },*/
         getInfo: function() {
             return {
                 longname: 'Paste text/word',
@@ -1060,11 +1060,11 @@
         _convertURLs: function(h) {
             var ex = '([-!#$%&\'\*\+\\./0-9=?A-Z^_`a-z{|}~]+@[-!#$%&\'\*\+\\/0-9=?A-Z^_`a-z{|}~]+\.[-!#$%&\'*+\\./0-9=?A-Z^_`a-z{|}~]+)';
             var ux = '((news|telnet|nttp|file|http|ftp|https)://[-!#$%&\'\*\+\\/0-9=?A-Z^_`a-z{|}~;]+\.[-!#$%&\'\*\+\\./0-9=?A-Z^_`a-z{|}~;]+)';
-            
+
             // find and link url if not already linked
             h = h.replace(new RegExp('(=["\']|>)?' + ux, 'g'), function(a, b, c) {
                 // only if not already a link, ie: b != =" or >
-                if (!b) {                    
+                if (!b) {
                     return '<a href="' + c + '">' + c + '</a>';
                 }
 
@@ -1289,12 +1289,11 @@
                     lastType;
 
             var ULRX = /^(__MCE_LIST_ITEM__)+[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*\u00a0*/;
-            var OLRX = /^(__MCE_LIST_ITEM__)+\(?(\w+)(\.|\))?\s*\u00a0+/;
+            var OLRX = /^(__MCE_LIST_ITEM__)+\(?(\w+)(\.|\))\s*\u00a0+/;
 
             // Convert middot lists into real semantic lists
             each(dom.select('p', node), function(p) {
-                var sib, val = '',
-                        type, html, idx, parents, s, chars, st;
+                var sib, val = '', type = 'ul', html, idx, parents, s, chars, st;
 
                 // Get text node value at beginning of paragraph
                 for (sib = p.firstChild; sib && sib.nodeType == 3; sib = sib.nextSibling) {
@@ -1318,9 +1317,9 @@
 
                     // Detect ordered lists 1., a. or ixv.
                     if (chars && chars != '__MCE_LIST_ITEM__') {
-                        if (/0[1-9]/.test(chars)) {
-                            st = 'decimal-leading-zero';
-                        }
+                        /*if (/0[1-9]/.test(chars)) {
+                         st = 'decimal-leading-zero';
+                         }*/
                         if (/[a-z+?]/.test(chars)) {
                             st = 'lower-alpha';
                         }
