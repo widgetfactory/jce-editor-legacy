@@ -26,13 +26,11 @@ var BrowserDialog = {
 		
         if (src) {
             src = tinyMCEPopup.editor.convertURL(src);
-            action = "update";
+            $('#insert').button('option', 'label', tinyMCEPopup.getLang('update', 'Update', true));
         }
         
         $.Plugin.init();
-
-        $('#insert').button('option', 'label', tinyMCEPopup.getLang('lang_' + action, 'Insert', true));
-		
+	
         if (/(:\/\/|www|index.php(.*)\?option)/gi.test(src)) {
             src = '';	
         }
