@@ -128,7 +128,7 @@ class WFFileSystem extends WFExtension {
                 }
 
                 // Replace any path variables
-                $pattern = array('/\$id/', '/\$username/', '/\$usertype/', '/\$(group|profile)/', '/\$day/', '/\$month/', '/\$year/');
+                $pattern = array('/\$id/', '/\$username/', '/\$user(group|type)/', '/\$(group|profile)/', '/\$day/', '/\$month/', '/\$year/');
                 $replace = array($user->id, $user->username, $usertype, $profile->name, date('d'), date('m'), date('Y'));
                 $root = preg_replace($pattern, $replace, $root);
 
