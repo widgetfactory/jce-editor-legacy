@@ -12,6 +12,7 @@
             width: '100%',
             height: '100%',
             theme: 'textmate',
+            font_size : '',
             load: function() {
             },
             change: function() {
@@ -428,6 +429,14 @@
                     var range = getSelectedRange();
                     cm.autoFormatRange(range.from, range.to);
                 };
+                
+                if (o.font_size) {
+                    if (/[^\D]/.test(o.font_size)) {
+                        o.font_size += 'px';
+                    }
+                    
+                    cm.getWrapperElement().style.fontSize = o.font_size;
+                }
 
                 this.editor = cm;
                 this._loaded(content);

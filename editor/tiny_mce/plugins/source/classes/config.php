@@ -20,6 +20,8 @@ class WFSourcePluginConfig {
         $settings['source_format'] = $wf->getParam('source.foramt', 1, 1, 'boolean');
         $settings['source_tag_closing'] = $wf->getParam('source.tag_closing', 1, 1, 'boolean');
         $settings['source_selection_match'] = $wf->getParam('source.selection_match', 1, 1, 'boolean');
+        
+        $settings['source_font_size'] = $wf->getParam('source.font_size', '', '');
 
         $theme = $wf->getParam('source.theme', 'textmate', 'textmate');
 
