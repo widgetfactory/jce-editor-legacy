@@ -91,7 +91,13 @@ JCEMediaBox = {
 WFPopups.addPopup('jcemediabox', {
     
     params : {
-        'attribute' : 'data-mediabox'
+        'attribute' : 'data-mediabox',
+        'popup_group' : '',
+        'popup_icon': 1,
+        'popup_icon_position' : '',
+        'popup_autopopup' : '',
+        'popup_hide' : 0,
+        'popup_mediatype' : ''
     },
 
     setup : function() {
@@ -111,6 +117,10 @@ WFPopups.addPopup('jcemediabox', {
             $('span.remove', $item).css('display', 'inline-block').click(function() {
                 $item.remove();
             });
+        });
+        
+        $.each(this.params, function (k, v) {                
+            $('#jcemediabox_' + k).val(v);
         });
     },
 
