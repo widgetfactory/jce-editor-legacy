@@ -205,11 +205,7 @@
             // Cleanup callback
             ed.onBeforeSetContent.add(function(ed, o) {
                 // Geshi
-                o.content = o.content.replace(/<pre xml:lang="([^"]+)"([^>]+)>(.*?)<\/pre>/g, function(a, b, c, d) {
-                    var attr = c.split(' ').join(' data-geshi-');
-
-                    return '<pre data-geshi="1" xml:lang="' + b + '"' + attr + '>' + d + '</pre>';
-                });
+                o.content = self.convertFromGeshi(o.content);
 
                 // only if "Cleanup HTML" enabled
                 if (ed.settings.validate) {
@@ -228,20 +224,12 @@
             ed.onPostProcess.add(function(ed, o) {
                 if (o.set) {
                     // Geshi
-                    o.content = o.content.replace(/<pre xml:lang="([^"]+)"([^>]+)>(.*?)<\/pre>/g, function(a, b, c, d) {
-                        var attr = c.split(' ').join(' data-geshi-');
-
-                        return '<pre data-geshi="1" xml:lang="' + b + '"' + attr + '>' + d + '</pre>';
-                    });
+                    o.content = self.convertFromGeshi(o.content);
                 }
                 if (o.get) {
                     // Geshi
-                    o.content = o.content.replace(/<pre([^>]+)data-geshi="1"([^>]*)>(.*?)<\/pre>/g, function(a, b, c, d) {
-                        var s = b + c;
-                        s = s.replace(/data-geshi-/gi, '').replace(/\s+/g, ' ');
+                    o.content = self.convertToGeshi(o.content);
 
-                        return '<pre' + s + '>' + d + '</pre>';
-                    });
                     // Remove empty jcemediabox / jceutilities anchors
                     o.content = o.content.replace(/<a([^>]*)class="jce(box|popup|lightbox|tooltip|_tooltip)"([^>]*)><\/a>/gi, '');
                     // Remove span elements with jcemediabox / jceutilities classes
@@ -288,6 +276,29 @@
                 title: 'advanced.cleanup_desc',
                 cmd: 'mceCleanup'
             });
+        },
+        convertFromGeshi: function(h) {
+            h = h.replace(/<pre xml:lang="([^"]+)"([^>]*)>(.*?)<\/pre>/g, function(a, b, c, d) {
+                var attr = '';
+
+                if (c && /\w/.test(c)) {
+                    attr = c.split(' ').join(' data-geshi-');
+                }
+
+                return '<pre data-geshi-lang="' + b + '"' + attr + '>' + d + '</pre>';
+            });
+
+            return h;
+        },
+        convertToGeshi: function(h) {
+            h = h.replace(/<pre([^>]+)data-geshi-lang="([^"]+)"([^>]*)>(.*?)<\/pre>/g, function(a, b, c, d, e) {
+                var s = b + d;
+                s = s.replace(/data-geshi-/gi, '').replace(/\s+/g, ' ').replace(/\s$/, '');
+
+                return '<pre xml:lang="' + c + '"' + s + '>' + e + '</pre>';
+            });
+
+            return h;
         },
         getInfo: function() {
             return {
