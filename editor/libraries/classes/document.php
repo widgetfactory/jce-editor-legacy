@@ -302,12 +302,14 @@ class WFDocument extends JObject {
         jimport('joomla.filesystem.path');
         $bool = strpos($url, JURI::root()) === false;
         
+        $root = JURI::root($bool);
+
         // return url if it does not contain the base url
-        if (strpos($url, JURI::root($bool)) === false) {
+        if (empty($root) || strpos($url, $root) === false) {
             return $url;
         }
         
-        return WFUtility::makePath(JPATH_SITE, JPath::clean(substr($url, strlen(JURI::root($bool)))));
+        return WFUtility::makePath(JPATH_SITE, JPath::clean(substr($url, strlen($root))));
     }
 
     /**
