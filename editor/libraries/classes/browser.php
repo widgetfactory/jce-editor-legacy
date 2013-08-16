@@ -1409,7 +1409,7 @@ class WFFileBrowser extends JObject {
             'actions' => $this->getActions(),
             'buttons' => $this->getButtons(),
             'upload' => $this->getUploadDefaults(),
-            'tree' => $this->get('folder_tree'),
+            'folder_tree' => $this->get('folder_tree'),
             'listlimit' => $this->get('list_limit'),
             'websafe_mode' => $this->get('websafe_mode'),
             'websafe_spaces' => $this->get('websafe_spaces')
