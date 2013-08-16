@@ -236,14 +236,14 @@ class WFEditor extends JObject {
         if ($plugin) {
             $options['plugin'] = $plugin;
         }
-
+        
         $signature = serialize($options);
 
         if (empty(self::$params[$signature])) {
             wfimport('admin.helpers.extension');
             
             // get plugin
-            $plugin = WFExtensionHelper::getPlugin();
+            $editor_plugin = WFExtensionHelper::getPlugin();
             
             // get params data for this profile
             $profile = $this->getProfile($plugin);
@@ -252,8 +252,8 @@ class WFEditor extends JObject {
             $editor_params   = array();
 
             // get params from editor plugin
-            if ($plugin->params && $plugin->params !== "{}") {
-                $editor_params['editor'] = json_decode($plugin->params, true);
+            if ($editor_plugin->params && $editor_plugin->params !== "{}") {
+                $editor_params['editor'] = json_decode($editor_plugin->params, true);
             } else {
                 // get component
                 $component = WFExtensionHelper::getComponent();
@@ -278,7 +278,7 @@ class WFEditor extends JObject {
             }
             
             // merge data and convert to json string
-            $data = WFParameter::mergeParams((array) $editor_params, (array) $profile_params);
+            $data = WFParameter::mergeParams($editor_params, $profile_params);
 
             self::$params[$signature] = new WFParameter($data, $options['path'], $options['key']);
         }
