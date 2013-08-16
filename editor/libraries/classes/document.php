@@ -307,7 +307,10 @@ class WFDocument extends JObject {
             return $url;
         }
         
-        return WFUtility::makePath(JPATH_SITE, JPath::clean(substr($url, strlen(JURI::root($bool)))));
+        // remove site uri, ie: make relative
+        $url = str_replace(JURI::root($bool), '', $url);
+        
+        return WFUtility::makePath(JPATH_SITE, JPath::clean($url));
     }
 
     /**
