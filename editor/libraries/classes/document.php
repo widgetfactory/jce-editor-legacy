@@ -300,16 +300,15 @@ class WFDocument extends JObject {
      */
     private function urlToPath($url) {
         jimport('joomla.filesystem.path');
-        $bool = strpos($url, JURI::root()) === false;
-        
-        $root = JURI::root($bool);
 
-        // return url if it does not contain the base url
-        if (empty($root) || strpos($url, $root) === false) {
-            return $url;
+        $root = JURI::root(true);
+        
+        // remove root from url
+        if (!empty($root)) {            
+            $url = substr($url, strlen($root));
         }
         
-        return WFUtility::makePath(JPATH_SITE, JPath::clean(substr($url, strlen($root))));
+        return WFUtility::makePath(JPATH_SITE, JPath::clean($url));
     }
 
     /**
@@ -630,8 +629,11 @@ class WFDocument extends JObject {
                     $data = '';
 
                     foreach ($this->getScripts() as $src => $type) {                        
-                        $src .= preg_match('/\.js$/', $src) ? '' : '.js';
-                        $files[] = $this->urlToPath($src);
+                        if (strpos($src, '://') === false && strpos($src, 'index.php') === false) {
+                            $src .= preg_match('/\.js$/', $src) ? '' : '.js';
+                            
+                            $files[] = $this->urlToPath($src);
+                        }
                     }
 
                     // parse ini language files
@@ -652,9 +654,11 @@ class WFDocument extends JObject {
                     break;
                 case 'css':
                     foreach ($this->getStyleSheets() as $style => $type) {
-                        $style .= preg_match('/\.css$/', $style) ? '' : '.css';
-
-                        $files[] = $this->urlToPath($style);
+                        if (strpos($style, '://') === false && strpos($style, 'index.php') === false) {
+                            $style .= preg_match('/\.css$/', $style) ? '' : '.css';
+                            
+                            $files[] = $this->urlToPath($style);
+                        }
                     }
 
                     break;
