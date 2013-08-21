@@ -201,6 +201,9 @@ class WFFormatPluginConfig {
         // quote keys and values
         $string = preg_replace('#\b([\w\s]+)\b#u', '"$1"', $string);
         
+        // convert utf-8 characters
+        $string = htmlentities($string, ENT_NOQUOTES, "UTF-8");
+        
         return $string;
     }
 }
