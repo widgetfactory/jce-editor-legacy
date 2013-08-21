@@ -465,7 +465,7 @@ WFPopups.addPopup('jcemediabox', {
         
         // map object properties to options array
         var props = $.map(data, function(v, k) {
-            return k + '[' + ed.dom.encode(v) + ']';
+            return k + '[' + v + ']';
         });
 
         if (this.params.attribute == 'data-mediabox') {
