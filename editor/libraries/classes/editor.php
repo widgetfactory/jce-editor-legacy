@@ -277,6 +277,11 @@ class WFEditor extends JObject {
                 $editor_params = array();
             }
             
+            // make sure we have an empty array if null or false
+            if (empty($profile_params)) {
+                $profile_params = array();
+            }
+            
             // merge data and convert to json string
             $data = WFParameter::mergeParams($editor_params, $profile_params);
 
