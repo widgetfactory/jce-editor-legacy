@@ -170,6 +170,11 @@ class WFEditorPlugin extends JObject {
 
     public function execute() {
         WFToken::checkToken() or die('Access to this resource is restricted');
+        
+        // load core language
+        WFLanguage::load('com_jce', JPATH_ADMINISTRATOR);
+        // Load Plugin language
+        WFLanguage::load('com_jce_' . trim($this->getName()));
 
         // JSON request or upload action
         if ($this->isRequest()) {
@@ -195,11 +200,6 @@ class WFEditorPlugin extends JObject {
                 $parser->output($data);
             }
 
-            // load core language
-            WFLanguage::load('com_jce', JPATH_ADMINISTRATOR);
-            // Load Plugin language
-            WFLanguage::load('com_jce_' . trim($this->getName()));
-            
             // set default plugin version
             $plugin_version = $this->getPluginVersion();
 
