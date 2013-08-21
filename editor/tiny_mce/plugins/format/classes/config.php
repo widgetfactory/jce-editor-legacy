@@ -138,13 +138,71 @@ class WFFormatPluginConfig {
         //$settings['theme_advanced_default_foreground_color'] = $wf->getParam('editor.theme_advanced_default_foreground_color', '#000000');
         //$settings['theme_advanced_default_background_color'] = $wf->getParam('editor.theme_advanced_default_background_color', '#FFFF00');
 
-        // Styles list
+        // Styles list (legacy)
         $styles = $wf->getParam('editor.theme_advanced_styles', '');
+        
         if ($styles) {
             $settings['theme_advanced_styles'] = implode(';', explode(',', $styles));
         }
+        
+        $custom_styles = $wf->getParam('editor.custom_styles', '');
+        
+        if ($custom_styles) {
+            $styles_regex   = '#^([\w\s]+=[\w]+)$#';
+            $styles         = array();
+            $formats        = array();
+            
+            foreach(explode(';', $custom_styles) as $line) {
+                // remove whitespace
+                $line = trim($line);
+                
+                // don't bother...
+                if (empty($line)) {
+                    continue;
+                }
+                
+                // check for classes
+                if (preg_match($styles_regex, $line)) {
+                    $styles[] = $line;
+                    continue;
+                }
+                
+                // if possible JSON string, eg: {key:value}, clean up and encode
+                if ($line{0} === "{" && $line{strlen($line) - 1} === "}" && strpos($line, ":") !== false) {
+                    // clean JSON string
+                    $line = self::cleanJSON($line);
+                    
+                    if ($line) {
+                        // create json object
+                        $line = json_decode($line);
+
+                        // if its OK, add it
+                        if (!empty($line)) {
+                            $formats[] = $line;
+                        }
+                    }
+                }
+            }
+            
+            if (!empty($styles)) {
+                $settings['theme_advanced_styles'] = implode(';', $styles);
+            }
+            
+            if (!empty($formats)) {
+                $settings['style_formats'] = json_encode($formats);
+            }
+        }
     }
 
+    private static function cleanJSON($string) {
+        // remove " and '
+        $string = str_replace(array('"', "'"), '', $string);
+
+        // quote keys and values
+        $string = preg_replace('#\b([\w\s]+)\b#u', '"$1"', $string);
+        
+        return $string;
+    }
 }
 
 ?>
