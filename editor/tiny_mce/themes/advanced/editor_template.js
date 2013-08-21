@@ -515,7 +515,7 @@
         _importClasses: function(e) {
             var ed = this.editor, ctrl = ed.controlManager.get('styleselect');
 
-            if (ctrl.getLength() == 0) {
+            //if (ctrl.getLength() == 0) {
                 each(this._getClasses(), function(o, idx) {
                     var name = 'style_' + idx, fmt;
 
@@ -535,7 +535,7 @@
                         }
                     });
                 });
-            }
+            //}
         },
         _createStyleSelect: function(n) {
             var t = this, ed = t.editor, ctrlMan = ed.controlManager, ctrl;
