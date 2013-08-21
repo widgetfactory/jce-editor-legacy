@@ -87,7 +87,7 @@ class JoomlalinksWeblinks extends JObject {
                     }
 
                     $items[] = array(
-                        'url' => $url,
+                        'url' => self::route($url),
                         'id' => $id,
                         'name' => $category->title . ' / ' . $category->alias,
                         'class' => 'folder weblink'
@@ -123,7 +123,7 @@ class JoomlalinksWeblinks extends JObject {
                             }
 
                             $items[] = array(
-                                'url' => $url,
+                                'url' => self::route($url),
                                 'id' => $id,
                                 'name' => $category->title . ' / ' . $category->alias,
                                 'class' => 'folder weblink'
@@ -142,7 +142,7 @@ class JoomlalinksWeblinks extends JObject {
                     }
                     
                     $items[] = array(
-                        'id'    => $id,
+                        'id'    => self::route($id),
                         'name'  => $weblink->title . ' / ' . $weblink->alias,
                         'class' => 'file'
                     );
@@ -207,6 +207,16 @@ class JoomlalinksWeblinks extends JObject {
 
         $db->setQuery($query, 0);
         return $db->loadObjectList();
+    }
+    
+    private static function route($url) {
+        $wf = WFEditorPlugin::getInstance();
+        
+        if ($wf->getParam('links.joomlalinks.sef_url', 0)) {
+            $url = WFLinkExtension::route($url);
+        }
+        
+        return $url;
     }
 
 }

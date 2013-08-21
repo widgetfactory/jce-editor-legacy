@@ -118,7 +118,7 @@ class JoomlalinksMenu extends JObject {
 
                     $items[] = array(
                         'id' => $children ? 'index.php?option=com_menu&view=menu&id=' . $menu->id : $link,
-                        'url' => $link,
+                        'url' => self::route($link),
                         'name' => $title . ' / ' . $menu->alias,
                         'class' => implode(' ', $class)
                     );
@@ -145,7 +145,7 @@ class JoomlalinksMenu extends JObject {
                     }
 
                     $items[] = array(
-                        'id' => $link,
+                        'id' => self::route($link),
                         'name' => $title . ' / ' . $menu->alias,
                         'class' => $children ? 'folder menu' : 'file'
                     );
@@ -314,6 +314,16 @@ class JoomlalinksMenu extends JObject {
 
         $db->setQuery($query, 0);
         return $db->loadObjectList();
+    }
+    
+    private static function route($url) {
+        $wf = WFEditorPlugin::getInstance();
+        
+        if ($wf->getParam('links.joomlalinks.sef_url', 0)) {
+            $url = WFLinkExtension::route($url);
+        }
+        
+        return $url;
     }
 
 }
