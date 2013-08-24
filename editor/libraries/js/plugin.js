@@ -680,41 +680,56 @@
                 // show error
                 $.Dialog.alert(txt);
             }
+            /**
+             * Test if valid JSON string
+             * https://github.com/douglascrockford/JSON-js/blob/master/json2.js
+             * @param {string} s
+             * @return {boolean}
+             */
+            function isJSON(s) {
+                return /^[\],:{}\s]*$/
+                    .test(s.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@')
+                    .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
+                    .replace(/(?:^|:|,)(?:\s*\[)+/g, ''));
+            }
 
             $.JSON.queue({
                 context: scope || this,
                 type: 'POST',
                 url: url,
                 data: 'json=' + $.JSON.serialize(json) + '&' + $.param(args),
-                //dataType: 'text',
+                dataType: 'text',
                 success: function(o) {
-                    // check result - should be object, parse as JSON if string
-                    if ($.type(o) == 'string') {
-                        // parse string as JSON object
-                        var s = $.parseJSON(o);
-                        // pass if successful
-                        if (s) {
-                            o = s;
-                        }
-                    }
-
-                    // process object result
-                    if ($.isPlainObject(o)) {
-                        if (o.error) {
-                            showError(o.text || o.error || '');
+                    var r;
+                    
+                    if (o) {
+                        // check result - should be object, parse as JSON if string
+                        if ($.type(o) == 'string' && isJSON(o)) {
+                            // parse string as JSON object
+                            var s = $.parseJSON(o);
+                            // pass if successful
+                            if (s) {
+                                o = s;
+                            }
                         }
 
-                        var r = o.result || null;
+                        // process object result
+                        if ($.isPlainObject(o)) {
+                            if (o.error) {
+                                showError(o.text || o.error || '');
+                            }
 
-                        if (r && r.error && r.error.length) {
-                            showError(r.error);
-                        }
-                        // show error
-                    } else {
-                        if (o) {
+                            r = o.result || null;
+
+                            if (r && r.error && r.error.length) {
+                                showError(r.error);
+                            }
+                            // show error
+                        } else {
                             showError(o);
                         }
-                        return false;
+                    } else {
+                        o = {'error' : ''};
                     }
 
                     if ($.isFunction(callback)) {
