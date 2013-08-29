@@ -30,7 +30,6 @@
         function removeVars(val) {
             return val.replace(/%(\w+)/g, '');
         }
-        ;
 
         // Create block/inline element to use for preview
         name = fmt.block || fmt.inline || 'span';
@@ -516,25 +515,27 @@
             var ed = this.editor, ctrl = ed.controlManager.get('styleselect');
 
             //if (ctrl.getLength() == 0) {
-                each(this._getClasses(), function(o, idx) {
-                    var name = 'style_' + idx, fmt;
+            var counter = Math.max(ctrl.getLength() - 1, 0);
 
-                    fmt = {
-                        inline: 'span',
-                        attributes: {
-                            'class': o['class']
-                        },
-                        selector: '*'
-                    };
+            each(this._getClasses(), function(o, idx) {
+                var name = 'style_' + counter + idx, fmt;
 
-                    ed.formatter.register(name, fmt);
+                fmt = {
+                    inline: 'span',
+                    attributes: {
+                        'class': o['class']
+                    },
+                    selector: '*'
+                };
 
-                    ctrl.add(o['class'], name, {
-                        style: function() {
-                            return getPreviewCss(ed, fmt);
-                        }
-                    });
+                ed.formatter.register(name, fmt);
+
+                ctrl.add(o['class'], name, {
+                    style: function() {
+                        return getPreviewCss(ed, fmt);
+                    }
                 });
+            });
             //}
         },
         _createStyleSelect: function(n) {
@@ -840,27 +841,6 @@
 
             return c;
         },
-        /*_createCharMap : function(cf) {
-         var ed = this.editor;
-         
-         var c = new tinymce.ui.ButtonDialog(cf.prefix + 'charmap', {
-         title   : ed.getLang('advanced.charmap_desc'),
-         'class' : 'mce_charmap',
-         url     : this.url + '/charmap.htm',
-         width   : 550 + parseInt(ed.getLang('advanced.charmap_delta_width', 0))
-         }, ed);
-         
-         ed.onMouseDown.add(c.hideDialog, c);
-         
-         // Remove the menu element when the editor is removed
-         ed.onRemove.add(function() {
-         c.destroy();
-         });
-         
-         cf.add(c);
-         
-         return c;
-         },*/
 
         renderUI: function(o) {
             var n, ic, tb, t = this, ed = t.editor, s = t.settings, sc, p, nl;
@@ -1318,7 +1298,6 @@
 
                             t.resizeTo(width, height);
                         }
-                        ;
 
                         function endResize(e) {
                             // Stop listening
@@ -1333,7 +1312,6 @@
 
                             ed.nodeChanged();
                         }
-                        ;
 
                         e.preventDefault();
 
@@ -1383,20 +1361,10 @@
                         return parents[i];
                 }
             }
-            ;
 
             cm.setActive('visualaid', ed.hasVisual);
             t._updateUndoStatus(ed);
             cm.setDisabled('outdent', !ed.queryCommandState('Outdent'));
-
-            // WFEDITOR - Remove Link NodeChange event
-
-            /*if (c = cm.get('link')) {
-             if (!p || !p.name) {
-             c.setDisabled(!p && co);
-             c.setActive(!!p);
-             }
-             }*/
 
             var link = getParent('A');
             var img = getParent('IMG');
@@ -1410,14 +1378,10 @@
                 c.setActive(isLink(link));
             }
 
-            /*p = getParent('IMG');
-             
-             if (c = cm.get('image'))
-             c.setActive(!co && !!p && n.className.indexOf('mceItem') == -1);*/
-
             if (c = cm.get('styleselect')) {
-                t._importClasses();
-
+                if (c.getLength() === 0) {
+                    t._importClasses();
+                }
                 formatNames = [];
                 each(c.items, function(item) {
                     formatNames.push(item.value);

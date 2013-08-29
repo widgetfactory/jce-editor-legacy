@@ -78,13 +78,13 @@ class WFFormatPluginConfig {
             'div_container' => 'advanced.div_container'
         );
 
-        $html5      = array('section', 'article', 'hgroup', 'aside', 'figure');
-        $schema     = $wf->getParam('editor.schema', 'html4');
-        $verify     = (bool) $wf->getParam('editor.verify_html', 0);
+        $html5 = array('section', 'article', 'hgroup', 'aside', 'figure');
+        $schema = $wf->getParam('editor.schema', 'html4');
+        $verify = (bool) $wf->getParam('editor.verify_html', 0);
 
-        $tmpblocks  = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,hgroup,aside,figure,dt,dd', 'p,address,pre,h1,h2,h3,h4,h5,h6');
-        $list       = array();
-        $blocks     = array();
+        $tmpblocks = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,hgroup,aside,figure,dt,dd', 'p,address,pre,h1,h2,h3,h4,h5,h6');
+        $list = array();
+        $blocks = array();
 
         // make an array
         if (is_string($tmpblocks)) {
@@ -104,7 +104,7 @@ class WFFormatPluginConfig {
             }
 
             $blocks[] = $v;
-            
+
             if ($v == 'div') {
                 $list['advanced.div_container'] = 'div_container';
             }
@@ -137,75 +137,67 @@ class WFFormatPluginConfig {
         $settings['theme_advanced_font_sizes'] = $wf->getParam('editor.theme_advanced_font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');
         //$settings['theme_advanced_default_foreground_color'] = $wf->getParam('editor.theme_advanced_default_foreground_color', '#000000');
         //$settings['theme_advanced_default_background_color'] = $wf->getParam('editor.theme_advanced_default_background_color', '#FFFF00');
-
         // Styles list (legacy)
         $styles = $wf->getParam('editor.theme_advanced_styles', '');
-        
+
         if ($styles) {
             $settings['theme_advanced_styles'] = implode(';', explode(',', $styles));
         }
-        
-        $custom_styles = $wf->getParam('editor.custom_styles', '');
-        
-        if ($custom_styles) {
-            $styles_regex   = '#^([\w\s]+=[\w]+)$#';
-            $styles         = array();
-            $formats        = array();
-            
-            foreach(explode(';', $custom_styles) as $line) {
-                // remove whitespace
-                $line = trim($line);
-                
-                // don't bother...
-                if (empty($line)) {
-                    continue;
-                }
-                
-                // check for classes
-                if (preg_match($styles_regex, $line)) {
-                    $styles[] = $line;
-                    continue;
-                }
-                
-                // if possible JSON string, eg: {key:value}, clean up and encode
-                if ($line{0} === "{" && $line{strlen($line) - 1} === "}" && strpos($line, ":") !== false) {
-                    // clean JSON string
-                    $line = self::cleanJSON($line);
-                    
-                    if ($line) {
-                        // create json object
-                        $line = json_decode($line);
 
-                        // if its OK, add it
-                        if (!empty($line)) {
-                            $formats[] = $line;
-                        }
-                    }
+        $custom_styles = json_decode($wf->getParam('editor.custom_styles', ''));
+
+        if (!empty($custom_styles)) {
+            $styles = array();
+
+            $blocks = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'div', 'address', 'pre', 'blockquote', 'center', 'dir', 'fieldset', 'header', 'footer', 'article', 'section', 'hgroup', 'aside', 'nav', 'figure');
+
+            foreach ((array) $custom_styles as $style) {
+                if (isset($style->styles)) {
+                    $style->styles = self::cleanJSON($style->styles);
                 }
+
+                if (isset($style->element)) {
+                    if (in_array($style->element, $blocks)) {
+                        $style->block   = $style->element;
+                    } else {
+                        $style->inline  = $style->element;
+                    }
+
+                    unset($style->element);
+                }
+
+                $styles[] = $style;
             }
-            
+
             if (!empty($styles)) {
-                $settings['theme_advanced_styles'] = implode(';', $styles);
-            }
-            
-            if (!empty($formats)) {
-                $settings['style_formats'] = json_encode($formats);
+                $settings['style_formats'] = htmlentities(json_encode($styles), ENT_NOQUOTES, "UTF-8");
             }
         }
     }
 
-    private static function cleanJSON($string) {
-        // remove " and '
-        $string = str_replace(array('"', "'"), '', $string);
+    protected static function cleanJSON($string, $delim = ";") {
+        $ret = array();
+        
+        foreach (explode($delim, $string) as $item) {
+            $item = trim($item);
 
-        // quote keys and values
-        $string = preg_replace('#\b([\w\s]+)\b#u', '"$1"', $string);
+            // split style at colon
+            $parts = explode(":", $item);
+            
+            if (count($parts) < 2) {
+                continue;
+            }
+            
+            // cleanup string
+            $parts = preg_replace('#^["\']#', '', $parts);
+            $parts = preg_replace('#["\']$#', '', $parts);
+
+            $ret[trim($parts[0])] = trim($parts[1]);
+        }
         
-        // convert utf-8 characters
-        $string = htmlentities($string, ENT_NOQUOTES, "UTF-8");
-        
-        return $string;
+        return $ret;
     }
+
 }
 
 ?>
