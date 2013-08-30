@@ -82,9 +82,16 @@ class WFFormatPluginConfig {
         $schema = $wf->getParam('editor.schema', 'html4');
         $verify = (bool) $wf->getParam('editor.verify_html', 0);
 
-        $tmpblocks = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,hgroup,aside,figure,dt,dd', 'p,address,pre,h1,h2,h3,h4,h5,h6');
-        $list = array();
-        $blocks = array();
+        // legacy blockformats
+        $blockformats   = $wf->getParam('editor.theme_advanced_blockformats');
+        
+        if (empty($blockformats)) {
+            $blockformats = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,hgroup,aside,figure,dt,dd';
+        }
+        
+        $tmpblocks      = $wf->getParam('editor.blockformats', $blockformats, 'p,address,pre,h1,h2,h3,h4,h5,h6');
+        $list           = array();
+        $blocks         = array();
 
         // make an array
         if (is_string($tmpblocks)) {
@@ -131,12 +138,26 @@ class WFFormatPluginConfig {
         if ($settings['relative_urls'] == 0) {
             $settings['remove_script_host'] = false;
         }
+        
+        $fonts = $wf->getParam('editor.fonts');
+        
+        if (!empty($fonts)) {
+            $list = array();
+            
+            foreach(json_decode($fonts, true) as $k => $v) {
+                $list[] = $k . '=' . $v;
+            }
+            
+            $fonts = implode(';', $list);
+            
+        } else {
+            $fonts = self::getFonts();
+        }
 
         // Fonts
-        $settings['theme_advanced_fonts'] = $model->getEditorFonts($wf->getParam('editor.theme_advanced_fonts_add', ''), $wf->getParam('editor.theme_advanced_fonts_remove', ''));
-        $settings['theme_advanced_font_sizes'] = $wf->getParam('editor.theme_advanced_font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');
-        //$settings['theme_advanced_default_foreground_color'] = $wf->getParam('editor.theme_advanced_default_foreground_color', '#000000');
-        //$settings['theme_advanced_default_background_color'] = $wf->getParam('editor.theme_advanced_default_background_color', '#FFFF00');
+        $settings['theme_advanced_fonts']       = $fonts;
+        $settings['theme_advanced_font_sizes']  = $wf->getParam('editor.theme_advanced_font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');
+
         // Styles list (legacy)
         $styles = $wf->getParam('editor.theme_advanced_styles', '');
 
@@ -196,6 +217,44 @@ class WFFormatPluginConfig {
         }
         
         return $ret;
+    }
+    
+    /**
+     * Get a list of editor font families
+     *
+     * @return string font family list
+     * @param string $add Font family to add
+     * @param string $remove Font family to remove
+     */
+    protected static function getFonts() {
+        $wf = WFEditor::getInstance();
+
+        $add    = explode(';', $wf->getParam('editor.theme_advanced_fonts_add', ''));
+        $remove = preg_split('/[;,]+/', $wf->getParam('editor.theme_advanced_fonts_remove', ''));
+
+        // Default font list
+        $fonts = array('Andale Mono=andale mono,times', 'Arial=arial,helvetica,sans-serif', 'Arial Black=arial black,avant garde', 'Book Antiqua=book antiqua,palatino', 'Comic Sans MS=comic sans ms,sans-serif', 'Courier New=courier new,courier', 'Georgia=georgia,palatino', 'Helvetica=helvetica', 'Impact=impact,chicago', 'Symbol=symbol', 'Tahoma=tahoma,arial,helvetica,sans-serif', 'Terminal=terminal,monaco', 'Times New Roman=times new roman,times', 'Trebuchet MS=trebuchet ms,geneva', 'Verdana=verdana,geneva', 'Webdings=webdings', 'Wingdings=wingdings,zapf dingbats');
+
+        if (count($remove)) {
+            foreach ($fonts as $key => $value) {
+                foreach ($remove as $gone) {
+                    if ($gone) {
+                        if (preg_match('/^' . $gone . '=/i', $value)) {
+                            // Remove family
+                            unset($fonts[$key]);
+                        }
+                    }
+                }
+            }
+        }
+        foreach ($add as $new) {
+            // Add new font family
+            if (preg_match('/([^\=]+)(\=)([^\=]+)/', trim($new)) && !in_array($new, $fonts)) {
+                $fonts[] = $new;
+            }
+        }
+        natcasesort($fonts);
+        return implode(';', $fonts);
     }
 
 }
