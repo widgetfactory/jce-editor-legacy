@@ -35,7 +35,7 @@
         <!--param name="theme_advanced_styles" type="text" size="100" default="" label="WF_PARAM_STYLES" description="WF_PARAM_STYLES_DESC" placeholder="eg: Style1=style1,Style2=style2,Style3=style3" /-->
         <param name="custom_styles" type="styleformat" default="" label="WF_PARAM_CUSTOM_STYLES" description="WF_PARAM_CUSTOM_STYLES_DESC" parent="profile_content_css[0,1]" />
         <!-- Formatting parameters -->
-        <param name="blockformats" type="blockformats" default="" label="WF_PARAM_BLOCK_FORMAT" description="WF_PARAM_BLOCK_FORMAT_DESC"/>
+        <param name="theme_advanced_blockformats" type="blockformats" default="" label="WF_PARAM_BLOCK_FORMAT" description="WF_PARAM_BLOCK_FORMAT_DESC"/>
         <param name="fonts" type="fonts" default="" label="WF_PARAM_FONTS" description="WF_PARAM_FONTS_DESC" />
         
         <!--param name="theme_advanced_fonts_add" type="text" size="100" default="" label="WF_PARAM_FONT_ADD" description="WF_PARAM_FONT_ADD_DESC" placeholder="eg: Arial=arial,helvetica,sans-serif;Georgia=georgia,palatino" />
