@@ -11,6 +11,32 @@
  */
 class WFFormatPluginConfig {
 
+    protected static $fonts = array('Andale Mono=andale mono,times', 'Arial=arial,helvetica,sans-serif', 'Arial Black=arial black,avant garde', 'Book Antiqua=book antiqua,palatino', 'Comic Sans MS=comic sans ms,sans-serif', 'Courier New=courier new,courier', 'Georgia=georgia,palatino', 'Helvetica=helvetica', 'Impact=impact,chicago', 'Symbol=symbol', 'Tahoma=tahoma,arial,helvetica,sans-serif', 'Terminal=terminal,monaco', 'Times New Roman=times new roman,times', 'Trebuchet MS=trebuchet ms,geneva', 'Verdana=verdana,geneva', 'Webdings=webdings', 'Wingdings=wingdings,zapf dingbats');
+    protected static $formats = array(
+        'p' => 'advanced.paragraph',
+        'address' => 'advanced.address',
+        'pre' => 'advanced.pre',
+        'h1' => 'advanced.h1',
+        'h2' => 'advanced.h2',
+        'h3' => 'advanced.h3',
+        'h4' => 'advanced.h4',
+        'h5' => 'advanced.h5',
+        'h6' => 'advanced.h6',
+        'div' => 'advanced.div',
+        'blockquote' => 'advanced.blockquote',
+        'code' => 'advanced.code',
+        'samp' => 'advanced.samp',
+        'span' => 'advanced.span',
+        'section' => 'advanced.section',
+        'article' => 'advanced.article',
+        'hgroup' => 'advanced.hgroup',
+        'aside' => 'advanced.aside',
+        'figure' => 'advanced.figure',
+        'dt' => 'advanced.dt',
+        'dd' => 'advanced.dd',
+        'div_container' => 'advanced.div_container'
+    );
+
     public static function getConfig(&$settings) {
         wfimport('admin.models.editor');
         $model = new WFModelEditor();
@@ -53,53 +79,26 @@ class WFFormatPluginConfig {
 
         $settings['removeformat_selector'] = $wf->getParam('editor.removeformat_selector', 'span,b,strong,em,i,font,u,strike', 'span,b,strong,em,i,font,u,strike');
 
-        $formats = array(
-            'p' => 'advanced.paragraph',
-            'address' => 'advanced.address',
-            'pre' => 'advanced.pre',
-            'h1' => 'advanced.h1',
-            'h2' => 'advanced.h2',
-            'h3' => 'advanced.h3',
-            'h4' => 'advanced.h4',
-            'h5' => 'advanced.h5',
-            'h6' => 'advanced.h6',
-            'div' => 'advanced.div',
-            'blockquote' => 'advanced.blockquote',
-            'code' => 'advanced.code',
-            'samp' => 'advanced.samp',
-            'span' => 'advanced.span',
-            'section' => 'advanced.section',
-            'article' => 'advanced.article',
-            'hgroup' => 'advanced.hgroup',
-            'aside' => 'advanced.aside',
-            'figure' => 'advanced.figure',
-            'dt' => 'advanced.dt',
-            'dd' => 'advanced.dd',
-            'div_container' => 'advanced.div_container'
-        );
-
-        $html5 = array('section', 'article', 'hgroup', 'aside', 'figure');
+        // html5 block elements
+        $html5  = array('section', 'article', 'hgroup', 'aside', 'figure');
+        // get current schema
         $schema = $wf->getParam('editor.schema', 'html4');
         $verify = (bool) $wf->getParam('editor.verify_html', 0);
 
-        // legacy blockformats
-        $blockformats   = $wf->getParam('editor.theme_advanced_blockformats');
-        
-        if (empty($blockformats)) {
-            $blockformats = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,hgroup,aside,figure,dt,dd';
-        }
-        
-        $tmpblocks      = $wf->getParam('editor.blockformats', $blockformats, 'p,address,pre,h1,h2,h3,h4,h5,h6');
-        $list           = array();
-        $blocks         = array();
+        // get blockformats from parameter
+        $blockformats = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,hgroup,aside,figure,dt,dd', 'p,address,pre,h1,h2,h3,h4,h5,h6');
+
+        $list       = array();
+        $blocks     = array();
 
         // make an array
-        if (is_string($tmpblocks)) {
-            $tmpblocks = explode(',', $tmpblocks);
+        if (is_string($blockformats)) {
+            $blockformats = explode(',', $blockformats);
         }
-
-        foreach ($tmpblocks as $v) {
-            $key = $formats[$v];
+        
+        // create label / value list using default
+        foreach ($blockformats as $v) {
+            $key = self::$formats[$v];
 
             // skip html5 blocks for html4 schema
             if ($verify && $schema == 'html4' && in_array($v, $html5)) {
@@ -117,7 +116,7 @@ class WFFormatPluginConfig {
             }
         }
 
-        $selector = $settings['removeformat_selector'] == '' ? 'span,b,strong,em,i,font,u,strike' : $settings['removeformat_selector'];
+        $selector = empty($settings['removeformat_selector']) ? 'span,b,strong,em,i,font,u,strike' : $settings['removeformat_selector'];
         $selector = explode(',', $selector);
 
         // set the root block
@@ -138,25 +137,24 @@ class WFFormatPluginConfig {
         if ($settings['relative_urls'] == 0) {
             $settings['remove_script_host'] = false;
         }
-        
+
         $fonts = $wf->getParam('editor.fonts');
-        
+
         if (!empty($fonts)) {
             $list = array();
-            
-            foreach(json_decode($fonts, true) as $k => $v) {
+
+            foreach (json_decode($fonts, true) as $k => $v) {
                 $list[] = $k . '=' . $v;
             }
-            
+
             $fonts = implode(';', $list);
-            
         } else {
             $fonts = self::getFonts();
         }
 
         // Fonts
-        $settings['theme_advanced_fonts']       = $fonts;
-        $settings['theme_advanced_font_sizes']  = $wf->getParam('editor.theme_advanced_font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');
+        $settings['theme_advanced_fonts'] = $fonts;
+        $settings['theme_advanced_font_sizes'] = $wf->getParam('editor.theme_advanced_font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');
 
         // Styles list (legacy)
         $styles = $wf->getParam('editor.theme_advanced_styles', '');
@@ -179,9 +177,9 @@ class WFFormatPluginConfig {
 
                 if (isset($style->element)) {
                     if (in_array($style->element, $blocks)) {
-                        $style->block   = $style->element;
+                        $style->block = $style->element;
                     } else {
-                        $style->inline  = $style->element;
+                        $style->inline = $style->element;
                     }
 
                     unset($style->element);
@@ -198,27 +196,27 @@ class WFFormatPluginConfig {
 
     protected static function cleanJSON($string, $delim = ";") {
         $ret = array();
-        
+
         foreach (explode($delim, $string) as $item) {
             $item = trim($item);
 
             // split style at colon
             $parts = explode(":", $item);
-            
+
             if (count($parts) < 2) {
                 continue;
             }
-            
+
             // cleanup string
             $parts = preg_replace('#^["\']#', '', $parts);
             $parts = preg_replace('#["\']$#', '', $parts);
 
             $ret[trim($parts[0])] = trim($parts[1]);
         }
-        
+
         return $ret;
     }
-    
+
     /**
      * Get a list of editor font families
      *
@@ -229,30 +227,35 @@ class WFFormatPluginConfig {
     protected static function getFonts() {
         $wf = WFEditor::getInstance();
 
-        $add    = explode(';', $wf->getParam('editor.theme_advanced_fonts_add', ''));
-        $remove = preg_split('/[;,]+/', $wf->getParam('editor.theme_advanced_fonts_remove', ''));
+        $add = $wf->getParam('editor.theme_advanced_fonts_add');
+        $remove = $wf->getParam('editor.theme_advanced_fonts_remove');
 
         // Default font list
-        $fonts = array('Andale Mono=andale mono,times', 'Arial=arial,helvetica,sans-serif', 'Arial Black=arial black,avant garde', 'Book Antiqua=book antiqua,palatino', 'Comic Sans MS=comic sans ms,sans-serif', 'Courier New=courier new,courier', 'Georgia=georgia,palatino', 'Helvetica=helvetica', 'Impact=impact,chicago', 'Symbol=symbol', 'Tahoma=tahoma,arial,helvetica,sans-serif', 'Terminal=terminal,monaco', 'Times New Roman=times new roman,times', 'Trebuchet MS=trebuchet ms,geneva', 'Verdana=verdana,geneva', 'Webdings=webdings', 'Wingdings=wingdings,zapf dingbats');
+        $fonts = self::$fonts;
+
+        if (empty($remove) && empty($add)) {
+            return "";
+        }
+
+        $remove = preg_split('/[;,]+/', $remove);
 
         if (count($remove)) {
             foreach ($fonts as $key => $value) {
                 foreach ($remove as $gone) {
-                    if ($gone) {
-                        if (preg_match('/^' . $gone . '=/i', $value)) {
-                            // Remove family
-                            unset($fonts[$key]);
-                        }
+                    if ($gone && preg_match('/^' . $gone . '=/i', $value)) {
+                        // Remove family
+                        unset($fonts[$key]);
                     }
                 }
             }
         }
-        foreach ($add as $new) {
+        foreach (explode(";", $add) as $new) {
             // Add new font family
             if (preg_match('/([^\=]+)(\=)([^\=]+)/', trim($new)) && !in_array($new, $fonts)) {
                 $fonts[] = $new;
             }
         }
+
         natcasesort($fonts);
         return implode(';', $fonts);
     }
