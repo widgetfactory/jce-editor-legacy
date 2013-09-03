@@ -278,11 +278,7 @@
                 items: '#item-list li.file',
                 clear: $('span.search-icon', '#searchbox'),
                 filter: '#item-list li',
-                onFilter: function(e, s, cb, scope) {
-                    if (s == '.') {
-                        return;
-                    }
-
+                onFilter: function(e, s, cb, scope) {                    
                     if ($('#browser-list-limit-select').val() == 'all') {
                         return $(this).listFilter('filter', s);
                     }

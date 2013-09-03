@@ -12,14 +12,14 @@
 
     $.widget("ui.listFilter", {
         options: {
-            list        : null,
-            items       : null,
-            clear       : null,
-            sort        : null,
-            hide        : false,
-            filter      : null,
-            onFilter    : null,
-            onFind      : null
+            list: null,
+            items: null,
+            clear: null,
+            sort: null,
+            hide: false,
+            filter: null,
+            onFilter: null,
+            onFind: null
         },
         working: false,
         _init: function() {
@@ -41,17 +41,20 @@
             $(el).keyup(function(e) {
                 var v = this.value;
 
-                if (v) {
-                    if (!$(this).hasClass('working')) {
-                        // set working state
-                        $(this).addClass('working');
-                        // wait to collect input...
-                        window.setTimeout(function() {
-                            self._find(v, e);
-                        }, 500);
+                if (v ) {
+                    if (v !== ".") {
+                        if (!$(this).hasClass('working')) {
+                            // set working state
+                            $(this).addClass('working');
+                            // wait to collect input...
+                            window.setTimeout(function() {
+                                self._find(v, e);
+                            }, 500);
+                        }
                     }
                 } else {
                     $(self.options.clear).click();
+                    $(this).removeClass('working');
                 }
             });
         },
@@ -96,7 +99,7 @@
             } else {
                 this.reset();
             }
-            
+
             this._found(x);
         },
         _found: function(x) {
