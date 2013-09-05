@@ -13,12 +13,10 @@
  */
 JCEMediaBox = {
     Popup: {
-
         /**
          * Addons object
          */
         addons: {},
-
         /**
          * Set Addons
          * @param {String} n Addon name
@@ -30,7 +28,6 @@ JCEMediaBox = {
             }
             $.extend(this.addons[n], o);
         },
-
         /**
          * Get all addons
          * @param {String} n Optional addon name
@@ -42,7 +39,6 @@ JCEMediaBox = {
 
             return this.addons;
         },
-
         /**
          * Get / Test an addon object
          * @param {Object} v
@@ -55,8 +51,8 @@ JCEMediaBox = {
 
             $.each(addons, function(addon, o) {
                 var fn = o[addon] ||
-                function() {
-                };
+                        function() {
+                        };
 
                 r = fn.call(this, v);
                 if (typeof r != 'undefined') {
@@ -69,7 +65,6 @@ JCEMediaBox = {
         }
 
     },
-
     /**
      * Utility function to trim whitespace from a string
      * @param {String} s
@@ -77,35 +72,32 @@ JCEMediaBox = {
     trim: function(s) {
         return $.trim(s);
     },
-
     /**
      * Set proportianl dimension calculations
      * @param {String} w Width
      * @param {String} h Height
      */
-    setDimensions : function(w, h) {
+    setDimensions: function(w, h) {
         $.Plugin.setDimensions(w, h, 'jcemediabox_popup_');
     }
 
 };
 WFPopups.addPopup('jcemediabox', {
-    
-    params : {
-        'attribute' : 'data-mediabox',
-        'popup_group' : '',
+    params: {
+        'attribute': 'data-mediabox',
+        'popup_group': '',
         'popup_icon': 1,
-        'popup_icon_position' : '',
-        'popup_autopopup' : '',
-        'popup_hide' : 0,
-        'popup_mediatype' : ''
+        'popup_icon_position': '',
+        'popup_autopopup': '',
+        'popup_hide': 0,
+        'popup_mediatype': ''
     },
-
-    setup : function() {
+    setup: function() {
         var self = this;
         $('#jcemediabox_popup_icon').change(function() {
             self.setIcon();
         });
-    	
+
         $('span.add', '#jcemediabox_popup_params').click(function() {
             // clone item
             var $item = $('li:first', '#jcemediabox_popup_params').clone().appendTo('#jcemediabox_popup_params');
@@ -113,17 +105,16 @@ WFPopups.addPopup('jcemediabox', {
             $('input', $item).val('');
             // add remove button action
             $('span.add', $item).hide();
-    		
+
             $('span.remove', $item).css('display', 'inline-block').click(function() {
                 $item.remove();
             });
         });
-        
-        $.each(this.params, function (k, v) {                
+
+        $.each(this.params, function(k, v) {
             $('#jcemediabox_' + k).val(v);
         });
     },
-
     /**
      * Check if node is a JCE MediaBox popup
      * @param {Object} n Element
@@ -131,7 +122,6 @@ WFPopups.addPopup('jcemediabox', {
     check: function(n) {
         return /jce(popup|_popup|lightbox)/.test(n.className);
     },
-
     /**
      * Get the MIME Type from a media type value
      * @param {Object} mt Media type value
@@ -193,7 +183,21 @@ WFPopups.addPopup('jcemediabox', {
 
         return mt || n.type || '';
     },
-
+    getImageType: function(s) {
+        // get extension
+        var e = /\.(jp(eg|g)|png|bmp|gif|tiff)$/.exec(s);
+        
+        if (e) {
+            if (e[1] === "jpg") {
+                e[1] = "jpeg";
+            }
+            
+            return "image/" + e[1];
+        }
+        
+        // use jpeg as default
+        return "image/jpeg";
+    },
     /**
      * Clean a link of popup attributes (does not clean rel attribute)
      * @param {Object} n
@@ -205,36 +209,35 @@ WFPopups.addPopup('jcemediabox', {
         $.each(['jcepopup', 'jcelightbox', 'jcebox', 'icon-left', 'icon-right', 'icon-top-left', 'icon-top-right', 'icon-bottom-left', 'icon-bottom-right', 'noicon', 'noshow', 'autopopup-single', 'autopopup-multiple'], function(i, v) {
             ed.dom.removeClass(n, v);
         });
-        
+
         // remove data attribute
         ed.dom.setAttrib(n, 'data-mediabox', '');
     },
-
     /**
      * Convert parameter string to JSON object
      */
-    convertData : function(s) {
+    convertData: function(s) {
         var a = [];
-        
+
         function trim(s) {
             // trim
             return s.replace(/:"([^"]+)"/, function(a, b) {
                 return ':"' + b.replace(/^\s+|\s+$/, '').replace(/\s*::\s*/, '::') + '"';
             });
         }
-        
+
         // trim
         s = s.replace(/:"([^"]+)"/, function(a, b) {
             return ':"' + b.replace(/^\s+|\s+$/, '').replace(/\s*::\s*/, '::') + '"';
         });
-        
+
         // if json string return object
         if (/^{[\w\W]+}$/.test(s)) {
             return $.parseJSON(trim(s));
         }
 
         // parameter format eg: title[title]
-        if (/\w+\[[^\]]+\]/.test(s)) {                	                	
+        if (/\w+\[[^\]]+\]/.test(s)) {
             s = s.replace(/([\w]+)\[([^\]]+)\](;)?/g, function(a, b, c, d) {
                 return '"' + b + '":"' + tinymce.DOM.encode(c) + '"' + (d ? ',' : '');
             });
@@ -242,49 +245,48 @@ WFPopups.addPopup('jcemediabox', {
             return $.parseJSON('{' + trim(s) + '}');
         }
     },
-
     /**
      * Get popup parameters
      * @param {Object} n Popup node
      */
     getAttributes: function(n, index) {
         var ed = tinyMCEPopup.editor, data = {}, rv, v;
-        
-        // set default index
-        index = index || 0;
 
         // set default index
         index = index || 0;
 
-        var title 	= ed.dom.getAttrib(n, 'title');
-        var rel 	= ed.dom.getAttrib(n, 'rel');
+        // set default index
+        index = index || 0;
+
+        var title = ed.dom.getAttrib(n, 'title');
+        var rel = ed.dom.getAttrib(n, 'rel');
 
         // No icon
         var icon = /noicon/g.test(n.className);
         var hide = /noshow/g.test(n.className);
-        
+
         // Auto popup        
         if (/(autopopup(.?|-single|-multiple))/.test(n.className)) {
             v = /autopopup-multiple/.test(n.className) ? 'autopopup-multiple' : 'autopopup-single';
-        	
+
             $('#jcemediabox_popup_autopopup').val(v);
-        }  
+        }
 
         $('#jcemediabox_popup_icon').val(icon ? 0 : 1);
         $('#jcemediabox_popup_icon_position').prop('disabled', icon);
 
         $('#jcemediabox_popup_hide').val(hide ? 1 : 0);
-		
+
         // Get position
         if (s = /icon-(top-right|top-left|bottom-right|bottom-left|left|right)/.exec(n.className)) {
             $('#jcemediabox_popup_icon_position').val(s[0]);
         }
 
-        var relRX 	= '(alternate|stylesheet|start|next|prev|contents|index|glossary|copyright|chapter|section|subsection|appendix|help|bookmark|nofollow|licence|tag|friend)';
-        var json 	= ed.dom.getAttrib(n, 'data-json') || ed.dom.getAttrib(n, 'data-mediabox');
+        var relRX = '(alternate|stylesheet|start|next|prev|contents|index|glossary|copyright|chapter|section|subsection|appendix|help|bookmark|nofollow|licence|tag|friend)';
+        var json = ed.dom.getAttrib(n, 'data-json') || ed.dom.getAttrib(n, 'data-mediabox');
 
         if (json) {
-            data 	= this.convertData(json);
+            data = this.convertData(json);
         }
 
         if (rel && /\w+\[.*\]/.test(rel)) {
@@ -295,12 +297,12 @@ WFPopups.addPopup('jcemediabox', {
                 // remove rel values	
                 rel = rel.replace(new RegExp(relRX, 'g'), '');
             }
-            
+
             // convert to object
             data = this.convertData($.trim(rel));
             // add to object
             data.rel = ra;
-            
+
         } else {
             // remove standard rel values
             var group = $.trim(rel.replace(new RegExp(relRX, 'g'), ''));
@@ -309,7 +311,7 @@ WFPopups.addPopup('jcemediabox', {
         }
 
         var params = [];
-        
+
         if (/::/.test(data.title)) {
             var parts = data.title.split('::');
             if (parts.length > 1) {
@@ -319,10 +321,10 @@ WFPopups.addPopup('jcemediabox', {
         }
 
         $.each(data, function(k, v) {
-            if ($('#jcemediabox_popup_' + k).get(0)) {        		                
-                
+            if ($('#jcemediabox_popup_' + k).get(0)) {
+
                 v = tinymce.DOM.decode(v);
-                
+
                 if (k == 'title' || k == 'caption') {
                     $('input[name^="jcemediabox_popup_' + k + '"]').eq(index).val(v);
                 } else {
@@ -348,7 +350,7 @@ WFPopups.addPopup('jcemediabox', {
                     // set value value
                     $('input.value', $item).val(decodeURIComponent(v));
                     // add remove button action
-                    $('span.add', $item).hide();            		
+                    $('span.add', $item).hide();
                     $('span.remove').css('display', 'inline-block');
                 }
             }
@@ -359,40 +361,39 @@ WFPopups.addPopup('jcemediabox', {
         $('#jcemediabox_popup_mediatype').val(this.getMediaType(n));
 
         $.extend(data, {
-            src	 : ed.dom.getAttrib(n, 'href'),
-            type : ed.dom.getAttrib(n, 'type') || ''
+            src: ed.dom.getAttrib(n, 'href'),
+            type: ed.dom.getAttrib(n, 'type') || ''
         });
 
         return data;
     },
-
     /**
      * Set Popup Attributes
      * @param {Object} n Link Element
      */
     setAttributes: function(n, args, index) {
         var self = this, ed = tinyMCEPopup.editor;
-        
+
         // set default index
         index = index || 0;
 
         this.remove(n);
-        
+
         // set default index
         index = index || 0;
 
         // Add jcepopup class
         ed.dom.addClass(n, 'jcepopup');
-        
+
         // Autopopup
         var auto = $('#jcemediabox_popup_autopopup').val();
-        
+
         if (auto) {
-            ed.dom.addClass(n, auto);  
+            ed.dom.addClass(n, auto);
         }
 
         var data = {};
-        
+
         // pass title to link
         if (args.title) {
             ed.dom.setAttrib(n, 'title', args.title);
@@ -409,10 +410,10 @@ WFPopups.addPopup('jcemediabox', {
                     return;
                 }
             }
-                
-            data[k] = v;          
+
+            data[k] = v;
         });
-        
+
         tinymce.each(['title', 'caption'], function(k) {
             var v = $('input[name^=jcemediabox_popup_' + k + ']').eq(index).val();
 
@@ -423,46 +424,51 @@ WFPopups.addPopup('jcemediabox', {
                     return;
                 }
             }
-                
+
             data[k] = v;
         });
-        
+
         $('li', '#jcemediabox_popup_params').each(function() {
             var k = $('input.name', this).val();
             var v = $('input.value', this).val();
-        	
+
             if (k !== '' && v !== '') {
                 data[k] = v;
             }
         });
-        
+
         // combine args
         $.extend(data, args.data || {});
-        
+
         // combine title and caption values
         if (data.title && data.caption) {
             data.title = data.title + '::' + data.caption;
             delete data.caption;
         }
-        
+
         // set type
         var mt = $('#jcemediabox_popup_mediatype').val() || n.type || data.type || '';
+        
+        // get image type
+        if (mt == "image") {
+            mt = this.getImageType(n.href);
+        }
 
         // Set media type
         ed.dom.setAttrib(n, 'type', mt);
-        
+
         // remove type so it is not added to rel attribute
         if (data.type) {
             delete data.type;
         }
         // get rel attribute value
         var rel = ed.dom.getAttrib(n, 'rel', '');
-        
+
         // remove any existing properties
         if (rel) {
             rel = rel.replace(/([a-z0-9]+)(\[([^\]]+)\]);?/gi, '');
         }
-        
+
         // map object properties to options array
         var props = $.map(data, function(v, k) {
             return k + '[' + v + ']';
@@ -470,9 +476,9 @@ WFPopups.addPopup('jcemediabox', {
 
         if (this.params.attribute == 'data-mediabox') {
             ed.dom.setAttrib(n, 'data-mediabox', props.join(';'));
-        } else {            
+        } else {
             rel = ' ' + props.join(';');
-            
+
             // remove HTML5 data attributes if any
             ed.dom.setAttrib(n, 'data-json', '');
             ed.dom.setAttrib(n, 'data-mediabox', '');
@@ -487,7 +493,7 @@ WFPopups.addPopup('jcemediabox', {
         } else {
             ed.dom.addClass(n, $('#jcemediabox_popup_icon_position').val());
         }
-        
+
         if ($('#jcemediabox_popup_hide').val() == 1) {
             ed.dom.addClass(n, 'noshow');
         }
@@ -495,26 +501,23 @@ WFPopups.addPopup('jcemediabox', {
         // Set target
         ed.dom.setAttrib(n, 'target', '_blank');
     },
-
     /**
      * Set the poup icon option
      */
-    setIcon : function() {
+    setIcon: function() {
         var v = $('#jcemediabox_popup_icon').val();
-        
+
         if (parseInt(v)) {
             $('#jcemediabox_popup_icon_position').removeAttr('disabled');
         } else {
             $('#jcemediabox_popup_icon_position').attr('disabled', 'disabled');
         }
     },
-
     /**
      * Function to call when popup extension selected
      */
     onSelect: function() {
     },
-
     /**
      * Call function when a file is selected / clicked
      * @param {Object} args Function arguments
