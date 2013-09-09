@@ -33,8 +33,9 @@
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
-        <param name="paste_remove_attributes" type="text" size="50" placeholder="eg: lang,align" default="" label="WF_PASTE_PARAM_ATTRIBUTES" description="WF_PASTE_PARAM_ATTRIBUTES_DESC" />
-        <param name="paste_retain_style_properties" placeholder="eg: font-size,font-family,color" size="50" type="text" default="" label="WF_PASTE_PARAM_RETAIN_STYLES" description="WF_PASTE_PARAM_RETAIN_STYLES_DESC" />
+        <param name="paste_remove_tags" type="text" size="50" class="input-xlarge" placeholder="eg: img,object,iframe" default="" label="WF_PASTE_PARAM_REMOVE_TAGS" description="WF_PASTE_PARAM_REMOVE_TAGS_DESC" />
+        <param name="paste_remove_attributes" type="text" size="50" class="input-xlarge" placeholder="eg: lang,align" default="" label="WF_PASTE_PARAM_ATTRIBUTES" description="WF_PASTE_PARAM_ATTRIBUTES_DESC" />
+        <param name="paste_retain_style_properties" placeholder="eg: font-size,font-family,color" class="input-xlarge" size="50" type="text" default="" label="WF_PASTE_PARAM_RETAIN_STYLES" description="WF_PASTE_PARAM_RETAIN_STYLES_DESC" />
         <param name="paste_remove_empty_paragraphs" type="radio" default="1" label="WF_PASTE_PARAM_REMOVE_PARAGRAPHS" description="WF_PASTE_PARAM_REMOVE_PARAGRAPHS_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>           
@@ -52,6 +53,7 @@
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>           
         </param>
+        <param name="paste_filter" type="text" size="50" class="input-xlarge" default="" label="WF_PASTE_PARAM_FILTER" description="WF_PASTE_PARAM_FILTER_DESC" />
     </params>
     <params group="access">
         <param name="paste_html" type="radio" default="1" label="WF_PASTE_PARAM_PASTE_HTML" description="WF_PASTE_PARAM_PASTE_HTML_DESC">

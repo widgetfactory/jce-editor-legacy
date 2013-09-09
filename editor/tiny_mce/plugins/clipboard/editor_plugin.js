@@ -1245,6 +1245,11 @@
                         }
                     }
                 });
+                
+                // remove tags
+                if (ed.getParam('clipboard_paste_remove_tags')) {
+                    dom.remove(dom.select(ed.getParam('clipboard_paste_remove_tags'), o.node));
+                }
 
                 // Empty element regular expression
                 var emptyRe = /^(\s|&nbsp;|\u00a0)?$/;
@@ -1412,6 +1417,23 @@
             // remove empty paragraphs
             if (ed.getParam('clipboard_paste_remove_empty_paragraphs', true)) {
                 h = h.replace(/<p([^>]+)>(&nbsp;|\u00a0)?<\/p>/g, '');
+            }
+
+            // pricess regular expression
+            if (ed.getParam('clipboard_paste_filter')) {
+                var re, rules = ed.getParam('clipboard_paste_filter').split(';');
+
+                each(rules, function(s) {                    
+                    // if it is already in Regular Expression format...
+                    if (/^\/.*\/(g|i|m)*$/.test(s)) {
+                        re = ( new Function( 'return ' + s ) )();
+                    // ...else create expression
+                    } else {
+                        re = new RegExp(s);
+                    }
+
+                    h = h.replace(re, "");
+                });
             }
 
             ed.execCommand('mceInsertContent', false, h, {
