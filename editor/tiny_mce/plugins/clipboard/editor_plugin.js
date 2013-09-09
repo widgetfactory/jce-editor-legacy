@@ -158,7 +158,6 @@
                 // reset to default
                 self.command = 'mcePaste';
             }
-            ;
 
             // Add command for external usage
             ed.addCommand('mceInsertClipboardContent', function(u, o) {
@@ -381,7 +380,6 @@
 
                 }
             }
-            ;
 
             // Is it's Opera or older FF use key handler
             if (tinymce.isOpera || /Firefox\/2/.test(navigator.userAgent)) {
@@ -499,49 +497,7 @@
                 });
             }
         },
-        /*createControl: function(n, cm) {
-         var self = this,
-         ed = self.editor;
-         
-         switch (n) {
-         case 'paste':
-         if (self.pasteHtml && self.pasteText) {
-         var c = cm.createSplitButton('paste', {
-         title: 'paste.paste_desc',
-         onclick: function(e) {
-         ed.execCommand('mcePaste');
-         }
-         
-         });
-         
-         c.onRenderMenu.add(function(c, m) {
-         m.add({
-         title: 'paste.paste_desc',
-         icon: 'paste',
-         onclick: function(e) {
-         ed.execCommand('mcePaste');
-         }
-         
-         });
-         
-         m.add({
-         title: 'paste.paste_text_desc',
-         icon: 'pastetext',
-         onclick: function(e) {
-         ed.execCommand('mcePasteText');
-         }
-         
-         });
-         });
-         
-         // Return the new splitbutton instance
-         return c;
-         }
-         break;
-         }
-         
-         return null;
-         },*/
+
         getInfo: function() {
             return {
                 longname: 'Paste text/word',
@@ -972,7 +928,6 @@
 
                 dom.rename(n, 'span');
             }
-            ;
 
             filters = {
                 font: function(n) {
@@ -1092,195 +1047,197 @@
             if (ed.settings.paste_enable_default_filters == false) {
                 return;
             }
+
             // skip if plain text
-            if (!this.plainText) {
+            if (this.plainText) {
+                return;
+            }
 
-                // Remove Apple style spans
-                each(dom.select('span.Apple-style-span', o.node), function(n) {
-                    dom.remove(n, 1);
-                });
+            // Remove Apple style spans
+            each(dom.select('span.Apple-style-span', o.node), function(n) {
+                dom.remove(n, 1);
+            });
 
-                // convert deprecated elements
-                if (!ed.getParam('clipboard_paste_remove_spans')) {
-                    // convert to inline_styles
-                    if (ed.settings.inline_styles) {
-                        this._convertToInline(o.node);
-                    }
+            // convert deprecated elements
+            if (!ed.getParam('clipboard_paste_remove_spans')) {
+                // convert to inline_styles
+                if (ed.settings.inline_styles) {
+                    this._convertToInline(o.node);
                 }
+            }
 
-                // post process Word content
-                if (o.wordContent) {
-                    var ftn = /(mso-(end|foot)note-id|sdfootnoteanc)/;
+            // post process Word content
+            if (o.wordContent) {
+                var ftn = /(mso-(end|foot)note-id|sdfootnoteanc)/;
 
-                    // process anchors
-                    each(dom.select('a', o.node), function(n) {
-                        var href = n.getAttribute('href');
+                // process anchors
+                each(dom.select('a', o.node), function(n) {
+                    var href = n.getAttribute('href');
 
-                        // remove anchors
-                        if (!href || href.indexOf('#_Toc') != -1) {
-                            dom.remove(n, 1);
-                        }
+                    // remove anchors
+                    if (!href || href.indexOf('#_Toc') != -1) {
+                        dom.remove(n, 1);
+                    }
 
-                        // convert footnotes to anchors
-                        if (ed.getParam('clipboard_paste_process_footnotes', 'convert') == 'convert') {
-                            var s = n.getAttribute('data-mce-footnote'), anchor, id;
+                    // convert footnotes to anchors
+                    if (ed.getParam('clipboard_paste_process_footnotes', 'convert') == 'convert') {
+                        var s = n.getAttribute('data-mce-footnote'), anchor, id;
 
-                            each(ed.dom.select('span', n), function(span) {
-                                if (!span.getAttribute('style')) {
-                                    ed.dom.remove(span, 1);
-                                }
-                            });
+                        each(ed.dom.select('span', n), function(span) {
+                            if (!span.getAttribute('style')) {
+                                ed.dom.remove(span, 1);
+                            }
+                        });
 
-                            // footnote anchor
-                            if (s && href) {
-                                // remove #
-                                if (href.charAt(0) == '#') {
-                                    id = href.substring(1);
-                                }
+                        // footnote anchor
+                        if (s && href) {
+                            // remove #
+                            if (href.charAt(0) == '#') {
+                                id = href.substring(1);
+                            }
 
-                                // remove marker
-                                n.removeAttribute('data-mce-footnote');
+                            // remove marker
+                            n.removeAttribute('data-mce-footnote');
 
-                                if (id) {
-                                    // get associated anchor
-                                    anchor = dom.select('a[name="' + id + '"]', o.node);
+                            if (id) {
+                                // get associated anchor
+                                anchor = dom.select('a[name="' + id + '"]', o.node);
 
-                                    // if there is an anchor
-                                    if (anchor.length) {
-                                        // fix anchor id/name
-                                        id = id.replace(/[^a-z]+(\w+)/gi, '$1');
+                                // if there is an anchor
+                                if (anchor.length) {
+                                    // fix anchor id/name
+                                    id = id.replace(/[^a-z]+(\w+)/gi, '$1');
 
-                                        var attribs = {
-                                            'class': 'mceItemAnchor',
-                                            'name': null,
-                                            'id': null
-                                        };
-                                        // get correct anchor attribute for schema
-                                        var k = ed.settings.schema == 'html5' ? 'id' : 'name';
+                                    var attribs = {
+                                        'class': 'mceItemAnchor',
+                                        'name': null,
+                                        'id': null
+                                    };
+                                    // get correct anchor attribute for schema
+                                    var k = ed.settings.schema == 'html5' ? 'id' : 'name';
 
-                                        // set attribute
-                                        attribs[k] = id;
+                                    // set attribute
+                                    attribs[k] = id;
 
-                                        // update attributes
-                                        dom.setAttribs(anchor, attribs);
+                                    // update attributes
+                                    dom.setAttribs(anchor, attribs);
 
-                                        // update anchor link
-                                        dom.setAttribs(n, {
-                                            'href': '#' + id
-                                        });
+                                    // update anchor link
+                                    dom.setAttribs(n, {
+                                        'href': '#' + id
+                                    });
 
-                                        // remove name attribute from link
-                                        n.removeAttribute('name');
-                                    } else {
-                                        n.removeAttribute('href');
-                                        // remove extra spans
-                                        each(ed.dom.select('span', n.parentNode), function(span) {
-                                            if (span.firstChild && span.firstChild.nodeType == 1) {
-                                                ed.dom.remove(span, 1);
-                                            }
-                                        });
-                                    }
+                                    // remove name attribute from link
+                                    n.removeAttribute('name');
+                                } else {
+                                    n.removeAttribute('href');
+                                    // remove extra spans
+                                    each(ed.dom.select('span', n.parentNode), function(span) {
+                                        if (span.firstChild && span.firstChild.nodeType == 1) {
+                                            ed.dom.remove(span, 1);
+                                        }
+                                    });
                                 }
                             }
                         }
-                    });
-
-                    // Remove lang attribute
-                    each(dom.select('*[lang]', o.node), function(el) {
-                        el.removeAttribute('lang');
-                    });
-                } // end word content
-
-                // Remove all styles
-                if (ed.getParam('clipboard_paste_remove_styles')) {
-                    // Remove style attribute
-                    each(dom.select('*[style]', o.node), function(el) {
-                        el.removeAttribute('style');
-                        el.removeAttribute('data-mce-style');
-                    });
-                } else {
-                    // process style attributes
-                    this._processStyles(o.node);
-                }
-
-                // convert lists
-                if (ed.getParam('clipboard_paste_convert_lists', true)) {
-                    this._convertLists(o.node);
-                }
-
-                // image file/data regular expression
-                var imgRe = /(file:|data:image)\//i, uploader = ed.plugins.upload;
-                var canUpload = uploader && uploader.plugins.length;
-
-                // Process images - remove local
-                each(dom.select('img', o.node), function(el) {
-                    var s = dom.getAttrib(el, 'src');
-
-                    // remove img element if blank, local file url or base64 encoded
-                    if (!s || imgRe.test(s)) {
-                        if (ed.getParam('clipboard_paste_upload_images') && canUpload) {
-                            // add marker
-                            ed.dom.setAttrib(el, 'data-mce-upload-marker', '1');
-                        } else {
-                            dom.remove(el);
-                        }
-                    } else {
-                        dom.setAttrib(el, 'src', ed.convertURL(s));
                     }
                 });
 
-                // Process links (ignore anchors)
-                each(dom.select('a', o.node), function(el) {
-                    var s = dom.getAttrib(el, 'href');
+                // Remove lang attribute
+                each(dom.select('*[lang]', o.node), function(el) {
+                    el.removeAttribute('lang');
+                });
+            } // end word content
 
-                    if (s) {
-                        // convert url
-                        if (s.charAt(0) != '#') {
-                            dom.getAttrib(el, 'href', ed.convertURL(s));
-                        }
+            // Remove all styles
+            if (ed.getParam('clipboard_paste_remove_styles')) {
+                // Remove style attribute
+                each(dom.select('*[style]', o.node), function(el) {
+                    el.removeAttribute('style');
+                    el.removeAttribute('data-mce-style');
+                });
+            } else {
+                // process style attributes
+                this._processStyles(o.node);
+            }
+
+            // convert lists
+            if (ed.getParam('clipboard_paste_convert_lists', true)) {
+                this._convertLists(o.node);
+            }
+
+            // image file/data regular expression
+            var imgRe = /(file:|data:image)\//i, uploader = ed.plugins.upload;
+            var canUpload = uploader && uploader.plugins.length;
+
+            // Process images - remove local
+            each(dom.select('img', o.node), function(el) {
+                var s = dom.getAttrib(el, 'src');
+
+                // remove img element if blank, local file url or base64 encoded
+                if (!s || imgRe.test(s)) {
+                    if (ed.getParam('clipboard_paste_upload_images') && canUpload) {
+                        // add marker
+                        ed.dom.setAttrib(el, 'data-mce-upload-marker', '1');
                     } else {
-                        // not an anchor, remove...
-                        if (!el.name || !el.id) {
-                            dom.remove(el);
-                        }
+                        dom.remove(el);
+                    }
+                } else {
+                    dom.setAttrib(el, 'src', ed.convertURL(s));
+                }
+            });
+
+            // Process links (ignore anchors)
+            each(dom.select('a', o.node), function(el) {
+                var s = dom.getAttrib(el, 'href');
+
+                if (s) {
+                    // convert url
+                    if (s.charAt(0) != '#') {
+                        dom.getAttrib(el, 'href', ed.convertURL(s));
+                    }
+                } else {
+                    // not an anchor, remove...
+                    if (!el.name || !el.id) {
+                        dom.remove(el);
+                    }
+                }
+            });
+
+            // remove tags
+            if (ed.getParam('clipboard_paste_remove_tags')) {
+                dom.remove(dom.select(ed.getParam('clipboard_paste_remove_tags'), o.node));
+            }
+
+            // Empty element regular expression
+            var emptyRe = /^(\s|&nbsp;|\u00a0)?$/;
+
+            // remove all spans
+            if (ed.getParam('clipboard_paste_remove_spans')) {
+                dom.remove(dom.select('span', o.node), 1);
+                // remove empty spans
+            } else {
+                ed.dom.remove(dom.select('span:empty', o.node));
+
+                each(dom.select('span', o.node), function(n) {
+                    var h = n.innerHTML;
+
+                    if (emptyRe.test(h)) {
+                        dom.remove(n);
                     }
                 });
-                
-                // remove tags
-                if (ed.getParam('clipboard_paste_remove_tags')) {
-                    dom.remove(dom.select(ed.getParam('clipboard_paste_remove_tags'), o.node));
-                }
+            }
 
-                // Empty element regular expression
-                var emptyRe = /^(\s|&nbsp;|\u00a0)?$/;
+            if (ed.getParam('clipboard_paste_remove_empty_paragraphs', true)) {
+                dom.remove(dom.select('p:empty', o.node));
 
-                // remove all spans
-                if (ed.getParam('clipboard_paste_remove_spans')) {
-                    dom.remove(dom.select('span', o.node), 1);
-                    // remove empty spans
-                } else {
-                    ed.dom.remove(dom.select('span:empty', o.node));
+                each(dom.select('p', o.node), function(n) {
+                    var h = n.innerHTML;
 
-                    each(dom.select('span', o.node), function(n) {
-                        var h = n.innerHTML;
-
-                        if (emptyRe.test(h)) {
-                            dom.remove(n);
-                        }
-                    });
-                }
-
-                if (ed.getParam('clipboard_paste_remove_empty_paragraphs', true)) {
-                    dom.remove(dom.select('p:empty', o.node));
-
-                    each(dom.select('p', o.node), function(n) {
-                        var h = n.innerHTML;
-
-                        if (emptyRe.test(h)) {
-                            dom.remove(n);
-                        }
-                    });
-                }
+                    if (emptyRe.test(h)) {
+                        dom.remove(n);
+                    }
+                });
             }
         },
         /**
@@ -1423,11 +1380,11 @@
             if (ed.getParam('clipboard_paste_filter')) {
                 var re, rules = ed.getParam('clipboard_paste_filter').split(';');
 
-                each(rules, function(s) {                    
+                each(rules, function(s) {
                     // if it is already in Regular Expression format...
                     if (/^\/.*\/(g|i|m)*$/.test(s)) {
-                        re = ( new Function( 'return ' + s ) )();
-                    // ...else create expression
+                        re = (new Function('return ' + s))();
+                        // ...else create expression
                     } else {
                         re = new RegExp(s);
                     }
