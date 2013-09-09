@@ -29,6 +29,13 @@
                 cmd: 'mceVisualChars'
             });
             
+            // add trigger for nbsp button
+            ed.onExecCommand.add(function(ed, cmd, ui, v, o) {
+                if (cmd === "mceNonBreaking") {
+                    t._toggleVisualChars(state);
+                }
+            });
+            
             // Register commands
             ed.addCommand('mceVisualChars', function() {
                 state = !state;
