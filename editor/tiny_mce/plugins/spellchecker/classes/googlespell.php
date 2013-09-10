@@ -15,15 +15,12 @@ class GoogleSpell extends SpellChecker {
 	function &checkWords($lang, $words) {		
 		$wordstr = implode(' ', $words);
 		$matches = $this->_getMatches($lang, $wordstr);
-
-		/*$words = array();
+		$words = array();
 
 		for ($i=0; $i<count($matches); $i++)
 			$words[] = $this->_unhtmlentities(mb_substr($wordstr, $matches[$i][1], $matches[$i][2], "UTF-8"));
 
-		return $words;*/
-                
-                return $matches;
+		return $words;
 	}
 
 	/**
@@ -38,7 +35,7 @@ class GoogleSpell extends SpellChecker {
 		$osug = array();
 		$matches = $this->_getMatches($lang, $word);
 
-		/*if (count($matches) > 0){
+		if (count($matches) > 0){
 			$s = $this->_unhtmlentities($matches[0][4]);			
 			$sug = explode("\t", preg_match('/&[^;]+;/', $s) ? utf8_encode($s) : $s);
 		}
@@ -49,81 +46,61 @@ class GoogleSpell extends SpellChecker {
 				$osug[] = $item;
 		}
 
-		return $osug;*/
-                
-                 return $matches;
+		return $osug;
 	}
 
 	protected function &_getMatches($lang, $str) {
                 $lang   = preg_replace('/[^a-z\-]/i', '', $lang); // Sanitize, remove everything but a-z or -
                 $str    = preg_replace('/[\x00-\x1F\x7F]/', '', $str); // Sanitize, remove all control characters
             
-		//$server = "www.google.com";
-                $server = "www.googleapis.com";
+		$server = "www.google.com";
 		$port = 443;
-		//$path = "/tbproxy/spell?lang=" . $lang . "&hl=en";
-                $path = "/rpc";
-		//$host = "www.google.com";
-		$url = "https://" . $server . ":" . $port . $path;
+		$path = "/tbproxy/spell?lang=" . $lang . "&hl=en";
+		$host = "www.google.com";
+		$url = "https://" . $server;
 
 		// Setup XML request
-		/*$xml = '<?xml version="1.0" encoding="utf-8" ?><spellrequest textalreadyclipped="0" ignoredups="0" ignoredigits="1" ignoreallcaps="1"><text>' . $str . '</text></spellrequest>';*/
+		$xml = '<?xml version="1.0" encoding="utf-8" ?><spellrequest textalreadyclipped="0" ignoredups="0" ignoredigits="1" ignoreallcaps="1"><text>' . $str . '</text></spellrequest>';
 
-		$data = array('method' => 'spelling.check', 'apiVersion' => 'v2', 'params' => array('language' => $lang, 'text' => $str, 'key' => 'AIzaSyCLlKc60a3z7lo8deV-hAyDU7rHYgL4HZg'));
-                
-                $header  = "POST ".$path." HTTP/1.0 \r\n";
+		$header  = "POST ".$path." HTTP/1.0 \r\n";
 		$header .= "MIME-Version: 1.0 \r\n";
-		//$header .= "Content-type: application/PTI26 \r\n";
-                $header .= "Content-type: application/json";
+		$header .= "Content-type: application/PTI26 \r\n";
 		$header .= "Content-length: ".strlen($xml)." \r\n";
 		$header .= "Content-transfer-encoding: text \r\n";
 		$header .= "Request-number: 1 \r\n";
 		$header .= "Document-type: Request \r\n";
 		$header .= "Interface-Version: Test 1.4 \r\n";
 		$header .= "Connection: close \r\n\r\n";
-		$header .= json_encode($data);
+		$header .= $xml;
 
 		// Use curl if it exists
 		if (function_exists('curl_init')) {
 			// Use curl
-			$ch = curl_init();                        
-                        
-                        curl_setopt($ch, CURLOPT_URL, $url);
-                        curl_setopt($ch, CURLOPT_HEADER, 0);
-
-                        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-                        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-                        // The @ sign allows the next line to fail if open_basedir is set or if safe mode is enabled
-                        //@curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-                        //@curl_setopt($ch, CURLOPT_MAXREDIRS, 20);
-
-                        @curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-                        
-                        curl_setopt($ch, CURLOPT_POST, 1);
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-                        
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL,$url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $header);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 			$response = curl_exec($ch);
 			
 			if ($response === false) {
 				$this->throwError('Invalid Server Response');
 			} else {
-				$res = $response;
+				$xml = $response;
 			}
 			
 			curl_close($ch);
 		} else {
 			// Use raw sockets
-			$fp = fsockopen("ssl://" . $server . $path, $port, $errno, $errstr, 30);
+			$fp = fsockopen("ssl://" . $server, $port, $errno, $errstr, 30);
 			if ($fp) {
 				// Send request
 				fwrite($fp, $header);
 
 				// Read response
-				$res = "";
+				$xml = "";
 				while (!feof($fp))
-					$res .= fgets($fp, 128);
+					$xml .= fgets($fp, 128);
 
 				fclose($fp);
 			} else {
@@ -133,12 +110,10 @@ class GoogleSpell extends SpellChecker {
 		}
 
 		// Grab and parse content
-		/*$matches = array();
+		$matches = array();
 		preg_match_all('/<c o="([^"]*)" l="([^"]*)" s="([^"]*)">([^<]*)<\/c>/', $xml, $matches, PREG_SET_ORDER);
 
-		return $matches;*/
-                
-                return json_decode($res, true);
+		return $matches;
 	}
 
 	protected function _unhtmlentities($string) {
