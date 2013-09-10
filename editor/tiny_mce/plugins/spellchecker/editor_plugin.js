@@ -27,7 +27,7 @@
 
             t.url = url;
             t.editor = ed;
-            t.rpcUrl = ed.getParam("spellchecker_rpc_url", "");
+            t.rpcUrl = ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=spellchecker'//ed.getParam("spellchecker_rpc_url", "");
 
             t.native_spellchecker = (t.rpcUrl == '' || ed.getParam("spellchecker_engine", "browser") == 'browser');
 
@@ -45,18 +45,22 @@
                 t.hasSupport = true;
 
                 // Disable the context menu when spellchecking is active
-                ed.onContextMenu.addToTop(function(ed, e) {
-                    if (t.active)
-                        return false;
-                });
+                if (ed.getParam("spellchecker_suggestions", true)) {
+
+                    ed.onContextMenu.addToTop(function(ed, e) {
+                        if (t.active)
+                            return false;
+                    });
+                }
             }
 
             // Register commands
             ed.addCommand('mceSpellCheck', function() {
-                if (t.native_spellchecker) {                    
-                    // Enable/disable native spellchecker
-                    ed.getBody().spellcheck = t.active = !t.active;
-                    
+                if (t.native_spellchecker) {
+                    var body = ed.getBody();
+
+                    body.spellcheck = t.active = !t.active;
+
                     ed.focus();
 
                     return;
@@ -84,15 +88,18 @@
             if (ed.settings.content_css !== false)
                 ed.contentCSS.push(url + '/css/content.css');
 
+            // show menus if enabled
+            if (ed.getParam("spellchecker_suggestions", true)) {
+                ed.onClick.add(t._showMenu, t);
+                ed.onContextMenu.add(t._showMenu, t);
+            }
 
-            ed.onClick.add(t._showMenu, t);
-            ed.onContextMenu.add(t._showMenu, t);
             ed.onBeforeGetContent.add(function() {
                 if (t.active)
                     t._removeWords();
             });
 
-            ed.onNodeChange.add(function(ed, cm) {                                
+            ed.onNodeChange.add(function(ed, cm) {
                 cm.setActive('spellchecker', !!t.active);
             });
 

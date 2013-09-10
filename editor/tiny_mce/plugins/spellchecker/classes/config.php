@@ -16,7 +16,7 @@ class WFSpellcheckerPluginConfig {
                 
                 $engine = $wf->getParam('spellchecker.engine', 'browser', 'browser');
                 
-                $url = JURI::base(true).'/index.php?option=com_jce&view=editor&layout=plugin&plugin=spellchecker&component_id=' . $settings['component_id'];
+                //$url = JURI::base(true).'/index.php?option=com_jce&view=editor&layout=plugin&plugin=spellchecker&component_id=' . $settings['component_id'];
                 
                 switch($engine) {
                     default:
@@ -44,7 +44,7 @@ class WFSpellcheckerPluginConfig {
                         break;
                 }
                 
-                $settings['spellchecker_rpc_url'] = $url;
+                //$settings['spellchecker_rpc_url'] = $url;
                 
                 // cast as array
                 if ($languages) {
@@ -56,6 +56,7 @@ class WFSpellcheckerPluginConfig {
                 }
 
 		$settings['spellchecker_engine'] = $engine;
+                $settings['spellchecker_suggestions'] = $wf->getParam('spellchecker.suggestions', 1, 1);
 	}
 }
 ?>
