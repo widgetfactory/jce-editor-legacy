@@ -511,6 +511,7 @@ class WFDocument extends JObject {
      * Render document head data
      */
     private function getHead() {
+        // create version / etag hash
         $version = $this->get('version', '000000');
         // set title		
         $output = '<title>' . $this->getTitle() . '</title>' . "\n";
@@ -526,7 +527,8 @@ class WFDocument extends JObject {
                 $stamp = '';
                 
                 if (strpos($src, '://') === false) {
-                    $stamp = strpos($src, '?') === false ? '?v=' . $version : '&v=' . $version;
+                    $version = md5(basename($src) . $version);
+                    $stamp  = strpos($src, '?') === false ? '?etag=' . $version : '&etag=' . $version;
                 }
                 
                 $output .= "\t\t<link href=\"" . $src . $stamp . "\" rel=\"stylesheet\" type=\"" . $type . "\" />\n";
@@ -540,9 +542,11 @@ class WFDocument extends JObject {
         } else {
             foreach ($this->_scripts as $src => $type) {
                 $stamp = '';
-                
+
                 if (strpos($src, '://') === false) {
-                    $stamp = strpos($src, '?') === false ? '?v=' . $version : '&v=' . $version;
+                    $version = md5(basename($src) . $version);
+                    
+                    $stamp = strpos($src, '?') === false ? '?etag=' . $version : '&etag=' . $version;
                 }
                 
                 $output .= "\t\t<script data-cfasync=\"false\" type=\"" . $type . "\" src=\"" . $src . $stamp . "\"></script>\n";
