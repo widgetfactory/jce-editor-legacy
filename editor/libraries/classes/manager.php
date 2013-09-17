@@ -17,7 +17,7 @@ wfimport('editor.libraries.classes.browser');
 
 class WFMediaManager extends WFEditorPlugin {
     
-    private static $browser;
+    private static $browser = array();
 
     /**
      * @access  public
@@ -58,11 +58,13 @@ class WFMediaManager extends WFEditorPlugin {
      * @return object WFBrowserExtension
      */
     public function getBrowser() {        
-        if (!isset(self::$browser)) {
-            self::$browser = new WFFileBrowser($this->getProperties());
+        $name = $this->getName();
+        
+        if (!isset(self::$browser[$name])) {            
+            self::$browser[$name] = new WFFileBrowser($this->getProperties());
         }
 
-        return self::$browser;
+        return self::$browser[$name];
     }
 
     /**
