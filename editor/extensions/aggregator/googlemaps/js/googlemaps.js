@@ -49,6 +49,9 @@ WFAggregator.add('googlemaps', {
         if (!/\&(amp;)?output=embed/.test(src)) {
             src += '&output=embed';
         }
+        
+        // protocol / scheme relative url
+        src = src.replace(/^http(s)?:\/\//, '//');
 
         data.src = src;
 
@@ -68,6 +71,9 @@ WFAggregator.add('googlemaps', {
         if (!src) {
             return data;
         }
+        
+        // protocol / scheme relative url
+        src = src.replace(/^http(s)?:\/\//, '//');
         
         src = src.replace(/\&(amp;)?output=embed/, '');
 

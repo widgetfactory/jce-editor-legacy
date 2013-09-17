@@ -67,13 +67,8 @@ WFAggregator.add('vine', {
         if (s && s.length > 1) {
             id = s[1];
         }
-
-        src = 'http://vine.co/v/' + id + '/embed/' + args.type || this.params.type;
-
-        // add protocol if not set
-        if (!/http(s)?:\/\//.test(src)) {
-            src = 'http://' + src;
-        }
+        // protocol / scheme relative url
+        src = '//vine.co/v/' + id + '/embed/' + args.type || this.params.type;
 
         // convert args to URL query string
         var query = $.param(args);
@@ -110,7 +105,7 @@ WFAggregator.add('vine', {
         }
         
         // simplify url
-        data.src    = 'http://vine.co/v/' + id + '/embed/';
+        data.src    = '//vine.co/v/' + id + '/embed/';
         data.size   = data.width || data.height || this.params.size; 
 
         return data;

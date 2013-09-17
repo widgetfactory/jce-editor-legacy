@@ -107,12 +107,8 @@ WFAggregator.add('vimeo', {
         if (type == 'flash') {
             src = 'http://vimeo.com/moogaloop.swf?clip_id=' + id;
         } else {
-            src = 'http://player.vimeo.com/video/' + id;
-        }
-
-        // add protocol if not set
-        if (!/http(s)?:\/\//.test(src)) {
-            src = 'http://' + src;
+            // protocol / scheme relative url
+            src = '//player.vimeo.com/video/' + id;
         }
 
         // convert args to URL query string
@@ -190,8 +186,9 @@ WFAggregator.add('vimeo', {
                 $('#vimeo_options table').append('<tr><td><label for="vimeo_' + k + '">' + k + '</label><input type="text" id="vimeo_' + k + '" value="' + v + '" /></td></tr>');
             }
         });
+        
         // simplify url
-        src = 'http://vimeo.com/' + id;
+        src = '//vimeo.com/' + id;
 
         // add # to color
         if (data['color'] && data['color'].charAt(0) != '#') {

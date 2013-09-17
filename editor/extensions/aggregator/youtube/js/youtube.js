@@ -75,11 +75,14 @@ WFAggregator.add('youtube', {
         $.extend(args, $.String.query(src));
 
         // set https
-        if ($('#youtube_https').is(':checked')) {
+        /*if ($('#youtube_https').is(':checked')) {
             src = src.replace(/^http:\/\//, 'https://');
         } else {
             src = src.replace(/^https:\/\//, 'http://');
-        }
+        }*/
+        
+        // protocol / scheme relative url
+        src = src.replace(/^http(s)?:\/\//, '//');
 
         $(':input', '#youtube_options').not('#youtube_embed, #youtube_https').each( function() {
             var k = $(this).attr('id'), v = $(this).val();
@@ -159,9 +162,12 @@ WFAggregator.add('youtube', {
 
         $.extend(data, query);
 
-        if (/https:\/\//.test(src)) {
+        /*if (/https:\/\//.test(src)) {
             data['https'] = true;
-        }
+        }*/
+        
+        // protocol / scheme relative url
+        src = src.replace(/^http(s)?:\/\//, '//');
 
         if (/youtube-nocookie/.test(src)) {
             data['privacy'] = true;
