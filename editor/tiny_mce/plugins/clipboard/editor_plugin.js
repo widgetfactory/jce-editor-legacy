@@ -1255,7 +1255,7 @@
 
             // Convert middot lists into real semantic lists
             each(dom.select('p', node), function(p) {
-                var sib, val = '', type = 'ul', html, idx, parents, s, chars, st;
+                var sib, val = '', type, html, idx, parents, s, chars, st;
 
                 // Get text node value at beginning of paragraph
                 for (sib = p.firstChild; sib && sib.nodeType == 3; sib = sib.nextSibling) {
@@ -1267,7 +1267,7 @@
                 val = html.replace(/<\/?\w+[^>]*>/gi, '').replace(/&nbsp;/g, '\u00a0');
 
                 // Detect unordered lists look for bullets
-                if (ULRX.test(val)) {
+                if (ULRX.test(val)) {                    
                     type = 'ul';
                 }
 
