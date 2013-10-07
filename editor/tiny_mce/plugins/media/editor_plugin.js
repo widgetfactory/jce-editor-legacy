@@ -191,7 +191,7 @@
                 }
 
                 // iframes
-                ed.schema.addValidElements('iframe[longdesc|name|src|frameborder|marginwidth|marginheight|scrolling|align|width|height|allowtransparency|allowfullscreen="allowfullscreen"|*]');
+                ed.schema.addValidElements('iframe[longdesc|name|src|frameborder|marginwidth|marginheight|scrolling|align|width|height|allowtransparency|allowfullscreen|seamless|*]');
 
                 // Add custom 'comment' element
                 ed.schema.addCustomElements('comment');
@@ -674,17 +674,16 @@
                         case 'autoplay':
                         case 'controls':
                         case 'loop':
+                        case 'seamless':
+                        // needed for Youtube iframes!
+                        case 'allowfullscreen':    
                             attribs[k] = k;
                             break;
                         case 'frameborder':
                             // remove in html5
-                            if (parseInt(v) == 1 && ed.settings.schema == 'html5') {
-                                v = null;
+                            if (parseInt(v) == 0 && ed.settings.schema === 'html5') {
+                                attribs['seamless'] = 'seamless';
                             }
-                            break;
-                            // needed for Youtube iframes!
-                        case 'allowfullscreen':
-                            attribs[k] = k;
                             break;
                         case 'type':
                             attribs[k] = v.replace(/"/g, "'");
