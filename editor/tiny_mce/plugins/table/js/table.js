@@ -39,6 +39,14 @@ var TableDialog = {
 
                 $('#style').val(tinyMCEPopup.dom.serializeStyle(st));
             });
+            
+            $('#valign').change(function() {
+                var st = tinyMCEPopup.dom.parseStyle($('#style').val());
+
+                st['vertical-align'] = $(this).val();
+
+                $('#style').val(tinyMCEPopup.dom.serializeStyle(st));
+            });
 
             // replace border field with checkbox
             $('#border').replaceWith('<input type="checkbox" id="border" />');
@@ -196,7 +204,7 @@ var TableDialog = {
         // Get table row data
         var rowtype = trElm.parentNode.nodeName.toLowerCase();
         var align = dom.getAttrib(trElm, 'align');
-        var valign = dom.getAttrib(trElm, 'valign');
+        var valign = dom.getAttrib(trElm, 'valign') || getStyle(trElm, 'vertical-align');
         var height = trimSize(getStyle(trElm, 'height', 'height'));
         var className = dom.getAttrib(trElm, 'class');
         var bgcolor = convertRGBToHex(getStyle(trElm, 'bgcolor', 'backgroundColor'));
@@ -248,7 +256,7 @@ var TableDialog = {
         // Get table cell data
         var celltype = tdElm.nodeName.toLowerCase();
         var align = dom.getAttrib(tdElm, 'align');
-        var valign = dom.getAttrib(tdElm, 'valign');
+        var valign = dom.getAttrib(tdElm, 'valign') || getStyle(tdElm, 'vertical-align');
         var width = trimSize(getStyle(tdElm, 'width', 'width'));
         var height = trimSize(getStyle(tdElm, 'height', 'height'));
         var bordercolor = convertRGBToHex(getStyle(tdElm, 'bordercolor', 'borderLeftColor'));
@@ -856,7 +864,7 @@ var TableDialog = {
         tinyMCEPopup.close();
     },
     updateCell: function(td, skip_id) {
-        var ed = tinyMCEPopup.editor, dom = ed.dom, doc = ed.getDoc(), v;
+        var self = this, ed = tinyMCEPopup.editor, dom = ed.dom, doc = ed.getDoc(), v;
 
         var curCellType = td.nodeName.toLowerCase();
         var celltype = $('#celltype').val();
@@ -874,6 +882,10 @@ var TableDialog = {
 
             if (k == 'classes') {
                 k = 'class';
+            }
+            
+            if (self.html5 && k == 'valign') {
+                return;
             }
 
             if (v === '') {
@@ -1031,6 +1043,10 @@ var TableDialog = {
 
         if (st['border-collapse'] && st['border-collapse'] == 'collapse') {
             $('#cellspacing').val(0);
+        }
+        
+        if (st['vertical-align']) {
+            $('#valign').val(st['vertical-align']);
         }
     },
     setClasses: function(v) {
