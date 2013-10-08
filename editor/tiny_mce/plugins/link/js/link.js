@@ -77,7 +77,7 @@ var LinkDialog = {
                     $('#text').val(v);
                     $('#text').attr('disabled', false);
                 } else {
-                    $('#text').val(tinyMCEPopup.getLang('dlg.selection', 'Element Selection'));
+                    $('#text').val(tinyMCEPopup.getLang('dlg.selection', 'Mixed Selection'));
                     $('#text').attr('disabled', true);
                     $('#text').addClass('disabled');
                 }
@@ -94,6 +94,19 @@ var LinkDialog = {
                 } else {                    
                     if (ed.dom.isBlock(n) || n.nodeName === 'BODY') {                                                                       
                         var html = se.getContent();
+                        // if node is body, remove tags to get html
+                        if (n.nodeName === 'BODY') {
+                            html = html.replace(/<\/?body[^>]*>/gi, '');
+                        // wrap in div to get html
+                        } else {
+                            var p = ed.dom.create('div', null, html);
+                            if (p.firstChild) {
+                                html = p.firstChild.innerHTML;
+                            }
+                        }
+                        // convert to string
+                        html = html.toString();
+                        
                         // plain text
                         if (v === html) {
                             state = true;
