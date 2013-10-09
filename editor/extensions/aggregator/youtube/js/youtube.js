@@ -9,56 +9,39 @@
  */
 WFAggregator.add('youtube', {
     /**
-	 * Parameter Object
-	 */
-    params 	: {
-        width : 425,
+     * Parameter Object
+     */
+    params: {
+        width: 425,
         height: 350,
-        embed : true
+        embed: true
     },
-
-    props : {
-        rel					: 1,
-        autohide 			: 2,
-        autoplay 			: 0,
-        controls 			: 1,
-        enablejsapi			: 0,
-        loop				: 0,
-        playlist			: '',
-        start				: '',
-        privacy				: 0
+    props: {
+        rel: 1,
+        autohide: 2,
+        autoplay: 0,
+        controls: 1,
+        enablejsapi: 0,
+        loop: 0,
+        playlist: '',
+        start: '',
+        privacy: 0
     },
-
-    setup 	: function() {
-        $('#youtube_embed').toggle(this.params.embed);
-        
-        $('#youtube_privacy').click( function() {
-            if ($(this).is(':checked')) {
-                $('#youtube_embed').attr('checked', true).attr('disabled', true);
-            } else {
-                $('#youtube_embed').attr('disabled', false);
-            }
-        });
-        
-        $('#youtube_embed').click( function() {
-            if (!$(this).is(':checked')) {
-                $('#youtube_privacy').attr('checked', false);
-            }
-        });
+    setup: function() {
     },
-    getTitle : function() {
+    getTitle: function() {
         return this.title || this.name;
     },
     /**
-	 * Get the Media type
-	 */
-    getType : function() {
+     * Get the Media type
+     */
+    getType: function() {
         return $('#youtube_embed:visible').is(':checked') ? 'flash' : 'iframe';
     },
     /**
-	 * Check whether a media type is supported
-	 */
-    isSupported : function(v) {
+     * Check whether a media type is supported
+     */
+    isSupported: function(v) {
         if (typeof v == 'object') {
             v = v.src || v.data || '';
         }
@@ -69,22 +52,22 @@ WFAggregator.add('youtube', {
 
         return false;
     },
-    getValues : function(src) {
+    getValues: function(src) {
         var self = this, data = {}, args = {}, type = this.getType();
 
         $.extend(args, $.String.query(src));
 
         // set https
         /*if ($('#youtube_https').is(':checked')) {
-            src = src.replace(/^http:\/\//, 'https://');
-        } else {
-            src = src.replace(/^https:\/\//, 'http://');
-        }*/
-        
+         src = src.replace(/^http:\/\//, 'https://');
+         } else {
+         src = src.replace(/^https:\/\//, 'http://');
+         }*/
+
         // protocol / scheme relative url
         src = src.replace(/^http(s)?:\/\//, '//');
 
-        $(':input', '#youtube_options').not('#youtube_embed, #youtube_https').each( function() {
+        $(':input', '#youtube_options').not('#youtube_embed, #youtube_https, #youtube_privacy').each(function() {
             var k = $(this).attr('id'), v = $(this).val();
 
             // remove youtube_ prefix
@@ -93,7 +76,7 @@ WFAggregator.add('youtube', {
             if ($(this).is(':checkbox')) {
                 v = $(this).is(':checked') ? 1 : 0;
             }
-			
+
             if (k == 'autohide') {
                 v = parseInt(v);
             }
@@ -114,31 +97,32 @@ WFAggregator.add('youtube', {
 
             return 'youtube' + c + '/' + (type == 'iframe' ? 'embed' : 'v') + '/' + d;
         });
+
         // privacy mode
         if ($('#youtube_privacy').is(':checked')) {
-            src = src.replace('youtube', 'youtube-nocookie');
+            src = src.replace(/youtube\./, 'youtube-nocookie.');
         } else {
-            src = src.replace('youtube-nocookie', 'youtube');
+            src = src.replace(/youtube-nocookie\./, 'youtube.');
         }
 
         if (type == 'iframe') {
             $.extend(data, {
-                allowfullscreen : true,
-                frameborder : 0
-            });	
-            
+                allowfullscreen: true,
+                frameborder: 0
+            });
+
             // add wmode
             args['wmode'] = 'opaque';
-            
+
         } else {
             $.extend(true, data, {
-                param : {
-                    allowfullscreen : true,
-                    wmode : 'opaque'
+                param: {
+                    allowfullscreen: true,
+                    wmode: 'opaque'
                 }
             });
         }
-        
+
         // convert args to URL query string
         var query = $.param(args);
 
@@ -151,7 +135,7 @@ WFAggregator.add('youtube', {
 
         return data;
     },
-    setValues : function(data) {
+    setValues: function(data) {
         var self = this, id = '', src = data.src || data.data || '';
 
         if (!src) {
@@ -163,13 +147,13 @@ WFAggregator.add('youtube', {
         $.extend(data, query);
 
         /*if (/https:\/\//.test(src)) {
-            data['https'] = true;
-        }*/
-        
+         data['https'] = true;
+         }*/
+
         // protocol / scheme relative url
         src = src.replace(/^http(s)?:\/\//, '//');
 
-        if (/youtube-nocookie/.test(src)) {
+        if (src.indexOf('youtube-nocookie') !== -1) {            
             data['privacy'] = true;
         }
 
@@ -193,7 +177,7 @@ WFAggregator.add('youtube', {
         if (data.playlist) {
             data.playlist = decodeURIComponent(data.playlist);
         }
-        
+
         // remove wmode
         if (query.wmode) {
             delete query.wmode;
@@ -226,16 +210,16 @@ WFAggregator.add('youtube', {
             args += '/' + id;
 
             return args;
-        // add www (required by iOS ??)
+            // add www (required by iOS ??)
         }).replace(/\/\/youtube/i, '//www.youtube');
-        
+
         data.src = src;
-        
+
         return data;
     },
-    getAttributes : function(src) {
+    getAttributes: function(src) {
         var args = {}, data = this.setValues({
-            src : src
+            src: src
         }) || {};
 
         $.each(data, function(k, v) {
@@ -246,18 +230,18 @@ WFAggregator.add('youtube', {
             args['youtube_' + k] = v;
         });
         $.extend(args, {
-            'src'	: data.src || src,
-            'width' : this.params.width,
+            'src': data.src || src,
+            'width': this.params.width,
             'height': this.params.height
         });
 
         return args;
     },
-    setAttributes : function() {
+    setAttributes: function() {
 
     },
-    onSelectFile 	: function() {
+    onSelectFile: function() {
     },
-    onInsert : function() {
+    onInsert: function() {
     }
 });
