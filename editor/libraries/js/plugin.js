@@ -180,7 +180,7 @@
             if (!$.support.cssFloat && document.querySelector) {
                 $('#jce').addClass('ie8');
             }
-            
+
             // create buttons
             $('button#insert, input#insert, button#update, input#update').button({
                 icons: {
@@ -193,7 +193,7 @@
                     primary: 'ui-icon-refresh'
                 }
             });
-            
+
             // add button actions
             $('button#cancel, input#cancel').button({
                 icons: {
@@ -205,13 +205,13 @@
             if (standalone) {
                 return;
             }
-            
+
             $('button#apply, input#apply').button({
                 icons: {
                     primary: 'ui-icon-plus'
                 }
             });
-            
+
             $('button#help, input#help').button({
                 icons: {
                     primary: 'ui-icon-help'
@@ -688,9 +688,9 @@
              */
             function isJSON(s) {
                 return /^[\],:{}\s]*$/
-                    .test(s.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@')
-                    .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
-                    .replace(/(?:^|:|,)(?:\s*\[)+/g, ''));
+                        .test(s.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@')
+                        .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
+                        .replace(/(?:^|:|,)(?:\s*\[)+/g, ''));
             }
 
             $.JSON.queue({
@@ -701,7 +701,7 @@
                 dataType: 'text',
                 success: function(o) {
                     var r;
-                    
+
                     if (o) {
                         // check result - should be object, parse as JSON if string
                         if ($.type(o) == 'string' && isJSON(o)) {
@@ -729,7 +729,7 @@
                             showError(o);
                         }
                     } else {
-                        o = {'error' : ''};
+                        o = {'error': ''};
                     }
 
                     if ($.isFunction(callback)) {
@@ -1385,14 +1385,25 @@
         },
         /*
          * Replace diacritic with nearest ascii equivalent.
-         * Possible future replacement? - https://github.com/addyosmani/backbone.paginator/blob/master/plugins/diacritic.js
+         * Based on cleanName function in plupload.js - https://github.com/moxiecode/plupload/blob/master/src/plupload.js
+         * Copyright 2013, Moxiecode Systems AB
          */
         replaceDiacritic: function(s) {
-            var utf8 = this.utf8_chars;
-            var ascii = this.ascii_chars;
+            var i, lookup;
 
-            for (var i = 0, ln = utf8.length; i < ln; i++) {
-                s = s.replace(utf8[i], ascii[i], 'g');
+            // Replace diacritics
+            lookup = [
+                /[\300-\306]/g, 'A', /[\340-\346]/g, 'a',
+                /\307/g, 'C', /\347/g, 'c',
+                /[\310-\313]/g, 'E', /[\350-\353]/g, 'e',
+                /[\314-\317]/g, 'I', /[\354-\357]/g, 'i',
+                /\321/g, 'N', /\361/g, 'n',
+                /[\322-\330]/g, 'O', /[\362-\370]/g, 'o',
+                /[\331-\334]/g, 'U', /[\371-\374]/g, 'u'
+            ];
+
+            for (i = 0; i < lookup.length; i += 2) {
+                s = s.replace(lookup[i], lookup[i + 1]);
             }
 
             return s;
