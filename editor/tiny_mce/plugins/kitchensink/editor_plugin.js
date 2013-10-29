@@ -10,68 +10,70 @@
 
 (function() {
     var each = tinymce.each, cookie = tinymce.util.Cookie, DOM = tinymce.DOM;
-    
+
     tinymce.create('tinymce.plugins.KitchenSink', {
-        init : function(ed, url) {
-            
-            var self= this, state = false;
-            
+        init: function(ed, url) {
+
+            var self = this, state = false;
+
             function toggle() {
                 var row = DOM.getParents(ed.id + '_kitchensink', 'table.mceToolbar');
-               
+
                 if (!row) {
                     return;
                 }
-               
+
                 var n = DOM.getNext(row[0], 'table.mceToolbar');
-                
-                while(n) {
+
+                while (n) {
                     if (DOM.isHidden(n)) {
                         DOM.setStyle(n, 'display', '');
                         state = true;
-                        
+
                     } else {
                         DOM.hide(n);
                         state = false;
                     }
-                    
+
                     n = DOM.getNext(n, 'table.mceToolbar');
                 }
                 
+                var h = ed.getContentAreaContainer().offsetHeight || ed.getElement().style.height || 0;
+
+                if (h) {
+                    DOM.setStyle(ed.id + '_ifr', 'height', h);
+                }
+
                 ed.controlManager.setActive('kitchensink', state);
             }
-            
+
             ed.addCommand('mceKitchenSink', toggle);
 
             ed.addButton('kitchensink', {
-                title   : 'kitchensink.desc', 
-                cmd     : 'mceKitchenSink'
+                title: 'kitchensink.desc',
+                cmd: 'mceKitchenSink'
             });
-
-            ed.onPostRender.add(function(ed, cm) {  
+            
+            ed.onPostRender.add(function(ed, cm) {
                 if (DOM.get('mce_fullscreen')) {
                     state = true;
                     return;
                 }
 
                 toggle();
-                
-                // adjust iframe 
-                DOM.setStyle(ed.id + '_ifr', 'height', ed.getContentAreaContainer().offsetHeight);
             });
-            
+
             ed.onInit.add(function(ed) {
                 ed.controlManager.setActive('kitchensink', state);
             });
         },
-
-        getInfo : function() {
+        getInfo: function() {
             return {
-                longname : 'Kitchen Sink',
-                author : 'Ryan Demmer',
-                authorurl : 'http://www.joomlacontenteditor.net/',
-                infourl : 'http://www.joomlacontenteditor.net/',
-                version : '@@version@@'
+                longname: 'Kitchen Sink',
+                author: 'Ryan Demmer',
+                authorurl: 'http://www.joomlacontenteditor.net/',
+                infourl: 'http://www.joomlacontenteditor.net/',
+                version: '@@version@@'
             };
         }
     });
