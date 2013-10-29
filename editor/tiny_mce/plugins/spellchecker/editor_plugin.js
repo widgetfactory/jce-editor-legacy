@@ -162,6 +162,7 @@
                         title: 'spellchecker.langs',
                         'class': 'mceMenuItemTitle'
                     }).setDisabled(1);
+                    t.menuItems = {};
                     each(t.languages, function(v, k) {
                         var o = {
                             icon: 1
@@ -171,16 +172,14 @@
                             if (v == t.selectedLang) {
                                 return;
                             }
-                            mi.setSelected(1);
-                            t.selectedItem.setSelected(0);
-                            t.selectedItem = mi;
+                            t._updateMenu(mi);
                             t.selectedLang = v;
                         };
 
                         o.title = k;
                         mi = m.add(o);
                         mi.setSelected(v == t.selectedLang);
-
+                        t.menuItems[v] = mi;
                         if (v == t.selectedLang) {
                             t.selectedItem = mi;
                         }
@@ -219,7 +218,11 @@
             }
         },
         // Internal functions
-
+        _updateMenu: function(mi) {
+            mi.setSelected(1);
+            this.selectedItem.setSelected(0);
+            this.selectedItem = mi;
+        },
         _walk: function(n, f) {
             var d = this.editor.getDoc(), w;
 
@@ -296,7 +299,7 @@
             // Wrap incorrect words in spans
             each(nl, function(n) {
                 var node, elem, txt, pos, v = n.nodeValue;
-
+                rx.lastIndex = 0;
                 if (rx.test(v)) {
                     // Encode the content
                     v = dom.encode(v);
@@ -516,7 +519,7 @@
                 success: function(o) {
                     var c = JSON.parse(o);
 
-                    if (typeof(c) == 'undefined') {
+                    if (typeof (c) == 'undefined') {
                         c = {
                             error: 'JSON Parse error.'
                         };
