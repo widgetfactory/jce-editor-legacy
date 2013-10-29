@@ -10,17 +10,15 @@
 //tinyMCEPopup.requireLangPack();
 
 var SearchReplaceDialog = {
-
-    settings : {},
-
-    init : function(ed) {
+    settings: {},
+    init: function(ed) {
         var self = this, m = tinyMCEPopup.getWindowArg("mode");
 
         $.Plugin.init();
 
         $('button#next').button({
-            icons : {
-                primary : 'ui-icon-arrowthick-1-e'
+            icons: {
+                primary: 'ui-icon-arrowthick-1-e'
             }
         }).click(function(e) {
             self.searchNext('none');
@@ -28,8 +26,8 @@ var SearchReplaceDialog = {
         });
 
         $('button#replaceBtn').button({
-            icons : {
-                primary : 'ui-icon-transferthick-e-w'
+            icons: {
+                primary: 'ui-icon-transferthick-e-w'
             }
         }).click(function(e) {
             self.searchNext('current');
@@ -37,21 +35,21 @@ var SearchReplaceDialog = {
         });
 
         $('button#replaceAllBtn').button({
-            icons : {
-                primary : 'ui-icon-transferthick-e-w'
+            icons: {
+                primary: 'ui-icon-transferthick-e-w'
             }
         }).click(function(e) {
             self.searchNext('all');
             e.preventDefault();
         });
-        
+
         var index = $('a[href="#' + m + '_tab"]').parent().index();
-        
+
         $('#tabs').on('tabsactivate', function(e, ui) {
-            var id = $(ui.newPanel).attr('id');            
+            var id = $(ui.newPanel).attr('id');
             self.switchMode(id.substring(0, id.indexOf('_')));
         }).tabs('option', 'active', index);
-        
+
         this.switchMode(m);
 
         $('#' + m + '_panel_searchstring').val(tinyMCEPopup.getWindowArg("search_string"));
@@ -59,39 +57,41 @@ var SearchReplaceDialog = {
         // Focus input field
         $('#' + m + '_panel_searchstring').focus();
     },
-
-    switchMode : function(m) {
+    switchMode: function(m) {
         var lm = this.lastMode;
 
         if (lm != m) {
             if (lm) {
                 $('#' + m + '_panel_searchstring').val($('#' + lm + '_panel_searchstring').val());
-                $('#' + m + '_panel_backwardsu').prop('checked',  $('#' + lm + '_panel_backwardsu').is(':checked'));
+                $('#' + m + '_panel_backwardsu').prop('checked', $('#' + lm + '_panel_backwardsu').is(':checked'));
 
-                $('#' + m + '_panel_backwardsd').prop('checked',  $('#' + lm + '_panel_backwardsd').is(':checked'));
-                $('#' + m + '_panel_casesensitivebox').prop('checked',  $('#' + lm + '_panel_casesensitivebox').is(':checked'));
+                $('#' + m + '_panel_backwardsd').prop('checked', $('#' + lm + '_panel_backwardsd').is(':checked'));
+                $('#' + m + '_panel_casesensitivebox').prop('checked', $('#' + lm + '_panel_casesensitivebox').is(':checked'));
             }
 
-            $("#replaceBtn, #replaceAllBtn").css('display', function() {                
+            $("#replaceBtn, #replaceAllBtn").css('display', function() {
                 if (m == 'replace') {
                     return 'inline';
                 }
                 return 'none';
             });
-            
+
             this.lastMode = m;
         }
     },
-
-    searchNext : function(a) {
+    searchNext: function(a) {
         var ed = tinyMCEPopup.editor, se = ed.selection, r = se.getRng(), m = this.lastMode, s, b, fl = 0, w = ed.getWin(), wm = ed.windowManager, fo = 0, ca, rs;
 
+        if (tinymce.isIE11 && !window.find) {
+            return;
+        }
+
         // Get input
-        s   = $('#' + m + '_panel_searchstring').val();
-        b   = $('#' + m + '_panel_backwardsu').is(':checked');
-        ca  = $('#' + m + '_panel_casesensitivebox').is(':checked');
-        rs  = $('#replace_panel_replacestring').val();
-        
+        s = $('#' + m + '_panel_searchstring').val();
+        b = $('#' + m + '_panel_backwardsu').is(':checked');
+        ca = $('#' + m + '_panel_casesensitivebox').is(':checked');
+        rs = $('#replace_panel_replacestring').val();
+
         if (tinymce.isIE) {
             r = ed.getDoc().selection.createRange();
         }
@@ -105,13 +105,13 @@ var SearchReplaceDialog = {
             r = se.getRng().cloneRange();
             ed.getDoc().execCommand('SelectAll', false, null);
             se.setRng(r);
-        };
+        }
 
         function replace() {
             ed.selection.setContent(rs); // Needs to be duplicated due to selection bug in IE
-        };
-
-        // IE flags
+        }
+        
+       // IE flags
         if (ca)
             fl = fl | 4;
 
