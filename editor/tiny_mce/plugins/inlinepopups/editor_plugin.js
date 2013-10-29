@@ -66,7 +66,7 @@
             if (!f.type)
                 t.bookmark = ed.selection.getBookmark(1);
 
-            id = DOM.uniqueId();
+            id = DOM.uniqueId("mce_inlinepopups_");
             vp = DOM.getViewPort();
             f.width = parseInt(f.width || 320);
             f.height = parseInt(f.height || 240) + (tinymce.isIE ? 8 : 0);
