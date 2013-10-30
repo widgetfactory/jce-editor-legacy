@@ -23,16 +23,16 @@ var BrowserDialog = {
 
         var win = tinyMCEPopup.getWindowArg("window");        
         var src = tinyMCEPopup.getWindowArg("url");
-		
-        if (src) {
-            src = tinyMCEPopup.editor.convertURL(src);
-            $('#insert').button('option', 'label', tinyMCEPopup.getLang('update', 'Update', true));
-        }
-        
+
         $.Plugin.init();
 	
         if (/(:\/\/|www|index.php(.*)\?option)/gi.test(src)) {
             src = '';	
+        }
+        
+        if (src) {
+            src = tinyMCEPopup.editor.convertURL(src);
+            $('#insert').button('option', 'label', tinyMCEPopup.getLang('update', 'Update', true));
         }
 		
         $('<input type="hidden" id="src" value="'+ src +'" />').appendTo(document.body);
