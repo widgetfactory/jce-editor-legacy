@@ -176,7 +176,6 @@
             function isMedia(n) {
                 return n && n.nodeName == 'IMG' && /mceItem(Flash|ShockWave|WindowsMedia|QuickTime|RealMedia|DivX|Silverlight|Audio|Video|Generic|Iframe)/.test(n.className);
             }
-            ;
 
             ed.onPreInit.add(function() {
                 var invalid = ed.settings.invalid_elements;
@@ -535,8 +534,9 @@
                 }
 
                 // get type data
-                var lookup = this.lookup[classid] || this.lookup[type] || this.lookup[name] || this.lookup['flash'];
-                type = lookup.name || type || '';
+                var lookup = this.lookup[classid] || this.lookup[type] || this.lookup[name] || {name : 'generic'};
+                
+                type = lookup.name || type;
 
                 var style = Styles.parse(n.attr('style'));
 
@@ -1013,7 +1013,7 @@
                         };
                     }
 
-                    var lookup = this.lookup[root.type] || this.lookup[name] || this.lookup['flash'];
+                    var lookup = this.lookup[root.type] || this.lookup[name] || {name : 'generic'};
 
                     if (!root.classid) {
                         root.classid = lookup.classid;
@@ -1051,7 +1051,10 @@
                     extend(root, props);
 
                     delete root.data;
-                    delete root.type;
+                    
+                    if (root.classid && root.codebase) {
+                        delete root.type;
+                    }
                 }
                 // audio / video
             } else {                
