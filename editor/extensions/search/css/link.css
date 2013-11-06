@@ -181,12 +181,12 @@ div#search-browser #search-options-button.active span.icon {
     margin : 2px;
 }
 
-div#search-options fieldset.only ul {
+div#search-options fieldset.search_only ul {
     list-style: none;
     padding : 0;
     margin : 0;
 }
 
-div#search-options fieldset.only ul li {
+div#search-options fieldset.search_only ul li {
     display : inline-block;
 }
