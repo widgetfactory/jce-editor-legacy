@@ -217,7 +217,7 @@
                     }
                 }
                 // pad bootstrap icons
-                o.content = o.content.replace(/<i class="icon-([\w-]+)"><\/i>/g, '<i class="icon-$1">&nbsp;</i>');
+                o.content = o.content.replace(/<([a-z0-9]+) class="icon-([\w-]+)"><\/\1>/gi, '<$1 class="icon-$2">&nbsp;</$1>');
             });
 
             // Cleanup callback
@@ -250,7 +250,7 @@
                     }
 
                     // clean bootstrap icons
-                    o.content = o.content.replace(/<i class="icon-([\w-]+)">(&nbsp;|\u00a0)<\/i>/g, '<i class="icon-$1"></i>');
+                    o.content = o.content.replace(/<([a-z0-9]+) class="icon-([\w-]+)">(&nbsp;|\u00a0)<\/\1>/g, '<$1 class="icon-$2"></$1>');
                 }
             });
 
