@@ -689,7 +689,7 @@
 
             // convert list items to marker
             if (ed.getParam('clipboard_paste_convert_lists', true)) {
-                h = h.replace(/<!--\[if !supportLists\]-->/gi, '$1__MCE_LIST_ITEM__'); // Convert supportLists to a list item marker
+                h = h.replace(/<!--\[if !supportLists\]-->/gi, '__MCE_LIST_ITEM__'); // Convert supportLists to a list item marker
                 h = h.replace(/(<span[^>]+:\s*symbol[^>]+>)/gi, '$1__MCE_LIST_ITEM__'); // Convert symbol spans to list items
                 h = h.replace(/(<span[^>]+mso-list:[^>]+>)/gi, '$1__MCE_LIST_ITEM__'); // Convert mso-list to item marker
                 h = h.replace(/(<p[^>]+(?:MsoListParagraph)[^>]+>)/gi, '$1__MCE_LIST_ITEM__');
@@ -1225,6 +1225,11 @@
                     if (emptyRe.test(h)) {
                         dom.remove(n);
                     }
+                    
+                    // remove span without attributes
+                    if (dom.getAttribs(n).length === 0) {
+                        dom.remove(n, 1);
+                    }
                 });
             }
 
@@ -1244,25 +1249,28 @@
          * Converts the most common bullet and number formats in Office into a real semantic UL/LI list.
          */
         _convertLists: function(node) {
-            var ed = this.editor,
-                    dom = ed.dom,
-                    listElm, li, lastMargin = -1,
-                    margin, levels = [],
-                    lastType;
+            var ed = this.editor, dom = ed.dom, listElm, li, lastMargin = -1, margin, levels = [], lastType;
 
-            var ULRX = /^(__MCE_LIST_ITEM__)+[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*\u00a0*/;
-            var OLRX = /^(__MCE_LIST_ITEM__)+\(?(\w+)(\.|\))\s*\u00a0+/;
+            var ULRX = /^(__MCE_LIST_ITEM__)*\s*[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*\u00a0*/;
+            var OLRX = /^(__MCE_LIST_ITEM__)*\s*\(?(\w+)(\.|\))\s*\u00a0*/;
 
             // Convert middot lists into real semantic lists
-            each(dom.select('p', node), function(p) {
-                var sib, val = '', type, html, idx, parents, s, chars, st;
+            each(dom.select('p, h1, h2, h3, h4, h5, h6', node), function(p, i) {
+                var sib, val = '', type, html, idx, parents, s, chars, st, start;
 
                 // Get text node value at beginning of paragraph
                 for (sib = p.firstChild; sib && sib.nodeType == 3; sib = sib.nextSibling) {
                     val += sib.nodeValue;
                 }
+                
                 // get paragraph html
                 html = p.innerHTML;
+                
+                // must be a list item
+                if (html.indexOf('__MCE_LIST_ITEM__') !== 0) {
+                    return;
+                }
+
                 // remove tags and replace spaces
                 val = html.replace(/<\/?\w+[^>]*>/gi, '').replace(/&nbsp;/g, '\u00a0');
 
@@ -1279,9 +1287,6 @@
 
                     // Detect ordered lists 1., a. or ixv.
                     if (chars && chars != '__MCE_LIST_ITEM__') {
-                        /*if (/0[1-9]/.test(chars)) {
-                         st = 'decimal-leading-zero';
-                         }*/
                         if (/[a-z+?]/.test(chars)) {
                             st = 'lower-alpha';
                         }
@@ -1294,23 +1299,28 @@
                         if (/[IVX+]/.test(chars)) {
                             st = 'upper-roman';
                         }
+                        // get start position if decimal
+                        if (i === 0 && !st && parseInt(chars) > 1) {
+                            start = parseInt(chars);
+                        }
                     }
                 }
 
                 // Check if node value matches the list pattern: o&nbsp;&nbsp;
                 if (type) {
                     margin = parseFloat(p.style.marginLeft || 0);
-
-                    if (margin > lastMargin)
+                    
+                    if (margin > lastMargin) {
                         levels.push(margin);
+                    }
 
                     if (!listElm || type != lastType) {
                         listElm = dom.create(type);
                         dom.insertAfter(listElm, p);
-                    } else {
+                    } else {                      
                         // Nested list element
                         if (margin > lastMargin) {
-                            listElm = li.appendChild(dom.create(type));
+                            listElm = dom.add(li, type);                            
                         } else if (margin < lastMargin) {
                             // Find parent level based on margin value
                             idx = tinymce.inArray(levels, margin);
@@ -1323,12 +1333,14 @@
                     each(dom.select('span', p), function(span) {
                         var html = span.innerHTML.replace(/<\/?\w+[^>]*>/gi, '').replace(/&nbsp;/g, '\u00a0');
 
-                        // Remove span with the middot or the number
-                        if (ULRX.test(html) || OLRX.test(html)) {
+                        // Remove span with the middot or the number or empty span
+                        if (ULRX.test(html) || OLRX.test(html) || /^(\s|\u00a0)?$/.test(html)) {
                             dom.remove(span);
-                            // remove empty spans
-                        } else if (/^(\s|\u00a0)?$/.test(html)) {
-                            dom.remove(span);
+                        }
+                        
+                        // remove span without attributes
+                        if (dom.getAttribs(span).length === 0) {
+                            dom.remove(span, 1);
                         }
                     });
 
@@ -1337,19 +1349,28 @@
 
                     // Remove middot/list items
                     if (type == 'ul') {
-                        html = html.replace(/__MCE_LIST_ITEM__/g, '').replace(/^[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*(&nbsp;|\u00a0)+\s*/, '');
+                        html = html.replace(ULRX, '');
                     } else {
-                        html = html.replace(/__MCE_LIST_ITEM__/g, '').replace(/(\s|&nbsp;|\u00a0)*\(?(\w+)(\.|\))?\s*(&nbsp;|\u00a0)+\s*/, '');
+                        html = html.replace(OLRX, '');
+                    }
+                    
+                    var args = {};
+                    
+                    // set list start
+                    if (start && i === 0) {
+                        args.start = start;
                     }
 
                     // Create li and add paragraph data into the new li
-                    li = listElm.appendChild(dom.create('li', 0, html));
-                    dom.remove(p);
-
+                    li = dom.add(listElm, 'li', args, html);
+                    
                     // Set list styling if any
                     if (st && typeof st != 'undefined') {
-                        dom.setStyle(listElm, 'list-style-type', st);
+                        dom.setStyle(li, 'list-style-type', st);
                     }
+                    
+                    // remove original
+                    dom.remove(p);
 
                     lastMargin = margin;
                     lastType = type;
@@ -1359,10 +1380,10 @@
             });
 
             // Remove any left over makers
-            html = node.innerHTML;
+            var h = node.innerHTML;
 
-            if (html.indexOf('__MCE_LIST_ITEM__') != -1) {
-                node.innerHTML = html.replace(/__MCE_LIST_ITEM__/g, '');
+            if (h.indexOf('__MCE_LIST_ITEM__') !== -1) {
+                node.innerHTML = h.replace(/__MCE_LIST_ITEM__/g, '');
             }
         },
         /**
