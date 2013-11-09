@@ -172,8 +172,7 @@
             var self = this, cm, o = this.options;
 
             if (window.CodeMirror) {
-
-                if (o.theme == 'codemirror') {
+               if (o.theme == 'codemirror') {
                     o.theme = 'default';
                 }
 
@@ -446,12 +445,6 @@
                 }
 
                 cm.refresh();
-
-                /*window.setTimeout(function() {
-                 var scroller = cm.getScrollerElement(), h = cm.getScrollerElement().offsetHeight - self.toolbar.offsetHeight;
-                 DOM.setStyle(scroller, 'height', h);
-                 DOM.setStyle(scroller.previoussibling, 'height', h);
-                 }, 10);*/
             }
         },
         _loaded: function(content) {
