@@ -123,6 +123,7 @@
                     if (!ed.getParam('code_php')) {
                         o.content = o.content.replace(/<\?(php)?([\s\S]*?)\?>/gi, '');
                     }
+
                     // PHP code within an attribute
                     o.content = o.content.replace(/\="([^"]+?)"/g, function(a, b) {                        
                         b = b.replace(/<\?(php)?(.+?)\?>/gi, function(x, y, z) {
@@ -157,17 +158,9 @@
                     // padd empty script tags
                     o.content = o.content.replace(/<script([^>]+)><\/script>/gi, '<script$1>\u00a0</script>');
 					
-                    // process type attributes for scripts
-                    o.content = o.content.replace(/<script([^>]*)>/gi, function(a, b) {
-                        var re = /\stype="([^"]+)"/;
-						
-                        if (re.test(b)) {
-                            b = b.replace(re, ' data-mce-type="$1"');
-                        } else {
-                            b += ' data-mce-type="text/javascript"';
-                        }
-						
-                        return '<script' + b + '>';
+                    // protect style and script tags from forced_root_block
+                    o.content = o.content.replace(/<(script|style)([^>]*)>/gi, function(a, b, c) {
+                        return '<' + b + c + ' data-mce-type="text/' + (b === 'script' ? 'javascript' : 'css') + '">';
                     });
                 }
             });
@@ -227,7 +220,7 @@
         },
 
         _buildScript: function(n) {
-            var self = this, ed = this.editor, v, node, text;
+            var self = this, ed = this.editor, v, node, text, p;
 
             if (!n.parent)
                 return;
