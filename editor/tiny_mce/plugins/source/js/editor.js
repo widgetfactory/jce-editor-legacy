@@ -225,16 +225,18 @@
 
                 // resize editor
                 cm.resize = function(w, h, init) {
-                    var scroller = cm.getScrollerElement();
+                    //var scroller = cm.getScrollerElement();
 
                     // only if drag resize
                     if (!init) {
                         h = h - self.toolbar.offsetHeight;
                     }
 
-                    DOM.setStyles(scroller, {
+                    /*DOM.setStyles(scroller, {
                         height: h
-                    });
+                    });*/
+                    
+                    cm.setSize(w || null, h);
                 };
 
                 cm.showInvisibles = function(s) {
