@@ -301,7 +301,6 @@
                     function block(e) {
                         e.preventDefault();
                     }
-                    ;
 
                     // set paste state as true...we got this far right?
                     self.canPaste = true;
@@ -1068,6 +1067,15 @@
 
             // post process Word content
             if (o.wordContent) {
+                
+                // where did this come from? Remove it!
+                dom.remove(dom.select('a[name="_GoBack"]', o.node), 1);
+                
+                // convert lists
+                if (ed.getParam('clipboard_paste_convert_lists', true)) {
+                    this._convertLists(o.node);
+                }
+                
                 var ftn = /(mso-(end|foot)note-id|sdfootnoteanc)/;
 
                 // process anchors
@@ -1083,21 +1091,23 @@
                     if (ed.getParam('clipboard_paste_process_footnotes', 'convert') == 'convert') {
                         var s = n.getAttribute('data-mce-footnote'), anchor, id;
 
-                        each(ed.dom.select('span', n), function(span) {
-                            if (!span.getAttribute('style')) {
-                                ed.dom.remove(span, 1);
-                            }
-                        });
-
                         // footnote anchor
                         if (s && href) {
-                            // remove #
-                            if (href.charAt(0) == '#') {
-                                id = href.substring(1);
-                            }
-
+                            // remove spans
+                            ed.dom.remove(ed.dom.select('span', n), 1);
+                            
                             // remove marker
                             n.removeAttribute('data-mce-footnote');
+                            
+                            // add vertical-align style
+                            if (n.href) {
+                                ed.dom.setStyle(n, 'vertical-align', 'super');
+                            }
+                            
+                            // get anchor id from href
+                            if (href.charAt(0) === '#') {
+                                id = href.substring(1);
+                            }
 
                             if (id) {
                                 // get associated anchor
@@ -1126,17 +1136,6 @@
                                     dom.setAttribs(n, {
                                         'href': '#' + id
                                     });
-
-                                    // remove name attribute from link
-                                    n.removeAttribute('name');
-                                } else {
-                                    n.removeAttribute('href');
-                                    // remove extra spans
-                                    each(ed.dom.select('span', n.parentNode), function(span) {
-                                        if (span.firstChild && span.firstChild.nodeType == 1) {
-                                            ed.dom.remove(span, 1);
-                                        }
-                                    });
                                 }
                             }
                         }
@@ -1159,11 +1158,6 @@
             } else {
                 // process style attributes
                 this._processStyles(o.node);
-            }
-
-            // convert lists
-            if (ed.getParam('clipboard_paste_convert_lists', true)) {
-                this._convertLists(o.node);
             }
 
             // image file/data regular expression
@@ -1258,16 +1252,11 @@
             each(dom.select('p, h1, h2, h3, h4, h5, h6', node), function(p, i) {
                 var sib, val = '', type, html, idx, parents, s, chars, st, start;
 
-                // Get text node value at beginning of paragraph
-                for (sib = p.firstChild; sib && sib.nodeType == 3; sib = sib.nextSibling) {
-                    val += sib.nodeValue;
-                }
-                
                 // get paragraph html
                 html = p.innerHTML;
                 
-                // must be a list item
-                if (html.indexOf('__MCE_LIST_ITEM__') !== 0) {
+                // quick check, must be a list item
+                if (html.indexOf('__MCE_LIST_ITEM__') === -1) {
                     return;
                 }
 
@@ -1334,7 +1323,13 @@
                         var html = span.innerHTML.replace(/<\/?\w+[^>]*>/gi, '').replace(/&nbsp;/g, '\u00a0');
 
                         // Remove span with the middot or the number or empty span
-                        if (ULRX.test(html) || OLRX.test(html) || /^(\s|\u00a0)?$/.test(html)) {
+                        if (ULRX.test(html) || OLRX.test(html)) {
+                            // keep innerHTML if a list item to be processed, otheriwse remove all
+                            dom.remove(span, html.indexOf('__MCE_LIST_ITEM__') !== -1);
+                        }
+                        
+                        // remove spans containing spaces
+                        if (/^(\s|\u00a0|&nbsp;)+$/.test(html)) {
                             dom.remove(span);
                         }
                         
@@ -1354,12 +1349,7 @@
                         html = html.replace(OLRX, '');
                     }
                     
-                    var args = {};
-                    
-                    // set list start
-                    if (start && i === 0) {
-                        args.start = start;
-                    }
+                    var args = {'start' : start};
 
                     // Create li and add paragraph data into the new li
                     li = dom.add(listElm, 'li', args, html);
