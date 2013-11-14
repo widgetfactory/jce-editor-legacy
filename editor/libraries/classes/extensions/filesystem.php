@@ -116,7 +116,7 @@ class WFFileSystem extends WFExtension {
                     // Joomla! 2.5?
                     if (is_int($group_id)) {
                         // usergroup table				
-                        $group = JTable::getInstance('Usergroup', 'JTable');
+                        $group = JTable::getInstance('Usergroup');
                         $group->load($group_id);
                         // usertype	
                         $usertype = $group->title;
