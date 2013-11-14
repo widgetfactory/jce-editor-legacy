@@ -496,7 +496,6 @@
                 });
             }
         },
-
         getInfo: function() {
             return {
                 longname: 'Paste text/word',
@@ -682,9 +681,56 @@
 
             return h;
         },
+        _processFootNotes: function(h) {
+            var ed = this.editor;
+
+            var footnotes = ed.getParam('clipboard_paste_process_footnotes', 'convert');
+
+            // remove surrounding divs
+            if (footnotes == 'remove') {
+                h = h.replace(/<div[^>]+(mso-element:(end|foot)note|sdfootnote)[^>]+>[\s\S]+?<\/div>/gi, '');
+                h = h.replace(/<div id="(edn|ftn)">[\s\S]+?<\/div>/gi, '');
+            } else {
+                // remove div
+                h = h.replace(/<div[^>]+mso-element:\s*((end|foot)note|sdfootnote)[^>]+>/gi, '');
+                h = h.replace(/<div id="(edn|ftn)">/gi, '');
+            }
+
+            // remove footnotes div (cleanup will remove trailing </div>)
+            h = h.replace('<div><!--\[if !supportFootnotes\]--><br clear="all">', '');
+
+            // process footnote anchors
+            if (footnotes === 'convert') {
+                h = h.replace(/<a\b([^>]+)style="(mso-(end|foot)note-id|sdfootnoteanc)[^"]+"([^>]+)>/gi, '<a$1data-mce-footnote="1"$4>');
+            } else if (footnotes === 'unlink') {
+                h = h.replace(/<a\b[^>]+(mso-(end|foot)note-id|sdfootnoteanc)[^>]+>([\s\S]+?)<\/a>/gi, '$3');
+            } else if (footnotes === 'remove') {
+                h = h.replace(/<a\b[^>]+(mso-(end|foot)note-id|sdfootnoteanc)[^>]+>([\s\S]+?)<\/a>/gi, '');
+            }
+
+            // process footnotes identified by <!--[if !supportFootnotes]--> comment
+            h = h.replace(/<a\b([^>]+)href="([^"]+)"([^>]+)>(.*?)<!--\[if !supportFootnotes\]-->(.*?)<\/a>/gi, function(a, b, c, d, e, f) {
+                var s = e + f;
+                // remove comments and spans
+                s = s.replace('<!--[endif]-->', '').replace(/<\/?span([^>]*)>/g, '');
+
+                // return link if convert
+                if (footnotes === 'convert') {
+                    return '<a data-mce-footnote="1"' + b + 'href="' + c + '"' + d + '>' + s + '</a>';
+                }
+
+                // return contents only
+                if (footnotes === 'unlink') {
+                    return s;
+                }
+
+                return "";
+            });
+
+            return h;
+        },
         _processWordContent: function(h) {
-            var ed = this.editor,
-                    stripClass, len;
+            var ed = this.editor, stripClass, len;
 
             // convert list items to marker
             if (ed.getParam('clipboard_paste_convert_lists', true)) {
@@ -693,26 +739,9 @@
                 h = h.replace(/(<span[^>]+mso-list:[^>]+>)/gi, '$1__MCE_LIST_ITEM__'); // Convert mso-list to item marker
                 h = h.replace(/(<p[^>]+(?:MsoListParagraph)[^>]+>)/gi, '$1__MCE_LIST_ITEM__');
             }
-
-            // remove footnote anchors
-            if (ed.getParam('clipboard_paste_process_footnotes', 'convert') == 'convert') {
-                h = h.replace(/<a\b([^>]+)style="(mso-(end|foot)note-id|sdfootnoteanc)[^"]+"([^>]+)>/gi, '<a$1data-mce-footnote="1"$4>');
-                // remove div
-                h = h.replace(/<div[^>]+(mso-element:(end|foot)note|sdfootnote)[^>]+>([\s\S]+?)<\/div>/gi, '$3');
-            }
-
-            // remove footnote anchors
-            if (ed.getParam('clipboard_paste_process_footnotes', 'convert') == 'remove') {
-                h = h.replace(/<a\b[^>]+(mso-(end|foot)note-id|sdfootnoteanc)[^>]+>([\s\S]+?)<\/a>/gi, '');
-                h = h.replace(/<div[^>]+(mso-element:(end|foot)note|sdfootnote)[^>]+>[\s\S]+?<\/div>/gi, '');
-            }
-            // unlink footnotes
-            if (ed.getParam('clipboard_paste_process_footnotes', 'convert') == 'unlink') {
-                h = h.replace(/<a\b[^>]+(mso-(end|foot)note-id|sdfootnoteanc)[^>]+>([\s\S]+?)<\/a>/gi, '$3');
-                // remove div
-                h = h.replace(/<div[^>]+(mso-element:(end|foot)note|sdfootnote)[^>]+>([\s\S]+?)<\/div>/gi, '$3');
-            }
-
+            // pre process footnotes
+            h = this._processFootNotes(h);
+            // clean word content
             h = this._cleanWordContent(h);
 
             // Convert <s> into <strike> for line-though
@@ -1036,6 +1065,68 @@
 
             return h;
         },
+        _convertFootNotes: function(node) {
+            var ed = this.editor, dom = ed.dom;
+
+            // process anchors
+            each(dom.select('a[data-mce-footnote]', node), function(n, i) {
+                var anchor, id, href = n.getAttribute('href');
+
+                // remove spans
+                dom.remove(ed.dom.select('span', n), 1);
+
+                // remove marker
+                n.removeAttribute('data-mce-footnote');
+                
+                // remove title
+                n.removeAttribute('title');
+
+                // add vertical-align style
+                dom.setStyle(n, 'vertical-align', 'super');
+
+                // get anchor id from href
+                if (href.charAt(0) === '#') {
+                    id = href.substring(1);
+                }
+
+                if (id) {
+                    if (!n.id) {
+                        dom.setAttrib(n, 'id', 'ftnref' + id.replace(/\D/g, ''));
+                    }
+                    
+                    // get associated anchor
+                    anchor = dom.select('a[name="' + id + '"]', node);
+
+                    // if there is an anchor
+                    if (anchor.length) {
+                        anchor = anchor[0];
+                        
+                        // fix anchor id/name
+                        id = id.replace(/[^a-z]+(\w+)/gi, '$1');
+
+                        var attribs = {
+                            'class': 'mceItemAnchor',
+                            'name': null,
+                            'id': null,
+                            'href' : '#' + n.id
+                        };
+                        // get correct anchor attribute for schema
+                        var k = ed.settings.schema == 'html5' ? 'id' : 'name';
+
+                        // set attribute
+                        attribs[k] = id;
+
+                        // update attributes
+                        dom.setAttribs(anchor, attribs);
+
+                        // update anchor link
+                        dom.setAttribs(n, {
+                            'href': '#' + id
+                        });
+                    }
+                }
+            });
+        },
         /**
          * Various post process items.
          */
@@ -1067,80 +1158,28 @@
 
             // post process Word content
             if (o.wordContent) {
-                
                 // where did this come from? Remove it!
                 dom.remove(dom.select('a[name="_GoBack"]', o.node), 1);
-                
-                // convert lists
-                if (ed.getParam('clipboard_paste_convert_lists', true)) {
-                    this._convertLists(o.node);
-                }
-                
-                var ftn = /(mso-(end|foot)note-id|sdfootnoteanc)/;
 
                 // process anchors
                 each(dom.select('a', o.node), function(n) {
                     var href = n.getAttribute('href');
 
                     // remove anchors
-                    if (!href || href.indexOf('#_Toc') != -1) {
+                    if (!href || href.indexOf('#_Toc') === 0) {
                         dom.remove(n, 1);
                     }
-
-                    // convert footnotes to anchors
-                    if (ed.getParam('clipboard_paste_process_footnotes', 'convert') == 'convert') {
-                        var s = n.getAttribute('data-mce-footnote'), anchor, id;
-
-                        // footnote anchor
-                        if (s && href) {
-                            // remove spans
-                            ed.dom.remove(ed.dom.select('span', n), 1);
-                            
-                            // remove marker
-                            n.removeAttribute('data-mce-footnote');
-                            
-                            // add vertical-align style
-                            if (n.href) {
-                                ed.dom.setStyle(n, 'vertical-align', 'super');
-                            }
-                            
-                            // get anchor id from href
-                            if (href.charAt(0) === '#') {
-                                id = href.substring(1);
-                            }
-
-                            if (id) {
-                                // get associated anchor
-                                anchor = dom.select('a[name="' + id + '"]', o.node);
-
-                                // if there is an anchor
-                                if (anchor.length) {
-                                    // fix anchor id/name
-                                    id = id.replace(/[^a-z]+(\w+)/gi, '$1');
-
-                                    var attribs = {
-                                        'class': 'mceItemAnchor',
-                                        'name': null,
-                                        'id': null
-                                    };
-                                    // get correct anchor attribute for schema
-                                    var k = ed.settings.schema == 'html5' ? 'id' : 'name';
-
-                                    // set attribute
-                                    attribs[k] = id;
-
-                                    // update attributes
-                                    dom.setAttribs(anchor, attribs);
-
-                                    // update anchor link
-                                    dom.setAttribs(n, {
-                                        'href': '#' + id
-                                    });
-                                }
-                            }
-                        }
-                    }
                 });
+
+                // convert lists
+                if (ed.getParam('clipboard_paste_convert_lists', true)) {
+                    this._convertLists(o.node);
+                }
+
+                // convert footnotes
+                if (ed.getParam('clipboard_paste_process_footnotes', 'convert') === 'convert') {
+                    this._convertFootNotes(o.node);
+                }
 
                 // Remove lang attribute
                 each(dom.select('*[lang]', o.node), function(el) {
@@ -1219,7 +1258,7 @@
                     if (emptyRe.test(h)) {
                         dom.remove(n);
                     }
-                    
+
                     // remove span without attributes
                     if (dom.getAttribs(n).length === 0) {
                         dom.remove(n, 1);
@@ -1254,7 +1293,7 @@
 
                 // get paragraph html
                 html = p.innerHTML;
-                
+
                 // quick check, must be a list item
                 if (html.indexOf('__MCE_LIST_ITEM__') === -1) {
                     return;
@@ -1264,7 +1303,7 @@
                 val = html.replace(/<\/?\w+[^>]*>/gi, '').replace(/&nbsp;/g, '\u00a0');
 
                 // Detect unordered lists look for bullets
-                if (ULRX.test(val)) {                    
+                if (ULRX.test(val)) {
                     type = 'ul';
                 }
 
@@ -1298,7 +1337,7 @@
                 // Check if node value matches the list pattern: o&nbsp;&nbsp;
                 if (type) {
                     margin = parseFloat(p.style.marginLeft || 0);
-                    
+
                     if (margin > lastMargin) {
                         levels.push(margin);
                     }
@@ -1306,10 +1345,10 @@
                     if (!listElm || type != lastType) {
                         listElm = dom.create(type);
                         dom.insertAfter(listElm, p);
-                    } else {                      
+                    } else {
                         // Nested list element
                         if (margin > lastMargin) {
-                            listElm = dom.add(li, type);                            
+                            listElm = dom.add(li, type);
                         } else if (margin < lastMargin) {
                             // Find parent level based on margin value
                             idx = tinymce.inArray(levels, margin);
@@ -1327,12 +1366,12 @@
                             // keep innerHTML if a list item to be processed, otheriwse remove all
                             dom.remove(span, html.indexOf('__MCE_LIST_ITEM__') !== -1);
                         }
-                        
+
                         // remove spans containing spaces
                         if (/^(\s|\u00a0|&nbsp;)+$/.test(html)) {
                             dom.remove(span);
                         }
-                        
+
                         // remove span without attributes
                         if (dom.getAttribs(span).length === 0) {
                             dom.remove(span, 1);
@@ -1348,17 +1387,17 @@
                     } else {
                         html = html.replace(OLRX, '');
                     }
-                    
-                    var args = {'start' : start};
+
+                    var args = {'start': start};
 
                     // Create li and add paragraph data into the new li
                     li = dom.add(listElm, 'li', args, html);
-                    
+
                     // Set list styling if any
                     if (st && typeof st != 'undefined') {
                         dom.setStyle(li, 'list-style-type', st);
                     }
-                    
+
                     // remove original
                     dom.remove(p);
 
