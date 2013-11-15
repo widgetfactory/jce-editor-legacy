@@ -226,18 +226,13 @@ WFPopups.addPopup('jcemediabox', {
             });
         }
 
-        // trim
-        s = s.replace(/:"([^"]+)"/, function(a, b) {
-            return ':"' + b.replace(/^\s+|\s+$/, '').replace(/\s*::\s*/, '::') + '"';
-        });
-
         // if json string return object
         if (/^{[\w\W]+}$/.test(s)) {
             return $.parseJSON(trim(s));
         }
 
         // parameter format eg: title[title]
-        if (/\w+\[[^\]]+\]/.test(s)) {
+        if (/\w+\[[^\]]+\]/.test(s)) {            
             s = s.replace(/([\w]+)\[([^\]]+)\](;)?/g, function(a, b, c, d) {
                 return '"' + b + '":"' + tinymce.DOM.encode(c) + '"' + (d ? ',' : '');
             });
@@ -282,7 +277,7 @@ WFPopups.addPopup('jcemediabox', {
             $('#jcemediabox_popup_icon_position').val(s[0]);
         }
 
-        var relRX = '(alternate|stylesheet|start|next|prev|contents|index|glossary|copyright|chapter|section|subsection|appendix|help|bookmark|nofollow|licence|tag|friend)';
+        var relRX = /(\w+|alternate|stylesheet|start|next|prev|contents|index|glossary|copyright|chapter|section|subsection|appendix|help|bookmark|nofollow|licence|tag|friend)\s+?/g;
         var json = ed.dom.getAttrib(n, 'data-json') || ed.dom.getAttrib(n, 'data-mediabox');
 
         if (json) {
@@ -291,21 +286,22 @@ WFPopups.addPopup('jcemediabox', {
 
         if (rel && /\w+\[.*\]/.test(rel)) {
             var ra = '';
-            if (rv = new RegExp(relRX, 'g').exec(rel)) {
+            if (rv = relRX.exec(rel)) {
                 // pass on rel value
                 ra = rv[1];
                 // remove rel values	
-                rel = rel.replace(new RegExp(relRX, 'g'), '');
+                rel = rel.replace(relRX, '');
             }
 
-            // convert to object
-            data = this.convertData($.trim(rel));
-            // add to object
-            data.rel = ra;
-
+            if (/^\w+\[/.test((rel))) {
+                // convert to object
+                data = this.convertData($.trim(rel)) || {};
+                // add to object
+                data.rel = ra;
+            }
         } else {
             // remove standard rel values
-            var group = $.trim(rel.replace(new RegExp(relRX, 'g'), ''));
+            var group = $.trim(rel.replace(relRX, ''));
 
             $('#jcemediabox_popup_group').val(group);
         }
