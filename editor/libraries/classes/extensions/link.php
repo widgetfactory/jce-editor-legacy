@@ -191,13 +191,14 @@ class WFLinkExtension extends WFExtension {
     public function getItemId($component, $needles = array()) {
         $match = null;
 
-        require_once(JPATH_SITE . '/includes/application.php');
+        //require_once(JPATH_SITE . '/includes/application.php');
+        $app = JApplication::getInstance('site');
 
         $tag = defined('JPATH_PLATFORM') ? 'component_id' : 'componentid';
 
-        $component = JComponentHelper::getComponent($component);
-        $menu = JSite::getMenu();
-        $items = $menu->getItems($tag, $component->id);
+        $component  = JComponentHelper::getComponent($component);
+        $menu       = $app->getMenu('site');
+        $items      = $menu->getItems($tag, $component->id);
 
         if ($items) {
             foreach ($needles as $needle => $id) {
