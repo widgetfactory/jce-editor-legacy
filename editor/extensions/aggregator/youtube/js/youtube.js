@@ -53,7 +53,7 @@ WFAggregator.add('youtube', {
         return false;
     },
     getValues: function(src) {
-        var self = this, data = {}, args = {}, type = this.getType();
+        var self = this, data = {}, args = {}, type = this.getType(), id;
 
         $.extend(args, $.String.query(src));
 
@@ -94,9 +94,16 @@ WFAggregator.add('youtube', {
             if (b && !c) {
                 c = '.com';
             }
+            
+            id = d;
 
             return 'youtube' + c + '/' + (type == 'iframe' ? 'embed' : 'v') + '/' + d;
         });
+        
+        // lopp requires a playlist value to be the same as the video id
+        if (id && args.loop && !args.playlist) {
+            args.playlist = id;
+        }
 
         // privacy mode
         if ($('#youtube_privacy').is(':checked')) {
@@ -176,6 +183,11 @@ WFAggregator.add('youtube', {
         // decode playlist
         if (data.playlist) {
             data.playlist = decodeURIComponent(data.playlist);
+        }
+        
+        // reset playlist if it is the same as the id
+        if (data.playlist === id) {
+            data.playlist = null;
         }
 
         // remove wmode
