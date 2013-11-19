@@ -618,7 +618,6 @@
                     }
                     return cls.length ? ' class="' + cls.join(" ") + '"' : '';
                 }
-                ;
 
                 h = h.replace(/ class="([^"]+)"/gi, removeClasses);
                 h = h.replace(/ class=([\-\w]+)/gi, removeClasses);
@@ -1239,7 +1238,14 @@
 
             // remove tags
             if (ed.getParam('clipboard_paste_remove_tags')) {
-                dom.remove(dom.select(ed.getParam('clipboard_paste_remove_tags'), o.node));
+                dom.remove(dom.select(ed.getParam('clipboard_paste_remove_tags'), o.node), 1);
+            }
+            
+            // keep tags
+            if (ed.getParam('clipboard_paste_keep_tags')) {
+                var tags = ed.getParam('clipboard_paste_keep_tags');
+                
+                dom.remove(dom.select('*:not(' + tags + ')', o.node), 1);
             }
 
             // Empty element regular expression
@@ -1426,8 +1432,8 @@
                 h = h.replace(/<p([^>]+)>(&nbsp;|\u00a0)?<\/p>/g, '');
             }
 
-            // pricess regular expression
-            if (ed.getParam('clipboard_paste_filter')) {
+            // process regular expression
+            if (ed.getParam('clipboard_paste_filter')) {                
                 var re, rules = ed.getParam('clipboard_paste_filter').split(';');
 
                 each(rules, function(s) {
