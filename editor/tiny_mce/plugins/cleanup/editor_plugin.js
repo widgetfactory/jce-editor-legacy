@@ -27,7 +27,6 @@
             ed.onPreInit.add(function() {
                 if (ed.settings.validate) {
                     // add support for "bootstrap" icons
-                    ed.schema.addValidElements('+i[*]');
                     var elements = ed.schema.elements;
 
                     each(split('span,a,i'), function(name) {
@@ -120,29 +119,32 @@
                 }
 
                 // try and keep empty a tags that are not anchors, process bootstrap icons
-                ed.parser.addNodeFilter('a,i', function(nodes, name) {
-                    var i = nodes.length, node, cls, map;
+                ed.parser.addNodeFilter('a,i,span', function(nodes, name) {
+                    var i = nodes.length, node, cls;
 
                     while (i--) {
-                        node = nodes[i], cls = node.attr('class'), map = node.attributes.map;
+                        node = nodes[i], cls = node.attr('class');
 
-                        if ((name == 'i' && cls && cls.indexOf('icon-') !== -1) || (name == 'a' && !node.firstChild && !map.name && !map.id)) {
+                        if (cls && /(glyph|uk-)?icon-/.test(cls)) {
                             node.attr('data-mce-bootstrap', '1');
+                            // padd it with a space if its empty
+                            if (!node.firstChild) {
+                                node.append(new Node('#text', '3')).value = '\u00a0';
+                            }
                         }
                     }
                 });
 
                 ed.serializer.addAttributeFilter('data-mce-bootstrap', function(nodes, name) {
-                    var i = nodes.length, node;
+                    var i = nodes.length, node, fc;
 
                     while (i--) {
-                        node = nodes[i];
-
-                        if (name == 'i' && !node.firstChild) {
-                            node.append(new Node('#text', '3')).value = '\u00a0';
-                        }
-
+                        node = nodes[i], fc = node.firstChild;
                         node.attr('data-mce-bootstrap', null);
+                        
+                        if (fc && fc.value === '\u00a0' || fc.value === '&nbsp;') {
+                            fc.remove();
+                        }
                     }
                 });
 
@@ -217,7 +219,7 @@
                     }
                 }
                 // pad bootstrap icons
-                o.content = o.content.replace(/<([a-z0-9]+) class="icon-([\w-]+)"><\/\1>/gi, '<$1 class="icon-$2">&nbsp;</$1>');
+                o.content = o.content.replace(/<([a-z0-9]+) class="([^"]*)(glyph|uk-)?icon-([\w-]+)([^"]*)">(&nbsp;|\u00a0|\s)?<\/\1>/gi, '<$1 class="$2$3icon-$4$5">&nbsp;</$1>');
             });
 
             // Cleanup callback
@@ -250,7 +252,7 @@
                     }
 
                     // clean bootstrap icons
-                    o.content = o.content.replace(/<([a-z0-9]+) class="icon-([\w-]+)">(&nbsp;|\u00a0)<\/\1>/g, '<$1 class="icon-$2"></$1>');
+                    o.content = o.content.replace(/<([a-z0-9]+) class="([^"]*)(glyph|uk-)?icon-([\w-]+)([^"]*)">(&nbsp;|\u00a0)<\/\1>/g, '<$1 class="$2$3icon-$4$5"></$1>');
                 }
             });
 
