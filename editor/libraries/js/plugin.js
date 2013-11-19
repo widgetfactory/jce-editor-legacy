@@ -294,7 +294,7 @@
 
                 ed.windowManager.open({
                     url: tinyMCEPopup.getParam('site_url') + 'index.php?option=com_jce&view=help&tmpl=component&lang=' + ed.settings.language + '&section=editor&category=' + this.getName(),
-                    width: 780,
+                    width: 768,
                     height: 560,
                     resizable: 1,
                     inline: 1,
@@ -1025,8 +1025,8 @@
             var div = document.createElement('div');
 
             options = $.extend({
-                width: $(window).width() - 100,
-                height: $(window).height() - 50,
+                width   : $(window).width() - 100,
+                height  : $(window).height() - 50,
                 onOpen: function() {
                     var iframe = document.createElement('iframe');
 
@@ -1037,21 +1037,21 @@
                         'scrolling': 'auto',
                         'frameborder': 0
                     }).css({
-                        width: '99%',
+                        width: '100%',
                         height: '99%'
                     }).load(function() {
-                        if ($.isFunction(options.onFrameLoad)) {
-                            options.onFrameLoad.call();
-                        }
-
                         var win = this.contentWindow, d = win.document, b = d.body;
                         var w = win.innerWidth || b.clientWidth;
                         var h = win.innerHeight || b.clientHeight;
 
                         $(this).css({
-                            width: w,
-                            height: h
+                            width   : w,
+                            height  : h
                         });
+                    
+                        if ($.isFunction(options.onFrameLoad)) {
+                            options.onFrameLoad.call(this);
+                        }
 
                         $(div).removeClass('loading');
                     });
