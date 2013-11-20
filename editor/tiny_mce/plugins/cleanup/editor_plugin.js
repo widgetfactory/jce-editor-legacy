@@ -118,7 +118,7 @@
                                     continue;
                                 }
                                 
-                                node.remove();
+                                node.unwrap();
                             }
                         }
                     });
