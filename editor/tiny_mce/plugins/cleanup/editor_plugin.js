@@ -112,6 +112,12 @@
                         if (ed.schema.isValidChild('body', name)) {
                             while (i--) {
                                 node = nodes[i];
+                                
+                                // don't remove system spans
+                                if (name === 'span' && node.attr('data-mce-type')) {
+                                    continue;
+                                }
+                                
                                 node.remove();
                             }
                         }
@@ -141,7 +147,7 @@
                     while (i--) {
                         node = nodes[i], fc = node.firstChild;
                         node.attr('data-mce-bootstrap', null);
-                        
+
                         if (fc && fc.value === '\u00a0' || fc.value === '&nbsp;') {
                             fc.remove();
                         }
