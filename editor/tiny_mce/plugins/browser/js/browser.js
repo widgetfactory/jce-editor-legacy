@@ -53,9 +53,21 @@ var BrowserDialog = {
 	
     insert : function() {
         var win = tinyMCEPopup.getWindowArg("window");
+        
+        var src = $('#src').val();
+        
+        if (src === "") {
+            var selected = WFFileBrowser.getSelectedItems();
+            
+            if (selected.length) {
+                this.selectFile(selected[0]);
+                
+                src = $('#src').val();
+            }
+        }
 
         // insert information now
-        win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = $('#src').val();
+        win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = src;
 
         // close popup window
         tinyMCEPopup.close();
