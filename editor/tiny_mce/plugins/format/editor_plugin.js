@@ -8,63 +8,71 @@
  * other free or open source software licenses.
  */
 (function() {
+    var VK = tinymce.VK;
+    var blocks = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,dl,dt,dd,code,samp';
+
     tinymce.create('tinymce.plugins.FormatPlugin', {
-        init : function(ed, url) {
-            var t = this;
+        init: function(ed, url) {
+            var self = this;
             this.editor = ed;
 
-            var blocks = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,dl,dt,dd,code,samp';
-			
             function isBlock(n) {
                 return new RegExp('^(' + blocks.replace(',', '|', 'g') + ')$', 'i').test(n.nodeName);
             }
-            
+
+            ed.onKeyDown.add(function(ed, e) {
+                if ((e.keyCode === VK.ENTER || e.keyCode === VK.UP) && e.altKey) {
+                    // clear blocks
+                    self._clearBlocks(ed, e);
+                }
+            });
+
             // Format Block fix
             ed.onBeforeExecCommand.add(function(ed, cmd, ui, v, o) {
                 var se = ed.selection, n = se.getNode(), p;
                 switch (cmd) {
-                    case 'FormatBlock':                        
+                    case 'FormatBlock':
                         // remove format
-                        if (!v) {                            
+                        if (!v) {
                             o.terminate = true;
-                            
+
                             if (n == ed.getBody()) {
                                 return;
                             }
-                            
+
                             ed.undoManager.add();
-                            p = ed.dom.getParent(n, blocks) || '';                            
+                            p = ed.dom.getParent(n, blocks) || '';
                             if (p) {
                                 ed.formatter.toggle(p.nodeName.toLowerCase());
                             }
-                            
+
                             var cm = ed.controlManager.get('formatselect');
                             if (cm) {
                                 cm.select(p);
-                            } 
+                            }
                         }
 
                         break;
                     case 'RemoveFormat':
                         if (!v && isBlock(n)) {
                             ed.undoManager.add();
-                            p = ed.dom.getParent(n, blocks) || '';                            
+                            p = ed.dom.getParent(n, blocks) || '';
                             if (p) {
                                 ed.formatter.toggle(p.nodeName.toLowerCase());
                             }
-                            
+
                             var cm = ed.controlManager.get('formatselect');
-                            
+
                             if (cm) {
                                 cm.select(p);
                             }
-                            
+
                             o.terminate = true;
                         }
                         break;
                 }
             });
-            
+
             ed.onExecCommand.add(function(ed, cmd, ui, v, o) {
                 var se = ed.selection, n = se.getNode();
                 // add Definition List
@@ -80,14 +88,14 @@
             });
 
             ed.onPreInit.add(function() {
-                
+
                 function wrapList(node) {
                     var sibling = node.prev;
-                    
+
                     if (node.parent && node.parent.name == 'dl') {
                         return;
                     }
-                        
+
                     if (sibling && (sibling.name === 'dl' || sibling.name === 'dl')) {
                         sibling.append(node);
                         return;
@@ -101,13 +109,13 @@
 
                     node.wrap(ed.parser.filterNode(new tinymce.html.Node('dl', 1)));
                 }
-                
+
                 ed.parser.addNodeFilter('dt,dd', function(nodes) {
                     for (var i = 0, len = nodes.length; i < len; i++) {
                         wrapList(nodes[i]);
                     }
                 });
-                
+
                 ed.serializer.addNodeFilter('dt,dd', function(nodes) {
                     for (var i = 0, len = nodes.length; i < len; i++) {
                         wrapList(nodes[i]);
@@ -115,14 +123,66 @@
                 });
             });
         },
-		
-        getInfo : function() {
+        _clearBlocks: function(ed, e) {
+            var p, n = ed.selection.getNode();
+
+            // Find parent element just before the document body
+            p = ed.dom.getParents(n, blocks);
+
+            if (p && p.length > 1) {
+                // set defualt content and get the element to use
+                var h = '&nbsp;', tag = ed.getParam('forced_root_block');
+                
+                if (!tag && ed.getParam('force_p_newlines')) {
+                    tag = 'p';
+                } else {
+                    tag = 'br';
+                }
+                
+                // prevent default action
+                e.preventDefault();
+
+                // get the first block in the collection
+                var block = p[p.length - 1];
+
+                // skip if it is the body
+                if (block === ed.getBody()) {
+                    return;
+                }
+
+                // create element
+                var el = ed.dom.create(tag);
+
+                // create bogus br element
+                if (tag === 'br') {
+                    h = '<br data-mce-bogus="1" />';
+                }
+
+                // set HTML
+                ed.dom.setHTML(el, h);
+
+                if (e.keyCode === VK.ENTER) {
+                    // insert after parent element
+                    ed.dom.insertAfter(el, block);
+                } else {
+                    // insert after parent element
+                    block.parentNode.insertBefore(el, block);
+                }
+
+                // select and collapse
+                ed.selection.select(el);
+                ed.selection.collapse(1);
+            }
+
+            // execute normal enter/up behaviour
+        },
+        getInfo: function() {
             return {
-                longname : 'Format',
-                author : 'Ryan Demmer',
-                authorurl : 'http://www.joomlacontenteditor.net',
-                infourl : 'http://www.joomlacontenteditor.net',
-                version : '@@version@@'
+                longname: 'Format',
+                author: 'Ryan Demmer',
+                authorurl: 'http://www.joomlacontenteditor.net',
+                infourl: 'http://www.joomlacontenteditor.net',
+                version: '@@version@@'
             };
         }
     });
