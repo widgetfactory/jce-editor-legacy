@@ -21,8 +21,10 @@ var TableDialog = {
 
         if (this.html5) {
             // hide HTML4 only attributes (tframe = frame)
-            $('#axis, #abbr, #scope, #summary, #char, #charoff, #tframe, #nowrap, #rules').parent().parent().hide();
-
+            $('#axis, #abbr, #scope, #summary, #char, #charoff, #tframe, #nowrap, #rules').each(function() {
+                $(this).add('label[for="' + this.id + '"]').parent().hide();
+            });
+            
             $('#cellspacing').change(function() {
                 var st = tinyMCEPopup.dom.parseStyle($('#style').val());
 
