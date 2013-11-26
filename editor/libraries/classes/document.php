@@ -463,7 +463,7 @@ class WFDocument extends JObject {
 
     public function getQueryString($query = array()) {
         // get version
-        $version = $this->get('version', '000000');
+        //$version = $this->get('version', '000000');
         // get layout
         $layout = JRequest::getWord('layout');
 
@@ -493,10 +493,10 @@ class WFDocument extends JObject {
         // set token
         $query[$token] = 1;
 
-        if (preg_match('/\d+/', $version)) {
+        /*if (preg_match('/\d+/', $version)) {
             // set version
             $query['v'] = preg_replace('#[^a-z0-9]#i', '', $version);
-        }
+        }*/
 
         $output = array();
 
@@ -525,10 +525,10 @@ class WFDocument extends JObject {
             foreach ($this->_styles as $src => $type) {
                 
                 $stamp = '';
-                
-                if (strpos($src, '://') === false) {
+                // only add stamp to static stylesheets
+                if (strpos($src, '://') === false && strpos($src, 'index.php?option=com_jce') === false) {
                     $version = md5(basename($src) . $version);
-                    $stamp  = strpos($src, '?') === false ? '?etag=' . $version : '&etag=' . $version;
+                    $stamp = strpos($src, '?') === false ? '?' . $version : '&' . $version;
                 }
                 
                 $output .= "\t\t<link href=\"" . $src . $stamp . "\" rel=\"stylesheet\" type=\"" . $type . "\" />\n";
@@ -542,11 +542,10 @@ class WFDocument extends JObject {
         } else {
             foreach ($this->_scripts as $src => $type) {
                 $stamp = '';
-
-                if (strpos($src, '://') === false) {
+                // only add stamp to static scripts
+                if (strpos($src, '://') === false && strpos($src, 'index.php?option=com_jce') === false) {
                     $version = md5(basename($src) . $version);
-                    
-                    $stamp = strpos($src, '?') === false ? '?etag=' . $version : '&etag=' . $version;
+                    $stamp = strpos($src, '?') === false ? '?' . $version : '&' . $version;
                 }
                 
                 $output .= "\t\t<script data-cfasync=\"false\" type=\"" . $type . "\" src=\"" . $src . $stamp . "\"></script>\n";

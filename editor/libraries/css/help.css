@@ -7,7 +7,7 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-@import url('bootstrap.min.css?etag=@@etag@@');
+@import url('bootstrap.min.css?@@etag@@');
 
 html {
     /*height : 100%;*/

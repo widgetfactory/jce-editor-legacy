@@ -7,10 +7,10 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-@import url("../jquery/css/jquery-ui.custom.css?etag=@@etag@@");
+@import url("../jquery/css/jquery-ui.custom.css?@@etag@@");
  
-@import url("reset.css?etag=@@etag@@");
-@import url("dialog.css?etag=@@etag@@");
-@import url("tips.css?etag=@@etag@@");
-@import url("select.css?etag=@@etag@@");
-@import url("colorpicker.css?etag=@@etag@@");
+@import url("reset.css?@@etag@@");
+@import url("dialog.css?@@etag@@");
+@import url("tips.css?@@etag@@");
+@import url("select.css?@@etag@@");
+@import url("colorpicker.css?@@etag@@");
