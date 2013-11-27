@@ -1345,7 +1345,11 @@
          * php.js is copyright 2011 Kevin van Zonneveld.
          */
         dirname: function(s) {
-            return s.replace(/\\/g, '/').replace(/\/[^\/]*\/?$/, '');
+            if (/[\\\/]+/.test(s)) {
+                return s.replace(/\\/g, '/').replace(/\/[^\/]*\/?$/, '');
+            }
+            
+            return '';
         },
         filename: function(s) {
             return this.stripExt(this.basename(s));
