@@ -33,7 +33,7 @@
 
             if (t.native_spellchecker) {
                 // < IE9 does not have a native spellchecker
-                if (tinymce.isIE && /Trident\/6\.0/.test(navigator.userAgent) === false) {
+                if (tinymce.isIE && /MSIE [56789]/.test(navigator.userAgent)) {
                     // no url set so no spellchecker
                     if (t.rpcUrl == '') {
                         return;
