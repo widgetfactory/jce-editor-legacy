@@ -29,7 +29,6 @@ class WFFormatPluginConfig {
         'span' => 'advanced.span',
         'section' => 'advanced.section',
         'article' => 'advanced.article',
-        'hgroup' => 'advanced.hgroup',
         'aside' => 'advanced.aside',
         'figure' => 'advanced.figure',
         'dt' => 'advanced.dt',
@@ -80,22 +79,22 @@ class WFFormatPluginConfig {
         $settings['removeformat_selector'] = $wf->getParam('editor.removeformat_selector', 'span,b,strong,em,i,font,u,strike', 'span,b,strong,em,i,font,u,strike');
 
         // html5 block elements
-        $html5  = array('section', 'article', 'hgroup', 'aside', 'figure');
+        $html5 = array('section', 'article', 'aside', 'figure');
         // get current schema
         $schema = $wf->getParam('editor.schema', 'html4');
         $verify = (bool) $wf->getParam('editor.verify_html', 0);
 
         // get blockformats from parameter
-        $blockformats = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,hgroup,aside,figure,dt,dd', 'p,address,pre,h1,h2,h3,h4,h5,h6');
+        $blockformats = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,aside,figure,dt,dd', 'p,address,pre,h1,h2,h3,h4,h5,h6');
 
-        $list       = array();
-        $blocks     = array();
+        $list = array();
+        $blocks = array();
 
         // make an array
         if (is_string($blockformats)) {
             $blockformats = explode(',', $blockformats);
         }
-        
+
         // create label / value list using default
         foreach ($blockformats as $v) {
             $key = self::$formats[$v];
@@ -115,19 +114,6 @@ class WFFormatPluginConfig {
                 $list['advanced.div_container'] = 'div_container';
             }
         }
-
-        $selector = empty($settings['removeformat_selector']) ? 'span,b,strong,em,i,font,u,strike' : $settings['removeformat_selector'];
-        $selector = explode(',', $selector);
-
-        // set the root block
-        $rootblock = (!$settings['forced_root_block']) ? 'p' : $settings['forced_root_block'];
-
-        if ($k = array_search($rootblock, $blocks) !== false) {
-            unset($blocks[$k]);
-        }
-
-        // remove format selector
-        $settings['removeformat_selector'] = implode(',', array_unique(array_merge($blocks, $selector)));
 
         // Format list / Remove Format
         $settings['theme_advanced_blockformats'] = json_encode($list);
@@ -151,7 +137,22 @@ class WFFormatPluginConfig {
         } else {
             $fonts = self::getFonts();
         }
+        
+        /*        
+        $selector = empty($settings['removeformat_selector']) ? 'span,b,strong,em,i,font,u,strike' : $settings['removeformat_selector'];
+        $selector = explode(',', $selector);
 
+        // set the root block
+        $rootblock = (!$settings['forced_root_block']) ? 'p' : $settings['forced_root_block'];
+
+        if ($k = array_search($rootblock, $blocks) !== false) {
+            unset($blocks[$k]);
+        }
+
+        // remove format selector
+        $selector = array_unique(array_merge($blocks, $selector));
+        */
+        
         // Fonts
         $settings['theme_advanced_fonts'] = $fonts;
         $settings['theme_advanced_font_sizes'] = $wf->getParam('editor.theme_advanced_font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');
@@ -168,7 +169,7 @@ class WFFormatPluginConfig {
         if (!empty($custom_styles)) {
             $styles = array();
 
-            $blocks = array('h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'div', 'address', 'pre', 'blockquote', 'center', 'dir', 'fieldset', 'header', 'footer', 'article', 'section', 'hgroup', 'aside', 'nav', 'figure');
+            $blocks = array('section', 'nav', 'article', 'aside', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'footer', 'address', 'main', 'p', 'pre', 'blockquote', 'figure', 'figcaption', 'div');
 
             foreach ((array) $custom_styles as $style) {
                 if (isset($style->styles)) {
@@ -181,6 +182,10 @@ class WFFormatPluginConfig {
                     } else {
                         $style->inline = $style->element;
                     }
+                    // remove
+                    $style->remove = "all";
+                    
+                    $selector[] = $style->element;
 
                     unset($style->element);
                 }
@@ -192,6 +197,8 @@ class WFFormatPluginConfig {
                 $settings['style_formats'] = htmlentities(json_encode($styles), ENT_NOQUOTES, "UTF-8");
             }
         }
+        // remove format selector
+        //$settings['removeformat_selector'] = implode(',', array_unique($selector));
     }
 
     protected static function cleanJSON($string, $delim = ";") {
