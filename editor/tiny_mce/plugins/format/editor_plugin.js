@@ -9,15 +9,16 @@
  */
 (function() {
     var VK = tinymce.VK;
-    var blocks = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,dl,dt,dd,code,samp';
+    var blocks = 'section,nav,article,aside,h1,h2,h3,h4,h5,h6,header,footer,address,main,p,pre,blockquote,figure,figcaption,div';
 
     tinymce.create('tinymce.plugins.FormatPlugin', {
         init: function(ed, url) {
             var self = this;
             this.editor = ed;
 
-            function isBlock(n) {
-                return new RegExp('^(' + blocks.replace(',', '|', 'g') + ')$', 'i').test(n.nodeName);
+            function isBlock(n, s) {
+                s = s || blocks;
+                return new RegExp('^(' + s.replace(',', '|', 'g') + ')$', 'i').test(n.nodeName);
             }
 
             ed.onKeyDown.add(function(ed, e) {
@@ -54,7 +55,9 @@
 
                         break;
                     case 'RemoveFormat':
-                        if (!v && isBlock(n)) {
+                        var s = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,aside,figure,dt,dd';
+                        
+                        if (!v && isBlock(n, s)) {
                             ed.undoManager.add();
                             p = ed.dom.getParent(n, blocks) || '';
                             if (p) {
