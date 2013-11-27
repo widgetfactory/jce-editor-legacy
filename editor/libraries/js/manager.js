@@ -815,7 +815,7 @@
             var sw = $status.width();
 
             // add root item
-            $root = $('<li/>').html(self._translate('root', 'Root')).click(function() {
+            var $root = $('<li/>').html(self._translate('root', 'Root')).click(function() {
                 self._changeDir('/');
             }).appendTo($pathway);
 
@@ -823,7 +823,7 @@
             dir = $.trim(dir.replace(/^\//, ''));
 
             // add folder count
-            $count = $('<li class="count">( ' + this._foldercount + ' ' + this._translate('folders', 'folders') + ', ' + this._filecount + ' ' + this._translate('files', 'files') + ')</li>').appendTo($pathway);
+            var $count = $('<li class="count">( ' + this._foldercount + ' ' + this._translate('folders', 'folders') + ', ' + this._filecount + ' ' + this._translate('files', 'files') + ')</li>').appendTo($pathway);
 
             // get base list width
             var w = bw = $root.outerWidth(true) + $count.outerWidth(true);
@@ -838,7 +838,7 @@
                         path = parts.slice(0, i + 1).join('/');
                     }
 
-                    $item = $('<li title="' + s + '" />').click(function(e) {
+                    var $item = $('<li title="' + s + '" />').click(function(e) {
                         self._changeDir(path);
                     }).html('&rsaquo;&nbsp;' + s).insertBefore($count);
 
@@ -913,7 +913,12 @@
          Determine whether current directory is root
          */
         _isRoot: function() {
-            return this._dir == '' || this._dir == '/';
+            var s = this._dir;
+            
+            // remove leading slash
+            s = s.replace(/^[\\\/]/, '');
+            
+            return s === '';
         },
         /**
          * Change Directory
@@ -938,7 +943,7 @@
             var path = src || this._dir;
 
             // store directory in cookie
-            if (src && this.options.use_cookies) {
+            if ((src || this._dir === '') && this.options.use_cookies) {
                 $.Cookie.set("wf_" + $.Plugin.getName() + '_dir', this._cleanPath(path));
             }
 
