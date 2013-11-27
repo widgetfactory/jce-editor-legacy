@@ -57,21 +57,33 @@
                     case 'RemoveFormat':
                         var s = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,aside,figure,dt,dd';
                         
-                        if (!v && isBlock(n, s)) {
-                            ed.undoManager.add();
-                            p = ed.dom.getParent(n, blocks) || '';
-                            if (p) {
-                                ed.formatter.toggle(p.nodeName.toLowerCase());
+                        if (!v) {                          
+                            if (isBlock(n, s)) {
+                                ed.undoManager.add();
+                                p = ed.dom.getParent(n, blocks) || '';
+
+                                if (p) {
+                                    ed.formatter.toggle(p.nodeName.toLowerCase());
+                                }
+
+                                var cm = ed.controlManager.get('formatselect');
+
+                                if (cm) {
+                                    cm.select(p);
+                                }
+
+                            } else {
+                                var cm = ed.controlManager.get('styleselect');
+                                // get select Styles value if any
+                                if (cm.selectedValue) {
+                                    // remove style
+                                    ed.formatter.remove(cm.selectedValue);
+                                }
                             }
-
-                            var cm = ed.controlManager.get('formatselect');
-
-                            if (cm) {
-                                cm.select(p);
-                            }
-
+                            
                             o.terminate = true;
                         }
+                        
                         break;
                 }
             });
