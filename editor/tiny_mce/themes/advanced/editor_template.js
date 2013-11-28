@@ -459,7 +459,6 @@
                     }
                 });
             }
-            ;
 
             try {
                 each(doc.styleSheets, parseCSS);
