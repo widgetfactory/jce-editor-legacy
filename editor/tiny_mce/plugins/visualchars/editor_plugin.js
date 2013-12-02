@@ -3,7 +3,7 @@
  * Copyright 2009, Ryan Demmer
  * Released under LGPL License.
  *
- * License: http://tinymce.moxiecode.com/license
+ * License: http://www.tinymce.com/license
  */
 (function() {
     tinymce.create('tinymce.plugins.VisualChars', {

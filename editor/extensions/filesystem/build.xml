@@ -65,7 +65,7 @@
         
         <jsmin force="true" copyright="${header_tinymce}">
             <fileset dir="${export_dir}/${extension_name}/${package_version}">
-                <contains text="http://tinymce.moxiecode.com/license" />          
+                <contains text="http://www.tinymce.com/license" />          
                 <include name="**/*.js" />
             </fileset>
         </jsmin>
@@ -74,7 +74,7 @@
             <fileset dir="${export_dir}/${extension_name}/${package_version}">                
                 <include name="**/*.js" />                
                 <not>
-                    <contains text="http://tinymce.moxiecode.com/license" />
+                    <contains text="http://www.tinymce.com/license" />
                 </not>
             </fileset>
         </jsmin>

@@ -4,7 +4,7 @@
  * Copyright 2009, Moxiecode Systems AB
  * Released under LGPL License.
  *
- * License: http://tinymce.moxiecode.com/license
+ * License: http://www.tinymce.com/license
  * Contributing: http://tinymce.moxiecode.com/contributing
  *
  * Adds auto-save capability to the TinyMCE text editor to rescue content
