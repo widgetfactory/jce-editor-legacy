@@ -93,22 +93,22 @@ var LinkDialog = {
                 } else {
                     if (ed.dom.isBlock(n) || n.nodeName === 'BODY') {
                         var html = se.getContent();
+                        
                         // if node is body, remove tags to get html
                         if (n.nodeName === 'BODY') {
                             html = html.replace(/<\/?body[^>]*>/gi, '');
                             // wrap in div to get html
                         } else {
                             var p = ed.dom.create('div', null, html);
-                            if (p.firstChild) {
-                                html = p.firstChild.innerHTML;
+                            if (p.firstChild) {                                
+                                html = p.firstChild.innerHTML || p.firstChild.textContent;
                             }
                         }
                         // convert to string
                         if (html) {
                             html = html.toString();
                         }
-
-                        // plain text
+                       // plain text
                         if (v === html) {
                             state = true;
                         } else {
@@ -300,7 +300,6 @@ var LinkDialog = {
             el = ed.dom.get('__mce_tmp');
             // set attributes
             ed.dom.setAttribs(el, args);
-
             // create link on selection or update existing link
         } else {
             // insert link on selection
