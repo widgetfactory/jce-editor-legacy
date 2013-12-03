@@ -14,7 +14,7 @@
     tinymce.create('tinymce.plugins.KitchenSink', {
         init: function(ed, url) {
 
-            var self = this, state = false;
+            var self = this, state = false, h = 0, el = ed.getElement(), s = ed.settings;
 
             function toggle() {
                 var row = DOM.getParents(ed.id + '_kitchensink', 'table.mceToolbar');
@@ -38,8 +38,9 @@
                     n = DOM.getNext(n, 'table.mceToolbar');
                 }
                 
-                var h = ed.getContentAreaContainer().offsetHeight || ed.getElement().style.height || 0;
-
+                // get height of container
+                h = s.height || el.style.height || el.offsetHeight;
+                
                 if (h) {
                     DOM.setStyle(ed.id + '_ifr', 'height', h);
                 }
