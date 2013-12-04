@@ -262,7 +262,7 @@
         },
 
         _buildStyle: function(n) {
-            var self = this, ed = this.editor, v, node, text;
+            var self = this, ed = this.editor, v, node, text, p;
 
             if (!n.parent)
                 return;
