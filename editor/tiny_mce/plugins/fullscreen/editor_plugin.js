@@ -40,7 +40,7 @@
 
             // create dispatcher
             ed.onFullScreen = new tinymce.util.Dispatcher();
-            
+
             // Register commands
             ed.addCommand('mceFullScreen', function() {
                 var win, oed;
@@ -55,7 +55,7 @@
                             // find the editor that opened this one, execute restore function there
                             var originalEditor = tinyMCE.get(fullscreenEditor.getParam('fullscreen_editor_id'));
                             originalEditor.plugins.fullscreen.saveState(fullscreenEditor);
-                            
+
                             originalEditor.onFullScreen.dispatch(originalEditor, false);
 
                             tinyMCE.remove(fullscreenEditor);
@@ -101,7 +101,7 @@
                     de.style.overflow = 'hidden'; //Fix for IE6/7
                     vp = DOM.getViewPort();
                     DOM.win.scrollTo(0, 0);
-                    
+
                     // allow adequate height for dialogs, or scroll
                     if (vp.h < 680) {
                         DOM.setStyle(DOM.doc.body, 'overflow', 'auto');
@@ -141,8 +141,15 @@
                         s[k] = v;
                     });
 
+                    var bookmark;
+                    // might generate an error if the first element cannot contain a node, eg: style
+                    try {
+                        bookmark = ed.selection.getBookmark();
+                    } catch (e) {
+                    }
+
                     t.fullscreenSettings = {
-                        bookmark: ed.selection.getBookmark(),
+                        bookmark: bookmark,
                         fullscreen_overflow: fullscreen_overflow,
                         fullscreen_html_overflow: fullscreen_html_overflow,
                         fullscreen_scrollx: fullscreen_scrollx,
@@ -173,7 +180,7 @@
 
                         fed.theme.resizeTo(vp.w - outerSize.w + innerSize.w, vp.h - outerSize.h + innerSize.h);
                     });
-                    
+
                     ed.onFullScreen.dispatch(t.fullscreenEditor, true);
                 }
             });
@@ -203,7 +210,14 @@
                 }
                 var settings = t.fullscreenSettings;
 
-                transferState(fullscreenEditor, ed, fullscreenEditor.selection.getBookmark());
+                var bookmark;
+                // might generate an error if the first element cannot contain a node, eg: style
+                try {
+                    bookmark = fullscreenEditor.selection.getBookmark();
+                } catch (e) {
+                }
+
+                transferState(fullscreenEditor, ed, bookmark);
 
                 // cleanup only required if window mode isn't used
                 if (!ed.getParam('fullscreen_new_window')) {
