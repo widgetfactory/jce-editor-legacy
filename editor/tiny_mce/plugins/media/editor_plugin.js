@@ -474,8 +474,9 @@
                 name = n.name;
                 var style = Styles.parse(n.attr('style'));
 
-                var w = n.attr('width') || style.width || '';
-                var h = n.attr('height') || style.height || '';
+                // get width an height
+                var w = n.attr('width')     || style.width  || '';
+                var h = n.attr('height')    || style.height || '';
 
                 var type = n.attr('type');
 
@@ -614,11 +615,11 @@
 
             // Set data attribute and class
             img.attr({
-                src: this.url + '/img/trans.gif',
-                width: w,
-                height: h,
-                'class': classes.join(' '),
-                'data-mce-json': JSON.serialize(o)
+                src     : this.url + '/img/trans.gif',
+                width   : w,
+                height  : h,
+                'class' : classes.join(' '),
+                'data-mce-json' : JSON.serialize(o)
             });
         },
         /**
@@ -1003,17 +1004,22 @@
                     delete root.classid;
                     delete root.codebase;
                 } else {
-                    if (!root.embed) {
-                        // create embed node
-                        root.embed = {
-                            width: root.width,
-                            height: root.height,
-                            src: src,
-                            type: root.type || this.getMimeType(n.attr('class')) || this.getMimeType(src)
-                        };
-                    }
-
                     var lookup = this.lookup[root.type] || this.lookup[name] || {name : 'generic'};
+                    
+                    if (lookup.name !== "generic") {
+                    
+                        if (!root.embed) {
+                            // create embed node
+                            root.embed = {
+                                width: root.width,
+                                height: root.height,
+                                src: src,
+                                type: root.type || this.getMimeType(n.attr('class')) || this.getMimeType(src)
+                            };
+                        }
+                        
+                        delete root.data;
+                    }
 
                     if (!root.classid) {
                         root.classid = lookup.classid;
@@ -1022,36 +1028,38 @@
                     if (!root.codebase) {
                         root.codebase = lookup.codebase;
                     }
-
+                    
                     // transfer embed attributes
-                    for (k in params) {
-                        if (/^(movie|source|url)$/.test(k)) {
-                            root.embed.src = params[k];
-                        } else {
-                            root.embed[k] = params[k];
+                    if (root.embed) {
+                        for (k in params) {
+                            if (/^(movie|source|url)$/.test(k)) {
+                                root.embed.src = params[k];
+                            } else {
+                                root.embed[k] = params[k];
+                            }
                         }
                     }
 
-                    // add src parameter
-                    var k = 'src';
-                    // use url for WindowsMedia
-                    if (/mceItemWindowsMedia/.test(n.attr('class'))) {
-                        k = 'url';
+                    if (lookup.name !== "generic") {
+                        // add src parameter
+                        var k = 'src';
+                        // use url for WindowsMedia
+                        if (/mceItemWindowsMedia/.test(n.attr('class'))) {
+                            k = 'url';
+                        }
+                        // use source for Silverlight
+                        if (/mceItemSilverLight/.test(n.attr('class'))) {
+                            k = 'source';
+                        }
+                        
+                        params[k] = src;
                     }
-                    // use source for Silverlight
-                    if (/mceItemSilverLight/.test(n.attr('class'))) {
-                        k = 'source';
-                    }
-
-                    params[k] = src;
 
                     var props = this.lookup[name];
 
                     // add classid, codebase, type if not present
                     extend(root, props);
 
-                    delete root.data;
-                    
                     if (root.classid && root.codebase) {
                         delete root.type;
                     }

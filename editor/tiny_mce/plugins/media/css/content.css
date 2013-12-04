@@ -5,6 +5,11 @@
     background-color:#ffffcc;
 }
 
+.mceItemGeneric {
+    min-width   : 50px;
+    min-height  : 50px;
+}
+
 .mceItemGeneric, .mceItemEmbed {
     background-image:url(../img/generic.png);
 }
