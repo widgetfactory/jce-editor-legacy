@@ -259,6 +259,11 @@
 
                     // clean bootstrap icons
                     o.content = o.content.replace(/<([a-z0-9]+) class="([^"]*)(glyph|uk-)?icon-([\w-]+)([^"]*)">(&nbsp;|\u00a0)<\/\1>/g, '<$1 class="$2$3icon-$4$5"></$1>');
+                    
+                    // remove padding on div
+                    if (ed.getParam('remove_div_padding')) {
+                        o.content = o.content.replace(/<div([^>]*)>(&nbsp;|\u00a0)<\/div>/g, '<div$1></div>');
+                    }
                 }
             });
 
