@@ -97,8 +97,11 @@ class WFFormatPluginConfig {
 
         // create label / value list using default
         foreach ($blockformats as $v) {
-            $key = self::$formats[$v];
-
+            
+            if (array_key_exists($v, self::$formats)) {
+                $key = self::$formats[$v];
+            }
+            
             // skip html5 blocks for html4 schema
             if ($verify && $schema == 'html4' && in_array($v, $html5)) {
                 continue;
