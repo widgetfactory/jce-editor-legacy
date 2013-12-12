@@ -81,7 +81,7 @@
                                 }
                             }
                             
-                            o.terminate = true;
+                            //o.terminate = true;
                         }
                         
                         break;
