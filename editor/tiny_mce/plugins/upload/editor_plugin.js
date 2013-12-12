@@ -343,8 +343,10 @@
                     e.stopPropagation();
                 }
 
-                // Block browser default drag over
-                ed.dom.bind(ed.getBody(), 'dragover', cancelEvent);
+                // Block browser default drag over in IE              
+                if (tinymce.isIE || tinymce.isIE11) {
+                    ed.dom.bind(ed.getBody(), 'dragover', cancelEvent);
+                }
 
                 // Attach drop handler and grab files
                 ed.dom.bind(ed.getBody(), 'drop', function(e) {
