@@ -405,7 +405,8 @@
                         apply: 'Apply',
                         name: 'Name'
                     },
-                    stylesheets: stylesheets
+                    stylesheets: stylesheets,
+                    custom_colors : ed.getParam('colorpicker_custom_colors', '')
                 });
 
                 $(this).colorpicker(settings);
