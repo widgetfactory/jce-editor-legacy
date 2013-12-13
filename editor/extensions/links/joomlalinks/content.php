@@ -62,6 +62,8 @@ class JoomlalinksContent extends JObject {
 
         $items = array();
         $view = isset($args->view) ? $args->view : '';
+        
+        $language = '';
 
         switch ($view) {
             // get top-level sections / categories
@@ -76,7 +78,11 @@ class JoomlalinksContent extends JObject {
                         $id = ContentHelperRoute::getSectionRoute($section->id);
                         $view = 'section';
                     } else {
-                        $id = ContentHelperRoute::getCategoryRoute($section->slug);
+                        if (isset($category->language)) {
+                            $language = $category->language;
+                        }
+                        
+                        $id = ContentHelperRoute::getCategoryRoute($section->slug, $language);
                         $view = 'category';
                     }
 
@@ -117,7 +123,12 @@ class JoomlalinksContent extends JObject {
 
                 foreach ($categories as $category) {
                     $url = '';
-                    $id = ContentHelperRoute::getCategoryRoute($category->id, $args->id);
+                    
+                    if (isset($category->language)) {
+                        $language = $category->language;
+                    }
+                    
+                    $id = ContentHelperRoute::getCategoryRoute($category->id, $args->id, $language);
 
                     if (strpos($id, 'index.php?Itemid=') !== false) {
                         $url = self::_getMenuLink($id);
@@ -139,7 +150,11 @@ class JoomlalinksContent extends JObject {
                         if (isset($article->sectionid)) {
                             $id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug, $article->sectionid);
                         } else {
-                            $id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug);
+                            if (isset($article->language)) {
+                                $language = $article->language;
+                            }
+                            
+                            $id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug, $language);
                         }
                         
                         $id = self::route($id);
@@ -176,9 +191,14 @@ class JoomlalinksContent extends JObject {
                         foreach ($categories as $category) {
                             // check for sub-categories					
                             $sub = WFLinkBrowser::getCategory('com_content', $category->id);
+                            
+                            // language
+                            if (isset($category->language)) {
+                                $language = $category->language;
+                            }
 
                             $url = '';
-                            $id = ContentHelperRoute::getCategoryRoute($category->id, $args->id);
+                            $id = ContentHelperRoute::getCategoryRoute($category->id, $language);
 
                             // get sub-categories
                             if (count($sub)) {
@@ -213,7 +233,12 @@ class JoomlalinksContent extends JObject {
                     if (isset($article->sectionid)) {
                         $id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug, $article->sectionid);
                     } else {
-                        $id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug);
+                        // language
+                        if (isset($article->language)) {
+                            $language = $article->language;
+                        }
+                        
+                        $id = ContentHelperRoute::getArticleRoute($article->slug, $article->catslug, $language);
                     }
                     
                     $id = self::route($id);
@@ -239,7 +264,12 @@ class JoomlalinksContent extends JObject {
             case 'uncategorized':
                 $statics = self::_getUncategorized();
                 foreach ($statics as $static) {
-                    $id = ContentHelperRoute::getArticleRoute($static->id);
+                    // language
+                    if (isset($static->language)) {
+                        $language = $static->language;
+                    }
+                    
+                    $id = ContentHelperRoute::getArticleRoute($static->id, 0, $language);
 
                     $id = self::route($id);
                     
@@ -309,9 +339,11 @@ class JoomlalinksContent extends JObject {
         $user = JFactory::getUser();
         $wf = WFEditorPlugin::getInstance();
 
-        $query = $db->getQuery(true);
+        $query      = $db->getQuery(true);
+        $version    = new JVersion();
 
-        $case = '';
+        $language   = $version->isCompatible('3.0') ? ', a.language' : '';
+        $case       = '';
 
         if ($wf->getParam('links.joomlalinks.article_alias', 1) == 1) {
             if (is_object($query)) {
@@ -342,7 +374,7 @@ class JoomlalinksContent extends JObject {
         if (is_object($query)) {
             $groups = implode(',', $user->getAuthorisedViewLevels());
 
-            $query->select('a.id AS slug, b.id AS catslug, a.alias, a.title AS title, a.access, ' . $query->concatenate(array('a.introtext', 'a.fulltext')) . ' AS content' . $case);
+            $query->select('a.id AS slug, b.id AS catslug, a.alias, a.title AS title, a.access, ' . $query->concatenate(array('a.introtext', 'a.fulltext')) . ' AS content' . $language . $case);
             $query->from('#__content AS a');
             $query->innerJoin('#__categories AS b ON b.id = ' . (int) $id);
             $query->where('a.catid = ' . (int) $id);
@@ -368,8 +400,11 @@ class JoomlalinksContent extends JObject {
     private function _getUncategorized() {
         $db = JFactory::getDBO();
         $user = JFactory::getUser();
+        
+        $version    = new JVersion();
+        $language   = $version->isCompatible('3.0') ? ', language' : '';
 
-        $query = 'SELECT id, title, alias, access, introtext AS content'
+        $query = 'SELECT id, title, alias, access, introtext AS content' . $language
                 . ' FROM #__content'
                 . ' WHERE state = 1'
                 . ' AND access <= ' . (int) $user->get('aid') . ' AND sectionid = 0'

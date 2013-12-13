@@ -59,6 +59,13 @@ class JoomlalinksContact extends JObject {
     function getLinks($args) {
         $items = array();
         $view = isset($args->view) ? $args->view : '';
+        
+        $language = '';
+        
+        if (defined('JPATH_PLATFORM')) {
+            require_once(JPATH_SITE . '/components/com_contact/helpers/route.php');
+        }
+        
         switch ($view) {
             default:
                 if (defined('JPATH_PLATFORM')) {
@@ -67,18 +74,17 @@ class JoomlalinksContact extends JObject {
                     $categories = WFLinkBrowser::getCategory('com_contact_details');
                 }
 
-                foreach ($categories as $category) {
-                    $itemid = WFLinkBrowser::getItemId('com_contact', array('category' => $category->id));
-                    
+                foreach ($categories as $category) {                  
                     if (defined('JPATH_PLATFORM')) {
-                        $url = 'index.php?option=com_contact&view=category&id=';
+                        // language
+                        if (isset($category->language)) {
+                            $language = $category->language;
+                        }
+                        $url = ContactHelperRoute::getCategoryRoute($category->id, $language);
                     } else {
-                        $url = 'index.php?option=com_contact&view=category&catid=';
+                        $itemid = WFLinkBrowser::getItemId('com_contact', array('category' => $category->id));
+                        $url = 'index.php?option=com_contact&view=category&catid=' . $category->slug . $itemid;
                     }
-                    
-                    // add category slug and itemid
-                    $url .= $category->slug . $itemid;
-                    
                     // convert to SEF
                     $url = self::route($url);
 
@@ -96,18 +102,16 @@ class JoomlalinksContact extends JObject {
 
                     foreach ($categories as $category) {
                         $children = WFLinkBrowser::getCategory('com_contact', $category->id);
+                        
+                        // language
+                        if (isset($category->language)) {
+                            $language = $category->language;
+                        }
 
                         if ($children) {
-                            $id = 'index.php?option=com_contact&view=category&id=' . $category->id;
-                        } else {
-                            $itemid = WFLinkBrowser::getItemId('com_contact', array('category' => $category->id));
-
-                            if (!$itemid && isset($args->Itemid)) {
-                                // fall back to the parent item's Itemid
-                                $itemid = '&Itemid=' . $args->Itemid;
-                            }
-
-                            $id = 'index.php?option=com_contact&view=category&id=' . $category->slug . $itemid;
+                            $id = ContactHelperRoute::getCategoryRoute($category->id, $language);
+                        } else {                            
+                            $id = ContactHelperRoute::getCategoryRoute($category->slug, $language);
                         }
                         
                         // convert to SEF
@@ -125,16 +129,24 @@ class JoomlalinksContact extends JObject {
                 $contacts = self::_contacts($args->id);
 
                 foreach ($contacts as $contact) {
-                    $catid  = $args->id ? '&catid=' . $args->id : '';
-                    $itemid = WFLinkBrowser::getItemId('com_contact', array('contact' => $contact->id));
-
-                    if (!$itemid && isset($args->Itemid)) {
-                        // fall back to the parent item's Itemid
-                        $itemid = '&Itemid=' . $args->Itemid;
+                    // language
+                    if (isset($contact->language)) {
+                        $language = $contact->language;
                     }
                     
-                    $id = 'index.php?option=com_contact&view=contact' . $catid . '&id=' . $contact->id . '-' . $contact->alias . $itemid;
+                    if (defined('JPATH_PLATFORM')) {
+                        $id = ContactHelperRoute::getContactRoute($contact->id, $args->id, $language);
+                    } else {
+                        $catid  = $args->id ? '&catid=' . $args->id : '';
+                        $itemid = WFLinkBrowser::getItemId('com_contact', array('contact' => $contact->id));
 
+                        if (!$itemid && isset($args->Itemid)) {
+                            // fall back to the parent item's Itemid
+                            $itemid = '&Itemid=' . $args->Itemid;
+                        }
+
+                        $id = 'index.php?option=com_contact&view=contact' . $catid . '&id=' . $contact->id . '-' . $contact->alias . $itemid;
+                    }
                     $id = self::route($id);
                     
                     $items[] = array(
@@ -163,11 +175,14 @@ class JoomlalinksContact extends JObject {
         $user = JFactory::getUser();
 
         $where = '';
+        
+        $version    = new JVersion();
+        $language   = $version->isCompatible('3.0') ? ', language' : '';
 
         $query = $db->getQuery(true);
 
         if (is_object($query)) {
-            $query->select(array('id', 'name', 'alias'))->from('#__contact_details')->where(array('catid='. (int) $id, 'published = 1', 'access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')'));
+            $query->select('id, name, alias' . $language)->from('#__contact_details')->where(array('catid='. (int) $id, 'published = 1', 'access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')'));
         } else {
             $query = 'SELECT id, name, alias'
             . ' FROM #__contact_details'

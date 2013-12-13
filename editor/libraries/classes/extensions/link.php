@@ -137,6 +137,9 @@ class WFLinkExtension extends WFExtension {
         $query = $db->getQuery(true);
 
         $where = array();
+        
+        $version    = new JVersion();
+        $language   = $version->isCompatible('3.0') ? ', language' : '';
 
         if (method_exists('JUser', 'getAuthorisedViewLevels')) {
             $where[] = 'parent_id = ' . (int) $parent;
@@ -154,7 +157,7 @@ class WFLinkExtension extends WFExtension {
         if ($wf->getParam('category_alias', 1) == 1) {
             if (is_object($query)) {
                 //sqlsrv changes
-                $case = ' CASE WHEN ';
+                $case = ', CASE WHEN ';
                 $case .= $query->charLength('alias', '!=', '0');
                 $case .= ' THEN ';
                 $a_id = $query->castAsChar('id');
@@ -168,7 +171,7 @@ class WFLinkExtension extends WFExtension {
 
         if (is_object($query)) {
             $where[] = 'published = 1';
-            $query->select('id AS slug, id AS id, title, alias, access, ' . $case)->from('#__categories')->where($where)->order('title');
+            $query->select('id AS slug, id AS id, title, alias, access' . $language . $case)->from('#__categories')->where($where)->order('title');
         } else {
             $query = 'SELECT id AS slug, id AS id, title, alias, access' . $case;
             $query .= ' FROM #__categories';

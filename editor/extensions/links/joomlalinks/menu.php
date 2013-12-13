@@ -111,9 +111,14 @@ class JoomlalinksMenu extends JObject {
                     } else {
                         $class[] = 'file';
                     }
-                    
+
                     if ($params->get('secure')) {
                         $link = self::toSSL($link);
+                    }
+                    
+                    // language
+                    if (isset($menu->language)) {
+                        $link .= $this->getLangauge($menu->language);
                     }
 
                     $items[] = array(
@@ -140,6 +145,11 @@ class JoomlalinksMenu extends JObject {
                     // resolve link
                     $link = self::_resolveLink($menu);
                     
+                    // language
+                    if (isset($menu->language)) {
+                        $link .= $this->getLangauge($menu->language);
+                    }
+
                     if ($params->get('secure')) {
                         $link = self::toSSL($link);
                     }
@@ -154,7 +164,7 @@ class JoomlalinksMenu extends JObject {
         }
         return $items;
     }
-    
+
     /**
      * Convert link to SSL
      * @param type $link
@@ -173,7 +183,7 @@ class JoomlalinksMenu extends JObject {
             // Build the URL.
             $link = 'https://' . $prefix . '/' . $link;
         }
-        
+
         return $link;
     }
 
@@ -315,14 +325,38 @@ class JoomlalinksMenu extends JObject {
         $db->setQuery($query, 0);
         return $db->loadObjectList();
     }
-    
+
+    private function getLangauge($language) {
+        $db = JFactory::getDBO();
+        $query = $db->getQuery(true);
+
+        $link = '';
+
+        if (is_object($query)) {
+            $query->select('a.sef AS sef');
+            $query->select('a.lang_code AS lang_code');
+            $query->from('#__languages AS a');
+            $db->setQuery($query);
+            $langs = $db->loadObjectList();
+
+            foreach ($langs as $lang) {
+                if ($language == $lang->lang_code) {
+                    $language = $lang->sef;
+                    $link .= '&lang=' . $language;
+                }
+            }
+        }
+
+        return $link;
+    }
+
     private static function route($url) {
         $wf = WFEditorPlugin::getInstance();
-        
+
         if ($wf->getParam('links.joomlalinks.sef_url', 0)) {
             $url = WFLinkExtension::route($url);
         }
-        
+
         return $url;
     }
 
