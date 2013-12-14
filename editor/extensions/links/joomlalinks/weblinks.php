@@ -185,7 +185,7 @@ class JoomlalinksWeblinks extends JObject {
 
         if ($wf->getParam('links.joomlalinks.weblinks_alias', 1) == 1) {
             if (is_object($dbquery) && method_exists($dbquery, 'charLength')) {
-                $query .= $languge;
+                $query .= $language;
                 
                 //sqlsrv changes
                 $case_when1 = ' CASE WHEN ';
