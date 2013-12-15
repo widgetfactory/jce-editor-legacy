@@ -15,7 +15,6 @@
             function isMceItem(n) {
                 return /mceItem/.test(n.className);
             }
-            ;
 
             // Register commands
             ed.addCommand('mceImageManager', function() {
