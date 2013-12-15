@@ -372,7 +372,7 @@
                 });
             }
 
-            function parseCSS(s) {
+            function parseCSS(s) {                
                 // IE style imports
                 each(s.imports, function(r) {
                     if (r.href.indexOf('://fonts.googleapis.com') > 0) {
@@ -469,7 +469,7 @@
             if (cl.length > 0) {
                 self.classes = cl;
             }
-
+            
             // add font-face rules
             if (ff.length) {
                 try {
@@ -1427,7 +1427,10 @@
                 return false;
             });
 
-            if (c = cm.get('fontselect')) {
+            if (c = cm.get('fontselect')) {                
+                // load classes from stylesheet
+                t._getClasses();
+                
                 c.select(function(v) {
                     return v.replace(/^([^,]+).*/, '$1').toLowerCase() == fn;
                 });
