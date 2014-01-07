@@ -144,7 +144,7 @@ class WFEditor extends JObject {
                 }
 
                 // check component
-                if ($item->components && in_array($option, explode(',', $item->components)) === false) {
+                if ($option !== 'com_jce' && $item->components && in_array($option, explode(',', $item->components)) === false) {
                     continue;
                 }
 
