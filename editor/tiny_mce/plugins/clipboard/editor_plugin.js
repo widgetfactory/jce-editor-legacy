@@ -189,7 +189,7 @@
 
                         if (self.pasteHtml) {
                             m.add({
-                                title: 'paste.paste_desc',
+                                title: 'clipboard.paste_desc',
                                 /* TODO - Change to clipboard.paste_desc */
                                 icon: 'paste',
                                 cmd: 'mcePaste'
@@ -197,7 +197,7 @@
                         }
                         if (self.pasteText) {
                             m.add({
-                                title: 'paste.paste_text_desc',
+                                title: 'clipboard.paste_text_desc',
                                 /* TODO - Change to clipboard.paste_text_desc */
                                 icon: 'pastetext',
                                 cmd: 'mcePasteText'
@@ -466,7 +466,7 @@
             // Add buttons
             if (self.pasteHtml) {
                 ed.addButton('paste', {
-                    title: 'paste.paste_desc',
+                    title: 'clipboard.paste_desc',
                     cmd: 'mcePaste',
                     ui: true
                 });
@@ -474,7 +474,7 @@
 
             if (self.pasteText) {
                 ed.addButton('pastetext', {
-                    title: 'paste.paste_text_desc',
+                    title: 'clipboard.paste_text_desc',
                     cmd: 'mcePasteText',
                     ui: true
                 });

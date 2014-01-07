@@ -20,13 +20,13 @@ var ClipboardDialog = {
 		});
 		
 		var cmd = tinyMCEPopup.getWindowArg('cmd');
-                var msg = ed.getLang('paste_dlg.title', 'Use %s+V on your keyboard to paste text into the window.');
+                var msg = ed.getLang('clipboard.paste_dlg_title', 'Use %s+V on your keyboard to paste text into the window.');
 		
 		title.innerHTML = msg.replace(/%s/g, tinymce.isMac ? 'CMD' : 'CTRL');
 		
 		if (cmd == 'mcePaste') {
 			// Set title
-			document.title 	= ed.getLang('paste.paste_desc');
+			document.title 	= ed.getLang('clipboard.paste_desc');
 			
 			// Create iframe
 			el.innerHTML = '<iframe id="content" src="javascript:\'\';" frameBorder="0" style="border: 1px solid gray"></iframe>';
@@ -54,7 +54,7 @@ var ClipboardDialog = {
 			}, 10);
 			
 		} else {
-			document.title 	= ed.getLang('paste.paste_text_desc');
+			document.title 	= ed.getLang('clipboard.paste_text_desc');
 			el.innerHTML 	= '<textarea id="content" name="content" rows="15" cols="100" dir="ltr" wrap="soft" class="mceFocus"></textarea>';		
 		}
                 
