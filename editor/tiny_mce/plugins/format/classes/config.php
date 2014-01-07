@@ -97,11 +97,11 @@ class WFFormatPluginConfig {
 
         // create label / value list using default
         foreach ($blockformats as $v) {
-            
+
             if (array_key_exists($v, self::$formats)) {
                 $key = self::$formats[$v];
             }
-            
+
             // skip html5 blocks for html4 schema
             if ($verify && $schema == 'html4' && in_array($v, $html5)) {
                 continue;
@@ -140,22 +140,22 @@ class WFFormatPluginConfig {
         } else {
             $fonts = self::getFonts();
         }
-        
-        /*        
-        $selector = empty($settings['removeformat_selector']) ? 'span,b,strong,em,i,font,u,strike' : $settings['removeformat_selector'];
-        $selector = explode(',', $selector);
 
-        // set the root block
-        $rootblock = (!$settings['forced_root_block']) ? 'p' : $settings['forced_root_block'];
+        /*
+          $selector = empty($settings['removeformat_selector']) ? 'span,b,strong,em,i,font,u,strike' : $settings['removeformat_selector'];
+          $selector = explode(',', $selector);
 
-        if ($k = array_search($rootblock, $blocks) !== false) {
-            unset($blocks[$k]);
-        }
+          // set the root block
+          $rootblock = (!$settings['forced_root_block']) ? 'p' : $settings['forced_root_block'];
 
-        // remove format selector
-        $selector = array_unique(array_merge($blocks, $selector));
-        */
-        
+          if ($k = array_search($rootblock, $blocks) !== false) {
+          unset($blocks[$k]);
+          }
+
+          // remove format selector
+          $selector = array_unique(array_merge($blocks, $selector));
+         */
+
         // Fonts
         $settings['theme_advanced_fonts'] = $fonts;
         $settings['theme_advanced_font_sizes'] = $wf->getParam('editor.theme_advanced_font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');
@@ -187,10 +187,16 @@ class WFFormatPluginConfig {
                     }
                     // remove
                     $style->remove = "all";
-                    
+
                     $selector[] = $style->element;
 
                     unset($style->element);
+                } else {
+                    $style->element = 'span';
+
+                    if (!isset($style->selector)) {
+                        $style->selector = '*';
+                    }
                 }
 
                 $styles[] = $style;
