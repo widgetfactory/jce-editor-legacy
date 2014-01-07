@@ -446,9 +446,10 @@
 
                             parseCSS(r.styleSheet);
                             break;
-
+                        // font-face
                         case 5:
-                            if (r.cssText) {
+                            // check for text and skip popular font icons
+                            if (r.cssText && /(fontawesome|glyphicons|icomoon)/i.test(r.cssText) === false) {
                                 var v = toAbsolute(r.cssText, href);
 
                                 if (tinymce.inArray(ff, v) === -1) {
