@@ -291,33 +291,28 @@ var LinkDialog = {
 
         // no selection or stored html
         if (se.isCollapsed() || $('#text').data('html')) {
-            var v = $('#text').data('html') || $('#text').val();
+            var v = $('#text').data('html') || $('#text').not(':disabled').val() || '';
 
-            ed.execCommand('mceInsertContent', false, '<a href="#" id="__mce_tmp">' + v + '</a>', {
+            ed.execCommand('mceInsertContent', false, '<a href="' + args.href + '" id="__mce_tmp">' + v + '</a>', {
                 skip_undo: 1
             });
             // get link
             el = ed.dom.get('__mce_tmp');
             // set attributes
-            ed.dom.setAttribs(el, args);
+            ed.dom.setAttribs(el, args);            
             // create link on selection or update existing link
         } else {
             // insert link on selection
-            ed.execCommand('mceInsertLink', false, args);
+            ed.execCommand('mceInsertLink', false, {'href' : args.href, 'id' : '__mce_tmp'});
+            
+            // get link
+            el = ed.dom.get('__mce_tmp');
+            // set attributes
+            ed.dom.setAttribs(el, args); 
 
             // if text selection, update
             if (!$('#text').is(':disabled')) {
-                // get the current node
-                el = ed.selection.getNode();
-
-                // get link from selection
-                if (el && el.nodeName != 'A') {
-                    el = ed.dom.getParent(n, 'a');
-                }
-
-                if (el) {
-                    ed.dom.setHTML(el, $('#text').val());
-                }
+                ed.dom.setHTML(el, $('#text').val());
 
                 // reset cursor
                 ed.selection.select(el);
