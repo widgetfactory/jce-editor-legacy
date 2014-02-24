@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -23,8 +23,6 @@ class WFViewPopup extends WFViewBase {
 
     public function display($tpl = null) {
         $app = JFactory::getApplication();
-
-        JHTML::_('behavior.mootools');
 
         $this->document->addScript(JURI::root(true) . '/components/com_jce/media/js/popup.js');
         $this->document->addStylesheet(JURI::root(true) . '/components/com_jce/media/css/popup.css');
@@ -72,6 +70,8 @@ class WFViewPopup extends WFViewBase {
                 'width' => $width,
                 'height' => $height
             );
+            
+            $this->document->addScriptDeclaration('(function(){WFWindowPopup.init(' . $width . ', ' . $height . ', ' . $click . ');})();');
 
             $this->assign('features', $features);
         } else {
