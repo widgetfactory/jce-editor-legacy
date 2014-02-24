@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -72,7 +72,7 @@
             var ed = this.editor, data = this.getUploadConfig();
 
             if (data && data.filetypes) {
-                if (new RegExp('\.(' + data.filetypes.join('|') + ')$').test(o.file)) {
+                if (new RegExp('\.(' + data.filetypes.join('|') + ')$', 'i').test(o.file)) {
                     var args = {
                         'src': o.file,
                         'alt': o.alt || o.name,
@@ -120,7 +120,7 @@
             var ed = this.editor, data = this.getUploadConfig();
 
             if (data && data.filetypes) {
-                if (new RegExp('\.(' + data.filetypes.join('|') + ')$').test(file.name)) {
+                if (new RegExp('\.(' + data.filetypes.join('|') + ')$', 'i').test(file.name)) {
                     return ed.getParam('site_url') + 'index.php?option=com_jce&view=editor&layout=plugin&plugin=imgmanager';
                 }
             }
