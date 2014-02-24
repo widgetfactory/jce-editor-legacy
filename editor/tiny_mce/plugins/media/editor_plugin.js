@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
  * @copyright   Copyright 2009, Moxiecode Systems AB
  * @license   	GNU/LGPL 2.1 or later - http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
  * JCE is free software. This version may have been modified pursuant
@@ -428,7 +428,7 @@
                     }
                 }
             }
-            
+
             html = tinymce.trim(html);
 
             if (html) {
@@ -475,8 +475,8 @@
                 var style = Styles.parse(n.attr('style'));
 
                 // get width an height
-                var w = n.attr('width')     || style.width  || '';
-                var h = n.attr('height')    || style.height || '';
+                var w = n.attr('width') || style.width || '';
+                var h = n.attr('height') || style.height || '';
 
                 var type = n.attr('type');
 
@@ -535,8 +535,8 @@
                 }
 
                 // get type data
-                var lookup = this.lookup[classid] || this.lookup[type] || this.lookup[name] || {name : 'generic'};
-                
+                var lookup = this.lookup[classid] || this.lookup[type] || this.lookup[name] || {name: 'generic'};
+
                 type = lookup.name || type;
 
                 var style = Styles.parse(n.attr('style'));
@@ -615,11 +615,11 @@
 
             // Set data attribute and class
             img.attr({
-                src     : this.url + '/img/trans.gif',
-                width   : w,
-                height  : h,
-                'class' : classes.join(' '),
-                'data-mce-json' : JSON.serialize(o)
+                src: this.url + '/img/trans.gif',
+                width: w,
+                height: h,
+                'class': classes.join(' '),
+                'data-mce-json': JSON.serialize(o)
             });
         },
         /**
@@ -676,14 +676,16 @@
                         case 'controls':
                         case 'loop':
                         case 'seamless':
-                        // needed for Youtube iframes!
-                        case 'allowfullscreen':    
+                            // needed for Youtube iframes!
+                        case 'allowfullscreen':
                             attribs[k] = k;
                             break;
                         case 'frameborder':
                             // remove in html5
                             if (parseInt(v) == 0 && ed.settings.schema === 'html5') {
                                 attribs['seamless'] = 'seamless';
+                            } else {
+                                attribs[k] = v;
                             }
                             break;
                         case 'type':
@@ -1004,10 +1006,10 @@
                     delete root.classid;
                     delete root.codebase;
                 } else {
-                    var lookup = this.lookup[root.type] || this.lookup[name] || {name : 'generic'};
-                    
+                    var lookup = this.lookup[root.type] || this.lookup[name] || {name: 'generic'};
+
                     if (lookup.name !== "generic") {
-                    
+
                         if (!root.embed) {
                             // create embed node
                             root.embed = {
@@ -1017,7 +1019,7 @@
                                 type: root.type || this.getMimeType(n.attr('class')) || this.getMimeType(src)
                             };
                         }
-                        
+
                         delete root.data;
                     }
 
@@ -1028,7 +1030,7 @@
                     if (!root.codebase) {
                         root.codebase = lookup.codebase;
                     }
-                    
+
                     // transfer embed attributes
                     if (root.embed) {
                         for (k in params) {
@@ -1051,7 +1053,7 @@
                         if (/mceItemSilverLight/.test(n.attr('class'))) {
                             k = 'source';
                         }
-                        
+
                         params[k] = src;
                     }
 
@@ -1065,9 +1067,9 @@
                     }
                 }
                 // audio / video
-            } else {                
+            } else {
                 // remove src in audio / video attributes if multiple source elements present
-                if (root.src && root.source) {                    
+                if (root.src && root.source) {
                     if (tinymce.is(root.source, 'array') && root.source.length) {
                         // only one source item...
                         if (root.source.length == 1) {
@@ -1077,7 +1079,7 @@
                             }
                             // get mimetype
                             if (!root.type) {
-                               root.type = this.getMimeType(root.src); 
+                                root.type = this.getMimeType(root.src);
                             }
                         } else {
                             delete root.src;
