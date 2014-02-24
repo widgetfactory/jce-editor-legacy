@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -95,52 +95,12 @@ function jInsertEditorText(text, editor) {
                 plugins : '',
                 whitespace_elements : 'pre,script,style,textarea,code',
                 fix_list_elements : true,
-                formats: {
-                    'div_container' : {
-                        block : 'div',
-                        wrapper : true
-                    },
-                    'span' : {
-                        inline : 'span'
-                    }, 
-                    'section' : {
-                        block : 'section', 
-                        wrapper: true, 
-                        merge_siblings: false
-                    },
-                    'article' : {
-                        block : 'article', 
-                        wrapper: true, 
-                        merge_siblings: false
-                    },
-                    'hroup' : {
-                        block : 'hgroup', 
-                        wrapper: true
-                    },
-                    'aside' : {
-                        block : 'aside', 
-                        wrapper: true
-                    },
-                    'figure' : {
-                        block : 'figure', 
-                        wrapper: true
-                    },
-                    'dl' : {
-                        block : 'dl', 
-                        wrapper: true
-                    },
-                    'code' : {
-                        inline : 'code'
-                    },
-                    'samp' : {
-                        inline : 'samp'
-                    }
-                },
+                keep_styles : false,
                 indent_before   : indent,
                 indent_after    : indent,
                 compress : {
-                    'css' : false,
-                    'javascript' : false
+                    'css' : true,
+                    'javascript' : true
                 }
             }, settings);
 

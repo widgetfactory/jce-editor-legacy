@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -215,8 +215,8 @@ class WFEditorPlugin extends JObject {
                 'name'      => $name,
                 'language'  => WFLanguage::getTag(),
                 'direction' => WFLanguage::getDir(),
-                'compress_javascript' => $this->getParam('editor.compress_javascript', 0),
-                'compress_css' => $this->getParam('editor.compress_css', 0)
+                'compress_javascript' => $this->getParam('editor.compress_javascript', 1),
+                'compress_css' => $this->getParam('editor.compress_css', 1)
             ));
 
             // set standalone mode
