@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -10,7 +10,7 @@
 var LinkDialog = {
     settings: {},
     init: function() {
-        tinyMCEPopup.restoreSelection();
+        //tinyMCEPopup.restoreSelection();
 
         var self = this, ed = tinyMCEPopup.editor, se = ed.selection, n, el;
 
@@ -69,61 +69,51 @@ var LinkDialog = {
         if (!se.isCollapsed()) {
             n = se.getNode();
 
-            var state = false, v = se.getContent({format: 'text'});
+            var state = true, v = '';
 
             function setText(state, v) {
                 if (state && v) {
-                    $('#text').val(v);
-                    $('#text').attr('disabled', false);
+                    $('#text').val(v).attr('disabled', false);
                 } else {
-                    $('#text').val(tinyMCEPopup.getLang('dlg.selection', 'Mixed Selection'));
-                    $('#text').attr('disabled', true);
-                    $('#text').addClass('disabled');
+                    //$('#text').val(tinyMCEPopup.getLang('dlg.selection', 'Mixed Selection'));
+                    $('#text').attr('disabled', true).addClass('disabled').parents('tr').hide();
                 }
             }
 
             if (n) {
                 n = ed.dom.getParent(n, 'A') || n;
+                var v = se.getContent({format: 'text'}), shortEnded = ed.schema.getShortEndedElements();
+                
+                // reset node in IE if the link is the first element
+                if (tinymce.isIE || tinymce.isIE11) {
+                    var start = se.getStart(), end = se.getEnd();
 
-                if (n.nodeName == 'A') {
-                    var c = n.childNodes;
-                    if (c.length == 1 && c[0].nodeType == 3) {
-                        state = true;
-                    }
-                } else {
-                    if (ed.dom.isBlock(n) || n.nodeName === 'BODY') {
-                        var html = se.getContent();
-                        
-                        // if node is body, remove tags to get html
-                        if (n.nodeName === 'BODY') {
-                            html = html.replace(/<\/?body[^>]*>/gi, '');
-                            // wrap in div to get html
-                        } else {
-                            var p = ed.dom.create('div', null, html);
-                            if (p.firstChild) {                                
-                                html = p.firstChild.innerHTML || p.firstChild.textContent;
-                            }
-                        }
-                        // convert to string
-                        if (html) {
-                            html = html.toString();
-                        }
-                       // plain text
-                        if (v === html) {
-                            state = true;
-                        } else {
-                            $('#text').data('html', html);
-                        }
-                    }
-                    // restore link element to n variable
-                    var elems = ed.dom.select('a', n);
-                    
-                    if (elems.length) {
-                        n = elems[0];
+                    if (start === end && start.nodeName === "A") {
+                        n = start;
                     }
                 }
-            } else {
-                state = true;
+                
+                // node is a link
+                if (n.nodeName === "A") {
+                    var nodes = n.childNodes, i, v = n.innerText || n.textContent;
+                    if (nodes.length === 0) {
+                        state = false;
+                    } else {
+                        for (i = nodes.length - 1; i >= 0; i--) {
+                            if (nodes[i].nodeType != 3) {
+                                state = false;
+                                break;
+                            }
+                        }
+                    }
+                // node contains html    
+                //} else if (/</.test(se.getContent()) && v === (n.innerText || n.textContent)) {
+                } else if (/</.test(se.getContent())) {
+                    state = false;
+                // node cannot contain html
+                } else if (shortEnded[n.nodeName]) {
+                    state = false;
+                }
             }
 
             // set text value and state
@@ -246,6 +236,8 @@ var LinkDialog = {
         }
     },
     insert: function() {
+        tinyMCEPopup.restoreSelection();
+        
         var ed = tinyMCEPopup.editor, se = ed.selection;
         AutoValidator.validate(document);
 
@@ -272,7 +264,7 @@ var LinkDialog = {
 
         var ed = tinyMCEPopup.editor, se = ed.selection, n = se.getNode(), args = {}, el;
 
-        var attribs = ['href', 'title', 'target', 'id', 'style', 'class', 'rel', 'rev', 'charset', 'hreflang', 'dir', 'lang', 'tabindex', 'accesskey', 'type'];
+        var attribs = ['href', 'title', 'target', 'id', 'style', 'class', 'rel', 'rev', 'charset', 'hreflang', 'dir', 'lang', 'tabindex', 'accesskey', 'type', 'data-mce-tmp'];
 
         tinymce.each(attribs, function(k) {
             var v = $('#' + k).val();
@@ -289,26 +281,41 @@ var LinkDialog = {
             args[k] = v;
         });
 
-        // no selection or stored html
-        if (se.isCollapsed() || $('#text').data('html')) {
-            var v = $('#text').data('html') || $('#text').not(':disabled').val() || '';
-
+        // no selection
+        if (se.isCollapsed()) {
+            var v = $('#text').not(':disabled').val() || '';
             ed.execCommand('mceInsertContent', false, '<a href="' + args.href + '" id="__mce_tmp">' + v + '</a>', {
                 skip_undo: 1
             });
             // get link
             el = ed.dom.get('__mce_tmp');
             // set attributes
-            ed.dom.setAttribs(el, args);            
+            ed.dom.setAttribs(el, args);
             // create link on selection or update existing link
         } else {
             // insert link on selection
-            ed.execCommand('mceInsertLink', false, {'href' : args.href, 'id' : '__mce_tmp'});
+            ed.execCommand('mceInsertLink', false, {'href': args.href, 'data-mce-tmp': '1'});
             
+            // restore styles
+            ed.dom.setAttrib(n, 'style', ed.dom.getAttrib(n, 'data-mce-style'));
+
             // get link
-            el = ed.dom.get('__mce_tmp');
-            // set attributes
-            ed.dom.setAttribs(el, args); 
+            var elms = ed.dom.select('a[data-mce-tmp]');
+            
+            tinymce.each(elms, function(elm, i) {
+                // set attributes
+                ed.dom.setAttribs(elm, args);
+                
+                // remove id on multiple links
+                if (i > 0 && args.id) {
+                    ed.dom.setAttrib(elm, 'id', '');
+                }
+            });
+
+            // get first link item
+            if (elms.length) {
+                el = elms[0];
+            }
 
             // if text selection, update
             if (!$('#text').is(':disabled')) {
@@ -318,9 +325,6 @@ var LinkDialog = {
                 ed.selection.select(el);
                 ed.selection.collapse(0);
             }
-
-            // restore styles
-            ed.dom.setAttrib(n, 'style', ed.dom.getAttrib(n, 'data-mce-style'));
         }
 
         // get link or element
