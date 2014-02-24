@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -215,9 +215,9 @@ class JoomlalinksMenu extends JObject {
         $query = $db->getQuery(true);
 
         if (is_object($query)) {
-            $query->select('*')->from('#__menu_types');
+            $query->select('*')->from('#__menu_types')->order('title');
         } else {
-            $query = 'SELECT * FROM #__menu_types';
+            $query = 'SELECT * FROM #__menu_types ORDER By title';
         }
 
         $db->setQuery($query, 0);
@@ -303,6 +303,7 @@ class JoomlalinksMenu extends JObject {
             }
 
             $query->where(array('m.published = 1', 'm.access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')', 'm.parent_id = ' . (int) $parent));
+            $query->order('m.title');
             $query->order('m.lft ASC');
         } else {
             $where = '';
@@ -318,6 +319,7 @@ class JoomlalinksMenu extends JObject {
                     . ' AND m.access <= ' . (int) $user->get('aid')
                     . ' AND m.parent = ' . (int) $parent
                     . $where
+                    . ' ORDER BY m.title'
                     . ' ORDER BY m.id'
             ;
         }
