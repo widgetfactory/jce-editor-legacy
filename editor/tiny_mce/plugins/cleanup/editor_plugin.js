@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -131,7 +131,7 @@
                     while (i--) {
                         node = nodes[i], cls = node.attr('class');
 
-                        if (cls && /(glyph|uk-)?icon-/.test(cls)) {
+                        if (cls && (/(glyph|uk-)?icon-/.test(cls) || /st_(sharethis|facebook|twitter|linkedin|googleplus|pinterest|fbsend|email)_/.test(cls))) {
                             node.attr('data-mce-bootstrap', '1');
                             // padd it with a space if its empty
                             if (!node.firstChild) {
