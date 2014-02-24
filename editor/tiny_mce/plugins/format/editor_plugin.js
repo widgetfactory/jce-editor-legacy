@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -25,6 +25,19 @@
                 if ((e.keyCode === VK.ENTER || e.keyCode === VK.UP) && e.altKey) {
                     // clear blocks
                     self._clearBlocks(ed, e);
+                }
+            });
+            
+            ed.onKeyUp.addToTop(function(ed, e) {                
+                if (e.keyCode === VK.ENTER) {
+                    var n = ed.selection.getNode();                    
+                    if (n.nodeName === 'DIV' && ed.settings.force_p_newlines) {
+                        // remove all attributes
+                        if (ed.settings.keep_styles === false) {
+                            ed.dom.removeAllAttribs(n);
+                        }
+                        ed.formatter.apply('p');
+                    }
                 }
             });
 
@@ -56,8 +69,8 @@
                         break;
                     case 'RemoveFormat':
                         var s = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,aside,figure,dt,dd';
-                        
-                        if (!v) {                          
+
+                        if (!v) {
                             if (isBlock(n, s)) {
                                 ed.undoManager.add();
                                 p = ed.dom.getParent(n, blocks) || '';
@@ -75,15 +88,15 @@
                             } else {
                                 var cm = ed.controlManager.get('styleselect');
                                 // get select Styles value if any
-                                if (cm.selectedValue) {
+                                if (cm && cm.selectedValue) {
                                     // remove style
                                     ed.formatter.remove(cm.selectedValue);
                                 }
                             }
-                            
+
                             //o.terminate = true;
                         }
-                        
+
                         break;
                 }
             });
@@ -96,6 +109,19 @@
                         if (v == 'dt' || v == 'dd') {
                             if (n && n.nodeName !== 'DL') {
                                 ed.formatter.apply('dl');
+                            }
+                        }
+                        break;
+                    case 'InsertHorizontalRule':
+                        // if an empty paragraph is created...
+                        if (n.nodeName === 'P' && ed.dom.isEmpty(n)) {
+
+                            if (n.nextSibling) {
+                                ed.dom.remove(n);
+                            } else {
+                                if (!tinymce.isIE || tinymce.isIE11) {
+                                    n.innerHTML = '<br data-mce-bogus="1">';
+                                }
                             }
                         }
                         break;
@@ -147,13 +173,13 @@
             if (p && p.length > 1) {
                 // set defualt content and get the element to use
                 var h = '&nbsp;', tag = ed.getParam('forced_root_block');
-                
+
                 if (!tag && ed.getParam('force_p_newlines')) {
                     tag = 'p';
                 } else {
                     tag = 'br';
                 }
-                
+
                 // prevent default action
                 e.preventDefault();
 
