@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -112,6 +112,11 @@ WFPopups.addPopup('jcemediabox', {
         });
 
         $.each(this.params, function(k, v) {
+            
+            if (k === 'popup_icon_position') {
+                v = v.replace('icon-', 'zoom-');
+            }
+            
             $('#jcemediabox_' + k).val(v);
         });
     },
@@ -206,7 +211,7 @@ WFPopups.addPopup('jcemediabox', {
         var ed = tinyMCEPopup.editor;
 
         // Cleanup
-        $.each(['jcepopup', 'jcelightbox', 'jcebox', 'icon-left', 'icon-right', 'icon-top-left', 'icon-top-right', 'icon-bottom-left', 'icon-bottom-right', 'noicon', 'noshow', 'autopopup-single', 'autopopup-multiple'], function(i, v) {
+        $.each(['jcepopup', 'jcelightbox', 'jcebox', 'icon-left', 'icon-right', 'icon-top-left', 'icon-top-right', 'icon-bottom-left', 'icon-bottom-right', 'zoom-left', 'zoom-right', 'zoom-top-left', 'zoom-top-right', 'zoom-bottom-left', 'zoom-bottom-right', 'noicon', 'noshow', 'autopopup-single', 'autopopup-multiple'], function(i, v) {
             ed.dom.removeClass(n, v);
         });
 
@@ -273,8 +278,13 @@ WFPopups.addPopup('jcemediabox', {
         $('#jcemediabox_popup_hide').val(hide ? 1 : 0);
 
         // Get position
-        if (s = /icon-(top-right|top-left|bottom-right|bottom-left|left|right)/.exec(n.className)) {
-            $('#jcemediabox_popup_icon_position').val(s[0]);
+        if (s = /(zoom|icon)-(top-right|top-left|bottom-right|bottom-left|left|right)/.exec(n.className)) {
+            var v = s[0];
+            
+            if (v) {
+                v = v.replace('icon-', 'zoom-');
+                $('#jcemediabox_popup_icon_position').val(v);
+            }
         }
 
         var relRX = /(\w+|alternate|stylesheet|start|next|prev|contents|index|glossary|copyright|chapter|section|subsection|appendix|help|bookmark|nofollow|licence|tag|friend)\s+?/g;

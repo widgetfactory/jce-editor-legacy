@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2013 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -34,12 +34,12 @@ defined('_WF_EXT') or die('RESTRICTED');
             <label for="jcemediabox_popup_icon_position" class="hastip" title="<?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_ICON_POSITION_DESC'); ?>"><?php echo WFText::_('WF_POPUPS_JCEMEDIABOX_ICON_POSITION'); ?></label>
             <select id="jcemediabox_popup_icon_position">
                 <option value=""><?php echo WFText::_('WF_OPTION_NOT_SET'); ?></option>
-                <option value="icon-left"><?php echo WFText::_('WF_OPTION_LEFT'); ?></option>
-                <option value="icon-right"><?php echo WFText::_('WF_OPTION_RIGHT'); ?></option>
-                <option value="icon-top-left"><?php echo WFText::_('WF_OPTION_TOP_LEFT'); ?></option>
-                <option value="icon-top-right"><?php echo WFText::_('WF_OPTION_TOP_RIGHT'); ?></option>                                        
-                <option value="icon-bottom-left"><?php echo WFText::_('WF_OPTION_BOTTOM_LEFT'); ?></option>
-                <option value="icon-bottom-right"><?php echo WFText::_('WF_OPTION_BOTTOM_RIGHT'); ?></option>
+                <option value="zoom-left"><?php echo WFText::_('WF_OPTION_LEFT'); ?></option>
+                <option value="zoom-right"><?php echo WFText::_('WF_OPTION_RIGHT'); ?></option>
+                <option value="zoom-top-left"><?php echo WFText::_('WF_OPTION_TOP_LEFT'); ?></option>
+                <option value="zoom-top-right"><?php echo WFText::_('WF_OPTION_TOP_RIGHT'); ?></option>                                        
+                <option value="zoom-bottom-left"><?php echo WFText::_('WF_OPTION_BOTTOM_LEFT'); ?></option>
+                <option value="zoom-bottom-right"><?php echo WFText::_('WF_OPTION_BOTTOM_RIGHT'); ?></option>
             </select>
         </td>
     </tr>
