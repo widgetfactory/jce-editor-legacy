@@ -173,6 +173,12 @@ class WFEditor extends JObject {
                         continue;
                     }
                 }
+                // decrypt params
+                if (!empty($item->params)) {
+                    wfimport('admin.helpers.encrypt');
+                    $item->params = WFEncryptHelper::decrypt($item->params);
+                }
+                
                 // assign item to profile
                 self::$profile = $item;
                 
