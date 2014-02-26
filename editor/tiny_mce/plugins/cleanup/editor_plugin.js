@@ -131,7 +131,7 @@
                     while (i--) {
                         node = nodes[i], cls = node.attr('class');
 
-                        if (cls && (/(glyph|uk-)?icon-/.test(cls) || /st_(sharethis|facebook|twitter|linkedin|googleplus|pinterest|fbsend|email)_/.test(cls))) {
+                        if (cls && (/\b(glyph|uk-)?(fa|icon)-/.test(cls) || /st_(sharethis|facebook|twitter|linkedin|googleplus|pinterest|fbsend|email)_/.test(cls))) {
                             node.attr('data-mce-bootstrap', '1');
                             // padd it with a space if its empty
                             if (!node.firstChild) {
@@ -225,7 +225,8 @@
                     }
                 }
                 // pad bootstrap icons
-                o.content = o.content.replace(/<([a-z0-9]+) class="([^"]*)(glyph|uk-)?icon-([\w-]+)([^"]*)">(&nbsp;|\u00a0|\s)?<\/\1>/gi, '<$1 class="$2$3icon-$4$5">&nbsp;</$1>');
+                o.content = o.content.replace(/<([a-z0-9]+) class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)">(&nbsp;|\u00a0|\s)?<\/\1>/gi, '<$1 class="$2$3$4-$5$6">&nbsp;</$1>');
+                
             });
 
             // Cleanup callback
@@ -258,8 +259,8 @@
                     }
 
                     // clean bootstrap icons
-                    o.content = o.content.replace(/<([a-z0-9]+) class="([^"]*)(glyph|uk-)?icon-([\w-]+)([^"]*)">(&nbsp;|\u00a0)<\/\1>/g, '<$1 class="$2$3icon-$4$5"></$1>');
-                    
+                    o.content = o.content.replace(/<([a-z0-9]+) class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)">(&nbsp;|\u00a0)<\/\1>/g, '<$1 class="$2$3$4-$5$6"></$1>');
+
                     // remove padding on div
                     if (ed.getParam('remove_div_padding')) {
                         o.content = o.content.replace(/<div([^>]*)>(&nbsp;|\u00a0)<\/div>/g, '<div$1></div>');
