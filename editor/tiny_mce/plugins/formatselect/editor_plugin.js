@@ -8,7 +8,7 @@
  * other free or open source software licenses.
  */
 (function() {
-    var each = tinymce.each, PreviewCss = tinymce.util.PreviewCss;
+    var each = tinymce.each;
     
     tinymce.create('tinymce.plugins.FormatSelectPlugin', {
         init: function(ed, url) {
@@ -36,7 +36,7 @@
             }
         },
         _createBlockFormats: function() {
-            var self = this, ed = this.editor;
+            var self = this, ed = this.editor, PreviewCss = tinymce.util.PreviewCss;
             
             var c, fmts = {
                 p: 'advanced.paragraph',
