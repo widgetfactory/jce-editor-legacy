@@ -68,15 +68,15 @@ WFAggregator.add('vine', {
             id = s[1];
         }
         // protocol / scheme relative url
-        src = '//vine.co/v/' + id + '/embed/' + args.type || this.params.type;
+        src = '//vine.co/v/' + id + '/embed/' + (args.type || this.params.type || '');
 
         // convert args to URL query string
-        var query = $.param(args);
+        /*var query = $.param(args);
 
         // add to src if not empty
         if (query) {
             src = src + (/\?/.test(src) ? '&' : '?') + query;
-        }
+        }*/
 
         data.src = src;
 
