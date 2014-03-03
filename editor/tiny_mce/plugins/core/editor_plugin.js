@@ -10,11 +10,11 @@
 (function(tinymce) {
     var DOM = tinymce.DOM, Event = tinymce.dom.Event, is = tinymce.is, each = tinymce.each, VK = tinymce.VK;
 
-    /**
-     * Firefox on Mac OS will move the browser back to the previous page if you press CMD+Left arrow.
-     * You might then loose all your work so we need to block that behavior and replace it with our own.
-     */
     tinyMCE.onAddEditor.add(function(mgr, ed) {
+        /**
+         * Firefox on Mac OS will move the browser back to the previous page if you press CMD+Left arrow.
+         * You might then loose all your work so we need to block that behavior and replace it with our own.
+         */
         if (tinymce.isMac && tinymce.isGecko && !tinymce.isIE11) {
             ed.onKeyDown.add(function(ed, e) {
                 if (VK.metaKeyPressed(e) && (e.keyCode == 37 || e.keyCode == 39)) {
