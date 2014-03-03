@@ -506,6 +506,32 @@ class WFDocument extends JObject {
 
         return implode('&', $output);
     }
+    
+    private function getHash($files) {
+        $seed = '';
+        
+        $hash = '';
+        
+        // create version / etag hash
+        $version = $this->get('version', '000000');
+        
+        // cast as array
+        $files = (array) $files;
+        
+        foreach($files as $file) {
+            
+                // only add stamp to static stylesheets
+                if (strpos($file, '://') === false && strpos($file, 'index.php?option=com_jce') === false) {
+                    $seed .= basename($file);
+                }
+        }
+        
+        if ($seed) {
+            $hash = md5($version . $seed);
+        }
+
+        return $hash;
+    }
 
     /**
      * Render document head data
@@ -519,42 +545,47 @@ class WFDocument extends JObject {
         // render stylesheets
         if ($this->get('compress_css', 0)) {
             $file = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . $this->getQueryString(array('task' => 'pack', 'type' => 'css'));
+            // add hash
+            $file .= '&' . $this->getHash(array_keys($this->_styles));
 
             $output .= "\t\t<link href=\"" . $file . "\" rel=\"stylesheet\" type=\"text/css\" />\n";
         } else {
             foreach ($this->_styles as $src => $type) {
                 
-                $stamp = '';
+                $hash = $this->getHash($src);
+
                 // only add stamp to static stylesheets
-                if (strpos($src, '://') === false && strpos($src, 'index.php?option=com_jce') === false) {
-                    $version = md5(basename($src) . $version);
-                    $stamp = strpos($src, '?') === false ? '?' . $version : '&' . $version;
+                if (!empty($hash)) {
+                    $hash = strpos($src, '?') === false ? '?' . $hash : '&' . $hash;
                 }
                 
-                $output .= "\t\t<link href=\"" . $src . $stamp . "\" rel=\"stylesheet\" type=\"" . $type . "\" />\n";
+                $output .= "\t\t<link href=\"" . $src . $hash . "\" rel=\"stylesheet\" type=\"" . $type . "\" />\n";
             }
         }
 
         // Render scripts
         if ($this->get('compress_javascript', 0)) {
-            $script = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . $this->getQueryString(array('task' => 'pack'));
+            $script  = JURI::base(true) . '/index.php?option=com_jce&view=editor&' . $this->getQueryString(array('task' => 'pack'));
+            // add hash
+            $script .= '&' . $this->getHash(array_keys($this->_scripts));
+            
             $output .= "\t\t<script data-cfasync=\"false\" type=\"text/javascript\" src=\"" . $script . "\"></script>\n";
         } else {
             foreach ($this->_scripts as $src => $type) {
-                $stamp = '';
-                // only add stamp to static scripts
-                if (strpos($src, '://') === false && strpos($src, 'index.php?option=com_jce') === false) {
-                    $version = md5(basename($src) . $version);
-                    $stamp = strpos($src, '?') === false ? '?' . $version : '&' . $version;
+                $hash = $this->getHash($src);
+
+                // only add stamp to static stylesheets
+                if (!empty($hash)) {
+                    $hash = strpos($src, '?') === false ? '?' . $hash : '&' . $hash;
                 }
                 
-                $output .= "\t\t<script data-cfasync=\"false\" type=\"" . $type . "\" src=\"" . $src . $stamp . "\"></script>\n";
+                $output .= "\t\t<script data-cfasync=\"false\" type=\"" . $type . "\" src=\"" . $src . $hash . "\"></script>\n";
             }
-
-            // Script declarations
-            foreach ($this->_script as $type => $content) {
-                $output .= "\t\t<script data-cfasync=\"false\" type=\"" . $type . "\">" . $content . "</script>";
-            }
+        }
+        
+        // Script declarations
+        foreach ($this->_script as $type => $content) {
+            $output .= "\t\t<script data-cfasync=\"false\" type=\"" . $type . "\">" . $content . "</script>";
         }
 
         // Other head data
@@ -648,9 +679,9 @@ class WFDocument extends JObject {
                     $data .= $parser->load();
 
                     // add script declarations
-                    foreach ($this->getScriptDeclarations() as $script) {
+                    /*foreach ($this->getScriptDeclarations() as $script) {
                         $data .= $script;
-                    }
+                    }*/
 
                     $packer->setContentEnd($data);
 
