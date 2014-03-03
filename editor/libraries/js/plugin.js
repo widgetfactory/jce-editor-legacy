@@ -1375,7 +1375,7 @@
 
             return'\\u' + c;
         },
-        safe: function(s, mode, spaces) {
+        safe: function(s, mode, spaces, textcase) {
             mode = mode || 'utf-8';
 
             // replace spaces with underscore
@@ -1415,8 +1415,23 @@
 
             // remove trailing period
             s = s.replace(/\.$/, '');
+            
+            // cleanup path
+            s = this.basename(s);
+            
+            // change case
+            if (textcase) {
+                switch(textcase) {
+                    case 'lowercase':
+                        s = s.toLowerCase();
+                        break;
+                    case 'uppercase':
+                        s = s.toUpperCase();
+                        break;
+                }
+            }
 
-            return this.basename(s);
+            return s;
         },
         query: function(s) {
             var p = {};

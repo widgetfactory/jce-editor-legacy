@@ -25,14 +25,14 @@ abstract class WFUtility {
 
     public static function cleanPath($path, $ds = DIRECTORY_SEPARATOR, $prefix = '') {
         $path = trim(urldecode($path));
-        
+
         // check for UNC path on IIS and set prefix
         if ($ds == '\\' && $path[0] == '\\' && $path[1] == '\\') {
             $prefix = "\\";
         }
         // clean path, removing double slashes, replacing back/forward slashes with DIRECTORY_SEPARATOR
         $path = preg_replace('#[/\\\\]+#', $ds, $path);
-        
+
         // return path with prefix if any
         return $prefix . $path;
     }
@@ -48,7 +48,7 @@ abstract class WFUtility {
     }
 
     private static function checkCharValue($string) {
-        if (preg_match('#([^\w\.\-~\/\\\\\s ])#i', $string, $matches)) {            
+        if (preg_match('#([^\w\.\-~\/\\\\\s ])#i', $string, $matches)) {
             foreach ($matches as $match) {
                 // not a safe UTF-8 character
                 if (ord($match) < 127) {
@@ -111,12 +111,29 @@ abstract class WFUtility {
         return str_replace(array_keys($CHARS), array_values($CHARS), $subject);
     }
 
+    protected static function changeCase($string, $case) {
+        if (!function_exists('mb_' . $case)) {
+            return $string;
+        }
+
+        switch ($case) {
+            case 'lowercase':
+                $string = mb_strtolower($string);
+                break;
+            case 'uppercase':
+                $string = mb_strtoupper($string);
+                break;
+        }
+
+        return $string;
+    }
+
     /**
      * Makes file name safe to use
      * @param mixed The name of the file (not full path)
      * @return mixed The sanitised string or array
      */
-    public static function makeSafe($subject, $mode = 'utf-8', $allowspaces = false) {
+    public static function makeSafe($subject, $mode = 'utf-8', $allowspaces = false, $case = '') {
         $search = array();
 
         // replace spaces with underscore
@@ -126,22 +143,22 @@ abstract class WFUtility {
 
         switch ($mode) {
             default:
-            case 'utf-8':                
+            case 'utf-8':
                 $search[] = '#[^a-zA-Z0-9_\.\-~\p{L}\p{N}\s ]#u';
                 $mode = 'utf-8';
                 break;
             case 'ascii':
-                $subject = self::utf8_latin_to_ascii($subject);                
+                $subject = self::utf8_latin_to_ascii($subject);
                 $search[] = '#[^a-zA-Z0-9_\.\-~\s ]#';
                 break;
         }
-        
+
         // remove multiple . characters
         $search[] = '#(\.){2,}#';
 
         // strip leading period
         $search[] = '#^\.#';
-        
+
         // strip trailing period
         $search[] = '#\.$#';
 
@@ -150,22 +167,34 @@ abstract class WFUtility {
 
         // only for utf-8 to avoid PCRE errors - PCRE must be at least version 5
         if ($mode == 'utf-8') {
-            try {                
-                $result = preg_replace($search, '', $subject);                
+            try {
+                $result = preg_replace($search, '', $subject);
             } catch (Exception $e) {
                 // try ascii
                 return self::makeSafe($subject, 'ascii');
             }
-            
+
             // try ascii
-            if (is_null($result) || $result === false) {                
+            if (is_null($result) || $result === false) {
                 return self::makeSafe($subject, 'ascii');
+            }
+
+            if ($case) {
+                // change case
+                $result = self::changeCase($result, $case);
             }
 
             return $result;
         }
 
-        return preg_replace($search, '', $subject);
+        $result = preg_replace($search, '', $subject);
+
+        if ($case) {
+            // change case
+            $result = self::changeCase($result, $case);
+        }
+
+        return $result;
     }
 
     /**

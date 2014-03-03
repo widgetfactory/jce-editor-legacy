@@ -520,7 +520,7 @@
                 }
                 
                 // sanitize name
-                title = $.String.safe(title, self.options.websafe_mode, self.options.websafe_spaces);
+                title = $.String.safe(title, self.options.websafe_mode, self.options.websafe_spaces, self.options.websafe_textcase);
                 // rename file
                 self._renameFile(file, title);
 
@@ -630,14 +630,14 @@
                     // remove extension
                     name    = $.String.stripExt(file.name);
                     // make web safe
-                    name    = $.String.safe(name, self.options.websafe_mode, self.options.websafe_spaces);
+                    name    = $.String.safe(name, self.options.websafe_mode, self.options.websafe_spaces, self.options.websafe_textcase);
 
                     $(input).val(name).show().attr('aria-hidden', false);
 
                     $(input).bind('blur', function() {
                         var v = $(input).val() + '.' + $.String.getExt($(txt).text());
                         // make web safe
-                        v = $.String.safe(v, self.options.websafe_mode, self.options.websafe_spaces);
+                        v = $.String.safe(v, self.options.websafe_mode, self.options.websafe_spaces, self.options.websafe_textcase);
 
                         self._renameFile(file, v);
 

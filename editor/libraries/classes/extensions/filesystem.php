@@ -136,7 +136,7 @@ class WFFileSystem extends WFExtension {
                 $parts = explode('/', $root);
 
                 // clean path parts
-                $parts = WFUtility::makeSafe($parts, $wf->getParam('editor.websafe_mode', 'utf-8'), $wf->getParam('editor.websafe_allow_spaces', 0));
+                $parts = WFUtility::makeSafe($parts, $wf->getParam('editor.websafe_mode', 'utf-8'), $wf->getParam('editor.websafe_allow_spaces', 0), $wf->getParam('editor.websafe_textcase', '', 'uppercase,lowercase'));
 
                 //join path parts
                 $root = implode('/', $parts);

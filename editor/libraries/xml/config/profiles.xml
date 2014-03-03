@@ -84,6 +84,10 @@
         <param name="websafe_allow_spaces" type="radio" default="0" label="WF_PARAM_WEBSAFE_ALLOW_SPACES" description="WF_PARAM_WEBSAFE_ALLOW_SPACES_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
+        </param>
+        <param name="websafe_textcase" type="list" class="checklist" multiple="multiple" default="uppercase,lowercase" label="WF_PARAM_websafe_textcase" description="WF_PARAM_websafe_textcase_DESC">
+            <option value="uppercase">WF_OPTION_UPPERCASE</option>
+            <option value="lowercase">WF_OPTION_LOWERCASE</option>
         </param> 
         <param name="upload_add_random" type="radio" default="0" label="WF_PARAM_UPLOAD_ADD_RANDOM" description="WF_PARAM_UPLOAD_ADD_RANDOM_DESC">
             <option value="1">WF_OPTION_YES</option>

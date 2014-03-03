@@ -72,7 +72,8 @@
             listlimit: 'all',
             expandable: true,
             websafe_mode: 'utf-8',
-            websafe_spaces: false
+            websafe_spaces: false,
+            websafe_textcase: ''
         },
         _init: function() {
             var self = this;
@@ -573,7 +574,7 @@
          */
         _isWebSafe: function(name) {
             //return !/[^a-zA-Z0-9:\.\_\-]/.test(name);
-            return name === $.String.safe(name, this.options.websafe_mode, this.options.websafe_spaces);
+            return name === $.String.safe(name, this.options.websafe_mode, this.options.websafe_spaces, this.options.websafe_textcase);
         },
         _isViewable: function(name) {
             var button = this._getButton('file', 'view');
@@ -1216,7 +1217,7 @@
                              */
                             function _checkName(file) {
                                 var found = false, msg = self._translate('file_exists_alert', 'A file with the same name exists in the target folder.');
-                                var name = $.String.safe(file.name, self.options.websafe_mode, self.options.websafe_spaces);
+                                var name = $.String.safe(file.name, self.options.websafe_mode, self.options.websafe_spaces, self.options.websafe_textcase);
 
                                 $('li', 'file-list').each(function() {
                                     if (name == $(this).attr('title')) {
@@ -1255,6 +1256,7 @@
                                 },
                                 websafe_mode: self.options.websafe_mode,
                                 websafe_spaces: self.options.websafe_spaces,
+                                websafe_textcase: self.options.websafe_textcase,
                                 fileRename: function(e, file) {
                                     return _checkName(file);
                                 },
@@ -1329,7 +1331,7 @@
                         confirm: function(v) {
                             if (v) {
                                 self._setLoader();
-                                var args = [dir, $.String.safe(v, self.options.websafe_mode, self.options.websafe_spaces)];
+                                var args = [dir, $.String.safe(v, self.options.websafe_mode, self.options.websafe_spaces, self.options.websafe_textcase)];
 
                                 $(':input:not(input[name="prompt"])', $(self._dialog['folder_new']).dialog('widget')).each(function() {
                                     args.push($(this).val());
@@ -1435,7 +1437,7 @@
                         value: v,
                         elements: this._getDialogOptions('rename'),
                         confirm: function(name) {
-                            name = $.String.safe(name, self.options.websafe_mode, self.options.websafe_spaces);
+                            name = $.String.safe(name, self.options.websafe_mode, self.options.websafe_spaces, self.options.websafe_textcase);
 
                             if (v == name) {
                                 $.Dialog.alert(self._translate('rename_item_name_new', 'Please specify a new name for the item'));

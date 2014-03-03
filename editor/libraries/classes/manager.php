@@ -151,7 +151,8 @@ class WFMediaManager extends WFEditorPlugin {
                 )
             ),
             'websafe_mode' => $this->getParam('editor.websafe_mode', 'utf-8'),
-            'websafe_spaces' => $this->getParam('editor.websafe_allow_spaces', 0)
+            'websafe_spaces' => $this->getParam('editor.websafe_allow_spaces', 0),
+            'websafe_textcase' => $this->getParam('editor.websafe_textcase', '', 'uppercase,lowercase')
         );
 
         return $config;
