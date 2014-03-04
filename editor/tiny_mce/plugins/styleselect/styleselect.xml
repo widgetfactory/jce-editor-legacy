@@ -15,7 +15,7 @@
             <option value="stylesheet">WF_STYLESELECT_STYLESHEET</option>
             <option value="custom">WF_STYLESELECT_CUSTOM</option>
         </param>
-        <param name="custom_styles" type="styleformat" default="" label="WF_PARAM_CUSTOM_STYLES" description="WF_PARAM_CUSTOM_STYLES_DESC" />
+        <param name="custom_styles" type="styleformat" default="" label="WF_PARAM_CUSTOM_STYLES" description="WF_PARAM_CUSTOM_STYLES_DESC" parent="styles[custom]" />
     </params>
     <help></help>
     <languages></languages>

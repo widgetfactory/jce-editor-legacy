@@ -73,7 +73,7 @@
             ed.onPreInit.add(function(editor) {
                 var styleselect = ed.controlManager.get('styleselect');
 
-                if (styleselect && !styleselect.hasClasses && ed.getParam('styleselect_stylesheet_styles', true)) {
+                if (styleselect && !styleselect.hasClasses && ed.getParam('styleselect_stylesheet', true)) {
                     styleselect.onPostRender.add(function(ed, n) {                        
                         if (!styleselect.NativeListBox) {
                             Event.bind(DOM.get(n.id + '_text'), 'focus mousedown', self.populateStyleSelect, self);
@@ -99,7 +99,7 @@
             ed.onNodeChange.add(function() {
                 var styleselect = ed.controlManager.get('styleselect');
 
-                if (styleselect && !styleselect.hasClasses && ed.getParam('styleselect_stylesheet_styles', true)) {
+                if (styleselect && !styleselect.hasClasses && ed.getParam('styleselect_stylesheet', true)) {
                     return self.populateStyleSelect();
                 }
             });

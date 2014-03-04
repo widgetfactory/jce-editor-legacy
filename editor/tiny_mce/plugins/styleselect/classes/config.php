@@ -16,16 +16,17 @@ class WFStyleselectPluginConfig {
         $model = new WFModelEditor();
         $wf = WFEditor::getInstance();
 
-        // Styles list (legacy)
-        /*$styles = $wf->getParam('editor.theme_advanced_styles', '');
+        $custom_styles      = json_decode($wf->getParam('styleselect.custom_styles', $wf->getParam('editor.custom_styles', '')));
+        $include            = (array) $wf->getParam('styleselect.styles', 'stylesheet,custom'); 
 
-        if ($styles) {
-            $settings['theme_advanced_styles'] = implode(';', explode(',', $styles));
-        }*/
+        if (!empty($custom_styles) && in_array('custom', $include)) {
+            // Styles list (legacy)
+            $theme_advanced_styles = $wf->getParam('editor.theme_advanced_styles', '');
 
-        $custom_styles = json_decode($wf->getParam('editor.custom_styles', ''));
-
-        if (!empty($custom_styles)) {
+            if (!empty($theme_advanced_styles)) {
+                $settings['theme_advanced_styles'] = implode(';', explode(',', $theme_advanced_styles));
+            }
+            
             $styles = array();
 
             $blocks = array('section', 'nav', 'article', 'aside', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'footer', 'address', 'main', 'p', 'pre', 'blockquote', 'figure', 'figcaption', 'div');
@@ -62,8 +63,10 @@ class WFStyleselectPluginConfig {
                 $settings['style_formats'] = htmlentities(json_encode($styles), ENT_NOQUOTES, "UTF-8");
             }
         }
-        
-        $settings['styleselect_stylesheet_styles'] = $wf->getParam('styleselect.stylesheet_styles', 1, 1);
+        // set this value false if stylesheet not included
+        if (in_array('stylesheet', $include) === false) {
+            $settings['styleselect_stylesheet'] = false;
+        }
     }
 
     protected static function cleanJSON($string, $delim = ";") {

@@ -95,6 +95,7 @@
                         if (keys > 1) {
                             name = fmt.name = fmt.name || 'style_' + (counter++);
                             ed.formatter.register(name, fmt);
+                            
                             ctrl.add(fmt.title, name, {
                                 style: function() {
                                     return new PreviewCss(ed, fmt);
@@ -104,6 +105,7 @@
                             ctrl.add(fmt.title);
                     });
                 }
+                // legacy styles
                 if (styles) {
                     each(styles, function(val, key) {
                         var name, fmt;
