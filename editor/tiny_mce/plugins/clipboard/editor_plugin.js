@@ -1301,9 +1301,9 @@
                 html = p.innerHTML;
 
                 // quick check, must be a list item
-                if (html.indexOf('__MCE_LIST_ITEM__') === -1) {
+                /*if (html.indexOf('__MCE_LIST_ITEM__') === -1) {
                     return;
-                }
+                }*/
 
                 // remove tags and replace spaces
                 val = html.replace(/<\/?\w+[^>]*>/gi, '').replace(/&nbsp;/g, '\u00a0');
