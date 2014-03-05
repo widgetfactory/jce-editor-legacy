@@ -20,7 +20,7 @@ class JoomlalinksContact extends JObject {
      *
      * @access	protected
      */
-    function __construct($options = array()) {
+    public function __construct($options = array()) {
         
     }
 
@@ -34,7 +34,7 @@ class JoomlalinksContact extends JObject {
      * @return	JCE  The editor object.
      * @since	1.5
      */
-    function getInstance() {
+    public static function getInstance() {
         static $instance;
 
         if (!is_object($instance)) {
@@ -56,7 +56,7 @@ class JoomlalinksContact extends JObject {
         }
     }
 
-    function getLinks($args) {
+    public function getLinks($args) {
         $items = array();
         $view = isset($args->view) ? $args->view : '';
         

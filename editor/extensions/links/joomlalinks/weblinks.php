@@ -20,7 +20,7 @@ class JoomlalinksWeblinks extends JObject {
      *
      * @access	protected
      */
-    function __construct($options = array()) {
+    public function __construct($options = array()) {
         
     }
 
@@ -34,7 +34,7 @@ class JoomlalinksWeblinks extends JObject {
      * @return	JCE  The editor object.
      * @since	1.5
      */
-    function getInstance() {
+    public static function getInstance() {
         static $instance;
 
         if (!is_object($instance)) {
@@ -43,11 +43,11 @@ class JoomlalinksWeblinks extends JObject {
         return $instance;
     }
 
-    function getOption() {
+    public function getOption() {
         return $this->_option;
     }
 
-    function getList() {
+    public function getList() {
         $wf = WFEditorPlugin::getInstance();
 
         if ($wf->checkAccess('links.joomlalinks.weblinks', 1)) {
