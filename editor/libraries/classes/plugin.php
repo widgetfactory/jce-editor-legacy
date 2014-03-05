@@ -138,8 +138,9 @@ class WFEditorPlugin extends JObject {
     }
 
     private function isRequest() {
-        $format = JRequest::getWord('format');
-        return ($format == 'json' || $format == 'raw') && (JRequest::getVar('json') || JRequest::getWord('action'));
+        $xmlhttprequest = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
+        return $xmlhttprequest || JRequest::getWord('action');
     }
 
     protected function getProfile($plugin = null) {
