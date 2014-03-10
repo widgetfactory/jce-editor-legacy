@@ -20,7 +20,7 @@ class WFAdvlistPluginConfig {
         $settings['advlist_number_styles'] = empty($number) ? false : implode(',', $number);
     }
     
-    private function getNumberList() {
+    private static function getNumberList() {
         $wf = WFEditor::getInstance();     
         $number = (array) $wf->getParam('lists.number_styles');
         
@@ -31,7 +31,7 @@ class WFAdvlistPluginConfig {
         return $number;
     }
     
-    private function getBulletList() {
+    private static function getBulletList() {
         $wf = WFEditor::getInstance();     
         $bullet = (array) $wf->getParam('lists.bullet_styles');
         
