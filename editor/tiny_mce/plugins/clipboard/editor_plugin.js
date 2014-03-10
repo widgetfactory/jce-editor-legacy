@@ -1355,11 +1355,17 @@
                         // Nested list element
                         if (margin > lastMargin) {
                             listElm = dom.add(li, type);
-                        } else if (margin < lastMargin) {
+                        } else if (margin < lastMargin) {                           
                             // Find parent level based on margin value
-                            idx = tinymce.inArray(levels, margin);
+                            idx = tinymce.inArray(levels, margin); 
+                            // levels less than 0 are 0
+                            if (idx < 0) {
+                                idx = 0;
+                            }
+                            // get list parents
                             parents = dom.getParents(listElm.parentNode, type);
-                            listElm = parents[parents.length - 1 - idx] || listElm;
+                            // find parent list element
+                            listElm = parents[parents.length - 1 - idx] || listElm;                            
                         }
                     }
 
