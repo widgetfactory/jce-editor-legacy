@@ -34,7 +34,10 @@ class WFLinkBrowser_Joomlalinks {
             foreach ($files as $file) {
                 require_once( $path . '/' . $file );
                 $classname = 'Joomlalinks' . ucfirst(basename($file, '.php'));
-                $this->_adapters[] = new $classname;
+
+                if (class_exists($classname)) {
+                    $this->_adapters[] = new $classname;
+                }
             }
         }
     }
@@ -73,6 +76,7 @@ class WFLinkBrowser_Joomlalinks {
             }
         }
     }
+
 }
 
 ?>
