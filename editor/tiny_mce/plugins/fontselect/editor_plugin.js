@@ -22,7 +22,7 @@
                 var c = cm.get('fontselect'), fn;
 
                 // select font
-                if (c) {
+                if (c && n.style) {
                     if (!fn && n.style.fontFamily) {
                         fn = n.style.fontFamily.replace(/[\"\']+/g, '').replace(/^([^,]+).*/, '$1').toLowerCase();
                     }

@@ -57,7 +57,7 @@
             ed.onNodeChange.add(function(ed, cm, n) {
                 var c = cm.get('fontsizeselect'), fn, s = ed.settings;
 
-                if (c) {
+                if (c && n.style) {
                     var fz = n.style.fontSize, cl = n.className;
 
                     // Use computed style
