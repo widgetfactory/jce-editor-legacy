@@ -18,27 +18,27 @@
             var self = this;
 
             this.editor = ed;
-            this.url 	= url;
-            
+            this.url = url;
+
             function isCode(n) {
-                return ed.dom.is(n, 'span.mceItemScript, span.mceItemStyle, span.mceItemPhp, span.mcePhp');
+                return ed.dom.is(n, '.mceItemScript, .mceItemStyle, .mceItemPhp, .mcePhp');
             }
-            
-            ed.onNodeChange.add( function(ed, cm, n, co) {                                
-                ed.dom.removeClass(ed.dom.select('span.mceItemSelected'), 'mceItemSelected');
-                
-                if (isCode(n) && n.nodeName == 'SPAN') {                 
+
+            ed.onNodeChange.add(function(ed, cm, n, co) {
+                ed.dom.removeClass(ed.dom.select('.mceItemSelected'), 'mceItemSelected');
+
+                if (isCode(n)) {
                     ed.dom.addClass(n, 'mceItemSelected');
                 }
             });
-            
-            ed.onKeyDown.add(function(ed, e) {				
-                if (e.keyCode == BACKSPACE || e.keyCode == DELETE) {                                        
+
+            ed.onKeyDown.add(function(ed, e) {
+                if (e.keyCode == BACKSPACE || e.keyCode == DELETE) {
                     self._removeCode(e);
                 }
             });
 
-            ed.onPreInit.add( function() {
+            ed.onPreInit.add(function() {
                 if (ed.getParam('code_style')) {
                     ed.schema.addValidElements('style[scoped|*]');
                     ed.schema.addValidChildren('+body[style]');
@@ -50,7 +50,7 @@
                         self._serializeSpan(nodes[i]);
                     }
                 });
-				
+
                 ed.parser.addNodeFilter('noscript', function(nodes) {
                     for (var i = 0, len = nodes.length; i < len; i++) {
                         self._serializeNoScript(nodes[i]);
@@ -58,7 +58,7 @@
                 });
 
                 // Convert span placeholders to script elements
-                ed.serializer.addNodeFilter('span,script,div', function(nodes, name, args) {
+                ed.serializer.addNodeFilter('script,div,span', function(nodes, name, args) {
                     for (var i = 0, len = nodes.length; i < len; i++) {
                         var node = nodes[i];
 
@@ -69,11 +69,11 @@
                         if (node.name == 'span' && /mceItemStyle/.test(node.attr('class'))) {
                             self._buildStyle(node);
                         }
-                        
+
                         /*if (node.name == 'span' && /mceItemCurlyCode/.test(node.attr('class'))) {
-                            node.unwrap();
-                        }*/
-						
+                         node.unwrap();
+                         }*/
+
                         if (node.name == 'div' && node.attr('data-mce-type') == 'noscript') {
                             self._buildNoScript(node);
                         }
@@ -81,19 +81,21 @@
                 });
             });
 
-            ed.onInit.add( function() {
+            ed.onInit.add(function() {
                 // Display "script" instead of "span" in element path
                 if (ed.theme && ed.theme.onResolveName) {
-                    ed.theme.onResolveName.add( function(theme, o) {
-                        if (o.name === 'span' && /mceItemScript/.test(o.node.className)) {
+                    ed.theme.onResolveName.add(function(theme, o) {
+                        var cls = o.node.className;
+                        
+                        if (o.name === 'span' && /mceItemScript/.test(cls)) {
                             o.name = 'script';
                         }
 
-                        if (o.name === 'span' && /mceItemStyle/.test(o.node.className)) {
+                        if (o.name === 'span' && /mceItemStyle/.test(cls)) {
                             o.name = 'style';
                         }
 
-                        if (o.name === 'span' && /mcePhp/.test(o.node.className)) {
+                        if (o.name === 'span' && /mcePhp/.test(cls)) {
                             o.name = 'php';
                         }
                     });
@@ -104,17 +106,17 @@
                     ed.dom.loadCSS(url + "/css/content.css");
             });
 
-            ed.onBeforeSetContent.add( function(ed, o) {                
+            ed.onBeforeSetContent.add(function(ed, o) {
                 //self._convertCurlyCode(o.content);
-                
+
                 // test for PHP, Script or Style
                 if (/<(\?|script|style)/.test(o.content)) {
-                    
+
                     // Remove javascript if not enabled
                     if (!ed.getParam('code_script')) {
                         o.content = o.content.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '');
                     }
-					
+
                     if (!ed.getParam('code_style')) {
                         o.content = o.content.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, '');
                     }
@@ -125,11 +127,11 @@
                     }
 
                     // PHP code within an attribute
-                    o.content = o.content.replace(/\="([^"]+?)"/g, function(a, b) {                        
+                    o.content = o.content.replace(/\="([^"]+?)"/g, function(a, b) {
                         b = b.replace(/<\?(php)?(.+?)\?>/gi, function(x, y, z) {
                             return '{php:start}' + ed.dom.encode(z) + '{php:end}';
-                        });  
-                        
+                        });
+
                         return '="' + b + '"';
                     });
 
@@ -157,15 +159,19 @@
 
                     // padd empty script tags
                     o.content = o.content.replace(/<script([^>]+)><\/script>/gi, '<script$1>\u00a0</script>');
-					
+
                     // protect style and script tags from forced_root_block
                     o.content = o.content.replace(/<(script|style)([^>]*)>/gi, function(a, b, c) {
-                        return '<' + b + c + ' data-mce-type="text/' + (b === 'script' ? 'javascript' : 'css') + '">';
+                        if (c.indexOf('data-mce-type') === -1) {
+                            c += ' data-mce-type="text/' + (b === 'script' ? 'javascript' : 'css') + '"';
+                        }
+                        
+                        return '<' + b + c + '>';
                     });
                 }
             });
 
-            ed.onPostProcess.add( function(ed, o) {
+            ed.onPostProcess.add(function(ed, o) {
                 if (o.get) {
                     // Process converted php
                     if (/(mcePhp|data-mce-php|\{php:start\})/.test(o.content)) {
@@ -192,17 +198,23 @@
                             return '<?php' + ed.dom.decode(d) + '?>';
                         });
                     }
+                    
+                    // remove data-mce-type
+                    o.content = o.content.replace(/<(script|style)([^>]*)>/gi, function(a, b, c) {
+                        c = c.replace(/\s?data-mce-type="[^"]+"/gi, "");
+                        
+                        return '<' + b + c + '">';
+                    });
                 }
             });
 
         },
-        
-        _removeCode : function(e) {
+        _removeCode: function(e) {
             var ed = this.editor, s = ed.selection, n = s.getNode();
-                    
-            if (ed.dom.is(n, 'span.mceItemScript, span.mceItemStyle, span.mceItemPhp, span.mcePhp')) {
+
+            if (ed.dom.is(n, '.mceItemScript, .mceItemStyle, .mceItemPhp, .mcePhp')) {
                 ed.undoManager.add();
-                
+
                 ed.dom.remove(n);
 
                 if (e) {
@@ -210,15 +222,13 @@
                 }
             }
         },
-        
-        _convertCurlyCode : function(content) {
+        _convertCurlyCode: function(content) {
             // open / close type code eg: {youtube}url{/youtube}
             content = content.replace(/\{([^\}]+)\}([\s\S]+?)\{\/\1\}/, '<span class="mceItemCurlyCode" data-mce-type="code-item">{$1}$2{/$1}</span>');
-                
+
             // single tag code type eg: {code}
             content = content.replace(/\{([^\}]+)\}/, '<span class="mceItemCurlyCode" data-mce-type="code-item">{$1}</span>');
         },
-
         _buildScript: function(n) {
             var self = this, ed = this.editor, v, node, text, p;
 
@@ -237,9 +247,9 @@
             node = new Node('script', 1);
 
             if (v) {
-				
+
                 v = tinymce.trim(v);
-				
+
                 if (v) {
                     text = new Node('#text', 3);
                     text.raw = true;
@@ -255,12 +265,14 @@
             each(p, function(v, k) {
                 node.attr(k, v);
             });
+            
+            // set data-mce-type
+            node.attr('data-mce-type', p.type);
 
             n.replace(node);
-			
+
             return true;
         },
-
         _buildStyle: function(n) {
             var self = this, ed = this.editor, v, node, text, p;
 
@@ -279,9 +291,9 @@
             node = new Node('style', 1);
 
             if (v) {
-				
+
                 v = tinymce.trim(v);
-				
+
                 if (v) {
                     text = new Node('#text', 3);
                     text.raw = true;
@@ -293,9 +305,9 @@
                     node.append(text);
                 }
             }
-			
+
             // add scoped attribute
-            if (n.parent.name == 'head') {
+            if (n.parent.name === 'head') {
                 p.scoped = null;
             } else {
                 p.scoped = "scoped";
@@ -304,12 +316,14 @@
             each(p, function(v, k) {
                 node.attr(k, v);
             });
+            
+            // set data-mce-type
+            node.attr('data-mce-type', p.type);
 
             n.replace(node);
 
             return true;
         },
-		
         _buildNoScript: function(n) {
             var self = this, ed = this.editor, p, node;
 
@@ -326,20 +340,19 @@
 
             n.wrap(node);
             n.unwrap();
-			
+
             return true;
         },
-        
         _serializeSpan: function(n) {
             var self = this, ed = this.editor, dom = ed.dom, v, k, p = {};
 
             if (!n.parent)
                 return;
-			
+
             each(n.attributes, function(at) {
                 if (at.name.indexOf('data-mce-') !== -1 || at.name == 'type')
                     return;
-				
+
                 p[at.name] = at.value;
             });
 
@@ -361,7 +374,6 @@
 
             n.replace(span);
         },
-		
         _serializeNoScript: function(n) {
             var self = this, ed = this.editor, dom = ed.dom, v, k, p = {};
 
@@ -379,15 +391,13 @@
 
             div.attr('data-mce-json', JSON.serialize(p));
             div.attr('data-mce-type', n.name);
-			
+
             n.wrap(div);
             n.unwrap();
         },
-
-        _ucfirst : function(s) {
+        _ucfirst: function(s) {
             return s.charAt(0).toUpperCase() + s.substring(1);
         },
-
         // Private internal function
         _clean: function(s) {
             // Remove prefix and suffix code for element
@@ -399,7 +409,6 @@
 
             return s;
         },
-
         getInfo: function() {
             return {
                 longname: 'Code',
