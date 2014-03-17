@@ -1,4 +1,4 @@
-span.mceItemPhp, span.mcePhp, span.mceItemScript, span.mceItemStyle {
+.mceItemPhp, .mcePhp, .mceItemScript, .mceItemStyle {
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -11,18 +11,21 @@ span.mceItemPhp, span.mcePhp, span.mceItemScript, span.mceItemStyle {
     letter-spacing: normal;
     word-spacing: normal;
     text-indent : -9999px;
+    margin: 0;
+    padding: 0;
+    border: 0 none;
 }
-span.mceItemPhp, span.mcePhp {
+.mceItemPhp, .mcePhp {
     background-position: 0 -100px;
 }
-span.mceItemScript {
+.mceItemScript {
     background-position: 0 -220px;
 }
-span.mceItemStyle {
+.mceItemStyle {
     background-position: 0 -420px;
 }
 
-span.mceItemScript.mceItemSelected, span.mceItemStyle.mceItemSelected, span.mceItemPhp.mceItemSelected, span.mcePhp.mceItemSelected {
+.mceItemScript.mceItemSelected, .mceItemStyle.mceItemSelected, .mceItemPhp.mceItemSelected, .mcePhp.mceItemSelected {
     background-color: #b4d4ff;
     border : 0 none;
 }
