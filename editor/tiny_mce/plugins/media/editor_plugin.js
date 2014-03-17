@@ -15,7 +15,7 @@
     var Styles = new tinymce.html.Styles();
 
     var validChildren = '#|a|abbr|area|address|article|aside|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|' +
-            'figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|' +
+            'figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|' +
             'p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var';
 
     function toArray(obj) {
@@ -180,17 +180,18 @@
             ed.onPreInit.add(function() {
                 var invalid = ed.settings.invalid_elements;
 
-                if (ed.settings.schema === 'html5') {
-                    // add valid children
-                    ed.schema.addValidChildren('+object[video|audio|' + validChildren + ']');
-                    ed.schema.addValidChildren('+audio[' + validChildren + ']');
-                    ed.schema.addValidChildren('+video[' + validChildren + ']');
-                } else {
+                if (ed.settings.schema !== 'html5') {
                     ed.schema.addValidElements('video[src|autobuffer|autoplay|loop|controls|width|height|poster|*],audio[src|autobuffer|autoplay|loop|controls|*],source[src|type|media|*],embed[src|type|width|height|*]');
                 }
-
+                
                 // iframes
                 ed.schema.addValidElements('iframe[longdesc|name|src|frameborder|marginwidth|marginheight|scrolling|align|width|height|allowtransparency|allowfullscreen|seamless|*]');
+
+                // add valid children
+                ed.schema.addValidChildren('+object[' + validChildren + '|video|audio|iframe]');
+                ed.schema.addValidChildren('+audio[' + validChildren + '|video|iframe]');
+                ed.schema.addValidChildren('+video[' + validChildren + '|audio|iframe]');
+                ed.schema.addValidChildren('+iframe[' + validChildren + '|audio|video|object]');
 
                 // Add custom 'comment' element
                 ed.schema.addCustomElements('comment');
@@ -329,7 +330,7 @@
          * @return o Object
          */
         createTemplate: function(n, o) {
-            var self = this, ed = this.editor, dom = ed.dom, nn, hc, cn, html;
+            var self = this, ed = this.editor, dom = ed.dom, nn, hc, cn, html, v;
 
             hc = n.firstChild;
             nn = n.name;
@@ -731,7 +732,7 @@
          * @return Parent Element
          */
         createNodes: function(data, el) {
-            var self = this, ed = this.editor, s;
+            var self = this, ed = this.editor, s, dom = ed.dom;
 
             /**
              * Internal function to create or process a node
@@ -742,7 +743,7 @@
 
                 // process node object
                 each(o, function(v, k) {
-                    var nn = el.name;
+                    var nn = el.name, n;
 
                     if (tinymce.is(v, 'object')) {
                         if (/(param|source)/.test(nn) && /(audio|embed|object|video)/.test(k)) {
@@ -750,7 +751,7 @@
                         }
 
                         if (k == 'comment') {
-                            node = new Node('#comment', 8);
+                            var node = new Node('#comment', 8);
                             node.value = v['data-comment-condition'] + '>';
 
                             delete v['data-comment-condition'];
@@ -787,7 +788,7 @@
                             } else {
                                 if (k == 'param') {
                                     for (n in v) {
-                                        param = new Node(k, 1);
+                                        var param = new Node(k, 1);
                                         param.shortEnded = true;
                                         self.setAttribs(param, data, n, v[n]);
                                         el.append(param);
@@ -803,7 +804,7 @@
                         }
                     } else {
                         if (nn == '#comment') {
-                            comment = new Node('#comment', 8);
+                            var comment = new Node('#comment', 8);
                             comment.value = dom.decode(v);
                             el.append(comment);
                         } else {
