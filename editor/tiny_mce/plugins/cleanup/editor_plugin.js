@@ -225,7 +225,7 @@
                     }
                 }
                 // pad bootstrap icons
-                o.content = o.content.replace(/<([a-z0-9]+) class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)">(&nbsp;|\u00a0|\s)?<\/\1>/gi, '<$1 class="$2$3$4-$5$6">&nbsp;</$1>');
+                o.content = o.content.replace(/<([^>]+)class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)"([^>]+?)>(&nbsp;|\u00a0|\s)?<\/\1>/gi, '<$1class="$2$3$4-$5$6"$7>&nbsp;</$1>');
                 
             });
 
@@ -259,7 +259,7 @@
                     }
 
                     // clean bootstrap icons
-                    o.content = o.content.replace(/<([a-z0-9]+) class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)">(&nbsp;|\u00a0)<\/\1>/g, '<$1 class="$2$3$4-$5$6"></$1>');
+                    o.content = o.content.replace(/<([^>]+)class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)"([^>]+?)>(&nbsp;|\u00a0)<\/\1>/g, '<$1class="$2$3$4-$5$6"$7></$1>');
 
                     // remove padding on div
                     if (ed.getParam('remove_div_padding')) {
