@@ -49,6 +49,20 @@ var TableDialog = {
 
                 $('#style').val(tinyMCEPopup.dom.serializeStyle(st));
             });
+            
+            $('#align').change(function() {
+                var st = tinyMCEPopup.dom.parseStyle($('#style').val()), v = $(this).val();
+                
+                if (v === "center") {
+                    st.float = "";
+                    st['margin-left'] = st['margin-right'] = "auto";
+                } else {
+                    st['float'] = v;
+                    st['margin-left'] = st['margin-right'] = "";
+                }
+                
+                $('#style').val(tinyMCEPopup.dom.serializeStyle(st));
+            });
 
             // replace border field with checkbox
             $('#border').replaceWith('<input type="checkbox" id="border" />');
@@ -137,7 +151,20 @@ var TableDialog = {
             }
 
             // Update form
-            $('#align').val(ed.dom.getAttrib(elm, 'align'));
+            $('#align').val(function() {
+                var v = ed.dom.getAttrib(elm, 'align') || ed.dom.getStyle(elm, 'float');
+                
+                if (v) {
+                    return v;
+                }
+                
+                if (ed.dom.getStyle(elm, 'margin-left') === "auto" && ed.dom.getStyle(elm, 'margin-right') === "auto") {
+                    return "center";
+                }
+                
+                return "";
+            });
+            
             $('#tframe').val(ed.dom.getAttrib(elm, 'frame'));
             $('#rules').val(ed.dom.getAttrib(elm, 'rules'));
 
