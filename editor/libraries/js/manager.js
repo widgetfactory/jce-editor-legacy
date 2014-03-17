@@ -233,7 +233,7 @@
 
             // setup sortable list items
             this._setupSortables();
-            
+
             // show / hide tree list
             this._toggleTree(this._treeLoaded());
 
@@ -279,7 +279,7 @@
                 items: '#item-list li.file',
                 clear: $('span.search-icon', '#searchbox'),
                 filter: '#item-list li',
-                onFilter: function(e, s, cb, scope) {                    
+                onFilter: function(e, s, cb, scope) {
                     if ($('#browser-list-limit-select').val() == 'all') {
                         return $(this).listFilter('filter', s);
                     }
@@ -518,10 +518,11 @@
                     src = src.substr(0, src.indexOf('?'));
                     // remove base
                     src = src.replace(this.options.base, '');
-                    // remove leading slash
-                    src = src.replace(/^[\/\\]+/, '');
                 }
             }
+            
+            // remove leading slash
+            src = src.replace(/^[\/\\]+/, '');
 
             // invalid src or not a local file resource
             if (!this._validatePath(src)) {
@@ -915,10 +916,10 @@
          */
         _isRoot: function() {
             var s = this._dir;
-            
+
             // remove leading slash
             s = s.replace(/^[\\\/]/, '');
-            
+
             return s === '';
         },
         /**
