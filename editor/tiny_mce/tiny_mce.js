@@ -2547,7 +2547,7 @@ tinymce.html.Styles = function(settings, schema) {
 					'audio[A|src|autobuffer|autoplay|loop|controls][source]' +
 					'video[A|src|autobuffer|autoplay|loop|controls|width|height|poster][source]' +
 					'hr[A][]' +
-					'form[A|accept-charset|action|autocomplete|enctype|method|name|novalidate|target][C]' +
+					'form[A|accept-charset|action|autocomplete|enctype|method|name|novalidate|target|onsubmit][C]' +
 					'fieldset[A|disabled|form|name][C|legend]' +
 					'label[A|form|for][B]' +
 					'input[A|type|accept|alt|autocomplete|autofocus|checked|disabled|form|formaction|formenctype|formmethod|formnovalidate|formtarget|height|list|max|maxlength|min|' +
@@ -15903,7 +15903,7 @@ tinymce.ForceBlocks = function(editor) {
 		// Wrap non block elements and text nodes
 		node = rootNode.firstChild;
 		while (node) {
-			if (node.nodeType === 3 || (node.nodeType == 1 && !blockElements[node.nodeName])) {
+			if (node.nodeType === 3 || (node.nodeType == 1 && !blockElements[node.nodeName] && !node.getAttribute('data-mce-type'))) {
 				// Remove empty text nodes
 				if (node.nodeType === 3 && node.nodeValue.length == 0) {
 					tempNode = node;
