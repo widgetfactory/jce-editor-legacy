@@ -14,6 +14,8 @@
         return str.split(delim || ',');
     }
 
+    var fontIconRe = /<([a-z0-9]+)([^>]+)class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)"([^>]*)>(&nbsp;|\u00a0)?<\/\1>/gi;
+
     tinymce.create('tinymce.plugins.CleanupPlugin', {
         init: function(ed, url) {
             var self = this;
@@ -225,8 +227,7 @@
                     }
                 }
                 // pad bootstrap icons
-                o.content = o.content.replace(/<([^>]+)class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)"([^>]+?)>(&nbsp;|\u00a0|\s)?<\/\1>/gi, '<$1class="$2$3$4-$5$6"$7>&nbsp;</$1>');
-                
+                o.content = o.content.replace(fontIconRe, '<$1$2class="$3$4$5-$6$7"$8>&nbsp;</$1>');
             });
 
             // Cleanup callback
@@ -259,7 +260,7 @@
                     }
 
                     // clean bootstrap icons
-                    o.content = o.content.replace(/<([^>]+)class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)"([^>]+?)>(&nbsp;|\u00a0)<\/\1>/g, '<$1class="$2$3$4-$5$6"$7></$1>');
+                    o.content = o.content.replace(fontIconRe, '<$1$2class="$3$4$5-$6$7"$8></$1>');
 
                     // remove padding on div
                     if (ed.getParam('remove_div_padding')) {
