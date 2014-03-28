@@ -76,7 +76,7 @@ class WFFormatselectPluginConfig {
                 continue;
             }
 
-            if ($key) {
+            if (isset($key)) {
                 $list[$key] = $v;
             }
 
