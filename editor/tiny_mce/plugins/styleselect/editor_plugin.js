@@ -37,9 +37,15 @@
 
         },
         createControl: function(n, cf) {
+            var ed = this.editor;
+            
             switch (n) {
                 case "styleselect":
-                    return this._createStyleSelect();
+                    // only create the control if we are using it!
+                    if (ed.getParam('styleselect_stylesheet') !== false || ed.getParam('style_formats') || ed.getParam('theme_advanced_styles')) {
+                        return this._createStyleSelect();
+                    }
+
                     break;
             }
         },

@@ -24,6 +24,8 @@
             if (!s.font_size_style_values) {
                 s.font_size_style_values = "8pt,10pt,12pt,14pt,18pt,24pt,36pt";
             }
+            
+            s.theme_advanced_font_sizes = ed.getParam('fontsizeselect_font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');
 
             if (tinymce.is(s.theme_advanced_font_sizes, 'string')) {
                 s.font_size_style_values = tinymce.explode(s.font_size_style_values);

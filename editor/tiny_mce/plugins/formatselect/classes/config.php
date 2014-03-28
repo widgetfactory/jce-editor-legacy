@@ -31,8 +31,7 @@ class WFFormatselectPluginConfig {
         'aside' => 'advanced.aside',
         'figure' => 'advanced.figure',
         'dt' => 'advanced.dt',
-        'dd' => 'advanced.dd',
-        'div_container' => 'advanced.div_container'
+        'dd' => 'advanced.dd'
     );
 
     public static function getConfig(&$settings) {
@@ -45,9 +44,17 @@ class WFFormatselectPluginConfig {
         // get current schema
         $schema = $wf->getParam('editor.schema', 'html4');
         $verify = (bool) $wf->getParam('editor.verify_html', 0);
+        
+        $legacy     = $wf->getParam('editor.theme_advanced_blockformats');
+        $default    = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,aside,figure,dt,dd';
 
         // get blockformats from parameter
-        $blockformats = $wf->getParam('editor.theme_advanced_blockformats', 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,aside,figure,dt,dd', 'p,address,pre,h1,h2,h3,h4,h5,h6');
+        $blockformats = $wf->getParam('formatselect.blockformats', $default, $default);
+        
+        // handle legacy parameter
+        if (!empty($legacy) && empty($blockformats)) {
+            $blockformats = $legacy;
+        }
 
         $list = array();
         $blocks = array();
@@ -74,14 +81,15 @@ class WFFormatselectPluginConfig {
             }
 
             $blocks[] = $v;
-
-            if ($v == 'div') {
+            
+            // add div container
+            if ($v === 'div') {
                 $list['advanced.div_container'] = 'div_container';
             }
         }
 
         // Format list / Remove Format
-        $settings['theme_advanced_blockformats'] = json_encode($list);
+        $settings['formatselect_blockformats'] = json_encode($list);
     }
 }
 

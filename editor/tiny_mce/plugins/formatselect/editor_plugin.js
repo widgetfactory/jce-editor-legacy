@@ -9,7 +9,7 @@
  */
 (function() {
     var each = tinymce.each;
-    
+
     tinymce.create('tinymce.plugins.FormatSelectPlugin', {
         init: function(ed, url) {
             var self = this;
@@ -19,7 +19,7 @@
                 var c = cm.get('formatselect'), p;
 
                 // select font
-                if (c) {                    
+                if (c) {
                     p = ed.dom.getParent(n, ed.dom.isBlock);
 
                     if (p) {
@@ -29,32 +29,42 @@
             });
         },
         createControl: function(n, cf) {
+            var ed = this.editor;
+            
             switch (n) {
                 case "formatselect":
-                    return this._createBlockFormats();
+                    
+                    if (ed.getParam('formatselect_blockformats')) {
+                        return this._createBlockFormats();
+                    }
+
                     break;
             }
         },
         _createBlockFormats: function() {
             var self = this, ed = this.editor, PreviewCss = tinymce.util.PreviewCss;
-            
+
             var c, fmts = {
-                p: 'advanced.paragraph',
-                address: 'advanced.address',
-                pre: 'advanced.pre',
-                h1: 'advanced.h1',
-                h2: 'advanced.h2',
-                h3: 'advanced.h3',
-                h4: 'advanced.h4',
-                h5: 'advanced.h5',
-                h6: 'advanced.h6',
-                div: 'advanced.div',
-                blockquote: 'advanced.blockquote',
-                code: 'advanced.code',
-                dt: 'advanced.dt',
-                dd: 'advanced.dd',
-                samp: 'advanced.samp',
-                span: 'advanced.span'
+                'p': 'advanced.paragraph',
+                'address': 'advanced.address',
+                'pre': 'advanced.pre',
+                'h1': 'advanced.h1',
+                'h2': 'advanced.h2',
+                'h3': 'advanced.h3',
+                'h4': 'advanced.h4',
+                'h5': 'advanced.h5',
+                'h6': 'advanced.h6',
+                'div': 'advanced.div',
+                'blockquote': 'advanced.blockquote',
+                'code': 'advanced.code',
+                'samp': 'advanced.samp',
+                'span': 'advanced.span',
+                'section': 'advanced.section',
+                'article': 'advanced.article',
+                'aside': 'advanced.aside',
+                'figure': 'advanced.figure',
+                'dt': 'advanced.dt',
+                'dd': 'advanced.dd'
             };
 
             c = ed.controlManager.createListBox('formatselect', {
@@ -66,11 +76,11 @@
             });
 
             if (c) {
-                each(ed.getParam('theme_advanced_blockformats', ed.settings.theme_advanced_blockformats, 'hash'), function(v, k) {
+                each(ed.getParam('formatselect_blockformats', '', 'hash'), function(v, k) {
                     c.add(ed.translate(k != v ? k : fmts[v]), v, {
                         'class': 'mce_formatPreview mce_' + v,
                         style: function() {
-                            return new PreviewCss(ed, {'block' : v});
+                            return new PreviewCss(ed, {'block': v});
                         }
                     });
                 });

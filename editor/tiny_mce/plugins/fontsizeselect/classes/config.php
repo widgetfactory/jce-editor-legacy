@@ -13,8 +13,8 @@ class WFFontsizeselectPluginConfig {
 
     public static function getConfig(&$settings) {
         $wf = WFEditor::getInstance();
-        
-        $settings['theme_advanced_font_sizes'] = $wf->getParam('editor.theme_advanced_font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');
+
+        $settings['fontsizeselect_font_sizes'] = $wf->getParam('fontsizeselect.font_sizes', '8pt,10pt,12pt,14pt,18pt,24pt,36pt', '8pt,10pt,12pt,14pt,18pt,24pt,36pt');
     }
 }
 

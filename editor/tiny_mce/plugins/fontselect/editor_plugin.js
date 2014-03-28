@@ -34,9 +34,15 @@
             });
         },
         createControl: function(n, cf) {
+            var ed = this.editor;
+            
             switch (n) {
                 case "fontselect":
-                    return this._createFontSelect();
+                    
+                    if (ed.getParam('fontselect_fonts')) {
+                        return this._createFontSelect();
+                    }
+
                     break;
             }
         },
@@ -70,7 +76,7 @@
 
             if (c) {
                 
-                each(ed.getParam('theme_advanced_fonts', self.fonts, 'hash'), function(v, k) {
+                each(ed.getParam('fontselect_fonts', '', 'hash'), function(v, k) {
                     if (/\d/.test(v)) {
                         v = "'" + v + "'";
                     }
