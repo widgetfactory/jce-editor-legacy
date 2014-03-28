@@ -16,7 +16,7 @@
 
     var validChildren = '#|a|abbr|area|address|article|aside|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|' +
             'figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|' +
-            'p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var';
+            'p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var|audio|video|iframe|object';
 
     function toArray(obj) {
         var undef, out, i;
@@ -183,15 +183,15 @@
                 if (ed.settings.schema !== 'html5') {
                     ed.schema.addValidElements('video[src|autobuffer|autoplay|loop|controls|width|height|poster|*],audio[src|autobuffer|autoplay|loop|controls|*],source[src|type|media|*],embed[src|type|width|height|*]');
                 }
-                
+
                 // iframes
                 ed.schema.addValidElements('iframe[longdesc|name|src|frameborder|marginwidth|marginheight|scrolling|align|width|height|allowtransparency|allowfullscreen|seamless|*]');
 
-                // add valid children
-                ed.schema.addValidChildren('+object[' + validChildren + '|video|audio|iframe]');
-                ed.schema.addValidChildren('+audio[' + validChildren + '|video|iframe]');
-                ed.schema.addValidChildren('+video[' + validChildren + '|audio|iframe]');
-                ed.schema.addValidChildren('+iframe[' + validChildren + '|audio|video|object]');
+                each(['object', 'audio', 'video', 'iframe'], function(n) {
+                    if (ed.schema.isValid(n)) {                        
+                        ed.schema.addValidChildren(n + '[' + validChildren + ']');
+                    }
+                });
 
                 // Add custom 'comment' element
                 ed.schema.addCustomElements('comment');
