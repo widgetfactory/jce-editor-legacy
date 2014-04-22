@@ -1501,7 +1501,7 @@
         },
         encodeURI: function(s, preserve_urls) {
             // don't encode local file links
-            if (/^(file:\/\/)?[A-Z]+:/.test(s)) {
+            if (s && s.indexOf('file://') === 0) {
                 return s;
             }
 
