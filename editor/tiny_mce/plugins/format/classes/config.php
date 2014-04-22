@@ -11,30 +11,6 @@
  */
 class WFFormatPluginConfig {
 
-    protected static $formats = array(
-        'p' => 'advanced.paragraph',
-        'address' => 'advanced.address',
-        'pre' => 'advanced.pre',
-        'h1' => 'advanced.h1',
-        'h2' => 'advanced.h2',
-        'h3' => 'advanced.h3',
-        'h4' => 'advanced.h4',
-        'h5' => 'advanced.h5',
-        'h6' => 'advanced.h6',
-        'div' => 'advanced.div',
-        'blockquote' => 'advanced.blockquote',
-        'code' => 'advanced.code',
-        'samp' => 'advanced.samp',
-        'span' => 'advanced.span',
-        'section' => 'advanced.section',
-        'article' => 'advanced.article',
-        'aside' => 'advanced.aside',
-        'figure' => 'advanced.figure',
-        'dt' => 'advanced.dt',
-        'dd' => 'advanced.dd',
-        'div_container' => 'advanced.div_container'
-    );
-
     public static function getConfig(&$settings) {
         wfimport('admin.models.editor');
         $model = new WFModelEditor();
