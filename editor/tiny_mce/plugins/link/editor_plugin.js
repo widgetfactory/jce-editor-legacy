@@ -18,22 +18,27 @@
             var self = this;
 
             function isLink(n) {            	
-            	if (n && n.nodeName != 'A') {
-                    n = ed.dom.getParent(n, 'A');
+                // no node specified
+                if (!n) {
+                    return false;
                 }
-
-                return n && n.nodeName == 'A' && !isAnchor(n);
+                
+                // get link
+                n = ed.dom.getParent(n, 'A');
+                
+                // is a link but not an anchor
+                return n && isAnchor(n) === false;
             }
             
             function isAnchor(n) {
-            	return ed.dom.is(n, 'a.mceItemAnchor') || ed.dom.is(n, 'img.mceItemAnchor');
+            	return ed.dom.hasClass(n, 'mceItemAnchor');
             }
 
             // Register commands
             ed.addCommand('mceLink', function() {
                 var se = ed.selection, n = se.getNode();
 
-                if (n.nodeName == 'A' && !n.name) {
+                if (n.nodeName == 'A' && !isAnchor(n)) {
                     se.select(n);
                 }
 
@@ -67,9 +72,10 @@
                 }
             });
             
-            ed.onNodeChange.add( function(ed, cm, n, co) {            	
-                cm.setActive('link', isLink(n));
-                
+            ed.onNodeChange.add( function(ed, cm, n, co) {            	                
+                // set active if link
+                cm.setActive('link', isLink(n)); 
+                // set disabled if anchor
                 cm.setDisabled('link', isAnchor(n));
             });
         },
