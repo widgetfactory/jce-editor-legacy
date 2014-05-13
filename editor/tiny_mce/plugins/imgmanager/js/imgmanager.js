@@ -574,13 +574,17 @@
                 });
                 
                 this.setMargins(true);
-            }
-            if (v == 'center') {
+            } else if (v == 'center') {
                 $(img).css({'display': 'block', 'margin-left':'auto', 'margin-right': 'auto'});
                 
                 $('#margin_left, #margin_right').val('auto');
                 
                 $('#clear').attr('disabled', true);
+                
+                this.setMargins(true);
+            } else {
+                $(img).css({'display': '', 'margin-left':'', 'margin-right': ''});
+                $('#margin_left, #margin_right').val('');
                 
                 this.setMargins(true);
             }
