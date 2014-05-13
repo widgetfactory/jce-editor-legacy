@@ -20,6 +20,6 @@ a.mceItemAnchor {
 a.mceItemAnchor::selection {
     background-color: #b4d4ff;
 }
-a.mceItemAnchor.mceItemSelected {
+.mceItemAnchor.mceItemSelected {
     background-color: #b4d4ff;
 }
