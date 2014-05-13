@@ -30,23 +30,22 @@
             });
 
             ed.onNodeChange.add(function(ed, cm, n, co) {
-                // check anchor state
                 var s = isAnchor(n);
-
-                //set active
-                cm.setActive('anchor', s);
 
                 // clear any existing anchor selections
                 ed.dom.removeClass(ed.dom.select('.mceItemAnchor.mceItemSelected'), 'mceItemSelected');
 
-                // add selected class
+                // set active
+                cm.setActive('anchor', s);
+
                 if (s) {
-                    ed.dom.addClass(n, 'mceItemSelected');
+                    ed.dom.addClass(ed.dom.select('.mceItemAnchor'), 'mceItemSelected');
                 }
             });
 
+            // Remove anchor on backspace or delete
             ed.onKeyDown.add(function(ed, e) {
-                if (e.keyCode == BACKSPACE || e.keyCode == DELETE) {
+                if (e.keyCode === VK.BACKSPACE || e.keyCode === VK.DELETE) {
                     self._removeAnchor(e);
                 }
             });
@@ -71,50 +70,26 @@
                     ed.dom.loadCSS(url + "/css/content.css");
             });
 
-
             // Pre-init			
             ed.onPreInit.add(function() {
                 // Convert anchor elements to image placeholder
                 ed.parser.addNodeFilter('a', function(nodes) {
                     for (var i = 0, len = nodes.length; i < len; i++) {
-                        var node = nodes[i], href = node.attr('href'), cls = node.attr('class') || '', name = node.attr('name') || node.attr('id');
+                        var node = nodes[i], fc = node.firstChild, href = node.attr('href'), cls = node.attr('class') || '', name = node.attr('name') || node.attr('id');
 
                         if ((!href || href.charAt(0) == '#') && name) {
                             if (!cls || /mceItemAnchor/.test(cls) === false) {
-                                node.attr('class', tinymce.trim(cls + ' mceItemAnchor'));
+                                cls += ' mceItemAnchor';                                
+                                node.attr('class', tinymce.trim(cls));
                             }
                         }
                     }
                 });
             });
 
-            function _cancelResize() {
-                each(ed.dom.select('span.mceItemAnchor'), function(n) {
-                    n.onresizestart = function() {
-                        return false;
-                    };
-
-                    n.onbeforeeditfocus = function() {
-                        return false;
-                    };
-                });
-            }
-            ;
             // prevent anchor from collapsing
             ed.onBeforeSetContent.add(function(ed, o) {
                 o.content = o.content.replace(/<a id="([^"]+)"><\/a>/gi, '<a id="$1">\uFEFF</a>');
-            });
-
-            ed.onSetContent.add(function() {
-                if (tinymce.isIE) {
-                    _cancelResize();
-                }
-            });
-
-            ed.onGetContent.add(function() {
-                if (tinymce.isIE) {
-                    _cancelResize();
-                }
             });
         },
         _removeAnchor: function(e) {
@@ -133,7 +108,7 @@
         _getAnchor: function() {
             var ed = this.editor, n = ed.selection.getNode(), v;
 
-            n = ed.dom.getParent(n, 'A');
+            n = ed.dom.getParent(n, 'a.mceItemAnchor');
             v = ed.dom.getAttrib(n, 'name') || ed.dom.getAttrib(n, 'id');
 
             return v;
@@ -211,7 +186,6 @@
 
             return true;
         },
-
         createControl: function(n, cm) {
             var self = this, ed = this.editor;
 
