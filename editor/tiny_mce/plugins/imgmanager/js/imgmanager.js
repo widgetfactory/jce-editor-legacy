@@ -342,8 +342,8 @@
                     if(v = ed.dom.getStyle(e, 'float')) {
                         return v;
                     }
-                    if(v = ed.dom.getStyle(e, 'vertical-align')) {
-                        return v;
+                    if (e.style.display === "block" && ed.dom.getStyle(e, 'margin-left') === "auto" && ed.dom.getStyle(e, 'margin-right') === "auto") {
+                        return 'center';
                     }
                     break;
                 case 'margin-top':
@@ -532,7 +532,19 @@
             });
 			
             // Align
-            $('#align').val($img.css('float') || $img.css('vertical-align') || '');
+            $('#align').val(function() {
+                var v = $img.css("float");
+                
+                if (v) {
+                    return v;
+                }
+                
+                if ($img.css('margin-left') === "auto" && $img.css('margin-right') === "auto" && $img.css('display') === "block") {
+                    return "center";
+                }
+                
+                return "";
+            });
         },
 
         updateStyles : function() {
@@ -552,9 +564,25 @@
                     $('#clear').attr('disabled', false);
                 }
                 $(img).css('float', v);
-            } else {
-                $(img).css('vertical-align', v);
+                
+                $('#margin_left, #margin_right').val(function() {
+                    if (this.value === "auto") {
+                        return "";
+                    }
+                    
+                    return this.value;
+                });
+                
+                this.setMargins(true);
+            }
+            if (v == 'center') {
+                $(img).css({'display': 'block', 'margin-left':'auto', 'margin-right': 'auto'});
+                
+                $('#margin_left, #margin_right').val('auto');
+                
                 $('#clear').attr('disabled', true);
+                
+                this.setMargins(true);
             }
 
             // Handle clear
@@ -634,24 +662,6 @@
         },
 
         _setRollover : function(src) {
-            /*if ($('#onmouseout').hasClass('focus')) {
-                $('#onmouseout').val(src);
-            }
-
-            if ($('#onmouseover').hasClass('focus')) {
-                $('#onmouseover').val(src);
-            }
-
-            if (!$('#onmouseover, #onmouseout').hasClass('focus')) {
-                if ($('#onmouseout').val() == '') {
-                    $('#onmouseout').val(src).addClass('focus').focus();
-                    // set the src value too
-                    $('#src').val(src);
-                } else {
-                    $('#onmouseover').val(src).addClass('focus').focus();
-                }
-            }*/
-            
             $('input.focus', '#rollover_tab').val(src);    
         },
 
