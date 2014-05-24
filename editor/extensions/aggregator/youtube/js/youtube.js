@@ -53,26 +53,26 @@ WFAggregator.add('youtube', {
         return false;
     },
     getValues: function(src) {
-        var self = this, data = {}, args = {}, type = this.getType(), id;
-
-        $.extend(args, $.String.query(src));
-
-        // set https
-        /*if ($('#youtube_https').is(':checked')) {
-         src = src.replace(/^http:\/\//, 'https://');
-         } else {
-         src = src.replace(/^https:\/\//, 'http://');
-         }*/
+        var self = this, data = {}, args = {}, type = this.getType(), id, query = {};
+        
+        // parse URI
+        var u = this.parseURL(src);
+        
+        if (u.query) {
+            // split query
+            query = $.String.query(u.query);
+        }
+        
+        // extend args with query data
+        $.extend(args, query);
 
         // protocol / scheme relative url
         src = src.replace(/^http(s)?:\/\//, '//');
-
+        
         $(':input', '#youtube_options').not('#youtube_embed, #youtube_https, #youtube_privacy').each(function() {
             var k = $(this).attr('id'), v = $(this).val();
-
             // remove youtube_ prefix
             k = k.substr(k.indexOf('_') + 1);
-
             if ($(this).is(':checkbox')) {
                 v = $(this).is(':checked') ? 1 : 0;
             }
@@ -87,20 +87,23 @@ WFAggregator.add('youtube', {
 
             args[k] = v;
         });
+        
         // process src
         src = src.replace(/youtu(\.)?be([^\/]+)?\/(.+)/, function(a, b, c, d) {
             d = d.replace(/(watch\?v=|v\/|embed\/)/, '');
-
+            
             if (b && !c) {
                 c = '.com';
             }
-            
-            id = d;
 
+            id = d.replace(/([^\?&#]+)/, function($0, $1) {
+                return $1;
+            });
+            
             return 'youtube' + c + '/' + (type == 'iframe' ? 'embed' : 'v') + '/' + d;
         });
         
-        // lopp requires a playlist value to be the same as the video id
+        // loop requires a playlist value to be the same as the video id
         if (id && args.loop && !args.playlist) {
             args.playlist = id;
         }
@@ -117,10 +120,8 @@ WFAggregator.add('youtube', {
                 allowfullscreen: true,
                 frameborder: 0
             });
-
             // add wmode
             args['wmode'] = 'opaque';
-
         } else {
             $.extend(true, data, {
                 param: {
@@ -131,36 +132,54 @@ WFAggregator.add('youtube', {
         }
 
         // convert args to URL query string
-        var query = $.param(args);
-
+        var q = $.param(args);
+        
         // add to src if not empty
-        if (query) {
-            src = src + (/\?/.test(src) ? '&' : '?') + query;
+        if (q) {
+            src = src + (/\?/.test(src) ? '&' : '?') + q;
         }
 
         data.src = src;
-
+        
         return data;
     },
-    setValues: function(data) {
-        var self = this, id = '', src = data.src || data.data || '';
+    /**
+     * Parse the Youtube URI into component parts
+     * https://github.com/tinymce/tinymce/blob/master/js/tinymce/classes/util/URI.js
+     */
+    parseURL: function(url) {
+        var o = {};
 
+        url = /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@\/]*):?([^:@\/]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/.exec(url);
+        $.each(["source", "protocol", "authority", "userInfo", "user", "password", "host", "port", "relative", "path", "directory", "file", "query", "anchor"], function(i, v) {
+            var s = url[i];
+            if (s) {
+                o[v] = s;
+            }
+        });
+
+        return o;
+    },
+    setValues: function(data) {
+        var self = this, id = '', src = data.src || data.data || '', query = {};
         if (!src) {
             return data;
         }
 
-        var query = $.String.query(src);
+        // parse URI
+        var u = this.parseURL(src);
+        
+        if (u.query) {
+            // split query
+            query = $.String.query(u.query);
+        }
 
         $.extend(data, query);
-
-        /*if (/https:\/\//.test(src)) {
-         data['https'] = true;
-         }*/
 
         // protocol / scheme relative url
         src = src.replace(/^http(s)?:\/\//, '//');
 
-        if (src.indexOf('youtube-nocookie') !== -1) {            
+        if (src.indexOf('youtube-nocookie') !== -1) {
             data['privacy'] = true;
         }
 
@@ -171,20 +190,19 @@ WFAggregator.add('youtube', {
 
         if (query.v) {
             id = query.v;
-
             delete query.v;
         } else {
-            var s = /(\.be|\/(embed|v))\/([^\/\?&]+)/.exec(src);
-
+            var s = /\/(embed|v)\/([\w]+)\b/.exec(u.path);
             if (s.length > 2) {
-                id = s[3];
+                id = s[2];
             }
         }
+
         // decode playlist
         if (data.playlist) {
             data.playlist = decodeURIComponent(data.playlist);
         }
-        
+
         // reset playlist if it is the same as the id
         if (data.playlist === id) {
             data.playlist = null;
@@ -201,10 +219,11 @@ WFAggregator.add('youtube', {
                 $('#youtube_options table').append('<tr><td><label for="youtube_' + k + '">' + k + '</label><input type="text" id="youtube_' + k + '" value="' + v + '" /></td></tr>');
             }
         });
-        // proces url
+        
+        // process url
         src = src.replace(/youtu(\.)?be([^\/]+)?\/(.+)/, function(a, b, c, d) {
             var args = 'youtube';
-
+            
             if (b) {
                 args += '.com';
             }
@@ -220,20 +239,27 @@ WFAggregator.add('youtube', {
             }
 
             args += '/' + id;
-
+            
+            // add time
+            if (u.anchor) {
+                var s = u.anchor;
+                
+                s = s.replace(/(\?|&)(.+)/, '');
+                
+                args += '#' + s;
+            }
+            
             return args;
             // add www (required by iOS ??)
         }).replace(/\/\/youtube/i, '//www.youtube');
-
+        
         data.src = src;
-
         return data;
     },
     getAttributes: function(src) {
         var args = {}, data = this.setValues({
             src: src
         }) || {};
-
         $.each(data, function(k, v) {
             if (k == 'src') {
                 return;
@@ -246,7 +272,6 @@ WFAggregator.add('youtube', {
             'width': this.params.width,
             'height': this.params.height
         });
-
         return args;
     },
     setAttributes: function() {
