@@ -17,7 +17,7 @@ class WFStyleselectPluginConfig {
         $wf = WFEditor::getInstance();
 
         $custom_styles      = json_decode($wf->getParam('styleselect.custom_styles', $wf->getParam('editor.custom_styles', '')));
-        $include            = (array) $wf->getParam('styleselect.styles', 'stylesheet,custom'); 
+        $include            = (array) $wf->getParam('styleselect.styles', array('stylesheet', 'custom')); 
 
         if (!empty($custom_styles) && in_array('custom', $include)) {
             // Styles list (legacy)
@@ -63,6 +63,7 @@ class WFStyleselectPluginConfig {
                 $settings['style_formats'] = htmlentities(json_encode($styles), ENT_NOQUOTES, "UTF-8");
             }
         }
+        
         // set this value false if stylesheet not included
         if (in_array('stylesheet', $include) === false) {
             $settings['styleselect_stylesheet'] = false;
