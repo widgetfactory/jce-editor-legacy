@@ -406,7 +406,7 @@
                         name: 'Name'
                     },
                     stylesheets: stylesheets,
-                    custom_colors : ed.getParam('colorpicker_custom_colors', '')
+                    custom_colors: ed.getParam('colorpicker_custom_colors', '')
                 });
 
                 $(this).colorpicker(settings);
@@ -690,8 +690,8 @@
             function isJSON(s) {
                 return /^[\],:{}\s]*$/
                         .test(s.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@')
-                        .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
-                        .replace(/(?:^|:|,)(?:\s*\[)+/g, ''));
+                                .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
+                                .replace(/(?:^|:|,)(?:\s*\[)+/g, ''));
             }
 
             $.JSON.queue({
@@ -981,8 +981,8 @@
             var div = document.createElement('div');
 
             options = $.extend({
-                width   : $(window).width() - 100,
-                height  : $(window).height() - 50,
+                width: $(window).width() - 100,
+                height: $(window).height() - 50,
                 onOpen: function() {
                     var iframe = document.createElement('iframe');
 
@@ -1001,10 +1001,10 @@
                         var h = win.innerHeight || b.clientHeight;
 
                         $(this).css({
-                            width   : w,
-                            height  : h
+                            width: w,
+                            height: h
                         });
-                    
+
                         if ($.isFunction(options.onFrameLoad)) {
                             options.onFrameLoad.call(this);
                         }
@@ -1177,11 +1177,11 @@
 
                         $.each(
                                 mediaTypes, function(k, v) {
-                            if (v.type && v.type == mt) {
-                                type = k;
-                                props = v;
-                            }
-                        });
+                                    if (v.type && v.type == mt) {
+                                        type = k;
+                                        props = v;
+                                    }
+                                });
 
                         // video types
                         if (/^(mp4|m4v|og(g|v)|webm)$/i.test(ext)) {
@@ -1302,7 +1302,7 @@
             if (/[\\\/]+/.test(s)) {
                 return s.replace(/\\/g, '/').replace(/\/[^\/]*\/?$/, '');
             }
-            
+
             return '';
         },
         filename: function(s) {
@@ -1415,13 +1415,13 @@
 
             // remove trailing period
             s = s.replace(/\.$/, '');
-            
+
             // cleanup path
             s = this.basename(s);
-            
+
             // change case
             if (textcase) {
-                switch(textcase) {
+                switch (textcase) {
                     case 'lowercase':
                         s = s.toLowerCase();
                         break;
@@ -1442,15 +1442,16 @@
                 s = s.substring(s.indexOf('?') + 1);
             }
 
-            // only process if there are any queries
-            if (/([^=]+)=(.+)/.test(s)) {
-                var pairs = s.replace(/&amp;/g, '&').split(/&/g) || [s];
-
-                $.each(pairs, function() {
-                    var pair = this.split('=');
-                    p[pair[0]] = pair[1];
-                });
+            if (/#/.test(s)) {
+                s = s.substr(0, s.indexOf('#'));
             }
+
+            var pairs = s.replace(/&amp;/g, '&').split('&');
+
+            $.each(pairs, function() {
+                var pair = this.split('=');
+                p[pair[0]] = pair[1];
+            });
 
             return p;
         },
