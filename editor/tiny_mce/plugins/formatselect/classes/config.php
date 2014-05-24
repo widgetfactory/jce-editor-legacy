@@ -51,9 +51,13 @@ class WFFormatselectPluginConfig {
         // get blockformats from parameter
         $blockformats = $wf->getParam('formatselect.blockformats', $default, $default);
         
-        // handle legacy parameter
-        if (!empty($legacy) && empty($blockformats)) {
-            $blockformats = $legacy;
+        // handle empty list
+        if (empty($blockformats)) {
+            if (!empty($legacy)) {
+                $blockformats = $legacy;
+            } else {
+                $blockformats = $default;
+            }
         }
 
         $list = array();
