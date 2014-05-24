@@ -8,7 +8,7 @@
  * other free or open source software licenses.
  */
 (function() {
-    var each = tinymce.each, PreviewCss = tinymce.util.PreviewCss, Event = tinymce.dom.Event, DOM = tinymce.DOM;
+    var each = tinymce.each, PreviewCss = tinymce.util.PreviewCss, DOM = tinymce.DOM;
 
     /* Make a css url absolute
      * @param u URL string
@@ -30,20 +30,20 @@
             var ed = this.editor;
 
             var self = this, styleselect = ed.controlManager.get('styleselect');
-
+            
             // if control does not exist or has been populated, return.
             if (!styleselect || styleselect.hasClasses) {
                 return;
             }
 
-            var counter = Math.max(styleselect.getLength() - 1, 0), classes = this.import();
+            var counter = Math.max(styleselect.getLength() - 1, 0), cls = this._import();
 
             // no classes found, return.
-            if (classes.length === 0) {
+            if (cls.length === 0) {
                 return;
             }
 
-            each(classes, function(o, idx) {
+            each(cls, function(o, idx) {
                 var name = 'style_' + (counter + idx), fmt;
 
                 fmt = {
@@ -79,10 +79,10 @@
                 if (styleselect && !styleselect.hasClasses && ed.getParam('styleselect_stylesheet', true)) {
                     styleselect.onPostRender.add(function(ed, n) {
                         if (!styleselect.NativeListBox) {
-                            Event.bind(DOM.get(n.id + '_text'), 'focus mousedown', self.populateStyleSelect, self);
-                            Event.bind(DOM.get(n.id + '_open'), 'focus mousedown', self.populateStyleSelect, self);
+                            DOM.bind(DOM.get(n.id + '_text'), 'focus mousedown', self.populateStyleSelect, self);
+                            DOM.bind(DOM.get(n.id + '_open'), 'focus mousedown', self.populateStyleSelect, self);
                         } else {
-                            Event.bind(DOM.get(n.id, 'focus'), self.populateStyleSelect, self);
+                            DOM.bind(DOM.get(n.id, 'focus'), self.populateStyleSelect, self);
                         }
                     });
                 }
@@ -93,7 +93,7 @@
                     fontselect.onPostRender.add(function() {
                         // font face items not yet created, run import
                         if (!self.fontface) {
-                            self.import();
+                            self._import();
                         }
                     });
                 }
@@ -107,7 +107,7 @@
                 }
             });
         },
-        import: function() {
+        _import: function() {
             var self = this, ed = this.editor, doc = ed.getDoc(), i, lo = {}, f = ed.settings.class_filter, ov, href = '', rules = [], fontface = false, classes = false;
 
             function parseCSS(stylesheet) {
