@@ -40,7 +40,7 @@ class WFFontselectPluginConfig {
             $remove = $wf->getParam('editor.theme_advanced_fonts_remove');
 
             if (empty($remove) && empty($add)) {
-                return "";
+                return implode(';', self::$fonts);
             }
 
             $remove = preg_split('/[;,]+/', $remove);
