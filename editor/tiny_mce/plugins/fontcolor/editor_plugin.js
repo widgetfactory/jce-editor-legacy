@@ -48,13 +48,11 @@
         _createForeColorMenu: function() {
             var c, self = this, ed = self.editor, s = ed.settings, o = {}, v;
 
-            if (s.theme_advanced_more_colors) {
-                o.more_colors_func = function() {
+            o.more_colors_func = function() {
                     ed.execCommand('mceColorPicker', false, {color: c.value, func: function(co) {
                             c.setColor(co);
                         }});
                 };
-            }
 
             if (v = s.theme_advanced_text_colors)
                 o.colors = v;
@@ -73,13 +71,11 @@
         _createBackColorMenu: function() {
             var c, self = this, ed = self.editor, s = ed.settings, o = {}, v;
 
-            if (s.theme_advanced_more_colors) {
-                o.more_colors_func = function() {
+            o.more_colors_func = function() {
                     ed.execCommand('mceColorPicker', false, {color: c.value, func: function(co) {
                             c.setColor(co);
                         }});
                 };
-            }
 
             if (v = s.theme_advanced_background_colors)
                 o.colors = v;
