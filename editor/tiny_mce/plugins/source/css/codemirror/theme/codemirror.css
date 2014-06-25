@@ -25,8 +25,10 @@
 .cm-s-default span.cm-link {color: #00c;}
 
 .cm-s-default .cm-matchhighlight { background: #e9e9e9 }
-.cm-s-default .CodeMirror-activeline {background: #e8f2ff !important;}
+.cm-s-default .CodeMirror-activeline-background {
+    background: none repeat scroll 0 0 #e8f2ff;
+}
 .cm-s-default .cm-searching {
-  background: #ffa;
-  background: rgba(255, 255, 0, .4);
+    background: #ffa;
+    background: rgba(255, 255, 0, .4);
 }

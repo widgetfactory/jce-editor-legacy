@@ -24,7 +24,7 @@
     border: 1px solid gray;
     color:black !important;;
 }
-.cm-s-textmate .CodeMirror-activeline {background: #F0F0F0 !important;}
+.cm-s-textmate .CodeMirror-activeline-background {background: #F0F0F0 !important;}
 .cm-s-textmate .cm-matchhighlight { background: #B5D5FF; }
 .cm-s-textmate .cm-searching {
   background: #ffa;
