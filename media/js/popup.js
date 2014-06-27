@@ -18,27 +18,27 @@
      */
     function ready() {
         // Mozilla, Opera and webkit nightlies currently support this event
-        if (document.addEventListener) {
+        if (doc.addEventListener) {
             // Use the handy event callback
-            document.addEventListener("DOMContentLoaded", function() {
-                document.removeEventListener("DOMContentLoaded", arguments.callee, false);
+            doc.addEventListener("DOMContentLoaded", function() {
+                doc.removeEventListener("DOMContentLoaded", arguments.callee, false);
                 return WFWindowPopup._init();
             }, false);
 
             // If IE event model is used
-        } else if (document.attachEvent) {
+        } else if (doc.attachEvent) {
             // ensure firing before onload,
             // maybe late but safe also for iframes
-            document.attachEvent("onreadystatechange", function() {
-                if (document.readyState === "complete") {
-                    document.detachEvent("onreadystatechange", arguments.callee);
+            doc.attachEvent("onreadystatechange", function() {
+                if (doc.readyState === "complete") {
+                    doc.detachEvent("onreadystatechange", arguments.callee);
                     return WFWindowPopup._init();
                 }
             });
 
             // If IE and not an iframe
             // continually check to see if the document is ready
-            if (document.documentElement.doScroll && window == window.top) {
+            if (doc.documentElement.doScroll && win == win.top) {
                 (function() {
                     if (domLoaded)
                         return;
@@ -46,7 +46,7 @@
                     try {
                         // If IE is used, use the trick by Diego Perini
                         // http://javascript.nwbox.com/IEContentLoaded/
-                        document.documentElement.doScroll("left");
+                        doc.documentElement.doScroll("left");
                     } catch (error) {
                         setTimeout(arguments.callee, 0);
                         return;
@@ -59,8 +59,8 @@
             }
         }
         // older browsers
-        if (window.attachEvent) {
-            window.attachEvent('onload', function() {
+        if (win.attachEvent) {
+            win.attachEvent('onload', function() {
                 return WFWindowPopup._init();
             });
         }
@@ -119,22 +119,10 @@
 
             win.moveTo(x, y);
         },
-        // Disable right click
+        // Close window on mouse click
         noclick: function() {
             doc.onmousedown = function(e) {
-                e = e || win.event;
-                // Its IE!
-                if (/msie/i.test(navigator.userAgent)) {
-                    if (e.button == 2)
-                        return false;
-                } else {
-                    if (e.which == 2 || e.which == 3) {
-                        return false;
-                    }
-                }
-            };
-            doc.oncontextmenu = function() {
-                return false;
+                return win.close();
             };
         }
     };
