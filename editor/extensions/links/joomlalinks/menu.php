@@ -80,8 +80,12 @@ class JoomlalinksMenu extends JObject {
                 foreach ($menus as $menu) {
 
                     $class = array();
-
-                    $params = defined('JPATH_PLATFORM') ? new JRegistry($menu->params) : new JParameter($menu->params);
+                    
+                    if (defined('JPATH_PLATFORM')) {
+                        $params = new JRegistry($menu->params);
+                    } else {
+                        $params = new JParameter($menu->params);
+                    }
 
                     switch ($menu->type) {
                         case 'separator':
@@ -140,7 +144,11 @@ class JoomlalinksMenu extends JObject {
                     $title = isset($menu->name) ? $menu->name : $menu->title;
 
                     // get params
-                    $params = defined('JPATH_PLATFORM') ? new JRegistry($menu->params) : new JParameter($menu->params);
+                    if (defined('JPATH_PLATFORM')) {
+                        $params = new JRegistry($menu->params);
+                    } else {
+                        $params = new JParameter($menu->params);
+                    }
 
                     // resolve link
                     $link = self::_resolveLink($menu);
@@ -319,8 +327,7 @@ class JoomlalinksMenu extends JObject {
                     . ' AND m.access <= ' . (int) $user->get('aid')
                     . ' AND m.parent = ' . (int) $parent
                     . $where
-                    . ' ORDER BY m.title'
-                    . ' ORDER BY m.id'
+                    . ' ORDER BY m.title, m.lft ASC'
             ;
         }
 
