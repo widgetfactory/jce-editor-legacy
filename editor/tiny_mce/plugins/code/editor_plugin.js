@@ -203,7 +203,7 @@
                     o.content = o.content.replace(/<(script|style)([^>]*)>/gi, function(a, b, c) {
                         c = c.replace(/\s?data-mce-type="[^"]+"/gi, "");
                         
-                        return '<' + b + c + '">';
+                        return '<' + b + c + '>';
                     });
                 }
             });
