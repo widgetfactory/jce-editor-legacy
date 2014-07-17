@@ -15,6 +15,9 @@
     }
 
     var fontIconRe = /<([a-z0-9]+)([^>]+)class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)"([^>]*)>(&nbsp;|\u00a0)?<\/\1>/gi;
+    
+    var emptyRx    = /<(ol|ul|sub|sup|blockquote|span|font|a|table|tbody|tr|strong|em|b|i)\b([^>]+)><\/\1>/gi;
+    var paddedRx   = /<(p|h1|h2|h3|h4|h5|h6|pre|div|address|caption)\b([^>]+)>(&nbsp;|\u00a0)<\/\1>/gi;
 
     tinymce.create('tinymce.plugins.CleanupPlugin', {
         init: function(ed, url) {
@@ -139,7 +142,7 @@
                             if (!node.firstChild) {
                                 node.append(new Node('#text', '3')).value = '\u00a0';
                             }
-                        }
+                    }
                     }
                 });
 
@@ -250,9 +253,11 @@
                     if (ed.settings.validate === false) {
                         // fix body content
                         o.content = o.content.replace(/<body([^>]*)>([\s\S]*)<\/body>/, '$2');
-
-                        // pad empty elements
-                        o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)([^>]*)><\/\1>/gi, '<$1$2>&nbsp;</$1>');
+                        
+                        if (!ed.getParam('remove_tag_padding')) {
+                            // pad empty elements
+                            o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)([^>]*)><\/\1>/gi, '<$1$2>&nbsp;</$1>');
+                        }
                     }
 
                     if (!ed.getParam('table_pad_empty_cells', true)) {
@@ -262,9 +267,14 @@
                     // clean bootstrap icons
                     o.content = o.content.replace(fontIconRe, '<$1$2class="$3$4$5-$6$7"$8></$1>');
 
-                    // remove padding on div
+                    // remove padding on div (legacy)
                     if (ed.getParam('remove_div_padding')) {
                         o.content = o.content.replace(/<div([^>]*)>(&nbsp;|\u00a0)<\/div>/g, '<div$1></div>');
+                    }
+                    
+                    // remove padding on everything
+                    if (ed.getParam('pad_empty_tags', true) === false) {
+                        o.content = o.content.replace(paddedRx, '<$1$2></$1>');
                     }
                 }
             });
