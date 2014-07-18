@@ -80,7 +80,7 @@
                     c.add(ed.translate(k != v ? k : fmts[v]), v, {
                         'class': 'mce_formatPreview mce_' + v,
                         style: function() {
-                            return new PreviewCss(ed, {'block': v});
+                            return PreviewCss(ed, {'block': v});
                         }
                     });
                 });
