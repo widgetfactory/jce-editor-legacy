@@ -28,6 +28,10 @@ class WFAdvlistPluginConfig {
             return false;
         }
         
+        if (in_array('default', $number) === false) {
+            array_unshift($number, 'default');
+        }
+        
         return $number;
     }
     
@@ -37,6 +41,10 @@ class WFAdvlistPluginConfig {
         
         if (count($bullet) === 1 && array_shift($bullet) === 'default') {
             return false;
+        }
+        
+        if (in_array('default', $bullet) === false) {
+            array_unshift($bullet, 'default');
         }
         
         return $bullet;

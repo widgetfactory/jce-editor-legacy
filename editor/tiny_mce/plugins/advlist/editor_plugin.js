@@ -21,10 +21,16 @@
                 var formats = [];
 
                 each(str.split(/,/), function(type) {
+                    var title = type.replace(/-/g, '_');
+                    
+                    if (type === 'default') {
+                        title = 'def';
+                    }
+                    
                     formats.push({
-                        title: 'advlist.' + (type == 'default' ? 'def' : type.replace(/-/g, '_')),
+                        title: 'advlist.' + title,
                         styles: {
-                            listStyleType: type == 'default' ? '' : type
+                            listStyleType: type === 'default' ? '' : type
                         }
                     });
                 });
@@ -52,20 +58,22 @@
         createControl: function(name, cm) {
             var t = this, btn, format, editor = t.editor;
 
-            if (name == 'numlist' || name == 'bullist') {
-                
+            if (name == 'numlist' || name == 'bullist') {                
+                // Default to first item if it's a default item
+                if (t[name][0].title == 'advlist.def') {
+                    format = t[name][0];
+                }
+
                 function hasFormat(node, format) {
                     var state = true;
-                    
-                    if (format) {
-                        each(format.styles, function(value, name) {
-                            // Format doesn't match
-                            if (editor.dom.getStyle(node, name) != value) {
-                                state = false;
-                                return false;
-                            }
-                        });
-                    }
+
+                    each(format.styles, function(value, name) {
+                        // Format doesn't match
+                        if (editor.dom.getStyle(node, name) != value) {
+                            state = false;
+                            return false;
+                        }
+                    });
 
                     return state;
                 }
@@ -82,17 +90,17 @@
                     }
 
                     // Append styles to new list element
-                    if (format) {
-                        list = dom.getParent(sel.getNode(), 'ol,ul');
-                        if (list) {
-                            dom.setStyles(list, format.styles);
-                            list.removeAttribute('data-mce-style');
-                        }
+                    //if (format) {
+                    list = dom.getParent(sel.getNode(), 'ol,ul');
+                    if (list) {
+                        dom.setStyles(list, format.styles);
+                        list.removeAttribute('data-mce-style');
                     }
+                    //}
 
                     editor.focus();
                 }
-                
+
                 // disabled
                 if (!t[name]) {
                     btn = cm.createButton(name, {
@@ -104,11 +112,6 @@
                     });
 
                     return btn;
-                }
-
-                // Default to first item if it's a default item
-                if (t[name][0].title == 'advlist.def') {
-                    format = t[name][0];
                 }
 
                 btn = cm.createSplitButton(name, {
