@@ -56,14 +56,16 @@
                 
                 function hasFormat(node, format) {
                     var state = true;
-
-                    each(format.styles, function(value, name) {
-                        // Format doesn't match
-                        if (editor.dom.getStyle(node, name) != value) {
-                            state = false;
-                            return false;
-                        }
-                    });
+                    
+                    if (format) {
+                        each(format.styles, function(value, name) {
+                            // Format doesn't match
+                            if (editor.dom.getStyle(node, name) != value) {
+                                state = false;
+                                return false;
+                            }
+                        });
+                    }
 
                     return state;
                 }
@@ -75,8 +77,9 @@
                     list = dom.getParent(sel.getNode(), 'ol,ul');
 
                     // Switch/add list type if needed
-                    if (!list || list.nodeName == (name == 'bullist' ? 'OL' : 'UL') || hasFormat(list, format))
+                    if (!list || list.nodeName == (name == 'bullist' ? 'OL' : 'UL') || hasFormat(list, format)) {
                         editor.execCommand(name == 'bullist' ? 'InsertUnorderedList' : 'InsertOrderedList');
+                    }
 
                     // Append styles to new list element
                     if (format) {
@@ -104,8 +107,9 @@
                 }
 
                 // Default to first item if it's a default item
-                if (t[name][0].title == 'advlist.def')
+                if (t[name][0].title == 'advlist.def') {
                     format = t[name][0];
+                }
 
                 btn = cm.createSplitButton(name, {
                     title: 'advanced.' + name + '_desc',
