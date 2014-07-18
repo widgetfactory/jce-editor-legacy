@@ -22,11 +22,11 @@
 
                 each(str.split(/,/), function(type) {
                     var title = type.replace(/-/g, '_');
-                    
+
                     if (type === 'default') {
                         title = 'def';
                     }
-                    
+
                     formats.push({
                         title: 'advlist.' + title,
                         styles: {
@@ -58,9 +58,9 @@
         createControl: function(name, cm) {
             var t = this, btn, format, editor = t.editor;
 
-            if (name == 'numlist' || name == 'bullist') {                
-                // Default to first item if it's a default item
-                if (t[name][0].title == 'advlist.def') {
+            if (name == 'numlist' || name == 'bullist') {
+
+                if (t[name] && t[name][0].title === 'advlist.def') {
                     format = t[name][0];
                 }
 
@@ -85,18 +85,18 @@
                     list = dom.getParent(sel.getNode(), 'ol,ul');
 
                     // Switch/add list type if needed
-                    if (!list || list.nodeName == (name == 'bullist' ? 'OL' : 'UL') || hasFormat(list, format)) {
+                    if (!list || list.nodeName == (name == 'bullist' ? 'OL' : 'UL') || !format || hasFormat(list, format)) {
                         editor.execCommand(name == 'bullist' ? 'InsertUnorderedList' : 'InsertOrderedList');
                     }
 
                     // Append styles to new list element
-                    //if (format) {
-                    list = dom.getParent(sel.getNode(), 'ol,ul');
-                    if (list) {
-                        dom.setStyles(list, format.styles);
-                        list.removeAttribute('data-mce-style');
+                    if (format) {
+                        list = dom.getParent(sel.getNode(), 'ol,ul');
+                        if (list) {
+                            dom.setStyles(list, format.styles);
+                            list.removeAttribute('data-mce-style');
+                        }
                     }
-                    //}
 
                     editor.focus();
                 }

@@ -22,14 +22,10 @@ class WFAdvlistPluginConfig {
     
     private static function getNumberList() {
         $wf = WFEditor::getInstance();     
-        $number = (array) $wf->getParam('lists.number_styles', array('lower-alpha','lower-greek','lower-roman','upper-alpha','upper-roman'));
+        $number = (array) $wf->getParam('lists.number_styles');
         
-        if (count($number) === 1 && array_shift($number) === 'default') {
+        if (empty($number) || (count($number) === 1 && array_shift($number) === 'default')) {
             return false;
-        }
-        
-        if (in_array('default', $number) === false) {
-            array_unshift($number, 'default');
         }
         
         return $number;
@@ -37,14 +33,10 @@ class WFAdvlistPluginConfig {
     
     private static function getBulletList() {
         $wf = WFEditor::getInstance();     
-        $bullet = (array) $wf->getParam('lists.bullet_styles', array('circle','disc','square'));
+        $bullet = (array) $wf->getParam('lists.bullet_styles');
         
-        if (count($bullet) === 1 && array_shift($bullet) === 'default') {
+        if (empty($bullet) || (count($bullet) === 1 && array_shift($bullet) === 'default')) {
             return false;
-        }
-        
-        if (in_array('default', $bullet) === false) {
-            array_unshift($bullet, 'default');
         }
         
         return $bullet;
