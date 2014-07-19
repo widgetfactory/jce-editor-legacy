@@ -544,7 +544,7 @@
             // Handle align
             $(img).css('float', '');
             $(img).css('vertical-align', '');
-
+            
             v = $('#align').val();
             
             // check if the image is centered
@@ -579,11 +579,12 @@
                 }
 
             } else if (v == 'center') {
-                $(img).css({'display': 'block', 'margin-left': 'auto', 'margin-right': 'auto', 'float': ''});
+                $(img).css({'display': 'block', 'margin-left': 'auto', 'margin-right': 'auto'});
 
                 $('#margin_left, #margin_right').val('auto');
                 $('#clear').attr('disabled', true);
 
+                this.setMargins(true);
             } else {
                 // equal values
                 if ($('#margin_check').is(':checked')) {
@@ -598,6 +599,10 @@
                     return this.style.display;
                 });
             }
+            
+            $('#margin_left, #margin_right, #margin_check').prop('disabled', v == 'center').each(function() {
+                $(this).siblings('label[for="' + this.id + '"]').toggleClass('disabled', v == 'center');
+            });
 
             // Handle clear
             v = $('#clear:enabled').val();
