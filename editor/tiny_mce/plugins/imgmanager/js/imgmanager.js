@@ -404,13 +404,13 @@
                     break;
             }
         },
-        setMargins: function(init) {
+        setMargins: function(e) {
             var x = 0, s = false;
 
             var v = $('#margin_top').val();
             var $elms = $('#margin_right, #margin_bottom, #margin_left');
 
-            if (init) {
+            if (e) {
                 $elms.each(function() {
                     if ($(this).val() === v) {
                         x++;
@@ -421,7 +421,7 @@
 
                 $elms.prop('disabled', s).prev('label').toggleClass('disabled', s);
 
-                $('#margin_check').prop('checked', s);
+                $('#margin_check').prop('checked', s).prop('disabled', false).prev('label').removeClass('disabled');
             } else {
                 s = $('#margin_check').is(':checked');
 
@@ -434,7 +434,7 @@
 
                 // set margin top
                 $('#margin_top').val(v);
-
+                
                 this.updateStyles();
             }
         },
@@ -544,27 +544,25 @@
             // Handle align
             $(img).css('float', '');
             $(img).css('vertical-align', '');
-            
+
             v = $('#align').val();
             
-            // check if the image is centered
-            function isCentered(el) {
-                return el.style.display === "block" && el.style.marginLeft === "auto" && el.style.marginRight === "auto";
-            }
+            if (v == 'center') {
+                $(img).css({'display': 'block', 'margin-left': 'auto', 'margin-right': 'auto'});
 
-            if (v == 'left' || v == 'right') {
-                if (ed.editor.settings.inline_styles) {
-                    $('#clear').attr('disabled', false);
-                }
+                $('#clear').attr('disabled', true);
 
+                $('#margin_left, #margin_right').val('auto');
+            } else {
+                // remove float etc.
                 $(img).css('float', v).css('display', function() {
-                    if (isCentered(this)) {
+                    if (this.style.display === "block" && this.style.marginLeft === "auto" && this.style.marginRight === "auto") {
                         return "";
                     }
-                    
+
                     return this.style.display;
                 });
-
+                
                 $('#margin_left, #margin_right').val(function() {
                     if (this.value === "auto") {
                         return "";
@@ -576,33 +574,10 @@
                 // equal values
                 if ($('#margin_check').is(':checked')) {
                     $('#margin_top').siblings('input[type="text"]').val($('#margin_top').val());
-                }
-
-            } else if (v == 'center') {
-                $(img).css({'display': 'block', 'margin-left': 'auto', 'margin-right': 'auto'});
-
-                $('#margin_left, #margin_right').val('auto');
-                $('#clear').attr('disabled', true);
-
-                this.setMargins(true);
-            } else {
-                // equal values
-                if ($('#margin_check').is(':checked')) {
-                    $('#margin_top').siblings('input[type="text"]').val($('#margin_top').val());
-                }
-                // remove float etc.
-                $(img).css('float', v).css('display', function() {
-                    if (isCentered(this)) {
-                        return "";
-                    }
-                    
-                    return this.style.display;
-                });
+                }  
+                
+                $('#clear').attr('disabled', !v);
             }
-            
-            $('#margin_left, #margin_right, #margin_check').prop('disabled', v == 'center').each(function() {
-                $(this).siblings('label[for="' + this.id + '"]').toggleClass('disabled', v == 'center');
-            });
 
             // Handle clear
             v = $('#clear:enabled').val();
