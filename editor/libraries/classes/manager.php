@@ -16,7 +16,7 @@ wfimport('editor.libraries.classes.plugin');
 wfimport('editor.libraries.classes.browser');
 
 class WFMediaManager extends WFEditorPlugin {
-    
+
     private static $browser = array();
 
     /**
@@ -25,26 +25,26 @@ class WFMediaManager extends WFEditorPlugin {
     public function __construct($config = array()) {
         // Call parent
         //parent::__construct();
-        
+
         if (!array_key_exists('type', $config)) {
             $config['type'] = 'manager';
         }
-        
+
         if (!array_key_exists('layout', $config)) {
             $config['layout'] = 'manager';
         }
-        
+
         if (!array_key_exists('view_path', $config)) {
             $config['view_path'] = WF_EDITOR_LIBRARIES . '/views/plugin';
         }
-        
+
         if (!array_key_exists('template_path', $config)) {
             $config['template_path'] = WF_EDITOR_LIBRARIES . '/views/plugin/tmpl';
         }
 
         // Call parent
         parent::__construct($config);
-        
+
         // update properties
         $this->setProperties($this->getConfig());
 
@@ -57,10 +57,10 @@ class WFMediaManager extends WFEditorPlugin {
      * @access public
      * @return object WFBrowserExtension
      */
-    public function getBrowser() {        
+    public function getBrowser() {
         $name = $this->getName();
-        
-        if (!isset(self::$browser[$name])) {            
+
+        if (!isset(self::$browser[$name])) {
             self::$browser[$name] = new WFFileBrowser($this->getProperties());
         }
 
@@ -89,16 +89,16 @@ class WFMediaManager extends WFEditorPlugin {
         $browser->set('position', $this->getParam('editor.browser_position', 'bottom'));
         $view->assign('browser', $browser);
     }
-    
+
     public function getFileTypes($format = 'array') {
         $browser = $this->getBrowser();
-        
+
         return $browser->getFileTypes($format);
     }
-    
+
     private function getFileSystem() {
         $filesystem = $this->getParam('filesystem.name', '', '', 'string', false);
-        
+
         // if an object, get the name
         if (is_object($filesystem)) {
             $filesystem = isset($filesystem->name) ? $filesystem->name : 'joomla';
@@ -108,7 +108,7 @@ class WFMediaManager extends WFEditorPlugin {
         if (empty($filesystem)) {
             $filesystem = 'joomla';
         }
-        
+
         return $filesystem;
     }
 
@@ -120,7 +120,13 @@ class WFMediaManager extends WFEditorPlugin {
     private function getConfig() {
         $filesystem = $this->getFileSystem();
 
-        $filetypes  = $this->getParam('extensions', $this->get('_filetypes', 'images=jpg,jpeg,png,gif'));
+        $filetypes = $this->getParam('extensions', $this->get('_filetypes', 'images=jpg,jpeg,png,gif'));
+
+        $textcase = $this->getParam('editor.websafe_textcase');
+
+        if (!empty($textcase)) {
+            $textcase = array_shift($textcase);
+        }
 
         $config = array(
             'dir' => $this->getParam('dir', '', '', 'string', false),
@@ -152,7 +158,7 @@ class WFMediaManager extends WFEditorPlugin {
             ),
             'websafe_mode' => $this->getParam('editor.websafe_mode', 'utf-8'),
             'websafe_spaces' => $this->getParam('editor.websafe_allow_spaces', 0),
-            'websafe_textcase' => $this->getParam('editor.websafe_textcase', '', 'uppercase,lowercase')
+            'websafe_textcase' => $textcase
         );
 
         return $config;
