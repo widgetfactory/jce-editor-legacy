@@ -112,17 +112,23 @@ abstract class WFUtility {
     }
 
     protected static function changeCase($string, $case) {
-        if (!function_exists('mb_' . $case)) {
+        if (!function_exists('mb_strtolower') || !function_exists('mb_strtoupper')) {
             return $string;
         }
 
-        switch ($case) {
-            case 'lowercase':
-                $string = mb_strtolower($string);
-                break;
-            case 'uppercase':
-                $string = mb_strtoupper($string);
-                break;
+        if (is_array($string)) {
+            foreach ($string as $value) {
+                $value = self::changeCase($value, $case);
+            }
+        } else {
+            switch ($case) {
+                case 'lowercase':
+                    $string = mb_strtolower($string);
+                    break;
+                case 'uppercase':
+                    $string = mb_strtoupper($string);
+                    break;
+            }
         }
 
         return $string;
