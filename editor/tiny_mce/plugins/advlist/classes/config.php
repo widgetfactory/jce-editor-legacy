@@ -14,10 +14,10 @@ class WFAdvlistPluginConfig {
     public static function getConfig(&$settings) {
         
         $bullet = self::getBulletList();
-        $settings['advlist_bullet_styles'] = empty($bullet) ? false : implode(',', $bullet);
+        $settings['advlist_bullet_styles'] = $bullet !== false ? implode(',', $bullet) : false;
         
         $number = self::getNumberList();
-        $settings['advlist_number_styles'] = empty($number) ? false : implode(',', $number);
+        $settings['advlist_number_styles'] = $number !== false ? implode(',', $number) : false;
     }
     
     private static function getNumberList() {
