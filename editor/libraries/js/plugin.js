@@ -649,10 +649,10 @@
             });
 
             // if data is a string or array
-            if ($.type(data) == 'string' || $.type(data) == 'array') {
+            if ($.type(data) === 'string' || $.type(data) === 'array') {
                 $.extend(json, {
-                    'args': $.type(data) == 'string' ? $.String.encodeURI(data) : $.map(data, function(s) {
-                        if (s && $.type(s) == 'string') {
+                    'args': $.type(data) === 'string' ? $.String.encodeURI(data) : $.map(data, function(s) {
+                        if (s && $.type(s) === 'string') {
                             return $.String.encodeURI(s);
                         }
                         
@@ -662,7 +662,7 @@
                 });
             } else {
                 // if data is an object
-                if (typeof data == 'object' && data.json) {
+                if ($.type(data) === 'object' && data.json) {
                     $.extend(json, {
                         'args': data.json
                     });
@@ -679,7 +679,7 @@
             url = url.replace(/&wf([a-z0-9]+)=1/, '');
 
             function showError(e) {
-                var txt = $.type(e) == 'array' ? e.join('\n') : e;
+                var txt = $.type(e) === 'array' ? e.join('\n') : e;
                 // remove linebreaks
                 txt = txt.replace(/<br([^>]+?)>/, '');
                 // show error
@@ -709,7 +709,7 @@
 
                     if (o) {
                         // check result - should be object, parse as JSON if string
-                        if ($.type(o) == 'string' && isJSON(o)) {
+                        if ($.type(o) === 'string' && isJSON(o)) {
                             // parse string as JSON object
                             var s = $.parseJSON(o);
                             // pass if successful
