@@ -652,7 +652,11 @@
             if ($.type(data) == 'string' || $.type(data) == 'array') {
                 $.extend(json, {
                     'args': $.type(data) == 'string' ? $.String.encodeURI(data) : $.map(data, function(s) {
-                        return $.String.encodeURI(s);
+                        if (s && $.type(s) == 'string') {
+                            return $.String.encodeURI(s);
+                        }
+                        
+                        return s;
                     })
 
                 });
