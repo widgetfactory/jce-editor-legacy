@@ -182,7 +182,7 @@
             });
 
             // Set list limit selection
-            $(dialog.limit + '-select').val($.Cookie.get('jce_' + $.Plugin.getName() + '_limit') || this.options.listlimit);
+            $(dialog.limit + '-select').val($.Cookie.get('wf_' + $.Plugin.getName() + '_limit') || this.options.listlimit);
 
             $(dialog.limit + '-select').change(function() {
                 self._limitcount = 0;
