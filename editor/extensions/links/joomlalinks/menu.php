@@ -311,7 +311,6 @@ class JoomlalinksMenu extends JObject {
             }
 
             $query->where(array('m.published = 1', 'm.access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')', 'm.parent_id = ' . (int) $parent));
-            $query->order('m.title');
             $query->order('m.lft ASC');
         } else {
             $where = '';
@@ -327,7 +326,7 @@ class JoomlalinksMenu extends JObject {
                     . ' AND m.access <= ' . (int) $user->get('aid')
                     . ' AND m.parent = ' . (int) $parent
                     . $where
-                    . ' ORDER BY m.title, m.lft ASC'
+                    . ' ORDER BY m.lft ASC'
             ;
         }
 
