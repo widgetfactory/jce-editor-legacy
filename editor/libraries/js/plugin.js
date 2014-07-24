@@ -1441,6 +1441,11 @@
             var p = {};
 
             s = this.decode(s);
+            
+            // nothing to create query from
+            if (s.indexOf('=') === -1) {
+                return p;
+            }
 
             if (/\?/.test(s)) {
                 s = s.substring(s.indexOf('?') + 1);
