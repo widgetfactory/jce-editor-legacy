@@ -14,9 +14,9 @@
 
     var Styles = new tinymce.html.Styles();
 
-    var validChildren = '#|a|abbr|area|address|article|aside|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|' +
-            'figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|' +
-            'p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var|audio|video|iframe|object';
+    var validChildren = '#,a,abbr,area,address,article,aside,b,bdo,blockquote,br,button,canvas,cite,code,command,datalist,del,details,dfn,dialog,div,dl,em,embed,fieldset,' +
+            'figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,hr,i,img,input,ins,kbd,keygen,label,link,map,mark,menu,meta,meter,nav,noscript,ol,output,' +
+            'p,pre,progress,q,ruby,samp,script,section,select,small,span,strong,style,sub,sup,svg,table,textarea,time,ul,var,audio,video,iframe,object';
 
     function toArray(obj) {
         var undef, out, i;
@@ -170,7 +170,6 @@
                 lookup[k.toLowerCase()] = v;
             });
 
-            //scriptRegExp = new RegExp('write(' + scriptRegExp + ')\\(([^)]+)\\)');
             self.lookup = lookup;
 
             function isMedia(n) {
@@ -179,14 +178,14 @@
 
             ed.onPreInit.add(function() {
                 var invalid = ed.settings.invalid_elements;
-
-                if (ed.settings.schema !== 'html5') {
-                    ed.schema.addValidElements('video[src|autobuffer|autoplay|loop|controls|width|height|poster|*],audio[src|autobuffer|autoplay|loop|controls|*],source[src|type|media|*],embed[src|type|width|height|*]');
-                }
-
+                
                 // iframes
                 ed.schema.addValidElements('iframe[longdesc|name|src|frameborder|marginwidth|marginheight|scrolling|align|width|height|allowtransparency|allowfullscreen|seamless|*]');
+                
+                // audio, video, embed
+                ed.schema.addValidElements('video[src|autobuffer|autoplay|loop|controls|width|height|poster|*],audio[src|autobuffer|autoplay|loop|controls|*],source[src|type|media|*],embed[src|type|width|height|*]');
 
+                // add children
                 each(['object', 'audio', 'video', 'iframe'], function(n) {
                     if (ed.schema.isValid(n)) {                        
                         ed.schema.addValidChildren(n + '[' + validChildren + ']');
@@ -250,8 +249,6 @@
 
             ed.onBeforeSetContent.add(function(ed, o) {
                 var h = o.content;
-                // fix some elements
-                //h = h.replace(/<(param|source)([^\/]+?)\/>(\s+?)<\/\1>/gi, '<$1$2/>');
 
                 // process comments within media elements
                 h = h.replace(/<(audio|embed|object|video|iframe)([^>]*?)>([\w\W]+?)<\/\1>/gi, function(a, b, c, d) {
@@ -267,23 +264,12 @@
                     // convert conditional comments end
                     d = d.replace(/<!(--<!)?\[endif\](--)?>/gi, '</comment>');
 
-                    /* process comments
-                     d = d.replace(/<!--([\w\W]+?)-->/g, function(a, b) {
-                     return '<comment>' + ed.dom.encode(b) + '</comment>';
-                     });*/
-
                     return '<' + b + c + '>' + d + '</' + b + '>';
                 });
 
                 o.content = h;
             });
 
-            /*ed.onPostProcess.add( function(ed, o) {
-             if (o.get) {
-             // cleanup param and source elements
-             o.content = o.content.replace(/>(\s|&nbsp;)?<\/(source|param)>/gi, ' />');
-             }
-             });*/
         },
         getInfo: function() {
             return {
