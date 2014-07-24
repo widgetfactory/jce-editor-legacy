@@ -17,9 +17,9 @@
          */
         if (tinymce.isMac && tinymce.isGecko && !tinymce.isIE11) {
             ed.onKeyDown.add(function(ed, e) {
-                if (VK.metaKeyPressed(e) && (e.keyCode == 37 || e.keyCode == 39)) {
-                    e.preventDefault();
+                if (VK.metaKeyPressed(e) && !e.shiftKey && (e.keyCode == 37 || e.keyCode == 39)) {
                     ed.selection.getSel().modify('move', e.keyCode == 37 ? 'backward' : 'forward', 'word');
+                    e.preventDefault();
                 }
             });
         }
