@@ -60,7 +60,10 @@ WFAggregator.add('vimeo', {
     getValues : function(src) {
         var self = this, data = {}, args = {}, type = this.getType(), id = '';
 
-        $.extend(args, $.String.query(src));
+        // get variables from query string
+        if (src.indexOf('=') !== -1) {
+            $.extend(args, $.String.query(src));
+        }
 
         $('input, select', '#vimeo_options').not('#vimeo_embed').each( function() {
             var k = $(this).attr('id'), v = $(this).val();
@@ -94,13 +97,14 @@ WFAggregator.add('vimeo', {
 
             args[k] = v;
         });
+        
         if (args.clip_id) {
             id = args.clip_id;
         } else {
             var s = /vimeo.com(\/video)?\/([0-9]+)/.exec(src);
 
-            if (s) {
-                id = s.length > 1 ? s[2] : s[1];
+            if (s && $.type(s) === "array") {
+                id = s.pop();
             }
         }
 
@@ -175,8 +179,8 @@ WFAggregator.add('vimeo', {
         } else {
             var s = /vimeo\.com\/(video\/)?([0-9]+)/.exec(src);
 
-            if (s && s.length > 2) {
-                id = s[2];
+            if (s && $.type(s) === "array") {
+                id = s.pop();
             }
         }
 
