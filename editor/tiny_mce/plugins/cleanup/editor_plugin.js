@@ -30,6 +30,9 @@
             }
 
             ed.onPreInit.add(function() {
+                // reset attribute order for anchor tags
+                ed.schema.addValidElements('a[href|target|ping|rel|media|type|id|accesskey|class|dir|draggable|item|hidden|itemprop|role|spellcheck|style|subject|title|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]');
+                
                 if (ed.settings.validate) {
                     // add support for "bootstrap" icons
                     var elements = ed.schema.elements;
@@ -235,6 +238,7 @@
 
             // Cleanup callback
             ed.onPostProcess.add(function(ed, o) {
+                
                 if (o.set) {
                     // Geshi
                     o.content = self.convertFromGeshi(o.content);
