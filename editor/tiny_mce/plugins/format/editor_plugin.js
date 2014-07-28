@@ -18,12 +18,12 @@
 
             function isBlock(n, s) {
                 s = s || blocks;
-                return new RegExp('^(' + s.replace(',', '|', 'g') + ')$', 'i').test(n.nodeName);
+                return new RegExp('^(' + s.replace(/,/g, '|') + ')$', 'i').test(n.nodeName);
             }
             
             ed.onPreInit.add(function(ed) {
                 // Register default block formats
-                tinymce.each('aside figure p h1 h2 h3 h4 h5 h6 div address pre div dl dt dd samp'.split(/\s/), function(name) {
+                tinymce.each('aside figure dl'.split(/\s/), function(name) {
                     ed.formatter.register(name, {block: name, remove: 'all', wrapper: true});
                 });
                 // div container
@@ -98,7 +98,6 @@
                         var s = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,aside,figure,dl,dt,dd';
 
                         if (!v) {
-                            
                             if (isBlock(n, s)) {
                                 ed.undoManager.add();
                                 p = ed.dom.getParent(n, blocks);
