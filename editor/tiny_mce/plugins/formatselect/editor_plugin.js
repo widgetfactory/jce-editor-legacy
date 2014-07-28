@@ -30,10 +30,10 @@
         },
         createControl: function(n, cf) {
             var ed = this.editor;
-            
+
             switch (n) {
                 case "formatselect":
-                    
+
                     if (ed.getParam('formatselect_blockformats')) {
                         return this._createBlockFormats();
                     }

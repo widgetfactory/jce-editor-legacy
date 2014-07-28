@@ -9,7 +9,7 @@
  */
 (function() {
     var VK = tinymce.VK;
-    var blocks = 'section,nav,article,aside,h1,h2,h3,h4,h5,h6,header,footer,address,main,p,pre,blockquote,figure,figcaption,div';
+    var blocks = 'section,nav,article,aside,h1,h2,h3,h4,h5,h6,header,footer,address,main,p,pre,blockquote,figure,figcaption,div,dl,dt,dd';
 
     tinymce.create('tinymce.plugins.FormatPlugin', {
         init: function(ed, url) {
@@ -20,6 +20,33 @@
                 s = s || blocks;
                 return new RegExp('^(' + s.replace(',', '|', 'g') + ')$', 'i').test(n.nodeName);
             }
+            
+            ed.onPreInit.add(function(ed) {
+                // Register default block formats
+                tinymce.each('aside figure p h1 h2 h3 h4 h5 h6 div address pre div dl dt dd samp'.split(/\s/), function(name) {
+                    ed.formatter.register(name, {block: name, remove: 'all', wrapper: true});
+                });
+                // div container
+                ed.formatter.register('div_container', {block: 'div', remove: 'all', wrapper: true});
+                // span
+                ed.formatter.register('span', {inline: 'span', remove: 'all'});
+                // section
+                ed.formatter.register('section', {block: 'section', remove: 'all', wrapper: true, merge_siblings: false});
+                // article
+                ed.formatter.register('article', {block: 'article', remove: 'all', wrapper: true, merge_siblings: false});
+            });
+
+            // update with HMTL5 tags
+            ed.settings.removeformat = [
+                {
+                    selector: 'b,strong,em,i,font,u,strike,sub,sup,dfn,code,samp,kbd,var,cite,mark,q',
+                    remove: 'all',
+                    split: true,
+                    expand: false,
+                    block_expand: true,
+                    deep: true
+                }
+            ];
 
             ed.onKeyDown.add(function(ed, e) {
                 if ((e.keyCode === VK.ENTER || e.keyCode === VK.UP) && e.altKey) {
@@ -68,12 +95,13 @@
 
                         break;
                     case 'RemoveFormat':
-                        var s = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,aside,figure,dt,dd';
+                        var s = 'p,div,address,pre,h1,h2,h3,h4,h5,h6,code,samp,span,section,article,aside,figure,dl,dt,dd';
 
                         if (!v) {
+                            
                             if (isBlock(n, s)) {
                                 ed.undoManager.add();
-                                p = ed.dom.getParent(n, blocks) || '';
+                                p = ed.dom.getParent(n, blocks);
 
                                 if (p) {
                                     ed.formatter.toggle(p.nodeName.toLowerCase());
