@@ -1076,7 +1076,7 @@
 
                 // remove marker
                 n.removeAttribute('data-mce-footnote');
-                
+
                 // remove title
                 n.removeAttribute('title');
 
@@ -1092,14 +1092,14 @@
                     if (!n.id) {
                         dom.setAttrib(n, 'id', 'ftnref' + id.replace(/\D/g, ''));
                     }
-                    
+
                     // get associated anchor
                     anchor = dom.select('a[name="' + id + '"]', node);
 
                     // if there is an anchor
                     if (anchor.length) {
                         anchor = anchor[0];
-                        
+
                         // fix anchor id/name
                         id = id.replace(/[^a-z]+(\w+)/gi, '$1');
 
@@ -1107,7 +1107,7 @@
                             'class': 'mceItemAnchor',
                             'name': null,
                             'id': null,
-                            'href' : '#' + n.id
+                            'href': '#' + n.id
                         };
                         // get correct anchor attribute for schema
                         var k = ed.settings.schema == 'html5' ? 'id' : 'name';
@@ -1240,11 +1240,11 @@
             if (ed.getParam('clipboard_paste_remove_tags')) {
                 dom.remove(dom.select(ed.getParam('clipboard_paste_remove_tags'), o.node), 1);
             }
-            
+
             // keep tags
             if (ed.getParam('clipboard_paste_keep_tags')) {
                 var tags = ed.getParam('clipboard_paste_keep_tags');
-                
+
                 dom.remove(dom.select('*:not(' + tags + ')', o.node), 1);
             }
 
@@ -1292,7 +1292,7 @@
 
             var ULRX = /^(__MCE_LIST_ITEM__)*\s*[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*\u00a0*/;
             var OLRX = /^(__MCE_LIST_ITEM__)*\s*\(?(\w+)(\.|\))\s*\u00a0*/;
-
+            
             // Convert middot lists into real semantic lists
             each(dom.select('p, h1, h2, h3, h4, h5, h6', node), function(p, i) {
                 var sib, val = '', type, html, idx, parents, s, chars, st, start;
@@ -1301,9 +1301,10 @@
                 html = p.innerHTML;
 
                 // quick check, must be a list item
-                /*if (html.indexOf('__MCE_LIST_ITEM__') === -1) {
+                if (html.indexOf('__MCE_LIST_ITEM__') === -1) {
+                    listElm = lastMargin = 0; // End list element
                     return;
-                }*/
+                }
 
                 // remove tags and replace spaces
                 val = html.replace(/<\/?\w+[^>]*>/gi, '').replace(/&nbsp;/g, '\u00a0');
@@ -1355,9 +1356,9 @@
                         // Nested list element
                         if (margin > lastMargin) {
                             listElm = dom.add(li, type);
-                        } else if (margin < lastMargin) {                           
+                        } else if (margin < lastMargin) {
                             // Find parent level based on margin value
-                            idx = tinymce.inArray(levels, margin); 
+                            idx = tinymce.inArray(levels, margin);
                             // levels less than 0 are 0
                             if (idx < 0) {
                                 idx = 0;
@@ -1365,22 +1366,22 @@
                             // get list parents
                             parents = dom.getParents(listElm.parentNode, type);
                             // find parent list element
-                            listElm = parents[parents.length - 1 - idx] || listElm;                            
+                            listElm = parents[parents.length - 1 - idx] || listElm;
                         }
                     }
 
                     // Remove middot or number spans if they exists
                     each(dom.select('span', p), function(span) {
-                        var html = span.innerHTML.replace(/<\/?\w+[^>]*>/gi, '').replace(/&nbsp;/g, '\u00a0');
+                        var h = span.innerHTML.replace(/<\/?\w+[^>]*>/gi, '').replace(/&nbsp;/g, '\u00a0');
 
                         // Remove span with the middot or the number or empty span
-                        if (ULRX.test(html) || OLRX.test(html)) {
+                        if (ULRX.test(h) || OLRX.test(h)) {
                             // keep innerHTML if a list item to be processed, otheriwse remove all
-                            dom.remove(span, html.indexOf('__MCE_LIST_ITEM__') !== -1);
+                            dom.remove(span, h.indexOf('__MCE_LIST_ITEM__') !== -1);
                         }
 
                         // remove spans containing spaces
-                        if (/^(\s|\u00a0|&nbsp;)+$/.test(html)) {
+                        if (/^(\s|\u00a0|&nbsp;)+$/.test(h)) {
                             dom.remove(span);
                         }
 
@@ -1439,7 +1440,7 @@
             }
 
             // process regular expression
-            if (ed.getParam('clipboard_paste_filter')) {                
+            if (ed.getParam('clipboard_paste_filter')) {
                 var re, rules = ed.getParam('clipboard_paste_filter').split(';');
 
                 each(rules, function(s) {
