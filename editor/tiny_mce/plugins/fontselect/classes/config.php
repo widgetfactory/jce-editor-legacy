@@ -36,17 +36,19 @@ class WFFontselectPluginConfig {
         
         // get fonts using legacy parameters
         if (empty($fonts)) {
+            $fonts  = self::$fonts;
+            
             $add    = $wf->getParam('editor.theme_advanced_fonts_add');
             $remove = $wf->getParam('editor.theme_advanced_fonts_remove');
 
             if (empty($remove) && empty($add)) {
-                return implode(';', self::$fonts);
+                return implode(';', $fonts);
             }
 
             $remove = preg_split('/[;,]+/', $remove);
 
             if (count($remove)) {
-                foreach (self::$fonts as $key => $value) {
+                foreach ($fonts as $key => $value) {
                     foreach ($remove as $gone) {
                         if ($gone && preg_match('/^' . $gone . '=/i', $value)) {
                             // Remove family
