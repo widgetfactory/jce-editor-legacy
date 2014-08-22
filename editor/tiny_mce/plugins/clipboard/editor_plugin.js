@@ -1455,10 +1455,16 @@
                     h = h.replace(re, "");
                 });
             }
+            
+            var verify = ed.settings.verify_html;
+            
+            ed.settings.verify_html = ed.settings.validate = true;
 
             ed.execCommand('mceInsertContent', false, h, {
                 skip_undo: skip_undo
             });
+            
+            ed.settings.verify_html = ed.settings.validate = verify;
         }
 
     });
