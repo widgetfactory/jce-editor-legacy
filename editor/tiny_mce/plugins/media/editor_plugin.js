@@ -965,7 +965,7 @@
             });
 
             // check for XHTML Strict setting
-            var strict = ed.getParam('media_strict', true) && /mceItemFlash/.test(n.attr('class'));
+            var strict = ed.getParam('media_strict', true) && /mceItem(Flash|ShockWave)/.test(n.attr('class'));
 
             // create embed node if necessary
             if (name == 'object') {
@@ -977,14 +977,16 @@
                 params = params || {};
 
                 delete root.src;
-                // add attributes for XHTML Flash
+                // add attributes for XHTML Flash / Director
                 if (strict) {
                     root.data = src;
 
-                    // add movie param
-                    extend(params, {
-                        'movie': src
-                    });
+                    // add movie param for Flash
+                    if (/mceItemFlash/.test(n.attr('class'))) {
+                        extend(params, {
+                            'movie': src
+                        });
+                    }
 
                     // remove src param if present
                     delete params.src;
