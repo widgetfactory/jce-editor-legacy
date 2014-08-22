@@ -31,7 +31,7 @@
 
             ed.onPreInit.add(function() {
                 // reset attribute order for anchor tags
-                ed.schema.addValidElements('a[href|target|ping|rel|media|type|id|accesskey|class|dir|draggable|item|hidden|itemprop|role|spellcheck|style|subject|title|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]');
+                ed.schema.addValidElements('a[href|target|ping|rel|media|type|id|name|accesskey|class|dir|draggable|item|hidden|itemprop|role|spellcheck|style|subject|title|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]');
                 
                 if (ed.settings.validate) {
                     // add support for "bootstrap" icons
