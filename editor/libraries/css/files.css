@@ -69,7 +69,7 @@ li.file.doc, li.file.docx {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -400px;
 }
 /* Microsoft Excel */
-li.file.xls, li.file.xlsx {
+li.file.xls, li.file.xlsx, li.file.xlsm {
     background: #FFFFFF url(../img/ext.png) no-repeat 0 -320px;
 }
 /* Microsoft Powerpoint */
