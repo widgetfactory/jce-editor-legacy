@@ -19,7 +19,7 @@ class WFFormatPluginConfig {
         $settings['inline_styles'] = $wf->getParam('editor.inline_styles', 1, 1);
 
         // Paragraph handling
-        $settings['forced_root_block'] = $wf->getParam('editor.forced_root_block', 'p');
+        $settings['forced_root_block'] = $wf->getParam('editor.forced_root_block', 'p', '', false);
 
         // set as boolean if disabled
         if (is_numeric($settings['forced_root_block'])) {

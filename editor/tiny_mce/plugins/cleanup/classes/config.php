@@ -34,12 +34,12 @@ class WFCleanupPluginConfig {
         $settings['cleanup_pluginmode'] = $wf->getParam('cleanup.pluginmode', 0, 0);
         
         // get verify html (default is true)
-        $settings['verify_html'] = $wf->getParam('editor.verify_html', 1, 1, 'boolean');
+        $settings['verify_html'] = $wf->getParam('editor.verify_html', 1, 1, 'boolean', false);
         
         $settings['pad_empty_tags'] = $wf->getParam('editor.pad_empty_tags', 1, 1, 'boolean');
 
         // set schema
-        $settings['schema'] = $wf->getParam('editor.schema', 'html4', 'html4');
+        $settings['schema'] = $wf->getParam('editor.schema', 'html4', 'html4', false);
 
         // Get Extended elements
         $settings['extended_valid_elements'] = $wf->getParam('editor.extended_elements', '', '');
