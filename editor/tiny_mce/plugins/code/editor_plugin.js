@@ -163,7 +163,12 @@
                     // protect style and script tags from forced_root_block
                     o.content = o.content.replace(/<(script|style)([^>]*)>/gi, function(a, b, c) {
                         if (c.indexOf('data-mce-type') === -1) {
-                            c += ' data-mce-type="text/' + (b === 'script' ? 'javascript' : 'css') + '"';
+                            if (c.indexOf('type') === -1) {
+                                var type = (b === "script") ? "javascript" : "css";
+                                c += ' data-mce-type="text/' + type + '"';   
+                            } else {
+                                c = c.replace(/type="([^"]+)"/i, 'data-mce-type="$1"');
+                            }
                         }
                         
                         return '<' + b + c + '>';
@@ -254,7 +259,7 @@
                     text = new Node('#text', 3);
                     text.raw = true;
                     // add cdata
-                    if (ed.getParam('code_cdata', true)) {
+                    if (ed.getParam('code_cdata', true) && p.type === "text/javascript") {
                         v = '// <![CDATA[\n' + self._clean(tinymce.trim(v)) + '\n// ]]>';
                     }
                     text.value = v;
