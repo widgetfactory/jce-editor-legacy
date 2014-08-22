@@ -428,6 +428,7 @@ function jInsertEditorText(text, editor) {
                     ed.save({
                         no_events: false
                     });
+
                     ed.hide();
                 }
             }
@@ -486,24 +487,42 @@ function jInsertEditorText(text, editor) {
          * @param {String} v The text to insert
          */
         insert: function(el, v) {
-            var ed, parent;
-            if (typeof el == 'string') {
-                el = document.getElementById(el);
-            }
-            if (/wfEditor/.test(el.className)) {
-                ed = tinyMCE.get(el.id);
-                if (window.parent.tinymce) {
-                    if (parent = window.parent.tinyMCE.get(el.id)) {
-                        ed = parent;
+            var ed, win = window;
 
-                        if (ed.lastSelectionBookmark) {
-                            ed.selection.moveToBookmark(ed.lastSelectionBookmark);
-                        }
-                    }
+            // tinymce is in the parent window
+            if (window.parent.tinymce) {
+                win = window.parent;
+            }
+
+            if (el) {
+                if (typeof el === 'string') {
+                    el = document.getElementById(el);
                 }
-                ed.execCommand('mceInsertContent', false, v);
-            } else {
+
+                // use element passed in
+                if (el && el.id) {
+                    ed = win.tinyMCE.get(el.id);
+                }
+            }
+            
+            // get active editor
+            if (!ed) {
+                ed = win.tinyMCE.activeEditor;
+            }
+
+            // insert into textarea if editor not loaded or is hidden
+            if (!ed || ed.isHidden()) {
                 this.insertIntoTextarea(el, v);
+                return true;
+            }
+
+            // editor found, insert
+            if (ed) {
+                if (ed.lastSelectionBookmark) {
+                    ed.selection.moveToBookmark(ed.lastSelectionBookmark);
+                }
+
+                ed.execCommand('mceInsertContent', false, v);
             }
         },
         insertIntoTextarea: function(el, v) {
