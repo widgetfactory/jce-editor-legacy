@@ -964,6 +964,8 @@ class WFFileBrowser extends JObject {
 
         // HTTP headers for no cache etc
         //header('Content-type: text/plain; charset=UTF-8');
+        
+        header('Content-Type: text/json;charset=UTF-8');
         header("Expires: Wed, 4 Apr 1984 13:00:00 GMT");
         header("Last-Modified: " . gmdate("D, d M_Y H:i:s") . " GMT");
         header("Cache-Control: no-store, no-cache, must-revalidate");
