@@ -16,7 +16,7 @@ defined('WF_EDITOR') or die('RESTRICTED');
 <!DOCTYPE html> 
 <html lang="<?php echo $this->language;?>" dir="<?php echo $this->direction;?>">
 	<head>
-		<meta charset="utf-8">
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<!-- [head] -->
 	</head>
