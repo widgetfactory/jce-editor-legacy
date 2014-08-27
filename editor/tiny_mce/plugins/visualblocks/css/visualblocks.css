@@ -9,6 +9,7 @@ dd, dt {
 
 ul, ol {
     margin: 0 0 1em 3px;
+    padding: 5px 40px;
 }
 
 p {background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAICAYAAAA1BOUGAAAAcklEQVQIW2NkwAMYp02bpsTMzBwBVfP9////OzMyMq6B+IwzZszwYGRk3A5kLwFKcAFpPyDfOz09fReypABQ4CNQ8SGg5CUgOwcuCdTVAhTkBurMBLJjgUavQZZcA5R4D5TYw8TEtB6o8zeGsciOxysJAFsxQAl0kP1+AAAAAElFTkSuQmCC);} 
