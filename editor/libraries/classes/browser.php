@@ -64,6 +64,7 @@ class WFFileBrowser extends JObject {
                     'move' => 1
                 )
             ),
+            'date_format' => '%d/%m/%Y, %H:%M',
             'websafe_mode' => 'utf-8',
             'websafe_spaces' => 0,
             'websafe_textcase' => ''
@@ -1416,7 +1417,8 @@ class WFFileBrowser extends JObject {
             'listlimit' => $this->get('list_limit'),
             'websafe_mode' => $this->get('websafe_mode'),
             'websafe_spaces' => $this->get('websafe_spaces'),
-            'websafe_textcase' => $this->get('websafe_textcase')
+            'websafe_textcase' => $this->get('websafe_textcase'),
+            'date_format' => $this->get('date_format')
         );
 
         $properties = array('base', 'delete', 'rename', 'folder_new', 'copy', 'move');

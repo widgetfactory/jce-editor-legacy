@@ -73,7 +73,8 @@
             expandable: true,
             websafe_mode: 'utf-8',
             websafe_spaces: false,
-            websafe_textcase: ''
+            websafe_textcase: '',
+            date_format: '%d/%m/%Y, %H:%M'
         },
         _init: function() {
             var self = this;
@@ -2229,7 +2230,7 @@
                 }
 
                 if (k == 'modified') {
-                    v = $.String.formatDate(v);
+                    v = $.String.formatDate(v, self.options.date_format);
                 }
 
                 $('#info-properties dl').append('<dd id="info-' + k.toLowerCase() + '">' + self._translate('' + k, k) + ': ' + v + '</dd>');

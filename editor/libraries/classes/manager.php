@@ -158,7 +158,8 @@ class WFMediaManager extends WFEditorPlugin {
             ),
             'websafe_mode' => $this->getParam('editor.websafe_mode', 'utf-8'),
             'websafe_spaces' => $this->getParam('editor.websafe_allow_spaces', 0),
-            'websafe_textcase' => $textcase
+            'websafe_textcase' => $textcase,
+            'date_format' => $this->getParam('editor.date_format', '%d/%m/%Y, %H:%M')
         );
 
         return $config;
