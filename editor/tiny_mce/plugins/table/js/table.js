@@ -5,7 +5,7 @@ var TableDialog = {
     init: function() {
         var self = this, ed = tinyMCEPopup.editor, context = tinyMCEPopup.getWindowArg('context', 'table');
 
-        this.html5 = ed.settings.schema == 'html5' && ed.settings.validate;
+        this.html5 = ed.settings.schema === "html5";
 
         if (!this.settings.file_browser) {
             $('input.browser').removeClass('browser');
@@ -21,12 +21,20 @@ var TableDialog = {
 
         if (this.html5) {
             // hide HTML4 only attributes (tframe = frame)
-            $('#axis, #abbr, #scope, #summary, #char, #charoff, #tframe, #nowrap, #rules').each(function() {
+            $('#axis, #abbr, #scope, #summary, #char, #charoff, #tframe, #nowrap, #rules, #cellpadding, #cellspacing').each(function() {
                 $(this).add('label[for="' + this.id + '"]').parent().hide();
             });
-            
-            $('#cellspacing').change(function() {
-                var st = tinyMCEPopup.dom.parseStyle($('#style').val());
+
+            function styles(v) {
+                if (typeof v === "undefined") {
+                    return tinyMCEPopup.dom.parseStyle($('#style').val());
+                }
+
+                $('#style').val(tinyMCEPopup.dom.serializeStyle(v));
+            }
+
+            /*$('#cellspacing').change(function() {
+                var st = styles();
 
                 var v = this.value;
 
@@ -39,20 +47,34 @@ var TableDialog = {
                     }
                 }
 
-                $('#style').val(tinyMCEPopup.dom.serializeStyle(st));
-            });
-            
+                styles(st);
+            });*/
+
+            /*$('#cellpadding').change(function() {
+                var st = styles();
+
+                var v = this.value;
+                
+                console.log(v);
+
+                if (v !== '') {
+                    st['padding'] = self.cssSize(v);
+                }
+
+                styles(st);
+            });*/
+
             $('#valign').change(function() {
-                var st = tinyMCEPopup.dom.parseStyle($('#style').val());
+                var st = styles();
 
                 st['vertical-align'] = $(this).val();
 
-                $('#style').val(tinyMCEPopup.dom.serializeStyle(st));
+                styles(st);
             });
-            
+
             $('#align').change(function() {
-                var st = tinyMCEPopup.dom.parseStyle($('#style').val()), v = $(this).val();
-                
+                var st = styles(), v = $(this).val();
+
                 if (v === "center") {
                     st.float = "";
                     st['margin-left'] = st['margin-right'] = "auto";
@@ -60,8 +82,8 @@ var TableDialog = {
                     st['float'] = v;
                     st['margin-left'] = st['margin-right'] = "";
                 }
-                
-                $('#style').val(tinyMCEPopup.dom.serializeStyle(st));
+
+                styles(st);
             });
 
             // replace border field with checkbox
@@ -86,7 +108,7 @@ var TableDialog = {
     },
     insert: function() {
         var context = tinyMCEPopup.getWindowArg('context', 'table');
-        
+
         switch (context) {
             case 'table':
                 this.insertTable();
@@ -115,19 +137,19 @@ var TableDialog = {
 
         $('#classlist').val(function() {
             var n = this, a = cls.split(' '), r = [];
-            
-            $.each(a, function(i, v) {                
+
+            $.each(a, function(i, v) {
                 if (v.indexOf('mceItem') == -1) {
                     if ($('option[value="' + v + '"]', n).length == 0) {
                         $(n).append(new Option(v, v));
                     }
-                    
+
                     r.push(v);
                 }
             });
-            
+
             return r;
-            
+
         }).change();
     },
     initTable: function() {
@@ -153,34 +175,34 @@ var TableDialog = {
             // Update form
             $('#align').val(function() {
                 var v = ed.dom.getAttrib(elm, 'align') || ed.dom.getStyle(elm, 'float');
-                
+
                 if (v) {
                     return v;
                 }
-                
+
                 if (ed.dom.getStyle(elm, 'margin-left') === "auto" && ed.dom.getStyle(elm, 'margin-right') === "auto") {
                     return "center";
                 }
-                
+
                 return "";
             });
-            
+
             $('#tframe').val(ed.dom.getAttrib(elm, 'frame'));
             $('#rules').val(ed.dom.getAttrib(elm, 'rules'));
 
             var cls = ed.dom.getAttrib(elm, 'class');
-            
+
             cls = cls.replace(/(?:^|\s)mceItem(\w+)(?!\S)/g, '');
-            
+
             this.updateClassList(cls);
-            
+
             $('#classes').val(cls);
 
             $('#cols').val(cols);
             $('#rows').val(rowsAr.length);
 
             var border = trimSize(getStyle(elm, 'border', 'borderWidth'));
-            
+
             // clean border
             border = border.replace(/[\D]/g, '');
 
@@ -258,9 +280,9 @@ var TableDialog = {
 
             $('#align').val(align);
             $('#valign').val(valign);
-            
+
             className = className.replace(/(?:^|\s)mceItem(\w+)(?!\S)/g, '');
-            
+
             // update class list
             this.updateClassList(className);
 
@@ -309,9 +331,9 @@ var TableDialog = {
 
             $('#align').val(align);
             $('#valign').val(valign);
-            
+
             className = className.replace(/(?:^|\s)mceItem(\w+)(?!\S)/g, '');
-            
+
             // update class list
             this.updateClassList(className);
 
@@ -344,11 +366,11 @@ var TableDialog = {
     },
     insertTable: function() {
         var ed = tinyMCEPopup.editor, dom = ed.dom;
-        
+
         tinyMCEPopup.restoreSelection();
 
-        var elm     = ed.dom.getParent(ed.selection.getNode(), "table");
-        var action  = tinyMCEPopup.getWindowArg('action');
+        var elm = ed.dom.getParent(ed.selection.getNode(), "table");
+        var action = tinyMCEPopup.getWindowArg('action');
 
         if (!action) {
             action = elm ? "update" : "insert";
@@ -384,21 +406,21 @@ var TableDialog = {
         lang = $('#lang').val();
         background = $('#backgroundimage').val();
         caption = $('#caption').is(':checked');
-        cellLimit = tinyMCEPopup.getParam('table_cell_limit', false);
-        rowLimit = tinyMCEPopup.getParam('table_row_limit', false);
-        colLimit = tinyMCEPopup.getParam('table_col_limit', false);
-
-        // Validate table size
-        if (colLimit && cols > colLimit) {
-            tinyMCEPopup.alert(ed.getLang('table_dlg.col_limit').replace(/\{\$cols\}/g, colLimit));
-            return false;
-        } else if (rowLimit && rows > rowLimit) {
-            tinyMCEPopup.alert(ed.getLang('table_dlg.row_limit').replace(/\{\$rows\}/g, rowLimit));
-            return false;
-        } else if (cellLimit && cols * rows > cellLimit) {
-            tinyMCEPopup.alert(ed.getLang('table_dlg.cell_limit').replace(/\{\$cells\}/g, cellLimit));
-            return false;
-        }
+        /*cellLimit = tinyMCEPopup.getParam('table_cell_limit', false);
+         rowLimit = tinyMCEPopup.getParam('table_row_limit', false);
+         colLimit = tinyMCEPopup.getParam('table_col_limit', false);
+         
+         // Validate table size
+         if (colLimit && cols > colLimit) {
+         tinyMCEPopup.alert(ed.getLang('table_dlg.col_limit').replace(/\{\$cols\}/g, colLimit));
+         return false;
+         } else if (rowLimit && rows > rowLimit) {
+         tinyMCEPopup.alert(ed.getLang('table_dlg.row_limit').replace(/\{\$rows\}/g, rowLimit));
+         return false;
+         } else if (cellLimit && cols * rows > cellLimit) {
+         tinyMCEPopup.alert(ed.getLang('table_dlg.cell_limit').replace(/\{\$cells\}/g, cellLimit));
+         return false;
+         }*/
 
         // reset border if checkbox (html5)
         if ($('#border').is(':checkbox')) {
@@ -487,9 +509,9 @@ var TableDialog = {
                 elm.style.borderColor = bordercolor;
                 elm.style.borderStyle = elm.style.borderStyle == "" ? "solid" : elm.style.borderStyle;
                 elm.style.borderWidth = this.cssSize(border);
-                
+
                 dom.setAttrib(elm, 'border', '');
-                
+
             } else {
                 elm.style.borderColor = '';
             }
@@ -912,7 +934,7 @@ var TableDialog = {
             if (k == 'classes') {
                 k = 'class';
             }
-            
+
             if (self.html5 && k == 'valign') {
                 return;
             }
@@ -1073,7 +1095,7 @@ var TableDialog = {
         if (st['border-collapse'] && st['border-collapse'] == 'collapse') {
             $('#cellspacing').val(0);
         }
-        
+
         if (st['vertical-align']) {
             $('#valign').val(st['vertical-align']);
         }
