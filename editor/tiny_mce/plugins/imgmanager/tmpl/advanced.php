@@ -15,12 +15,12 @@ defined( '_JEXEC' ) or die('RESTRICTED');
         <table border="0" cellpadding="2">
             <tr>
                 <td><label for="style" class="hastip" title="<?php echo WFText::_('WF_LABEL_STYLE_DESC');?>"><?php echo WFText::_('WF_LABEL_STYLE');?></label></td>
-                <td><input id="style" type="text" value="" onchange="ImageManagerDialog.setStyles();" /></td>
+                <td><input id="style" type="text" value="" /></td>
             </tr>
             <tr>
                 <td><label for="classlist" class="hastip" title="<?php echo WFText::_('WF_LABEL_CLASS_LIST_DESC');?>"><?php echo WFText::_('WF_LABEL_CLASS_LIST');?></label></td>
                 <td>
-                    <select id="classlist" onchange="ImageManagerDialog.setClasses(this.value);">
+                    <select id="classlist">
                         <option value=""><?php echo WFText::_('WF_OPTION_NOT_SET');?></option>
                     </select>
                 </td>
@@ -41,7 +41,7 @@ defined( '_JEXEC' ) or die('RESTRICTED');
             <tr>
                 <td><label for="dir" class="hastip" title="<?php echo WFText::_('WF_LABEL_DIR_DESC');?>"><?php echo WFText::_('WF_LABEL_DIR');?></label></td>
                 <td>
-                    <select id="dir" onchange="ImageManagerDialog.updateStyles();">
+                    <select id="dir">
                             <option value=""><?php echo WFText::_('WF_OPTION_NOT_SET');?></option>
                             <option value="ltr"><?php echo WFText::_('WF_OPTION_LTR');?></option>
                             <option value="rtl"><?php echo WFText::_('WF_OPTION_RTL');?></option>
