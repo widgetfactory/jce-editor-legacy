@@ -20,7 +20,7 @@
                 s = s || blocks;
                 return new RegExp('^(' + s.replace(/,/g, '|') + ')$', 'i').test(n.nodeName);
             }
-            
+
             ed.onPreInit.add(function(ed) {
                 // Register default block formats
                 tinymce.each('aside figure dl'.split(/\s/), function(name) {
@@ -54,10 +54,10 @@
                     self._clearBlocks(ed, e);
                 }
             });
-            
-            ed.onKeyUp.addToTop(function(ed, e) {                
+
+            ed.onKeyUp.addToTop(function(ed, e) {
                 if (e.keyCode === VK.ENTER) {
-                    var n = ed.selection.getNode();                    
+                    var n = ed.selection.getNode();
                     if (n.nodeName === 'DIV' && ed.settings.force_p_newlines) {
                         // remove all attributes
                         if (ed.settings.keep_styles === false) {
@@ -77,7 +77,7 @@
                         if (!v) {
                             o.terminate = true;
 
-                            if (n == ed.getBody()) {
+                            if (n === ed.getBody()) {
                                 return;
                             }
 
@@ -120,10 +120,56 @@
                                     ed.formatter.remove(cm.selectedValue);
                                 }
                             }
-
-                            //o.terminate = true;
                         }
 
+                        break;
+
+                    case 'InsertHorizontalRule':
+                        if (n.nodeName === "P") {
+
+                            ed.execCommand('mceInsertContent', false, '<span id="mce_hr_marker" data-mce-type="bookmark">\uFEFF</span>', {
+                                skip_undo: 1
+                            });
+
+                            ed.undoManager.add();
+
+                            var marker = ed.dom.get('mce_hr_marker');
+                            var hr = ed.dom.create('hr');
+
+                            // split paragraph
+                            ed.dom.split(n, marker);
+
+                            // get marker sibling
+                            var ns = marker.nextSibling, ps = n.nextSibling;
+
+                            // check if paragraph has a sibling and it is a block element. If not, create a new paragraph after the hr
+                            if (!ns && !ed.dom.isBlock(ps)) {
+                                var el = ed.getParam('forced_root_block') || 'br';
+                                ns = ed.dom.create(el);
+
+                                if (el !== 'br') {
+                                    ns.innerHTML = '\u00a0';
+                                }
+
+                                ed.dom.insertAfter(ns, marker);
+                                s = ed.selection.select(ns);
+                                ed.selection.collapse(1);
+                            }
+
+                            // replace marker with hr element
+                            ed.dom.replace(hr, marker);
+
+                            // get hr sibling
+                            ns = hr.nextSibling;
+
+                            // selection sibling and collapse
+                            if (ns) {
+                                s = ed.selection.select(ns);
+                                ed.selection.collapse(1);
+                            }
+
+                            o.terminate = true;
+                        }
                         break;
                 }
             });
@@ -133,22 +179,9 @@
                 // add Definition List
                 switch (cmd) {
                     case 'FormatBlock':
-                        if (v == 'dt' || v == 'dd') {
+                        if (v === 'dt' || v === 'dd') {
                             if (n && n.nodeName !== 'DL') {
                                 ed.formatter.apply('dl');
-                            }
-                        }
-                        break;
-                    case 'InsertHorizontalRule':
-                        // if an empty paragraph is created...
-                        if (n.nodeName === 'P' && ed.dom.isEmpty(n)) {
-
-                            if (n.nextSibling) {
-                                ed.dom.remove(n);
-                            } else {
-                                if (!tinymce.isIE || tinymce.isIE11) {
-                                    n.innerHTML = '<br data-mce-bogus="1">';
-                                }
                             }
                         }
                         break;
@@ -160,7 +193,7 @@
                 function wrapList(node) {
                     var sibling = node.prev;
 
-                    if (node.parent && node.parent.name == 'dl') {
+                    if (node.parent && node.parent.name === 'dl') {
                         return;
                     }
 
