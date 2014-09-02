@@ -155,12 +155,21 @@
                 self.setMargins();
             });
             // set styles events
-            $('#align, #clear, #border_width, #border_styles, #border_color').change(function() {
+            $('#align, #clear, #border_width, #border_styles, #border_color, #dir').change(function() {
                 self.updateStyles();
             });
+
             // set border click event
             $('#border').click(function() {
                 self.setBorder();
+            });
+
+            $('#style').change(function() {
+                self.setStyles();
+            });
+
+            $('#classlist').change(function() {
+                self.setClasses(this.value);
             });
 
             // Create File Browser
@@ -217,37 +226,17 @@
             tinyMCEPopup.restoreSelection();
 
             // Fixes crash in Safari
-            if (tinymce.isWebKit)
+            if (tinymce.isWebKit) {
                 ed.getWin().focus();
-
-            if (!ed.settings.inline_styles) {
-                args = {
-                    vspace: $('#margin_top').val() || $('#margin_bottom').val(),
-                    hspace: $('#margin_left').val() || $('#margin_right').val(),
-                    border: $('#border_width').val(),
-                    align: $('#align').val()
-                };
-
-                var img = $('#sample');
-                var style = ed.dom.parseStyle($(img).attr('style'));
-
-                // remove styles
-                tinymce.each(['margin', 'float', 'border', 'vertical-align'], function(s) {
-                    delete style[s];
-                });
-
-                // reset style
-                $('#style').val(ed.dom.serializeStyle(style));
-
-            } else {
-                // Remove deprecated values
-                args = {
-                    vspace: '',
-                    hspace: '',
-                    border: '',
-                    align: ''
-                };
             }
+
+            // Remove deprecated values
+            args = {
+                vspace: '',
+                hspace: '',
+                border: '',
+                align: ''
+            };
 
             // set attributes
             tinymce.each(['src', 'width', 'height', 'alt', 'title', 'classes', 'style', 'id', 'dir', 'lang', 'usemap', 'longdesc'], function(k) {
@@ -434,7 +423,7 @@
 
                 // set margin top
                 $('#margin_top').val(v);
-                
+
                 this.updateStyles();
             }
         },
@@ -536,17 +525,16 @@
             });
         },
         updateStyles: function() {
-            var ed = tinyMCEPopup, st, v, br, img = $('#sample');
+            var ed = tinyMCEPopup, st, v, br, img = $('#sample'), k;
 
             $(img).attr('style', $('#style').val());
             $(img).attr('dir', $('#dir').val());
 
             // Handle align
             $(img).css('float', '');
-            $(img).css('vertical-align', '');
 
             v = $('#align').val();
-            
+
             if (v == 'center') {
                 $(img).css({'display': 'block', 'margin-left': 'auto', 'margin-right': 'auto'});
 
@@ -562,7 +550,7 @@
 
                     return this.style.display;
                 });
-                
+
                 $('#margin_left, #margin_right').val(function() {
                     if (this.value === "auto") {
                         return "";
@@ -574,8 +562,8 @@
                 // equal values
                 if ($('#margin_check').is(':checked')) {
                     $('#margin_top').siblings('input[type="text"]').val($('#margin_top').val());
-                }  
-                
+                }
+
                 $('#clear').attr('disabled', !v);
             }
 
