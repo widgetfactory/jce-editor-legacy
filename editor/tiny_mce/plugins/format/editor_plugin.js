@@ -125,48 +125,42 @@
                         break;
 
                     case 'InsertHorizontalRule':
-                        if (n.nodeName === "P") {
-
-                            ed.execCommand('mceInsertContent', false, '<span id="mce_hr_marker" data-mce-type="bookmark">\uFEFF</span>', {
-                                skip_undo: 1
-                            });
-
+                        if (n.nodeName === "P") {   
+                            // insert hr marker
+                            ed.execCommand('mceInsertContent', false, '<hr id="mce-hr-marker" />', {skip_undo: 1});        
+                            
+                            // add to undo stack
                             ed.undoManager.add();
 
-                            var marker = ed.dom.get('mce_hr_marker');
-                            var hr = ed.dom.create('hr');
+                            var ns = n.nextSibling, el, hr = ed.dom.get('mce-hr-marker');
 
-                            // split paragraph
-                            ed.dom.split(n, marker);
-
-                            // get marker sibling
-                            var ns = marker.nextSibling, ps = n.nextSibling;
-
-                            // check if paragraph has a sibling and it is a block element. If not, create a new paragraph after the hr
-                            if (!ns && !ed.dom.isBlock(ps)) {
-                                var el = ed.getParam('forced_root_block') || 'br';
+                            // check if paragraph has a sibling and it is a block element. If not, create a new paragraph after it
+                            if (!ed.dom.isBlock(ns)) {
+                                el = ed.getParam('forced_root_block') || 'br';
                                 ns = ed.dom.create(el);
 
                                 if (el !== 'br') {
-                                    ns.innerHTML = '\u00a0';
+                                    if (!tinymce.isIE || tinymce.isIE11) {
+                                        ns.innerHTML = '<br data-mce-bogus="1">';
+                                    }
                                 }
 
-                                ed.dom.insertAfter(ns, marker);
-                                s = ed.selection.select(ns);
-                                ed.selection.collapse(1);
+                                ed.dom.insertAfter(ns, n);
+                                // move cursor to beginning of new paragraph
+                                ed.selection.setCursorLocation(ns, 0);
+                            } else {
+                                // move cursor to end of paragraph
+                                ed.selection.setCursorLocation(ns, ns.childNodes.length);
                             }
 
-                            // replace marker with hr element
-                            ed.dom.replace(hr, marker);
-
-                            // get hr sibling
-                            ns = hr.nextSibling;
-
-                            // selection sibling and collapse
-                            if (ns) {
-                                s = ed.selection.select(ns);
-                                ed.selection.collapse(1);
-                            }
+                            // move the marker after the first paragraph
+                            ed.dom.insertAfter(hr, n);
+                            
+                            // remove id
+                            ed.dom.setAttrib(hr, 'id', '');
+                            
+                            // trigger nodeChanged event to update path etc.
+                            ed.nodeChanged();
 
                             o.terminate = true;
                         }
