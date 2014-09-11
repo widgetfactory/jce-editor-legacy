@@ -33,7 +33,7 @@
             });
 
             ed.onKeyDown.add(function(ed, e) {
-                if (e.keyCode == BACKSPACE || e.keyCode == DELETE) {
+                if (e.keyCode === BACKSPACE || e.keyCode === DELETE) {
                     self._removeCode(e);
                 }
             });
