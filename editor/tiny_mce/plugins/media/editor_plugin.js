@@ -185,6 +185,19 @@
                     // add children
                     each(['object', 'audio', 'video', 'iframe'], function(n) {
                         if (ed.schema.isValid(n)) {
+                            
+                            if (n === "object") {
+                                validChildren += '|param';
+                            }
+                            
+                            if (n === "video" || n === "audio") {
+                                validChildren += '|source';
+                                
+                                if (n === "video") {
+                                    validChildren += '|track';
+                                }
+                            }
+                            
                             ed.schema.addValidChildren(n + '[' + validChildren + ']');
                         }
                     });
