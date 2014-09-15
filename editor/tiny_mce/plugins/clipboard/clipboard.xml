@@ -68,10 +68,10 @@
     </params>
     <params group="buttons">
         <param name="buttons" class="checklist buttonlist" type="list" multiple="multiple" default="cut,copy,paste,pastetext" label="WF_PARAM_BUTTONS" description="WF_PARAM_BUTTONS_DESC">
-            <option value="cut">Cut</option>
-            <option value="copy">Copy</option>
-            <option value="paste">Paste</option>
-            <option value="pastetext">Paste As Plain Text</option>
+            <option value="cut">WF_OPTION_CUT</option>
+            <option value="copy">WF_OPTION_COPY</option>
+            <option value="paste">WF_OPTION_PASTE</option>
+            <option value="pastetext">WF_OPTION_PASTE_TEXT</option>
         </param>
     </params>
     <help>
