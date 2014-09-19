@@ -33,6 +33,11 @@
                 // reset attribute order for anchor tags
                 ed.schema.addValidElements('a[href|target|ping|rel|media|type|id|name|accesskey|class|dir|draggable|download|item|hidden|itemprop|role|spellcheck|style|subject|title|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]');
                 
+                // add support for picture tag
+                ed.schema.addValidElements('picture[id|accesskey|class|dir|lang|style|tabindex|title|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]');
+                ed.schema.addValidElements('source[src|srcset|media|type|sizes|id|accesskey|class|dir|lang|style|tabindex|title]');
+                ed.schema.addValidChildren('picture[source|img]');
+                
                 if (ed.settings.validate) {
                     // add support for "bootstrap" icons
                     var elements = ed.schema.elements;
@@ -60,7 +65,7 @@
                                 if (new RegExp(re).test(node.attr(name))) {
                                     node.attr(name, "");
                                     // remove temp attribute
-                                    if (name == 'src' || name == 'href') {
+                                    if (name === 'src' || name === 'href') {
                                         node.attr('data-mce-' + name, "");
                                     }
                                 }
@@ -139,7 +144,7 @@
                     while (i--) {
                         node = nodes[i], cls = node.attr('class');
 
-                        if (cls && (/\b(glyph|uk-)?(fa|icon)-/.test(cls) || /st_(sharethis|facebook|twitter|linkedin|googleplus|pinterest|fbsend|email)_/.test(cls))) {
+                        if (cls) {
                             node.attr('data-mce-bootstrap', '1');
                             // padd it with a space if its empty
                             if (!node.firstChild) {
@@ -232,8 +237,12 @@
                         o.content = o.content.replace(new RegExp('<([^>]+)(' + s.replace(/,/g, '|') + ')="([^"]+)"([^>]*)>', 'gi'), '<$1$4>');
                     }
                 }
+                
                 // pad bootstrap icons
                 o.content = o.content.replace(fontIconRe, '<$1$2class="$3$4$5-$6$7"$8>&nbsp;</$1>');
+                
+                // padd some empty tags
+                o.content = o.content.replace(/<(a|i|span)([^>]+)><\/\1>/gi, '<$1$2>&nbsp;</$1>');
             });
 
             // Cleanup callback
@@ -270,6 +279,9 @@
 
                     // clean bootstrap icons
                     o.content = o.content.replace(fontIconRe, '<$1$2class="$3$4$5-$6$7"$8></$1>');
+                    
+                    // clean empty tags
+                    o.content = o.content.replace(/<(a|i|span)([^>]+)>(&nbsp;|\u00a0)<\/\1>/gi, '<$1$2></$1>');
 
                     // remove padding on div (legacy)
                     if (ed.getParam('remove_div_padding')) {
