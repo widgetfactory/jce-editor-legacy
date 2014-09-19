@@ -686,7 +686,7 @@
             var footnotes = ed.getParam('clipboard_paste_process_footnotes', 'convert');
 
             // remove surrounding divs
-            if (footnotes == 'remove') {
+            if (footnotes === 'remove') {
                 h = h.replace(/<div[^>]+(mso-element:(end|foot)note|sdfootnote)[^>]+>[\s\S]+?<\/div>/gi, '');
                 h = h.replace(/<div id="(edn|ftn)">[\s\S]+?<\/div>/gi, '');
             } else {
@@ -699,17 +699,18 @@
             h = h.replace('<div><!--\[if !supportFootnotes\]--><br clear="all">', '');
 
             // process footnote anchors
-            if (footnotes === 'convert') {
+            if (footnotes === 'convert') {                
                 h = h.replace(/<a\b([^>]+)style="(mso-(end|foot)note-id|sdfootnoteanc)[^"]+"([^>]+)>/gi, '<a$1data-mce-footnote="1"$4>');
             } else if (footnotes === 'unlink') {
                 h = h.replace(/<a\b[^>]+(mso-(end|foot)note-id|sdfootnoteanc)[^>]+>([\s\S]+?)<\/a>/gi, '$3');
             } else if (footnotes === 'remove') {
                 h = h.replace(/<a\b[^>]+(mso-(end|foot)note-id|sdfootnoteanc)[^>]+>([\s\S]+?)<\/a>/gi, '');
             }
-
+  
             // process footnotes identified by <!--[if !supportFootnotes]--> comment
-            h = h.replace(/<a\b([^>]+)href="([^"]+)"([^>]+)>(.*?)<!--\[if !supportFootnotes\]-->(.*?)<\/a>/gi, function(a, b, c, d, e, f) {
+            h = h.replace(/<a\b([^>]+)href="([^"]+)"([^>]+)>([\s\S]*?)\[if !supportFootnotes\]([\s\S]*?)<\/a>/gi, function(a, b, c, d, e, f) {
                 var s = e + f;
+                
                 // remove comments and spans
                 s = s.replace('<!--[endif]-->', '').replace(/<\/?span([^>]*)>/g, '');
 
@@ -1084,8 +1085,10 @@
                 dom.setStyle(n, 'vertical-align', 'super');
 
                 // get anchor id from href
-                if (href.charAt(0) === '#') {
-                    id = href.substring(1);
+                if (href.indexOf('#') !== -1) {
+                    id = href.substring(href.indexOf('#') + 1);
+                    
+                    console.log(href, id);
                 }
 
                 if (id) {
