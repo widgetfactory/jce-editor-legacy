@@ -699,18 +699,18 @@
             h = h.replace('<div><!--\[if !supportFootnotes\]--><br clear="all">', '');
 
             // process footnote anchors
-            if (footnotes === 'convert') {                
+            if (footnotes === 'convert') {
                 h = h.replace(/<a\b([^>]+)style="(mso-(end|foot)note-id|sdfootnoteanc)[^"]+"([^>]+)>/gi, '<a$1data-mce-footnote="1"$4>');
             } else if (footnotes === 'unlink') {
                 h = h.replace(/<a\b[^>]+(mso-(end|foot)note-id|sdfootnoteanc)[^>]+>([\s\S]+?)<\/a>/gi, '$3');
             } else if (footnotes === 'remove') {
                 h = h.replace(/<a\b[^>]+(mso-(end|foot)note-id|sdfootnoteanc)[^>]+>([\s\S]+?)<\/a>/gi, '');
             }
-  
+
             // process footnotes identified by <!--[if !supportFootnotes]--> comment
             h = h.replace(/<a\b([^>]+)href="([^"]+)"([^>]+)>([\s\S]*?)\[if !supportFootnotes\]([\s\S]*?)<\/a>/gi, function(a, b, c, d, e, f) {
                 var s = e + f;
-                
+
                 // remove comments and spans
                 s = s.replace('<!--[endif]-->', '').replace(/<\/?span([^>]*)>/g, '');
 
@@ -749,6 +749,16 @@
 
             // Replace nsbp entites to char since it's easier to handle
             h = h.replace(/&nbsp;/gi, "\u00a0");
+
+            // cleanup table border
+            h = h.replace(/<table([^>]+)>/, function($1, $2) {
+
+                if (ed.settings.schema === "html5") {
+                    $2 = $2.replace(/(border|cell(padding|spacing))="([^"]+)"/gi, '');
+                }
+
+                return '<table' + $2 + '>';
+            });
 
             // Remove bad attributes, with or without quotes, ensuring that attribute text is really inside a tag.
             // If JavaScript had a RegExp look-behind, we could have integrated this with the last process() array and got rid of the loop. But alas, it does not, so we cannot.
@@ -1087,8 +1097,6 @@
                 // get anchor id from href
                 if (href.indexOf('#') !== -1) {
                     id = href.substring(href.indexOf('#') + 1);
-                    
-                    console.log(href, id);
                 }
 
                 if (id) {
@@ -1187,6 +1195,16 @@
                 each(dom.select('*[lang]', o.node), function(el) {
                     el.removeAttribute('lang');
                 });
+
+                // cleanup table cells
+                each(dom.select('td', o.node), function(el) {
+                    var p = dom.select('p', el);
+
+                    if (p.length === 1) {
+                        dom.remove(p[0], true);
+                    }
+                });
+
             } // end word content
 
             // Remove all styles
@@ -1295,10 +1313,10 @@
 
             var ULRX = /^(__MCE_LIST_ITEM__)*\s*[\u2022\u00b7\u00a7\u00d8o\u25CF]\s*\u00a0*/;
             var OLRX = /^(__MCE_LIST_ITEM__)*\s*\(?(\w+)(\.|\))\s*\u00a0*/;
-            
+
             // Convert middot lists into real semantic lists
             each(dom.select('p, h1, h2, h3, h4, h5, h6', node), function(p, i) {
-                var sib, val = '', type, html, idx, parents, s, chars, st, start;
+                var sib, val = '', type, html, idx, parents, s, chars, st, start, cls = p.className;
 
                 // get paragraph html
                 html = p.innerHTML;
@@ -1406,6 +1424,12 @@
 
                     var args = {'start': start};
 
+                    // trime whitespace
+                    html = tinymce.trim(html);
+
+                    // remove non-breaking space
+                    html = html.replace(/^(&nbsp;)+|(&nbsp;)+$/gi, '');
+
                     // Create li and add paragraph data into the new li
                     li = dom.add(listElm, 'li', args, html);
 
@@ -1458,15 +1482,15 @@
                     h = h.replace(re, "");
                 });
             }
-            
+
             var verify = ed.settings.verify_html;
-            
+
             ed.settings.verify_html = ed.settings.validate = true;
 
             ed.execCommand('mceInsertContent', false, h, {
                 skip_undo: skip_undo
             });
-            
+
             ed.settings.verify_html = ed.settings.validate = verify;
         }
 
