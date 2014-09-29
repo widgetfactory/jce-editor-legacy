@@ -36,7 +36,7 @@ class WFSearchExtension extends WFExtension {
      * @return	JCE  The editor object.
      * @since	1.5
      */
-    public function getInstance($type, $config = array()) {
+    public static function getInstance($type, $config = array()) {
         if (!isset(self::$instances)) {
             self::$instances = array();
         }

@@ -44,7 +44,7 @@ final class WFTabs extends JObject {
      * @access  public
      * @return  object WFTabs
      */
-    public function getInstance($config = array()) {
+    public static function getInstance($config = array()) {
         static $instance;
 
         if (!is_object($instance)) {
