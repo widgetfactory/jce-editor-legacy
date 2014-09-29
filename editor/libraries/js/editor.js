@@ -546,25 +546,26 @@ function jInsertEditorText(text, editor) {
         convertURL: function(url, elm, save, name) {
             var ed = tinymce.EditorManager.activeEditor, s = tinymce.settings, base = s.document_base_url;
 
-            if (!url)
+            if (!url) {
                 return url;
+            }
 
             // Don't convert link href since thats the CSS files that gets loaded into the editor also skip local file URLs
-            if (!s.convert_urls || (elm && elm.nodeName == 'LINK') || url.indexOf('file:') === 0)
+            if (!s.convert_urls || (elm && elm.nodeName === 'LINK') || url.indexOf('file:') === 0) {
                 return url;
+            }
 
-            if (url == base || url == base.substring(0, base.length - 1) || url.charAt(0) == '/') {
+            if (url === base || url === base.substring(0, base.length - 1) || url.charAt(0) === '/') {
                 return url;
             }
 
             // Convert to relative
-            if (s.relative_urls)
+            if (s.relative_urls) {
                 return ed.documentBaseURI.toRelative(url);
+            }
 
             // Convert to absolute
-            url = ed.documentBaseURI.toAbsolute(url, s.remove_script_host);
-
-            return url;
+            return ed.documentBaseURI.toAbsolute(url, s.remove_script_host);
         },
         indent: function(h) {
             // simple indentation
