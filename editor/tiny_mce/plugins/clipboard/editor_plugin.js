@@ -1045,6 +1045,25 @@
                 }
             });
 
+            // convert some attributes
+            each(dom.select('*[align]', node), function(el) {
+                var v = dom.getAttrib(el, 'align');
+
+                if (v === "left" || v === "right" || v === "center") {
+                    if (/(IMG|OBJECT|VIDEO|AUDIO|EMBED|PICTURE)/.test(el.nodeName)) {
+                        if (v === "center") {
+                            dom.setStyles(el, {'margin': 'auto', 'display': 'block'});
+                        } else {
+                            dom.setStyle(el, 'float', v);
+                        }
+                    } else {
+                        dom.setStyle(el, 'text-align', v);
+                    }
+                }
+
+                el.removeAttribute('align');
+            });
+
         },
         /**
          * Convert URL strings to elements
@@ -1204,7 +1223,6 @@
                         dom.remove(p[0], true);
                     }
                 });
-
             } // end word content
 
             // Remove all styles
