@@ -1050,7 +1050,7 @@
                 var v = dom.getAttrib(el, 'align');
 
                 if (v === "left" || v === "right" || v === "center") {
-                    if (/(IMG|OBJECT|VIDEO|AUDIO|EMBED|PICTURE)/.test(el.nodeName)) {
+                    if (/(IFRAME|IMG|OBJECT|VIDEO|AUDIO|EMBED)/i.test(el.nodeName)) {
                         if (v === "center") {
                             dom.setStyles(el, {'margin': 'auto', 'display': 'block'});
                         } else {
@@ -1236,6 +1236,21 @@
                 // process style attributes
                 this._processStyles(o.node);
             }
+            
+            // fix margin units
+            each(dom.select('*[style]', o.node), function(el) {
+                var m = el.style.marginLeft, v = '';
+                
+                if (m && m.indexOf('px') === -1) {
+                    v = parseInt(m, 10);
+                    
+                    if (m.indexOf('pt') !== -1 && v > 0) {
+                        m = Math.round(m / 35.4) * 30;
+                    }
+
+                    dom.setStyle(el, 'margin-left', v);
+                }
+            });
 
             // image file/data regular expression
             var imgRe = /(file:|data:image)\//i, uploader = ed.plugins.upload;
