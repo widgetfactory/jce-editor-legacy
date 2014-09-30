@@ -43,16 +43,6 @@ class WFLinkSearchExtension extends WFSearchExtension {
         }
     }
 
-    public function getInstance() {
-        static $instance;
-
-        if (!isset($instance)) {
-            $instance = new WFSearchExtension();
-        }
-
-        return $instance;
-    }
-
     public function display() {
         parent::display();
 
