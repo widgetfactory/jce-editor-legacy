@@ -1245,7 +1245,7 @@
                     v = parseInt(m, 10);
                     
                     if (m.indexOf('pt') !== -1 && v > 0) {
-                        m = Math.round(m / 35.4) * 30;
+                        v = Math.round(v / 35.4) * 30;
                     }
 
                     dom.setStyle(el, 'margin-left', v);
