@@ -264,6 +264,9 @@ var LinkDialog = {
 
         tinymce.each(attribs, function(k) {
             var v = $('#' + k).val();
+            
+            // trim value
+            v = tinymce.trim(v);
 
             if (k == 'href') {
                 // prepare URL
