@@ -19,13 +19,13 @@ class WFCleanupPluginConfig {
         $model = new WFModelEditor();
         
         // Encoding
-        $settings['entity_encoding'] = $wf->getParam('editor.entity_encoding', 'raw', 'named');
+        $settings['entity_encoding'] = $wf->getParam('editor.entity_encoding');
         
         // keep &nbsp;
         $nbsp = (bool) $wf->getParam('editor.keep_nbsp', 1);
         
         // use named encoding with limited entities set if raw/utf-8 and keep_nbsp === true
-        if ($settings['entity_encoding'] == 'raw' && $nbsp) {
+        if ($settings['entity_encoding'] === 'raw' && $nbsp) {
             $settings['entity_encoding'] = '';
             $settings['entities'] = '160,nbsp,173,shy';
         }
