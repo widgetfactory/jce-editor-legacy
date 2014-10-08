@@ -68,16 +68,19 @@
                     // Toggle off the current format(s)
                     matches = ed.formatter.matchAll(formatNames);
                     tinymce.each(matches, function(match) {
-                        if (!name || match == name) {
-                            if (match)
+                        if (!name || match === name) {
+                            
+                            if (match) {
                                 ed.formatter.remove(match);
+                            }
 
                             removedFormat = true;
                         }
                     });
 
-                    if (!removedFormat)
+                    if (!removedFormat) {                        
                         ed.formatter.apply(name);
+                    }
 
                     ed.undoManager.add();
                     ed.nodeChanged();
@@ -107,8 +110,9 @@
                                     return new PreviewCss(ed, fmt);
                                 }
                             });
-                        } else
+                        } else {
                             ctrl.add(fmt.title);
+                        }
                     });
                 }
                 // legacy styles

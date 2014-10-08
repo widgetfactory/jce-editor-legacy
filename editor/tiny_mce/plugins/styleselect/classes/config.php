@@ -35,6 +35,10 @@ class WFStyleselectPluginConfig {
                 if (isset($style->styles)) {
                     $style->styles = self::cleanJSON($style->styles);
                 }
+                
+                if (isset($style->attributes)) {
+                    $style->attributes = self::cleanJSON($style->attributes, " ", "=");
+                }
 
                 if (isset($style->element)) {
                     if (in_array($style->element, $blocks)) {
@@ -70,14 +74,14 @@ class WFStyleselectPluginConfig {
         }
     }
 
-    protected static function cleanJSON($string, $delim = ";") {
+    protected static function cleanJSON($string, $delim1 = ";", $delim2=":") {
         $ret = array();
 
-        foreach (explode($delim, $string) as $item) {
+        foreach (explode($delim1, $string) as $item) {
             $item = trim($item);
 
             // split style at colon
-            $parts = explode(":", $item);
+            $parts = explode($delim2, $item);
 
             if (count($parts) < 2) {
                 continue;
