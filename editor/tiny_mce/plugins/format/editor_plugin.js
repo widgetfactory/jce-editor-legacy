@@ -34,6 +34,10 @@
                 ed.formatter.register('section', {block: 'section', remove: 'all', wrapper: true, merge_siblings: false});
                 // article
                 ed.formatter.register('article', {block: 'article', remove: 'all', wrapper: true, merge_siblings: false});
+                // code
+                ed.formatter.register('code', {inline: 'code', remove: 'all'});
+                // samp
+                ed.formatter.register('samp', {inline: 'samp', remove: 'all'});
             });
 
             // update with HMTL5 tags
