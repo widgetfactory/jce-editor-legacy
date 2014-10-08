@@ -36,7 +36,7 @@
                 return;
             }
 
-            var counter = Math.max(styleselect.getLength() - 1, 0), cls = this._import();
+            var counter = styleselect.getLength(), cls = this._import();
 
             // no classes found, return.
             if (cls.length === 0) {
