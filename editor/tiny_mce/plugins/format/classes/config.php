@@ -19,11 +19,11 @@ class WFFormatPluginConfig {
         $settings['inline_styles'] = $wf->getParam('editor.inline_styles', 1, 1);
 
         // Paragraph handling
-        $settings['forced_root_block'] = $wf->getParam('editor.forced_root_block', 'p', '', false);
-
+        $forced_root_block = $wf->getParam('editor.forced_root_block', '', 'p', 'string', false);
+        
         // set as boolean if disabled
-        if (is_numeric($settings['forced_root_block'])) {
-            $settings['forced_root_block'] = (bool) $settings['forced_root_block'];
+        if (is_numeric($forced_root_block)) {
+            $settings['forced_root_block'] = (bool) intval($forced_root_block);
 
             if ($wf->getParam('editor.force_br_newlines', 0, 0, 'boolean') === false) {
                 // legacy
@@ -31,9 +31,9 @@ class WFFormatPluginConfig {
             }
         }
 
-        if (strpos($settings['forced_root_block'], '|') !== false) {
+        if (strpos($forced_root_block, '|') !== false) {
             // multiple values
-            $values = explode('|', $settings['forced_root_block']);
+            $values = explode('|', $forced_root_block);
 
             foreach ($values as $value) {
                 $kv = explode(':', $value);
