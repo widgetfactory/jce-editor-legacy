@@ -192,7 +192,8 @@ WFAggregator.add('youtube', {
             id = query.v;
             delete query.v;
         } else {
-            var s = /\/?(embed|v)?\/([\w]+)\b/.exec(u.path);
+            var s = /\/?(embed|v)?\/([\w-]+)\b/.exec(u.path);
+            
             if (s && $.type(s) === "array") {
                 id = s.pop();
             }
