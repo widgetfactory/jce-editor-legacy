@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package   	JCE
  * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
@@ -42,9 +41,16 @@ $plugin = WFEditorPlugin::getInstance();
                         <td>
                             <select id="align">
                                 <option value=""><?php echo WFText::_('WF_OPTION_NOT_SET'); ?></option>
-                                <option value="left"><?php echo WFText::_('WF_OPTION_ALIGN_LEFT'); ?></option>
-                                <option value="right"><?php echo WFText::_('WF_OPTION_ALIGN_RIGHT'); ?></option>
-                                <option value="center"><?php echo WFText::_('WF_OPTION_ALIGN_CENTER'); ?></option>
+                                <optgroup label="------------">
+                                    <option value="left"><?php echo WFText::_('WF_OPTION_ALIGN_LEFT'); ?></option>
+                                    <option value="center"><?php echo WFText::_('WF_OPTION_ALIGN_CENTER'); ?></option>
+                                    <option value="right"><?php echo WFText::_('WF_OPTION_ALIGN_RIGHT'); ?></option>
+                                </optgroup>
+                                <optgroup label="------------">
+                                    <option value="top"><?php echo WFText::_('WF_OPTION_ALIGN_TOP'); ?></option>
+                                    <option value="middle"><?php echo WFText::_('WF_OPTION_ALIGN_MIDDLE'); ?></option>
+                                    <option value="bottom"><?php echo WFText::_('WF_OPTION_ALIGN_BOTTOM'); ?></option>
+                                </optgroup>
                             </select>
 
                             <label for="clear" class="hastip" title="<?php echo WFText::_('WF_LABEL_CLEAR_DESC'); ?>"><?php echo WFText::_('WF_LABEL_CLEAR'); ?></label>

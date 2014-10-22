@@ -325,6 +325,11 @@
                     if (v = ed.dom.getStyle(e, 'float')) {
                         return v;
                     }
+                    
+                    if (v = ed.dom.getStyle(e, 'vertical-align')) {
+                        return v;
+                    }
+                    
                     if (e.style.display === "block" && ed.dom.getStyle(e, 'margin-left') === "auto" && ed.dom.getStyle(e, 'margin-right') === "auto") {
                         return 'center';
                     }
@@ -511,7 +516,7 @@
 
             // Align
             $('#align').val(function() {
-                var v = $img.css("float");
+                var v = $img.css("float") || $img.css("vertical-align");
 
                 if (v) {
                     return v;
@@ -542,6 +547,10 @@
 
                 $('#margin_left, #margin_right').val('auto');
             } else {
+                if (/(top|middle|bottom)/.test(v)) {
+                    $(img).css("vertical-align", v);
+                }
+                
                 // remove float etc.
                 $(img).css('float', v).css('display', function() {
                     if (this.style.display === "block" && this.style.marginLeft === "auto" && this.style.marginRight === "auto") {

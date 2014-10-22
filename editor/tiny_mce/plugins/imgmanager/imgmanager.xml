@@ -115,9 +115,12 @@
         <param name="border_color" type="text" class="color" size="10" default="#000000" label="WF_PARAM_BORDER_COLOR" description="WF_PARAM_BORDER_COLOR_DESC"/>
         <param name="align" type="list" default="" label="WF_PARAM_ALIGN_DEFAULT" description="WF_PARAM_ALIGN_DEFAULT_DESC">
             <option value="">WF_OPTION_NOT_SET</option>
-            <option value="center">WF_OPTION_ALIGN_CENTER</option>
             <option value="left">WF_OPTION_ALIGN_LEFT</option>
+            <option value="center">WF_OPTION_ALIGN_CENTER</option>
             <option value="right">WF_OPTION_ALIGN_RIGHT</option>
+            <option value="top">WF_OPTION_ALIGN_TOP</option>
+            <option value="middle">WF_OPTION_ALIGN_MIDDLE</option>
+            <option value="bottom">WF_OPTION_ALIGN_BOTTOM</option>
         </param>
         <param name="always_include_dimensions" type="radio" default="0" label="WF_IMGMANAGER_PARAM_ALWAYS_INCLUDE_DIMENSIONS" description="WF_IMGMANAGER_PARAM_ALWAYS_INCLUDE_DIMENSIONS_DESC">
             <option value="1">WF_OPTION_YES</option>
