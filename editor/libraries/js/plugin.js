@@ -362,7 +362,7 @@
 
                 var $picker = $('<span role="button" class="pickcolor_icon" title="' + self.translate('browse') + '" id="' + id + '_pick"></span>').insertAfter(this).toggleClass('disabled', $(this).is(':disabled')).attr('aria-disabled', function() {
                     return $(this).hasClass('disabled');
-                });
+                }).css('background-color', $(this).val());
 
                 $(this).bind('pick', function() {
                     $(this).next('span.pickcolor_icon').css('background-color', $(this).val());
