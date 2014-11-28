@@ -76,9 +76,10 @@ var BrowserDialog = {
     selectFile : function(file) {
         var self 	= this;
         var name 	= file.title;
-        var src		= $.String.path(WFFileBrowser.get('getBaseDir'), file.id);
 
-        src	= src.charAt(0) == '/' ? src.substring(1) : src;			
+        var src = $(file).data('url');
+
+        src = src.charAt(0) == '/' ? src.substring(1) : src;			
         $('#src').val(src);
     }
 };
