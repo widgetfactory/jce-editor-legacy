@@ -340,9 +340,9 @@
                 }
 
                 if ($('#' + n).is(':checkbox')) {
-                    $('#' + n).prop('checked', parseFloat(v));
+                    $('#' + n).prop('checked', parseFloat(v)).change();
                 } else {
-                    $('#' + n).val(v);
+                    $('#' + n).val(v).change();
                 }
             }
         },
@@ -356,26 +356,28 @@
         createColourPickers: function() {
             var self = this, ed = tinyMCEPopup.editor, doc = ed.getDoc();
 
-            $('input.color, input.colour').each(function() {
+            $('input.color').each(function() {
                 var id = $(this).attr('id');
                 var ev = $(this).get(0).onchange;
 
                 var $picker = $('<span role="button" class="pickcolor_icon" title="' + self.translate('browse') + '" id="' + id + '_pick"></span>').insertAfter(this).toggleClass('disabled', $(this).is(':disabled')).attr('aria-disabled', function() {
                     return $(this).hasClass('disabled');
-                }).css('background-color', $(this).val());
+                });
 
                 $(this).bind('pick', function() {
                     $(this).next('span.pickcolor_icon').css('background-color', $(this).val());
                 });
-
-                // need to use direct call to onchange event for tinyMCEPopup.pickColor callback
-                $(this).get(0).onchange = function() {
+                
+                $(this).change(function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
                     $(this).trigger('pick');
 
                     if ($.isFunction(ev)) {
                         ev.call(this);
                     }
-                };
+                });
 
                 // get stylesheets form editor
                 var stylesheets = [];
