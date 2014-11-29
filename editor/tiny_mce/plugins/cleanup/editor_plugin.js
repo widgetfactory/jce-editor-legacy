@@ -189,6 +189,35 @@
                         node.attr(name, null);
                     }
                 });
+                
+                ed.serializer.addNodeFilter('br', function(nodes, name) {
+                    var i = nodes.length, node, k;
+                    
+                    if (i) {
+                        while (i--) {
+                            node = nodes[i];
+                            // no nodes before this one, so it must be the first
+                            if (!node.prev) {
+                                node.remove();
+                            }
+                        }
+                    }
+                });
+                
+                // remove br in Gecko
+                ed.parser.addNodeFilter('br', function(nodes, name) {
+                    var i = nodes.length, node, k;
+                    
+                    if (i) {
+                        while (i--) {
+                            node = nodes[i];
+                            // no nodes before this one, so it must be the first
+                            if (!node.prev) {
+                                node.remove();
+                            }
+                        }
+                    }
+                });
 
             });
             // run cleanup with default settings
@@ -225,6 +254,9 @@
 
             // Cleanup callback
             ed.onBeforeSetContent.add(function(ed, o) {
+                // remove br tag added by Firefox
+                o.content = o.content.replace(/^<br>/, '');
+                
                 // Geshi
                 o.content = self.convertFromGeshi(o.content);
 
@@ -246,8 +278,7 @@
             });
 
             // Cleanup callback
-            ed.onPostProcess.add(function(ed, o) {
-                
+            ed.onPostProcess.add(function(ed, o) {                                
                 if (o.set) {
                     // Geshi
                     o.content = self.convertFromGeshi(o.content);
@@ -295,7 +326,7 @@
                 }
             });
 
-            ed.onSaveContent.add(function(ed, o) {
+            ed.onSaveContent.add(function(ed, o) {                
                 // Convert entities to characters
                 if (ed.getParam('cleanup_pluginmode')) {
 

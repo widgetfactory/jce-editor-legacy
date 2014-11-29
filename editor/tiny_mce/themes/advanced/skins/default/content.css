@@ -32,3 +32,5 @@ img::selection {
 /** bookmark **/
 span[data-mce-type="bookmark"] {font-size: 0;}
 pre.mcePreformatted {margin:0;padding:0;}
+
+[_moz_editor_bogus_node] {display:none;}
