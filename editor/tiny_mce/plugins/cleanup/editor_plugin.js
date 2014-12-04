@@ -161,7 +161,7 @@
                         node = nodes[i], fc = node.firstChild;
                         node.attr('data-mce-bootstrap', null);
 
-                        if (fc && fc.value === '\u00a0' || fc.value === '&nbsp;') {
+                        if (fc && (fc.value === '\u00a0' || fc.value === '&nbsp;')) {
                             fc.remove();
                         }
                     }
@@ -196,8 +196,9 @@
                     if (i) {
                         while (i--) {
                             node = nodes[i];
-                            // no nodes before this one, so it must be the first
-                            if (!node.prev) {
+
+                            // parent node is body
+                            if (node.parent && node.parent.name === "body" && !node.prev) {                                
                                 node.remove();
                             }
                         }
@@ -211,8 +212,9 @@
                     if (i) {
                         while (i--) {
                             node = nodes[i];
-                            // no nodes before this one, so it must be the first
-                            if (!node.prev) {
+                           
+                            // parent node is body
+                            if (node.parent && node.parent.name === "body" && !node.prev) {                                
                                 node.remove();
                             }
                         }
