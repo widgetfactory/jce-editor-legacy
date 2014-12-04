@@ -31,7 +31,7 @@ class WFCleanupPluginConfig {
         }
 
         // set "plugin mode"
-        $settings['cleanup_pluginmode'] = $wf->getParam('cleanup.pluginmode', 0, 0);
+        $settings['cleanup_pluginmode'] = $wf->getParam('editor.cleanup_pluginmode', 0, 0);
         
         // get verify html (default is true)
         $settings['verify_html'] = $wf->getParam('editor.verify_html', 1, 1, 'boolean', false);
