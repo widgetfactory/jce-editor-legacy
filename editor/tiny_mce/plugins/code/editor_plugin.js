@@ -246,8 +246,10 @@
             }
 
             p = JSON.parse(n.attr('data-mce-json')) || {};
-
-            p.type = n.attr('data-mce-type') || p.type || 'text/javascript';
+            
+            if (!p.type) {
+                p.type = n.attr('data-mce-type') || 'text/javascript';
+            }
 
             node = new Node('script', 1);
 
@@ -268,6 +270,10 @@
             }
 
             each(p, function(v, k) {
+                if (k === "type") {
+                    v = v.replace(/mce-/, '');
+                }
+ 
                 node.attr(k, v);
             });
             
@@ -290,8 +296,10 @@
             }
 
             p = JSON.parse(n.attr('data-mce-json')) || {};
-
-            p.type = 'text/css';
+            
+            if (!p.type) {
+                p.type = 'text/css';
+            }
 
             node = new Node('style', 1);
 
@@ -319,6 +327,10 @@
             }
 
             each(p, function(v, k) {
+                if (k === "type") {
+                    v = v.replace(/mce-/, '');
+                }
+                
                 node.attr(k, v);
             });
             
@@ -355,7 +367,7 @@
                 return;
 
             each(n.attributes, function(at) {
-                if (at.name.indexOf('data-mce-') !== -1 || at.name == 'type')
+                if (at.name.indexOf('data-mce-') !== -1)
                     return;
 
                 p[at.name] = at.value;
