@@ -15,10 +15,14 @@
     }
 
     var fontIconRe = /<([a-z0-9]+)([^>]+)class="([^"]*)(glyph|uk-)?(fa|icon)-([\w-]+)([^"]*)"([^>]*)>(&nbsp;|\u00a0)?<\/\1>/gi;
-    
-    var emptyRx    = /<(ol|ul|sub|sup|blockquote|span|font|a|table|tbody|tr|strong|em|b|i)\b([^>]+)><\/\1>/gi;
-    var paddedRx   = /<(p|h1|h2|h3|h4|h5|h6|pre|div|address|caption)\b([^>]+)>(&nbsp;|\u00a0)<\/\1>/gi;
 
+    var emptyRx = /<(ol|ul|sub|sup|blockquote|span|font|a|table|tbody|tr|strong|em|b|i)\b([^>]+)><\/\1>/gi;
+    var paddedRx = /<(p|h1|h2|h3|h4|h5|h6|pre|div|address|caption)\b([^>]+)>(&nbsp;|\u00a0)<\/\1>/gi;
+
+    var children = '#|a|abbr|area|address|article|aside|audio|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|' +
+    'figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|' +
+    'p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var|video';
+        
     tinymce.create('tinymce.plugins.CleanupPlugin', {
         init: function(ed, url) {
             var self = this;
@@ -33,11 +37,16 @@
                 // reset attribute order for anchor tags
                 ed.schema.addValidElements('a[href|target|ping|rel|media|type|id|name|accesskey|class|dir|draggable|download|item|hidden|itemprop|role|spellcheck|style|subject|title|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]');
                 
+                // try add phrasing and flow elements to anchor tag
+                if (ed.settings.schema === "html5") {
+                    ed.schema.addValidChildren('a[' + children + ']');
+                }
+
                 // add support for picture tag
                 ed.schema.addValidElements('picture[id|accesskey|class|dir|lang|style|tabindex|title|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]');
                 ed.schema.addValidElements('source[src|srcset|media|type|sizes|id|accesskey|class|dir|lang|style|tabindex|title]');
                 ed.schema.addValidChildren('picture[source|img]');
-                
+
                 if (ed.settings.validate) {
                     // add support for "bootstrap" icons
                     var elements = ed.schema.elements;
@@ -125,12 +134,12 @@
                         if (ed.schema.isValidChild('body', name)) {
                             while (i--) {
                                 node = nodes[i];
-                                
+
                                 // don't remove system spans
                                 if (name === 'span' && node.attr('data-mce-type')) {
                                     continue;
                                 }
-                                
+
                                 node.unwrap();
                             }
                         }
@@ -150,7 +159,7 @@
                             if (!node.firstChild) {
                                 node.append(new Node('#text', '3')).value = '\u00a0';
                             }
-                    }
+                        }
                     }
                 });
 
@@ -189,32 +198,32 @@
                         node.attr(name, null);
                     }
                 });
-                
+
                 ed.serializer.addNodeFilter('br', function(nodes, name) {
                     var i = nodes.length, node, k;
-                    
+
                     if (i) {
                         while (i--) {
                             node = nodes[i];
 
                             // parent node is body
-                            if (node.parent && node.parent.name === "body" && !node.prev) {                                
+                            if (node.parent && node.parent.name === "body" && !node.prev) {
                                 node.remove();
                             }
                         }
                     }
                 });
-                
+
                 // remove br in Gecko
                 ed.parser.addNodeFilter('br', function(nodes, name) {
                     var i = nodes.length, node, k;
-                    
+
                     if (i) {
                         while (i--) {
                             node = nodes[i];
-                           
+
                             // parent node is body
-                            if (node.parent && node.parent.name === "body" && !node.prev) {                                
+                            if (node.parent && node.parent.name === "body" && !node.prev) {
                                 node.remove();
                             }
                         }
@@ -258,7 +267,7 @@
             ed.onBeforeSetContent.add(function(ed, o) {
                 // remove br tag added by Firefox
                 o.content = o.content.replace(/^<br>/, '');
-                
+
                 // Geshi
                 o.content = self.convertFromGeshi(o.content);
 
@@ -271,16 +280,16 @@
                         o.content = o.content.replace(new RegExp('<([^>]+)(' + s.replace(/,/g, '|') + ')="([^"]+)"([^>]*)>', 'gi'), '<$1$4>');
                     }
                 }
-                
+
                 // pad bootstrap icons
                 o.content = o.content.replace(fontIconRe, '<$1$2class="$3$4$5-$6$7"$8>&nbsp;</$1>');
-                
+
                 // padd some empty tags
                 o.content = o.content.replace(/<(a|i|span)([^>]+)><\/\1>/gi, '<$1$2>&nbsp;</$1>');
             });
 
             // Cleanup callback
-            ed.onPostProcess.add(function(ed, o) {                                
+            ed.onPostProcess.add(function(ed, o) {
                 if (o.set) {
                     // Geshi
                     o.content = self.convertFromGeshi(o.content);
@@ -299,7 +308,7 @@
                     if (ed.settings.validate === false) {
                         // fix body content
                         o.content = o.content.replace(/<body([^>]*)>([\s\S]*)<\/body>/, '$2');
-                        
+
                         if (!ed.getParam('remove_tag_padding')) {
                             // pad empty elements
                             o.content = o.content.replace(/<(p|h1|h2|h3|h4|h5|h6|th|td|pre|div|address|caption)([^>]*)><\/\1>/gi, '<$1$2>&nbsp;</$1>');
@@ -312,7 +321,7 @@
 
                     // clean bootstrap icons
                     o.content = o.content.replace(fontIconRe, '<$1$2class="$3$4$5-$6$7"$8></$1>');
-                    
+
                     // clean empty tags
                     o.content = o.content.replace(/<(a|i|span)([^>]+)>(&nbsp;|\u00a0)<\/\1>/gi, '<$1$2></$1>');
 
@@ -320,7 +329,7 @@
                     if (ed.getParam('remove_div_padding')) {
                         o.content = o.content.replace(/<div([^>]*)>(&nbsp;|\u00a0)<\/div>/g, '<div$1></div>');
                     }
-                    
+
                     // remove padding on everything
                     if (ed.getParam('pad_empty_tags', true) === false) {
                         o.content = o.content.replace(paddedRx, '<$1$2></$1>');
@@ -328,7 +337,7 @@
                 }
             });
 
-            ed.onSaveContent.add(function(ed, o) {                
+            ed.onSaveContent.add(function(ed, o) {
                 // Convert entities to characters
                 if (ed.getParam('cleanup_pluginmode')) {
 
