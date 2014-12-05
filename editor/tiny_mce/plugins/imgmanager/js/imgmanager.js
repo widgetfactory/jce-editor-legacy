@@ -663,7 +663,7 @@
                 this._setRollover(src);
             } else {
                 name = $.String.stripExt(name);
-                name = name.replace(/_/g, ' ');
+                name = name.replace(/[-_]+/g, ' ');
 
                 $('#alt').val(name);
                 $('#onmouseout').val(src);
