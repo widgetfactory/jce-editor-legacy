@@ -44,13 +44,38 @@
                 $('#onmouseover, #onmouseout').removeClass('focus');
                 $(this).addClass('focus');
             });
+            
+            // add margin events
+            $('#margin_top, #margin_right, #margin_bottom, #margin_left').change(function() {
+                self.setMargins();
+            });
+            // add margin equal values event
+            $('#margin_check').click(function() {
+                self.setMargins();
+            });
+            // set styles events
+            $('#align, #clear, #border_width, #border_styles, #border_color, #dir').change(function() {
+                self.updateStyles();
+            });
+
+            // set border click event
+            $('#border').click(function() {
+                self.setBorder();
+            });
+
+            $('#style').change(function() {
+                self.setStyles();
+            });
+
+            $('#classlist').change(function() {
+                self.setClasses(this.value);
+            });
 
             // setup plugin
             $.Plugin.init({
                 selectChange: function() {
                     ImageManagerDialog.updateStyles();
                 }
-
             });
 
             if (n && n.nodeName == 'IMG') {
@@ -145,32 +170,6 @@
             } else {
                 $.Plugin.setDefaults(this.settings.defaults);
             }
-
-            // add margin events
-            $('#margin_top, #margin_right, #margin_bottom, #margin_left').change(function() {
-                self.setMargins();
-            });
-            // add margin equal values event
-            $('#margin_check').click(function() {
-                self.setMargins();
-            });
-            // set styles events
-            $('#align, #clear, #border_width, #border_styles, #border_color, #dir').change(function() {
-                self.updateStyles();
-            });
-
-            // set border click event
-            $('#border').click(function() {
-                self.setBorder();
-            });
-
-            $('#style').change(function() {
-                self.setStyles();
-            });
-
-            $('#classlist').change(function() {
-                self.setClasses(this.value);
-            });
 
             // Create File Browser
             WFFileBrowser.init($('#src'), {
@@ -436,6 +435,8 @@
             var s = $('#border').is(':checked');
 
             $('#border~:input, #border~span, #border~label').attr('disabled', !s).toggleClass('disabled', !s);
+            
+            $('#border_color').change();
 
             this.updateStyles();
         },
