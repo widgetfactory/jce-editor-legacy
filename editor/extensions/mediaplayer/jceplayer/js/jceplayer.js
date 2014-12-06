@@ -188,8 +188,12 @@ WFMediaPlayer.init({
             if (self.props[k] === v || v === '') {
                 return;
             }
+            
+            if (v && typeof v === "string") {
+                v = $.String.encodeURI(v, true);
+            }
 
-            data.push(k + '=' + $.String.encodeURI(v, true));
+            data.push(k + '=' + v);
         });
 
         return {
