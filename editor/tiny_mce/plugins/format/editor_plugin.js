@@ -129,19 +129,32 @@
                         break;
 
                     case 'InsertHorizontalRule':
-                        if (n.nodeName === "P") {   
-                            // insert hr marker
-                            ed.execCommand('mceInsertContent', false, '<hr id="mce-hr-marker" />', {skip_undo: 1});        
-                            
+                        if (n.nodeName === "P") {                            
                             // add to undo stack
                             ed.undoManager.add();
 
-                            var ns = n.nextSibling, el, hr = ed.dom.get('mce-hr-marker');
+                            // insert hr marker
+                            ed.execCommand('mceInsertContent', false, '<div id="mce-hr-marker" />', {skip_undo: 1});
+
+                            var m = ed.dom.get('mce-hr-marker');
+                            
+                            // remove id
+                            ed.dom.setAttrib(m, 'id', '');
+                            
+                            // create hr
+                            var hr = ed.dom.create('hr');
+                            
+                            // replace marker with hr
+                            ed.dom.replace(hr, m);
+                            
+                            // get marker sibling
+                            var ns = m.nextSibling;
 
                             // check if paragraph has a sibling and it is a block element. If not, create a new paragraph after it
                             if (!ed.dom.isBlock(ns)) {
-                                el = ed.getParam('forced_root_block') || 'br';
-                                ns = ed.dom.create(el);
+                                var el = ed.getParam('forced_root_block') || 'br';
+                                
+                                ns = ed.dom.add(ed.getBody(), el);
 
                                 if (el !== 'br') {
                                     if (!tinymce.isIE || tinymce.isIE11) {
@@ -149,19 +162,9 @@
                                     }
                                 }
 
-                                ed.dom.insertAfter(ns, n);
                                 // move cursor to beginning of new paragraph
                                 ed.selection.setCursorLocation(ns, 0);
-                            } else {
-                                // move cursor to end of paragraph
-                                ed.selection.setCursorLocation(ns, ns.childNodes.length);
                             }
-
-                            // move the marker after the first paragraph
-                            ed.dom.insertAfter(hr, n);
-                            
-                            // remove id
-                            ed.dom.setAttrib(hr, 'id', '');
                             
                             // trigger nodeChanged event to update path etc.
                             ed.nodeChanged();
