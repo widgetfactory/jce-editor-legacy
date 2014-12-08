@@ -130,11 +130,11 @@
 
                     case 'InsertHorizontalRule':
                         if (n.nodeName === "P") {                            
+                            // insert hr marker
+                            ed.execCommand('mceInsertContent', false, '<div id="mce-hr-marker"></div>');
+                            
                             // add to undo stack
                             ed.undoManager.add();
-
-                            // insert hr marker
-                            ed.execCommand('mceInsertContent', false, '<div id="mce-hr-marker" />', {skip_undo: 1});
 
                             var m = ed.dom.get('mce-hr-marker');
                             
