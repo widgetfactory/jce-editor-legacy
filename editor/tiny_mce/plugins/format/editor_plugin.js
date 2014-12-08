@@ -128,10 +128,10 @@
 
                         break;
 
-                    case 'InsertHorizontalRule':
+                    /*case 'InsertHorizontalRule':
                         if (n.nodeName === "P") {                            
                             // insert hr marker
-                            ed.execCommand('mceInsertContent', false, '<div id="mce-hr-marker"></div>');
+                            ed.execCommand('mceInsertContent', false, '<hr id="mce-hr-marker" />');
                             
                             // add to undo stack
                             ed.undoManager.add();
@@ -140,12 +140,6 @@
                             
                             // remove id
                             ed.dom.setAttrib(m, 'id', '');
-                            
-                            // create hr
-                            var hr = ed.dom.create('hr');
-                            
-                            // replace marker with hr
-                            ed.dom.replace(hr, m);
                             
                             // get marker sibling
                             var ns = m.nextSibling;
@@ -171,7 +165,7 @@
 
                             o.terminate = true;
                         }
-                        break;
+                        break;*/
                 }
             });
 
