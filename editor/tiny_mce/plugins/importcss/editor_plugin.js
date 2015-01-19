@@ -48,9 +48,7 @@
 
                 fmt = {
                     inline: 'span',
-                    attributes: {
-                        'class': o['class']
-                    },
+                    classes: o['class'],
                     selector: '*'
                 };
 
