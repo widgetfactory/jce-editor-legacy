@@ -2,7 +2,8 @@ html, body{height:100%;}
 .mceContentBody{height:100%;min-width:90%;padding:5px;}
 body, td, pre {color:#000; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:11px; margin:8px;}
 body {background:#FFF;}
-body.mceContentReset {background: #FFFFFF none !important; color:#000000 !important; text-align:left !important; font-size:12px !important;}
+body.mceContentReset {background: #FFFFFF none !important; color:#000000 !important; font-size:12px !important;}
+body[dir="ltr"].mceContentReset {text-align:left !important;}
 h1 {font-size: 2em}
 h2 {font-size: 1.5em}
 h3 {font-size: 1.17em}
