@@ -114,7 +114,7 @@ var WFPopups = WFExtensions.add('Popups', {
             }
         });
 
-        if(this.popup) {			
+        if(n && this.popup) {			
             // Select popup in list
             this.selectPopup(this.popup);
             
@@ -230,11 +230,11 @@ var WFPopups = WFExtensions.add('Popups', {
     getAttributes : function(n, index) {
         var ed = tinyMCEPopup.editor, k, v, at, data;
 
-        if(n.nodeName != 'A') {
+        if(n || n.nodeName != 'A') {
             n = ed.dom.getParent(n, 'a');
         }
 
-        if(this.isPopup(n)) {
+        if(n && this.isPopup(n)) {
             data = this._call('getAttributes', [n, index]);
         }
 
