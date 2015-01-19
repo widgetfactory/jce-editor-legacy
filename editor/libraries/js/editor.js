@@ -82,7 +82,7 @@ function jInsertEditorText(text, editor) {
                 document_base_url: base,
                 site_url: site,
                 mode: 'textareas',
-                entity_encoding: 'raw',
+                //entity_encoding: 'raw',
                 editor_selector: 'wfEditor',
                 editor_deselector: 'wfNoEditor',
                 urlconverter_callback: 'WFEditor.convertURL',
