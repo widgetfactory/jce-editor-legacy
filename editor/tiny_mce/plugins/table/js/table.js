@@ -17,7 +17,7 @@ var TableDialog = {
             return this.initMerge();
         }
 
-        addClassesToList('classlist', "table_styles");
+        TinyMCE_Utils.addClassesToList('classlist', "table_styles");
 
         if (this.html5) {
             // hide HTML4 only attributes (tframe = frame)

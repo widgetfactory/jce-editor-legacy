@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2015 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -253,33 +253,11 @@ class WFEditorPlugin extends JObject {
 
         if ($document->get('standalone') == 0) {
             $document->addScript(array('tiny_mce_popup'), 'tiny_mce');
-            $document->addScript(array('tiny_mce_utils'), 'libraries');
         }
 
-        $document->addScript(array('jquery-' . WF_JQUERY . '.min', 'jquery-ui-' . WF_JQUERYUI . '.custom.min', 'jquery.ui.touch-punch.min'), 'jquery');
-
-        // add colorpicker
-        if ($this->get('colorpicker')) {
-            $wf = WFEditor::getInstance();
-            
-            $document->addScript(array('colorpicker'), 'libraries');
-        }
-
-        $document->addScript(array(
-            'html5',
-            'select',
-            'tips',
-            'plugin'
-        ), 'libraries');
-
+        $document->addScript(array('jquery.min', 'jquery-ui.min'), 'jquery');      
+        $document->addScript(array('plugin.full.js'));
         $document->addStyleSheet(array('plugin'), 'libraries');
-        
-        // MediaElement in the future perhaps?
-        
-        /*if ($this->get('mediaplayer')) {
-            $document->addScript(array('mediaelement-and-player.min'), 'mediaelement');
-            $document->addStyleSheet(array('mediaelementplayer.min'), 'mediaelement');
-        }*/
 
         // add custom plugin.css if exists
         if (is_file(JPATH_SITE . '/media/jce/css/plugin.css')) {

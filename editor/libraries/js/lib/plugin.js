@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2015 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -9,17 +9,88 @@
  */
 
 // String functions
-(function($) {
-    var standalone = typeof tinyMCEPopup == 'undefined';
+(function ($) {
+    // set standalone flag
+    var standalone = true;
+
+    // check for tinyMCEPopup
+    if (window.tinyMCEPopup) {
+        var TinyMCE_Utils = {};
+
+        TinyMCE_Utils.fillClassList = function (id) {
+            var ed = tinyMCEPopup.editor, lst = document.getElementById(id), v, cl;
+
+            if (v = tinyMCEPopup.getParam('theme_advanced_styles')) {
+                cl = [];
+
+                tinymce.each(v.split(';'), function (v) {
+                    var p = v.split('=');
+
+                    cl.push({'title': p[0], 'class': p[1]});
+                });
+
+            } else {
+                cl = ed.dom.getClasses();
+            }
+
+            tinymce.each(['jcepopup', 'jcetooltip'], function (o) {
+                lst.options[lst.options.length] = new Option(o, o);
+            });
+
+            if (cl.length > 0) {
+                tinymce.each(cl, function (o) {
+                    lst.options[lst.options.length] = new Option(o.title || o['class'], o['class']);
+                });
+
+            }
+        };
+
+        TinyMCE_Utils.updateColor = function (parent) {
+            if (typeof parent == 'string') {
+                parent = document.getElementById(parent);
+            }
+            document.getElementById(parent.id + '_pick').style.backgroundColor = parent.value;
+        };
+
+        TinyMCE_Utils.addClassesToList = function (list_id, specific_option) {
+            // Setup class droplist
+            var styleSelectElm = document.getElementById(list_id);
+            var styles = tinyMCEPopup.getParam('theme_advanced_styles', false);
+            styles = tinyMCEPopup.getParam(specific_option, styles);
+
+            if (styles) {
+                var stylesAr = styles.split(';');
+
+                for (var i = 0; i < stylesAr.length; i++) {
+                    if (stylesAr != "") {
+                        var key, value;
+
+                        key = stylesAr[i].split('=')[0];
+                        value = stylesAr[i].split('=')[1];
+
+                        styleSelectElm.options[styleSelectElm.length] = new Option(key, value);
+                    }
+                }
+            } else {
+                tinymce.each(tinyMCEPopup.editor.dom.getClasses(), function (o) {
+                    styleSelectElm.options[styleSelectElm.length] = new Option(o.title || o['class'], o['class']);
+                });
+            }
+        };
+
+        this.TinyMCE_Utils = TinyMCE_Utils;
+
+        standalone = false;
+    }
 
     var $tmp = document.createElement('div');
 
     // check for canvas
     $.support.canvas = !!document.createElement('canvas').getContext;
     // check for background size
-    $.support.backgroundSize = (function() {
+    $.support.backgroundSize = (function () {
         var s = false;
-        $.each(['backgroundSize', 'MozBackgroundSize', 'WebkitBackgroundSize', 'OBackgroundSize'], function() {
+        $.each(['backgroundSize', 'MozBackgroundSize', 'WebkitBackgroundSize', 'OBackgroundSize'], function () {
             if (typeof $tmp.style[this] !== 'undefined') {
                 s = true;
             }
@@ -31,7 +102,7 @@
     /* http://downloads.beninzambia.com/blog/acrobat_detection.js.txt
      * Modified for our purposes
      */
-    $.support.pdf = (function() {
+    $.support.pdf = (function () {
         try {
             // IE
             if (!$.support.cssFloat) {
@@ -88,7 +159,7 @@
      * http://www.modernizr.com
      * Copyright (c) 2009-2011 Faruk Ates, Paul Irish, Alex Sexton
      */
-    $.support.video = (function() {
+    $.support.video = (function () {
         var el = document.createElement('video'), bool = false;
         // IE9 Running on Windows Server SKU can cause an exception to be thrown, bug #224
         try {
@@ -115,7 +186,7 @@
      * http://www.modernizr.com
      * Copyright (c) 2009-2011 Faruk Ates, Paul Irish, Alex Sexton
      */
-    $.support.audio = (function() {
+    $.support.audio = (function () {
         var el = document.createElement('audio'), bool = false;
 
         try {
@@ -147,14 +218,14 @@
             help: $.noop,
             alerts: ''
         },
-        getURI: function(absolute) {
+        getURI: function (absolute) {
             if (!standalone) {
                 return tinyMCEPopup.editor.documentBaseURI.getURI(absolute);
             }
 
             return (absolute) ? this.options.root : this.options.site;
         },
-        init: function(options) {
+        init: function (options) {
             var self = this;
 
             $.extend(this.options, options);
@@ -219,7 +290,7 @@
             });
 
             // add button actions
-            $('button#cancel, input#cancel').click(function(e) {
+            $('button#cancel, input#cancel').click(function (e) {
                 tinyMCEPopup.close();
                 e.preventDefault();
             });
@@ -229,7 +300,7 @@
 
             // activate tabs - add activate function to fix bc issue with new JQuery UI
             $('#tabs').tabs({
-                activate: function(e, ui) {
+                activate: function (e, ui) {
                     $(ui.newPanel).removeClass('ui-tabs-hide').siblings('.ui-tabs-panel').addClass('ui-tabs-hide');
                 }
             });
@@ -253,7 +324,7 @@
         /**
          * HTML5 form widgets
          */
-        _formWidgets: function() {
+        _formWidgets: function () {
             var self = this;
 
             $('input[placeholder], textarea[placeholder]').placeholder();
@@ -264,17 +335,17 @@
 
             $(':input[min]').min();
         },
-        getName: function() {
+        getName: function () {
             return $('body').data('plugin');
         },
-        getPath: function(plugin) {
+        getPath: function (plugin) {
             if (!standalone) {
                 return tinyMCEPopup.getParam('site_url') + 'components/com_jce/editor/tiny_mce/plugins/' + this.getName();
             }
 
             return this.options.site + 'components/com_jce/editor/tiny_mce/plugins/' + this.getName();
         },
-        loadLanguage: function() {
+        loadLanguage: function () {
             if (!standalone) {
                 var ed = tinyMCEPopup.editor, u = ed.getParam('document_base_url') + 'components/com_jce/editor/tiny_mce';
 
@@ -288,7 +359,7 @@
                 }
             }
         },
-        help: function() {
+        help: function () {
             if (!standalone) {
                 var ed = tinyMCEPopup.editor;
 
@@ -304,7 +375,7 @@
                 this.options.help.call(this, this.getName());
             }
         },
-        setDimensions: function(wo, ho, prefix) {
+        setDimensions: function (wo, ho, prefix) {
             prefix = prefix || '';
 
             var w = $('#' + prefix + wo).val();
@@ -329,7 +400,7 @@
             $('#' + prefix + 'tmp_' + ho).val(h);
             $('#' + prefix + 'tmp_' + wo).val(w);
         },
-        setDefaults: function(s) {
+        setDefaults: function (s) {
             var n, v;
 
             for (n in s) {
@@ -346,32 +417,32 @@
                 }
             }
         },
-        setClasses: function(v, n) {
+        setClasses: function (v, n) {
             n = n || 'classes';
 
             var $tmp = $('<span/>').addClass($('#' + n).val()).addClass(v);
 
             $('#' + n).val($tmp.attr('class'));
         },
-        createColourPickers: function() {
+        createColourPickers: function () {
             var self = this, ed = tinyMCEPopup.editor, doc = ed.getDoc();
 
-            $('input.color').each(function() {
+            $('input.color').each(function () {
                 var id = $(this).attr('id');
                 var ev = $(this).get(0).onchange;
 
-                var $picker = $('<span role="button" class="pickcolor_icon" title="' + self.translate('browse') + '" id="' + id + '_pick"></span>').insertAfter(this).toggleClass('disabled', $(this).is(':disabled')).attr('aria-disabled', function() {
+                var $picker = $('<span role="button" class="pickcolor_icon" title="' + self.translate('browse') + '" id="' + id + '_pick"></span>').insertAfter(this).toggleClass('disabled', $(this).is(':disabled')).attr('aria-disabled', function () {
                     return $(this).hasClass('disabled');
                 });
 
-                $(this).bind('pick', function() {
+                $(this).bind('pick', function () {
                     $(this).next('span.pickcolor_icon').css('background-color', $(this).val());
                 });
-                
-                $(this).change(function(e) {
+
+                $(this).change(function (e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    
+
                     $(this).trigger('pick');
 
                     if ($.isFunction(ev)) {
@@ -383,7 +454,7 @@
                 var stylesheets = [];
 
                 if (doc.styleSheets.length) {
-                    $.each(doc.styleSheets, function(i, s) {
+                    $.each(doc.styleSheets, function (i, s) {
                         // only load template stylesheets, not from tinymce plugins
                         if (s.href && s.href.indexOf('tiny_mce') == -1) {
                             stylesheets.push(s);
@@ -414,18 +485,18 @@
                 $(this).colorpicker(settings);
             });
         },
-        createBrowsers: function() {
+        createBrowsers: function () {
             var self = this;
-            $('input.browser').each(function() {
+            $('input.browser').each(function () {
                 var input = this, type = $(this).hasClass('image') ? 'image' : 'file';
 
                 var ev = $(this).get(0).onchange;
 
-                $('<span role="button" class="browser_icon" title="' + self.translate('browse') + '"></span>').click(function() {
-                    return TinyMCE_Utils.openBrowser(this, $(input).attr('id'), type, 'file_browser_callback');
+                $('<span role="button" class="browser_icon" title="' + self.translate('browse') + '"></span>').click(function () {
+                    return tinyMCEPopup.openBrowser($(input).attr('id'), type, 'file_browser_callback');
                 }).insertAfter(this);
 
-                $(this).get(0).onchange = function() {
+                $(this).get(0).onchange = function () {
                     if ($.isFunction(ev)) {
                         ev.call(this);
                     }
@@ -434,7 +505,7 @@
             });
 
         },
-        getLanguage: function() {
+        getLanguage: function () {
             if (!this.language) {
                 var s = $('body').attr('lang') || 'en';
 
@@ -452,7 +523,7 @@
          * @param {Object} o Width / Height Object pair
          * @param {Object} c Width / Height Object pair
          */
-        sizeToFit: function(o, c) {
+        sizeToFit: function (o, c) {
             var x = c.width;
             var y = c.height;
             var w = o.width;
@@ -493,17 +564,17 @@
          *
          * Modified for JQuery
          */
-        addI18n: function(p, o) {
+        addI18n: function (p, o) {
             var i18n = this.i18n;
 
             if ($.type(p) == 'string') {
-                $.each(o, function(k, o) {
+                $.each(o, function (k, o) {
                     i18n[p + '.' + k] = o;
                 });
             } else {
-                $.each(p, function(lc, o) {
-                    $.each(o, function(g, o) {
-                        $.each(o, function(k, o) {
+                $.each(p, function (lc, o) {
+                    $.each(o, function (g, o) {
+                        $.each(o, function (k, o) {
                             if (g === 'common')
                                 i18n[lc + '.' + k] = o;
                             else
@@ -515,7 +586,7 @@
                 });
             }
         },
-        translate: function(s, ds) {
+        translate: function (s, ds) {
             if (!standalone) {
                 return tinyMCEPopup.getLang('dlg.' + s, ds);
             }
@@ -541,7 +612,7 @@
          * @copyright Copyright 2009, Moxiecode Systems AB
          * @licence GNU / LGPL - http://www.gnu.org/copyleft/lesser.html
          */
-        get: function(n, s) {
+        get: function (n, s) {
             var c = document.cookie, e, p = n + "=", b, v;
 
             // Strict mode
@@ -587,7 +658,7 @@
          * @copyright Copyright 2009, Moxiecode Systems AB
          * @licence GNU / LGPL - http://www.gnu.org/copyleft/lesser.html
          */
-        set: function(n, v, e, p, d, s) {
+        set: function (n, v, e, p, d, s) {
             document.cookie = n + "=" + escape(v) +
                     ((e) ? "; expires=" + e.toGMTString() : "") +
                     ((p) ? "; path=" + escape(p) : "") +
@@ -601,16 +672,16 @@
      * JSON XHR
      */
     $.JSON = {
-        queue: function(o) {
+        queue: function (o) {
             var _old = o.complete;
 
-            o.complete = function() {
+            o.complete = function () {
                 if (_old)
                     _old.apply(this, arguments);
             };
 
-            $([$.JSON.queue]).queue("ajax", function() {
-                window.setTimeout(function() {
+            $([$.JSON.queue]).queue("ajax", function () {
+                window.setTimeout(function () {
                     $.ajax(o);
                 }, 500);
 
@@ -631,7 +702,7 @@
          * @param scope
          *            Scope to execute callback in
          */
-        request: function(func, data, callback, scope) {
+        request: function (func, data, callback, scope) {
             var json = {
                 'fn': func
             };
@@ -646,18 +717,18 @@
             // get form input data (including token)
             var fields = $(':input', 'form').serializeArray();
 
-            $.each(fields, function(i, field) {
+            $.each(fields, function (i, field) {
                 args[field.name] = field.value;
             });
 
             // if data is a string or array
             if ($.type(data) === 'string' || $.type(data) === 'array') {
                 $.extend(json, {
-                    'args': $.type(data) === 'string' ? $.String.encodeURI(data) : $.map(data, function(s) {
+                    'args': $.type(data) === 'string' ? $.String.encodeURI(data) : $.map(data, function (s) {
                         if (s && $.type(s) === 'string') {
                             return $.String.encodeURI(s);
                         }
-                        
+
                         return s;
                     })
 
@@ -706,7 +777,7 @@
                 url: url,
                 data: 'json=' + $.JSON.serialize(json) + '&' + $.param(args),
                 dataType: 'text',
-                success: function(o) {
+                success: function (o) {
                     var r;
 
                     if (o) {
@@ -745,19 +816,19 @@
                         return r;
                     }
                 },
-                error: function(e, txt, status) {
+                error: function (e, txt, status) {
                     $.Dialog.alert(status || ('SERVER ERROR - ' + txt.toUpperCase()));
                 }
 
             });
         },
-        serialize: function(o) {
+        serialize: function (o) {
             return JSON.stringify(o);
         }
 
     },
     $.URL = {
-        toAbsolute: function(url) {
+        toAbsolute: function (url) {
             if (!standalone) {
                 return tinyMCEPopup.editor.documentBaseURI.toAbsolute(url);
             }
@@ -767,7 +838,7 @@
             }
             return $.Plugin.getURI(true) + url.substr(0, url.indexOf('/'));
         },
-        toRelative: function(url) {
+        toRelative: function (url) {
             if (!standalone) {
                 return tinyMCEPopup.editor.documentBaseURI.toRelative(url);
             }
@@ -785,20 +856,20 @@
      */
     $.Dialog = {
         counter: 0,
-        _uid: function(p) {
+        _uid: function (p) {
             return (!p ? 'wf_' : p) + (this.counter++);
         },
         /**
          * Basic Dialog
          */
-        dialog: function(title, data, options) {
+        dialog: function (title, data, options) {
             var div = document.createElement('div');
 
             options = $.extend(options, {
                 minWidth: options.minWidth || options.width || 300,
                 minHeight: options.minHeight || options.height || 150,
                 modal: (typeof options.modal === 'undefined') ? true : options.modal,
-                open: function() {
+                open: function () {
                     // adjust modal
                     $(div).dialog('widget').next('div.ui-widget-overlay').css({
                         width: '100%',
@@ -806,7 +877,7 @@
                     });
 
                     // fix buttons
-                    $('div.ui-dialog-buttonset button[icons]', $(div).dialog('widget')).each(function() {
+                    $('div.ui-dialog-buttonset button[icons]', $(div).dialog('widget')).each(function () {
                         var icon = $(this).attr('icons');
 
                         $(this).prepend('<span class="ui-button-icon-primary ui-icon ' + icon + '"/>');
@@ -816,7 +887,7 @@
                         options.onOpen.call();
                     }
                 },
-                close: function() {
+                close: function () {
                     $(this).dialog('destroy').remove();
                 }
 
@@ -832,7 +903,7 @@
         /**
          * Confirm Dialog
          */
-        confirm: function(s, cb, options) {
+        confirm: function (s, cb, options) {
             var html = '<div class="confirm"><span class="icon"></span>' + s + '</div>';
 
             options = $.extend({
@@ -842,7 +913,7 @@
                         icons: {
                             primary: 'ui-icon-check'
                         },
-                        click: function() {
+                        click: function () {
                             cb.call(this, true);
                             $(this).dialog("close");
                         }
@@ -852,7 +923,7 @@
                         icons: {
                             primary: 'ui-icon-close'
                         },
-                        click: function() {
+                        click: function () {
                             cb.call(this, false);
                             $(this).dialog("close");
                         }
@@ -865,14 +936,14 @@
         /**
          * Alert Dialog
          */
-        alert: function(s) {
+        alert: function (s) {
             var html = '<div class="alert"><span class="icon"></span>' + s + '</div>';
 
             var options = {
                 resizable: false,
                 buttons: [{
                         text: $.Plugin.translate('ok', 'OK'),
-                        click: function() {
+                        click: function () {
                             $(this).dialog("close");
                         }
                     }]
@@ -883,7 +954,7 @@
         /**
          * Prompt Dialog
          */
-        prompt: function(title, options) {
+        prompt: function (title, options) {
             var html = '<p>';
 
             var id = options.id || 'dialog-prompt', name = options.name || 'prompt', v = options.value || '';
@@ -911,7 +982,7 @@
                         icons: {
                             primary: 'ui-icon-check'
                         },
-                        click: function() {
+                        click: function () {
                             if ($.isFunction(options.confirm)) {
                                 options.confirm.call(this, $('#' + id).val());
                             } else {
@@ -920,7 +991,7 @@
                         }
 
                     }],
-                onOpen: function() {
+                onOpen: function () {
                     $('#' + options.id).focus();
                 }
 
@@ -931,7 +1002,7 @@
         /**
          * Upload Dialog
          */
-        upload: function(options) {
+        upload: function (options) {
             var div = document.createElement('div');
 
             $(div).attr('id', 'upload-body').append(
@@ -957,7 +1028,7 @@
                         }
                     }, {
                         text: $.Plugin.translate('upload', 'Upload'),
-                        click: function() {
+                        click: function () {
                             if ($.isFunction(options.upload)) {
                                 options.upload.call();
                             }
@@ -968,7 +1039,7 @@
 
                     }, {
                         text: $.Plugin.translate('close', 'Close'),
-                        click: function() {
+                        click: function () {
                             $(this).dialog("close");
                         },
                         icons: {
@@ -983,13 +1054,13 @@
         /**
          * IFrame Dialog
          */
-        iframe: function(name, url, options) {
+        iframe: function (name, url, options) {
             var div = document.createElement('div');
 
             options = $.extend({
                 width: $(window).width() - 100,
                 height: $(window).height() - 50,
-                onOpen: function() {
+                onOpen: function () {
                     var iframe = document.createElement('iframe');
 
                     $(div).addClass('loading');
@@ -1001,7 +1072,7 @@
                     }).css({
                         width: '100%',
                         height: '99%'
-                    }).load(function() {
+                    }).load(function () {
                         var win = this.contentWindow, d = win.document, b = d.body;
                         var w = win.innerWidth || b.clientWidth;
                         var h = win.innerHeight || b.clientHeight;
@@ -1032,7 +1103,7 @@
         /**
          * Media Dialog
          */
-        media: function(name, url, options) {
+        media: function (name, url, options) {
             var self = this;
             options = options || {};
 
@@ -1044,12 +1115,12 @@
                 width: ww - Math.round(ww / 100 * 10),
                 height: wh - Math.round(wh / 100 * 10),
                 resizable: false,
-                close: function() {
+                close: function () {
                     $(div).empty();
                     $(this).dialog('destroy').remove();
                 },
                 dialogClass: 'ui-preview',
-                onOpen: function() {
+                onOpen: function () {
                     var parent = div.parentNode;
                     // image
                     if (/\.(jpg|jpeg|gif|png)/i.test(url)) {
@@ -1058,7 +1129,7 @@
 
                         var dw = $(parent).width(), dh = $(parent).height();
 
-                        img.onload = function() {
+                        img.onload = function () {
                             if (loaded)
                                 return false;
 
@@ -1087,7 +1158,7 @@
                                 }
                             }
 
-                            $(parent).click(function() {
+                            $(parent).click(function () {
                                 $(div.parentNode).dialog('close');
                             });
 
@@ -1165,7 +1236,7 @@
                         // Parses the default mime types
                         // string into a mimes lookup
                         // map
-                        (function(data) {
+                        (function (data) {
                             var items = data.split(/,/),
                                     i, y, ext;
 
@@ -1182,7 +1253,7 @@
                         var type, props;
 
                         $.each(
-                                mediaTypes, function(k, v) {
+                                mediaTypes, function (k, v) {
                                     if (v.type && v.type == mt) {
                                         type = k;
                                         props = v;
@@ -1296,7 +1367,7 @@
          * More info at: http://phpjs.org
          * php.js is copyright 2011 Kevin van Zonneveld.
          */
-        basename: function(s) {
+        basename: function (s) {
             return s.replace(/^.*[\/\\]/g, '');
         },
         /**
@@ -1304,23 +1375,23 @@
          * More info at: http://phpjs.org
          * php.js is copyright 2011 Kevin van Zonneveld.
          */
-        dirname: function(s) {
+        dirname: function (s) {
             if (/[\\\/]+/.test(s)) {
                 return s.replace(/\\/g, '/').replace(/\/[^\/]*\/?$/, '');
             }
 
             return '';
         },
-        filename: function(s) {
+        filename: function (s) {
             return this.stripExt(this.basename(s));
         },
-        getExt: function(s) {
+        getExt: function (s) {
             return s.substring(s.length, s.lastIndexOf('.') + 1).toLowerCase();
         },
-        stripExt: function(s) {
+        stripExt: function (s) {
             return s.replace(/\.[^.]+$/i, '');
         },
-        pathinfo: function(s) {
+        pathinfo: function (s) {
             var info = {
                 'basename': this.basename(s),
                 'dirname': this.dirname(s),
@@ -1329,7 +1400,7 @@
             };
             return info;
         },
-        path: function(a, b) {
+        path: function (a, b) {
             a = this.clean(a);
             b = this.clean(b);
 
@@ -1341,7 +1412,7 @@
 
             return a + b;
         },
-        clean: function(s) {
+        clean: function (s) {
             if (!/:\/\//.test(s)) {
                 return s.replace(/\/+/g, '/');
             }
@@ -1352,7 +1423,7 @@
          * Based on cleanName function in plupload.js - https://github.com/moxiecode/plupload/blob/master/src/plupload.js
          * Copyright 2013, Moxiecode Systems AB
          */
-        replaceDiacritic: function(s) {
+        replaceDiacritic: function (s) {
             var i, lookup;
 
             // Replace diacritics
@@ -1372,7 +1443,7 @@
 
             return s;
         },
-        _toUnicode: function(s) {
+        _toUnicode: function (s) {
             var c = s.toString(16).toUpperCase();
 
             while (c.length < 4) {
@@ -1381,7 +1452,7 @@
 
             return'\\u' + c;
         },
-        safe: function(s, mode, spaces, textcase) {
+        safe: function (s, mode, spaces, textcase) {
             mode = mode || 'utf-8';
 
             // replace spaces with underscore
@@ -1439,11 +1510,11 @@
 
             return s;
         },
-        query: function(s) {
+        query: function (s) {
             var p = {};
 
             s = this.decode(s);
-            
+
             // nothing to create query from
             if (s.indexOf('=') === -1) {
                 return p;
@@ -1459,7 +1530,7 @@
 
             var pairs = s.replace(/&amp;/g, '&').split('&');
 
-            $.each(pairs, function() {
+            $.each(pairs, function () {
                 var pair = this.split('=');
                 p[pair[0]] = pair[1];
             });
@@ -1471,7 +1542,7 @@
          *
          * Copyright 2010, Moxiecode Systems AB
          */
-        encode: function(s) {
+        encode: function (s) {
             var baseEntities = {
                 '"': '&quot;',
                 "'": '&#39;',
@@ -1479,7 +1550,7 @@
                 '>': '&gt;',
                 '&': '&amp;'
             };
-            return ('' + s).replace(/[<>&\"\']/g, function(chr) {
+            return ('' + s).replace(/[<>&\"\']/g, function (chr) {
                 return baseEntities[chr] || chr;
             });
 
@@ -1489,7 +1560,7 @@
          *
          * Copyright 2010, Moxiecode Systems AB
          */
-        decode: function(s) {
+        decode: function (s) {
             var reverseEntities = {
                 '&lt;': '<',
                 '&gt;': '>',
@@ -1497,7 +1568,7 @@
                 '&quot;': '"',
                 '&apos;': "'"
             };
-            return s.replace(/&(#)?([\w]+);/g, function(all, numeric, value) {
+            return s.replace(/&(#)?([\w]+);/g, function (all, numeric, value) {
                 if (numeric)
                     return String.fromCharCode(value);
 
@@ -1505,13 +1576,13 @@
             });
 
         },
-        escape: function(s) {
+        escape: function (s) {
             return encodeURI(s);
         },
-        unescape: function(s) {
+        unescape: function (s) {
             return decodeURI(s);
         },
-        encodeURI: function(s, preserve_urls) {
+        encodeURI: function (s, preserve_urls) {
             // don't encode local file links
             if (s && s.indexOf('file://') === 0) {
                 return s;
@@ -1520,14 +1591,14 @@
             s = encodeURIComponent(decodeURIComponent(s)).replace(/%2F/g, '/');
 
             if (preserve_urls) {
-                s = s.replace(/%(21|2A|27|28|29|3B|3A|40|26|3D|2B|24|2C|3F|25|23|5B|5D)/g, function(a, b) {
+                s = s.replace(/%(21|2A|27|28|29|3B|3A|40|26|3D|2B|24|2C|3F|25|23|5B|5D)/g, function (a, b) {
                     return String.fromCharCode(parseInt(b, 16));
                 });
             }
 
             return s;
         },
-        buildURI: function(s) {
+        buildURI: function (s) {
             // add http if necessary
             if (/^\s*www\./.test(s)) {
                 s = 'http://' + s;
@@ -1540,7 +1611,7 @@
          * @author Moxiecode
          * @copyright Copyright 2004-2008, Moxiecode Systems AB, All rights reserved.
          */
-        toHex: function(color) {
+        toHex: function (color) {
             var re = new RegExp("rgb\\s*\\(\\s*([0-9]+).*,\\s*([0-9]+).*,\\s*([0-9]+).*\\)", "gi");
 
             var rgb = color.replace(re, "$1,$2,$3").split(',');
@@ -1562,7 +1633,7 @@
          * @author Moxiecode
          * @copyright Copyright  2004-2008, Moxiecode Systems AB, All rights reserved.
          */
-        toRGB: function(color) {
+        toRGB: function (color) {
             if (color.indexOf('#') != -1) {
                 color = color.replace(new RegExp('[^0-9A-F]', 'gi'), '');
 
@@ -1574,10 +1645,10 @@
             }
             return color;
         },
-        ucfirst: function(s) {
+        ucfirst: function (s) {
             return s.charAt(0).toUpperCase() + s.substring(1);
         },
-        formatSize: function(s) {
+        formatSize: function (s) {
             // MB
             if (s > 1048576) {
                 return Math.round((s / 1048576) * 100) /
@@ -1599,7 +1670,7 @@
          * @return Formatted Date / Time
          * @copyright Copyright 2009, Moxiecode Systems AB
          */
-        formatDate: function(time, fmt) {
+        formatDate: function (time, fmt) {
             var date = new Date(time * 1000);
 
             fmt = fmt || '%d/%m/%Y, %H:%M';
@@ -1645,9 +1716,9 @@ if (typeof ColorPicker === 'undefined') {
 }
 
 // UI Tabs backwards compat
-(function($, prototype) {
+(function ($, prototype) {
     var _trigger = prototype._trigger;
-    prototype._trigger = function(type, event, data) {
+    prototype._trigger = function (type, event, data) {
         var ret = _trigger.apply(this, arguments);
         if (!ret) {
             return false;
@@ -1663,14 +1734,14 @@ if (typeof ColorPicker === 'undefined') {
 }(jQuery, jQuery.ui.tabs.prototype));
 
 // UI Accordian backwards compat
-(function($, prototype) {
+(function ($, prototype) {
     prototype.activate = prototype._activate;
 }(jQuery, jQuery.ui.accordion.prototype));
 
 // change events
-(function($, prototype) {
+(function ($, prototype) {
     var _trigger = prototype._trigger;
-    prototype._trigger = function(type, event, data) {
+    prototype._trigger = function (type, event, data) {
         var ret = _trigger.apply(this, arguments);
         if (!ret) {
             return false;
@@ -1686,19 +1757,19 @@ if (typeof ColorPicker === 'undefined') {
 }(jQuery, jQuery.ui.accordion.prototype));
 
 // height options
-(function($, prototype) {
+(function ($, prototype) {
     prototype.options.heightStyle = "content";
 }(jQuery, jQuery.ui.accordion.prototype));
 
 // namespace backwards compat
-(function($, ui) {
-    $(document).ready(function() {
-        $.each(['resize', 'crop', 'rotate', 'sortable'], function(i, k) {
+(function ($, ui) {
+    $(document).ready(function () {
+        $.each(['resize', 'crop', 'rotate', 'sortable'], function (i, k) {
             if (ui[k]) {
                 var proto = ui[k].prototype;
                 var _init = proto._init;
 
-                proto._init = function() {
+                proto._init = function () {
                     _init.apply(this, arguments);
                     // store name
                     $(this.element).data(k, true);

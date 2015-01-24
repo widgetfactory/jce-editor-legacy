@@ -1,6 +1,6 @@
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2014 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2015 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -328,6 +328,8 @@ WFPopups.addPopup('jcemediabox', {
 
         $.each(data, function(k, v) {
             if ($('#jcemediabox_popup_' + k).get(0)) {
+                
+                v = decodeURIComponent(v);
 
                 v = tinymce.DOM.decode(v);
 
@@ -406,21 +408,7 @@ WFPopups.addPopup('jcemediabox', {
             delete args.title;
         }
 
-        tinymce.each(['group', 'width', 'height'], function(k) {
-            var v = $('#jcemediabox_popup_' + k).val();
-
-            if (v == '' || v == null) {
-                if (args[k]) {
-                    v = args[k];
-                } else {
-                    return;
-                }
-            }
-
-            data[k] = v;
-        });
-
-        tinymce.each(['title', 'caption'], function(k) {
+        tinymce.each(['group', 'width', 'height', 'title', 'caption'], function(k) {
             var v = $('input[name^=jcemediabox_popup_' + k + ']').eq(index).val();
 
             if (v == '' || v == null || typeof v === 'undefined') {
@@ -477,7 +465,7 @@ WFPopups.addPopup('jcemediabox', {
 
         // map object properties to options array
         var props = $.map(data, function(v, k) {
-            return k + '[' + v + ']';
+            return k + '[' + encodeURIComponent(v) + ']';
         });
 
         if (this.params.attribute == 'data-mediabox') {
