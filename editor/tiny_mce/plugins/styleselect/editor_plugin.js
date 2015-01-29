@@ -144,5 +144,5 @@
     });
 
     // Register plugin
-    tinymce.PluginManager.add('styleselect', tinymce.plugins.StyleSelectPlugin, ['importcss']);
+    tinymce.PluginManager.add('styleselect', tinymce.plugins.StyleSelectPlugin);
 })();

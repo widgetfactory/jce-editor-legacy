@@ -8,33 +8,20 @@
 (function(exports) {
     "use strict";
 
-    var html = "", baseDir;
-
-    var scripts = document.getElementsByTagName('script');
-    for (var i = 0; i < scripts.length; i++) {
-        var src = scripts[i].src;
-
-        if (src.indexOf('/plugin.full.js') != -1) {            
-            baseDir = src.substring(0, src.lastIndexOf('/'));
-        }
-    }
+    var html = "", s = "";
+     
+    var baseDir = '/20x/components/com_jce/editor/libraries/js';
 
     function writeScripts() {
         document.write(html);
     }
 
-    function load(path) {
-        
-        if (path.indexOf('.js') !== -1) {
-            html += '<script type="text/javascript" src="' + baseDir + '/' + path + '"></script>\n';
-        }
-        
-        if (path.indexOf('.css') !== -1) {
-            html += '<link rel="stylesheet" type="text/css" href="' + baseDir + '/' + path + '" />\n';
-        }
+    function load(path) { 
+        html += '<script type="text/javascript" src="' + baseDir + '/' + path + '"></script>\n';
     }
     
     load('lib/html5.js');
+    load('lib/validate.js');
     load('lib/select.js');
     load('lib/tips.js');
     load('lib/colorpicker.js');

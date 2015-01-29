@@ -68,9 +68,6 @@ final class WFFileBrowserPlugin extends WFMediaManager {
 
             $document->addScriptDeclaration('jQuery(document).ready(function($){$.WFBrowserWidget.init(' . json_encode($options) . ');});');
 
-            $document->addStyleSheet(array(
-                'dialog'
-                    ), 'libraries');
         } else {
             $document->addScript(array('browser'), 'plugins');
             $document->addScriptDeclaration('BrowserDialog.settings=' . json_encode($settings) . ';');

@@ -257,6 +257,8 @@ class WFEditorPlugin extends JObject {
 
         $document->addScript(array('jquery.min', 'jquery-ui.min'), 'jquery');      
         $document->addScript(array('plugin.full.js'));
+        
+        $document->addStyleSheet(array('jquery-ui'), 'jquery');
         $document->addStyleSheet(array('plugin'), 'libraries');
 
         // add custom plugin.css if exists

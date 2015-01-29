@@ -91,5 +91,5 @@
     });
 
     // Register plugin
-    tinymce.PluginManager.add('fontselect', tinymce.plugins.FontSelectPlugin, ['importcss']);
+    tinymce.PluginManager.add('fontselect', tinymce.plugins.FontSelectPlugin);
 })();
