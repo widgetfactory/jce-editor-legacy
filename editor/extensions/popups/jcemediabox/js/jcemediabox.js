@@ -22,7 +22,7 @@ JCEMediaBox = {
          * @param {String} n Addon name
          * @param {Object} o Addon Object
          */
-        setAddons: function(n, o) {
+        setAddons: function (n, o) {
             if (typeof this.addons[n] == 'undefined') {
                 this.addons[n] = {};
             }
@@ -32,7 +32,7 @@ JCEMediaBox = {
          * Get all addons
          * @param {String} n Optional addon name
          */
-        getAddons: function(n) {
+        getAddons: function (n) {
             if (n) {
                 return this.addons[n];
             }
@@ -44,14 +44,14 @@ JCEMediaBox = {
          * @param {Object} v
          * @param {Object} n
          */
-        getAddon: function(v, n) {
+        getAddon: function (v, n) {
             var t = this, cp = false, r;
 
             var addons = this.getAddons(n);
 
-            $.each(addons, function(addon, o) {
+            $.each(addons, function (addon, o) {
                 var fn = o[addon] ||
-                        function() {
+                        function () {
                         };
 
                 r = fn.call(this, v);
@@ -69,7 +69,7 @@ JCEMediaBox = {
      * Utility function to trim whitespace from a string
      * @param {String} s
      */
-    trim: function(s) {
+    trim: function (s) {
         return $.trim(s);
     },
     /**
@@ -77,7 +77,7 @@ JCEMediaBox = {
      * @param {String} w Width
      * @param {String} h Height
      */
-    setDimensions: function(w, h) {
+    setDimensions: function (w, h) {
         $.Plugin.setDimensions(w, h, 'jcemediabox_popup_');
     }
 
@@ -92,13 +92,13 @@ WFPopups.addPopup('jcemediabox', {
         'popup_hide': 0,
         'popup_mediatype': ''
     },
-    setup: function() {
+    setup: function () {
         var self = this;
-        $('#jcemediabox_popup_icon').change(function() {
+        $('#jcemediabox_popup_icon').change(function () {
             self.setIcon();
         });
 
-        $('span.add', '#jcemediabox_popup_params').click(function() {
+        $('span.add', '#jcemediabox_popup_params').click(function () {
             // clone item
             var $item = $('li:first', '#jcemediabox_popup_params').clone().appendTo('#jcemediabox_popup_params');
             // empty input values
@@ -106,17 +106,17 @@ WFPopups.addPopup('jcemediabox', {
             // add remove button action
             $('span.add', $item).hide();
 
-            $('span.remove', $item).css('display', 'inline-block').click(function() {
+            $('span.remove', $item).css('display', 'inline-block').click(function () {
                 $item.remove();
             });
         });
 
-        $.each(this.params, function(k, v) {
-            
+        $.each(this.params, function (k, v) {
+
             if (k === 'popup_icon_position') {
                 v = v.replace('icon-', 'zoom-');
             }
-            
+
             $('#jcemediabox_' + k).val(v);
         });
     },
@@ -124,14 +124,14 @@ WFPopups.addPopup('jcemediabox', {
      * Check if node is a JCE MediaBox popup
      * @param {Object} n Element
      */
-    check: function(n) {
+    check: function (n) {
         return /jce(popup|_popup|lightbox)/.test(n.className);
     },
     /**
      * Get the MIME Type from a media type value
      * @param {Object} mt Media type value
      */
-    getMediaType: function(n) {
+    getMediaType: function (n) {
         var mt;
 
         switch (n.type) {
@@ -188,18 +188,18 @@ WFPopups.addPopup('jcemediabox', {
 
         return mt || n.type || '';
     },
-    getImageType: function(s) {
+    getImageType: function (s) {
         // get extension
         var e = /\.(jp(eg|g)|png|bmp|gif|tiff)$/.exec(s);
-        
+
         if (e) {
             if (e[1] === "jpg") {
                 e[1] = "jpeg";
             }
-            
+
             return "image/" + e[1];
         }
-        
+
         // use jpeg as default
         return "image/jpeg";
     },
@@ -207,11 +207,11 @@ WFPopups.addPopup('jcemediabox', {
      * Clean a link of popup attributes (does not clean rel attribute)
      * @param {Object} n
      */
-    remove: function(n) {
+    remove: function (n) {
         var ed = tinyMCEPopup.editor;
 
         // Cleanup
-        $.each(['jcepopup', 'jcelightbox', 'jcebox', 'icon-left', 'icon-right', 'icon-top-left', 'icon-top-right', 'icon-bottom-left', 'icon-bottom-right', 'zoom-left', 'zoom-right', 'zoom-top-left', 'zoom-top-right', 'zoom-bottom-left', 'zoom-bottom-right', 'noicon', 'noshow', 'autopopup-single', 'autopopup-multiple'], function(i, v) {
+        $.each(['jcepopup', 'jcelightbox', 'jcebox', 'icon-left', 'icon-right', 'icon-top-left', 'icon-top-right', 'icon-bottom-left', 'icon-bottom-right', 'zoom-left', 'zoom-right', 'zoom-top-left', 'zoom-top-right', 'zoom-bottom-left', 'zoom-bottom-right', 'noicon', 'noshow', 'autopopup-single', 'autopopup-multiple'], function (i, v) {
             ed.dom.removeClass(n, v);
         });
 
@@ -221,12 +221,12 @@ WFPopups.addPopup('jcemediabox', {
     /**
      * Convert parameter string to JSON object
      */
-    convertData: function(s) {
+    convertData: function (s) {
         var a = [];
 
         function trim(s) {
             // trim
-            return s.replace(/:"([^"]+)"/, function(a, b) {
+            return s.replace(/:"([^"]+)"/, function (a, b) {
                 return ':"' + b.replace(/^\s+|\s+$/, '').replace(/\s*::\s*/, '::') + '"';
             });
         }
@@ -237,8 +237,8 @@ WFPopups.addPopup('jcemediabox', {
         }
 
         // parameter format eg: title[title]
-        if (/\w+\[[^\]]+\]/.test(s)) {            
-            s = s.replace(/([\w]+)\[([^\]]+)\](;)?/g, function(a, b, c, d) {
+        if (/\w+\[[^\]]+\]/.test(s)) {
+            s = s.replace(/([\w]+)\[([^\]]+)\](;)?/g, function (a, b, c, d) {
                 return '"' + b + '":"' + tinymce.DOM.encode(c) + '"' + (d ? ',' : '');
             });
 
@@ -249,7 +249,7 @@ WFPopups.addPopup('jcemediabox', {
      * Get popup parameters
      * @param {Object} n Popup node
      */
-    getAttributes: function(n, index) {
+    getAttributes: function (n, index) {
         var ed = tinyMCEPopup.editor, data = {}, rv, v;
 
         // set default index
@@ -280,7 +280,7 @@ WFPopups.addPopup('jcemediabox', {
         // Get position
         if (s = /(zoom|icon)-(top-right|top-left|bottom-right|bottom-left|left|right)/.exec(n.className)) {
             var v = s[0];
-            
+
             if (v) {
                 v = v.replace('icon-', 'zoom-');
                 $('#jcemediabox_popup_icon_position').val(v);
@@ -326,9 +326,9 @@ WFPopups.addPopup('jcemediabox', {
             data.title = parts[0];
         }
 
-        $.each(data, function(k, v) {
+        $.each(data, function (k, v) {
             if ($('#jcemediabox_popup_' + k).get(0)) {
-                
+
                 v = decodeURIComponent(v);
 
                 v = tinymce.DOM.decode(v);
@@ -345,7 +345,7 @@ WFPopups.addPopup('jcemediabox', {
         });
         var x = 0;
         // process remaining data values as params
-        $.each(data, function(k, v) {
+        $.each(data, function (k, v) {
             if (v !== '') {
                 if (x == 0) {
                     $('li:first input.name', '#jcemediabox_popup_params').val(k);
@@ -379,7 +379,7 @@ WFPopups.addPopup('jcemediabox', {
      * Set Popup Attributes
      * @param {Object} n Link Element
      */
-    setAttributes: function(n, args, index) {
+    setAttributes: function (n, args, index) {
         var self = this, ed = tinyMCEPopup.editor;
 
         // set default index
@@ -408,8 +408,14 @@ WFPopups.addPopup('jcemediabox', {
             delete args.title;
         }
 
-        tinymce.each(['group', 'width', 'height', 'title', 'caption'], function(k) {
-            var v = $('input[name^=jcemediabox_popup_' + k + ']').eq(index).val();
+        tinymce.each(['group', 'width', 'height', 'title', 'caption'], function (k) {
+            var v;
+
+            if (k == 'title' || k == 'caption') {
+                v = $('input[name^="jcemediabox_popup_' + k + '"]').eq(index).val();
+            } else {
+                v = $('#jcemediabox_popup_' + k).val();
+            }
 
             if (v == '' || v == null || typeof v === 'undefined') {
                 if (args[k]) {
@@ -418,31 +424,29 @@ WFPopups.addPopup('jcemediabox', {
                     return;
                 }
             }
+            
+            if (k == 'title' || k == 'caption' || k == 'group') {
+                v = encodeURIComponent(v);
+            }
 
             data[k] = v;
         });
 
-        $('li', '#jcemediabox_popup_params').each(function() {
+        $('li', '#jcemediabox_popup_params').each(function () {
             var k = $('input.name', this).val();
             var v = $('input.value', this).val();
 
             if (k !== '' && v !== '') {
-                data[k] = v;
+                data[k] = encodeURIComponent(v);
             }
         });
 
         // combine args
         $.extend(data, args.data || {});
 
-        // combine title and caption values
-        if (data.title && data.caption) {
-            data.title = data.title + '::' + data.caption;
-            delete data.caption;
-        }
-
         // set type
         var mt = $('#jcemediabox_popup_mediatype').val() || n.type || data.type || '';
-        
+
         // get image type
         if (mt == "image") {
             mt = this.getImageType(n.href);
@@ -464,8 +468,8 @@ WFPopups.addPopup('jcemediabox', {
         }
 
         // map object properties to options array
-        var props = $.map(data, function(v, k) {
-            return k + '[' + encodeURIComponent(v) + ']';
+        var props = $.map(data, function (v, k) {
+            return k + '[' + v + ']';
         });
 
         if (this.params.attribute == 'data-mediabox') {
@@ -498,7 +502,7 @@ WFPopups.addPopup('jcemediabox', {
     /**
      * Set the poup icon option
      */
-    setIcon: function() {
+    setIcon: function () {
         var v = $('#jcemediabox_popup_icon').val();
 
         if (parseInt(v)) {
@@ -510,15 +514,15 @@ WFPopups.addPopup('jcemediabox', {
     /**
      * Function to call when popup extension selected
      */
-    onSelect: function() {
+    onSelect: function () {
     },
     /**
      * Call function when a file is selected / clicked
      * @param {Object} args Function arguments
      */
-    onSelectFile: function(args) {
+    onSelectFile: function (args) {
         // Set popup attributes
-        $.each(args, function(k, v) {
+        $.each(args, function (k, v) {
             $('#jcemediabox_popup_' + k).val(v);
         });
 
