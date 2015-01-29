@@ -46,7 +46,9 @@ class WFFileBrowser extends JObject {
                 'chunk_size' => null,
                 'max_size' => 1024,
                 'validate_mimetype' => 1,
-                'add_random' => 0
+                'add_random' => 0,
+                'total_files' => 0,
+                'total_size' => 0
             ),
             'folder_tree' => 1,
             'list_limit' => 'all',
@@ -67,7 +69,7 @@ class WFFileBrowser extends JObject {
             'date_format' => '%d/%m/%Y, %H:%M',
             'websafe_mode' => 'utf-8',
             'websafe_spaces' => 0,
-            'websafe_textcase' => ''
+            'websafe_textcase' => '' 
         );
 
         $config = array_merge($default, $config);
@@ -938,7 +940,8 @@ class WFFileBrowser extends JObject {
         if (!$this->checkFeature('upload')) {
             JError::raiseError(403, 'Access to this resource is restricted');
         }
-
+        
+        $filesystem = $this->getFileSystem();
         jimport('joomla.filesystem.file');
 
         // get uploaded file
@@ -968,6 +971,25 @@ class WFFileBrowser extends JObject {
         $dir = rawurldecode($dir);
         // check destination path
         WFUtility::checkPath($dir);
+        
+        $upload = $this->get('upload');
+        
+        // Check file number limits        
+        if (!empty($upload['total_files'])) {
+            if ($filesystem->countFiles($path, true) > $upload['total_files']) {
+                throw new InvalidArgumentException(WFText::_('WF_MANAGER_FILE_LIMIT_ERROR'));
+            }
+        }
+        
+        // Check total file size limit        
+        if (!empty($upload['total_size'])) {
+            $size = $filesystem->getTotalSize($path);
+            
+            if (($size / 1024 / 1024) > $upload['total_size']) {
+                throw new InvalidArgumentException(WFText::_('WF_MANAGER_FILE_SIZE_LIMIT_ERROR'));
+            }
+        }
+
         // decode name
         $name = rawurldecode($name);
         // check file name
@@ -996,8 +1018,6 @@ class WFFileBrowser extends JObject {
             throw new InvalidArgumentException('INVALID FILE NAME');
         }
 
-        $upload = $this->get('upload');
-
         // add random string
         if ($upload['add_random']) {
             $name = $name . '_' . substr(md5(uniqid(rand(), 1)), 0, 5);
@@ -1009,7 +1029,6 @@ class WFFileBrowser extends JObject {
         // create a filesystem result object
         $result = new WFFileSystemResult();
 
-        $filesystem = $this->getFileSystem();
         $complete = false;
         $contentType = JRequest::getVar('CONTENT_TYPE', '', 'SERVER');
 

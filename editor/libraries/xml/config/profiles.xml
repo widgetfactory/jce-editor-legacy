@@ -94,6 +94,8 @@
             <option value="0">WF_OPTION_NO</option>
         </param>
         <param name="date_format" type="text" default="" placeholder="eg: %d/%m/%Y, %H:%M" label="WF_PARAM_DATE_FORMAT" description="WF_PARAM_DATE_FORMAT_DESC" />
+        <param name="total_files" type="text" pattern="[0-9]*" default="" label="WF_PARAM_TOTAL_FILES_LIMIT" description="WF_PARAM_TOTAL_FILES_LIMIT_DESC" />
+        <param name="total_size" type="text" pattern="[0-9]*" default="" label="WF_PARAM_TOTAL_FILES_SIZE_LIMIT" description="WF_PARAM_TOTAL_FILES_SIZE_LIMIT_DESC" />
     </params>
     <params group="advanced">
 	<!-- Elements -->

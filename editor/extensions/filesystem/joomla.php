@@ -131,13 +131,33 @@ class WFJoomlaFileSystem extends WFFileSystem {
 
         return $FTPOptions['enabled'] == 1;
     }
+    
+    public function getTotalSize($path, $recurse = true) {
+        jimport('joomla.filesystem.folder');
+        
+        $total = 0;
+        
+        if (strpos($path, $this->getBaseDir()) === false) {
+            $path = WFUtility::makePath($this->getBaseDir(), $path);
+        }
+        
+        if (JFolder::exists($path)) {
+            $files = JFolder::files($path, '.', $recurse, true, array('.svn', 'CVS', '.DS_Store', '__MACOSX', 'index.html', 'thumbs.db'));
+            
+            foreach($files as $file) {
+                $total += filesize($file);
+            }
+        }
+        
+        return $total;
+    }
 
     /**
      * Count the number of folders in a given folder
      * @return integer Total number of folders
      * @param string $path Absolute path to folder
      */
-    public function countFolders($path) {
+    public function countFolders($path, $recurse = false) {
         jimport('joomla.filesystem.folder');
         $total = 0;
 
@@ -146,7 +166,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
         }
 
         if (JFolder::exists($path)) {
-            $folders = JFolder::folders($path);
+            $folders = JFolder::folders($path, '.', $recurse);
             return count($folders);
         }
 
@@ -158,7 +178,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
      * @return integer File total
      * @param string $path Absolute path to folder
      */
-    public function countFiles($path) {
+    public function countFiles($path, $recurse = false) {
         jimport('joomla.filesystem.file');
 
         if (strpos($path, $this->getBaseDir()) === false) {
@@ -166,7 +186,7 @@ class WFJoomlaFileSystem extends WFFileSystem {
         }
 
         if (JFolder::exists($path)) {
-            $files = JFolder::files($path, '.', false, false, array('index.html', 'thumbs.db'));
+            $files = JFolder::files($path, '.', $recurse, false, array('index.html', 'thumbs.db'));
             return count($files);
         }
 

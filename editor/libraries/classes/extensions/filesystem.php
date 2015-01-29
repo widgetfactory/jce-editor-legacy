@@ -164,6 +164,18 @@ class WFFileSystem extends WFExtension {
     public function toRelative($path) {
         return $path;
     }
+    
+    public function getTotalSize($path, $recurse = true) {
+        return 0;
+    }
+    
+    public function countFolders($path, $recurse = false) {
+        return 0;
+    }
+    
+    public function countFiles($path, $recurse = false) {
+        return 0;
+    }
 
     public function getFiles($path, $filter) {
         return array();
