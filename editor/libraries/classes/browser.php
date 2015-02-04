@@ -344,7 +344,7 @@ class WFFileBrowser extends JObject {
      * @param string $relative The relative path of the folder
      * @return Folder list array
      */
-    private function getFolders($relative, $filter) {
+    private function getFolders($relative, $filter = '') {
         $filesystem = $this->getFileSystem();
         $list = $filesystem->getFolders($relative, $filter);
 
@@ -392,11 +392,11 @@ class WFFileBrowser extends JObject {
         }
 
         // get file list by filter
-        $files = self::getFiles($dir, $name . '\.(?i)(' . implode('|', $filetypes) . ')$');
+        $files = $this->getFiles($dir, $name . '\.(?i)(' . implode('|', $filetypes) . ')$');
         
         if (empty($filter) || $filter{0} != '.') {
             // get folder list
-            $folders = self::getFolders($dir, '^(?i)' . WFUtility::makeSafe($filter) . '.*');
+            $folders = $this->getFolders($dir, '^(?i)' . WFUtility::makeSafe($filter) . '.*');
         }
 
         $folderArray    = array();
@@ -1037,7 +1037,11 @@ class WFFileBrowser extends JObject {
             $result = $filesystem->upload('multipart', trim($file['tmp_name']), $dir, $name);
 
             if (!$result->state) {
-                $result->message = WFText::_('WF_MANAGER_UPLOAD_ERROR');
+                
+                if (empty($result->message)) {
+                    $result->message = WFText::_('WF_MANAGER_UPLOAD_ERROR');
+                }
+
                 $result->code = 103;
             }
 
