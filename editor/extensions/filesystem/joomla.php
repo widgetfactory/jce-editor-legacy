@@ -159,7 +159,6 @@ class WFJoomlaFileSystem extends WFFileSystem {
      */
     public function countFolders($path, $recurse = false) {
         jimport('joomla.filesystem.folder');
-        $total = 0;
 
         if (strpos($path, $this->getBaseDir()) === false) {
             $path = WFUtility::makePath($this->getBaseDir(), $path);
