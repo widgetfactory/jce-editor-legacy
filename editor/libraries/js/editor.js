@@ -147,7 +147,7 @@ function jInsertEditorText(text, editor) {
 
             if (s.compress.javascript == 0) {
                 // development mode
-                if (VERSION === "@@version@@") {
+                if (VERSION.indexOf('@@') != -1) {
                     return;
                 }
 
