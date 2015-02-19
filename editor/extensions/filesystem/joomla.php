@@ -153,26 +153,6 @@ class WFJoomlaFileSystem extends WFFileSystem {
     }
 
     /**
-     * Count the number of folders in a given folder
-     * @return integer Total number of folders
-     * @param string $path Absolute path to folder
-     */
-    public function countFolders($path, $recurse = false) {
-        jimport('joomla.filesystem.folder');
-
-        if (strpos($path, $this->getBaseDir()) === false) {
-            $path = WFUtility::makePath($this->getBaseDir(), $path);
-        }
-
-        if (JFolder::exists($path)) {
-            $folders = JFolder::folders($path, '.', $recurse);
-            return count($folders);
-        }
-
-        return 0;
-    }
-
-    /**
      * Count the number of files in a folder
      * @return integer File total
      * @param string $path Absolute path to folder
