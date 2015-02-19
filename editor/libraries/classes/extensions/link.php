@@ -53,6 +53,7 @@ class WFLinkExtension extends WFExtension {
 
         $document = WFDocument::getInstance();
         $document->addScript(array('link.full'), 'libraries');
+        $document->addStyleSheet(array('tree'), 'libraries');
 
         foreach ($this->extensions as $extension) {
             $extension->display();
