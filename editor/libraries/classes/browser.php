@@ -976,14 +976,14 @@ class WFFileBrowser extends JObject {
         
         // Check file number limits        
         if (!empty($upload['total_files'])) {
-            if ($filesystem->countFiles($path, true) > $upload['total_files']) {
+            if ($filesystem->countFiles($dir, true) > $upload['total_files']) {
                 throw new InvalidArgumentException(WFText::_('WF_MANAGER_FILE_LIMIT_ERROR'));
             }
         }
         
         // Check total file size limit        
         if (!empty($upload['total_size'])) {
-            $size = $filesystem->getTotalSize($path);
+            $size = $filesystem->getTotalSize($dir);
             
             if (($size / 1024 / 1024) > $upload['total_size']) {
                 throw new InvalidArgumentException(WFText::_('WF_MANAGER_FILE_SIZE_LIMIT_ERROR'));
