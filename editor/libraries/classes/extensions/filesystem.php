@@ -169,10 +169,6 @@ class WFFileSystem extends WFExtension {
         return 0;
     }
     
-    public function countFolders($path, $recurse = false) {
-        return 0;
-    }
-    
     public function countFiles($path, $recurse = false) {
         return 0;
     }
