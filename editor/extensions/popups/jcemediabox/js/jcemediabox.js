@@ -237,8 +237,8 @@ WFPopups.addPopup('jcemediabox', {
         }
 
         // parameter format eg: title[title]
-        if (/\w+\[[^\]]+\]/.test(s)) {
-            s = s.replace(/([\w]+)\[([^\]]+)\](;)?/g, function (a, b, c, d) {
+        if (/\w+\[[^\]]+\]/.test(s)) {            
+            s = s.replace(/([\w-]+)\[([^\]]+)\](;)?/g, function (a, b, c, d) {
                 return '"' + b + '":"' + tinymce.DOM.encode(c) + '"' + (d ? ',' : '');
             });
 
@@ -347,6 +347,9 @@ WFPopups.addPopup('jcemediabox', {
         // process remaining data values as params
         $.each(data, function (k, v) {
             if (v !== '') {
+                
+                v = decodeURIComponent(v);
+                
                 if (x == 0) {
                     $('li:first input.name', '#jcemediabox_popup_params').val(k);
                     $('li:first input.value', '#jcemediabox_popup_params').val(v);
@@ -356,7 +359,7 @@ WFPopups.addPopup('jcemediabox', {
                     // set name value
                     $('input.name', $item).val(k);
                     // set value value
-                    $('input.value', $item).val(decodeURIComponent(v));
+                    $('input.value', $item).val(v);
                     // add remove button action
                     $('span.add', $item).hide();
                     $('span.remove').css('display', 'inline-block');
