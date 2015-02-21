@@ -179,6 +179,13 @@ WFPopups.addPopup('jcemediabox', {
         }
 
         if (!mt && n.href) {
+            JCEMediaBox.options = {
+                popup : {
+                    google_viewer : 0,
+                    pdfjs: 0
+                }
+            };
+            
             var o = JCEMediaBox.Popup.getAddon(n.href);
 
             if (o && o.type) {
@@ -327,9 +334,11 @@ WFPopups.addPopup('jcemediabox', {
         }
 
         $.each(data, function (k, v) {
-            if ($('#jcemediabox_popup_' + k).get(0)) {
-
-                v = decodeURIComponent(v);
+            if ($('#jcemediabox_popup_' + k).get(0) && v !== "") {
+                
+                if (k == 'title' || k == 'caption' || k == 'group') {
+                    v = decodeURIComponent(v);
+                }
 
                 v = tinymce.DOM.decode(v);
 
@@ -348,7 +357,9 @@ WFPopups.addPopup('jcemediabox', {
         $.each(data, function (k, v) {
             if (v !== '') {
                 
-                v = decodeURIComponent(v);
+                try {
+                    v = decodeURIComponent(v);
+                } catch(e) {}
                 
                 if (x == 0) {
                     $('li:first input.name', '#jcemediabox_popup_params').val(k);
