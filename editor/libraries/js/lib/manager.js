@@ -2151,6 +2151,10 @@
 
                 $(file).removeClass('loading disabled').children('span.checkbox').removeClass('disabled');
             };
+            
+            img.onerror = function() {
+                $(file).removeClass('loading disabled').children('span.checkbox').removeClass('disabled');
+            };
 
             img.src = src;
         },
