@@ -329,16 +329,6 @@ class WFJoomlaFileSystem extends WFFileSystem {
         if (preg_match('#\.(jpg|jpeg|bmp|gif|tiff|png)#i', $file) && $count <= 100) {
             $props = @getimagesize($path);
 
-            /* if (preg_match('#\.(jpg|jpeg|tiff)#i', $file)) {
-              $data = exif_read_data($path, 'IDF0', true, false);
-
-              if ($data !== false) {
-              $idf 	= isset($data['IDF0']) ? $data['IDF0'] : array();
-              $exif 	= isset($data['EXIF']) ? $data['EXIF'] : array();
-              $data 	= array_merge($idf, $exif);
-              }
-              } */
-
             $width = $props[0];
             $height = $props[1];
 
