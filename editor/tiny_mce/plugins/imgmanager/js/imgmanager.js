@@ -45,6 +45,13 @@
                 $(this).addClass('focus');
             });
             
+            // add onchange handlers to width and height
+            $('#width, #height').change(function() {
+                var a = this, b = (this.id === "width") ? '#height' : '#width';
+                $(this).addClass('edited');
+                self.setDimensions(a, b, '#constrain');
+            });
+            
             // add margin events
             $('#margin_top, #margin_right, #margin_bottom, #margin_left').change(function() {
                 self.setMargins();
@@ -101,8 +108,8 @@
                     w = n.width, h = n.height;
                 }
 
-                $('#width, #tmp_width').val(w);
-                $('#height, #tmp_height').val(h);
+                $('#width').val(w).data('tmp', w);
+                $('#height').val(h).data('tmp', h);
 
                 $('#constrain').prop('checked', w && h);
 
@@ -443,10 +450,23 @@
         setClasses: function(v) {
             return $.Plugin.setClasses(v);
         },
-        setDimensions: function(a, b) {
-            $('#' + a + ', #' + b).addClass('edited');
+        /**
+         * Generic function to set dimensions
+         */
+        setDimensions: function(a, b, c) {
+            var w = $(a).val();
 
-            return $.Plugin.setDimensions(a, b);
+            if (w && $(b).val()) {
+                // if constrain is on                
+                if ($(c).is(':checked, .checked')) {
+                    var tw = $(a).data('tmp'), h = $(b).val();
+
+                    if (tw) {
+                        var temp = ((h / tw) * w).toFixed(0);
+                        $(b).val(temp).data('tmp', temp).addClass('edited');
+                    }
+                }
+            }
         },
         setStyles: function() {
             var self = this, ed = tinyMCEPopup, $img = $('#sample');
