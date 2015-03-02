@@ -74,7 +74,7 @@ WFPopups.addPopup('window', {
         // parse features
         features 	= $.String.query(features.replace(/,/g, '&'));
 
-        $.each(features, function(k, v) {
+        $.each(features, function(k, v) {            
             switch(k) {
                 case 'width':
                 case 'height':
@@ -89,15 +89,15 @@ WFPopups.addPopup('window', {
                     $('#window_popup_' + k).attr('checked', v == 'yes');
                     break;
                 case 'top':
-                case 'left':
-                    v = (parseInt(v) == 0) ? k : v;
-                    
-                    if (/screen\.avail(Width|Height)/.test(v)) {
-                        if (/[0-9]+/.test(v)) {
-                        	v = 'center';
+                case 'left':                    
+                    if (v.indexOf('screen') !== -1) {
+                        if (v.indexOf('/2-') !== -1) {
+                            v = 'center';
                         } else {
-                        	v = (k == 'top') ? 'bottom' : 'right';
+                            v = v.indexOf('Width') !== -1 ? 'right' : 'bottom';
                         }
+                    } else {
+                        v = k;
                     }
                     
                     if ($('option[value="' + v + '"]', '#window_popup_position_' + k).length == 0) {
@@ -165,7 +165,7 @@ WFPopups.addPopup('window', {
 
         var left = $('#window_popup_position_left').val();
 
-        switch($('#window_popup_position_left').val()) {
+        switch(left) {
             case 'left':
                 left = 0;
                 break;
@@ -180,10 +180,10 @@ WFPopups.addPopup('window', {
         var features = {
         	'scrollbars' 	: 'yes',
         	'resizable' 	: 'yes',
-        	'location' 		: 'yes',
-        	'menubar' 		: 'yes',
-        	'status' 		: 'yes',
-        	'toolbar' 		: 'yes'
+        	'location' 	: 'yes',
+        	'menubar' 	: 'yes',
+        	'status' 	: 'yes',
+        	'toolbar' 	: 'yes'
         };
 
         $.each(features, function(k, def) {
