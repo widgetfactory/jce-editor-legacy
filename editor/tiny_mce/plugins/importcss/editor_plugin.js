@@ -7,7 +7,7 @@
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses.
  */
-(function() {
+(function () {
     var each = tinymce.each, PreviewCss = tinymce.util.PreviewCss, DOM = tinymce.DOM;
 
     /* Make a css url absolute
@@ -15,7 +15,7 @@
      * @param p URL of the css file
      */
     function toAbsolute(u, p) {
-        return u.replace(/url\(["']?(.+?)["']?\)/gi, function(a, b) {
+        return u.replace(/url\(["']?(.+?)["']?\)/gi, function (a, b) {
 
             if (b.indexOf('://') < 0) {
                 return 'url("' + p + b + '")';
@@ -26,44 +26,96 @@
     }
 
     tinymce.create('tinymce.plugins.ImportCSS', {
-        populateStyleSelect: function() {
+        convertSelectorToFormat: function (selectorText) {
+            var format, ed = this.editor;
+
+            // Parse simple element.class1, .class1
+            var selector = /^(?:([a-z0-9\-_]+))?(\.[a-z0-9_\-\.]+)$/i.exec(selectorText);
+
+            if (!selector) {
+                return;
+            }
+
+            var elementName = selector[1];
+
+            if (elementName === "body") {
+                return;
+            }
+
+            var classes = selector[2].substr(1).split('.').join(' ');
+            var inlineSelectorElements = tinymce.makeMap('a,img');
+
+            // element.class - Produce block formats
+            if (selector[1]) {
+                format = {
+                    title: selectorText
+                };
+
+                if (ed.schema.getTextBlockElements()[elementName]) {
+                    // Text block format ex: h1.class1
+                    format.block = elementName;
+                } else if (ed.schema.getBlockElements()[elementName] || inlineSelectorElements[elementName.toLowerCase()]) {
+                    // Block elements such as table.class and special inline elements such as a.class or img.class
+                    format.selector = elementName;
+                } else {
+                    // Inline format strong.class1
+                    format.inline = elementName;
+                }
+            } else if (selector[2]) {
+                // .class - apply to any element
+                format = {
+                    inline: "span",
+                    selector: '*',
+                    title: selectorText.substr(1),
+                    classes: classes
+                };
+            }
+
+            // Append to or override class attribute
+            if (ed.settings.importcss_merge_classes !== false) {
+                format.classes = classes;
+            } else {
+                format.attributes = {"class": classes};
+            }
+
+            return format;
+        },
+        populateStyleSelect: function () {
             var ed = this.editor;
 
             var self = this, styleselect = ed.controlManager.get('styleselect');
-            
+
             // if control does not exist or has been populated, return.
             if (!styleselect || styleselect.hasClasses) {
                 return;
             }
 
-            var counter = styleselect.getLength(), cls = this._import();
+            var counter = styleselect.getLength(), selectors = this._import();
 
             // no classes found, return.
-            if (cls.length === 0) {
+            if (selectors.length === 0) {
                 return;
             }
 
-            each(cls, function(o, idx) {
-                var name = 'style_' + (counter + idx), fmt;
+            each(selectors, function (s, idx) {
+                var name = 'style_' + (counter + idx);
 
-                fmt = {
-                    inline: 'span',
-                    classes: o['class'],
-                    selector: '*'
-                };
+                var fmt = self.convertSelectorToFormat(s);
 
-                ed.formatter.register(name, fmt);
+                if (fmt) {
+                    ed.formatter.register(name, fmt);
 
-                styleselect.add(o['class'], name, {
-                    style: function() {
-                        return PreviewCss(ed, fmt);
-                    }
-                });
+                    styleselect.add(fmt.title, name, {
+                        style: function () {
+                            return PreviewCss(ed, fmt);
+                        }
+                    });
+                }
             });
 
             styleselect.hasClasses = true;
         },
-        init: function(ed, url) {
+        init: function (ed, url) {
             this.editor = ed;
 
             var self = this;
@@ -71,11 +123,11 @@
             this.classes = [];
             this.fontface = [];
 
-            ed.onPreInit.add(function(editor) {
+            ed.onPreInit.add(function (editor) {
                 var styleselect = ed.controlManager.get('styleselect');
 
                 if (styleselect && !styleselect.hasClasses && ed.getParam('styleselect_stylesheet', true)) {
-                    styleselect.onPostRender.add(function(ed, n) {
+                    styleselect.onPostRender.add(function (ed, n) {
                         if (!styleselect.NativeListBox) {
                             DOM.bind(DOM.get(n.id + '_text'), 'focus mousedown', self.populateStyleSelect, self);
                             DOM.bind(DOM.get(n.id + '_open'), 'focus mousedown', self.populateStyleSelect, self);
@@ -88,7 +140,7 @@
                 var fontselect = ed.controlManager.get('fontselect');
 
                 if (fontselect) {
-                    fontselect.onPostRender.add(function() {
+                    fontselect.onPostRender.add(function () {
                         // font face items not yet created, run import
                         if (!self.fontface) {
                             self._import();
@@ -97,7 +149,7 @@
                 }
             });
 
-            ed.onNodeChange.add(function() {
+            ed.onNodeChange.add(function () {
                 var styleselect = ed.controlManager.get('styleselect');
 
                 if (styleselect && !styleselect.hasClasses && ed.getParam('styleselect_stylesheet', true)) {
@@ -105,13 +157,13 @@
                 }
             });
         },
-        _import: function() {
+        _import: function () {
             var self = this, ed = this.editor, doc = ed.getDoc(), i, lo = {}, f = ed.settings.class_filter, ov, href = '', rules = [], fontface = false, classes = false;
 
             function parseCSS(stylesheet) {
 
                 // IE style imports
-                each(stylesheet.imports, function(r) {
+                each(stylesheet.imports, function (r) {
                     if (r.href.indexOf('://fonts.googleapis.com') > 0) {
                         var v = '@import url(' + r.href + ');';
 
@@ -138,7 +190,7 @@
                     // @import url(//fonts.googleapis.com/css?family=Pathway+Gothic+One);
                 }
 
-                each(rules, function(r) {
+                each(rules, function (r) {
                     // Real type or fake it on IE
                     switch (r.type || 1) {
                         // Rule
@@ -148,27 +200,14 @@
                             }
 
                             if (r.selectorText) {
-                                each(r.selectorText.split(','), function(v) {
+                                each(r.selectorText.split(','), function (v) {
                                     v = v.replace(/^\s*|\s*$|^\s\./g, "");
 
                                     // Is internal or it doesn't contain a class
                                     if (/\.mce/.test(v) || !/\.[\w\-]+$/.test(v))
                                         return;
 
-                                    // Remove everything but class name
-                                    ov = v;
-                                    v = tinymce._replace(/.*\.([a-z0-9_\-]+).*/i, '$1', v);
-
-                                    // Filter classes
-                                    if (f && !(v = f(v, ov)))
-                                        return;
-
-                                    if (!lo[v]) {
-                                        self.classes.push({
-                                            'class': v
-                                        });
-                                        lo[v] = 1;
-                                    }
+                                    self.classes.push(v);
                                 });
                             }
 
@@ -204,7 +243,7 @@
                             break;
                     }
                 });
-                
+
                 // set flag so we don't repeat
                 classes = true;
             }
@@ -212,7 +251,7 @@
             if ((self.classes.length === 0 && classes === false) || (self.fontface.length === 0 && fontface === false)) {
                 // parse stylesheets
                 try {
-                    each(doc.styleSheets, function(styleSheet) {
+                    each(doc.styleSheets, function (styleSheet) {
                         parseCSS(styleSheet);
                     });
                 } catch (ex) {
@@ -232,7 +271,7 @@
                     var css = self.fontface.join("\n");
 
                     if (style.styleSheet) {
-                        var setCss = function() {
+                        var setCss = function () {
                             try {
                                 style.styleSheet.cssText = css;
                             } catch (e) {

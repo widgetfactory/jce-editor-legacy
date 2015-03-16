@@ -1271,10 +1271,11 @@
 					}
 				}
 
-				for (;;) {
+				while (true) {
 					// Stop expanding on block elements
-					if (!format[0].block_expand && isBlock(parent))
+					if (isBlock(parent)) {
 						return parent;
+					}
 
 					// Walk left/right
 					for (sibling = parent[siblingName]; sibling; sibling = sibling[siblingName]) {

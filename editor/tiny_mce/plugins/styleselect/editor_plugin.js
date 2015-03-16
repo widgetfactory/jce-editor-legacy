@@ -67,6 +67,7 @@
 
                     // Toggle off the current format(s)
                     matches = ed.formatter.matchAll(formatNames);
+
                     tinymce.each(matches, function(match) {
                         if (!name || match === name) {
                             
@@ -78,7 +79,7 @@
                         }
                     });
 
-                    if (!removedFormat) {                        
+                    if (!removedFormat) {
                         ed.formatter.apply(name);
                     }
 
@@ -123,7 +124,7 @@
                         if (val) {
                             name = 'style_' + (counter++);
                             fmt = {
-                                inline: 'span',
+                                //inline: 'span',
                                 classes: val,
                                 selector: '*'
                             };
