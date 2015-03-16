@@ -933,28 +933,14 @@ class WFFileBrowser extends JObject {
      * @param type $name
      * @return boolean
      */
-    private function validateFileName($name) {
-        $filetypes = explode('.', $file['name']);
-        
-        if (count($filetypes) < 2) {
-            return false;
-        }
-        
-        array_shift($filetypes);
-        
+    private function validateFileName($name) {        
         // Media file names should never have executable extensions buried in them.
         $executable = array(
             'php', 'js', 'exe', 'phtml', 'java', 'perl', 'py', 'asp', 'dll', 'go', 'ade', 'adp', 'bat', 'chm', 'cmd', 'com', 'cpl', 'hta', 'ins', 'isp',
             'jse', 'lib', 'mde', 'msc', 'msp', 'mst', 'pif', 'scr', 'sct', 'shb', 'sys', 'vb', 'vbe', 'vbs', 'vxd', 'wsc', 'wsf', 'wsh'
         );
         
-        $check = array_intersect($filetypes, $executable);
-        
-        if (!empty($check)) {
-            return false;
-        }
-        
-        return true;
+        return preg_match('#\.(' . implode('|', $executable) . ')\b#', $name);
     }
 
     /**
