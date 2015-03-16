@@ -929,8 +929,8 @@
 
                 // Perform replacements
                 h = h.replace(/\u2026/g, "...");
-                h = h.replace(/[\x93\x94\u201c\u201d]/g, '"');
-                h = h.replace(/[\x60\x91\x92\u2018\u2019]/g, "'");
+                h = h.replace(/[\x93\x94]/g, '"');
+                h = h.replace(/[\x60\x91\x92]/g, "'");
 
                 if (rb = ed.getParam("forced_root_block")) {
                     // strip whitespace
