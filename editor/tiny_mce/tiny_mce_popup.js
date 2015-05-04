@@ -1,18 +1,7 @@
 (function () {
-    var i, nl = document.getElementsByTagName('script'), base, src, p, li, query = '', it, scripts = [];
-
-    for (i = 0; i < nl.length; i++) {
-        src = nl[i].src;
-
-        if (src && src.indexOf("tiny_mce_popup.js") != -1) {
-            base = src.substring(0, src.lastIndexOf('/'));
-
-            if ((p = src.indexOf('?')) != -1)
-                query = src.substring(p + 1);
-        }
-    }
-
-    nl = null; // IE leak fix
+    var i, base, src, p, li, query = '', it, scripts = [];
+    
+    base = '../../../tinymce-for-jce2/jscripts/tiny_mce';
 
     function include(u) {
         scripts.push(base + '/classes/' + u);
