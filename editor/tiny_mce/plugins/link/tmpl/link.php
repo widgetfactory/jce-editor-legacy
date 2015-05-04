@@ -11,6 +11,9 @@
  */
 defined('_JEXEC') or die('RESTRICTED');
 
+$search = $this->plugin->getSearch('link');
+$links  = $this->plugin->getLinks();
+
 ?>
 <table width="100%">
     <tr>
@@ -23,17 +26,15 @@ defined('_JEXEC') or die('RESTRICTED');
         <td><input id="text" type="text" value="" class="required" /></td>
     </tr>
 </table>
+<?php if ($search->isEnabled() || !empty($links->getLists())) :?>
 <fieldset>
     <legend><?php echo WFText::_('WF_LABEL_LINKS'); ?></legend>
     <div id="link-options">
-        <?php 
-            if ($this->plugin->getSearch('link')->isEnabled()) :
-                echo $this->plugin->getSearch('link')->render();
-            endif;
-        ?>
-        <?php echo $this->plugin->getLinks()->render(); ?>
+        <?php echo $search->render();?>
+        <?php echo $links->render(); ?>
     </div>
 </fieldset>
+<?php endif;?>
 <h4><?php echo WFText::_('WF_LABEL_ATTRIBUTES'); ?></h4>
 <table>
     <tr id="attributes-anchor">

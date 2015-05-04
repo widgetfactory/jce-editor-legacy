@@ -71,8 +71,8 @@ class WFLinkExtension extends WFExtension {
 
         return self::$links[$name];
     }
-
-    public function render() {
+    
+    public function getLists() {
         $list = array();
 
         foreach ($this->extensions as $extension) {
@@ -80,6 +80,12 @@ class WFLinkExtension extends WFExtension {
                 $list[] = $extension->getList();
             }
         }
+        
+        return $list;
+    }
+
+    public function render() {
+        $list = $this->getLists();
 
         if (count($list)) {
             $view = $this->getView(array('name' => 'links', 'layout' => 'links'));
