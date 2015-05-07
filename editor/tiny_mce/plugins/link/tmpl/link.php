@@ -26,7 +26,7 @@ $links  = $this->plugin->getLinks();
         <td><input id="text" type="text" value="" class="required" /></td>
     </tr>
 </table>
-<?php if ($search->isEnabled() || !empty($links->getLists())) :?>
+<?php if ($search->isEnabled() || count($links->getLists())) :?>
 <fieldset>
     <legend><?php echo WFText::_('WF_LABEL_LINKS'); ?></legend>
     <div id="link-options">
