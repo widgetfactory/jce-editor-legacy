@@ -85,6 +85,7 @@ function jInsertEditorText(text, editor) {
                 document_base_url: base,
                 site_url: site,
                 mode: 'textareas',
+                schema: "mixed",
                 //entity_encoding: 'raw',
                 editor_selector: 'wfEditor',
                 editor_deselector: 'wfNoEditor',

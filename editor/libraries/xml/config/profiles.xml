@@ -14,6 +14,7 @@
         </param>
         <param name="schema" type="list" default="" label="WF_PARAM_DOCTYPE" description="WF_PARAM_EDITOR_PROFILE_DOCTYPE_DESC">
             <option value="">WF_OPTION_INHERIT</option>
+            <option value="mixed">WF_PARAM_DOCTYPE_MIXED</option>
             <option value="html4">HTML4</option>
             <option value="html5">HTML5</option>
         </param>

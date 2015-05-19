@@ -5,8 +5,9 @@
 			<option value="1">WF_OPTION_YES</option>
 			<option value="0">WF_OPTION_NO</option>
 		</param>
-                <param name="schema" type="list" default="html4" label="WF_PARAM_DOCTYPE" description="WF_PARAM_DOCTYPE_DESC">
-			<option value="html4">HTML4</option>
+                <param name="schema" type="list" default="mixed" label="WF_PARAM_DOCTYPE" description="WF_PARAM_DOCTYPE_DESC">
+			<option value="mixed">WF_PARAM_DOCTYPE_MIXED</option>
+                        <option value="html4">HTML4</option>
 			<option value="html5">HTML5</option>
 		</param>
 		<param name="entity_encoding" type="list" default="raw" label="WF_PARAM_ENTITY_ENCODING" description="WF_PARAM_ENTITY_ENCODING_DESC">
