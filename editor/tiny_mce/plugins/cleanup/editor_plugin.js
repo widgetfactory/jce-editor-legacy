@@ -18,10 +18,6 @@
 
     var emptyRx = /<(ol|ul|sub|sup|blockquote|span|font|a|table|tbody|tr|strong|em|b|i)\b([^>]+)><\/\1>/gi;
     var paddedRx = /<(p|h1|h2|h3|h4|h5|h6|pre|div|address|caption)\b([^>]+)>(&nbsp;|\u00a0)<\/\1>/gi;
-
-    /*var children = '#|a|abbr|area|address|article|aside|audio|b|bdo|blockquote|br|button|canvas|cite|code|command|datalist|del|details|dfn|dialog|div|dl|em|embed|fieldset|' +
-    'figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|i|iframe|img|input|ins|kbd|keygen|label|link|map|mark|menu|meta|meter|nav|noscript|ol|object|output|' +
-    'p|pre|progress|q|ruby|samp|script|section|select|small|span|strong|style|sub|sup|svg|table|textarea|time|ul|var|video';*/
         
     tinymce.create('tinymce.plugins.CleanupPlugin', {
         init: function(ed, url) {
@@ -34,28 +30,32 @@
             }
 
             ed.onPreInit.add(function() {
-                // reset attribute order for anchor tags
-                ed.schema.addValidElements('a[href|target|ping|rel|media|type|id|name|accesskey|class|dir|draggable|download|item|hidden|itemprop|role|spellcheck|style|subject|title|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]');
-                
-                // try add phrasing and flow elements to anchor tag
-                /*if (ed.settings.schema === "html5") {
-                    ed.schema.addValidChildren('a[' + children + ']');
-                }*/
-
-                // add support for picture tag
-                ed.schema.addValidElements('picture[id|accesskey|class|dir|lang|style|tabindex|title|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onkeypress|onkeydown|onkeyup]');
-                ed.schema.addValidElements('source[src|srcset|media|type|sizes|id|accesskey|class|dir|lang|style|tabindex|title]');
-                ed.schema.addValidChildren('picture[source|img]');
 
                 if (ed.settings.validate) {
                     // add support for "bootstrap" icons
                     var elements = ed.schema.elements;
 
-                    each(split('span,a,i'), function(name) {
+                    each(split('span,a,em,i'), function(name) {
                         if (elements[name]) {
-                            elements[name].removeEmpty = false;
+                            elements[name].removeEmptyAttrs = true;
                         }
                     });
+                    
+                    if (ed.getParam('pad_empty_tags', true) === false) {
+                        each(split('p h1 h2 h3 h4 h5 h6 th td pre div address caption'), function (name) {
+                            if (elements[name]) {
+                                elements[name].paddEmpty = false;
+                            }
+                        });
+                    }
+                    
+                    if (!ed.getParam('table_pad_empty_cells', true)) {
+                        each(split('th td'), function (name) {
+                            if (elements[name]) {
+                                elements[name].paddEmpty = false;
+                            }
+                        });
+                    }
                 }
 
                 // only if "Cleanup HTML" enabled
