@@ -55,6 +55,7 @@
                 'h5': 'advanced.h5',
                 'h6': 'advanced.h6',
                 'div': 'advanced.div',
+                'div_container' : 'advanced.div_container',
                 'blockquote': 'advanced.blockquote',
                 'code': 'advanced.code',
                 'samp': 'advanced.samp',
