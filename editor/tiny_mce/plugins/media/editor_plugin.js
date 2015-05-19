@@ -13,9 +13,9 @@
     var Node = tinymce.html.Node;
 
     var Styles = new tinymce.html.Styles();
-
+    
     // list of valid child elements
-    var validChildren = '#|address|blockquote|div|dl|fieldset|form|h1|h2|h3|h4|h5|h6|hr|menu|ol|p|pre|table|ul|a|abbr|b|bdo|br|button|cite|code|del|dfn|em|embed|i|iframe|img|input|ins|kbd|label|map|noscript|object|q|s|samp|script|select|small|span|strong|sub|sup|textarea|u|var|#text|#comment|article|aside|details|dialog|figure|header|footer|hgroup|section|nav|audio|canvas|command|datalist|mark|meter|output|progress|time|wbr|video|ruby|bdi|keygen|object';
+    //var validChildren = '#|address|blockquote|div|dl|fieldset|form|h1|h2|h3|h4|h5|h6|hr|menu|ol|p|pre|table|ul|a|abbr|b|bdo|br|button|cite|code|del|dfn|em|embed|i|iframe|img|input|ins|kbd|label|map|noscript|object|q|s|samp|script|select|small|span|strong|sub|sup|textarea|u|var|#text|#comment|article|aside|details|dialog|figure|header|footer|hgroup|section|nav|audio|canvas|command|datalist|mark|meter|output|progress|time|wbr|video|ruby|bdi|keygen|object';
 
     function toArray(obj) {
         var undef, out, i;
@@ -177,31 +177,11 @@
 
             ed.onPreInit.add(function() {
                 var invalid = ed.settings.invalid_elements;
-
-                // iframes
-                ed.schema.addValidElements('iframe[longdesc|name|src|frameborder|marginwidth|marginheight|scrolling|align|width|height|allowtransparency|allowfullscreen|seamless|*]');
-
-                if (ed.settings.schema === "html5") {
-                    // add children
-                    each(['object', 'audio', 'video', 'iframe'], function(n) {
-                        if (ed.schema.isValid(n)) {
-                            
-                            if (n === "object") {
-                                validChildren += '|param';
-                            }
-                            
-                            if (n === "video" || n === "audio") {
-                                validChildren += '|source';
-                                
-                                if (n === "video") {
-                                    validChildren += '|track';
-                                }
-                            }
-                            
-                            ed.schema.addValidChildren(n + '[' + validChildren + ']');
-                        }
-                    });
-                } else {
+                
+                // keep this for legacy
+                if (ed.settings.schema === "html4") {
+                    // iframe
+                    ed.schema.addValidElements('iframe[longdesc|name|src|frameborder|marginwidth|marginheight|scrolling|align|width|height|allowfullscreen|seamless|*]');
                     // audio, video, embed
                     ed.schema.addValidElements('video[src|autobuffer|autoplay|loop|controls|width|height|poster|*],audio[src|autobuffer|autoplay|loop|controls|*],source[src|type|media|*],embed[src|type|width|height|*]');
                 }
