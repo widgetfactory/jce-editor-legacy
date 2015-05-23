@@ -161,8 +161,6 @@
                         if (!cloneFormats[node.nodeName]) {
                             return;
                         }
-                        
-                        console.log(node);
 
                         node = cloneNode(node, false);
 
