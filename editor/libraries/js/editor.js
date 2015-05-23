@@ -392,58 +392,37 @@ function jInsertEditorText(text, editor) {
         },
         toggle: function (el, use_cookies) {
             var self = this, ed = tinyMCE.get(el.id), DOM = tinymce.DOM;
+            
+            var state = !ed || ed.isHidden() ? 1 : 0
+            // set cookie
+            if (use_cookies) {
+                tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', state);
+            }
 
             // turn it on
             if (!ed) {
-                if (use_cookies) {
-                    tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
-                }
-
                 DOM.removeClass(el, 'wfNoEditor');
                 DOM.addClass(el, 'wfEditor');
-
-                //el.className = 'wfEditor';
-
-                tinyMCE.execCommand('mceAddEditor', 0, el.id);
             } else {
                 self._wrapText(ed.getElement(), true);
 
                 if (ed.isHidden()) {
-                    if (use_cookies) {
-                        tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 1);
-                    }
-
                     DOM.removeClass(el, 'wfNoEditor');
                     DOM.addClass(el, 'wfEditor');
-
-                    ed.load();
-                    ed.show();
                 } else {
-                    if (use_cookies) {
-                        tinymce.util.Cookie.set('wf_editor_' + el.id + '_state', 0);
-                    }
                     DOM.removeClass(el, 'wfEditor');
                     DOM.addClass(el, 'wfNoEditor');
-
-                    ed.save({
-                        no_events: false
-                    });
-
-                    ed.hide();
                 }
             }
+            
+            tinymce.execCommand('mceToggleEditor', false, el.id);
         },
         _wrapText: function (el, s) {
-            var v, n;
-
-            el.setAttribute("wrap", s);
-
-            if (!tinymce.isIE) {
-                v = el.value;
-                n = el.cloneNode(false);
-                n.setAttribute("wrap", s);
-                el.parentNode.replaceChild(n, el);
-                n.value = v;
+            
+            if (s) {
+                el.setAttribute("wrap", "soft");
+            } else {
+                el.removeAttribute("wrap");
             }
         },
         showLoader: function (el) {
