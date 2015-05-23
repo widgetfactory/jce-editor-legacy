@@ -152,6 +152,7 @@
                             var cls = /system-pagebreak/.test(cls) ? 'mceItemPageBreak' : 'mceItemReadMore';
                             
                             node.attr('class', cls);
+                            
                             if (node.attr('alt')) {
                                 node.attr('data-mce-alt', node.attr('alt'));
                                 node.attr('alt', null);
@@ -168,7 +169,7 @@
                             if (/mceItemPageBreak/.test(node.attr('class'))) {
                                 node.attr('class', 'system-pagebreak');
                             } else {
-                                node.attr('class', '');
+                                node.attr('class', null);
                                 node.attr('id', 'system-readmore');
                             }
 
