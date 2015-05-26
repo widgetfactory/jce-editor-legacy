@@ -35,11 +35,11 @@
                     // add support for "bootstrap" icons
                     var elements = ed.schema.elements;
 
-                    each(split('span,a,em,i'), function(name) {
+                    /*each(split('span,a,em,i'), function(name) {
                         if (elements[name]) {
                             elements[name].removeEmptyAttrs = true;
                         }
-                    });
+                    });*/
                     
                     if (ed.getParam('pad_empty_tags', true) === false) {
                         each(split('p h1 h2 h3 h4 h5 h6 th td pre div address caption'), function (name) {
