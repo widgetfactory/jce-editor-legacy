@@ -70,7 +70,7 @@
         init: function () {
             var self = this, ed = tinyMCEPopup.editor, context = tinyMCEPopup.getWindowArg('context', 'table');
 
-            this.html5 = ed.settings.schema === "html5";
+            this.html5 = ed.settings.schema === "html5-strict";
 
             if (!this.settings.file_browser) {
                 $('input.browser').removeClass('browser');
